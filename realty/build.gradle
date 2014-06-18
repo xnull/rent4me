@@ -1,0 +1,30 @@
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        springVersion = '4.0.5.RELEASE'
+        logbackVersion = '1.1.2'
+    }
+}
+
+subprojects {
+    afterEvaluate {
+        plugins.withType(JavaPlugin) {
+            dependencies {
+                //spring
+                compile "org.springframework:spring-context:${springVersion}"
+
+                //logger
+                compile 'org.slf4j:slf4j-api:1.7.7'
+                compile "ch.qos.logback:logback-classic:${logbackVersion}"
+                compile "ch.qos.logback:logback-core:${logbackVersion}"
+
+                //test
+                testCompile 'junit:junit:4.11'
+                testCompile 'org.mockito:mockito-all:1.9.5'
+            }
+        }
+    }
+}
