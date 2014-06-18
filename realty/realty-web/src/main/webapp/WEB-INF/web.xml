@@ -46,7 +46,7 @@
     </servlet-mapping>
 
     <!-- Zk settings -->
-    <servlet>
+    <!--<servlet>
         <servlet-name>zkLoader</servlet-name>
         <servlet-class>
             org.zkoss.zk.ui.http.DHtmlLayoutServlet
@@ -73,10 +73,10 @@
     <servlet-mapping>
         <servlet-name>auEngine</servlet-name>
         <url-pattern>/zkau/*</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 
-    <welcome-file-list>
+    <!--<welcome-file-list>
         <welcome-file>view/zk/index.zul</welcome-file>
-    </welcome-file-list>
+    </welcome-file-list>-->
 
 </web-app>
