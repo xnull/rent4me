@@ -11,7 +11,12 @@
 
     <context:property-placeholder location="classpath*:config.properties"/>
 
-
+    <bean id="flyway" class="com.googlecode.flyway.core.Flyway" init-method="migrate" depends-on="dbCleaner">
+        <property name="initOnMigrate" value="true"/>
+        <property name="validateOnMigrate" value="true"/>
+        <property name="locations" value="sql"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.driverClass}"/>

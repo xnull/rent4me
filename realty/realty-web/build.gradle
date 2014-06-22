@@ -24,5 +24,7 @@ dependencies {
     compile "org.glassfish.jersey.ext:jersey-spring3:${jerseyVersion}"
 
     compile project(':realty-services')
+    compile "c3p0:c3p0:0.9.1.2"
+
 }
 
