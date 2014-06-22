@@ -39,6 +39,8 @@ dependencies {
     compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
     compile "org.glassfish.jersey.ext:jersey-spring3:${jerseyVersion}"
 
+    compile project(':realty-services')
+
     //zk
     compile "org.zkoss.zk:zkbind:${zkVersion}"
     compile "org.zkoss.zk:zul:${zkVersion}"

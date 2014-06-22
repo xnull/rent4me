@@ -5,6 +5,8 @@ allprojects {
 
     ext {
         springVersion = '4.0.5.RELEASE'
+        hibernateVersion = '4.2.2.Final'
+        jolboxDSPoolVersion = '0.8.0.RELEASE'
         logbackVersion = '1.1.2'
     }
 }

@@ -59,4 +59,9 @@
    
  Может тогда и можно будет оставить в живых агенства, но комиссия их будет 3№ а не адовые 100.
  
- 
+ ----------
+ Connect to dev environment using following info:
+
+ IP Address: 188.226.219.248 (alias: dev-realty.fspare.com)
+ Username: root
+ Password: hnzjnjwbfjao
