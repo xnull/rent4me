@@ -8,23 +8,7 @@ apply plugin: 'jetty'
 
 ext {
     jerseyVersion = '2.9'
-    zkVersion = '7.0.2'
-    zkSpringVersion = '3.1'
     springSecurityVersion = '3.2.4.RELEASE'
-}
-
-repositories {
-    maven{
-        url 'http://mavensync.zkoss.org/maven2'
-    }
-}
-
-idea {
-    project {
-        //if you want to set specific jdk and language level
-        jdkName = '1.7'
-        languageLevel = '1.7'
-    }
 }
 
 dependencies {
@@ -40,14 +24,5 @@ dependencies {
     compile "org.glassfish.jersey.ext:jersey-spring3:${jerseyVersion}"
 
     compile project(':realty-services')
-
-    //zk
-    compile "org.zkoss.zk:zkbind:${zkVersion}"
-    compile "org.zkoss.zk:zul:${zkVersion}"
-    compile "org.zkoss.zk:zkplus:${zkVersion}"
-    compile "org.zkoss.zk:zhtml:${zkVersion}"
-
-    compile "org.zkoss.zk:zkspring-core:${zkSpringVersion}"
-    compile "org.zkoss.zk:zkspring-security:${zkSpringVersion}"
 }
 
