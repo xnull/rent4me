@@ -68,3 +68,25 @@ function clearMarkers() {
 function showMarkers() {
     setAllMap(map);
 }
+
+
+/**
+ * ajax request
+ */
+angular.module("realtyapp", []).controller("RealtyController", function ($scope, $http) {
+    $scope.myData = {};
+    var ajaxRequest = function (item, event) {
+
+        /*var responsePromise = $http.get("test-data.json");
+
+         responsePromise.success(function (data, status, headers, config) {
+         $scope.myData.fromServer = data.title;
+         });
+         responsePromise.error(function (data, status, headers, config) {
+         alert("AJAX failed!");
+         });*/
+        $scope.myData.fromServer = {"test": "ok"}.test
+    }
+
+    $scope.myData.doClick = ajaxRequest;
+});

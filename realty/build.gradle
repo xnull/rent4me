@@ -14,11 +14,17 @@ allprojects {
 subprojects {
     afterEvaluate {
         plugins.withType(JavaPlugin) {
+            def javaVersion = '1.7'
+
+            sourceCompatibility = javaVersion
+            targetCompatibility = javaVersion
+
+            version = '1.0'
+
             idea {
                 project {
-                    //if you want to set specific jdk and language level
-                    jdkName = '1.7'
-                    languageLevel = '1.7'
+                    jdkName = javaVersion
+                    languageLevel = javaVersion
                 }
             }
 
