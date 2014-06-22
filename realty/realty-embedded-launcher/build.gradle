@@ -1,0 +1,21 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.eclipse.jetty:jetty-start:8.1.5.v20120716"
+    compile "org.eclipse.jetty:jetty-webapp:8.1.5.v20120716"
+    compile "org.eclipse.jetty:jetty-jndi:8.1.5.v20120716"
+    compile "org.eclipse.jetty:jetty-plus:8.1.5.v20120716"
+
+    compile "commons-io:commons-io:2.4"
+
+    compile project(":realty-web")
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
