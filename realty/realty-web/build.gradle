@@ -26,6 +26,7 @@ idea {
         languageLevel = '1.7'
     }
 }
+
 dependencies {
     //spring
     compile "org.springframework:spring-webmvc:${springVersion}"
