@@ -8,7 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class RentService {
 
-    public void putForRent(Long userId, Long flatId){
+    /**
+     * Put your property for rent
+     * @param userId
+     * @param propertyId
+     */
+    public void putForRent(Long userId, Long propertyId){
 
     }
 }
