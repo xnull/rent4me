@@ -20,7 +20,14 @@
         <constructor-arg index="0" ref="dataSource"/>
     </bean>
 
-    <bean id="em" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <bean id="flyway" class="com.googlecode.flyway.core.Flyway" init-method="migrate" >
+        <property name="initOnMigrate" value="true"/>
+        <property name="validateOnMigrate" value="true"/>
+        <property name="locations" value="sql"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="em" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="flyway">
         <property name="persistenceUnitName" value="JpaPersistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaVendorAdapter">

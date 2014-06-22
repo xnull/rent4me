@@ -65,7 +65,7 @@ public class Apartment {
         return created;
     }
 
-    void setCreated(Date created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -73,7 +73,7 @@ public class Apartment {
         return updated;
     }
 
-    void setUpdated(Date updated) {
+    public void setUpdated(Date updated) {
         this.updated = updated;
     }
 

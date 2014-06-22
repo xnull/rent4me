@@ -39,6 +39,7 @@ dependencies {
     compile "org.glassfish.jersey.ext:jersey-spring3:${jerseyVersion}"
 
     compile project(':realty-services')
+    compile "com.jolbox:bonecp:${jolboxDSPoolVersion}"
 
     //zk
     compile "org.zkoss.zk:zkbind:${zkVersion}"
