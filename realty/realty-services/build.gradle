@@ -1,1 +1,5 @@
 apply plugin: 'java'
+
+dependencies {
+    compile 'com.google.apis:google-api-services-mapsengine:v1-rev17-1.18.0-rc'
+}
