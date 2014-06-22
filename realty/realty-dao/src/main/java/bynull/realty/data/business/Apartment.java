@@ -77,6 +77,14 @@ public class Apartment {
         this.updated = updated;
     }
 
+    public void updateFrom(Apartment apartment) {
+        this.setAddress(apartment.getAddress());
+        this.setCity(apartment.getCity());
+        this.setCreated(apartment.getCreated());
+        this.setUpdated(apartment.getUpdated());
+        this.setLocation(apartment.getLocation());
+    }
+
     @PrePersist
     void prePersist() {
         Date date = new Date();

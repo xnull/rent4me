@@ -1,7 +1,16 @@
 package bynull.realty.services;
 
+import bynull.realty.dto.ApartmentDTO;
+
+import java.util.List;
+
 /**
  * @author dionis on 22/06/14.
  */
 public interface ApartmentService {
+    ApartmentDTO create(ApartmentDTO dto);
+    void update(ApartmentDTO dto);
+    ApartmentDTO find(Long id);
+    void delete(Long id);
+    List<ApartmentDTO> findAll();
 }
