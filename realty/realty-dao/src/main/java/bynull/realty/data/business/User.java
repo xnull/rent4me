@@ -1,4 +1,4 @@
-package bynull.realty.business;
+package bynull.realty.data.business;
 
 /**
  * Created by null on 21.06.14.
