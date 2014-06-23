@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <security:debug/>
+
+    <security:http pattern="/static/**" security="none"/>
+
+    <security:http use-expressions="true" >
+        <security:intercept-url pattern="/rest/**" access="hasRole('ROLE_USER')" requires-channel="any"/>
+        <!--<security:intercept-url pattern="/login" access="isAnonymous()" requires-channel="any"/>-->
+        <security:http-basic  />
+        <!--<security:form-login-->
+                <!--login-page="/login"-->
+                <!--authentication-failure-url="/login"-->
+                <!--default-target-url="/"-->
+                <!--username-parameter="username"-->
+                <!--password-parameter="password"-->
+                <!--/>-->
+
+        <!--<security:logout logout-url="/logout" logout-success-url="/" />-->
+        <!--<security:session-management>-->
+            <!--<security:concurrency-control max-sessions="1"/>-->
+        <!--</security:session-management>-->
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userDetailsServiceImpl">
+            <security:password-encoder ref="md5PasswordEncoder"/>
+            <!--<security:user-service >-->
+                <!--<security:user name="dionis" authorities="ROLE_ADMIN" password="123"/>-->
+            <!--</security:user-service>-->
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+</beans>

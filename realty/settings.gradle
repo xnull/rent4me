@@ -1,5 +1,5 @@
-include 'realty-web'
+include 'realty-sql'
 include 'realty-dao'
 include 'realty-services'
-include 'realty-sql'
+include 'realty-web'
 include 'realty-embedded-launcher'

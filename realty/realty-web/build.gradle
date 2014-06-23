@@ -8,7 +8,6 @@ apply plugin: 'jetty'
 
 ext {
     jerseyVersion = '2.9'
-    springSecurityVersion = '3.2.4.RELEASE'
 }
 
 dependencies {
