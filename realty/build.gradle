@@ -32,6 +32,7 @@ subprojects {
             dependencies {
                 //spring
                 compile "org.springframework:spring-context:${springVersion}"
+                compile "org.springframework:spring-context-support:${springVersion}"
 
                 //logger
                 compile 'org.slf4j:slf4j-api:1.7.7'
@@ -41,6 +42,9 @@ subprojects {
                 //test
                 testCompile 'junit:junit:4.11'
                 testCompile 'org.mockito:mockito-all:1.9.5'
+                testCompile "org.dbunit:dbunit:2.4.9"
+                testCompile "org.springframework:spring-test:${springVersion}"
+                testCompile "com.jolbox:bonecp:${jolboxDSPoolVersion}"
             }
         }
     }
