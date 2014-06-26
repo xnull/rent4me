@@ -21,7 +21,7 @@ public class UserRepositoryTest extends DbTest {
     AuthorityRepository authorityRepository;
 
     @Test
-    public void createUser() {
+    public void createUserTest() {
         User user = new User();
         user.setUsername("dionis");
         user.setPasswordHash("hash");

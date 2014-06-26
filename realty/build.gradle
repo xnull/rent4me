@@ -14,6 +14,9 @@ allprojects {
 
 subprojects {
     afterEvaluate {
+        sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
+        sourceSets.test.output.resourcesDir = sourceSets.test.output.classesDir
+
         plugins.withType(JavaPlugin) {
             def javaVersion = '1.7'
 
