@@ -27,14 +27,44 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "password_hash")
     private String passwordHash;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "age")
+    private Integer age;
+
     @JoinTable(name = "realty_users_authorities", joinColumns = {
             @JoinColumn(name = "user_id")
     }, inverseJoinColumns = {
             @JoinColumn(name = "authority_id")
     })
-
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Authority> authorities;
+    /**
+     * Set of my apartments
+     */
+    @JoinColumn(name = "owner_id")
+    @OneToMany
+    private Set<Apartment> apartments;
+
+    /**
+     * Set of rental histories - for users who rented history(not owners).
+     */
+    @JoinTable(name = "rental_histories_vw",
+            joinColumns = {
+                    @JoinColumn(name = "user_id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "rental_history_id")
+            }
+    )
+    @OneToMany
+    private Set<RentalHistory> rentalHistories;
 
     @Override
     public Collection<Authority> getAuthorities() {
@@ -98,6 +128,66 @@ public class User implements UserDetails {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public Set<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(Set<Apartment> apartments) {
+        this.apartments = apartments;
+    }
+
+    public Set<RentalHistory> getRentalHistories() {
+        return rentalHistories;
+    }
+
+    public void setRentalHistories(Set<RentalHistory> rentalHistories) {
+        this.rentalHistories = rentalHistories;
     }
 
     @Override
