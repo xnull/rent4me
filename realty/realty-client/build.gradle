@@ -1,0 +1,53 @@
+/**
+ * Client part of realty application: html and javascript.
+ * Decided that source files will be moved from realty-web/src/main/webapp/view
+ */
+
+/**
+ * https://github.com/srs/gradle-node-plugin
+ *
+ * tasks: nodeSetup, npmInstall
+ */
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.moowork.gradle:gradle-node-plugin:0.4'
+    }
+}
+
+apply plugin: 'node'
+
+node {
+    // Version of node to use.
+    version = '0.11.10'
+
+    // Base URL for fetching node distributions (change if you have a mirror).
+    distBaseUrl = 'http://nodejs.org/dist'
+
+    // If true, it will download node using above parameters.
+    // If false, it will try to use globally installed node.
+    download = true
+
+    // Set the work directory for unpacking node
+    workDir = file("${project.buildDir}/nodejs")
+}
+
+task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
+    script = file(projectDir.getAbsolutePath() + '/node_modules/bower/bin/bower')
+    args = ['install']
+    execOverrides {
+        it.ignoreExitValue = false
+        it.workingDir = projectDir
+    }
+}
+
+task karmaStart(dependsOn: npmInstall, type: NodeTask) {
+    script = file(projectDir.getAbsolutePath() + '/node_modules/karma/bin/karma')
+    args = ['start', 'karma.conf.js']
+    execOverrides {
+        it.ignoreExitValue = false
+        it.workingDir = projectDir
+    }
+}

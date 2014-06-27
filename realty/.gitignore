@@ -1,2 +1,10 @@
 build
 build/**
+
+realty-client/node_modules
+
+*.iml
+*.iws
+
+.gradle
+.idea
