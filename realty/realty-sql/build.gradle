@@ -3,8 +3,19 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
+/**
+ * Gradle flyway plugin
+ * http://flywaydb.org/documentation/gradle/
+ */
+buildscript {
+    dependencies {
+        classpath "org.flywaydb:flyway-gradle-plugin:3.0"
+    }
+}
+
+apply plugin: 'flyway'
+
 dependencies {
 //    compile "com.googlecode.flyway:flyway-core:2.0.3"
     compile libraries."com.googlecode.flyway:flyway-core"
-
 }
