@@ -14,8 +14,8 @@ public class ApartmentDTO {
         ApartmentDTO dto = new ApartmentDTO();
         dto.setId(apartment.getId());
         dto.setLocation(GeoPointDTO.from(apartment.getLocation()));
-        dto.setCity(apartment.getCity());
-        dto.setAddress(apartment.getAddress());
+//        dto.setCity(apartment.getCity());
+//        dto.setAddress(apartment.getAddress());
         dto.setCreated(apartment.getCreated());
         dto.setUpdated(apartment.getUpdated());
         return dto;
@@ -79,8 +79,8 @@ public class ApartmentDTO {
     public Apartment toInternal() {
         Apartment apartment = new Apartment();
         apartment.setId(getId());
-        apartment.setCity(getCity());
-        apartment.setAddress(getAddress());
+//        apartment.setCity(getCity());
+//        apartment.setAddress(getAddress());
         apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
         apartment.setCreated(getCreated());
         apartment.setUpdated(getUpdated());

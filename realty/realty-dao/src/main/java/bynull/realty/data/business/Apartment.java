@@ -3,6 +3,7 @@ package bynull.realty.data.business;
 import bynull.realty.data.common.GeoPoint;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -18,16 +19,30 @@ public class Apartment {
     private Long id;
     @Column(name = "location")
     private GeoPoint location;
-    @Column(name = "city")
-    private String city;
-    @Column(name = "address")
-    private String address;
+    @Embedded
+    private AddressComponents addressComponents;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_dt")
     private Date created;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_dt")
     private Date updated;
+
+    @JoinColumn(name = "owner_id")
+    @ManyToOne
+    private User owner;
+    @Column(name = "type_of_rent")
+    @Enumerated(EnumType.STRING)
+    private RentType typeOfRent;
+    @Column(name = "rental_fee")
+    private BigDecimal rentalFee;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fee_period")
+    private FeePeriod feePeriod;
+    @Column(name = "short_desc")
+    private String shortDescription;
+    @Column(name = "extended_desc")
+    private String extendedDescription;
 
     public Long getId() {
         return id;
@@ -45,20 +60,12 @@ public class Apartment {
         this.location = location;
     }
 
-    public String getCity() {
-        return city;
+    public AddressComponents getAddressComponents() {
+        return addressComponents;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddressComponents(AddressComponents addressComponents) {
+        this.addressComponents = addressComponents;
     }
 
     public Date getCreated() {
@@ -77,9 +84,57 @@ public class Apartment {
         this.updated = updated;
     }
 
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public RentType getTypeOfRent() {
+        return typeOfRent;
+    }
+
+    public void setTypeOfRent(RentType typeOfRent) {
+        this.typeOfRent = typeOfRent;
+    }
+
+    public BigDecimal getRentalFee() {
+        return rentalFee;
+    }
+
+    public void setRentalFee(BigDecimal rentalFee) {
+        this.rentalFee = rentalFee;
+    }
+
+    public FeePeriod getFeePeriod() {
+        return feePeriod;
+    }
+
+    public void setFeePeriod(FeePeriod feePeriod) {
+        this.feePeriod = feePeriod;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public String getExtendedDescription() {
+        return extendedDescription;
+    }
+
+    public void setExtendedDescription(String extendedDescription) {
+        this.extendedDescription = extendedDescription;
+    }
+
     public void updateFrom(Apartment apartment) {
-        this.setAddress(apartment.getAddress());
-        this.setCity(apartment.getCity());
+//        this.setAddress(apartment.getAddress());
+//        this.setCity(apartment.getCity());
         this.setCreated(apartment.getCreated());
         this.setUpdated(apartment.getUpdated());
         this.setLocation(apartment.getLocation());

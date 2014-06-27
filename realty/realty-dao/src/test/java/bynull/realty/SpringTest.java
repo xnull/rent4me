@@ -9,5 +9,5 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:data-test-context.xml"})
-public class SpringTest {
+public abstract class SpringTest {
 }

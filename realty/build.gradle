@@ -6,14 +6,82 @@ allprojects {
     ext {
         springVersion = '4.0.5.RELEASE'
         hibernateVersion = '4.2.2.Final'
-        jolboxDSPoolVersion = '0.8.0.RELEASE'
         springSecurityVersion = '3.2.4.RELEASE'
         logbackVersion = '1.1.2'
+        jerseyVersion = '2.9'
+        jettyVersion = '8.1.5.v20120716'
     }
 }
 
 subprojects {
+    libraries = [
+            //spring core
+            'org.springframework:spring-context': ["org.springframework:spring-context:${springVersion}"],
+            'org.springframework:spring-context-support': ["org.springframework:spring-context-support:${springVersion}"],
+
+            //spring security
+            'org.springframework.security:spring-security-core': ["org.springframework.security:spring-security-core:${springSecurityVersion}"],
+            'org.springframework.security:spring-security-config': ["org.springframework.security:spring-security-config:${springSecurityVersion}"],
+
+            //srping db
+            'org.springframework:spring-jdbc': ["org.springframework:spring-jdbc:${springVersion}"],
+            'org.springframework:spring-orm': ["org.springframework:spring-orm:${springVersion}"],
+            'org.springframework.data:spring-data-jpa': ["org.springframework.data:spring-data-jpa:1.6.0.RELEASE"],
+
+            //spring web
+            'org.springframework:spring-webmvc': ["org.springframework:spring-webmvc:${springVersion}"],
+            'org.springframework:spring-web': ["org.springframework:spring-web:${springVersion}"],
+            'org.springframework.security:spring-security-web': ["org.springframework.security:spring-security-web:${springSecurityVersion}"],
+
+            //hibernate
+            'org.hibernate:hibernate-core': ["org.hibernate:hibernate-core:${hibernateVersion}"],
+            'org.hibernate:hibernate-entitymanager': ["org.hibernate:hibernate-entitymanager:${hibernateVersion}"],
+            'org.hibernate.javax.persistence:hibernate-jpa-2.0-api': ["org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final"],
+
+            //jersey(rest)
+            'javax.ws.rs:javax.ws.rs-api': ['javax.ws.rs:javax.ws.rs-api:2.0'],
+            'org.glassfish.jersey.containers:jersey-container-servlet': ["org.glassfish.jersey.containers:jersey-container-servlet:${jerseyVersion}"],
+            'org.glassfish.jersey.media:jersey-media-json-jackson': ["org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"],
+
+            //spring & jersey integration
+            'org.glassfish.jersey.ext:jersey-spring3': ["org.glassfish.jersey.ext:jersey-spring3:${jerseyVersion}"],
+
+            //drivers
+            'postgresql:postgresql': ["postgresql:postgresql:9.1-901-1.jdbc4"],
+            'org.postgis:postgis-jdbc': ["org.postgis:postgis-jdbc:1.3.3"],
+            'com.googlecode.flyway:flyway-core': ["com.googlecode.flyway:flyway-core:2.0.3"],
+
+            //pooling
+            'com.jolbox:bonecp': ["com.jolbox:bonecp:0.8.0.RELEASE"],
+            'c3p0:c3p0': ["c3p0:c3p0:0.9.1.2"],
+
+            //jetty(for embedded use)
+            "org.eclipse.jetty:jetty-start": ["org.eclipse.jetty:jetty-start:${jettyVersion}"],
+            "org.eclipse.jetty:jetty-webapp": ["org.eclipse.jetty:jetty-webapp:${jettyVersion}"],
+            "org.eclipse.jetty:jetty-jndi": ["org.eclipse.jetty:jetty-jndi:${jettyVersion}"],
+            "org.eclipse.jetty:jetty-plus": ["org.eclipse.jetty:jetty-plus:${jettyVersion}"],
+
+            //logger
+            'org.slf4j:slf4j-api': ['org.slf4j:slf4j-api:1.7.7'],
+            'ch.qos.logback:logback-classic': ["ch.qos.logback:logback-classic:${logbackVersion}"],
+            'ch.qos.logback:logback-core': ["ch.qos.logback:logback-core:${logbackVersion}"],
+
+            //common stuff
+            'commons-io:commons-io': ["commons-io:commons-io:2.4"],
+
+            //test
+            'junit:junit': ['junit:junit:4.11'],
+            'org.hamcrest:hamcrest-all': ["org.hamcrest:hamcrest-all:1.3"],
+            'org.mockito:mockito-all': ['org.mockito:mockito-all:1.9.5'],
+            'org.dbunit:dbunit': ["org.dbunit:dbunit:2.4.9"],
+            'org.springframework:spring-test': ["org.springframework:spring-test:${springVersion}"],
+
+    ]
+
     afterEvaluate {
+        sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
+        sourceSets.test.output.resourcesDir = sourceSets.test.output.classesDir
+
         plugins.withType(JavaPlugin) {
             def javaVersion = '1.7'
 
@@ -29,25 +97,26 @@ subprojects {
                 }
             }
 
+            /*
             dependencies {
                 //spring
-                compile "org.springframework:spring-context:${springVersion}"
-                compile "org.springframework:spring-context-support:${springVersion}"
-                compile "org.springframework.security:spring-security-core:${springSecurityVersion}"
+                compile libraries."org.springframework:spring-context"
+                compile libraries."org.springframework:spring-context-support"
+                compile libraries."org.springframework.security:spring-security-core"
 
                 //logger
-                compile 'org.slf4j:slf4j-api:1.7.7'
-                compile "ch.qos.logback:logback-classic:${logbackVersion}"
-                compile "ch.qos.logback:logback-core:${logbackVersion}"
+                compile libraries.'org.slf4j:slf4j-api'
+                compile libraries."ch.qos.logback:logback-classic"
+                compile libraries."ch.qos.logback:logback-core"
 
                 //test
-                testCompile 'junit:junit:4.11'
-                testCompile "org.hamcrest:hamcrest-all:1.3"
-                testCompile 'org.mockito:mockito-all:1.9.5'
-                testCompile "org.dbunit:dbunit:2.4.9"
-                testCompile "org.springframework:spring-test:${springVersion}"
-                testCompile "com.jolbox:bonecp:${jolboxDSPoolVersion}"
-            }
+                testCompile libraries.'junit:junit'
+                testCompile libraries."org.hamcrest:hamcrest-all"
+                testCompile libraries.'org.mockito:mockito-all'
+                testCompile libraries."org.dbunit:dbunit"
+                testCompile libraries."org.springframework:spring-test"
+                testCompile libraries."com.jolbox:bonecp"
+            }*/
         }
     }
 }

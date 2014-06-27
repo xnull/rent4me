@@ -21,10 +21,11 @@ public class UserRepositoryTest extends DbTest {
     AuthorityRepository authorityRepository;
 
     @Test
-    public void createUser() {
+    public void createUserTest() {
         User user = new User();
         user.setUsername("dionis");
         user.setPasswordHash("hash");
+        user.setEmail("a@b.c");
         User savedUser = userRepository.saveAndFlush(user);
         assertThat(savedUser, is(notNullValue()));
     }
@@ -34,6 +35,7 @@ public class UserRepositoryTest extends DbTest {
         User user = new User();
         user.setUsername("dionis");
         user.setPasswordHash("hash");
+        user.setEmail("a@b.c");
         User savedUser = userRepository.saveAndFlush(user);
         authorityRepository.saveAndFlush(new Authority(Authority.Name.ROLE_USER));
         flushAndClear();
@@ -56,6 +58,7 @@ public class UserRepositoryTest extends DbTest {
         User user = new User();
         user.setUsername("dionis");
         user.setPasswordHash("hash");
+        user.setEmail("a@b.c");
         User savedUser = userRepository.saveAndFlush(user);
         authorityRepository.saveAndFlush(new Authority(Authority.Name.ROLE_USER));
         flushAndClear();
@@ -91,6 +94,7 @@ public class UserRepositoryTest extends DbTest {
         User user = new User();
         user.setUsername("dionis");
         user.setPasswordHash("hash");
+        user.setEmail("a@b.c");
         User savedUser = userRepository.saveAndFlush(user);
         authorityRepository.saveAndFlush(new Authority(Authority.Name.ROLE_USER));
         flushAndClear();

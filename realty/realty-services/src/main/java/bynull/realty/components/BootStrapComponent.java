@@ -31,6 +31,7 @@ public class BootStrapComponent implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        if(1==1) return;
         authorityRepository.deleteAll();
         userRepository.deleteAll();
         transactionOperations.execute(new TransactionCallbackWithoutResult() {

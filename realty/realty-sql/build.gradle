@@ -4,5 +4,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 
 dependencies {
-    compile "com.googlecode.flyway:flyway-core:2.0.3"
+//    compile "com.googlecode.flyway:flyway-core:2.0.3"
+    compile libraries."com.googlecode.flyway:flyway-core"
+
 }
