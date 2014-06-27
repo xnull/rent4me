@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'war'
 
 apply plugin: 'idea'
 apply plugin: 'eclipse'
@@ -8,12 +9,15 @@ repositories {
 }
 
 dependencies {
-    compile "org.eclipse.jetty:jetty-start:8.1.5.v20120716"
-    compile "org.eclipse.jetty:jetty-webapp:8.1.5.v20120716"
-    compile "org.eclipse.jetty:jetty-jndi:8.1.5.v20120716"
-    compile "org.eclipse.jetty:jetty-plus:8.1.5.v20120716"
-
-    compile "commons-io:commons-io:2.4"
-
     compile project(":realty-web")
+
+    compile libraries.'org.slf4j:slf4j-api'
+    compile libraries."ch.qos.logback:logback-classic"
+    compile libraries."ch.qos.logback:logback-core"
+    compile libraries."org.eclipse.jetty:jetty-start"
+    compile libraries."org.eclipse.jetty:jetty-webapp"
+    compile libraries."org.eclipse.jetty:jetty-jndi"
+    compile libraries."org.eclipse.jetty:jetty-plus"
+
+    compile libraries."commons-io:commons-io"
 }

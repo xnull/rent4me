@@ -4,6 +4,9 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 
 dependencies {
-    compile 'com.google.apis:google-api-services-mapsengine:v1-rev17-1.18.0-rc'
     compile project(':realty-dao')
+
+    compile 'com.google.apis:google-api-services-mapsengine:v1-rev17-1.18.0-rc'
+    compile libraries.'org.springframework:spring-context'
+    compile libraries.'org.springframework.security:spring-security-core'
 }
