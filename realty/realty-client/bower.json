@@ -1,7 +1,11 @@
 {
     "name": "realty",
     "version": "1.0.0",
+    "main": "index.html",
     "dependencies": {
-        "requirejs": "2.1.14"
+        "angular": "latest",
+        "angular-route": "latest",
+        "requirejs": "latest",
+        "requirejs-domready": "latest"
     }
 }

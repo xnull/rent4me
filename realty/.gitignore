@@ -2,6 +2,7 @@ build
 build/**
 
 realty-client/node_modules
+realty-client/app/vendor
 
 *.iml
 *.iws
