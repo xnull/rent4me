@@ -6,7 +6,7 @@
 /**
  * https://github.com/srs/gradle-node-plugin
  *
- * tasks: nodeSetup, npmInstall
+ * tasks: nodeSetup, npmInstall, jsTest
  */
 buildscript {
     repositories {
@@ -17,6 +17,8 @@ buildscript {
     }
 }
 
+apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'node'
 
 node {
@@ -35,6 +37,7 @@ node {
 }
 
 task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
+    group = 'javascript'
     script = file(projectDir.getAbsolutePath() + '/node_modules/bower/bin/bower')
     args = ['install']
     execOverrides {
@@ -43,7 +46,8 @@ task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
     }
 }
 
-task karmaStart(dependsOn: npmInstall, type: NodeTask) {
+task jsTest(dependsOn: npmInstall, type: NodeTask) {
+    group = 'javascript'
     script = file(projectDir.getAbsolutePath() + '/node_modules/karma/bin/karma')
     args = ['start', 'karma.conf.js']
     execOverrides {
@@ -51,3 +55,4 @@ task karmaStart(dependsOn: npmInstall, type: NodeTask) {
         it.workingDir = projectDir
     }
 }
+test.dependsOn jsTest

@@ -1,25 +1,19 @@
-/**
- * Created by null on 28.06.14.
- */
-/**
- * loads sub modules and wraps them up into the main module
- * this should be used for top-level module definitions only
- */
-define([
-    'angular',
-    'angular-route',
-    './controllers/index',
-    './directives/index',
-    './filters/index',
-    './services/index'
-], function (angular) {
-    'use strict';
+console.log('Create an angular app module');
+var rentApplication = angular.module('project', ['ngRoute']);
 
-    return angular.module('app', [
-        'app.controllers',
-        'app.directives',
-        'app.filters',
-        'app.services',
-        'ngRoute'
-    ]);
+var RENT_CONTROLLER_NAME = 'RentController';
+var RENT_SERVICE_NAME = 'rentService';
+
+rentApplication.config(function ($routeProvider) {
+    console.log('Configure the angular app routes');
+    $routeProvider.
+        when('/rent', {
+            controller: RENT_CONTROLLER_NAME,
+            templateUrl: 'components/rent/rent-view.html'
+        }).otherwise({
+            redirectTo: '/'
+        });
 });
+
+rentApplication.controller(RENT_CONTROLLER_NAME, rentController);
+rentApplication.factory(RENT_SERVICE_NAME, rentService);
