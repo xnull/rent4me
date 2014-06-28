@@ -1,0 +1,31 @@
+var rentController = function RentController($scope, rentService) {
+    console.log('Rent controller execution');
+    $scope.putForRent = rentService.putForRent;
+    $scope.greeting = rentService.hello();
+};
+
+var rentService = function RentService($http) {
+    "use strict";
+
+    return {
+        hello: function () {
+            return 'hello piska';
+        },
+
+        putForRent: function () {
+            $http({method: 'GET', url: 'putForRent'}).
+                success(function (data, status, headers, config) {
+                    // this callback will be called asynchronously
+                    // when the response is available
+                    console.log('Successful sending ajax request');
+                }).
+                error(function (data, status, headers, config) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                    console.log('Error sending ajax request. Status: ' + status);
+                    //$scope.greeting = "raz dva";
+                });
+        }
+    };
+};
+
