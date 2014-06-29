@@ -1,10 +1,10 @@
-var rentController = function RentController($scope, rentService) {
+var rentController = function ($scope, rentService) {
     console.log('Rent controller execution');
     $scope.putForRent = rentService.putForRent;
     $scope.greeting = rentService.hello();
 };
 
-var rentService = function RentService($http) {
+var rentService = function ($http) {
     "use strict";
 
     return {

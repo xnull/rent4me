@@ -38,21 +38,25 @@ node {
 
 task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
     group = 'javascript'
-    script = file(projectDir.getAbsolutePath() + '/node_modules/bower/bin/bower')
+    script = new File(project.projectDir, '/node_modules/bower/bin/bower')
     args = ['install']
     execOverrides {
         it.ignoreExitValue = false
-        it.workingDir = projectDir
+        it.workingDir = project.projectDir
     }
 }
 
 task jsTest(dependsOn: npmInstall, type: NodeTask) {
     group = 'javascript'
-    script = file(projectDir.getAbsolutePath() + '/node_modules/karma/bin/karma')
-    args = ['start', 'karma.conf.js']
+    script = new File(project.projectDir, '/node_modules/karma/bin/karma')
+    args = ['start', 'test/karma.conf.js']
     execOverrides {
         it.ignoreExitValue = false
-        it.workingDir = projectDir
+        it.workingDir = project.projectDir
     }
 }
 test.dependsOn jsTest
+
+clean << {
+    project.delete './node_modules'
+}

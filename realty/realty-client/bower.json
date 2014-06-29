@@ -2,10 +2,14 @@
     "name": "realty",
     "version": "1.0.0",
     "main": "index.html",
+
     "dependencies": {
         "angular": "latest",
-        "angular-route": "latest",
-        "requirejs": "latest",
-        "requirejs-domready": "latest"
+        "angular-route": "latest"
+    },
+    "devDependencies": {
+        "angular-loader": "latest",
+        "angular-mocks": "latest",
+        "html5-boilerplate": "~4.3.0"
     }
 }
