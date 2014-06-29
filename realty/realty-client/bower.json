@@ -4,12 +4,13 @@
     "main": "index.html",
 
     "dependencies": {
-        "angular": "latest",
-        "angular-route": "latest"
+        "angular": "v1.3.0-beta.11",
+        "angular-resource": "v1.3.0-beta.11",
+        "angular-route": "v1.3.0-beta.11"
     },
     "devDependencies": {
-        "angular-loader": "latest",
-        "angular-mocks": "latest",
+        "angular-loader": "v1.3.0-beta.11",
+        "angular-mocks": "v1.3.0-beta.11",
         "html5-boilerplate": "~4.3.0"
     }
 }
