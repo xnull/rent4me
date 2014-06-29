@@ -1,3 +1,5 @@
+'use strict';
+
 console.log('Create an angular app module');
 var rentApplication = angular.module('project', ['ngRoute']);
 
