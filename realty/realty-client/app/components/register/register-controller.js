@@ -1,19 +1,15 @@
-var authController = function ($scope, authService) {
+var registerController = function ($scope, registerService) {
     console.log('Rent controller execution');
-    $scope.putForRent = authService.putForRent;
-    $scope.greeting = authService.hello();
+    $scope.register = registerService.register;
+//    $scope.greeting = registerService.hello();
 };
 
-var authService = function ($http) {
+var registerService = function ($http) {
     "use strict";
 
     return {
-        hello: function () {
-            return 'hello piska';
-        },
-
-        putForRent: function () {
-            $http({method: 'GET', url: 'putForRent'}).
+        register: function () {
+            $http({method: 'POST', url: 'register'}).
                 success(function (data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available

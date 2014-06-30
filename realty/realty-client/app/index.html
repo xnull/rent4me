@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Rent Service</title>
+    <title>Rent 4 Me</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
@@ -75,6 +75,8 @@
     <script src="vendor/angular-route/angular-route.min.js"></script>
 
     <script src="components/rent/rent-controller.js"></script>
+    <script src="components/login/login-controller.js"></script>
+    <script src="components/register/register-controller.js"></script>
     <script src="app.js"></script>
 </head>
 
@@ -93,14 +95,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#/rent">Rent Service</a>
+                <a class="navbar-brand" href="#/">Rent 4 Me</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <!--<sec:authorize access="isFullyAuthenticated()">-->
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Login</a></li>
-                        <li><a href="#">Register</a></li>
+                        <li><a href="#/login">Login</a></li>
+                        <li><a href="#/register">Register</a></li>
                         <li><a href="#/rent">Rent</a></li>
                     <!--<li><a href="#">New</a></li>-->
                         <!--<li class="dropdown">-->
@@ -128,7 +130,7 @@
 
 <div id="footer">
     <div class="container">
-        <p class="text-muted">&copy; Company 2014
+        <p class="text-muted">&copy; Rent 4 Me 2014
         </p>
     </div>
 </div>
