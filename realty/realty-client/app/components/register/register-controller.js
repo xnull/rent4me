@@ -1,5 +1,5 @@
 var registerController = function ($scope, registerService) {
-    console.log('Rent controller execution');
+    console.log('Register controller execution');
     $scope.register = registerService.register;
 //    $scope.greeting = registerService.hello();
 };

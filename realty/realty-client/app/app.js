@@ -42,6 +42,9 @@ rentApplication.config(function ($routeProvider) {
     FacebookProvider.init('270007246518198');
 }]);*/
 
+rentApplication.controller('NavigationController', navigationController);
+rentApplication.factory('navigationService', navigationService);
+
 rentApplication.controller(RENT_CONTROLLER_NAME, rentController);
 rentApplication.controller(LOGIN_CONTROLLER_NAME, loginController);
 rentApplication.controller(FB_LOGIN_CONTROLLER_NAME, fbLoginController);

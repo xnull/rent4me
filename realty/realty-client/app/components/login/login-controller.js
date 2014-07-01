@@ -1,6 +1,9 @@
-var loginController = function ($scope, loginService) {
-    console.log('Rent controller execution');
+var loginController = function ($scope, loginService, navigationService) {
+    console.log('Login controller execution');
+//    $scope.NavigationController = NavigationController;
     $scope.login = loginService.login;
+    console.log("Nav service state:"+navigationService.getTab());
+    $scope.navService = navigationService;
 //    $scope.greeting = loginService.hello();
 };
 
