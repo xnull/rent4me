@@ -97,21 +97,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#/" ng-click="navController.selectTab('home')">Rent 4 Me</a>
+                <a class="navbar-brand" href="#/" ng-click="navController.setHome()">Rent 4 Me</a>
             </div>
             <div class="collapse navbar-collapse" >
                 <ul class="nav navbar-nav">
                     <!--<sec:authorize access="isFullyAuthenticated()">-->
-                        <li ng-class="{ active: navController.isSelected('home') }">
-                            <a href="#" ng-click="navController.selectTab('home')">Home</a>
+                        <li ng-class="{ active: navController.isHome() }">
+                            <a href="#" ng-click="navController.setHome()">Home</a>
                         </li>
-                        <li ng-class="{ active: navController.isSelected('login') }">
-                            <a href="#/login" ng-click="navController.selectTab('login')">Login</a></li>
-                        <li ng-class="{ active: navController.isSelected('register') }">
-                            <a href="#/register" ng-click="navController.selectTab('register')">Register</a>
+                        <li ng-class="{ active: navController.isLogin() }">
+                            <a href="#/login" ng-click="navController.setLogin()">Login</a></li>
+                        <li ng-class="{ active: navController.isRegister() }">
+                            <a href="#/register" ng-click="navController.setRegister()">Register</a>
                         </li>
-                        <li ng-class="{ active: navController.isSelected('rent') }">
-                            <a href="#/rent" ng-click="navController.selectTab('rent')">Rent</a>
+                        <li ng-class="{ active: navController.isRent() }">
+                            <a href="#/rent" ng-click="navController.setRent()">Rent</a>
                         </li>
                     <!--<li><a href="#">New</a></li>-->
                         <!--<li class="dropdown">-->
