@@ -1,5 +1,5 @@
 var navigationController = function ($scope, navigationService) {
-    console.log("Nav controller");
+    //console.log("Nav controller");
 
     this.getTab = navigationService.getTab;
     this.isSelected = navigationService.isSelected;
