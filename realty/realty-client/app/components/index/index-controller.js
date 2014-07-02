@@ -1,21 +1,31 @@
-var fbLoginController = function ($scope, fbLoginService) {
-    //console.log('Rent controller execution');
-    $scope.fbAsyncInit = fbLoginService.fbAsyncInit;
-//    $scope.greeting = fbLoginService.hello();
+var indexController = function ($scope, indexService, navigationService) {
+    //console.log('Index controller execution');
+
+    $(function () {
+        navigationService.setHome();
+
+        var $carousel = $('.carousel');
+        $carousel.carousel({
+            interval: 30000,
+            pause: "hover",
+            wrap: true
+        });
+
+        $('.carousel-control').each(function () {
+            var elem = $(this);
+            elem.on('click', function () {
+                var dataSlideDirection = elem.attr('data-slide');
+                $carousel.carousel(dataSlideDirection);
+            });
+        });
+
+    });
 };
 
-var fbLoginService = function ($http) {
+var indexService = function ($http) {
     "use strict";
 
     return {
-        fbAsyncInit: function() {
-            FB.init({
-                appId      : '270007246518198',
-                xfbml      : true,
-                version    : 'v2.0'
-            });
-        },
-
         login: function () {
             $http({method: 'POST', url: 'login'}).
                 success(function (data, status, headers, config) {

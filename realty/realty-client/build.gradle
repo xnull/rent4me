@@ -61,6 +61,13 @@ task jsTest(dependsOn: bowerInstall, type: NodeTask) {
         it.workingDir = project.projectDir
     }
 }
+
+task packApp(dependsOn: bowerInstall, type: Tar) {
+    group = 'Packaging'
+    from 'app'
+    baseName = 'app'
+}
+
 test.dependsOn jsTest
 
 task jsHint(dependsOn: bowerInstall, type: NodeTask) {

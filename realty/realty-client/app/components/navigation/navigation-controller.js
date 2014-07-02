@@ -1,5 +1,5 @@
 var navigationController = function ($scope, navigationService) {
-    console.log("Nav controller");
+    //console.log("Nav controller");
 
     this.getTab = navigationService.getTab;
     this.isSelected = navigationService.isSelected;
@@ -21,10 +21,10 @@ var navigationController = function ($scope, navigationService) {
 var navigationService = function () {
     "use strict";
 
-    const home = 'home';
-    const register = 'register';
-    const login = 'login';
-    const rent = 'rent';
+    var home = 'home';
+    var register = 'register';
+    var login = 'login';
+    var rent = 'rent';
 
     this.tab = home;//set default value
     var _self = this;
