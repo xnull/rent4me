@@ -19,5 +19,5 @@ gulp.task('lint', function () {
  * Print all javascript files
  */
 gulp.task('print', function () {
-    gulp.src('app/components/**/*.js').pipe(print())
+    gulp.src('app/components/**/*.js').pipe(print());
 });

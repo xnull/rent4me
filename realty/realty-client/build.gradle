@@ -79,6 +79,7 @@ task jsHint(dependsOn: bowerInstall, type: NodeTask) {
         it.workingDir = project.projectDir
     }
 }
+check.dependsOn jsHint
 
 clean << {
     project.delete './node_modules'
