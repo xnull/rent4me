@@ -65,3 +65,10 @@
  IP Address: 188.226.219.248 (alias: dev-realty.fspare.com)
  Username: root
  Password: hnzjnjwbfjao
+
+
+ ------
+ mailchimp.com
+ email: admin@rent4.me
+ username: admin@rent4.me
+ password: T210sadml324@asdlk
