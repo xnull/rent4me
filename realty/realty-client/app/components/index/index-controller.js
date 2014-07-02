@@ -4,7 +4,7 @@ var indexController = function ($scope, indexService, navigationService) {
     $(function () {
         navigationService.setHome();
 
-        const $carousel = $('.carousel');
+        var $carousel = $('.carousel');
         $carousel.carousel({
             interval: 5000,
             pause: "hover",
@@ -14,7 +14,7 @@ var indexController = function ($scope, indexService, navigationService) {
         $('.carousel-control').each(function () {
             var elem = $(this);
             elem.on('click', function () {
-                const dataSlideDirection = elem.attr('data-slide');
+                var dataSlideDirection = elem.attr('data-slide');
                 $carousel.carousel(dataSlideDirection);
             });
         });
