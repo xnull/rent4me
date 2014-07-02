@@ -62,7 +62,7 @@
  ----------
  Connect to dev environment using following info:
 
- IP Address: 188.226.219.248 (alias: dev-realty.fspare.com)
+ IP Address: 188.226.219.248 (alias: dev-realty.fspare.com, rent4.me)
  Username: root
  Password: hnzjnjwbfjao
 
