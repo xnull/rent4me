@@ -92,7 +92,7 @@
 <div id="wrap">
 
     <!-- Fixed navbar -->
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="NavigationController as navController">
+    <!--<div class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="NavigationController as navController">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -105,38 +105,43 @@
             </div>
             <div class="collapse navbar-collapse" >
                 <ul class="nav navbar-nav">
-                    <!--<sec:authorize access="isFullyAuthenticated()">-->
-                        <!--<li ng-class="{ active: navController.isHome() }">-->
-                            <!--<a href="#/">Home</a>-->
-                        <!--</li>-->
-                        <!--<li ng-class="{ active: navController.isLogin() }">-->
-                            <!--<a href="#/login">Login</a></li>-->
-                        <!--<li ng-class="{ active: navController.isRegister() }">-->
-                            <!--<a href="#/register">Register</a>-->
-                        <!--</li>-->
-                        <!--<li ng-class="{ active: navController.isRent() }">-->
-                            <!--<a href="#/rent">Rent</a>-->
-                        <!--</li>-->
-                    <!--<li><a href="#">New</a></li>-->
-                        <!--<li class="dropdown">-->
-                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>-->
-                        <!--<ul class="dropdown-menu">-->
-                            <!--<li><a href="#">Action</a></li>-->
-                            <!--<li><a href="#">Another action</a></li>-->
-                            <!--<li><a href="#">Something else here</a></li>-->
-                            <!--<li class="divider"></li>-->
-                            <!--<li class="dropdown-header">Nav header</li>-->
-                            <!--<li><a href="#">Separated link</a></li>-->
-                            <!--<li><a href="#">One more separated link</a></li>-->
-                            <!--</ul>-->
-                        <!--</li>-->
-                    <!--</sec:authorize>-->
+                    &lt;!&ndash;<sec:authorize access="isFullyAuthenticated()">&ndash;&gt;
+    &lt;!&ndash;<li ng-class="{ active: navController.isHome() }">&ndash;&gt;
+    &lt;!&ndash;<a href="#/">Home</a>&ndash;&gt;
+    &lt;!&ndash;</li>&ndash;&gt;
+    &lt;!&ndash;<li ng-class="{ active: navController.isLogin() }">&ndash;&gt;
+    &lt;!&ndash;<a href="#/login">Login</a></li>&ndash;&gt;
+    &lt;!&ndash;<li ng-class="{ active: navController.isRegister() }">&ndash;&gt;
+    &lt;!&ndash;<a href="#/register">Register</a>&ndash;&gt;
+    &lt;!&ndash;</li>&ndash;&gt;
+    &lt;!&ndash;<li ng-class="{ active: navController.isRent() }">&ndash;&gt;
+    &lt;!&ndash;<a href="#/rent">Rent</a>&ndash;&gt;
+    &lt;!&ndash;</li>&ndash;&gt;
+    &lt;!&ndash;<li><a href="#">New</a></li>&ndash;&gt;
+    &lt;!&ndash;<li class="dropdown">&ndash;&gt;
+    &lt;!&ndash;<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>&ndash;&gt;
+    &lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;
+    &lt;!&ndash;<li><a href="#">Action</a></li>&ndash;&gt;
+    &lt;!&ndash;<li><a href="#">Another action</a></li>&ndash;&gt;
+    &lt;!&ndash;<li><a href="#">Something else here</a></li>&ndash;&gt;
+    &lt;!&ndash;<li class="divider"></li>&ndash;&gt;
+    &lt;!&ndash;<li class="dropdown-header">Nav header</li>&ndash;&gt;
+    &lt;!&ndash;<li><a href="#">Separated link</a></li>&ndash;&gt;
+    &lt;!&ndash;<li><a href="#">One more separated link</a></li>&ndash;&gt;
+    &lt;!&ndash;</ul>&ndash;&gt;
+    &lt;!&ndash;</li>&ndash;&gt;
+    &lt;!&ndash;</sec:authorize>&ndash;&gt;
                 </ul>
             </div>
-            <!--/.nav-collapse -->
+            &lt;!&ndash;/.nav-collapse &ndash;&gt;
+        </div>
+    </div>-->
+
+    <div class="bs-docs-header" style="text-align: center">
+        <div class="container">
+            <h1>Аренда недвижимости без посредников</h1>
         </div>
     </div>
-
     <div ng-view class="container"></div>
 </div>
 
@@ -154,10 +159,17 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-52484973-1', 'auto');
     ga('send', 'pageview');
