@@ -3,19 +3,29 @@
 console.log('Create an angular app module');
 var rentApplication = angular.module('project', ['ngRoute'/*, 'facebook'*/]);
 
+var INDEX_CONTROLLER_NAME = 'IndexController';
+var INDEX_SERVICE_NAME = 'indexService';
+
 var RENT_CONTROLLER_NAME = 'RentController';
 var RENT_SERVICE_NAME = 'rentService';
+
 var LOGIN_CONTROLLER_NAME = 'LoginController';
 var LOGIN_SERVICE_NAME = 'loginService';
+
 var FB_LOGIN_CONTROLLER_NAME = 'FBLoginController';
 var FB_LOGIN_SERVICE_NAME = 'fbLoginService';
+
 var REGISTER_CONTROLLER_NAME = 'RegisterController';
 var REGISTER_SERVICE_NAME = 'registerService';
 
 rentApplication.config(function ($routeProvider) {
     console.log('Configure the angular app routes');
-    $routeProvider.
-        when('/rent', {
+    $routeProvider
+        .when('/', {
+            controller: INDEX_CONTROLLER_NAME,
+            templateUrl: 'components/index/index-view.html'
+        })
+        .when('/rent', {
             controller: RENT_CONTROLLER_NAME,
             templateUrl: 'components/rent/rent-view.html'
         })
@@ -44,6 +54,9 @@ rentApplication.config(function ($routeProvider) {
 
 rentApplication.controller('NavigationController', navigationController);
 rentApplication.factory('navigationService', navigationService);
+
+rentApplication.controller(INDEX_CONTROLLER_NAME, indexController);
+rentApplication.factory(INDEX_SERVICE_NAME, indexService);
 
 rentApplication.controller(RENT_CONTROLLER_NAME, rentController);
 rentApplication.controller(LOGIN_CONTROLLER_NAME, loginController);

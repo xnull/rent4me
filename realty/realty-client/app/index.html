@@ -75,6 +75,9 @@
     <script src="vendor/angular-resource/angular-resource.min.js"></script>
     <script src="vendor/angular-route/angular-route.min.js"></script>
 
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+
+    <script src="components/index/index-controller.js"></script>
     <script src="components/rent/rent-controller.js"></script>
     <script src="components/navigation/navigation-controller.js"></script>
     <script src="components/login/login-controller.js"></script>
@@ -98,21 +101,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#/" ng-click="navController.setHome()">Rent 4 Me</a>
+                <a class="navbar-brand" href="#/">Rent 4 Me</a>
             </div>
             <div class="collapse navbar-collapse" >
                 <ul class="nav navbar-nav">
                     <!--<sec:authorize access="isFullyAuthenticated()">-->
                         <li ng-class="{ active: navController.isHome() }">
-                            <a href="#" ng-click="navController.setHome()">Home</a>
+                            <a href="#/">Home</a>
                         </li>
                         <li ng-class="{ active: navController.isLogin() }">
-                            <a href="#/login" ng-click="navController.setLogin()">Login</a></li>
+                            <a href="#/login">Login</a></li>
                         <li ng-class="{ active: navController.isRegister() }">
-                            <a href="#/register" ng-click="navController.setRegister()">Register</a>
+                            <a href="#/register">Register</a>
                         </li>
                         <li ng-class="{ active: navController.isRent() }">
-                            <a href="#/rent" ng-click="navController.setRent()">Rent</a>
+                            <a href="#/rent">Rent</a>
                         </li>
                     <!--<li><a href="#">New</a></li>-->
                         <!--<li class="dropdown">-->
@@ -149,7 +152,6 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="vendor/jquery/dist/jquery.min.js"></script>
 <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

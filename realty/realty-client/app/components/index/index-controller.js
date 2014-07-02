@@ -1,18 +1,28 @@
-var loginController = function ($scope, loginService, navigationService) {
-    console.log('Login controller execution');
-//    $scope.NavigationController = NavigationController;
-    $scope.login = loginService.login;
-    console.log("Nav service state:"+navigationService.getTab());
-    $scope.navService = navigationService;
-
+var indexController = function ($scope, indexService, navigationService) {
+    console.log('Index controller execution');
 
     $(function () {
-        navigationService.setLogin();
+        navigationService.setHome();
+
+        const $carousel = $('.carousel');
+        $carousel.carousel({
+            interval: 5000,
+            pause: "hover",
+            wrap: true
+        });
+
+        $('.carousel-control').each(function () {
+            var elem = $(this);
+            elem.on('click', function () {
+                const dataSlideDirection = elem.attr('data-slide');
+                $carousel.carousel(dataSlideDirection);
+            });
+        });
+
     });
-//    $scope.greeting = loginService.hello();
 };
 
-var loginService = function ($http) {
+var indexService = function ($http) {
     "use strict";
 
     return {

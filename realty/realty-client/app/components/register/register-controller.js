@@ -1,6 +1,10 @@
-var registerController = function ($scope, registerService) {
+var registerController = function ($scope, registerService, navigationService) {
     console.log('Register controller execution');
     $scope.register = registerService.register;
+
+    $(function () {
+        navigationService.setRegister();
+    });
 //    $scope.greeting = registerService.hello();
 };
 

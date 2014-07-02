@@ -1,7 +1,11 @@
-var rentController = function ($scope, rentService) {
+var rentController = function ($scope, rentService, navigationService) {
     console.log('Rent controller execution');
     $scope.putForRent = rentService.putForRent;
     $scope.greeting = rentService.hello();
+
+    $(function () {
+        navigationService.setRent();
+    });
 };
 
 var rentService = function ($http) {
