@@ -6,7 +6,7 @@ var indexController = function ($scope, indexService, navigationService) {
 
         var $carousel = $('.carousel');
         $carousel.carousel({
-            interval: 5000,
+            interval: 30000,
             pause: "hover",
             wrap: true
         });
