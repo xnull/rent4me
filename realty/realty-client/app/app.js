@@ -1,6 +1,6 @@
 'use strict';
 
-console.log('Create an angular app module');
+//console.log('Create an angular app module');
 var rentApplication = angular.module('project', ['ngRoute'/*, 'facebook'*/]);
 
 var INDEX_CONTROLLER_NAME = 'IndexController';
@@ -19,7 +19,7 @@ var REGISTER_CONTROLLER_NAME = 'RegisterController';
 var REGISTER_SERVICE_NAME = 'registerService';
 
 rentApplication.config(function ($routeProvider) {
-    console.log('Configure the angular app routes');
+//    console.log('Configure the angular app routes');
     $routeProvider
         .when('/', {
             controller: INDEX_CONTROLLER_NAME,
