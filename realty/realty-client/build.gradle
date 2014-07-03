@@ -52,15 +52,22 @@ task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
 /**
  * Run unit tests
  */
-task jsTest(dependsOn: bowerInstall, type: NodeTask) {
-    group = 'javascript'
+task jsTest(type: JsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/karma/bin/karma')
     args = ['start', 'test/karma.conf.js']
-    execOverrides {
-        it.ignoreExitValue = false
-        it.workingDir = project.projectDir
-    }
 }
+test.dependsOn jsTest
+
+task jsE2ETest(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/protractor/bin/protractor')
+    args = ['test/protractor-conf.js']
+}
+
+task jsHint(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['lint']
+}
+check.dependsOn jsHint
 
 task packApp(dependsOn: bowerInstall, type: Tar) {
     group = 'Packaging'
@@ -68,20 +75,19 @@ task packApp(dependsOn: bowerInstall, type: Tar) {
     baseName = 'app'
 }
 
-test.dependsOn jsTest
-
-task jsHint(dependsOn: bowerInstall, type: NodeTask) {
-    group = 'javascript'
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['lint']
-    execOverrides {
-        it.ignoreExitValue = false
-        it.workingDir = project.projectDir
-    }
-}
-check.dependsOn jsHint
-
 clean << {
     project.delete './node_modules'
     project.delete './app/vendor'
+}
+
+public class JsTaskRunner extends com.moowork.gradle.node.task.NodeTask {
+
+    JsTaskRunner() {
+        group = 'javascript'
+        dependsOn 'bowerInstall'
+        setExecOverrides {
+            it.ignoreExitValue = false
+            it.workingDir = project.projectDir
+        }
+    }
 }
