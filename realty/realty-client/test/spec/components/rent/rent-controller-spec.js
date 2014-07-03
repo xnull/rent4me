@@ -3,43 +3,33 @@
  */
 'use strict';
 
-/* jasmine specs for controllers go here */
-
-/*
-
- describe('controllers', function(){
- beforeEach(module('project'));
-
- it('should inject controller', inject(function($controller) {
- //spec body
- var rent = $controller('rentController', { $scope: {} });
- expect(rent).toBeDefined();
- }));
- });
+/**
+ * http://www.benlesh.com/2013/06/angular-js-unit-testing-services.html
  */
+describe('Rent service test', function () {
+    var _httpBackend;
+    var _rentService;
 
-/*describe('Rent testing', function () {
- var scope, ctrl, $httpBackend;
+    beforeEach(function () {
 
- beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
- $httpBackend = _$httpBackend_;
- $httpBackend.expectGET('putForRent').respond([
- {name: 'Nexus S'},
- {name: 'Motorola DROID'}
- ]);
+        // load the module.
+        module('project');
 
- scope = $rootScope.$new();
- ctrl = $controller('RentController', {$scope: scope});
- }));
+        // inject your service for testing.
+        // The _underscores_ are a convenience thing
+        // so you can have your variable name be the
+        // same as your injected service.
+        inject(function (rentService) {
+            _rentService = rentService;
+        });
 
+        inject(function ($httpBackend) {
+            _httpBackend = $httpBackend;
+        });
+    });
 
- it('should create "phones" model with 2 phones fetched from xhr', function () {
- expect(scope.phones).toEqualData([]);
- $httpBackend.flush();
-
- expect(scope.phones).toEqualData([
- {name: 'Nexus S'},
- {name: 'Motorola DROID'}
- ]);
- });
- });*/
+    it('check hello method', function () {
+        expect(_rentService).toBeDefined();
+        expect(_rentService.hello()).toBe("hey hello");
+    });
+});
