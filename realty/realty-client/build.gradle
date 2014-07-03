@@ -36,6 +36,9 @@ node {
     workDir = file("${project.buildDir}/nodejs")
 }
 
+/**
+ * Download js dependencies
+ */
 task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
     group = 'javascript'
     script = new File(project.projectDir, '/node_modules/bower/bin/bower')
@@ -46,7 +49,10 @@ task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
     }
 }
 
-task jsTest(dependsOn: npmInstall, type: NodeTask) {
+/**
+ * Run unit tests
+ */
+task jsTest(dependsOn: bowerInstall, type: NodeTask) {
     group = 'javascript'
     script = new File(project.projectDir, '/node_modules/karma/bin/karma')
     args = ['start', 'test/karma.conf.js']
@@ -64,6 +70,18 @@ task packApp(dependsOn: bowerInstall, type: Tar) {
 
 test.dependsOn jsTest
 
+task jsHint(dependsOn: bowerInstall, type: NodeTask) {
+    group = 'javascript'
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['lint']
+    execOverrides {
+        it.ignoreExitValue = false
+        it.workingDir = project.projectDir
+    }
+}
+check.dependsOn jsHint
+
 clean << {
     project.delete './node_modules'
+    project.delete './app/vendor'
 }

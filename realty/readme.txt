@@ -63,8 +63,16 @@
  Connect to dev environment using following info:
 
  IP Address: 188.226.219.248 (alias: dev-realty.fspare.com, rent4.me)
+
+ ROOT login
+
  Username: root
  Password: hnzjnjwbfjao
+
+ Tomcat login:
+ Username: tomcat
+ Password: k124hfeoifs9
+
 
 
  ------
