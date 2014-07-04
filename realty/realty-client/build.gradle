@@ -58,7 +58,18 @@ task jsTest(type: JsTaskRunner) {
 }
 test.dependsOn jsTest
 
-task jsE2ETest(type: JsTaskRunner) {
+
+task updateWebDriverManager(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/protractor/bin/webdriver-manager')
+    args = ['update']
+}
+
+task startWebDriverManager(dependsOn: updateWebDriverManager, type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/protractor/bin/webdriver-manager')
+    args = ['start']
+}
+
+task jsE2ETest(dependsOn: updateWebDriverManager, type: JsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/protractor/bin/protractor')
     args = ['test/protractor-conf.js']
 }
