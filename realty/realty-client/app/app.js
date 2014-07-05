@@ -124,7 +124,8 @@ rentApplication.run(
 //        $.ajaxSetup({ cache: true });
         $.getScript('//connect.facebook.net/en_UK/all.js', function(){
             FB.init({
-                appId: '270007246518198',
+//                appId: '271375949714661', //for local development:
+                appId: '270007246518198',//for deployment
                 cookie: true,  // enable cookies to allow the server to access
                 // the session
                 xfbml: true,  // parse social plugins on this page
