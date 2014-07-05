@@ -1,4 +1,4 @@
-var navigationController = function ($scope, navigationService) {
+var navigationController = function ($scope, navigationService, authorizationService) {
     //console.log("Nav controller");
 
     this.getTab = navigationService.getTab;
@@ -16,6 +16,8 @@ var navigationController = function ($scope, navigationService) {
 
     this.isRent = navigationService.isRent;
     this.setRent = navigationService.setRent;
+
+    this.isAuthorized = authorizationService.isAuthorized();
 };
 
 var navigationService = function () {
