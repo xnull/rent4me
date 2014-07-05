@@ -1,9 +1,24 @@
-var loginController = function ($scope, loginService, navigationService) {
+var loginController = function ($scope, $log, loginService, navigationService, authorizationService) {
     //console.log('Login controller execution');
-//    $scope.NavigationController = NavigationController;
+
     $scope.login = loginService.login;
-    //console.log("Nav service state:"+navigationService.getTab());
+
     $scope.navService = navigationService;
+
+    $scope.isAuthorized = authorizationService.isAuthorized;
+
+    $scope.$on(authorizationService.EVENT_AUTH_STATE_CHANGED, function () {
+        $scope.apply(
+            function () {
+                var authorized = authorizationService.isAuthorized();
+                $log.info("login_controller, setting to " + authorized);
+                $scope.isAuthorized = authorized;
+            });
+    });
+
+
+    $scope.loginWithFacebook = authorizationService.loginWithFacebook;
+    $scope.logout = authorizationService.logoutWithFacebook;
 
 
     $(function () {

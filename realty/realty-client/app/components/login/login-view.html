@@ -25,6 +25,7 @@
         </div>
     </form>
     <div class="container">
-        <a href="#/fb_login" class="btn btn-primary">Login wth Facebook</a>
+        <a ng-hide="isAuthorized()" ng-click="loginWithFacebook()" class="btn btn-primary">Login wth Facebook</a>
+        <a ng-show="isAuthorized()" ng-click="logout()" class="btn btn-primary">Logout</a>
     </div>
 </div>

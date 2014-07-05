@@ -1,4 +1,4 @@
-var navigationController = function ($scope, navigationService) {
+var navigationController = function ($scope, navigationService, authorizationService) {
     //console.log("Nav controller");
 
     this.getTab = navigationService.getTab;
@@ -16,6 +16,8 @@ var navigationController = function ($scope, navigationService) {
 
     this.isRent = navigationService.isRent;
     this.setRent = navigationService.setRent;
+
+    this.isAuthorized = authorizationService.isAuthorized();
 };
 
 var navigationService = function () {
@@ -30,7 +32,7 @@ var navigationService = function () {
     var _self = this;
 
     return {
-        getTab: function() {
+        getTab: function () {
             return _self.tab;
         },
         selectTab: function (setTab) {
@@ -43,28 +45,28 @@ var navigationService = function () {
         isHome: function () {
             return this.isSelected(home);
         },
-        setHome: function() {
+        setHome: function () {
             this.selectTab(home);
         },
 
         isRegister: function () {
             return this.isSelected(register);
         },
-        setRegister: function() {
+        setRegister: function () {
             this.selectTab(register);
         },
 
         isLogin: function () {
             return this.isSelected(login);
         },
-        setLogin: function() {
+        setLogin: function () {
             this.selectTab(login);
         },
 
         isRent: function () {
             return this.isSelected(rent);
         },
-        setRent: function() {
+        setRent: function () {
             this.selectTab(rent);
         }
     };
