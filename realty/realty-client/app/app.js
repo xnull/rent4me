@@ -1,7 +1,7 @@
 'use strict';
 
 //console.log('Create an angular app module');
-var rentApplication = angular.module('project', ['ngRoute'/*, 'facebook'*/]);
+var rentApplication = angular.module('project', ['ngRoute', 'ngResource'/*, 'facebook'*/]);
 
 var INDEX_CONTROLLER_NAME = 'IndexController';
 var INDEX_SERVICE_NAME = 'indexService';
@@ -45,6 +45,11 @@ rentApplication.config(function ($routeProvider) {
             redirectTo: '/'
         });
 });
+
+rentApplication.config(['$resourceProvider', function ($resourceProvider) {
+    // Don't strip trailing slashes from calculated URLs
+    $resourceProvider.defaults.stripTrailingSlashes = false;
+}]);
 
 /*rentApplication.config(['FacebookProvider', function(FacebookProvider) {
     // Here you could set your appId through the setAppId method and then initialize

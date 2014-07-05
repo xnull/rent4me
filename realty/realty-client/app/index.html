@@ -13,57 +13,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
-
-
-    <!-- Custom styles for this template -->
-    <style type="text/css">
-        /* Sticky footer styles
-        -------------------------------------------------- */
-
-        html,
-        body {
-            height: 100%;
-            /* The html and body elements cannot have any padding or margin. */
-        }
-
-        /* Wrapper for page content to push down footer */
-        #wrap {
-            min-height: 100%;
-            height: auto;
-            /* Negative indent footer by its height */
-            margin: 0 auto -60px;
-            /* Pad bottom by footer height */
-            padding: 0 0 60px;
-        }
-
-        /* Set the fixed height of the footer here */
-        #footer {
-            height: 60px;
-            background-color: #f5f5f5;
-        }
-
-        /* Custom page CSS
-        -------------------------------------------------- */
-        /* Not required for template or sticky footer method. */
-
-        #wrap > .container {
-            padding: 60px 15px 0;
-        }
-
-        .container .text-muted {
-            margin: 20px 0;
-        }
-
-        #footer > .container {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-
-        code {
-            font-size: 80%;
-        }
-
-    </style>
+    <link rel="stylesheet" href="index.css">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -76,7 +26,6 @@
     <script src="vendor/angular/angular.min.js"></script>
     <script src="vendor/angular-resource/angular-resource.min.js"></script>
     <script src="vendor/angular-route/angular-route.min.js"></script>
-
 
     <script src="components/index/index-controller.js"></script>
     <script src="components/rent/rent-controller.js"></script>
@@ -142,8 +91,9 @@
         <div class="container">
             <h1>Аренда недвижимости без посредников</h1>
         </div>
+        <div ng-view class="container"></div>
     </div>
-    <div ng-view class="container"></div>
+
 </div>
 
 
