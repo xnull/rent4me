@@ -1,73 +1,84 @@
-//console.log('Create an angular app module');
-var rentApplication = angular.module('project', ['ngRoute', 'ngResource'/*, 'facebook'*/]);
-
-var INDEX_CONTROLLER_NAME = 'IndexController';
-var INDEX_SERVICE_NAME = 'indexService';
-
-var RENT_CONTROLLER_NAME = 'RentController';
-var RENT_SERVICE_NAME = 'rentService';
-
-var LOGIN_CONTROLLER_NAME = 'LoginController';
-var LOGIN_SERVICE_NAME = 'loginService';
-
+var appConfiguration = [
+    {
+        ctl: indexController,
+        service: indexService,
+        ctlName: 'IndexController',
+        serviceName: 'indexService',
+        route: '/',
+        template: 'components/index/index-view.html'
+    },
+    {
+        ctl: rentController,
+        service: rentService,
+        ctlName: 'RentController',
+        serviceName: 'rentService',
+        route: '/rent',
+        template: 'components/rent/rent-view.html'
+    },
+    {
+        ctl: loginController,
+        service: loginService,
+        ctlName: 'LoginController',
+        serviceName: 'loginService',
+        route: '/login',
+        template: 'components/login/login-view.html'
+    },
+    {
+        ctl: registerController,
+        service: registerService,
+        ctlName: 'RegisterController',
+        serviceName: 'registerService',
+        route: '/register',
+        template: 'components/register/register-view.html'
+    }
+];
 var AUTHORIZATION_CONTROLLER_NAME = 'AuthorizationController';
 var AUTHORIZATION_SERVICE_NAME = 'authorizationService';
 
-var REGISTER_CONTROLLER_NAME = 'RegisterController';
-var REGISTER_SERVICE_NAME = 'registerService';
+
+/*appConfiguration.push({
+ ctl: ,
+ service: ,
+ ctlName: 'SearchRentController',
+ serviceName: 'searchRentService',
+ route: '/search-rent',
+ template: 'components/search-rent/search-rent-view.html'
+ });*/
+
+var rentApplication = angular.module('project', ['ngRoute', 'ngResource'/*, 'facebook'*/]);
 
 rentApplication.config(function ($routeProvider) {
     'use strict';
-    //$log.debug('Configure the angular app routes');
-    $routeProvider
-        .when('/', {
-            controller: INDEX_CONTROLLER_NAME,
-            templateUrl: 'components/index/index-view.html'
+
+    for (var i = 0; i < appConfiguration.length; i++) {
+        var cfg = appConfiguration[i];
+        console.log("CtlName: " + cfg.ctlName + ", serviceName: " + cfg.serviceName + ", route: " + cfg.route);
+        $routeProvider.when(cfg.route, {
+            controller: cfg.ctlName,
+            templateUrl: cfg.template
         })
-        .when('/rent', {
-            controller: RENT_CONTROLLER_NAME,
-            templateUrl: 'components/rent/rent-view.html'
-        })
-        .when('/login', {
-            controller: LOGIN_CONTROLLER_NAME,
-            templateUrl: 'components/login/login-view.html'
-        })
-        .when('/register', {
-            controller: REGISTER_CONTROLLER_NAME,
-            templateUrl: 'components/register/register-view.html'
-        })
-        .otherwise({
-            redirectTo: '/'
-        });
+    }
+
+    $routeProvider.otherwise({
+        redirectTo: '/'
+    });
 });
 
-rentApplication.config(['$resourceProvider', function ($resourceProvider) {
-    // Don't strip trailing slashes from calculated URLs
-    $resourceProvider.defaults.stripTrailingSlashes = false;
-}]);
+for (var i = 0; i < appConfiguration.length; i++) {
+    var cfg = appConfiguration[i];
+    rentApplication.controller(cfg.ctlName, cfg.ctl);
+    rentApplication.factory(cfg.serviceName, cfg.service);
+}
+rentApplication.controller(AUTHORIZATION_CONTROLLER_NAME, authorizationController);
+rentApplication.factory(AUTHORIZATION_SERVICE_NAME, authorizationService);
+rentApplication.controller('NavigationController', navigationController);
+rentApplication.factory('navigationService', navigationService);
 
 /*rentApplication.config(['FacebookProvider', function(FacebookProvider) {
  // Here you could set your appId through the setAppId method and then initialize
  // or use the shortcut in the initialize method directly.
  FacebookProvider.init('270007246518198');
  }]);*/
-
-rentApplication.controller('NavigationController', navigationController);
-rentApplication.factory('navigationService', navigationService);
-
-rentApplication.controller(INDEX_CONTROLLER_NAME, indexController);
-rentApplication.factory(INDEX_SERVICE_NAME, indexService);
-
-rentApplication.controller(AUTHORIZATION_CONTROLLER_NAME, authorizationController);
-rentApplication.factory(AUTHORIZATION_SERVICE_NAME, authorizationService);
-
-rentApplication.controller(RENT_CONTROLLER_NAME, rentController);
-rentApplication.controller(LOGIN_CONTROLLER_NAME, loginController);
-
-rentApplication.controller(REGISTER_CONTROLLER_NAME, registerController);
-rentApplication.factory(RENT_SERVICE_NAME, rentService);
-rentApplication.factory(LOGIN_SERVICE_NAME, loginService);
-rentApplication.factory(REGISTER_SERVICE_NAME, registerService);
 
 //TODO: clean up this shit
 var authFuction = function ($rootScope, $window, authorizationService, $log) {
