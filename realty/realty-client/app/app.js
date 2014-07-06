@@ -75,7 +75,7 @@ rentApplication.config(function ($routeProvider) {
         $routeProvider.when(cfg.route, {
             controller: cfg.ctlName,
             templateUrl: cfg.template
-        })
+        });
     }
 
     $routeProvider.otherwise({
