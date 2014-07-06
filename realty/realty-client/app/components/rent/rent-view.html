@@ -1,33 +1,36 @@
-<div ng-controller='RentController' style="width: 300px">
-    <form name="rentForm" ng-submit="putForRent()">
-        <div class="form-group">
-            <label for="city">Город:</label>
-            <input id="city" class="form-control" type="text" placeholder="Город" ng-model="rentData.city">
-        </div>
-        <div class="form-group">
-            <label for="street_address">Улица:</label>
-            <input id="street_address" class="form-control" placeholder="Улица" type="text" ng-model="rentData.address">
-        </div>
-        <div class="form-group">
-            <label for="house">Дом:</label>
-            <input id="house" class="form-control" type="text" placeholder="Дом" ng-model="rentData.house">
-        </div>
-        <div class="form-group">
-            <label for="floor">Этаж:</label>
-            <input id="floor" class="form-control" type="text" placeholder="Этаж" ng-model="rentData.floor">
-        </div>
-        <div class="form-group">
-            <label for="rent_period">Срок аренды:</label>
-            <input id="rent_period" class="form-control" type="text" placeholder="Срок аренды"
-                   ng-model="rentData.rentPeriod">
-        </div>
-        <div class="form-group">
-            <label for="description">Описание:</label>
-            <textarea id="description" class="form-control" placeholder="Описание"
-                      ngModel="rentData.description"></textarea>
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Выставить объявление">
-        </div>
-    </form>
+<div class="bs-docs-header" style="text-align: center; margin-bottom: 10px;">
+    <div ng-controller='RentController' style="width: 300px" class="container">
+        <form name="rentForm" ng-submit="putForRent()">
+            <div class="form-group">
+                <label for="city">Город:</label>
+                <input id="city" class="form-control" type="text" placeholder="Город" ng-model="rentData.city">
+            </div>
+            <div class="form-group">
+                <label for="street_address">Улица:</label>
+                <input id="street_address" class="form-control" placeholder="Улица" type="text"
+                       ng-model="rentData.address">
+            </div>
+            <div class="form-group">
+                <label for="house">Дом:</label>
+                <input id="house" class="form-control" type="text" placeholder="Дом" ng-model="rentData.house">
+            </div>
+            <div class="form-group">
+                <label for="floor">Этаж:</label>
+                <input id="floor" class="form-control" type="text" placeholder="Этаж" ng-model="rentData.floor">
+            </div>
+            <div class="form-group">
+                <label for="rent_period">Срок аренды:</label>
+                <input id="rent_period" class="form-control" type="text" placeholder="Срок аренды"
+                       ng-model="rentData.rentPeriod">
+            </div>
+            <div class="form-group">
+                <label for="description">Описание:</label>
+                <textarea id="description" class="form-control" placeholder="Описание"
+                          ngModel="rentData.description"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Выставить объявление">
+            </div>
+        </form>
+    </div>
 </div>

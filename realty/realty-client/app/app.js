@@ -1,4 +1,4 @@
-var appConfiguration = [
+var componentsCfg = [
     {
         ctl: indexController,
         service: indexService,
@@ -30,29 +30,40 @@ var appConfiguration = [
         serviceName: 'registerService',
         route: '/register',
         template: 'components/register/register-view.html'
+    },
+    {
+        ctl: rentSearchController,
+        service: rentSearchService,
+        ctlName: 'RentSearchController',
+        serviceName: 'rentSearchService',
+        route: '/rent-search',
+        template: 'components/rent-search/rent-search-view.html'
     }
 ];
-var AUTHORIZATION_CONTROLLER_NAME = 'AuthorizationController';
-var AUTHORIZATION_SERVICE_NAME = 'authorizationService';
 
+var backendComponents = [
+    {
+        ctl: authorizationController,
+        service: authorizationService,
+        ctlName: 'AuthorizationController',
+        serviceName: 'authorizationService'
+    },
+    {
+        ctl: navigationController,
+        service: navigationService,
+        ctlName: 'NavigationController',
+        serviceName: 'navigationService'
+    }
+];
 
-/*appConfiguration.push({
- ctl: ,
- service: ,
- ctlName: 'SearchRentController',
- serviceName: 'searchRentService',
- route: '/search-rent',
- template: 'components/search-rent/search-rent-view.html'
- });*/
 
 var rentApplication = angular.module('project', ['ngRoute', 'ngResource'/*, 'facebook'*/]);
 
 rentApplication.config(function ($routeProvider) {
     'use strict';
 
-    for (var i = 0; i < appConfiguration.length; i++) {
-        var cfg = appConfiguration[i];
-        console.log("CtlName: " + cfg.ctlName + ", serviceName: " + cfg.serviceName + ", route: " + cfg.route);
+    for (var i = 0; i < componentsCfg.length; i++) {
+        var cfg = componentsCfg[i];
         $routeProvider.when(cfg.route, {
             controller: cfg.ctlName,
             templateUrl: cfg.template
@@ -64,15 +75,16 @@ rentApplication.config(function ($routeProvider) {
     });
 });
 
-for (var i = 0; i < appConfiguration.length; i++) {
-    var cfg = appConfiguration[i];
-    rentApplication.controller(cfg.ctlName, cfg.ctl);
-    rentApplication.factory(cfg.serviceName, cfg.service);
+for (var i = 0; i < componentsCfg.length; i++) {
+    rentApplication.controller(componentsCfg[i].ctlName, componentsCfg[i].ctl);
+    rentApplication.factory(componentsCfg[i].serviceName, componentsCfg[i].service);
 }
-rentApplication.controller(AUTHORIZATION_CONTROLLER_NAME, authorizationController);
-rentApplication.factory(AUTHORIZATION_SERVICE_NAME, authorizationService);
-rentApplication.controller('NavigationController', navigationController);
-rentApplication.factory('navigationService', navigationService);
+
+for (var i = 0; i < backendComponents.length; i++) {
+    rentApplication.controller(backendComponents[i].ctlName, backendComponents[i].ctl);
+    rentApplication.factory(backendComponents[i].serviceName, backendComponents[i].service);
+}
+
 
 /*rentApplication.config(['FacebookProvider', function(FacebookProvider) {
  // Here you could set your appId through the setAppId method and then initialize
