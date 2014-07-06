@@ -66,8 +66,8 @@
                     <li ng-hide="auth_info.authorized" ng-class="{ active: navController.isRegister() }">
                         <a href="#/register">Register</a>
                     </li>
-                    <li ng-show="auth_info.authorized" ng-class="{ active: navController.isRent() }">
-                        <a href="#/rent">Rent</a>
+                    <li ng-hide="auth_info.authorized" ng-class="{ active: navController.isRent() }">
+                    <a href="#/rent">Rent</a>
                     </li>
                     <li ng-show="auth_info.authorized" ng-click="authController.logout()">
                         <a>Logout</a>

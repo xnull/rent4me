@@ -74,6 +74,11 @@ task jsE2ETest(dependsOn: updateWebDriverManager, type: JsTaskRunner) {
     args = ['test/protractor-conf.js']
 }
 
+task jsBuild(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['jsBuild']
+}
+
 task jsHint(type: JsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
     args = ['lint']
