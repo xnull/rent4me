@@ -1,5 +1,7 @@
 var authorizationController = function ($scope, $log, authorizationService) {
-    var log_prefix = "auth_ctrl ";
+    "use strict";
+
+    var logPrefix = "auth_ctrl ";
 
     $scope.auth_info = {
         authorized: authorizationService.isAuthorized()
@@ -8,25 +10,25 @@ var authorizationController = function ($scope, $log, authorizationService) {
 
 //    $scope.authorized = authorizationService.isAuthorized();
 
-    $log.info(log_prefix + "Authorized? " + $scope.auth_info.authorized);
+    $log.info(logPrefix + "Authorized? " + $scope.auth_info.authorized);
 
     var _self = this;
 
-    $log.info(log_prefix + "Binding for scope event: " + authorizationService.EVENT_AUTH_STATE_CHANGED);
+    $log.info(logPrefix + "Binding for scope event: " + authorizationService.EVENT_AUTH_STATE_CHANGED);
     $scope.$on(authorizationService.EVENT_AUTH_STATE_CHANGED, function () {
-        $log.info(log_prefix + "Received event: " + authorizationService.EVENT_AUTH_STATE_CHANGED);
+        $log.info(logPrefix + "Received event: " + authorizationService.EVENT_AUTH_STATE_CHANGED);
 
         $scope.$apply(function () {
             var authorized = authorizationService.isAuthorized();
-            $log.info(log_prefix + "Setting authorized to " + authorized);
+            $log.info(logPrefix + "Setting authorized to " + authorized);
             $scope.auth_info.authorized = authorized;
         });
     });
 
 //    $scope.$watch(authorizationService.EVENT_AUTH_STATE_CHANGED, function(){
-//        $log.info(log_prefix+"Received event on watch: "+authorizationService.EVENT_AUTH_STATE_CHANGED);
+//        $log.info(logPrefix+"Received event on watch: "+authorizationService.EVENT_AUTH_STATE_CHANGED);
 //        var authorized = authorizationService.isAuthorized();
-//        $log.info(log_prefix+"Setting authorized to(on watch) "+authorized);
+//        $log.info(logPrefix+"Setting authorized to(on watch) "+authorized);
 //        $scope.auth_info.authorized = authorized;
 //    });
 
@@ -37,6 +39,8 @@ var authorizationController = function ($scope, $log, authorizationService) {
 
 
 var authorizationService = function ($rootScope, $log) {
+    'use strict';
+
     var log_prefix = "auth_service ";
     var authorization = {};
 

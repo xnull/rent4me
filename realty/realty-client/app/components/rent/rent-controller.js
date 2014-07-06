@@ -1,3 +1,10 @@
+/**
+ * dynamic pages https://egghead.io/lessons/angularjs-using-resource-for-data-models
+ * @param $log
+ * @param $scope
+ * @param rentService
+ * @param navigationService
+ */
 var rentController = function ($log, $scope, rentService, navigationService) {
     "use strict";
     $log.debug('Rent controller: execution');

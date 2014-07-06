@@ -1,4 +1,6 @@
 var indexController = function ($scope, indexService, navigationService, $log) {
+    'use strict';
+
     $log.debug('Index controller execution');
 
     $(function () {

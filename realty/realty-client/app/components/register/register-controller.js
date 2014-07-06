@@ -1,4 +1,6 @@
 var registerController = function ($scope, registerService, navigationService, $log) {
+    'use strict';
+
     $log.debug('Register controller execution');
     $scope.register = registerService.register;
 

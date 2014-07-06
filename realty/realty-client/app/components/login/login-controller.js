@@ -1,4 +1,6 @@
-var loginController = function ($scope, $log, loginService, navigationService, authorizationService, $log) {
+var loginController = function ($scope, $log, loginService, navigationService, authorizationService) {
+    'use strict';
+
     $log.debug('Login controller execution');
 
     $scope.login = loginService.login;

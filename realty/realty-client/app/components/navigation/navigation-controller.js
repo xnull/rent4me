@@ -1,4 +1,6 @@
 var navigationController = function ($scope, navigationService, authorizationService, $log) {
+    'use strict';
+
     $log.debug("Nav controller");
 
     this.getTab = navigationService.getTab;
