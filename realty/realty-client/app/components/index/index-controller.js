@@ -1,5 +1,5 @@
-var indexController = function ($scope, indexService, navigationService) {
-    //console.log('Index controller execution');
+var indexController = function ($scope, indexService, navigationService, $log) {
+    $log.debug('Index controller execution');
 
     $(function () {
         navigationService.setHome();
@@ -22,7 +22,7 @@ var indexController = function ($scope, indexService, navigationService) {
     });
 };
 
-var indexService = function ($http) {
+var indexService = function ($http, $log) {
     "use strict";
 
     return {
@@ -31,12 +31,12 @@ var indexService = function ($http) {
                 success(function (data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
-                    //console.log('Successful sending ajax request');
+                    $log.debug('Successful sending ajax request');
                 }).
                 error(function (data, status, headers, config) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    //console.log('Error sending ajax request. Status: ' + status);
+                    $log.debug('Error sending ajax request. Status: ' + status);
                     //$scope.greeting = "raz dva";
                 });
         }

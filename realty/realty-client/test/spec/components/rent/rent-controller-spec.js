@@ -5,6 +5,8 @@
 
 /**
  * http://www.benlesh.com/2013/06/angular-js-unit-testing-services.html
+ *
+ * mock http://stackoverflow.com/questions/14773269/injecting-a-mock-into-an-angularjs-service
  */
 describe('Rent service test', function () {
     var _httpBackend;

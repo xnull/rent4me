@@ -18,7 +18,7 @@ var REGISTER_SERVICE_NAME = 'registerService';
 
 rentApplication.config(function ($routeProvider) {
     'use strict';
-    // console.log('Configure the angular app routes');
+    //$log.debug('Configure the angular app routes');
     $routeProvider
         .when('/', {
             controller: INDEX_CONTROLLER_NAME,
@@ -106,7 +106,7 @@ var authFuction = function ($rootScope, $window, authorizationService, $log) {
             // The person is not logged into Facebook, so we're not sure if
             // they are logged into this app or not.
             innerHTML = 'Please log into Facebook.';
-            console.log(innerHTML);
+            $log.debug(innerHTML);
 //                document.getElementById('status').innerHTML = innerHTML;
         }
     }

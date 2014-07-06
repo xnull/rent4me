@@ -55,8 +55,8 @@ var authorizationService = function ($rootScope, $log) {
         $log.info("login with FB");
         FB.login(function (response) {
                 // handle the response
-                console.log("Response after login:");
-                console.log(response);
+                $log.debug("Response after login:");
+                $log.debug(response);
 
                 if (response.authResponse) {
                     $log.info(log_prefix + 'Welcome!  Fetching your information.... ');

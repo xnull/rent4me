@@ -1,5 +1,5 @@
-var loginController = function ($scope, $log, loginService, navigationService, authorizationService) {
-    //console.log('Login controller execution');
+var loginController = function ($scope, $log, loginService, navigationService, authorizationService, $log) {
+    $log.debug('Login controller execution');
 
     $scope.login = loginService.login;
 

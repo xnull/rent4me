@@ -19,6 +19,10 @@ gulp.task('jsBuild', function () {
         .pipe(jshint()).pipe(jshint.reporter('default'))
         .pipe(concat('all.js'))
         .pipe(gulp.dest('./dist'));
+
+    //concat and copy all css files to destination
+    //copy all html files to destination
+    //copy all images, eventually all files exclude js
 });
 
 // Lint Task
