@@ -2,6 +2,13 @@
  * Created by null on 06.07.14.
  */
 
+/**
+ * Google maps and angularjs http://www.simplecoding.org/google-maps-angularjs-pozicionirovanie-karty.html
+ * @param $log
+ * @param $scope
+ * @param rentSearchService
+ * @param navigationService
+ */
 var rentSearchController = function ($log, $scope, rentSearchService, navigationService) {
     "use strict";
 
