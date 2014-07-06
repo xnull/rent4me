@@ -22,6 +22,9 @@ var navigationController = function ($scope, navigationService, authorizationSer
     this.isRentSearch = navigationService.isRentSearch;
     this.setRentSearch = navigationService.setRentSearch;
 
+    this.isPersonal = navigationService.isPersonal;
+    this.setPersonal = navigationService.setPersonal;
+
     this.isAuthorized = authorizationService.isAuthorized();
 };
 
@@ -33,6 +36,7 @@ var navigationService = function () {
     var login = 'login';
     var rent = 'rent';
     var rentSearch = 'rent-search';
+    var personal = 'personal';
 
     this.tab = home;//set default value
     var _self = this;
@@ -81,6 +85,13 @@ var navigationService = function () {
         },
         setRentSearch: function () {
             this.selectTab(rentSearch);
+        },
+
+        isPersonal: function () {
+            return this.isSelected(personal);
+        },
+        setPersonal: function () {
+            this.selectTab(personal);
         }
     };
 

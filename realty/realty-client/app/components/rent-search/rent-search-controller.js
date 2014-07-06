@@ -11,4 +11,4 @@ var rentSearchController = function ($log, $scope, rentSearchService, navigation
 
 var rentSearchService = function () {
     "use strict";
-}
+};
