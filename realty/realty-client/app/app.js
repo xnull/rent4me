@@ -154,11 +154,20 @@ var authFuction = function ($rootScope, $window, authorizationService, $log) {
 //270007246518198
 
     // Load the SDK asynchronously
+    var isProduction = $window.location.href.indexOf('rent4.me') != -1;
 
+    var fbAppId;
+    if(isProduction) {
+        fbAppId = '270007246518198';
+    } else {
+        fbAppId = '271375949714661';
+    }
 //        $.ajaxSetup({ cache: true });
     $.getScript('//connect.facebook.net/en_UK/all.js', function () {
+
         FB.init({
-            appId: '270007246518198',
+//            appId: '270007246518198',//for deployment
+            appId: fbAppId,//for development
             cookie: true,  // enable cookies to allow the server to access
             // the session
             xfbml: true,  // parse social plugins on this page
@@ -185,4 +194,4 @@ var authFuction = function ($rootScope, $window, authorizationService, $log) {
     });
 
 };
-//rentApplication.run(authFuction);
+rentApplication.run(authFuction);
