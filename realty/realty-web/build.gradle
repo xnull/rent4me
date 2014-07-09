@@ -6,13 +6,9 @@ apply plugin: 'eclipse'
 
 apply plugin: 'jetty'
 
-configurations {
-    provided
-}
-
-sourceSets.main.compileClasspath += configurations.provided
-eclipse.classpath.plusConfigurations += configurations.provided
-idea.module.scopes.PROVIDED.plus += [ configurations.provided ]
+/**
+ * The War plugin adds two dependency configurations: providedCompile and providedRuntime. See http://www.gradle.org/docs/current/userguide/war_plugin.html
+ */
 
 dependencies {
     compile project(':realty-services')
@@ -31,7 +27,7 @@ dependencies {
     compile libraries."org.glassfish.jersey.media:jersey-media-json-jackson"
     compile libraries."org.glassfish.jersey.ext:jersey-spring3"
 
-    provided libraries."javax.servlet:javax.servlet-api"
+    providedCompile libraries."javax.servlet:javax.servlet-api"
 
     //db pool
     compile libraries."c3p0:c3p0"
