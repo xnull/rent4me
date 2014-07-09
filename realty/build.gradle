@@ -121,8 +121,8 @@ subprojects {
              */
             idea {
                 project {
-                    jdkName = javaVersion
-                    languageLevel = javaVersion
+                    //jdkName = javaVersion
+                    //languageLevel = javaVersion
                 }
             }
 

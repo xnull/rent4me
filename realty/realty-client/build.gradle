@@ -58,7 +58,6 @@ task jsTest(type: JsTaskRunner) {
 }
 test.dependsOn jsTest
 
-
 task updateWebDriverManager(type: JsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/protractor/bin/webdriver-manager')
     args = ['update']
