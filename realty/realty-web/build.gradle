@@ -6,6 +6,14 @@ apply plugin: 'eclipse'
 
 apply plugin: 'jetty'
 
+configurations {
+    provided
+}
+
+sourceSets.main.compileClasspath += configurations.provided
+eclipse.classpath.plusConfigurations += configurations.provided
+idea.module.scopes.PROVIDED.plus += [ configurations.provided ]
+
 dependencies {
     compile project(':realty-services')
 
@@ -22,6 +30,8 @@ dependencies {
     compile libraries."org.glassfish.jersey.containers:jersey-container-servlet"
     compile libraries."org.glassfish.jersey.media:jersey-media-json-jackson"
     compile libraries."org.glassfish.jersey.ext:jersey-spring3"
+
+    provided libraries."javax.servlet:javax.servlet-api"
 
     //db pool
     compile libraries."c3p0:c3p0"

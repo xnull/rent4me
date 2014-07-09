@@ -7,10 +7,20 @@
 
     <security:debug/>
 
-    <security:http pattern="/rest/**" use-expressions="true" >
+    <security:global-method-security authentication-manager-ref="authenticationManager"/>
+
+    <bean id="tokenAuthenticationFilter" class="bynull.realty.web.filters.TokenAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationEntryPoint" >
+            <bean class="bynull.realty.web.filters.TokenAuthenticationEntryPoint"/>
+        </property>
+    </bean>
+
+    <security:http pattern="/rest/**" use-expressions="true" authentication-manager-ref="authenticationManager">
         <security:intercept-url pattern="/rest/**" access="hasRole('ROLE_USER')" requires-channel="any"/>
         <!--<security:intercept-url pattern="/login" access="isAnonymous()" requires-channel="any"/>-->
         <security:http-basic  />
+        <!--<security:custom-filter ref="tokenAuthenticationFilter" before="BASIC_AUTH_FILTER"/>-->
         <!--<security:form-login-->
                 <!--login-page="/login"-->
                 <!--authentication-failure-url="/login"-->
@@ -25,15 +35,19 @@
         <!--</security:session-management>-->
     </security:http>
 
-    <security:http pattern="/**" security="none"/>
+    <security:http pattern="/**" security="none" authentication-manager-ref="authenticationManager"/>
 
-    <security:authentication-manager>
-        <security:authentication-provider user-service-ref="userDetailsServiceImpl">
-            <security:password-encoder ref="md5PasswordEncoder"/>
+
+    <security:authentication-manager id="authenticationManager">
+        <security:authentication-provider ref="tokenBasedAuthenticationProvider">
+            <!--<security:password-encoder ref="md5PasswordEncoder"/>-->
             <!--<security:user-service >-->
                 <!--<security:user name="dionis" authorities="ROLE_ADMIN" password="123"/>-->
             <!--</security:user-service>-->
         </security:authentication-provider>
+        <!--<security:authentication-provider user-service-ref="userDetailsServiceImpl2">-->
+            <!--<security:password-encoder ref="md5PasswordEncoder"/>-->
+        <!--</security:authentication-provider>-->
     </security:authentication-manager>
 
 </beans>

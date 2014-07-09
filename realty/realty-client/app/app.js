@@ -151,8 +151,6 @@ var authFuction = function ($rootScope, $window, authorizationService, $log) {
         });
     }
 
-//270007246518198
-
     // Load the SDK asynchronously
     var isProduction = $window.location.href.indexOf('rent4.me') != -1;
 
