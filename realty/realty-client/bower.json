@@ -9,7 +9,8 @@
         "angular-route": "v1.3.0-beta.11",
         "bootstrap": "3.2.0",
         "respond": "1.4.2",
-        "html5shiv": "3.7.2"
+        "html5shiv": "3.7.2",
+        "google-maps-utility-library-v3": "latest"
     },
     "devDependencies": {
         "angular-loader": "v1.3.0-beta.11",
