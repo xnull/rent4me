@@ -11,12 +11,14 @@ paths.app = 'app/**';
 paths.jsHintFiles = 'app/components/**/*.js';
 paths.dist = '../realty-web/src/main/webapp/view';
 
-gulp.task('jsBuild', ['clean-dist'], function () {
+gulp.task('jsBuild', ['clean-dist', 'bower-files'], function () {
     gulp.src(paths.jsHintFiles).pipe(jshint()).pipe(jshint.reporter('default'));
-    gulpBowerFiles().pipe(gulp.dest('./app/vendor'));
     gulp.src(paths.app).pipe(gulp.dest(paths.dist));
 });
 
+gulp.task('bower-files', function () {
+    return gulpBowerFiles().pipe(gulp.dest('./app/vendor'));
+});
 gulp.task('clean-dist', function () {
     return gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));
 });
