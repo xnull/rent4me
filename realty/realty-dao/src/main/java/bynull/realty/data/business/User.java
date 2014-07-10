@@ -1,14 +1,9 @@
 package bynull.realty.data.business;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.*;
 
 /**
@@ -75,30 +70,30 @@ public class User implements UserDetails {
 
     public void addAuthority(Authority authority) {
         Assert.notNull(authority);
-        if(authorities == null) {
+        if (authorities == null) {
             authorities = new HashSet<Authority>();
         }
         Iterator<Authority> iterator = authorities.iterator();
         boolean hasAuthority = false;
         while (iterator.hasNext()) {
             Authority next = iterator.next();
-            if(next.getName() == authority.getName()) {
+            if (next.getName() == authority.getName()) {
                 hasAuthority = true;
                 break;
             }
         }
-        if(!hasAuthority) {
+        if (!hasAuthority) {
             authorities.add(authority);
         }
     }
 
     public void removeAuthority(Authority authority) {
         Assert.notNull(authority);
-        if(authorities == null) return;
+        if (authorities == null) return;
         Iterator<Authority> iterator = authorities.iterator();
         while (iterator.hasNext()) {
             Authority next = iterator.next();
-            if(next.getName() == authority.getName()) iterator.remove();
+            if (next.getName() == authority.getName()) iterator.remove();
         }
     }
 

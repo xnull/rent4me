@@ -11,7 +11,9 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserTokenRepository extends JpaRepository<UserToken, Long> {
     @Query("select (case when count(t) > 0 then true else false end) from UserToken t where t.user=:user and t.token=:token")
-    boolean isValidToken(@Param("user")User user, @Param("token") String token);
+    boolean isValidToken(@Param("user") User user, @Param("token") String token);
+
     UserToken findByUser(User user);
+
     UserToken findByUserAndToken(User user, String token);
 }

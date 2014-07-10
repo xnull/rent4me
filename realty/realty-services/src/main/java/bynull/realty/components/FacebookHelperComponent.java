@@ -10,16 +10,11 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import javax.ws.rs.BadRequestException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -33,13 +28,13 @@ public class FacebookHelperComponent {
 
     private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
 
-    private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()){{
+    private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
 
         final HttpClientParams params = new HttpClientParams();
         params.setIntParameter(HttpClientParams.MAX_REDIRECTS, 5);
         //wait for 3 seconds max to obtain connection
         params.setConnectionManagerTimeout(3 * 1000);
-        params.setSoTimeout(10*1000);
+        params.setSoTimeout(10 * 1000);
 
         this.setParams(params);
     }};

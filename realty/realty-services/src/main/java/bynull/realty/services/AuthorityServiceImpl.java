@@ -22,7 +22,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     public Authority findOrCreateAuthorityByName(Authority.Name name) {
         Assert.notNull(name);
         Authority found = authorityRepository.findByName(name);
-        if(found == null) {
+        if (found == null) {
             Authority authority = new Authority(name);
             authority = authorityRepository.saveAndFlush(authority);
             return authority;

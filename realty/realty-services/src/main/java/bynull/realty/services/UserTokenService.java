@@ -11,10 +11,12 @@ import java.util.Date;
  */
 public interface UserTokenService {
     boolean isTokenValid(User user, String token);
+
     void createToken(User user, String token, Date expiration);
 
     /**
      * Get token if credentials are valid.
+     *
      * @param username username
      * @param password password
      * @return newly generated token will be returned
@@ -25,6 +27,7 @@ public interface UserTokenService {
 
     /**
      * Receive a valid authentication token for user
+     *
      * @param user User
      * @return Valid access token
      */

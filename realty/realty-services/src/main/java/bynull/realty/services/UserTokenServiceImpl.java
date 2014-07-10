@@ -46,13 +46,13 @@ public class UserTokenServiceImpl implements UserTokenService {
 
     @Transactional
     @Override
-    public String getTokenIfValidCredentials(String username, String password)throws BadCredentialsException, UsernameNotFoundException {
+    public String getTokenIfValidCredentials(String username, String password) throws BadCredentialsException, UsernameNotFoundException {
         User user = userService.loadUserByUsername(username);
         boolean matches = passwordEncoder.isPasswordValid(user.getPasswordHash(), password, null);
 
         LOGGER.debug("Password matches? {}", matches);
 
-        if(matches) {
+        if (matches) {
             return getTokenForUser(user);
         } else {
             throw new BadCredentialsException("Bad credentials");
@@ -63,7 +63,7 @@ public class UserTokenServiceImpl implements UserTokenService {
     @Override
     public String getTokenForUser(User user) {
         UserToken found = userTokenRepository.findByUser(user);
-        if(found != null) {
+        if (found != null) {
             LOGGER.debug("Found existing token");
             return found.getToken();
         } else {
@@ -82,7 +82,7 @@ public class UserTokenServiceImpl implements UserTokenService {
         Assert.notNull(user);
         Assert.notNull(token);
         UserToken foundToken = userTokenRepository.findByUserAndToken(user, token);
-        if(foundToken == null) {
+        if (foundToken == null) {
             throw new NotFoundException();
         } else {
             userTokenRepository.delete(foundToken);

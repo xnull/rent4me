@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -42,8 +41,8 @@ public class BaseLauncher {
     private final URL url;
 
     /**
-     * @param url                    Class your using this code from should be used to obtain url instance. Example: {@code Launcher.class.getResource("Launcher.class")}
-     * @param targetClass            Class your using this code from should be used. Example: {@code Launcher.class}
+     * @param url          Class your using this code from should be used to obtain url instance. Example: {@code Launcher.class.getResource("Launcher.class")}
+     * @param targetClass  Class your using this code from should be used. Example: {@code Launcher.class}
      * @param handlerDescs
      */
     public BaseLauncher(URL url, Class<?> targetClass, List<HandlerDesc> handlerDescs) {

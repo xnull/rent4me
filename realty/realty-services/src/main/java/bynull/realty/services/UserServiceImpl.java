@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if(user == null) {
-            throw new UsernameNotFoundException("User with username '"+username+"' not found");
+        if (user == null) {
+            throw new UsernameNotFoundException("User with username '" + username + "' not found");
         }
         return user;
     }
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         try {
             FacebookHelperComponent.FacebookVerificationInfoDTO verify = facebookHelperComponent.verify(new FacebookHelperComponent.ClientShortInfo(facebookId, accessToken));
             User user = userRepository.findByFacebookId(verify.facebookId);
-            if(user == null) {
+            if (user == null) {
                 LOGGER.debug("No user found that matches facebook id. Creating new one.");
                 Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
 
