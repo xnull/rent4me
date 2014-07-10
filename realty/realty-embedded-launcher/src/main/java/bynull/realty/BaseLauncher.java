@@ -26,35 +26,37 @@ import java.util.jar.JarFile;
  * @author dionis on 22/06/14.
  */
 public class BaseLauncher {
+    public static class HandlerDesc {
+        public final String defaultPath, multiModuleDefaultPath, webAppPath;
+
+        public HandlerDesc(String defaultPath, String multiModuleDefaultPath, String webAppPath) {
+            this.defaultPath = defaultPath;
+            this.multiModuleDefaultPath = multiModuleDefaultPath;
+            this.webAppPath = webAppPath;
+        }
+    }
+
     private Logger logger;
     private final Class<?> targetClass;
-    private final String defaultPath;
-    private final String multiModuleDefaultPath;
+    private final List<HandlerDesc> handlerDescs;
     private final URL url;
-    private final String webAppPath;
 
     /**
      * @param url                    Class your using this code from should be used to obtain url instance. Example: {@code Launcher.class.getResource("Launcher.class")}
      * @param targetClass            Class your using this code from should be used. Example: {@code Launcher.class}
-     * @param defaultPath
-     * @param multiModuleDefaultPath
-     * @param webAppPath
+     * @param handlerDescs
      */
-    public BaseLauncher(URL url, Class<?> targetClass, String defaultPath, String multiModuleDefaultPath, String webAppPath) {
+    public BaseLauncher(URL url, Class<?> targetClass, List<HandlerDesc> handlerDescs) {
         Assert.notNull(url);
         Assert.notNull(targetClass);
-        Assert.notNull(defaultPath);
-        Assert.notNull(multiModuleDefaultPath);
-        Assert.notNull(webAppPath);
+        Assert.notNull(handlerDescs);
         this.url = url;
         this.targetClass = targetClass;
-        this.defaultPath = defaultPath;
-        this.multiModuleDefaultPath = multiModuleDefaultPath;
-        this.webAppPath = webAppPath;
+        this.handlerDescs = handlerDescs;
     }
 
     public void doStart(String... args) throws Exception {
-        if (isLaunchFromIDE()) {
+        if (isLaunchFromIDE(handlerDescs.get(0))) {
             setUpLogDirectory();
 //            if (StringUtils.containsIgnoreCase(System.getProperty("user.home"), "dionis")) {
 //                getLogger().info("Using profile for dionis.");
@@ -92,9 +94,11 @@ public class BaseLauncher {
         selectChannelConnector.setThreadPool(new QueuedThreadPool());
         server.setConnectors(new Connector[]{selectChannelConnector});
 
-        WebAppContext handler = new WebAppContext(getWebAppPath(), "/" + webAppPath);
-        ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
-        contextHandlerCollection.addHandler(handler);
+        final ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
+        for (HandlerDesc handlerDesc : handlerDescs) {
+            WebAppContext handler = new WebAppContext(getWebAppPath(handlerDesc), "/" + handlerDesc.webAppPath);
+            contextHandlerCollection.addHandler(handler);
+        }
         server.setHandler(contextHandlerCollection);
         server.start();
         long end = System.currentTimeMillis();
@@ -124,13 +128,13 @@ public class BaseLauncher {
      * @return
      * @throws java.io.IOException
      */
-    private String getWebAppPath() throws IOException {
-        if (isLaunchFromIDE()) {
+    private String getWebAppPath(HandlerDesc handlerDesc) throws IOException {
+        if (isLaunchFromIDE(handlerDesc)) {
             getLogger().info("Launched from IDE: Using default path");
-            if (isStandaloneDefaultPath())
-                return getStandaloneDefaultPath();
-            else if (isMultiModuleDefaultPath()) {
-                return getMultiModuleDefaultPath();
+            if (isStandaloneDefaultPath(handlerDesc))
+                return getStandaloneDefaultPath(handlerDesc);
+            else if (isMultiModuleDefaultPath(handlerDesc)) {
+                return getMultiModuleDefaultPath(handlerDesc);
             } else {
                 throw new IllegalStateException("Unsupported default path");
             }
@@ -168,24 +172,24 @@ public class BaseLauncher {
         }
     }
 
-    private String getStandaloneDefaultPath() {
-        return defaultPath;
+    private String getStandaloneDefaultPath(HandlerDesc handlerDesc) {
+        return handlerDesc.defaultPath;
     }
 
-    private boolean isLaunchFromIDE() {
-        return isStandaloneDefaultPath() || isMultiModuleDefaultPath();
+    private boolean isLaunchFromIDE(HandlerDesc handlerDesc) {
+        return isStandaloneDefaultPath(handlerDesc) || isMultiModuleDefaultPath(handlerDesc);
     }
 
-    private boolean isStandaloneDefaultPath() {
-        return new File(getStandaloneDefaultPath()).exists();
+    private boolean isStandaloneDefaultPath(HandlerDesc handlerDesc) {
+        return new File(getStandaloneDefaultPath(handlerDesc)).exists();
     }
 
-    private boolean isMultiModuleDefaultPath() {
-        return new File(getMultiModuleDefaultPath()).exists();
+    private boolean isMultiModuleDefaultPath(HandlerDesc handlerDesc) {
+        return new File(getMultiModuleDefaultPath(handlerDesc)).exists();
     }
 
-    private String getMultiModuleDefaultPath() {
-        return multiModuleDefaultPath;
+    private String getMultiModuleDefaultPath(HandlerDesc handlerDesc) {
+        return handlerDesc.multiModuleDefaultPath;
     }
 
     private synchronized Logger getLogger() {

@@ -1,6 +1,7 @@
 package bynull.realty.components;
 
 import bynull.realty.services.UserService;
+import bynull.realty.services.UserTokenService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -22,6 +23,8 @@ import javax.annotation.Resource;
 public class TokenBasedAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
     @Resource
     UserService userService;
+    @Resource
+    UserTokenService userTokenService;
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
@@ -34,7 +37,7 @@ public class TokenBasedAuthenticationProvider extends AbstractUserDetailsAuthent
 
         String presentedPassword = authentication.getCredentials().toString();
 
-        if (!userService.isTokenValid((bynull.realty.data.business.User) userDetails, presentedPassword)) {
+        if (!userTokenService.isTokenValid((bynull.realty.data.business.User) userDetails, presentedPassword)) {
             logger.debug("Authentication failed: password does not match stored value");
 
             throw new BadCredentialsException(messages.getMessage(

@@ -7,20 +7,22 @@ var loginController = function ($scope, $log, loginService, navigationService, a
 
     $scope.navService = navigationService;
 
-    $scope.isAuthorized = authorizationService.isAuthorized;
+    $scope.authorized = authorizationService.isAuthorized();
 
-    $scope.$on(authorizationService.EVENT_AUTH_STATE_CHANGED, function () {
-        $scope.apply(
-            function () {
-                var authorized = authorizationService.isAuthorized();
-                $log.info("login_controller, setting to " + authorized);
-                $scope.isAuthorized = authorized;
-            });
+    $scope.$on(authorizationService.EVENT_AUTH_STATE_CHANGED, function (event, args) {
+
+        $log.info('Event');
+        $log.info(event);
+        $log.info('args');
+        $log.info(args);
+        $log.info("login_controller, setting to "+args.authorized);
+//        var authorized = authorizationService.isAuthorized();
+        $scope.authorized = args.authorized;
     });
 
 
     $scope.loginWithFacebook = authorizationService.loginWithFacebook;
-    $scope.logout = authorizationService.logoutWithFacebook;
+    $scope.logout = authorizationService.logout;
 
 
     $(function () {

@@ -17,6 +17,10 @@
     </bean>
 
     <security:http pattern="/rest/**" use-expressions="true" authentication-manager-ref="authenticationManager">
+        <!--<security:intercept-url pattern="/rest/test/test3" access="hasRole('ROLE_USER')" requires-channel="any"/>-->
+        <security:intercept-url pattern="/rest/auth" method="DELETE" access="hasRole('ROLE_USER')" requires-channel="any"/>
+        <security:intercept-url pattern="/rest/auth/**" access="isAnonymous()" requires-channel="any"/>
+        <security:intercept-url pattern="/rest/users/**" method="POST" access="isAnonymous()" requires-channel="any"/>
         <security:intercept-url pattern="/rest/**" access="hasRole('ROLE_USER')" requires-channel="any"/>
         <!--<security:intercept-url pattern="/login" access="isAnonymous()" requires-channel="any"/>-->
         <security:http-basic  />

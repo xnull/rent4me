@@ -1,1 +1,0 @@
-Map component is needed for working with google or yandex map

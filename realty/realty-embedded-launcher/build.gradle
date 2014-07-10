@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     compile project(":realty-web")
+    compile project(":realty-client")
 
     compile libraries.'org.slf4j:slf4j-api'
     compile libraries."ch.qos.logback:logback-classic"

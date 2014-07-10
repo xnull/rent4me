@@ -37,4 +37,26 @@ public class UserTokenRepositoryTest extends DbTest {
         assertThat(persisted.getUpdated(), is(notNullValue()));
         assertThat(persisted.getUpdated(), equalTo(persisted.getCreated()));
     }
+
+    @Test
+    public void findValidTokens_NoneFound() {
+        User user = createUser();
+        boolean validToken = userTokenRepository.isValidToken(user, "token");
+        assertThat(validToken, is(false));
+    }
+
+    @Test
+    public void findValidTokens_OneFound() {
+        User user = createUser();
+
+        UserToken userToken = new UserToken();
+        userToken.setUser(user);
+        userToken.setToken("token");
+
+        userToken = userTokenRepository.saveAndFlush(userToken);
+        flushAndClear();
+
+        boolean validToken = userTokenRepository.isValidToken(user, userToken.getToken());
+        assertThat(validToken, is(true));
+    }
 }
