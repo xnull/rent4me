@@ -65,10 +65,14 @@ var backendComponents = [
 ];
 
 
-var rentApplication = angular.module('project', ['ngRoute', 'ngResource'/*, 'facebook'*/]);
+var rentApplication = angular.module('project', ['ngRoute', 'ngResource', 'ngCookies'/*, 'facebook'*/]);
 
-rentApplication.config(function ($routeProvider) {
+rentApplication.config(function ($routeProvider, $httpProvider) {
     'use strict';
+
+    $httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
 
     for (var i = 0; i < componentsCfg.length; i++) {
         var cfg = componentsCfg[i];
@@ -101,8 +105,12 @@ for (var i = 0; i < backendComponents.length; i++) {
  }]);*/
 
 //TODO: clean up this shit
-var authFuction = function ($rootScope, $window, authorizationService, $log) {
+var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
     'use strict';
+
+//    $http.defaults.useXDomain = true;
+//    delete $http.defaults.headers.common['X-Requested-With'];
+
     // $rootScope.fbUser = {};
 
     // This is called with the results from from FB.getLoginStatus().
@@ -184,12 +192,12 @@ var authFuction = function ($rootScope, $window, authorizationService, $log) {
         //
         // These three cases are handled in the callback function.
 
-        FB.getLoginStatus(function (response) {
+        /*FB.getLoginStatus(function (response) {
             statusChangeCallback(response);
-        });
+        });*/
 //            $('#loginbutton,#feedbutton').removeAttr('disabled');
 
     });
 
 };
-rentApplication.run(authFuction);
+rentApplication.run(defaultSetup);

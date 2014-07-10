@@ -37,13 +37,15 @@ public class User implements UserDetails {
     private String lastName;
     @Column(name = "age")
     private Integer age;
+    @Column(name = "facebook_id")
+    private String facebookId;
 
     @JoinTable(name = "realty_users_authorities", joinColumns = {
             @JoinColumn(name = "user_id")
     }, inverseJoinColumns = {
             @JoinColumn(name = "authority_id")
     })
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = javax.persistence.CascadeType.ALL)
     private Set<Authority> authorities;
     /**
      * Set of my apartments
@@ -188,6 +190,14 @@ public class User implements UserDetails {
 
     public void setRentalHistories(Set<RentalHistory> rentalHistories) {
         this.rentalHistories = rentalHistories;
+    }
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
     }
 
     @Override
