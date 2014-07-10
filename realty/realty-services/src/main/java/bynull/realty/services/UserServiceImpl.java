@@ -8,16 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -36,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     PasswordEncoder passwordEncoder;
+
+    @Resource
+    AuthorityService authorityService;
 
     @Resource
     FacebookHelperComponent facebookHelperComponent;
@@ -58,6 +56,8 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findByFacebookId(verify.facebookId);
             if(user == null) {
                 LOGGER.debug("No user found that matches facebook id. Creating new one.");
+                Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
+
                 user = new User();
 //                TODO: get more details from FB if possible to fill account in a proper way
 //                user.setFirstName(verify.name);
@@ -68,8 +68,9 @@ public class UserServiceImpl implements UserService {
                 LOGGER.info("Generated password for user with fb id [{}]: []", verify.facebookId, rawPass);
                 user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
                 user.setFacebookId(verify.facebookId);
-                user.addAuthority(new Authority(Authority.Name.ROLE_USER));
+                user.addAuthority(authority);
                 user = userRepository.saveAndFlush(user);
+//                userRepository.saveAndFlush(user);
             } else {
                 LOGGER.debug("Found user from facebook");
             }
