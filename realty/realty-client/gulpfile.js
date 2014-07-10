@@ -1,28 +1,24 @@
-/**
- *
- */
-"use strict";
-
 // Includes
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var print = require('gulp-print');
 var concat = require('gulp-concat');
+var clean = require('gulp-clean');
+var gulpBowerFiles = require('gulp-bower-files');
 
-var paths = {
-    scripts: ['app/components/**/*.js', 'app/app.js']
-    //images: 'client/img/**/*'
-};
+var paths = {};
+paths.app = 'app/**';
+paths.jsHintFiles = 'app/components/**/*.js';
+paths.dist = '../realty-web/src/main/webapp/view';
 
-gulp.task('jsBuild', function () {
-    gulp.src(paths.scripts)
-        .pipe(jshint()).pipe(jshint.reporter('default'))
-        .pipe(concat('all.js'))
-        .pipe(gulp.dest('./dist'));
+gulp.task('jsBuild', ['clean-dist'], function () {
+    gulp.src(paths.jsHintFiles).pipe(jshint()).pipe(jshint.reporter('default'));
+    gulpBowerFiles().pipe(gulp.dest('./app/vendor'));
+    gulp.src(paths.app).pipe(gulp.dest(paths.dist));
+});
 
-    //concat and copy all css files to destination
-    //copy all html files to destination
-    //copy all images, eventually all files exclude js
+gulp.task('clean-dist', function () {
+    return gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));
 });
 
 // Lint Task

@@ -9,3 +9,5 @@ realty-client/app/vendor
 
 .gradle
 .idea
+
+realty-web/src/main/webapp/view

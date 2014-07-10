@@ -1,3 +1,0 @@
-/*
- * Application initialization and loading
- */

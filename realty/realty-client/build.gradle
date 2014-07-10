@@ -18,8 +18,9 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'idea'
 apply plugin: 'node'
+
+def nodeJsDir = file("${rootProject.projectDir}/.gradle/nodejs")
 
 node {
     // Version of node to use.
@@ -33,20 +34,15 @@ node {
     download = true
 
     // Set the work directory for unpacking node
-    workDir = file("${project.buildDir}/nodejs")
+    workDir = nodeJsDir
 }
 
 /**
  * Download js dependencies
  */
-task bowerInstall(dependsOn: npmInstall, type: NodeTask) {
-    group = 'javascript'
+task bowerInstall(dependsOn: npmInstall, type: BaseJsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/bower/bin/bower')
     args = ['install']
-    execOverrides {
-        it.ignoreExitValue = false
-        it.workingDir = project.projectDir
-    }
 }
 
 /**
@@ -57,6 +53,33 @@ task jsTest(type: JsTaskRunner) {
     args = ['start', 'test/karma.conf.js']
 }
 test.dependsOn jsTest
+
+task jsBuild(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['jsBuild']
+}
+
+task bfiles(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['bower-files']
+}
+
+task jsHint(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['lint']
+}
+check.dependsOn jsHint
+
+task packApp(dependsOn: bowerInstall, type: Tar) {
+    group = 'Packaging'
+    from 'app'
+    baseName = 'app'
+}
+
+clean << {
+    //project.delete './node_modules'
+    project.delete './app/vendor'
+}
 
 task updateWebDriverManager(type: JsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/protractor/bin/webdriver-manager')
@@ -73,36 +96,19 @@ task jsE2ETest(dependsOn: updateWebDriverManager, type: JsTaskRunner) {
     args = ['test/protractor-conf.js']
 }
 
-task jsBuild(type: JsTaskRunner) {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['jsBuild']
-}
-
-task jsHint(type: JsTaskRunner) {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['lint']
-}
-check.dependsOn jsHint
-
-task packApp(dependsOn: bowerInstall, type: Tar) {
-    group = 'Packaging'
-    from 'app'
-    baseName = 'app'
-}
-
-clean << {
-    project.delete './node_modules'
-    project.delete './app/vendor'
-}
-
-public class JsTaskRunner extends com.moowork.gradle.node.task.NodeTask {
-
-    JsTaskRunner() {
+public class BaseJsTaskRunner extends com.moowork.gradle.node.task.NodeTask {
+    BaseJsTaskRunner() {
         group = 'javascript'
-        dependsOn 'bowerInstall'
         setExecOverrides {
             it.ignoreExitValue = false
             it.workingDir = project.projectDir
         }
+    }
+}
+
+public class JsTaskRunner extends BaseJsTaskRunner {
+    JsTaskRunner() {
+        super()
+        dependsOn 'bowerInstall'
     }
 }
