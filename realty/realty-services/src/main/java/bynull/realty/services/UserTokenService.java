@@ -1,6 +1,7 @@
 package bynull.realty.services;
 
 import bynull.realty.data.business.User;
+import bynull.realty.data.business.UserToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -11,7 +12,13 @@ import java.util.Date;
  */
 public interface UserTokenService {
     boolean isTokenValid(User user, String token);
-    void createToken(User user, String token, Date expiration);
+
+    /**
+     * Create a new token for user.
+     * @param user
+     * @return
+     */
+    String createToken(User user);
 
     /**
      * Get token if credentials are valid.

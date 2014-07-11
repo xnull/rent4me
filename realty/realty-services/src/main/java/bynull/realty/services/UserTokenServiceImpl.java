@@ -39,9 +39,16 @@ public class UserTokenServiceImpl implements UserTokenService {
         return userTokenRepository.isValidToken(user, token);
     }
 
+    @Transactional
     @Override
-    public void createToken(User user, String token, Date expiration) {
-
+    public String createToken(User user) {
+        Assert.notNull(user);
+        String token = UUID.randomUUID().toString();
+        UserToken userToken = new UserToken();
+        userToken.setToken(token);
+        userToken.setUser(user);
+        userToken = userTokenRepository.saveAndFlush(userToken);
+        return userToken.getToken();
     }
 
     @Transactional
@@ -62,18 +69,10 @@ public class UserTokenServiceImpl implements UserTokenService {
     @Transactional
     @Override
     public String getTokenForUser(User user) {
-        UserToken found = userTokenRepository.findByUser(user);
-        if(found != null) {
-            LOGGER.debug("Found existing token");
-            return found.getToken();
-        } else {
-            LOGGER.debug("Creating new token");
-            UserToken userToken = new UserToken();
-            userToken.setUser(user);
-            userToken.setToken(UUID.randomUUID().toString());
-            userToken = userTokenRepository.saveAndFlush(userToken);
-            return userToken.getToken();
-        }
+        LOGGER.debug("Creating new token");
+        String userToken = createToken(user);
+        LOGGER.debug("Obtained new token [{}] for user [{}]", userToken, user.getId());
+        return userToken;
     }
 
     @Transactional
