@@ -6,12 +6,11 @@ import bynull.realty.data.business.UserToken;
 import org.junit.Test;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class UserTokenRepositoryTest extends DbTest {
     @Resource

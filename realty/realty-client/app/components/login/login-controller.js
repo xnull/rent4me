@@ -15,7 +15,7 @@ var loginController = function ($scope, $log, loginService, navigationService, a
         $log.info(event);
         $log.info('args');
         $log.info(args);
-        $log.info("login_controller, setting to "+args.authorized);
+        $log.info("login_controller, setting to " + args.authorized);
 //        var authorized = authorizationService.isAuthorized();
         $scope.authorized = args.authorized;
     });

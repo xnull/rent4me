@@ -1,7 +1,6 @@
 package bynull.realty.services;
 
 import bynull.realty.data.business.User;
-import bynull.realty.data.business.UserToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -15,13 +14,14 @@ public interface UserTokenService {
 
     /**
      * Create a new token for user.
-     * @param user
-     * @return
+     * @param user user for whom need to create new token.
+     * @return newly created token.
      */
     String createToken(User user);
 
     /**
      * Get token if credentials are valid.
+     *
      * @param username username
      * @param password password
      * @return newly generated token will be returned
@@ -32,6 +32,7 @@ public interface UserTokenService {
 
     /**
      * Receive a valid authentication token for user
+     *
      * @param user User
      * @return Valid access token
      */

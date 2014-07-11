@@ -45,7 +45,7 @@ public class AuthenticationResource {
     }
 
     @DELETE
-    public Response logout(TokenJSON tokenJSON,@Context HttpServletRequest request) {
+    public Response logout(TokenJSON tokenJSON, @Context HttpServletRequest request) {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         User user = authentication != null ? (User) authentication.getPrincipal() : null;

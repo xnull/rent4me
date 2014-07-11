@@ -214,7 +214,6 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
         var data = {"token": token};
 
 
-
         $http({
             method: 'DELETE',
             url: '/rest/auth',

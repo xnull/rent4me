@@ -102,6 +102,9 @@ subprojects {
         plugins.withType(JavaPlugin) {
             def javaVersion = '1.7'
 
+            project.apply plugin: 'idea'
+            project.apply plugin: 'eclipse'
+
             /**
              * Code quality plugins
              */
@@ -125,6 +128,11 @@ subprojects {
                 project {
                     //jdkName = javaVersion
                     //languageLevel = javaVersion
+                }
+
+                module {
+                    downloadJavadoc = true
+                    downloadSources = true
                 }
             }
 

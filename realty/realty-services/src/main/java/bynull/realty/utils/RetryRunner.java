@@ -23,10 +23,10 @@ public class RetryRunner<T> {
             try {
                 return callable.call();
             } catch (Exception e) {
-                LOGGER.error("Exception happened at attempt ["+attempt+"]/ "+retryAttempts+".", e);
+                LOGGER.error("Exception happened at attempt [" + attempt + "]/ " + retryAttempts + ".", e);
             }
         } while (attempt < retryAttempts);
-        throw new RetryFailedException("Failed to execute job in "+retryAttempts+" attempts.");
+        throw new RetryFailedException("Failed to execute job in " + retryAttempts + " attempts.");
     }
 
     public static class RetryFailedException extends Exception {

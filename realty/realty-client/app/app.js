@@ -163,7 +163,7 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
     var isProduction = $window.location.href.indexOf('rent4.me') != -1;
 
     var fbAppId;
-    if(isProduction) {
+    if (isProduction) {
         fbAppId = '270007246518198';
     } else {
         fbAppId = '271375949714661';
@@ -193,8 +193,8 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
         // These three cases are handled in the callback function.
 
         /*FB.getLoginStatus(function (response) {
-            statusChangeCallback(response);
-        });*/
+         statusChangeCallback(response);
+         });*/
 //            $('#loginbutton,#feedbutton').removeAttr('disabled');
 
     });

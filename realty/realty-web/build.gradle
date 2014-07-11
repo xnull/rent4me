@@ -1,9 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'war'
-
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-
 apply plugin: 'jetty'
 
 /**
@@ -33,3 +29,4 @@ dependencies {
     compile libraries."c3p0:c3p0"
 }
 
+war.dependsOn project(':realty-client').jsBuild

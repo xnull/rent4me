@@ -1,6 +1,5 @@
 package bynull.realty.web.rest;
 
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Consumes;
@@ -20,7 +19,7 @@ public class TestRestResource {
 
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response test(){
+    public Response test() {
         return Response.ok("{code: \"ok\"}").build();
     }
 
@@ -28,7 +27,7 @@ public class TestRestResource {
     @Path("/test2")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response test2(){
+    public Response test2() {
         return Response.ok("{code: \"ok\"}").build();
     }
 
@@ -36,7 +35,7 @@ public class TestRestResource {
     @Path("/test3")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response test3(){
+    public Response test3() {
         return Response.ok("{code: \"ok\"}").build();
     }
 }

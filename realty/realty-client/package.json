@@ -10,7 +10,9 @@
         "gulp-jshint": "1.6.4",
         "gulp-print": "1.1.0",
         "gulp-concat": "2.2.0",
-        "gulp-uglify": "0.3.1"
+        "gulp-uglify": "0.3.1",
+        "gulp-clean": "0.3.1",
+        "gulp-bower-files": "0.2.6"
     },
     "devDependencies": {
         "karma": "~0.10",
