@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author dionis on 12/07/14.
  */
-public class CommonUtils {
+public final class CommonUtils {
     private CommonUtils() {
     }
 

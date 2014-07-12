@@ -1,6 +1,7 @@
 package bynull.realty.components;
 
 import bynull.realty.utils.RetryRunner;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.httpclient.HttpClient;
@@ -14,8 +15,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.Callable;
+
+import static bynull.realty.util.CommonUtils.copy;
 
 /**
  * @author dionis on 09/07/14.
@@ -23,7 +29,7 @@ import java.util.concurrent.Callable;
 @Component
 public class FacebookHelperComponent {
     private static final Logger LOGGER = LoggerFactory.getLogger(FacebookHelperComponent.class);
-    public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name&access_token=";
+    public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
 
 
     private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
@@ -64,7 +70,7 @@ public class FacebookHelperComponent {
                     return performVerification(person);
                 }
             });
-        } catch (RetryRunner.RetryFailedException e) {
+        } catch (Exception e) {
             throw new FacebookAuthorizationException(e);
         }
 
@@ -94,17 +100,30 @@ public class FacebookHelperComponent {
 
     public static class FacebookVerificationInfoDTO {
         public final String facebookId;
-
         public final String email;
-
         public final String name;
+        public final String firstName;
+        public final String lastName;
+        public final Date birthday;
+        public final boolean verified;
 
         public FacebookVerificationInfoDTO(@JsonProperty("id") String facebookId,
                                            @JsonProperty("email") String email,
-                                           @JsonProperty("name") String name) {
+                                           @JsonProperty("name") String name,
+                                           @JsonProperty("first_name") String firstName,
+                                           @JsonProperty("last_name") String lastName,
+                                           @JsonProperty("birthday")
+                                           @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy") Date birthday,
+                                           @JsonProperty("verified") boolean verified,
+                                           @JsonProperty("is_verified") boolean verifiedManuallyByFB
+        ) {
             this.facebookId = facebookId;
             this.email = email;
             this.name = name;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.birthday = copy(birthday);
+            this.verified = verified || verifiedManuallyByFB;
         }
     }
 
@@ -126,6 +145,15 @@ public class FacebookHelperComponent {
             Assert.notNull(response.facebookId, "Facebook id should not be empty");
             Assert.notNull(response.email, "Email should not be empty");
             Assert.notNull(response.name, "Name should not be empty");
+
+            if (!response.facebookId.equals(person.facebookId)) {
+                throw new BadRequestException("Facebook id differs");
+            }
+
+            if (!response.verified) {
+                throw new WebApplicationException("Account not verified", Response.Status.EXPECTATION_FAILED);
+            }
+
             Assert.isTrue(response.facebookId.equals(person.facebookId), "Invalid facebook id");
 
             // returned string example {"id":"100000169700800"}

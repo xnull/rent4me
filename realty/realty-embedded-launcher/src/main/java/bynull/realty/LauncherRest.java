@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * @author dionis on 22/06/14.
  */
-public class LauncherRest {
+public final class LauncherRest {
     private LauncherRest() {
     }
 

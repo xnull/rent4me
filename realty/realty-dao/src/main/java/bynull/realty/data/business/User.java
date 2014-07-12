@@ -30,6 +30,8 @@ public class User implements UserDetails {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    @Column(name = "display_name")
+    private String displayName;
     @Column(name = "age")
     private Integer age;
     @Column(name = "facebook_id")
@@ -157,6 +159,14 @@ public class User implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public Integer getAge() {

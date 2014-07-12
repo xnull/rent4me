@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author dionis on 23/06/14.
@@ -68,6 +69,12 @@ public class UserServiceImpl implements UserService {
                 LOGGER.info("Generated password for user with fb id [{}]: []", verify.facebookId, rawPass);
                 user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
                 user.setFacebookId(verify.facebookId);
+                user.setDisplayName(verify.name);
+                user.setFirstName(verify.firstName);
+                user.setLastName(verify.lastName);
+                user.setAge(verify.birthday != null
+                        ? (int) (TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - verify.birthday.getTime(), TimeUnit.DAYS) / 365.24)
+                        : null);
                 user.addAuthority(authority);
                 user = userRepository.saveAndFlush(user);
 //                userRepository.saveAndFlush(user);

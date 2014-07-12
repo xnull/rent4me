@@ -16,20 +16,27 @@ public class RetryRunner<T> {
         this.retryAttempts = retryAttempts;
     }
 
-    public T doWithRetry(Callable<T> callable) throws RetryFailedException {
+    public T doWithRetry(Callable<T> callable) throws Exception {
         int attempt = 0;
+        Exception lastException = null;
         do {
             attempt++;
             try {
                 return callable.call();
             } catch (Exception e) {
+                lastException = e;
                 LOGGER.error("Exception happened at attempt [" + attempt + "]/ " + retryAttempts + ".", e);
             }
         } while (attempt < retryAttempts);
-        throw new RetryFailedException("Failed to execute job in " + retryAttempts + " attempts.");
+        if (lastException != null) {
+            LOGGER.error("Failed to execute job in {} attempts.", retryAttempts);
+            throw lastException;
+        } else {
+            throw new RetryFailedException("Failed to execute job in " + retryAttempts + " attempts.");
+        }
     }
 
-    public static class RetryFailedException extends Exception {
+    public static final class RetryFailedException extends Exception {
         private RetryFailedException() {
         }
 

@@ -10,9 +10,10 @@ import java.sql.SQLException;
 /**
  * @author dionis on 22/06/14.
  */
-public class GeoPointColumnMapper {
+public final class GeoPointColumnMapper {
     public static final GeoPointColumnMapper INSTANCE = new GeoPointColumnMapper();
-    private GeoPointColumnMapper(){
+
+    private GeoPointColumnMapper() {
 
     }
 
