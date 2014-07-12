@@ -17,6 +17,8 @@ module.exports = function (config) {
         files: [
             'app/vendor/angular/angular.js',
             'app/vendor/angular-route/angular-route.js',
+            'app/vendor/angular-resource/angular-resource.js',
+            'app/vendor/angular-cookies/angular-cookies.js',
             'app/vendor/angular-mocks/angular-mocks.js',
             'app/vendor/jquery/dist/jquery.min.js',
             'app/components/**/*.js',
