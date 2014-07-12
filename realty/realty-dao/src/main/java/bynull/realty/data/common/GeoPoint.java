@@ -1,9 +1,11 @@
 package bynull.realty.data.common;
 
+import java.io.Serializable;
+
 /**
  * @author dionis on 22/06/14.
  */
-public class GeoPoint {
+public class GeoPoint implements Serializable {
     private double latitude;
     private double longitude;
 

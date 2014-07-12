@@ -4,8 +4,6 @@ import bynull.realty.data.business.User;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Date;
-
 /**
  * @author dionis on 09/07/14.
  */
@@ -14,6 +12,7 @@ public interface UserTokenService {
 
     /**
      * Create a new token for user.
+     *
      * @param user user for whom need to create new token.
      * @return newly created token.
      */

@@ -5,11 +5,14 @@ import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.FeePeriod;
 import bynull.realty.data.business.RentType;
 import bynull.realty.data.business.User;
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class ApartmentRepositoryTest extends DbTest {
     @Resource
@@ -25,5 +28,10 @@ public class ApartmentRepositoryTest extends DbTest {
         apartment.setFeePeriod(FeePeriod.MONTHLY);
         apartment = repository.saveAndFlush(apartment);
 
+
+        flushAndClear();
+
+        Apartment found = repository.getOne(apartment.getId());
+        assertThat(found, is(notNullValue()));
     }
 }

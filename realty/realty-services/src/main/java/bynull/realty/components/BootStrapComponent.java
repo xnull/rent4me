@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionOperations;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 
@@ -31,7 +30,7 @@ public class BootStrapComponent implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if(1==1) return;
+        if (1 == 1) return;
         authorityRepository.deleteAll();
         userRepository.deleteAll();
         transactionOperations.execute(new TransactionCallbackWithoutResult() {

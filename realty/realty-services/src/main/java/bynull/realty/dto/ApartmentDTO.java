@@ -1,16 +1,24 @@
 package bynull.realty.dto;
 
 import bynull.realty.data.business.Apartment;
-import bynull.realty.data.common.GeoPoint;
 
 import java.util.Date;
+
+import static bynull.realty.util.CommonUtils.copy;
 
 /**
  * @author dionis on 22/06/14.
  */
 public class ApartmentDTO {
+    private Long id;
+    private GeoPointDTO location;
+    private String city;
+    private String address;
+    private Date created;
+    private Date updated;
+
     public static ApartmentDTO from(Apartment apartment) {
-        if(apartment == null) return null;
+        if (apartment == null) return null;
         ApartmentDTO dto = new ApartmentDTO();
         dto.setId(apartment.getId());
         dto.setLocation(GeoPointDTO.from(apartment.getLocation()));
@@ -20,13 +28,6 @@ public class ApartmentDTO {
         dto.setUpdated(apartment.getUpdated());
         return dto;
     }
-
-    private Long id;
-    private GeoPointDTO location;
-    private String city;
-    private String address;
-    private Date created;
-    private Date updated;
 
     public Long getId() {
         return id;
@@ -61,19 +62,19 @@ public class ApartmentDTO {
     }
 
     public Date getCreated() {
-        return created;
+        return copy(created);
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = copy(created);
     }
 
     public Date getUpdated() {
-        return updated;
+        return copy(updated);
     }
 
     public void setUpdated(Date updated) {
-        this.updated = updated;
+        this.updated = copy(updated);
     }
 
     public Apartment toInternal() {

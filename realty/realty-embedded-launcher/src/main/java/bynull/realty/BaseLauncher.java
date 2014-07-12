@@ -25,20 +25,10 @@ import java.util.jar.JarFile;
  * @author dionis on 22/06/14.
  */
 public class BaseLauncher {
-    public static class HandlerDesc {
-        public final String defaultPath, multiModuleDefaultPath, webAppPath;
-
-        public HandlerDesc(String defaultPath, String multiModuleDefaultPath, String webAppPath) {
-            this.defaultPath = defaultPath;
-            this.multiModuleDefaultPath = multiModuleDefaultPath;
-            this.webAppPath = webAppPath;
-        }
-    }
-
-    private Logger logger;
     private final Class<?> targetClass;
     private final List<HandlerDesc> handlerDescs;
     private final URL url;
+    private Logger logger;
 
     /**
      * @param url          Class your using this code from should be used to obtain url instance. Example: {@code Launcher.class.getResource("Launcher.class")}
@@ -52,6 +42,14 @@ public class BaseLauncher {
         this.url = url;
         this.targetClass = targetClass;
         this.handlerDescs = handlerDescs;
+    }
+
+    private static int getPortOrDefault(String[] args, int defaultPort) {
+        return args.length == 1 ? Integer.valueOf(args[0]) : defaultPort;
+    }
+
+    private static double currentMemoryUsageMB() {
+        return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024.0 / 1024.0;
     }
 
     public void doStart(String... args) throws Exception {
@@ -109,16 +107,8 @@ public class BaseLauncher {
 //        Main.main(new String[]{"jetty.xml"});
     }
 
-    private static int getPortOrDefault(String[] args, int defaultPort) {
-        return args.length == 1 ? Integer.valueOf(args[0]) : defaultPort;
-    }
-
     private void logMemoryUsage() {
         getLogger().info("Memory usage after start: {} MB", currentMemoryUsageMB());
-    }
-
-    private static double currentMemoryUsageMB() {
-        return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024.0 / 1024.0;
     }
 
     /**
@@ -139,7 +129,9 @@ public class BaseLauncher {
             }
         } else {
             final File localTemporaryDirectory = new File("./tmp/");
-            localTemporaryDirectory.mkdir();
+            if (!localTemporaryDirectory.mkdir()) {
+                throw new IllegalStateException("Could not create local temporary directory " + localTemporaryDirectory);
+            }
             localTemporaryDirectory.deleteOnExit();
 
             System.out.println("Class: " + BaseLauncher.class.getName());
@@ -158,8 +150,10 @@ public class BaseLauncher {
 
                     if (entry.isDirectory()) {
                         final File dir = new File("./tmp/" + path);
+                        if (!dir.mkdir()) {
+                            throw new IllegalStateException("Could not create directory for entry " + dir);
+                        }
                         dir.deleteOnExit();
-                        dir.mkdir();
                     } else {
                         File temporaryFile = new File(localTemporaryDirectory, entry.getName());
                         temporaryFile.deleteOnExit();
@@ -196,5 +190,15 @@ public class BaseLauncher {
             logger = LoggerFactory.getLogger(targetClass);
         }
         return logger;
+    }
+
+    public static class HandlerDesc {
+        public final String defaultPath, multiModuleDefaultPath, webAppPath;
+
+        public HandlerDesc(String defaultPath, String multiModuleDefaultPath, String webAppPath) {
+            this.defaultPath = defaultPath;
+            this.multiModuleDefaultPath = multiModuleDefaultPath;
+            this.webAppPath = webAppPath;
+        }
     }
 }

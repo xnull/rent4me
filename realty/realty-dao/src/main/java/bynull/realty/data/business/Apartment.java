@@ -3,15 +3,18 @@ package bynull.realty.data.business;
 import bynull.realty.data.common.GeoPoint;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import static bynull.realty.util.CommonUtils.copy;
 
 /**
  * Created by null on 21.06.14.
  */
 @Entity
 @Table(name = "apartments")
-public class Apartment {
+public class Apartment implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "apartment_id_generator", strategy = GenerationType.SEQUENCE)
@@ -69,19 +72,19 @@ public class Apartment {
     }
 
     public Date getCreated() {
-        return created;
+        return copy(created);
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = copy(created);
     }
 
     public Date getUpdated() {
-        return updated;
+        return copy(updated);
     }
 
     public void setUpdated(Date updated) {
-        this.updated = updated;
+        this.updated = copy(updated);
     }
 
     public User getOwner() {

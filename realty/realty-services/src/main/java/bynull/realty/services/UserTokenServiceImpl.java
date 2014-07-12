@@ -14,7 +14,6 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.ws.rs.NotFoundException;
-import java.util.Date;
 import java.util.UUID;
 
 /**

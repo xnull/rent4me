@@ -8,23 +8,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
+import static bynull.realty.util.CommonUtils.copy;
+
 /**
  * @author dionis on 22/06/14.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApartmentJSON {
-    public static ApartmentJSON from(ApartmentDTO apartment) {
-        if(apartment == null) return null;
-        ApartmentJSON json = new ApartmentJSON();
-        json.setId(apartment.getId());
-        json.setLocation(GeoPointJSON.from(apartment.getLocation()));
-        json.setCity(apartment.getCity());
-        json.setAddress(apartment.getAddress());
-        json.setCreated(apartment.getCreated());
-        json.setUpdated(apartment.getUpdated());
-        return json;
-    }
-
     @JsonProperty("id")
     private Long id;
     @JsonProperty("location")
@@ -39,6 +29,18 @@ public class ApartmentJSON {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.ISO_DATE_TIME_FORMAT)
     @JsonProperty("updated")
     private Date updated;
+
+    public static ApartmentJSON from(ApartmentDTO apartment) {
+        if (apartment == null) return null;
+        ApartmentJSON json = new ApartmentJSON();
+        json.setId(apartment.getId());
+        json.setLocation(GeoPointJSON.from(apartment.getLocation()));
+        json.setCity(apartment.getCity());
+        json.setAddress(apartment.getAddress());
+        json.setCreated(apartment.getCreated());
+        json.setUpdated(apartment.getUpdated());
+        return json;
+    }
 
     public Long getId() {
         return id;
@@ -73,19 +75,19 @@ public class ApartmentJSON {
     }
 
     public Date getCreated() {
-        return created;
+        return copy(created);
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = copy(created);
     }
 
     public Date getUpdated() {
-        return updated;
+        return copy(updated);
     }
 
     public void setUpdated(Date updated) {
-        this.updated = updated;
+        this.updated = copy(updated);
     }
 
     public ApartmentDTO toDTO() {

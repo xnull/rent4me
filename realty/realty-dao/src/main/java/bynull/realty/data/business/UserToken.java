@@ -1,14 +1,17 @@
 package bynull.realty.data.business;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+
+import static bynull.realty.util.CommonUtils.copy;
 
 /**
  * @author dionis on 09/07/14.
  */
 @Entity
 @Table(name = "user_tokens")
-public class UserToken {
+public class UserToken implements Serializable {
     @Id
     @GeneratedValue(generator = "user_token_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_token_id_generator", sequenceName = "user_tokens_id_seq", allocationSize = 1)
@@ -51,7 +54,7 @@ public class UserToken {
     }
 
     public Date getCreated() {
-        return created;
+        return copy(created);
     }
 
     void setCreated(Date created) {
@@ -59,7 +62,7 @@ public class UserToken {
     }
 
     public Date getUpdated() {
-        return updated;
+        return copy(updated);
     }
 
     void setUpdated(Date updated) {

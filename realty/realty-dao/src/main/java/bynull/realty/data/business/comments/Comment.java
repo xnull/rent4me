@@ -3,13 +3,16 @@ package bynull.realty.data.business.comments;
 import bynull.realty.data.business.User;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+
+import static bynull.realty.util.CommonUtils.copy;
 
 /**
  * @author dionis on 25/06/14.
  */
 @MappedSuperclass
-public abstract class Comment {
+public abstract class Comment implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "comment_id_generator", strategy = GenerationType.SEQUENCE)
@@ -36,19 +39,19 @@ public abstract class Comment {
     }
 
     public Date getCreated() {
-        return created;
+        return copy(created);
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = copy(created);
     }
 
     public Date getUpdated() {
-        return updated;
+        return copy(updated);
     }
 
     public void setUpdated(Date updated) {
-        this.updated = updated;
+        this.updated = copy(updated);
     }
 
     public String getText() {

@@ -1,14 +1,17 @@
 package bynull.realty.data.business;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+
+import static bynull.realty.util.CommonUtils.copy;
 
 /**
  * @author dionis on 25/06/14.
  */
 @Entity
 @Table(name = "rental_histories")
-public class RentalHistory {
+public class RentalHistory implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "rent_history_id_generator", strategy = GenerationType.SEQUENCE)
@@ -77,35 +80,35 @@ public class RentalHistory {
     }
 
     public Date getStart() {
-        return start;
+        return copy(start);
     }
 
     public void setStart(Date start) {
-        this.start = start;
+        this.start = copy(start);
     }
 
     public Date getEnd() {
-        return end;
+        return copy(end);
     }
 
     public void setEnd(Date end) {
-        this.end = end;
+        this.end = copy(end);
     }
 
     public Date getCreated() {
-        return created;
+        return copy(created);
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = copy(created);
     }
 
     public Date getUpdated() {
-        return updated;
+        return copy(updated);
     }
 
     public void setUpdated(Date updated) {
-        this.updated = updated;
+        this.updated = copy(updated);
     }
 
     @PrePersist

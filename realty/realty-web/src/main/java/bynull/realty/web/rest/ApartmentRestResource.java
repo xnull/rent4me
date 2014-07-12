@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class ApartmentRestResource {
     @Path("/{id}")
     public Response findOne(@PathParam("id") long id) {
         ApartmentDTO dto = apartmentService.find(id);
-        if(dto == null) {
+        if (dto == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .build();

@@ -1,7 +1,6 @@
 package bynull.realty.data.business.comments;
 
 import bynull.realty.data.business.Apartment;
-import bynull.realty.data.business.User;
 
 import javax.persistence.*;
 
