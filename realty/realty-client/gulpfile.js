@@ -11,8 +11,7 @@ paths.app = 'app/**';
 paths.jsHintFiles = 'app/components/**/*.js';
 paths.dist = '../realty-web/src/main/webapp/view';
 
-gulp.task('jsBuild', ['clean-dist', 'bower-files'], function () {
-    gulp.src(paths.jsHintFiles).pipe(jshint()).pipe(jshint.reporter('default'));
+gulp.task('jsBuild', ['lint', 'clean-dist', 'bower-files'], function () {
     gulp.src(paths.app).pipe(gulp.dest(paths.dist));
 });
 
@@ -25,7 +24,7 @@ gulp.task('clean-dist', function () {
 
 // Lint Task
 gulp.task('lint', function () {
-    return gulp.src(paths.scripts)
+    return gulp.src(paths.jsHintFiles)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
