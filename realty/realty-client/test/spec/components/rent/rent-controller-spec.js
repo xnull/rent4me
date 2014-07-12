@@ -27,13 +27,13 @@ describe('Rent service test', function () {
             _rentService = rentService;
         });
 
-        /*inject(function ($httpBackend) {
+        inject(function ($httpBackend) {
          _httpBackend = $httpBackend;
-         });*/
+        });
     });
 
     it('check hello method', function () {
-        //expect(_rentService).toBeDefined();
-        //expect(_rentService.hello()).toBe("hey hello");
+        expect(_rentService).toBeDefined();
+        expect(_rentService.hello()).toBe("hey hello");
     });
 });
