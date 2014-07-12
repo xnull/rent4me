@@ -21,6 +21,7 @@ module.exports = function (config) {
             'app/vendor/angular-cookies/angular-cookies.js',
             'app/vendor/angular-mocks/angular-mocks.js',
             'app/vendor/jquery/dist/jquery.min.js',
+            'app/vendor/blockui/jquery.blockUI.js',
             'app/components/**/*.js',
             'app/app.js',
             'test/spec/**/*-spec.js'
