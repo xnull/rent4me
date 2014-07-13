@@ -40,6 +40,14 @@ var componentsCfg = [
         template: 'components/rent-search/rent-search-view.html'
     },
     {
+        ctl: renterSearchController,
+        service: renterSearchService,
+        ctlName: 'RenterSearchController',
+        serviceName: 'renterSearchService',
+        route: '/renter-search',
+        template: 'components/renter-search/renter-search-view.html'
+    },
+    {
         ctl: personalController,
         service: personalService,
         ctlName: 'PersonalController',
