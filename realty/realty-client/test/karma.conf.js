@@ -23,6 +23,7 @@ module.exports = function (config) {
             'app/vendor/jquery/dist/jquery.min.js',
             'app/vendor/blockui/jquery.blockUI.js',
             'app/components/**/*.js',
+            'app/main.js',
             'app/app.js',
             'test/spec/**/*-spec.js'
         ],

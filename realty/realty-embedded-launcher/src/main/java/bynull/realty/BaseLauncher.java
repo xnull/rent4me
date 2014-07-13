@@ -45,7 +45,7 @@ public class BaseLauncher {
     }
 
     private static int getPortOrDefault(String[] args, int defaultPort) {
-        return args.length == 1 ? Integer.valueOf(args[0]) : defaultPort;
+        return args.length == 1 ? Integer.parseInt(args[0]) : defaultPort;
     }
 
     private static double currentMemoryUsageMB() {
