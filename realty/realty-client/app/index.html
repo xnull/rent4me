@@ -39,6 +39,7 @@
     <script src="components/register/register-controller.js"></script>
     <script src="components/rent-search/rent-search-controller.js"></script>
     <script src="components/personal/personal-controller.js"></script>
+    <script src="main.js"></script>
     <script src="app.js"></script>
 </head>
 
@@ -77,6 +78,11 @@
                     <li ng-class="{ active: navController.isRentSearch() }">
                         <a href="#/rent-search">Поиск объявлений</a>
                     </li>
+
+                    <li ng-class="{ active: navController.isRentSearch() }">
+                        <a href="#/renter-search">Поиск арендаторов</a>
+                    </li>
+
                     <li ng-show="auth_info.authorized" ng-class="{ active: navController.isPersonal() }">
                         <a href="#/personal">Личный кабинет</a>
                     </li>
