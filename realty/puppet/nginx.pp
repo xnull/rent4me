@@ -1,3 +1,7 @@
+/**
+ * http://krisjordan.com/essays/goodbye-server-configuration-woes-hello-puppet nginx installation and configuration
+ */
+
 package { "nginx":
   ensure => installed
 }

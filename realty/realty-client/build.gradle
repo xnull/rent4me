@@ -2,6 +2,7 @@
  * Client part of realty application: html and javascript.
  * Decided that source files will be moved from realty-web/src/main/webapp/view
  */
+apply from: "${rootProject.projectDir}/gradle/client-deployment.gradle"
 
 /**
  * https://github.com/srs/gradle-node-plugin
