@@ -3,14 +3,14 @@ var authorizationController = function ($scope, $log, $cookies, authorizationSer
 
     var logPrefix = "auth_ctrl ";
 
-    $scope.auth_info = {
+    $scope.authInfo = {
         authorized: authorizationService.isAuthorized()
     };
 
 
 //    $scope.authorized = authorizationService.isAuthorized();
 
-    $log.info(logPrefix + "Authorized? " + $scope.auth_info.authorized);
+    $log.info(logPrefix + "Authorized? " + $scope.authInfo.authorized);
 
     var _self = this;
 
@@ -24,7 +24,7 @@ var authorizationController = function ($scope, $log, $cookies, authorizationSer
         $log.info(args);
 
         $log.info(logPrefix + "Setting authorized to " + args.authorized);
-        $scope.auth_info.authorized = args.authorized;
+        $scope.authInfo.authorized = args.authorized;
 //        $scope.$apply();
 //        });
     });
@@ -33,7 +33,7 @@ var authorizationController = function ($scope, $log, $cookies, authorizationSer
 //        $log.info(logPrefix+"Received event on watch: "+authorizationService.EVENT_AUTH_STATE_CHANGED);
 //        var authorized = authorizationService.isAuthorized();
 //        $log.info(logPrefix+"Setting authorized to(on watch) "+authorized);
-//        $scope.auth_info.authorized = authorized;
+//        $scope.authInfo.authorized = authorized;
 //    });
 
     this.loginWithFacebook = authorizationService.loginWithFacebook;
