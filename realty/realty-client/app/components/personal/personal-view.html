@@ -2,28 +2,86 @@
     .personal-view {
         max-width: 900px;
         padding: 10px;
-        text-align: center;
         margin-bottom: 10px;
     }
 </style>
 
 <div class="personal-view container">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="bs-docs-header">
-                <ul class="nav nav-tabs nav-stacked" role="tablist">
-                    <li ng-repeat="menuTab in menuTabs" ng-class="{active:isActiveMenuTab(menuTab.id)}">
+                <ul class="nav nav-stacked" role="tablist">
+                <li ng-repeat="menuTab in menuTabs" ng-class="{active:isActiveMenuTab(menuTab.id)}">
                         <a ng-click="showMenu(menuTab.id)">{{menuTab.name}}</a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="col-md-8" style="border: 1px solid #ccc; border-radius:3px; height: 600px;">
+        <div class="col-md-9" style="border: 1px solid #ccc; border-radius:5px; height: 600px;">
             <div class="animate-switch-container" ng-switch on="currentMenuTabId">
-                <div class="animate-switch" ng-switch-when="message">message div</div>
-                <div class="animate-switch" ng-switch-when="settings">Settings Div</div>
-                <div class="animate-switch" ng-switch-default>Home div</div>
+                <div class="animate-switch" ng-switch-when="myAds">
+                    Мои объявления. Нужно отображать:<br/><br/>
+                    1. Список выставленных объявлений пользователем<br/>
+                    2. Статистику по каждому выставленному объявлению:<br/>
+                    2.1. Сколько дней объявление висело. пока не было закрыто<br/>
+                    2.2. Количество просмотров объявления<br/>
+                    2.3. Отношение и отзывы пользователей<br/>
+                    2.4. Средняя цена аналогичных предложений<br/>
+                    2.5. Фотки квартиры
+                </div>
+
+                <div class="animate-switch" ng-switch-when="addAds">
+                    Выставить или изменить если есть активное объявление о сдаче квартиры:<br/>
+                    1. Конструктор,позволяющий сформировать текст объявления. Например есть шаблоные тексты типа:
+                    'очень высокие потолки', 'мебилированная квартира', 'без домашних животных',
+                    'не курящие' и т.д.<br/>
+                    2. Галка позволяющая выставить хату скрыто: объявление не будет отображаться в поиске, а
+                    будет присылаться в рассылке, только тем кто подписан на автопоиск в этом месте
+                </div>
+
+                <div class="animate-switch" ng-switch-when="myRealty">
+                    Информация по квартире\ам пользователя:<br/>
+                    1. Адрес, количество комнат, наличие мебели, балкон и т.д<br/>
+                    2. Описание<br/>
+                    3. Типовой договор для сдачи этой квартиры. Плюс договор может присобачить сам собственник
+                    тот который он хочет<br/>
+                    4. Фотки квартиры
+                    5. Отметка на карте где находится ваша хата
+                </div>
+
+                <div class="animate-switch" ng-switch-when="account">
+                    Аккаунт пользователя:<br/>
+                    1. Имя, ник, электронная почта<br/>
+                    2. Привязанная учетная запись с соц сети если имеется<br/>
+                    3. Индикатро говорящий о том, верифицированный ли пользователь.
+                    Например для тех кто сдает квартиру это привязан ли юзер к аккаунту соц. сети<br/>
+                    4. смена пароля<br/>
+                    5. Рассылка уведомлений: какие уведомления рассылать. например новости сайта,
+                    аналитику, новые личные сообщения, предложения заинтересовавшихся и т.д<br/>
+                    <strong>6. Данные пользователя: паспорт, итд, всё что нужно чтобы распечатать документ аренды
+                        квартиры</strong>
+                </div>
+
+                <div class="animate-switch" ng-switch-when="messages">
+                    Сообщения пользователя:<br/>
+                    1. Входящие, исходящие, отправленные, черновики и т.д.<br/>
+                    <br/>
+                </div>
+
+                <div class="animate-switch" ng-switch-when="finances">
+                    Финансы:<br/>
+                    1. Баланс и кошелек пользователя<br/>
+                    2. История операций
+                    <br/>
+                </div>
+
+                <div class="animate-switch" ng-switch-when="searches">
+                    Автопоиск:<br/>
+                    1. Список автопоисков, раз в определенный промежуток времени пользователю на почту будет приходить
+                    сообщение на почту с результами поиска<br/>
+                    <br/>
+                </div>
             </div>
         </div>
     </div>
