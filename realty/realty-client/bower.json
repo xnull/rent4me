@@ -22,7 +22,7 @@
 
     "overrides": {
         "blockui": {
-            "main": "./blockUI.jquery.json.js"
+            "main": "./jquery.blockUI.js"
         },
         "google-maps-utility-library-v3": {
             "main": "./markerclusterer/src/markerclusterer.js"

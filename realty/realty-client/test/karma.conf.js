@@ -21,7 +21,7 @@ module.exports = function (config) {
             'app/vendor/angular-cookies/angular-cookies.js',
             '../.gradle/bower/angular-mocks/angular-mocks.js',
             'app/vendor/jquery/dist/jquery.js',
-            'app/vendor/blockui/blockUI.jquery.json.js',
+            'app/vendor/blockui/jquery.blockUI.js',
             'app/components/**/*.js',
             'app/main.js',
             'app/app.js',
