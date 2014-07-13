@@ -26,7 +26,7 @@ html, body {
 /* Not required for template or sticky footer method. */
 
 #wrap > .container {
-    padding: 100px 15px 0;
+    padding: 10px 10px 0;
 }
 
 .container .text-muted {
