@@ -20,8 +20,28 @@ var indexController = function ($scope, indexService, navigationService, $log) {
                 $carousel.carousel(dataSlideDirection);
             });
         });
-
     });
+
+    $scope.carouselData = [
+        {
+            img: 'components/index/images/1.jpg',
+            header: 'Найдите своё лучшее жильё',
+            text: 'Наша цель - помочь вам сэкономить деньги при поиске жилья.',
+            isActive: 'active'
+        },
+        {
+            img: 'components/index/images/2.jpg',
+            header: 'Только проверенные объявления',
+            text: 'Мы делаем акцент на том, что бы защитить наших пользователей.',
+            isActive: ''
+        },
+        {
+            img: 'components/index/images/3.jpg',
+            header: 'Мощная система модерации объявлений',
+            text: 'Наши модераторы тщательно проверяют каждое добавленное объявление.',
+            isActive: ''
+        }
+    ];
 };
 
 var indexService = function ($http, $log) {
