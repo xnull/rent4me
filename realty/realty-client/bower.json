@@ -18,5 +18,15 @@
         "angular-loader": "v1.3.0-beta.11",
         "angular-mocks": "v1.3.0-beta.11",
         "html5-boilerplate": "~4.3.0"
+    },
+
+    "overrides": {
+        "blockui": {
+            "main": "./blockUI.jquery.json.js"
+        },
+        "google-maps-utility-library-v3": {
+            "main": "./markerclusterer/src/markerclusterer.js"
+        }
+
     }
 }
