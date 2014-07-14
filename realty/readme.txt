@@ -80,3 +80,9 @@
  email: admin@rent4.me
  username: admin@rent4.me
  password: T210sadml324@asdlk
+
+
+ ------
+ digitalocean.com
+ email: dionis.argiri@gmail.com
+ password: asdjlk2332kj320d12
