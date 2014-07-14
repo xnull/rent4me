@@ -63,10 +63,6 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
         } else {
             $cookies.username = val;
         }
-
-        $log.info(log_prefix + "Broadcasting event " + authorization.EVENT_USERNAME_CHANGED);
-        $rootScope.$broadcast(authorization.EVENT_USERNAME_CHANGED, {username: authorization.username});
-
     };
 
     authorization.setToken = function (val) {
@@ -77,10 +73,11 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
         } else {
             $cookies.token = val;
         }
+    };
 
+    authorization.authStateChanged = function () {
         $log.info(log_prefix + "Broadcasting event " + authorization.EVENT_AUTH_STATE_CHANGED);
         $rootScope.$broadcast(authorization.EVENT_AUTH_STATE_CHANGED, {authorized: authorization.isAuthorized()});
-
     };
 
 
@@ -107,6 +104,7 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
                     $log.info("JSON:");
                     $log.info(angular.toJson(data));
 
+                    $.blockUI();
                     $http({
                         method: 'POST',
                         url: '/rest/auth/facebook',
@@ -120,9 +118,11 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
 
                             authorization.setToken(data.token);
                             authorization.setUsername(data.username);
+                            authorization.authStateChanged();
                             // this callback will be called asynchronously
                             // when the response is available
                             //console.log('Successful sending ajax request');
+                            $.unblockUI();
                         }).
                         error(function (data, status, headers, config) {
                             $log.info("Error!");
@@ -132,6 +132,8 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
                             $log.info(config);
                             authorization.setToken(null);
                             authorization.setUsername(null);
+                            authorization.authStateChanged();
+                            $.unblockUI();
                             // called asynchronously if an error occurs
                             // or server returns response with an error status.
                             //console.log('Error sending ajax request. Status: ' + status);
@@ -213,7 +215,7 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
 
         var data = {"token": token};
 
-
+        $.blockUI();
         $http({
             method: 'DELETE',
             url: '/rest/auth',
@@ -230,6 +232,8 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
 
             authorization.setToken(null);
             authorization.setUsername(null);
+            authorization.authStateChanged();
+            $.unblockUI();
             // this callback will be called asynchronously
             // when the response is available
             //console.log('Successful sending ajax request');
@@ -240,6 +244,12 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
                 $log.info(status);
                 $log.info(headers);
                 $log.info(config);
+                authorization.setToken(null);
+                authorization.setUsername(null);
+                authorization.authStateChanged();
+//                alert(status);
+                $.unblockUI();
+
 //                authorization.setToken(null);
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.

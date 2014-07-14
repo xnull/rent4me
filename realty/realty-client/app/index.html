@@ -49,7 +49,7 @@
 <!-- Wrap all page content here -->
 <div id="wrap">
     <!-- Fixed navbar -->
-    <div class="navbar navbar-default" role="navigation"
+    <div class="navbar navbar-default " role="navigation"
          ng-controller="NavigationController as navController"
          style="max-width: 900px; margin: 5px auto; background-color: #eeeeee; padding: 5px; border-radius: 5px;">
         <div class="container">
@@ -87,7 +87,7 @@
                         <a href="#/personal">Личный кабинет</a>
                     </li>
                     <li ng-show="authInfo.authorized" ng-click="authController.logout()">
-                        <a>Выход</a>
+                        <a href="#">Выход</a>
                     </li>
                 </ul>
             </div>
@@ -111,6 +111,21 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".navbar ul li a").click(function (event) {
+            // check if window is small enough so dropdown is created
+//            alert('clicked');
+            var $nav = $(".navbar-collapse");
+
+            $nav.collapse('hide');
+//            console.log($nav.hasClass('collapse'));
+
+//            $nav.removeClass("in");
+//            $nav.addClass("collapse");
+        });
+    });
+</script>
 <script>
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
