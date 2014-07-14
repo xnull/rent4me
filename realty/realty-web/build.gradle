@@ -1,6 +1,56 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'jetty'
+apply plugin: 'ssh'
+
+task deployBackendDev(dependsOn: war, type: SshTask) {
+    group = 'Deployment'
+
+    def passphrase = "k124hfeoifs9";
+
+    remotes {
+        webServer {
+            host = "rent4.me"
+            user = "tomcat"
+            password = passphrase
+        }
+    }
+
+    session(remotes.webServer) {
+        execute 'cd /home/tomcat/tc7 ; bin/catalina.sh stop ; rm -rf webapps/* ; rm -rf work/*'
+        put war.archivePath, '/home/tomcat/tc7/webapps/'
+        execute 'cd /home/tomcat/tc7 ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; bin/catalina.sh start'
+    }
+}
+
+task deployBackendRelease(dependsOn: deployBackendDev, type: SshTask) {
+    group = 'Deployment'
+
+    /*def passphrase = "k124hfeoifs9";
+
+    remotes {
+        webServer {
+            host = "rent4.me"
+            user = "tomcat"
+            password = passphrase
+        }
+    }
+
+    session(remotes.webServer) {
+        execute 'cd /home/tomcat/tc7 ; bin/catalina.sh stop ; rm -rf webapps/* ; rm -rf work/*'
+        put war.archivePath, '/home/tomcat/tc7/webapps/'
+        execute 'cd /home/tomcat/tc7 ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; bin/catalina.sh start'
+    }*/
+}
 
 /**
  * The War plugin adds two dependency configurations: providedCompile and providedRuntime. See http://www.gradle.org/docs/current/userguide/war_plugin.html
