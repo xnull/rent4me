@@ -52,6 +52,9 @@ var rentSearchService = function ($log) {
         }
     };
 
+    /**
+     * http://habrahabr.ru/post/28621/ clustering markers
+     */
     return {
         googleMapInitialization: function () {
             $log.debug('Initialize google maps');

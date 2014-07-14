@@ -2,6 +2,9 @@
  * Client part of realty application: html and javascript.
  * Decided that source files will be moved from realty-web/src/main/webapp/view
  */
+apply from: "${rootProject.projectDir}/gradle/client-deployment.gradle"
+
+defaultTasks 'bowerInstall'
 
 /**
  * https://github.com/srs/gradle-node-plugin
@@ -41,31 +44,31 @@ node {
 /**
  * Download js dependencies
  */
-task bowerInstall(dependsOn: npmInstall, type: BaseJsTaskRunner) {
+task bowerInstallSystem(dependsOn: npmInstall, type: BaseJsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/bower/bin/bower')
     args = ['install']
+}
+
+task bowerInstall(type: JsTaskRunner) {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['bower-files']
 }
 
 /**
  * Run unit tests
  */
-task jsTest(type: JsTaskRunner) {
+task jsTest(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/karma/bin/karma')
     args = ['start', 'test/karma.conf.js']
 }
 test.dependsOn jsTest
 
-task jsBuild(type: JsTaskRunner) {
+task jsBuild(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
     args = ['jsBuild']
 }
 
-task bfiles(type: JsTaskRunner) {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['bower-files']
-}
-
-task jsHint(type: JsTaskRunner) {
+task jsHint(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
     args = ['lint']
 }
@@ -82,7 +85,7 @@ clean << {
     project.delete './app/vendor'
 }
 
-task updateWebDriverManager(type: JsTaskRunner) {
+task updateWebDriverManager(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/protractor/bin/webdriver-manager')
     args = ['update']
 }
@@ -110,6 +113,6 @@ public class BaseJsTaskRunner extends com.moowork.gradle.node.task.NodeTask {
 public class JsTaskRunner extends BaseJsTaskRunner {
     JsTaskRunner() {
         super()
-        dependsOn 'bowerInstall'
+        dependsOn 'bowerInstallSystem'
     }
 }

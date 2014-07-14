@@ -16,7 +16,7 @@ gulp.task('jsBuild', ['lint', 'clean-dist', 'bower-files'], function () {
 });
 
 gulp.task('bower-files', function () {
-    return gulpBowerFiles().pipe(gulp.dest('./app/vendor'));
+    gulpBowerFiles().pipe(gulp.dest('./app/vendor'));
 });
 gulp.task('clean-dist', function () {
     return gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));

@@ -28,12 +28,9 @@ public class RetryRunner<T> {
                 LOGGER.error("Exception happened at attempt [" + attempt + "]/ " + retryAttempts + ".", e);
             }
         } while (attempt < retryAttempts);
-        if (lastException != null) {
-            LOGGER.error("Failed to execute job in {} attempts.", retryAttempts);
-            throw lastException;
-        } else {
-            throw new RetryFailedException("Failed to execute job in " + retryAttempts + " attempts.");
-        }
+
+        LOGGER.error("Failed to execute job in {} attempts.", retryAttempts);
+        throw lastException;
     }
 
     public static final class RetryFailedException extends Exception {

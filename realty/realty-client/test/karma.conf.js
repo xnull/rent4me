@@ -19,10 +19,11 @@ module.exports = function (config) {
             'app/vendor/angular-route/angular-route.js',
             'app/vendor/angular-resource/angular-resource.js',
             'app/vendor/angular-cookies/angular-cookies.js',
-            'app/vendor/angular-mocks/angular-mocks.js',
-            'app/vendor/jquery/dist/jquery.min.js',
+            '../.gradle/bower/angular-mocks/angular-mocks.js',
+            'app/vendor/jquery/dist/jquery.js',
             'app/vendor/blockui/jquery.blockUI.js',
             'app/components/**/*.js',
+            'app/main.js',
             'app/app.js',
             'test/spec/**/*-spec.js'
         ],
