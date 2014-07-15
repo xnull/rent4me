@@ -3,25 +3,6 @@ var indexController = function ($scope, indexService, navigationService, $log) {
 
     $log.debug('Index controller execution');
 
-    $(function () {
-        navigationService.setHome();
-
-        var $carousel = $('.carousel');
-        $carousel.carousel({
-            interval: 30000,
-            pause: "hover",
-            wrap: true
-        });
-
-        $('.carousel-control').each(function () {
-            var elem = $(this);
-            elem.on('click', function () {
-                var dataSlideDirection = elem.attr('data-slide');
-                $carousel.carousel(dataSlideDirection);
-            });
-        });
-    });
-
     $scope.carouselData = [
         {
             img: 'components/index/images/1.jpg',
@@ -42,6 +23,25 @@ var indexController = function ($scope, indexService, navigationService, $log) {
             isActive: ''
         }
     ];
+
+    $(function () {
+        navigationService.setHome();
+
+        var $carousel = $('.carousel');
+        $carousel.carousel({
+            interval: 15000,
+            pause: "hover",
+            wrap: true
+        });
+
+        $('.carousel-control').each(function () {
+            var elem = $(this);
+            elem.on('click', function () {
+                var dataSlideDirection = elem.attr('data-slide');
+                $carousel.carousel(dataSlideDirection);
+            });
+        });
+    });
 };
 
 var indexService = function ($http, $log) {

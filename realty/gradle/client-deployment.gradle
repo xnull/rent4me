@@ -1,56 +1,35 @@
-configurations {
-    sshAntTask
+import org.hidetake.gradle.ssh.plugin.SshTask;
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
+    }
 }
 
-dependencies {
-    sshAntTask 'org.apache.ant:ant-jsch:1.9.2'
+project.apply plugin: 'ssh'
+
+project.remotes {
+    webServer {
+        host = "rent4.me"
+        user = "root"
+        password = "hnzjnjwbfjao"
+    }
 }
 
-ant.taskdef(
-        name: 'scp',
-        classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
-        classpath: configurations.sshAntTask.asPath)
 
-ant.taskdef(
-        name: 'ssh',
-        classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
-        classpath: configurations.sshAntTask.asPath)
+class RemoteDeploymentTask extends SshTask {
 
-task clientDeployment {
-    group = 'Infrastructure'
+    public static final String TASK_NAME = 'remoteDeployment'
 
-    doLast {
-        // Create a new file for each execution to make
-        // sure that execution doesn't fails in case
-        // idententy of host has been changed.
-        def knownHosts = File.createTempFile("knownhosts", "txt")
-        def user = 'root'
-        def host = 'rent4.me'
-        def privateKey = file('keys/myKey')
+    RemoteDeploymentTask() {
+        group = 'Deployment'
 
-        try {
-            // Example to copy files to a remote host.
-            ant.scp(
-                    file: file("build.gradle"),
-                    todir: "${user}@${host}:~",
-                    keyfile: privateKey,
-                    trust: true,
-                    knownhosts: knownHosts
-            )
-
-            // Example to execute a command on the remote host.
-            /*ant.ssh(
-                    host: host,
-                    username: user,
-                    keyfile: privateKey,
-                    trust: true,
-                    knownhosts: knownHosts,
-                    command: "ls /"
-
-            )*/
-
-        } finally {
-            knownHosts.delete()
+        session(remotes.webServer) {
+            put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/usr/share/nginx/app/dev/'
+            execute 'cd /usr/share/nginx/app/dev/;tar -xf app-1.0.tar'
         }
     }
 }

@@ -1,4 +1,16 @@
 <style type="text/css">
+    /*html, body {
+        height: 100%;
+    }
+
+    .carousel, .item, .active {
+        height: 100%;
+    }
+
+    .carousel-inner {
+        height: 100%;
+    }*/
+
     .email-sign-up {
         max-width: 900px;
         margin: 40px auto;
@@ -6,32 +18,20 @@
         padding: 20px;
         border-radius: 10px;
     }
-
-    #carousel-example-generic {
-        margin-left: auto;
-        margin-right: auto;
-    }
 </style>
 
-<div class="bs-docs-header" style="text-align: center; margin-bottom: 10px;">
-<div class="container">
-        <h1>Аренда недвижимости без посредников</h1>
-    </div>
-</div>
-
-<div id="carousel-example-generic" class="carousel slide" style="max-width: 900px">
+<div id="myCarousel" class="carousel slide" data-ride="carousel" ng-controller="IndexController">
     <!-- Indicators -->
     <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
     </ol>
 
     <!-- Wrapper for slides -->
-    <div class="carousel-inner" ng-controller='IndexController'>
-
+    <div class="carousel-inner">
         <div class="item {{imgData.isActive}}" ng-repeat="imgData in carouselData">
-            <img ng-src="{{imgData.img}}" alt="..." style="border-radius:5px;">
+            <img ng-src="{{imgData.img}}" alt="...">
 
             <div class="carousel-caption">
                 <h2>{{imgData.header}}</h2>
@@ -49,9 +49,8 @@
     </span>
 </div>
 
-
 <!-- Begin MailChimp Signup Form -->
-<div class="email-sign-up">
+<!--<div class="email-sign-up">
     <h3>Скоро открытие!</h3>
     <h5>Будьте в числе первых:</h5>
 
@@ -63,17 +62,14 @@
             <input type="email" value="" name="EMAIL" class="form-control" placeholder="E-mail">
         </div>
 
-        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-        <div style="position: absolute; left: -5000px;"><input type="text" name="b_0a209f5f0573bb38236e00eb5_df5a96106d"
-                                                               tabindex="-1" value=""></div>
+        <div style="position: absolute; left: -5000px;">
+            <input type="text" name="b_0a209f5f0573bb38236e00eb5_df5a96106d" tabindex="-1" value="">
+        </div>
 
         <div class="form-group">
             <input type="submit" value="Подписаться" name="subscribe" id="mc-embedded-subscribe"
                    class="btn btn-primary">
         </div>
-
     </form>
-</div>
-
-<!--End mc_embed_signup-->
+</div>-->
 
