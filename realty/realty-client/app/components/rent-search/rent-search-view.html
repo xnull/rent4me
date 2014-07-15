@@ -1,39 +1,67 @@
 <style type="text/css">
     .search-form {
-        max-width: 900px;
+        max-width: 100%;
         margin: 10px auto;
         background-color: #eeeeee;
         padding: 10px;
         border-radius: 10px;
     }
 
+    .rent-form {
+        max-width: 100%;
+        margin-top: 90px;
+        background-color: #eeeeee;
+        border: 1px solid #888;
+        border-radius: 5px;
+        padding: 0px;
+    }
+
     #map-canvas {
-        height: 100%
+        height: 700px;
     }
 </style>
 
-<div class="bs-docs-header search-form">
+<div class="container rent-form">
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="flatType" class="col-md-1 control-label">Тип</label>
 
-    <form class="form-inline" role="form">
-        <div class="form-group">
-            <label class="sr-only" for="exampleInputEmail2">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-addon">@</div>
-                <input class="form-control" type="email" placeholder="Enter email">
+            <div class="col-md-3">
+                <div class="btn-group" id="flatType">
+                    <button type="button" class="btn btn-default">Квартира</button>
+                    <button type="button" class="btn btn-default">Комната</button>
+                </div>
             </div>
         </div>
+
         <div class="form-group">
-            <label class="sr-only" for="exampleInputPassword2">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+            <label for="price" class="col-md-1 control-label">Цена</label>
+
+            <div class=input-group" id="price">
+                <input type="text" class="form-control">
+                <input type="text" class="form-control">
+            </div>
         </div>
-        <div class="checkbox">
-            <label> <input type="checkbox"> Remember me </label>
+
+        <div class="form-group">
+            <label for="rooms" class="col-md-1 control-label">Комнат</label>
+
+            <div class="col-md-11">
+                <div class="btn-group" id="rooms">
+                    <button type="button" class="btn btn-default">1</button>
+                    <button type="button" class="btn btn-default">2</button>
+                    <button type="button" class="btn btn-default">3</button>
+                    <button type="button" class="btn btn-default">4</button>
+                    <button type="button" class="btn btn-default">5</button>
+                </div>
+            </div>
         </div>
+
+        <p></p>
         <button type="submit" class="btn btn-default">Sign in</button>
     </form>
 </div>
 
-<div id="map-canvas" class="search-form" ng-init="initializeGoogleMaps()" style="height: 700px"/>
+<div class="container">
+    <div id="map-canvas" class="search-form" ng-init="initializeGoogleMaps()"/>
+</div>
