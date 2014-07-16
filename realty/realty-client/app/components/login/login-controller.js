@@ -22,6 +22,7 @@ var loginController = function ($scope, $log, loginService, navigationService, a
 
 
     $scope.loginWithFacebook = authorizationService.loginWithFacebook;
+    $scope.loginWithVK = authorizationService.loginWithVK;
     $scope.logout = authorizationService.logout;
 
 
