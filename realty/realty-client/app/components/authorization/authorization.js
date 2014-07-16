@@ -37,6 +37,7 @@ var authorizationController = function ($scope, $log, $cookies, authorizationSer
 //    });
 
     this.loginWithFacebook = authorizationService.loginWithFacebook;
+    this.loginWithVK = authorizationService.loginWithVK;
     this.logout = authorizationService.logout;
 
 };
@@ -258,6 +259,40 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
             });
 
 //        authorization.setFacebookUser(null);
+    };
+
+    authorization.loginWithVK = function () {
+
+        $log.info("login with VK");
+
+        function authInfo(response) {
+            $log.info('VK response:');
+            $log.info(response);
+            if (response.session) {
+                $log.info('VK response session:');
+                $log.info(response.session);
+                $log.info('user: ' + response.session.mid);
+            } else {
+                $log.info('not authorized in VK');
+                VK.Auth.login(function (response) {
+                    $.blockUI();
+                    if (response.session) {
+                        /* Пользователь успешно авторизовался */
+                        if (response.settings) {
+                            /* Выбранные настройки доступа пользователя, если они были запрошены */
+                        }
+                    } else {
+                        /* Пользователь нажал кнопку Отмена в окне авторизации */
+                    }
+                    $.unblockUI();
+                });
+            }
+            $.unblockUI();
+        }
+
+        $.blockUI();
+
+        VK.Auth.getLoginStatus(authInfo);
     };
 
     authorization.logoutWithFacebook = function () {

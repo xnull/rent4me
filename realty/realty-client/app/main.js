@@ -107,18 +107,6 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
         VK.init({
             apiId: vkAppId
         });
-        function authInfo(response) {
-            $log.info('VK response:');
-            $log.info(response);
-            if (response.session) {
-                $log.info('VK response session:');
-                $log.info(response.session);
-                $log.info('user: ' + response.session.mid);
-            } else {
-                $log.info('not authorized in VK');
-            }
-        }
 
-        VK.Auth.getLoginStatus(authInfo);
     });
 };
