@@ -274,8 +274,8 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
                 $log.info('user: ' + response.session.mid);
             } else {
                 $log.info('not authorized in VK');
+                $.blockUI();
                 VK.Auth.login(function (response) {
-                    $.blockUI();
                     if (response.session) {
                         /* Пользователь успешно авторизовался */
                         if (response.settings) {
