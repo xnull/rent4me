@@ -21,147 +21,153 @@
     }
 </style>
 
-<div class="container rent-form" style=" background-color:#eee; border: 1px solid #888; border-radius:3px;">
+<div class="container rent-form">
     <br/>
 
-    <div class="bs-docs-header">
-        <form class="form-horizontal" role="form">
-            <div class="row">
-                <!-- First part of the search panel -->
-                <div class="col-md-4">
-                    <!-- Flat type -->
-                    <div class="form-group">
-                        <label for="flatType" class="col-md-3 control-label">Тип</label>
+    <form class="form-horizontal" role="form">
+        <div class="row">
+            <!-- First part of the search panel -->
+            <div class="col-md-4">
+                <!-- Flat type -->
+                <div class="form-group">
+                    <label for="flatType" class="col-md-3 control-label">Тип</label>
 
-                        <div class="col-md-9">
-                            <div class="btn-group" id="flatType">
-                                <button type="button" class="btn btn-default">Квартира</button>
-                                <button type="button" class="btn btn-default">Комната</button>
-                                <button type="button" class="btn btn-default">Дом</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- flats count -->
-                    <div class="form-group">
-                        <label for="rooms" class="col-md-3 control-label">Комнат</label>
-
-                        <div class="col-md-9">
-                            <div class="btn-group" id="rooms">
-                                <button type="button" class="btn btn-default">1</button>
-                                <button type="button" class="btn btn-default">2</button>
-                                <button type="button" class="btn btn-default">3</button>
-                                <button type="button" class="btn btn-default">4</button>
-                                <button type="button" class="btn btn-default">5</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- price -->
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Цена </label>
-
-                        <div class="control-group col col-md-3">
-                            <div class=input-group" id="priceStart">
-                                <input type="text" class="form-control col-md-1" placeholder="От">
-                            </div>
-                        </div>
-
-                        <div class="control-group col col-md-3">
-                            <div class=input-group" id="priceEnd">
-                                <input type="text" class="form-control" placeholder="До">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="address" class="col-md-3 control-label">Адрес</label>
-
-                        <div class="col-md-9">
-                            <div class="btn-group" id="address">
-                                <button type="button" class="btn btn-default">Карта</button>
-                                <button type="button" class="btn btn-default">Метро</button>
-                                <button type="button" class="btn btn-default">Адрес</button>
-                            </div>
+                    <div class="col-md-9">
+                        <div class="btn-group" id="flatType">
+                            <button type="button" class="btn btn-default">Квартира</button>
+                            <button type="button" class="btn btn-default">Комната</button>
+                            <button type="button" class="btn btn-default">Дом</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Second part of the search panel -->
-                <div class="col-md-4">
-                    <!-- Pay period -->
-                    <div class="form-group">
-                        <div class="dropdown">
-                            <label class="col-md-4 control-label">Срок аренды</label>
-                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                                    data-toggle="dropdown">
-                                Срок аренды
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Длительная аренда</a>
-                                </li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Краткосрочная аренда
-                                    (несколько
-                                    месяцев)</a></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Посуточно</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <!-- flats count -->
+                <div class="form-group">
+                    <label for="rooms" class="col-md-3 control-label">Комнат</label>
 
-                    <!-- Photo -->
-                    <div class="form-group">
-                        <div class="col-md-offset-4">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> Только с фото
-                                </label>
-                            </div>
+                    <div class="col-md-9">
+                        <div class="btn-group" id="rooms">
+                            <button type="button" class="btn btn-default">1</button>
+                            <button type="button" class="btn btn-default">2</button>
+                            <button type="button" class="btn btn-default">3</button>
+                            <button type="button" class="btn btn-default">4</button>
+                            <button type="button" class="btn btn-default">5</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Third part of the search panel -->
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="furniture" class="col-md-4 control-label">Мебель</label>
+                <!-- price -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Цена </label>
 
-                        <div class="btn-group" id="furniture">
-                            <button type="button" class="btn btn-default">Есть</button>
-                            <button type="button" class="btn btn-default">Нет</button>
+                    <div class="control-group col col-md-3">
+                        <div class=input-group" id="priceStart">
+                            <input type="text" class="form-control col-md-1" placeholder="От">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="fridge" class="col-md-4 control-label">Холодильник</label>
-
-                        <div class="btn-group" id="fridge">
-                            <button type="button" class="btn btn-default">Есть</button>
-                            <button type="button" class="btn btn-default">Нет</button>
+                    <div class="control-group col col-md-3">
+                        <div class=input-group" id="priceEnd">
+                            <input type="text" class="form-control" placeholder="До">
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="wash" class="col-md-4 control-label">Стиральная машина</label>
+                <div class="form-group">
+                    <label for="address" class="col-md-3 control-label">Адрес</label>
 
-                        <div class="btn-group" id="wash">
-                            <button type="button" class="btn btn-default">Есть</button>
-                            <button type="button" class="btn btn-default">Нет</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="kids" class="col-md-4 control-label">С детьми</label>
-
-                        <div class="btn-group" id="kids">
-                            <button type="button" class="btn btn-default">Есть</button>
-                            <button type="button" class="btn btn-default">Нет</button>
+                    <div class="col-md-9">
+                        <div class="btn-group" id="address">
+                            <button type="button" class="btn btn-default">Карта</button>
+                            <button type="button" class="btn btn-default">Адрес</button>
+                            <button type="button" class="btn btn-disabled">Метро</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+
+            <!-- Second part of the search panel -->
+            <div class="col-md-4">
+                <!-- Pay period -->
+                <div class="form-group">
+                    <div class="dropdown">
+                        <label class="col-md-4 control-label">Срок аренды</label>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            Срок аренды
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Длительная аренда</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Краткосрочная аренда
+                                (несколько
+                                месяцев)</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Посуточно</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Photo -->
+                <div class="form-group">
+                    <div class="col-md-offset-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Только с фото
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Third part of the search panel -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="furniture" class="col-md-4 control-label">Мебель</label>
+
+                    <div class="btn-group" id="furniture">
+                        <button type="button" class="btn btn-default">Есть</button>
+                        <button type="button" class="btn btn-default">Нет</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fridge" class="col-md-4 control-label">Холодильник</label>
+
+                    <div class="btn-group" id="fridge">
+                        <button type="button" class="btn btn-default">Есть</button>
+                        <button type="button" class="btn btn-default">Нет</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="wash" class="col-md-4 control-label">Стиральная машина</label>
+
+                    <div class="btn-group" id="wash">
+                        <button type="button" class="btn btn-default">Есть</button>
+                        <button type="button" class="btn btn-default">Нет</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="kids" class="col-md-4 control-label">С детьми</label>
+
+                    <div class="btn-group" id="kids">
+                        <button type="button" class="btn btn-default">Есть</button>
+                        <button type="button" class="btn btn-default">Нет</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" class="form-control col-md-offset-2" placeholder="Введите адрес">
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-default col-md-offset-11">Поиск</button>
+    </form>
     <br/>
 </div>
 

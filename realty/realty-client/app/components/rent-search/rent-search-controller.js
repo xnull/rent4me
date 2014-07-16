@@ -25,6 +25,8 @@ var rentSearchController = function ($log, $scope, rentSearchService, navigation
 var rentSearchService = function ($log) {
     "use strict";
 
+    var map;
+
     var testMapMarkers = {
 
         generateTestData: function () {
@@ -58,7 +60,7 @@ var rentSearchService = function ($log) {
     return {
         googleMapInitialization: function () {
             $log.debug('Initialize google maps');
-            var map;
+
             var myLatlng = new google.maps.LatLng(55.752020, 37.617526);
             var mapOptions = {
                 center: myLatlng,
@@ -70,6 +72,13 @@ var rentSearchService = function ($log) {
             map = new google.maps.Map(mapContainer, mapOptions);
 
             var markerCluster = new MarkerClusterer(map, testMapMarkers.generateTestData());
+        },
+
+        /**
+         * https://developers.google.com/maps/documentation/javascript/places?hl=ru
+         */
+        googleAddresses: function () {
+
         }
     };
 };
