@@ -63,10 +63,13 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
     var isProduction = $window.location.href.indexOf('rent4.me') != -1;
 
     var fbAppId;
+    var vkAppId;
     if (isProduction) {
         fbAppId = '270007246518198';
+        vkAppId = '4463597';
     } else {
         fbAppId = '271375949714661';
+        vkAppId = '4463597';
     }
 //        $.ajaxSetup({ cache: true });
     $.getScript('//connect.facebook.net/en_UK/all.js', function () {
@@ -99,4 +102,23 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
 
     });
 
+
+    $.getScript('//vk.com/js/api/openapi.js', function () {
+        VK.init({
+            apiId: vkAppId
+        });
+        function authInfo(response) {
+            $log.info('VK response:');
+            $log.info(response);
+            if (response.session) {
+                $log.info('VK response session:');
+                $log.info(response.session);
+                $log.info('user: ' + response.session.mid);
+            } else {
+                $log.info('not authorized in VK');
+            }
+        }
+
+        VK.Auth.getLoginStatus(authInfo);
+    });
 };
