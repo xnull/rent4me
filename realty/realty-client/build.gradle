@@ -87,6 +87,10 @@ task deployFrontendDev(dependsOn: packApp, type: SshTask) {
 
     def passphrase = "hnzjnjwbfjao";
 
+    ssh {
+        knownHosts = allowAnyHosts
+    }
+
     remotes {
         webServer {
             host = "rent4.me"
@@ -105,6 +109,10 @@ task deployFrontendRelease(dependsOn: packApp, type: SshTask) {
     group = 'Deployment'
 
     def passphrase = "hnzjnjwbfjao";
+
+    ssh {
+        knownHosts = allowAnyHosts
+    }
 
     remotes {
         webServer {

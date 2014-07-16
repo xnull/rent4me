@@ -17,6 +17,10 @@ task deployBackendDev(dependsOn: war, type: SshTask) {
 
     def passphrase = "k124hfeoifs9";
 
+    ssh {
+        knownHosts = allowAnyHosts
+    }
+
     remotes {
         webServer {
             host = "rent4.me"
@@ -36,6 +40,10 @@ task deployBackendRelease(dependsOn: deployBackendDev, type: SshTask) {
     group = 'Deployment'
 
     /*def passphrase = "k124hfeoifs9";
+
+    ssh {
+        knownHosts = allowAnyHosts
+    }
 
     remotes {
         webServer {
