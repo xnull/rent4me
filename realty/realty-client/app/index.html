@@ -21,8 +21,8 @@
     <script src="vendor/respond/dest/respond.min.js"></script>
     <![endif]-->
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&language=ru"></script>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?v=3&sensor=true&libraries=places&language=ru"></script>
     <script src="vendor/jquery/dist/jquery.js"></script>
 
     <script src="vendor/angular/angular.js"></script>
@@ -62,7 +62,7 @@
 
         <div class="masthead collapse navbar-collapse" ng-controller="NavigationController as navController">
             <ul class="nav nav-justified panel panel-default" ng-controller="AuthorizationController as authController">
-            <li ng-class="{ active: navController.isHome() }">
+                <li ng-class="{ active: navController.isHome() }">
                     <a href="#/"><strong>Главная</strong></a>
                 </li>
                 <li ng-class="{ active: navController.isRentSearch() }">

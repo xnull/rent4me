@@ -11,11 +11,25 @@
  */
 var rentSearchController = function ($log, $scope, rentSearchService, navigationService) {
     "use strict";
-
     $log.debug('Rent search controller initialization');
 
     $scope.initializeGoogleMaps = rentSearchService.googleMapInitialization;
 
+    $scope.apartment = {};
+    $scope.search = function () {
+        $log.debug($scope.apartment);
+    };
+
+    /* Dropdown menu see commented component on view
+     $(function() {
+     // Setup drop down menu
+     $('.dropdown-toggle').dropdown();
+
+     // Fix input element click problem
+     $('.dropdown input, .dropdown label').click(function(e) {
+     e.stopPropagation();
+     });
+     });*/
 
     $(function () {
         navigationService.setRentSearch();
@@ -56,10 +70,16 @@ var rentSearchService = function ($log) {
 
     /**
      * http://habrahabr.ru/post/28621/ clustering markers
+     *
+     * https://developers.google.com/maps/documentation/javascript/places?hl=ru
+     *
+     * https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
      */
     return {
         googleMapInitialization: function () {
             $log.debug('Initialize google maps');
+
+            var markers = testMapMarkers.generateTestData();
 
             var myLatlng = new google.maps.LatLng(55.752020, 37.617526);
             var mapOptions = {
@@ -71,14 +91,13 @@ var rentSearchService = function ($log) {
 
             map = new google.maps.Map(mapContainer, mapOptions);
 
-            var markerCluster = new MarkerClusterer(map, testMapMarkers.generateTestData());
-        },
+            var markerCluster = new MarkerClusterer(map, markers);
 
-        /**
-         * https://developers.google.com/maps/documentation/javascript/places?hl=ru
-         */
-        googleAddresses: function () {
+            //var inputElement = angular.element('addressInput');
+            var inputElement = document.getElementById('addressInput');
 
+            var autocomplete = new google.maps.places.Autocomplete(inputElement);
+            autocomplete.bindTo('bounds', map);
         }
     };
 };
