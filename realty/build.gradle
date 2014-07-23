@@ -139,6 +139,9 @@ subprojects {
             /**
              * Code quality settings
              */
+            findbugs {
+                toolVersion = "3.0.0"
+            }
             findbugsMain {
                 reports {
                     xml.enabled = false
