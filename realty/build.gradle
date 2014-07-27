@@ -148,27 +148,6 @@ subprojects {
                     html.enabled = true
                 }
             }
-
-            /*
-            dependencies {
-                //spring
-                compile libraries."org.springframework:spring-context"
-                compile libraries."org.springframework:spring-context-support"
-                compile libraries."org.springframework.security:spring-security-core"
-
-                //logger
-                compile libraries.'org.slf4j:slf4j-api'
-                compile libraries."ch.qos.logback:logback-classic"
-                compile libraries."ch.qos.logback:logback-core"
-
-                //test
-                testCompile libraries.'junit:junit'
-                testCompile libraries."org.hamcrest:hamcrest-all"
-                testCompile libraries.'org.mockito:mockito-all'
-                testCompile libraries."org.dbunit:dbunit"
-                testCompile libraries."org.springframework:spring-test"
-                testCompile libraries."com.jolbox:bonecp"
-            }*/
         }
     }
 }
