@@ -1,12 +1,12 @@
 /**
  * Application configuration
  */
-var appDependencies = [
+var moduleDependencies = [
     'ui.router', 'ngResource', 'ngCookies', /*, 'facebook'*/
     'rentApp.index', 'rentApp.rent', 'rentApp.auth', 'rentApp.navigation', 'rentApp.login',
     'rentApp.register', 'rentApp.rentSearch', 'rentApp.renterSearch', 'rentApp.personal'
 ];
-var rentApplication = angular.module('rentApp', appDependencies);
+var rentApplication = angular.module('rentApp', moduleDependencies);
 var logger = angular.injector(['rentApp', 'ng']).get('$log');
 
 rentApplication.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {

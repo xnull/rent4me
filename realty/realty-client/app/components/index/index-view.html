@@ -1,24 +1,21 @@
 <style type="text/css">
-    /*html, body {
+    html, body {
         height: 100%;
     }
 
-    .carousel, .item, .active {
+    .carousel {
         height: 100%;
     }
 
-    .carousel-inner {
+    .item, .active {
         height: 100%;
-    }*/
+    }
 
-    .email-sign-up {
-        max-width: 900px;
-        margin: 40px auto;
-        background-color: #eeeeee;
-        padding: 20px;
-        border-radius: 10px;
+    .carousel-caption {
+        margin: 80px auto;
     }
 </style>
+
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" ng-controller="IndexController">
     <!-- Indicators -->
@@ -33,9 +30,16 @@
         <div class="item {{imgData.isActive}}" ng-repeat="imgData in carouselData">
             <img ng-src="{{imgData.img}}" alt="...">
 
-            <div class="carousel-caption">
-                <h2>{{imgData.header}}</h2>
-                <br/>{{imgData.text}}
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>{{imgData.header}}</h1>
+                    <br/><strong>{{imgData.text}}</strong>
+
+                    <p></p>
+                    <a class="btn btn-lg btn-primary" href="#" role="button" data-toggle="modal" data-target="#myModal">Быть
+                        в курсе</a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -49,27 +53,41 @@
     </span>
 </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><h3>Скоро открытие!</h3></h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h5>Мы будем уведомлять вас о новых событиях:</h5>
+
+                    <form action="//rent4.us8.list-manage.com/subscribe/post?u=0a209f5f0573bb38236e00eb5&amp;id=df5a96106d"
+                          method="post" name="mc-embedded-subscribe-form"
+                          target="_blank">
+
+                        <div class="form-group">
+                            <input type="email" value="" name="EMAIL" class="form-control" placeholder="E-mail">
+                        </div>
+
+                        <div style="position: absolute; left: -5000px;">
+                            <input type="text" name="b_0a209f5f0573bb38236e00eb5_df5a96106d" tabindex="-1" value="">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Подписаться" name="subscribe" id="mc-embedded-subscribe"
+                                   class="btn btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Begin MailChimp Signup Form -->
-<!--<div class="email-sign-up">
-    <h3>Скоро открытие!</h3>
-    <h5>Будьте в числе первых:</h5>
-
-    <form action="//rent4.us8.list-manage.com/subscribe/post?u=0a209f5f0573bb38236e00eb5&amp;id=df5a96106d"
-          method="post" name="mc-embedded-subscribe-form"
-          target="_blank">
-
-        <div class="form-group">
-            <input type="email" value="" name="EMAIL" class="form-control" placeholder="E-mail">
-        </div>
-
-        <div style="position: absolute; left: -5000px;">
-            <input type="text" name="b_0a209f5f0573bb38236e00eb5_df5a96106d" tabindex="-1" value="">
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Подписаться" name="subscribe" id="mc-embedded-subscribe"
-                   class="btn btn-primary">
-        </div>
-    </form>
-</div>-->
+<!---->
 

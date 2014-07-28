@@ -101,7 +101,7 @@ task deployFrontendDev(dependsOn: packApp, type: SshTask) {
 
     session(remotes.webServer) {
         put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/usr/share/nginx/app/dev/'
-        execute 'cd /usr/share/nginx/app/dev/;tar -xf app-1.0.tar'
+        execute 'cd /usr/share/nginx/app/dev;tar -xf app-1.0.tar'
     }
 }
 
@@ -124,7 +124,7 @@ task deployFrontendRelease(dependsOn: packApp, type: SshTask) {
 
     session(remotes.webServer) {
         put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/usr/share/nginx/app/'
-        execute 'cd /usr/share/nginx/app/dev/;tar -xf app-1.0.tar'
+        execute 'cd /usr/share/nginx/app/;tar -xf app-1.0.tar'
     }
 }
 
