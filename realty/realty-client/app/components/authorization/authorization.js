@@ -14,7 +14,7 @@ authModule.controller('AuthorizationController', function ($scope, $log, $cookie
 
     $log.info(logPrefix + "Authorized? " + $scope.authInfo.authorized);
 
-    var _self = this;
+    //var _self = this;
 
     $log.info(logPrefix + "Binding for scope event: " + authorizationService.EVENT_AUTH_STATE_CHANGED);
     $scope.$on(authorizationService.EVENT_AUTH_STATE_CHANGED, function (event, args) {
@@ -48,12 +48,12 @@ authModule.controller('AuthorizationController', function ($scope, $log, $cookie
 authModule.factory('authorizationService', function ($http, $resource, $rootScope, $log, $cookies) {
     'use strict';
 
-    var log_prefix = "auth_service ";
+    var logPrefix = "auth_service ";
     var authorization = {};
 
 //    authorization.fbUser = null;
-    authorization.username = $cookies.username && $cookies.username != 'null' ? $cookies.username : null;
-    authorization.token = $cookies.token && $cookies.token != 'null' ? $cookies.token : null;
+    authorization.username = $cookies.username && $cookies.username !== 'null' ? $cookies.username : null;
+    authorization.token = $cookies.token && $cookies.token !== 'null' ? $cookies.token : null;
 
     authorization.EVENT_AUTH_STATE_CHANGED = 'EVENT_AUTH_STATE_CHANGED';
     authorization.EVENT_USERNAME_CHANGED = 'EVENT_USERNAME_CHANGED';
@@ -79,14 +79,14 @@ authModule.factory('authorizationService', function ($http, $resource, $rootScop
     };
 
     authorization.authStateChanged = function () {
-        $log.info(log_prefix + "Broadcasting event " + authorization.EVENT_AUTH_STATE_CHANGED);
+        $log.info(logPrefix + "Broadcasting event " + authorization.EVENT_AUTH_STATE_CHANGED);
         $rootScope.$broadcast(authorization.EVENT_AUTH_STATE_CHANGED, {authorized: authorization.isAuthorized()});
     };
 
 
 //    authorization.setFacebookUser = function (val) {
 //        authorization.fbUser = val;
-//        $log.info(log_prefix + "Broadcasting event " + authorization.EVENT_AUTH_STATE_CHANGED);
+//        $log.info(logPrefix + "Broadcasting event " + authorization.EVENT_AUTH_STATE_CHANGED);
 //        $rootScope.$broadcast(authorization.EVENT_AUTH_STATE_CHANGED);
 //    };
     authorization.isAuthorized = function () {
@@ -101,7 +101,7 @@ authModule.factory('authorizationService', function ($http, $resource, $rootScop
                 $log.debug(response);
 
                 if (response.authResponse) {
-                    $log.info(log_prefix + 'Welcome!  Fetching your information.... ');
+                    $log.info(logPrefix + 'Welcome!  Fetching your information.... ');
                     var data = {"facebook_id": response.authResponse.userID, "access_token": response.authResponse.accessToken};
                     $log.info(data);
                     $log.info("JSON:");
@@ -146,10 +146,10 @@ authModule.factory('authorizationService', function ($http, $resource, $rootScop
 
 //                    authorization.setFacebookUser(true);
 //                    FB.api('/me', function (response) {
-//                        $log.info(log_prefix + 'Good to see you, ' + response.name + '.');
+//                        $log.info(logPrefix + 'Good to see you, ' + response.name + '.');
 //                    });
                 } else {
-                    $log.info(log_prefix + 'User cancelled login or did not fully authorize.');
+                    $log.info(logPrefix + 'User cancelled login or did not fully authorize.');
                     authorization.logout();
                 }
             },
@@ -300,7 +300,7 @@ authModule.factory('authorizationService', function ($http, $resource, $rootScop
     authorization.logoutWithFacebook = function () {
         FB.logout(function (response) {
             // user is now logged out
-            $log.info(log_prefix + "Logging out...");
+            $log.info(logPrefix + "Logging out...");
             authorization.logout();
         });
     };

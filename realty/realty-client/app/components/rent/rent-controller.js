@@ -1,4 +1,20 @@
-var rentModule = angular.module('rentApp.rent', []);
+var rentModuleCfg = {
+    ctlName: 'RentController',
+    serviceName: 'rentService',
+    stateName: 'rentState',
+    stateConfig: {
+        url: '/rent',
+        templateUrl: 'components/rent/rent-view.html',
+        controller: 'RentController'
+    }
+};
+
+var rentModule = angular.module('rentApp.rent', ['ui.router']);
+
+rentModule.config(function ($stateProvider) {
+    'use strict';
+    $stateProvider.state(rentModuleCfg.stateName, rentModuleCfg.stateConfig);
+});
 
 /**
  * dynamic pages https://egghead.io/lessons/angularjs-using-resource-for-data-models
@@ -7,7 +23,7 @@ var rentModule = angular.module('rentApp.rent', []);
  * @param rentService
  * @param navigationService
  */
-rentModule.controller('RentController', function ($log, $scope, rentService, navigationService) {
+rentModule.controller(rentModuleCfg.ctlName, function ($log, $scope, rentService, navigationService) {
     "use strict";
     $log.debug('Rent controller: execution');
 
@@ -22,7 +38,7 @@ rentModule.controller('RentController', function ($log, $scope, rentService, nav
     });
 });
 
-rentModule.factory('rentService', function ($resource, $log) {
+rentModule.factory(rentModuleCfg.serviceName, function ($resource, $log) {
     "use strict";
 
     return {

@@ -1,6 +1,22 @@
-var indexModule = angular.module('rentApp.index', []);
+var indexModuleCfg = {
+    ctlName: 'IndexController',
+    serviceName: 'indexService',
+    stateName: 'indexState',
+    stateConfig: {
+        url: '/',
+        templateUrl: 'components/index/index-view.html',
+        controller: 'IndexController'
+    }
+};
 
-indexModule.controller('IndexController', function ($scope, indexService, navigationService, $log) {
+var indexModule = angular.module('rentApp.index', ['ui.router']);
+
+indexModule.config(function ($stateProvider) {
+    'use strict';
+    $stateProvider.state(indexModuleCfg.stateName, indexModuleCfg.stateConfig);
+});
+
+indexModule.controller(indexModuleCfg.ctlName, function ($scope, indexService, navigationService, $log) {
     'use strict';
 
     $log.debug('Index controller execution');
@@ -46,7 +62,7 @@ indexModule.controller('IndexController', function ($scope, indexService, naviga
     });
 });
 
-indexModule.factory('indexService', function ($http, $log) {
+indexModule.factory(indexModuleCfg.serviceName, function ($http, $log) {
     "use strict";
 
     return {

@@ -1,6 +1,22 @@
-var loginModule = angular.module('rentApp.login', []);
+var loginModuleCfg = {
+    ctlName: 'LoginController',
+    serviceName: 'loginService',
+    stateName: 'loginState',
+    stateConfig: {
+        url: '/login',
+        templateUrl: 'components/login/login-view.html',
+        controller: 'LoginController'
+    }
+};
 
-loginModule.controller('LoginController', function ($scope, $log, loginService, navigationService, authorizationService) {
+var loginModule = angular.module('rentApp.login', ['ui.router']);
+
+loginModule.config(function ($stateProvider) {
+    'use strict';
+    $stateProvider.state(loginModuleCfg.stateName, loginModuleCfg.stateConfig);
+});
+
+loginModule.controller(loginModuleCfg.ctlName, function ($scope, $log, loginService, navigationService, authorizationService) {
     'use strict';
 
     $log.debug('Login controller execution');
@@ -34,7 +50,7 @@ loginModule.controller('LoginController', function ($scope, $log, loginService, 
 //    $scope.greeting = loginService.hello();
 });
 
-loginModule.factory('loginService', function ($http) {
+loginModule.factory(loginModuleCfg.serviceName, function ($http) {
     "use strict";
 
     return {

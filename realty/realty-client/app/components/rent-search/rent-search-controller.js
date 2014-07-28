@@ -1,8 +1,35 @@
 /**
  * Created by null on 06.07.14.
  */
+var rentSearchModuleCfg = {
+    ctlName: 'RentSearchController',
+    serviceName: 'rentSearchService',
+    stateName: 'rentSearchState',
+    stateConfig: {
+        url: '/rent-search',
+        templateUrl: 'components/rent-search/rent-search-view.html'
+        //controller: 'RentSearchController'
+    }
+};
 
-var rentSearchModule = angular.module('rentApp.rentSearch', []);
+var rentSearchModuleSubview = {
+    stateName: 'rentSearchState.searchForm',
+    //url: '/rent-search/search',
+    stateConfig: {
+        views: {
+            "rentSearchForm": {
+                templateUrl: 'rent-search-form.html'
+            }
+        }
+    }
+};
+
+var rentSearchModule = angular.module('rentApp.rentSearch', ['ui.router']);
+
+rentSearchModule.config(function ($stateProvider) {
+    'use strict';
+    $stateProvider.state(rentSearchModuleCfg.stateName, rentSearchModuleCfg.stateConfig);
+});
 
 /**
  * Google maps and angularjs http://www.simplecoding.org/google-maps-angularjs-pozicionirovanie-karty.html
@@ -11,7 +38,7 @@ var rentSearchModule = angular.module('rentApp.rentSearch', []);
  * @param rentSearchService
  * @param navigationService
  */
-rentSearchModule.controller('RentSearchController', function ($log, $scope, rentSearchService, navigationService) {
+rentSearchModule.controller(rentSearchModuleCfg.ctlName, function ($log, $scope, rentSearchService, navigationService) {
     "use strict";
     $log.debug('Rent search controller initialization');
 
@@ -38,7 +65,7 @@ rentSearchModule.controller('RentSearchController', function ($log, $scope, rent
     });
 });
 
-rentSearchModule.factory('rentSearchService', function ($log) {
+rentSearchModule.factory(rentSearchModuleCfg.serviceName, function ($log) {
     "use strict";
 
     var map;

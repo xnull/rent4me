@@ -1,10 +1,25 @@
 /**
  * Created by null on 06.07.14.
  */
+var personalModuleCfg = {
+    ctlName: 'PersonalController',
+    serviceName: 'personalService',
+    stateName: 'personalState',
+    stateConfig: {
+        url: '/personal',
+        templateUrl: 'components/personal/personal-view.html',
+        controller: 'PersonalController'
+    }
+};
 
-var personalModule = angular.module('rentApp.personal', []);
+var personalModule = angular.module('rentApp.personal', ['ui.router']);
 
-personalModule.controller('PersonalController', function ($log, $scope, personalService, navigationService) {
+personalModule.config(function ($stateProvider) {
+    'use strict';
+    $stateProvider.state(personalModuleCfg.stateName, personalModuleCfg.stateConfig);
+});
+
+personalModule.controller(personalModuleCfg.ctlName, function ($log, $scope, personalService, navigationService) {
     "use strict";
 
     $scope.menuTabs = [
@@ -38,6 +53,6 @@ personalModule.controller('PersonalController', function ($log, $scope, personal
     });
 });
 
-personalModule.factory('personalService', function () {
+personalModule.factory(personalModuleCfg.serviceName, function () {
     "use strict";
 });

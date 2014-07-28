@@ -1,6 +1,21 @@
-var registerModule = angular.module('rentApp.register', []);
+var registerModuleCfg = {
+    ctlName: 'RegisterController',
+    serviceName: 'registerService',
+    stateName: 'registerState',
+    stateConfig: {
+        url: '/register',
+        templateUrl: 'components/register/register-view.html'
+    }
+};
 
-registerModule.controller('RegisterController', function ($scope, registerService, navigationService, $log) {
+var registerModule = angular.module('rentApp.register', ['ui.router']);
+
+registerModule.config(function ($stateProvider) {
+    'use strict';
+    $stateProvider.state(registerModuleCfg.stateName, registerModuleCfg.stateConfig);
+});
+
+registerModule.controller(registerModuleCfg.ctlName, function ($scope, registerService, navigationService, $log) {
     'use strict';
 
     $log.debug('Register controller execution');
@@ -12,7 +27,7 @@ registerModule.controller('RegisterController', function ($scope, registerServic
 //    $scope.greeting = registerService.hello();
 });
 
-registerModule.factory('registerService', function ($http) {
+registerModule.factory(registerModuleCfg.serviceName, function ($http) {
     "use strict";
 
     return {
