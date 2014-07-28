@@ -1,4 +1,6 @@
-var loginController = function ($scope, $log, loginService, navigationService, authorizationService) {
+var loginModule = angular.module('rentApp.login', []);
+
+loginModule.controller('LoginController', function ($scope, $log, loginService, navigationService, authorizationService) {
     'use strict';
 
     $log.debug('Login controller execution');
@@ -30,9 +32,9 @@ var loginController = function ($scope, $log, loginService, navigationService, a
         navigationService.setLogin();
     });
 //    $scope.greeting = loginService.hello();
-};
+});
 
-var loginService = function ($http) {
+loginModule.factory('loginService', function ($http) {
     "use strict";
 
     return {
@@ -51,5 +53,4 @@ var loginService = function ($http) {
                 });
         }
     };
-};
-
+});

@@ -1,7 +1,10 @@
 /**
  * Created by null on 06.07.14.
  */
-var personalController = function ($log, $scope, personalService, navigationService) {
+
+var personalModule = angular.module('rentApp.personal', []);
+
+personalModule.controller('PersonalController', function ($log, $scope, personalService, navigationService) {
     "use strict";
 
     $scope.menuTabs = [
@@ -33,8 +36,8 @@ var personalController = function ($log, $scope, personalService, navigationServ
     $(function () {
         navigationService.setPersonal();
     });
-};
+});
 
-var personalService = function () {
+personalModule.factory('personalService', function () {
     "use strict";
-};
+});

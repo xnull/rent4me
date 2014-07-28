@@ -2,6 +2,8 @@
  * Created by null on 06.07.14.
  */
 
+var rentSearchModule = angular.module('rentApp.rentSearch', []);
+
 /**
  * Google maps and angularjs http://www.simplecoding.org/google-maps-angularjs-pozicionirovanie-karty.html
  * @param $log
@@ -9,7 +11,7 @@
  * @param rentSearchService
  * @param navigationService
  */
-var rentSearchController = function ($log, $scope, rentSearchService, navigationService) {
+rentSearchModule.controller('RentSearchController', function ($log, $scope, rentSearchService, navigationService) {
     "use strict";
     $log.debug('Rent search controller initialization');
 
@@ -34,9 +36,9 @@ var rentSearchController = function ($log, $scope, rentSearchService, navigation
     $(function () {
         navigationService.setRentSearch();
     });
-};
+});
 
-var rentSearchService = function ($log) {
+rentSearchModule.factory('rentSearchService', function ($log) {
     "use strict";
 
     var map;
@@ -100,5 +102,5 @@ var rentSearchService = function ($log) {
             autocomplete.bindTo('bounds', map);
         }
     };
-};
+});
 

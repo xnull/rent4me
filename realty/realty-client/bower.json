@@ -7,6 +7,7 @@
         "angular": "v1.3.0-beta.11",
         "angular-resource": "v1.3.0-beta.11",
         "angular-route": "v1.3.0-beta.11",
+        "angular-ui-router": "0.2.10",
         "angular-cookies": "v1.3.0-beta.11",
         "blockui": "v2.65",
         "bootstrap": "3.2.0",

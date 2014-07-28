@@ -1,4 +1,6 @@
-var navigationController = function ($scope, navigationService, authorizationService, $log) {
+var navigationModule = angular.module('rentApp.navigation', []);
+
+navigationModule.controller('NavigationController', function ($scope, navigationService, authorizationService, $log) {
     'use strict';
 
     $log.debug("Nav controller");
@@ -29,9 +31,9 @@ var navigationController = function ($scope, navigationService, authorizationSer
     this.setPersonal = navigationService.setPersonal;
 
     this.isAuthorized = authorizationService.isAuthorized();
-};
+});
 
-var navigationService = function () {
+navigationModule.factory('navigationService', function () {
     "use strict";
 
     var home = 'home';
@@ -105,5 +107,4 @@ var navigationService = function () {
             this.selectTab(personal);
         }
     };
-
-};
+});

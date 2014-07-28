@@ -1,111 +1,98 @@
 var componentsCfg = [
     {
-        ctl: indexController,
-        service: indexService,
-        ctlName: 'IndexController',
-        serviceName: 'indexService',
-        route: '/',
-        template: 'components/index/index-view.html'
+        stateName: 'indexState',
+        stateConfig: {
+            url: '/',
+            templateUrl: 'components/index/index-view.html',
+            controller: 'IndexController'
+        }
     },
     {
-        ctl: rentController,
-        service: rentService,
-        ctlName: 'RentController',
-        serviceName: 'rentService',
-        route: '/rent',
-        template: 'components/rent/rent-view.html'
+        stateName: 'rentState',
+        stateConfig: {
+            url: '/rent',
+            templateUrl: 'components/rent/rent-view.html',
+            controller: 'RentController'
+        }
     },
     {
-        ctl: loginController,
-        service: loginService,
-        ctlName: 'LoginController',
-        serviceName: 'loginService',
-        route: '/login',
-        template: 'components/login/login-view.html'
+        stateName: 'loginState',
+        stateConfig: {
+            url: '/login',
+            templateUrl: 'components/login/login-view.html',
+            controller: 'LoginController'
+        }
     },
     {
-        ctl: registerController,
-        service: registerService,
-        ctlName: 'RegisterController',
-        serviceName: 'registerService',
-        route: '/register',
-        template: 'components/register/register-view.html'
+        stateName: 'registerState',
+        stateConfig: {
+            url: '/register',
+            templateUrl: 'components/register/register-view.html'
+        }
     },
     {
-        ctl: rentSearchController,
-        service: rentSearchService,
-        ctlName: 'RentSearchController',
-        serviceName: 'rentSearchService',
-        route: '/rent-search',
-        template: 'components/rent-search/rent-search-view.html'
+        stateName: 'rentSearchState',
+        stateConfig: {
+            url: '/rent-search',
+            templateUrl: 'components/rent-search/rent-search-view.html'
+            //controller: 'RentSearchController'
+        }
     },
     {
-        ctl: renterSearchController,
-        service: renterSearchService,
-        ctlName: 'RenterSearchController',
-        serviceName: 'renterSearchService',
-        route: '/renter-search',
-        template: 'components/renter-search/renter-search-view.html'
+        stateName: 'rentSearchState.searchForm',
+        //url: '/rent-search/search',
+        stateConfig: {
+            views: {
+                "rentSearchForm": {
+                    templateUrl: 'rent-search-form.html'
+                }
+            }
+        }
     },
     {
-        ctl: personalController,
-        service: personalService,
-        ctlName: 'PersonalController',
-        serviceName: 'personalService',
-        route: '/personal',
-        template: 'components/personal/personal-view.html'
-    }
-];
-
-var backendComponents = [
-    {
-        ctl: authorizationController,
-        service: authorizationService,
-        ctlName: 'AuthorizationController',
-        serviceName: 'authorizationService'
+        stateName: 'renterSearchState',
+        stateConfig: {
+            url: '/renter-search',
+            templateUrl: 'components/renter-search/renter-search-view.html',
+            controller: 'RenterSearchController'
+        }
     },
     {
-        ctl: navigationController,
-        service: navigationService,
-        ctlName: 'NavigationController',
-        serviceName: 'navigationService'
+        stateName: 'personalState',
+        stateConfig: {
+            url: '/personal',
+            templateUrl: 'components/personal/personal-view.html',
+            controller: 'PersonalController'
+        }
     }
 ];
 
 /**
  * Application configuration
  */
+var appDependencies = [
+    'ui.router', 'ngResource', 'ngCookies', /*, 'facebook'*/
+    'rentApp.index', 'rentApp.rent', 'rentApp.auth', 'rentApp.navigation', 'rentApp.login',
+    'rentApp.register', 'rentApp.rentSearch', 'rentApp.renterSearch', 'rentApp.personal'
+];
+var rentApplication = angular.module('rentApp', appDependencies);
+var logger = angular.injector(['rentApp', 'ng']).get('$log');
 
-var rentApplication = angular.module('project', ['ngRoute', 'ngResource', 'ngCookies'/*, 'facebook'*/]);
-
-rentApplication.config(function ($routeProvider, $httpProvider) {
+rentApplication.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     'use strict';
+
+    logger.debug('Configure angular application');
 
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-
     for (var i = 0; i < componentsCfg.length; i++) {
         var cfg = componentsCfg[i];
-        $routeProvider.when(cfg.route, {
-            controller: cfg.ctlName,
-            templateUrl: cfg.template
-        });
+        $stateProvider.state(cfg.stateName, cfg.stateConfig);
     }
 
-    $routeProvider.otherwise({
-        redirectTo: '/'
-    });
+    $urlRouterProvider.otherwise('/');
 });
 
-for (var i = 0; i < componentsCfg.length; i++) {
-    rentApplication.controller(componentsCfg[i].ctlName, componentsCfg[i].ctl);
-    rentApplication.factory(componentsCfg[i].serviceName, componentsCfg[i].service);
-}
-
-for (var i = 0; i < backendComponents.length; i++) {
-    rentApplication.controller(backendComponents[i].ctlName, backendComponents[i].ctl);
-    rentApplication.factory(backendComponents[i].serviceName, backendComponents[i].service);
-}
-
+logger.debug('Run angular application');
 rentApplication.run(defaultSetup);

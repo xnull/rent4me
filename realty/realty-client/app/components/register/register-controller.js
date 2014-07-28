@@ -1,4 +1,6 @@
-var registerController = function ($scope, registerService, navigationService, $log) {
+var registerModule = angular.module('rentApp.register', []);
+
+registerModule.controller('RegisterController', function ($scope, registerService, navigationService, $log) {
     'use strict';
 
     $log.debug('Register controller execution');
@@ -8,9 +10,9 @@ var registerController = function ($scope, registerService, navigationService, $
         navigationService.setRegister();
     });
 //    $scope.greeting = registerService.hello();
-};
+});
 
-var registerService = function ($http) {
+registerModule.factory('registerService', function ($http) {
     "use strict";
 
     return {
@@ -29,5 +31,5 @@ var registerService = function ($http) {
                 });
         }
     };
-};
+});
 

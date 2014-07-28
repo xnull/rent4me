@@ -1,4 +1,6 @@
-var authorizationController = function ($scope, $log, $cookies, authorizationService) {
+var authModule = angular.module('rentApp.auth', []);
+
+authModule.controller('AuthorizationController', function ($scope, $log, $cookies, authorizationService) {
     "use strict";
 
     var logPrefix = "auth_ctrl ";
@@ -40,10 +42,10 @@ var authorizationController = function ($scope, $log, $cookies, authorizationSer
     this.loginWithVK = authorizationService.loginWithVK;
     this.logout = authorizationService.logout;
 
-};
+});
 
 
-var authorizationService = function ($http, $resource, $rootScope, $log, $cookies) {
+authModule.factory('authorizationService', function ($http, $resource, $rootScope, $log, $cookies) {
     'use strict';
 
     var log_prefix = "auth_service ";
@@ -304,4 +306,4 @@ var authorizationService = function ($http, $resource, $rootScope, $log, $cookie
     };
 
     return  authorization;
-};
+});

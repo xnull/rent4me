@@ -1,4 +1,6 @@
-var indexController = function ($scope, indexService, navigationService, $log) {
+var indexModule = angular.module('rentApp.index', []);
+
+indexModule.controller('IndexController', function ($scope, indexService, navigationService, $log) {
     'use strict';
 
     $log.debug('Index controller execution');
@@ -42,9 +44,9 @@ var indexController = function ($scope, indexService, navigationService, $log) {
             });
         });
     });
-};
+});
 
-var indexService = function ($http, $log) {
+indexModule.factory('indexService', function ($http, $log) {
     "use strict";
 
     return {
@@ -63,5 +65,5 @@ var indexService = function ($http, $log) {
                 });
         }
     };
-};
+});
 

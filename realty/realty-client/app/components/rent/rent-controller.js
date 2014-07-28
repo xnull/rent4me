@@ -1,3 +1,5 @@
+var rentModule = angular.module('rentApp.rent', []);
+
 /**
  * dynamic pages https://egghead.io/lessons/angularjs-using-resource-for-data-models
  * @param $log
@@ -5,7 +7,7 @@
  * @param rentService
  * @param navigationService
  */
-var rentController = function ($log, $scope, rentService, navigationService) {
+rentModule.controller('RentController', function ($log, $scope, rentService, navigationService) {
     "use strict";
     $log.debug('Rent controller: execution');
 
@@ -18,9 +20,9 @@ var rentController = function ($log, $scope, rentService, navigationService) {
     $(function () {
         navigationService.setRent();
     });
-};
+});
 
-var rentService = function ($resource, $log) {
+rentModule.factory('rentService', function ($resource, $log) {
     "use strict";
 
     return {
@@ -39,4 +41,4 @@ var rentService = function ($resource, $log) {
             });
         }
     };
-};
+});
