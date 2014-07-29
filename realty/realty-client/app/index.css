@@ -1,4 +1,6 @@
-/* Sticky footer styles */
+html, body {
+    height: 100%;
+}
 
 /* Special class on .container surrounding .navbar, used for positioning it into place. */
 .navbar-wrapper {
@@ -7,6 +9,14 @@
     right: 0;
     left: 0;
     z-index: 20;
+}
+
+.navbar-login-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 15;
 }
 
 .navbar {
@@ -20,10 +30,10 @@
     padding-left: 0;
 }
 
-.navbar-wrapper .navbar {
+/*.navbar-wrapper .navbar {
     padding-right: 15px;
     padding-left: 15px;
-}
+}*/
 
 .navbar-wrapper .navbar .container {
     width: auto;
@@ -35,12 +45,11 @@
 
     /* Navbar positioning foo */
     .navbar-wrapper {
-        margin-top: 20px;
+        margin-top: 60px;
     }
 
-    .navbar-wrapper .container {
-        padding-right: 15px;
-        padding-left: 15px;
+    .navbar-login-wrapper {
+        margin-top: 10px;
     }
 
     .navbar-wrapper .navbar {
@@ -48,8 +57,16 @@
         padding-left: 0;
     }
 
+    /*.navbar-wrapper .container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }*/
     /* The navbar becomes detached from the top, so we round the corners */
     .navbar-wrapper .navbar {
+        border-radius: 4px;
+    }
+
+    .navbar-login-wrapper {
         border-radius: 4px;
     }
 }

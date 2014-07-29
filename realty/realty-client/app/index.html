@@ -47,51 +47,80 @@
 
 <body>
 
-<!-- Wrap all page content here -->
-<div class="navbar-wrapper navbar navbar-default">
-    <div class="container">
+<div class="container" ng-controller="NavigationController as navController">
+    <div class="navbar-login-wrapper navbar navbar-default">
+        <div class="container col-md-offset-9 col-md-2">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
 
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+            <!--<div class="masthead collapse navbar-collapse">
+                <div class="btn-group" id="registerForm">
+                    <button type="button" class="btn btn-default"><strong>Регистрация</strong></button>
+                    <button type="button" class="btn btn-default"><strong>Вход</strong></button>
+                </div>
+            </div>-->
+            <div class="masthead collapse navbar-collapse" ng-controller="AuthorizationController as authController">
+                <ul class="nav nav-justified panel panel-default">
+                    <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isRegister() }">
+                        <a href="#/register"><strong>Регистрация</strong></a>
+                    </li>
+                    <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isLogin() }">
+                        <a href="#/login"><strong>Вход</strong></a>
+                    </li>
+                    <li ng-show="authInfo.authorized" ng-class="{ active: navController.isPersonal() }">
+                        <a href="#/personal"><strong>Личный кабинет</strong></a>
+                    </li>
+                    <li ng-show="authInfo.authorized" ng-click="authController.logout()">
+                        <a href="#"><strong>Выход</strong></a>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </div>
 
-        <div class="masthead collapse navbar-collapse" ng-controller="NavigationController as navController">
-            <ul class="nav nav-justified panel panel-default" ng-controller="AuthorizationController as authController">
-                <li ng-class="{ active: navController.isHome() }">
-                    <a href="#/"><strong>Главная</strong></a>
-                </li>
-                <li ng-class="{ active: navController.isRentSearch() }">
-                    <a href="#/rent-search"><strong>Поиск объявлений</strong></a>
-                </li>
+    <div class="navbar-wrapper navbar navbar-default">
+        <div class="container">
 
-                <li ng-class="{ active: navController.isRenterSearch() }">
-                    <a href="#/renter-search"><strong>Поиск арендаторов</strong></a>
-                </li>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
 
-                <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isRegister() }">
-                    <a href="#/register"><strong>Регистрация</strong></a>
-                </li>
+            <div class="masthead collapse navbar-collapse">
+                <ul class="nav nav-justified panel panel-default">
+                    <li ng-class="{ active: navController.isHome() }">
+                        <a href="#/"><strong>Главная</strong></a>
+                    </li>
+                    <li ng-class="{ active: navController.isRentSearch() }">
+                        <a href="#/rent-search"><strong>Поиск объявлений</strong></a>
+                    </li>
 
-                <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isLogin() }">
-                    <a href="#/login"><strong>Вход</strong></a>
-                </li>
+                    <li ng-class="{ active: navController.isRenterSearch() }">
+                        <a href="#/renter-search"><strong>Поиск арендаторов</strong></a>
+                    </li>
 
-                <li ng-show="authInfo.authorized" ng-class="{ active: navController.isRent() }">
-                    <a href="#/rent"><strong>Разместить объявление</strong></a>
-                </li>
+                    <li ng-show="authInfo.authorized" ng-class="{ active: navController.isRent() }">
+                        <a href="#/rent"><strong>Разместить объявление</strong></a>
+                    </li>
 
-                <li ng-show="authInfo.authorized" ng-class="{ active: navController.isPersonal() }">
-                    <a href="#/personal"><strong>Личный кабинет</strong></a>
-                </li>
-                <li ng-show="authInfo.authorized" ng-click="authController.logout()">
-                    <a href="#"><strong>Выход</strong></a>
-                </li>
-            </ul>
+                    <li ng-show="authInfo.authorized" ng-class="{ active: navController.isPersonal() }">
+                        <a href="#/personal"><strong>Личный кабинет</strong></a>
+                    </li>
+                    <li ng-show="authInfo.authorized" ng-click="authController.logout()">
+                        <a href="#"><strong>Выход</strong></a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
