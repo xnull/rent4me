@@ -1,58 +1,77 @@
 /**
  * Created by null on 06.07.14.
  */
-var personalModuleCfg = {
-    ctlName: 'PersonalController',
-    serviceName: 'personalService',
-    stateName: 'personalState',
-    stateConfig: {
-        url: '/personal',
-        templateUrl: 'components/personal/personal-view.html',
-        controller: 'PersonalController'
-    }
-};
-
-var personalModule = angular.module('rentApp.personal', ['ui.router']);
-
-personalModule.config(function ($stateProvider) {
+var personalModule = (function () {
     'use strict';
-    $stateProvider.state(personalModuleCfg.stateName, personalModuleCfg.stateConfig);
-});
 
-personalModule.controller(personalModuleCfg.ctlName, function ($log, $scope, personalService, navigationService) {
-    "use strict";
+    var cfg = {
+        moduleName: 'rentApp.personal',
+        moduleDependencies: ['ui.router'],
 
-    $scope.menuTabs = [
-        {id: 'myAds', name: 'Мои объявления'},
-        {id: 'addAds', name: 'Создать объявление'},
-        {id: 'myRealty', name: 'Моя недвижимость'},
-        {id: 'account', name: 'Аккаунт'},
-        {id: 'messages', name: 'Мои сообщения'},
-        {id: 'finances', name: 'Мои финансы'},
-        {id: 'searches', name: 'Автопоиск'}
-    ];
-
-    $scope.currentMenuTabId = $scope.menuTabs[0].id;
-
-    $scope.isActiveMenuTab = function (menuTabId) {
-        $log.debug('Is menu active: ' + menuTabId);
-
-        if ($scope.currentMenuTabId === menuTabId) {
-            return 'active';
+        ctlName: 'PersonalController',
+        serviceName: 'personalService',
+        stateName: 'personalState',
+        stateConfig: {
+            url: '/personal',
+            templateUrl: 'components/personal/personal-view.html',
+            controller: 'PersonalController'
         }
-        return '';
     };
 
-    $scope.showMenu = function (menuTabId) {
-        $log.info('Show subview: ' + menuTabId);
-        $scope.currentMenuTabId = menuTabId;
+    var angularModule = angular.module(cfg.moduleName, cfg.moduleDependencies);
+    var angularLogger = angular.injector([cfg.moduleName, 'ng']).get('$log');
+
+    function init() {
+        angularLogger.debug('Loading "' + cfg.moduleName + '" module');
+
+        angularModule.config(function ($stateProvider) {
+            $stateProvider.state(cfg.stateName, cfg.stateConfig);
+        });
+
+        angularModule.controller(cfg.ctlName, controller);
+        angularModule.factory(cfg.serviceName, service);
+    }
+
+    function controller($log, $scope, personalService, navigationService) {
+        $scope.menuTabs = [
+            {id: 'myAds', name: 'Мои объявления'},
+            {id: 'addAds', name: 'Создать объявление'},
+            {id: 'myRealty', name: 'Моя недвижимость'},
+            {id: 'account', name: 'Аккаунт'},
+            {id: 'messages', name: 'Мои сообщения'},
+            {id: 'finances', name: 'Мои финансы'},
+            {id: 'searches', name: 'Автопоиск'}
+        ];
+
+        $scope.currentMenuTabId = $scope.menuTabs[0].id;
+
+        $scope.isActiveMenuTab = function (menuTabId) {
+            $log.debug('Is menu active: ' + menuTabId);
+
+            if ($scope.currentMenuTabId === menuTabId) {
+                return 'active';
+            }
+            return '';
+        };
+
+        $scope.showMenu = function (menuTabId) {
+            $log.info('Show subview: ' + menuTabId);
+            $scope.currentMenuTabId = menuTabId;
+        };
+
+        $(function () {
+            navigationService.setPersonal();
+        });
+    }
+
+    function service() {
+    }
+
+    return {
+        init: init,
+        ctl: controller,
+        srv: service
     };
+})();
 
-    $(function () {
-        navigationService.setPersonal();
-    });
-});
-
-personalModule.factory(personalModuleCfg.serviceName, function () {
-    "use strict";
-});
+personalModule.init();

@@ -1,36 +1,54 @@
 /**
  * Created by null on 13.07.14.
  */
-var renterSearchModuleCfg = {
-    ctlName: 'RenterSearchController',
-    serviceName: 'renterSearchService',
-    stateName: 'renterSearchState',
-    stateConfig: {
-        url: '/renter-search',
-        templateUrl: 'components/renter-search/renter-search-view.html',
-        controller: 'RenterSearchController'
-    }
-};
-
-var renterSearchModule = angular.module('rentApp.renterSearch', ['ui.router']);
-
-renterSearchModule.config(function ($stateProvider) {
+var renterSearchModule = (function () {
     'use strict';
-    $stateProvider.state(renterSearchModuleCfg.stateName, renterSearchModuleCfg.stateConfig);
-});
 
-renterSearchModule.controller(renterSearchModuleCfg.ctlName, function ($log, $scope, renterSearchService, navigationService) {
-    "use strict";
+    var cfg = {
+        moduleName: 'rentApp.renterSearch',
+        moduleDependencies: ['ui.router'],
 
-    $log.debug('Renter search controller initialization');
+        ctlName: 'RenterSearchController',
+        serviceName: 'renterSearchService',
+        stateName: 'renterSearchState',
+        stateConfig: {
+            url: '/renter-search',
+            templateUrl: 'components/renter-search/renter-search-view.html',
+            controller: 'RenterSearchController'
+        }
+    };
 
-    $(function () {
-        navigationService.setRenterSearch();
-    });
-});
+    var angularModule = angular.module(cfg.moduleName, cfg.moduleDependencies);
+    var angularLogger = angular.injector([cfg.moduleName, 'ng']).get('$log');
 
-renterSearchModule.factory(renterSearchModuleCfg.serviceName, function ($log) {
-    "use strict";
+    function init() {
+        angularLogger.debug('Loading "' + cfg.moduleName + '" module');
 
-    $log.debug('Renter search service init');
-});
+        angularModule.config(function ($stateProvider) {
+            $stateProvider.state(cfg.stateName, cfg.stateConfig);
+        });
+
+        angularModule.controller(cfg.ctlName, controller);
+        angularModule.factory(cfg.serviceName, service);
+    }
+
+    function controller($log, $scope, renterSearchService, navigationService) {
+        $log.debug('Renter search controller initialization');
+
+        $(function () {
+            navigationService.setRenterSearch();
+        });
+    }
+
+    function service($log) {
+        $log.debug('Renter search service init');
+    }
+
+    return {
+        init: init,
+        ctl: controller,
+        srv: service
+    };
+})();
+
+renterSearchModule.init();

@@ -28,9 +28,9 @@
     "strict": true,     // true: Requires all functions run in ES5 Strict Mode
     "maxparams": 5,    // {int} Max number of formal params allowed per function
     "maxdepth": 4,    // {int} Max depth of nested blocks (within functions)
-    "maxstatements": false,    // {int} Max number statements per function
-    "maxcomplexity": false,    // {int} Max cyclomatic complexity per function
-    "maxlen": false,    // {int} Max number of characters per line
+    "maxstatements": 10,    // {int} Max number statements per function
+    "maxcomplexity": 4,    // {int} Max cyclomatic complexity per function
+    "maxlen": 120,    // {int} Max number of characters per line
 
     // Relaxing
     "asi": false,     // true: Tolerate Automatic Semicolon Insertion (no semicolons)
@@ -77,24 +77,7 @@
     // Custom Globals
     "globals": {
         "angular": true,
-
-        "indexController": true,
-        "indexService": true,
-        "rentController": true,
-        "rentService": true,
-        "loginController": true,
-        "loginService": true,
-        "registerController": true,
-        "registerService": true,
-        "rentSearchController": true,
-        "rentSearchService": true,
-        "renterSearchController": true,
-        "renterSearchService": true,
-        "personalController": true,
-        "personalService": true,
-        "authorizationController": true,
-        "authorizationService": true,
-        "navigationController": true,
-        "navigationService": true
+        "google": true,
+        "MarkerClusterer": true
     }
 }
