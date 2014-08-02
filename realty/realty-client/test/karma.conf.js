@@ -5,7 +5,7 @@ module.exports = function (config) {
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '../',
+        basePath: '../app',
 
 
         // frameworks to use
@@ -15,17 +15,17 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'app/vendor/angular/angular.js',
-            'app/vendor/angular-route/angular-route.js',
-            'app/vendor/angular-resource/angular-resource.js',
-            'app/vendor/angular-cookies/angular-cookies.js',
-            '../.gradle/bower/angular-mocks/angular-mocks.js',
-            'app/vendor/jquery/dist/jquery.js',
-            'app/vendor/blockui/jquery.blockUI.js',
-            'app/components/**/*.js',
-            'app/main.js',
-            'app/app.js',
-            'test/spec/**/*-spec.js'
+            'vendor/angular/angular.js',
+            'vendor/angular-ui-router/release/angular-ui-router.js',
+            'vendor/angular-resource/angular-resource.js',
+            'vendor/angular-cookies/angular-cookies.js',
+            '../../.gradle/bower/angular-mocks/angular-mocks.js',
+            'vendor/jquery/dist/jquery.js',
+            'vendor/blockui/jquery.blockUI.js',
+            'components/**/*.js',
+            'main.js',
+            'app.js',
+            '../test/spec/**/*-spec.js'
         ],
 
 

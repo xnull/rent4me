@@ -8,6 +8,8 @@
 var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
     'use strict';
 
+    $log.debug('Loading default settings');
+
 //    $http.defaults.useXDomain = true;
 //    delete $http.defaults.headers.common['X-Requested-With'];
 

@@ -1,6 +1,39 @@
 /**
  * Application configuration
  */
+var scriptLoader = (function () {
+    'use strict';
+
+    var scripts = [
+        'components/index/index-controller.js',
+        'components/rent/rent-controller.js',
+        'components/navigation/navigation-controller.js',
+        'components/login/login-controller.js',
+        'components/authorization/authorization.js',
+        'components/register/register-controller.js',
+        'components/rent-search/rent-search-controller.js',
+        'components/personal/personal-controller.js',
+        'components/renter-search/renter-search-controller.js',
+        'main.js'
+    ];
+
+    function loadScript(url) {
+        document.write('<' + 'script src="' + url + '"' + ' type="text/javascript"><' + '/script>');
+    }
+
+    function loadScripts() {
+        for (var i = 0; i < scripts.length; ++i) {
+            loadScript(scripts[i]);
+        }
+    }
+
+    return{
+        loadScripts: loadScripts
+    };
+})();
+
+scriptLoader.loadScripts();
+
 var rentApplication = (function () {
     'use strict';
 
@@ -27,7 +60,9 @@ var rentApplication = (function () {
             });
 
             angularApplication.run(defaultSetup);
-        }
+        },
+
+        applicationName: appName
     };
 })();
 

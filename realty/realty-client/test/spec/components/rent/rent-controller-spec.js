@@ -17,7 +17,7 @@ describe('Rent service test', function () {
     beforeEach(function () {
 
         // load the module.
-        module('project');
+        module(rentApplication.applicationName);
 
         // inject your service for testing.
         // The _underscores_ are a convenience thing
