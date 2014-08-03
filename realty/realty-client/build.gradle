@@ -138,12 +138,13 @@ task updateWebDriverManager(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     args = ['update']
 }
 
+/*
 task startWebDriverManager(dependsOn: updateWebDriverManager, type: JsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/protractor/bin/webdriver-manager')
     args = ['start']
-}
+}*/
 
-task jsE2ETest(dependsOn: updateWebDriverManager, type: JsTaskRunner) {
+task jsE2E (type: JsTaskRunner, dependsOn: updateWebDriverManager){
     script = new File(project.projectDir, '/node_modules/protractor/bin/protractor')
     args = ['test/protractor-conf.js']
 }

@@ -51,6 +51,9 @@ var ApartmentInfoModule = (function () {
 
     function ApartmentInfoService($resource, $log) {
 
+        /**
+         * @type {Object}
+         */
         var apartmentInfoDto = {
             id: 1,
             ownerId: 123,
@@ -88,9 +91,12 @@ var ApartmentInfoModule = (function () {
         /**
          * Get info about a apartment
          * @param apartmentId
-         * @returns apartmentInfoDto
+         * @returns {Object} apartmentInfoDto
+         * @param $resource
          */
         function getApartmentById(apartmentId) {
+            $log.debug('Get apartment info by id: ' + apartmentId);
+            //$log.debug($resource);
             return apartmentInfoDto;
         }
 
