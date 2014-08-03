@@ -7,86 +7,90 @@
     }
 </style>
 
-<div class="container apartment-view" ng-controller="ApartmentInfoController">
-    <div class="row">
-        <div class="col-md-4">
-            <h2>{{apartmentInfo.price}}
-                <small> руб. / мес</small>
-            </h2>
-            <h4>
-                <address>{{apartmentInfo.address}}</address>
-            </h4>
-            <div class="row">
-                <div class="col-md-8">Владелец</div>
-                <div class="col-md-4"> {{apartmentInfo.ownerId}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">Этаж</div>
-                <div class="col-md-4"> {{apartmentInfo.floor}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">Комнат</div>
-                <div class="col-md-4"> {{apartmentInfo.rooms}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">Общая площадь</div>
-                <div class="col-md-4"> {{apartmentInfo.square}}</div>
+<div class="container">
+    <div class="apartment-view" ng-controller="ApartmentInfoController">
+        <div class="row">
+            <div class="col-md-4">
+                <br/>
+
+                <h2>{{apartmentInfo.price}}
+                    <small> руб. / мес</small>
+                </h2>
+                <h4>
+                    <address>{{apartmentInfo.address}}</address>
+                </h4>
+                <div class="row">
+                    <div class="col-md-8">Владелец</div>
+                    <div class="col-md-4"> {{apartmentInfo.ownerId}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">Этаж</div>
+                    <div class="col-md-4"> {{apartmentInfo.floor}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">Комнат</div>
+                    <div class="col-md-4"> {{apartmentInfo.rooms}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">Общая площадь</div>
+                    <div class="col-md-4"> {{apartmentInfo.square}}</div>
+                </div>
+
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-8">Холодильник</div>
+                    <div class="col-md-4"> {{apartmentInfo.features.refrigerator}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">Мебель</div>
+                    <div class="col-md-4"> {{apartmentInfo.features.furniture}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">Кондиционер</div>
+                    <div class="col-md-4"> {{apartmentInfo.features.conditioner}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">Телевизор</div>
+                    <div class="col-md-4"> {{apartmentInfo.features.tv}}</div>
+                </div>
             </div>
 
-            <br/>
 
-            <div class="row">
-                <div class="col-md-8">Холодильник</div>
-                <div class="col-md-4"> {{apartmentInfo.features.refrigerator}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">Мебель</div>
-                <div class="col-md-4"> {{apartmentInfo.features.furniture}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">Кондиционер</div>
-                <div class="col-md-4"> {{apartmentInfo.features.conditioner}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">Телевизор</div>
-                <div class="col-md-4"> {{apartmentInfo.features.tv}}</div>
-            </div>
-        </div>
+            <div class="col-md-8">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active"><a role="tab" data-toggle="tab">Фотографии</a></li>
+                    <li><a role="tab" data-toggle="tab">Карта</a></li>
+                </ul>
 
-
-        <div class="col-md-8">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a role="tab" data-toggle="tab">Фотографии</a></li>
-                <li><a role="tab" data-toggle="tab">Profile</a></li>
-            </ul>
-
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div class="tab-pane fade in active" id="photo">
-                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
-                            <div class="item {{imgData.isActive}}" ng-repeat="imgData in carouselData">
-                                <img ng-src="{{imgData.img}}" alt="...">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="photo">
+                        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                <div class="item {{imgData.isActive}}" ng-repeat="imgData in apartmentInfo.images">
+                                    <img ng-src="{{imgData.img}}" alt="...">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Controls -->
-                <span class="left carousel-control" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </span>
-                <span class="right carousel-control" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </span>
+                            <!-- Controls -->
+                            <span class="left carousel-control" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </span>
+                            <span class="right carousel-control" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="tab-pane fade" id="map">...</div>
+
             </div>
         </div>
+
+        <div>{{apartmentInfo.description}}</div>
     </div>
-    <br/>
-    <br/>
-    <div>{{apartmentInfo.description}}</div>
 </div>

@@ -42,18 +42,6 @@ var ApartmentInfoModule = (function () {
     function controller($log, $scope, navigationService, ApartmentInfoService) {
         $log.debug('Apartment info controller: execution');
 
-        $scope.carouselData = [
-            {
-                img: 'components/apartment-info/images/photo1.jpg',
-                isActive: 'active'
-            },
-            {
-                img: 'components/apartment-info/images/photo2.jpg',
-                isActive: ''
-            }
-        ];
-
-        $log.info(ApartmentInfoService.getApartmentById(123));
         $scope.apartmentInfo = ApartmentInfoService.getApartmentById(123);
 
         //$(function () {
@@ -78,7 +66,16 @@ var ApartmentInfoModule = (function () {
                 tv: true,
                 conditioner: true //etc
             },
-            images: ['img1', 'img2'],
+            images: [
+                {
+                    img: 'components/apartment-info/images/photo1.jpg',
+                    isActive: 'active'
+                },
+                {
+                    img: 'components/apartment-info/images/photo2.jpg',
+                    isActive: ''
+                }
+            ],
             description: 'Комната в центре столицы, с хорошими соседями, в историческом доме - крепче современных.' +
                 'До Чистых Прудов 5 минут пешком.' +
                 'Все удовольствия культурной жизни в шаговой доступности, театры, кафе, антикафе, кинотеатры - ' +
