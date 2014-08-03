@@ -51,21 +51,24 @@ var rentModule = (function () {
     }
 
     function service($resource, $log) {
+        function hello () {
+            return 'hey hello';
+        }
+
+        function putForRent ($scope) {
+            $log.debug('Rent service: put for rent');
+
+            var putResource = $resource('putForRent');
+            putResource.save(angular.toJson($scope.rentData));
+
+            putResource.query(function (response) {
+                $scope.rentData = response;
+            });
+        }
+
         return {
-            hello: function () {
-                return 'hey hello';
-            },
-
-            putForRent: function ($scope) {
-                $log.debug('Rent service: put for rent');
-
-                var putResource = $resource('putForRent');
-                putResource.save(angular.toJson($scope.rentData));
-
-                putResource.query(function (response) {
-                    $scope.rentData = response;
-                });
-            }
+            hello: hello,
+            putForRent: putForRent
         };
     }
 

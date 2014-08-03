@@ -14,6 +14,7 @@ var scriptLoader = (function () {
         'components/rent-search/rent-search-controller.js',
         'components/personal/personal-controller.js',
         'components/renter-search/renter-search-controller.js',
+        'components/apartment-info/apartment-info-controller.js',
         'main.js'
     ];
 
@@ -42,7 +43,7 @@ var rentApplication = (function () {
     var moduleDependencies = [
         'ui.router', 'ngResource', 'ngCookies', /*, 'facebook'*/
         'rentApp.index', 'rentApp.rent', 'rentApp.auth', 'rentApp.navigation', 'rentApp.login',
-        'rentApp.register', 'rentApp.rentSearch', 'rentApp.renterSearch', 'rentApp.personal'
+        'rentApp.register', 'rentApp.rentSearch', 'rentApp.renterSearch', 'rentApp.personal', 'rentApp.apartmentInfo'
     ];
 
     var angularApplication = angular.module(appName, moduleDependencies);
