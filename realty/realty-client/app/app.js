@@ -33,7 +33,8 @@ var scriptLoader = (function () {
     };
 })();
 
-scriptLoader.loadScripts();
+//Dynamic loading is not working, so we haven't choice we need to use requireJs, but it will be later
+//scriptLoader.loadScripts();
 
 var rentApplication = (function () {
     'use strict';
