@@ -10,150 +10,151 @@
 </style>
 
 <!-- The Form -->
-<div class="container rent-form">
-    <br/>
+<div class="container">
+    <div class="rent-form container">
+        <br/>
 
-    <form class="form-horizontal" role="form" ng-submit="search()" ng-controller="RentSearchController">
+        <form class="form-horizontal" role="form" ng-submit="search()" ng-controller="RentSearchController">
 
-        <div class="row">
-            <!-- First part of the search panel -->
-            <div class="col-md-4">
+            <div class="row">
+                <!-- First part of the search panel -->
+                <div class="col-md-4">
 
-                <!-- Flat type -->
-                <div class="form-group">
-                    <label for="flatType" class="col-md-3 control-label">Тип</label>
+                    <!-- Flat type -->
+                    <div class="form-group">
+                        <label for="flatType" class="col-md-3 control-label">Тип</label>
 
-                    <div class="col-md-9">
-                        <div class="btn-group" data-toggle="buttons" id="flatType">
-                            <label class="btn btn-default">
-                                <input type="checkbox" ng-model="apartment.aprt"> Квартира
-                            </label>
-                            <label class="btn btn-default"> <input type="checkbox" ng-model="apartment.single">
-                                Комната </label>
-                            <label class="btn btn-default"> <input type="checkbox" ng-model="apartment.house"> Дом
-                            </label>
+                        <div class="col-md-9">
+                            <div class="btn-group" data-toggle="buttons" id="flatType">
+                                <label class="btn btn-default">
+                                    <input type="checkbox" ng-model="apartment.aprt"> Квартира
+                                </label>
+                                <label class="btn btn-default"> <input type="checkbox" ng-model="apartment.single">
+                                    Комната </label>
+                                <label class="btn btn-default"> <input type="checkbox" ng-model="apartment.house"> Дом
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- flats count -->
+                    <div class="form-group">
+                        <label for="rooms" class="col-md-3 control-label">Комнат</label>
+
+                        <div class="col-md-9">
+                            <div class="btn-group" data-toggle="buttons" id="rooms">
+                                <label class="btn btn-default"> <input
+                                        type="checkbox">1</label>
+                                <label class="btn btn-default"> <input
+                                        type="checkbox">2</label>
+                                <label class="btn btn-default"> <input
+                                        type="checkbox">3</label>
+                                <label class="btn btn-default"> <input
+                                        type="checkbox">4</label>
+                                <label class="btn btn-default"> <input
+                                        type="checkbox">5</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- price -->
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Цена </label>
+
+                        <div class="control-group col col-md-3">
+                            <div class=input-group" id="priceStart">
+                                <input type="text" class="form-control col-md-1"
+                                       placeholder="От">
+                            </div>
+                        </div>
+
+                        <div class="control-group col col-md-3">
+                            <div class=input-group" id="priceEnd">
+                                <input type="text" class="form-control" placeholder="До">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address" class="col-md-3 control-label">Адрес</label>
+
+                        <div class="col-md-9">
+                            <div class="btn-group" id="address">
+                                <button type="button" class="btn btn-default">Карта</button>
+                                <button type="button" class="btn btn-default">Адрес</button>
+                                <button type="button" class="btn btn-disabled">Метро
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- flats count -->
-                <div class="form-group">
-                    <label for="rooms" class="col-md-3 control-label">Комнат</label>
-
-                    <div class="col-md-9">
-                        <div class="btn-group" data-toggle="buttons" id="rooms">
-                            <label class="btn btn-default"> <input
-                                    type="checkbox">1</label>
-                            <label class="btn btn-default"> <input
-                                    type="checkbox">2</label>
-                            <label class="btn btn-default"> <input
-                                    type="checkbox">3</label>
-                            <label class="btn btn-default"> <input
-                                    type="checkbox">4</label>
-                            <label class="btn btn-default"> <input
-                                    type="checkbox">5</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- price -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Цена </label>
-
-                    <div class="control-group col col-md-3">
-                        <div class=input-group" id="priceStart">
-                            <input type="text" class="form-control col-md-1"
-                                   placeholder="От">
-                        </div>
-                    </div>
-
-                    <div class="control-group col col-md-3">
-                        <div class=input-group" id="priceEnd">
-                            <input type="text" class="form-control" placeholder="До">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="address" class="col-md-3 control-label">Адрес</label>
-
-                    <div class="col-md-9">
-                        <div class="btn-group" id="address">
-                            <button type="button" class="btn btn-default">Карта</button>
-                            <button type="button" class="btn btn-default">Адрес</button>
-                            <button type="button" class="btn btn-disabled">Метро
+                <!-- Second part of the search panel -->
+                <div class="col-md-4">
+                    <!-- Pay period -->
+                    <div class="form-group">
+                        <div class="dropdown">
+                            <label class="col-md-4 control-label">Срок аренды</label>
+                            <button class="btn btn-default dropdown-toggle" type="button"
+                                    id="dropdownMenu1"
+                                    data-toggle="dropdown">
+                                Срок аренды
+                                <span class="caret"></span>
                             </button>
+                            <ul class="dropdown-menu" role="menu"
+                                aria-labelledby="dropdownMenu1">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">Длительная
+                                        аренда</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">Краткосрочная
+                                        аренда (несколько месяцев)</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">Посуточно</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Photo -->
+                    <div class="form-group">
+                        <div class="checkbox col-md-offset-4">
+                            <label> <input type="checkbox"> Только с фото </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Third part of the search panel -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label> <input type="checkbox">Мебель</label>
+                        </div>
+                        <div class="checkbox">
+                            <label> <input type="checkbox">Холодильник</label>
+                        </div>
+                        <div class="checkbox">
+                            <label> <input type="checkbox">Стиральная машина</label>
+                        </div>
+                        <div class="checkbox">
+                            <label> <input type="checkbox">С детьми</label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Second part of the search panel -->
-            <div class="col-md-4">
-                <!-- Pay period -->
+            <!-- Four part of the search panel -->
+            <div class="col-md-6">
                 <div class="form-group">
-                    <div class="dropdown">
-                        <label class="col-md-4 control-label">Срок аренды</label>
-                        <button class="btn btn-default dropdown-toggle" type="button"
-                                id="dropdownMenu1"
-                                data-toggle="dropdown">
-                            Срок аренды
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu"
-                            aria-labelledby="dropdownMenu1">
-                            <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">Длительная
-                                    аренда</a>
-                            </li>
-                            <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">Краткосрочная
-                                    аренда (несколько месяцев)</a>
-                            </li>
-                            <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">Посуточно</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <input type="text" id="addressInput"
+                           class="form-control col-md-offset-2" placeholder="Введите адрес">
                 </div>
-
-                <!-- Photo -->
                 <div class="form-group">
-                    <div class="checkbox col-md-offset-4">
-                        <label> <input type="checkbox"> Только с фото </label>
-                    </div>
+                    <input type="submit" class="btn btn-primary col-md-offset-12" value="Поиск">
                 </div>
             </div>
-
-            <!-- Third part of the search panel -->
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label> <input type="checkbox">Мебель</label>
-                    </div>
-                    <div class="checkbox">
-                        <label> <input type="checkbox">Холодильник</label>
-                    </div>
-                    <div class="checkbox">
-                        <label> <input type="checkbox">Стиральная машина</label>
-                    </div>
-                    <div class="checkbox">
-                        <label> <input type="checkbox">С детьми</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Four part of the search panel -->
-        <div class="col-md-6">
-            <div class="form-group">
-                <input type="text" id="addressInput"
-                       class="form-control col-md-offset-2" placeholder="Введите адрес">
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary col-md-offset-12" value="Поиск">
-            </div>
-        </div>
-    </form>
-
+        </form>
+    </div>
 </div>
