@@ -44,9 +44,22 @@ var ApartmentInfoModule = (function () {
 
         $scope.apartmentInfo = ApartmentInfoService.getApartmentById(123);
 
-        //$(function () {
-        //navigationService.setRent();
-        //});
+        $(function () {
+            var $carousel = $('.carousel');
+            $carousel.carousel({
+                interval: 15000,
+                pause: "hover",
+                wrap: true
+            });
+
+            $('.carousel-control').each(function () {
+                var elem = $(this);
+                elem.on('click', function () {
+                    var dataSlideDirection = elem.attr('data-slide');
+                    $carousel.carousel(dataSlideDirection);
+                });
+            });
+        });
     }
 
     function ApartmentInfoService($resource, $log) {
