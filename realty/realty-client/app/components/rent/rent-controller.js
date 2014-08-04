@@ -41,7 +41,7 @@ var rentModule = (function () {
 
         $scope.putForRent = function () {
             $log.debug(angular.toJson($scope.rentData));
-            rentService.putForRent($scope);
+            rentService.putForRent();
             //$scope.$watch('rentData', rentService.putForRent);
         };
 
@@ -50,12 +50,12 @@ var rentModule = (function () {
         });
     }
 
-    function service($resource, $log) {
+    function service($resource, $log, $scope) {
         function hello () {
             return 'hey hello';
         }
 
-        function putForRent ($scope) {
+        function putForRent() {
             $log.debug('Rent service: put for rent');
 
             var putResource = $resource('putForRent');

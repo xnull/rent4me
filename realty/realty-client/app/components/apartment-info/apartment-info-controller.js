@@ -12,7 +12,7 @@ var ApartmentInfoModule = (function () {
         serviceName: 'ApartmentInfoService',
         stateName: 'apartmentInfoState',
         stateConfig: {
-            url: '/apartment-info',
+            url: '/apartment-info/{apartmentId}',
             templateUrl: 'components/apartment-info/apartment-info-view.html',
             controller: 'ApartmentInfoController' //cfg.ctlName
         }
@@ -39,10 +39,10 @@ var ApartmentInfoModule = (function () {
      * @param rentService
      * @param navigationService
      */
-    function controller($log, $scope, navigationService, ApartmentInfoService) {
+    function controller($log, $scope, $stateParams, navigationService, ApartmentInfoService) {
         $log.debug('Apartment info controller: execution');
 
-        $scope.apartmentInfo = ApartmentInfoService.getApartmentById(123);
+        $scope.apartmentInfo = ApartmentInfoService.getApartmentById($stateParams.apartmentId);
 
         $(function () {
             var $carousel = $('.carousel');
