@@ -3,7 +3,15 @@ apply from: ext.pathToJavaProjectScript
 dependencies {
     compile project(':realty-dao')
 
-    compile 'com.google.apis:google-api-services-mapsengine:v1-rev17-1.18.0-rc'
+    /**
+     * https://developers.google.com/api-client-library/java/apis/coordinate/v1
+     */
+    compile 'com.google.apis:google-api-services-coordinate:v1-rev47-1.19.0'
+
+    compile 'org.glassfish.jersey.core:jersey-client:2.11'
+    compile libraries."org.glassfish.jersey.media:jersey-media-json-jackson"
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.4.1.1'
 
     compile libraries.'org.springframework.security:spring-security-core'
     compile libraries.'org.glassfish.jersey.media:jersey-media-json-jackson'
