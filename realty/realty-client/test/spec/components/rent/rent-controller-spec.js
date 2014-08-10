@@ -18,6 +18,7 @@ describe('Rent service test', function () {
 
         // load the module.
         module(rentApplication.applicationName);
+        //console.log("QUEUE: " + module(rentApplication.applicationName)._invokeQueue);
 
         // inject your service for testing.
         // The _underscores_ are a convenience thing

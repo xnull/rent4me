@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply from: ext.pathToJavaProjectScript
 apply plugin: 'war'
 
 repositories {
@@ -9,9 +9,6 @@ dependencies {
     compile project(":realty-web")
     compile project(":realty-client")
 
-    compile libraries.'org.slf4j:slf4j-api'
-    compile libraries."ch.qos.logback:logback-classic"
-    compile libraries."ch.qos.logback:logback-core"
     compile libraries."org.eclipse.jetty:jetty-start"
     compile libraries."org.eclipse.jetty:jetty-webapp"
     compile libraries."org.eclipse.jetty:jetty-jndi"

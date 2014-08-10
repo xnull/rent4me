@@ -1,13 +1,11 @@
 buildscript {
-    repositories {
-        jcenter()
-    }
     dependencies {
         classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
     }
 }
 
-apply plugin: 'java'
+apply from: ext.pathToJavaProjectScript
+
 apply plugin: 'war'
 apply plugin: 'jetty'
 apply plugin: 'ssh'
@@ -73,7 +71,6 @@ dependencies {
     compile libraries."org.springframework.security:spring-security-web"
     compile libraries."org.springframework.security:spring-security-config"
     compile libraries."org.springframework.security:spring-security-core"
-    compile libraries."org.springframework:spring-context-support"
 
     //rest
     compile libraries.'javax.ws.rs:javax.ws.rs-api'
