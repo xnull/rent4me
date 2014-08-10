@@ -10,11 +10,11 @@
 </style>
 
 <!-- The Form -->
-<div class="container">
-    <div class="rent-form container">
+<div class="container" ng-controller="RentSearchController">
+    <div class="rent-form">
         <br/>
 
-        <form class="form-horizontal" role="form" ng-submit="search()" ng-controller="RentSearchController">
+        <form class="form-horizontal" role="form" ng-submit="search()">
 
             <div class="row">
                 <!-- First part of the search panel -->
@@ -22,7 +22,7 @@
 
                     <!-- Flat type -->
                     <div class="form-group">
-                        <label for="flatType" class="col-md-3 control-label">Тип</label>
+                        <label class="col-md-3 control-label">Тип</label>
 
                         <div class="col-md-9">
                             <div class="btn-group" data-toggle="buttons" id="flatType">
@@ -39,7 +39,7 @@
 
                     <!-- flats count -->
                     <div class="form-group">
-                        <label for="rooms" class="col-md-3 control-label">Комнат</label>
+                        <label class="col-md-3 control-label">Комнат</label>
 
                         <div class="col-md-9">
                             <div class="btn-group" data-toggle="buttons" id="rooms">
@@ -76,7 +76,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="address" class="col-md-3 control-label">Адрес</label>
+                        <label class="col-md-3 control-label">Адрес</label>
 
                         <div class="col-md-9">
                             <div class="btn-group" id="address">

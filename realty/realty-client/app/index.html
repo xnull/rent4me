@@ -38,7 +38,10 @@
     <script src="components/login/login-controller.js"></script>
     <script src="components/authorization/authorization.js"></script>
     <script src="components/register/register-controller.js"></script>
+
+    <script src="components/rent-search/google-maps-service.js"></script>
     <script src="components/rent-search/rent-search-controller.js"></script>
+
     <script src="components/personal/personal-controller.js"></script>
     <script src="components/renter-search/renter-search-controller.js"></script>
     <script src="components/apartment-info/apartment-info-controller.js"></script>
@@ -48,9 +51,10 @@
 
 <body>
 
-<div class="container" ng-controller="NavigationController as navController">
+<div class="container"  ng-controller="NavigationController as navController">
     <div class="navbar-login-wrapper navbar navbar-default">
-        <div class="container col-md-offset-9 col-md-2">
+        <div class="container">
+        <div class="col-md-offset-8 pull-right">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -60,13 +64,7 @@
                 </button>
             </div>
 
-            <!--<div class="masthead collapse navbar-collapse">
-                <div class="btn-group" id="registerForm">
-                    <button type="button" class="btn btn-default"><strong>Регистрация</strong></button>
-                    <button type="button" class="btn btn-default"><strong>Вход</strong></button>
-                </div>
-            </div>-->
-            <div class="masthead collapse navbar-collapse" ng-controller="AuthorizationController as authController">
+            <div class="masthead collapse navbar-collapse " ng-controller="AuthorizationController as authController">
                 <ul class="nav nav-justified panel panel-default">
                     <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isRegister() }">
                         <a href="#/register"><strong>Регистрация</strong></a>
@@ -83,6 +81,7 @@
                 </ul>
             </div>
         </div>
+            </div>
     </div>
 
     <div class="navbar-wrapper navbar navbar-default">

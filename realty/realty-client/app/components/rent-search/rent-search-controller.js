@@ -8,8 +8,18 @@ var rentSearchModule = (function () {
         moduleName: 'rentApp.rentSearch',
         moduleDependencies: ['ui.router'],
 
+        services: [
+            {
+                serviceName: 'rentSearchService',
+                service: SearchService
+            },
+            {
+                serviceName: 'rentSearchMapService',
+                service: rentSearchMapModule.googleMapService
+            }
+        ],
+
         ctlName: 'RentSearchController',
-        serviceName: 'rentSearchService',
         stateName: 'rentSearchState',
         stateConfig: {
             url: '/rent-search',
@@ -18,10 +28,10 @@ var rentSearchModule = (function () {
         }
     };
 
-    var angularModule = angular.module(cfg.moduleName, cfg.moduleDependencies);
-    var angularLogger = angular.injector([cfg.moduleName, 'ng']).get('$log');
-
     function init() {
+        var angularModule = angular.module(cfg.moduleName, cfg.moduleDependencies);
+        var angularLogger = angular.injector([cfg.moduleName, 'ng']).get('$log');
+
         angularLogger.debug('Loading "' + cfg.moduleName + '" module');
 
         angularModule.config(function ($stateProvider) {
@@ -29,7 +39,10 @@ var rentSearchModule = (function () {
         });
 
         angularModule.controller(cfg.ctlName, controller);
-        angularModule.factory(cfg.serviceName, service);
+
+        cfg.services.forEach(function (service) {
+            angularModule.factory(service.serviceName, service.service);
+        });
     }
 
     /**
@@ -39,10 +52,8 @@ var rentSearchModule = (function () {
      * @param rentSearchService
      * @param navigationService
      */
-    function controller($log, $scope, rentSearchService, navigationService) {
+    function controller($log, $scope, rentSearchMapService, navigationService) {
         $log.debug('Rent search controller initialization');
-
-        $scope.initializeGoogleMaps = rentSearchService.googleMapInitialization;
 
         $scope.apartment = {};
         $scope.search = function () {
@@ -60,77 +71,14 @@ var rentSearchModule = (function () {
          });
          });*/
 
+
         $(function () {
             navigationService.setRentSearch();
         });
     }
 
-    function service($log) {
-        var map;
-        var testMapMarkers;
 
-        function generateTestData() {
-            var points = [
-                {lat: 55.752020, lng: 37.617526}, //The Moscow cremlin
-                {lat: 55.728253, lng: 37.601028}, //Park Gorkogo
-                {lat: 55.703043, lng: 37.530714}, //MGU
-                {lat: 55.708562, lng: 37.521573}, //Science park MGU
-                {lat: 55.794082, lng: 37.588483}, //MEtro savolovskaya
-                {lat: 55.807759, lng: 37.581531}, //Metro Dmitrovskaya
-                {lat: 55.818586, lng: 37.578956}, //Metro Timiryazevskaya
-                {lat: 55.836713, lng: 37.570073}, //Metro Petro-razumovskaya
-                {lat: 55.831674, lng: 37.569448}, //Dmitrovskoe hosse 39
-                {lat: 55.862149, lng: 37.604533}  //Otradnoe
-            ];
-
-            var clusterMarkers = [];
-            for (var i = 0; i < points.length; i++) {
-                clusterMarkers.push(new google.maps.Marker({
-                    position: new google.maps.LatLng(points[i].lat, points[i].lng)
-                }));
-            }
-
-            return clusterMarkers;
-        }
-
-        function googleMapInitialization() {
-            $log.debug('Initialize google maps');
-
-            testMapMarkers = generateTestData();
-            var markers = testMapMarkers;
-
-            var myLatlng = new google.maps.LatLng(55.752020, 37.617526);
-            var mapOptions = {
-                center: myLatlng,
-                zoom: 10
-            };
-
-            var mapContainer = document.getElementById('map-canvas');
-
-            map = new google.maps.Map(mapContainer, mapOptions);
-
-            new MarkerClusterer(map, markers);
-
-            //var inputElement = angular.element('addressInput');
-            var inputElement = document.getElementById('addressInput');
-
-            var autocomplete = new google.maps.places.Autocomplete(inputElement);
-            autocomplete.bindTo('bounds', map);
-        }
-
-        /**
-         * http://habrahabr.ru/post/28621/ clustering markers
-         *
-         * https://developers.google.com/maps/documentation/javascript/places?hl=ru
-         *
-         * https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
-         */
-        return {
-            googleMapInitialization: googleMapInitialization
-        };
-    }
-
-    function SearchService() {
+    function SearchService($log, $resource) {
 
         var searchRequest = {
             floorsNumber: 1,
@@ -146,19 +94,32 @@ var rentSearchModule = (function () {
             }
         ];
 
+        /**
+         * Send request to the server
+         * @param searchRequest
+         */
+        function searchByParams(searchRequest) {
+            var User = $resource('/rest/rent-search/:userId', {userId:'@id'});
+            User.get({userId:123}, function(u, getResponseHeaders){
+                u.abc = true;
+                u.$save(function(u, putResponseHeaders) {
+                    //u => saved user object
+                    //putResponseHeaders => $http header getter
+                });
+            });
+        }
+
 
         return {
-            searchByParams: function (searchRequest) {
-            }
-
+            searchByParams: searchByParams
         };
     }
 
     return {
         init: init,
         ctl: controller,
-        srv: service,
-        searchService: SearchService
+        searchService: SearchService,
+        googleMapsService: rentSearchMapModule.googleMapService
     };
 })();
 
