@@ -50,8 +50,8 @@ describe('test of navigation', function () {
             absLocation: 'http://rent4.me/dev/#/rent'
         },
         {
-            url: '#/apartment-info',
-            absLocation: 'http://rent4.me/dev/#/apartment-info'
+            url: '#/apartment-info/123',
+            absLocation: 'http://rent4.me/dev/#/apartment-info/123'
         }
     ];
 

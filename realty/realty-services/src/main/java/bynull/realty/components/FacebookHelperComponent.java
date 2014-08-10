@@ -138,7 +138,7 @@ public class FacebookHelperComponent {
                 throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
             }
             String body = httpGet.getResponseBodyAsString();
-            LOGGER.info("Execution time: {} ms", (System.currentTimeMillis() - requestStartTime));
+            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
 
             FacebookVerificationInfoDTO response = jacksonObjectMapper.readValue(body, FacebookVerificationInfoDTO.class);
             Assert.notNull(response);
