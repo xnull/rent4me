@@ -11,6 +11,10 @@ public interface UserService extends UserDetailsService {
     @Override
     User loadUserByUsername(String username) throws UsernameNotFoundException;
 
+    UsernameTokenPair authenticateFacebookUser(String facebookId, String accessToken);
+
+    UsernameTokenPair authenticateVkUser(String vkId, String accessToken);
+
     class UsernameTokenPair {
         public final String username;
         public final String token;
@@ -20,6 +24,4 @@ public interface UserService extends UserDetailsService {
             this.token = token;
         }
     }
-
-    UsernameTokenPair authenticateFacebookUser(String facebookId, String accessToken);
 }

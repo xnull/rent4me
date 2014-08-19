@@ -274,20 +274,62 @@ authModule.factory('authorizationService', function ($http, $resource, $rootScop
                 $log.info('VK response session:');
                 $log.info(response.session);
                 $log.info('user: ' + response.session.mid);
+                $log.info('secret id: ' + response.session.sid);
+                $log.info('sig: ' + response.session.sig);
+
+                $.blockUI();
+
+                var data = {"vk_id": response.session.mid, "access_token": response.session.sig};
+
+                $http({
+                    method: 'POST',
+                    url: '/rest/auth/vk',
+                    data: angular.toJson(data)
+                }).
+                    success(function (data, status, headers, config) {
+                        $log.info("Success!");
+                        $log.info("Status:" + status);
+                        $log.info("Data:");
+                        $log.info(data);
+
+                        authorization.setToken(data.token);
+                        authorization.setUsername(data.username);
+                        authorization.authStateChanged();
+                        // this callback will be called asynchronously
+                        // when the response is available
+                        //console.log('Successful sending ajax request');
+                        $.unblockUI();
+                    }).
+                    error(function (data, status, headers, config) {
+                        $log.info("Error!");
+                        $log.info(data);
+                        $log.info(status);
+                        $log.info(headers);
+                        $log.info(config);
+                        authorization.setToken(null);
+                        authorization.setUsername(null);
+                        authorization.authStateChanged();
+                        $.unblockUI();
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                        //console.log('Error sending ajax request. Status: ' + status);
+                        //$scope.greeting = "raz dva";
+                    });
+
             } else {
                 $log.info('not authorized in VK');
                 $.blockUI();
-                VK.Auth.login(function (response) {
-                    if (response.session) {
-                        /* Пользователь успешно авторизовался */
-                        if (response.settings) {
-                            /* Выбранные настройки доступа пользователя, если они были запрошены */
-                        }
-                    } else {
-                        /* Пользователь нажал кнопку Отмена в окне авторизации */
-                    }
-                    $.unblockUI();
-                });
+                /*VK.Auth.login(function (response) {
+                 if (response.session) {
+                 // Пользователь успешно авторизовался
+                 if (response.settings) {
+                 // Выбранные настройки доступа пользователя, если они были запрошены
+                 }
+                 } else {
+                 // Пользователь нажал кнопку Отмена в окне авторизации
+                 }
+                 $.unblockUI();
+                 });*/
             }
             $.unblockUI();
         }

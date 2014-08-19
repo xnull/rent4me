@@ -44,6 +44,13 @@ public class AuthenticationResource {
         return Response.ok(new UsernameTokenPairJSON(usernameTokenPair.username, usernameTokenPair.token)).build();
     }
 
+    @POST
+    @Path("/vk")
+    public Response authenticateWithVK(RequestVKLoginJSON vkLoginJSON) {
+        UserService.UsernameTokenPair usernameTokenPair = userService.authenticateVkUser(vkLoginJSON.getVkId(), vkLoginJSON.getAccessToken());
+        return Response.ok(new UsernameTokenPairJSON(usernameTokenPair.username, usernameTokenPair.token)).build();
+    }
+
     @DELETE
     public Response logout(TokenJSON tokenJSON, @Context HttpServletRequest request) {
         Authentication authentication =
@@ -107,6 +114,29 @@ public class AuthenticationResource {
 
         public void setToken(String token) {
             this.token = token;
+        }
+    }
+
+    public static class RequestVKLoginJSON {
+        @JsonProperty("vk_id")
+        private String vkId;
+        @JsonProperty("access_token")
+        private String accessToken;
+
+        public String getVkId() {
+            return vkId;
+        }
+
+        public void setVkId(String vkId) {
+            this.vkId = vkId;
+        }
+
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public void setAccessToken(String accessToken) {
+            this.accessToken = accessToken;
         }
     }
 
