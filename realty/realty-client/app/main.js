@@ -105,10 +105,10 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
     });
 
 
-    $.getScript('//vk.com/js/api/openapi.js', function () {
-        VK.init({
+    /*$.getScript('//vk.com/js/api/openapi.js', function () {
+     VK.init({
             apiId: vkAppId
         });
 
-    });
+     });*/
 };
