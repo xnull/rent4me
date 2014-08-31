@@ -1,6 +1,6 @@
 project.apply plugin: 'java'
 
-def javaVersion = '1.7'
+def javaVersion = '1.8'
 
 project.apply plugin: 'idea'
 project.apply plugin: 'eclipse'
