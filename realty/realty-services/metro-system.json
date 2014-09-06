@@ -1,0 +1,955 @@
+{
+  "metro_system" : [ {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Ulitsa Podbelskogo, Moscow, Russia, 107370",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.814527",
+            "lng" : "37.734261"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Улица Подбельского"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Cherkizovskaya, Moscow, Russia, 107553",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.803943",
+            "lng" : "37.744764"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Черкизовская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Preobrazhenskaya Ploshchad', Moscow, Russia, 107061",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.79624",
+            "lng" : "37.715474"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Преображенская площадь"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Sokolniki, Moscow, Russia, 107014",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.78925",
+            "lng" : "37.679683"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Сокольники"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Krasnoselskaya, Moscow, Russia, 107140",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.77999699999999",
+            "lng" : "37.666079"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Красносельская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Komsomolskaya, Moscow, Russia, 107140",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.776241",
+            "lng" : "37.65587"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Комсомольская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Krasnye Vorota, Moscow, Russia, 107078",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.76908",
+            "lng" : "37.649106"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Красные ворота"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Chistye Prudy, Moscow, Russia, 101000",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.764928",
+            "lng" : "37.638436"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Чистые пруды"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Lubyanka, Moscow, Russia, 109012",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.75966",
+            "lng" : "37.62658100000001"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Лубянка"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Okhotnyy Ryad, Moscow, Russia, 125009",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.757879",
+            "lng" : "37.616635"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Охотный ряд"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Biblioteka imeni Lenina, Moscow, Russia, 125009",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.752252",
+            "lng" : "37.610493"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Библиотека имени Ленина"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Kropotkinskaya, Moscow, Russia, 119019",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.745155",
+            "lng" : "37.603031"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Кропоткинская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Park Kultury, Moscow, Russia, 119021",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.735204",
+            "lng" : "37.593074"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Парк культуры"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Frunzenskaya, Moscow, Russia, 119146",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.727474",
+            "lng" : "37.580683"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Фрунзенская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Sportivnaya, Moscow, Russia, 119048",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.723338",
+            "lng" : "37.564069"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Спортивная"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Vorobyevy Gory, Moscow, Russia, 119270",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.710409",
+            "lng" : "37.559423"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Воробьёвы горы"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Universitet, Moscow, Russia, 119311",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.69255099999999",
+            "lng" : "37.534592"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Университет"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Prospekt Vernadskogo, Moscow, Russia, 119415",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.676978",
+            "lng" : "37.50631"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Проспект Вернадского"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Yugo-Zapadnaya, Moscow, Russia, 119571",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.66375000000001",
+            "lng" : "37.483152"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 1,
+      "name" : "Юго-Западная"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Rechnoy Vokzal, Moscow, Russia, 125565",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.855055",
+            "lng" : "37.476109"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Речной вокзал"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.836138",
+            "lng" : "37.484058"
+          }
+        }
+      }, {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.835967",
+            "lng" : "37.483592"
+          }
+        }
+      }, {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.840005",
+            "lng" : "37.48663"
+          }
+        }
+      }, {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.840622",
+            "lng" : "37.486919"
+          }
+        }
+      }, {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.835443",
+            "lng" : "37.48467"
+          }
+        }
+      }, {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.835175",
+            "lng" : "37.484048"
+          }
+        }
+      }, {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.84004",
+            "lng" : "37.486575"
+          }
+        }
+      }, {
+        "formatted_address" : "Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.840743",
+            "lng" : "37.487524"
+          }
+        }
+      }, {
+        "formatted_address" : "Golovinskoye shosse, 1, Moscow, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.83958",
+            "lng" : "37.488543"
+          }
+        }
+      }, {
+        "formatted_address" : "Kronshtadtskiy bulvar, 49, Moscovo, Moscow, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.852542",
+            "lng" : "37.512122"
+          }
+        }
+      }, {
+        "formatted_address" : "Kronshtadtskiy bulvar, 15, Moscow, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.842522",
+            "lng" : "37.494273"
+          }
+        }
+      }, {
+        "formatted_address" : "Иркутская ул., 11/17, Moscow, город Москва, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.816211",
+            "lng" : "37.785244"
+          }
+        }
+      }, {
+        "formatted_address" : "Golovinskoe Shosse 8 Bld. 2A, มอสโก, Россия",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.839615",
+            "lng" : "37.49136"
+          }
+        }
+      }, {
+        "formatted_address" : "Смольная ул., 11/13, город Москва, Россия",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.84609",
+            "lng" : "37.498416"
+          }
+        }
+      }, {
+        "formatted_address" : "Кронштадтский бул., 9с3, Moscow, город Москва, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.8427",
+            "lng" : "37.488765"
+          }
+        }
+      }, {
+        "formatted_address" : "Фестивальная ул., 20 корпус 2, Moscow, город Москва, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.860363",
+            "lng" : "37.498839"
+          }
+        }
+      }, {
+        "formatted_address" : "Михалковская ул., 65, город Москва, Россия",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.837115",
+            "lng" : "37.50662"
+          }
+        }
+      }, {
+        "formatted_address" : "2-я Энтузиастов ул., 5, корп. 17, Восточный АО, город Москва, Россия",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.746891",
+            "lng" : "37.736349"
+          }
+        }
+      }, {
+        "formatted_address" : "2-y Syromyatnicheskiy pereulok, 10, Moscow, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.752189",
+            "lng" : "37.661999"
+          }
+        }
+      }, {
+        "formatted_address" : "Golovinskoye shosse, 8 корпус 1, 319, Moscow, Russia",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.838972",
+            "lng" : "37.490804"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Водный стадион"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Voykovskaya, Moscow, Russia, 125171",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.819087",
+            "lng" : "37.497888"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Войковская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Sokol, Moscow, Russia, 125057",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.80478",
+            "lng" : "37.515548"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Сокол"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Aeroport, Moscow, Russia, 125167",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.800365",
+            "lng" : "37.532628"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Аэропорт"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Dinamo, Moscow, Russia, 125167",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.789711",
+            "lng" : "37.558184"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Динамо"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Belorusskaya, Moscow, Russia, 125040",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.777094",
+            "lng" : "37.581847"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Белорусская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Mayakovskaya, Moscow, Russia, 125047",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.770126",
+            "lng" : "37.595934"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Маяковская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Tverskaya, Moscow, Russia, 125009",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.764847",
+            "lng" : "37.60486"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Тверская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Teatralnaya, Moscow, Russia, 109012",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.7576",
+            "lng" : "37.618738"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Театральная"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Novokuznetskaya, Moscow, Russia, 115035",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.742424",
+            "lng" : "37.629263"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Новокузнецкая"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Paveletskaya, Moscow, Russia, 115054",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.731266",
+            "lng" : "37.636263"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Павелецкая"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Avtozavodskaya, Moscow, Russia, 115280",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.707394",
+            "lng" : "37.657297"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Автозаводская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Kolomenskaya, Moscow, Russia, 115487",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.678271",
+            "lng" : "37.663842"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Коломенская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Kashirskaya, Moscow, Russia, 115522",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.655134",
+            "lng" : "37.648843"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Каширская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Kantemirovskaya, Moscow, Russia, 115477",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.635715",
+            "lng" : "37.6566"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Кантемировская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Tsaritsyno, Moscow, Russia, 115304",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.62145599999999",
+            "lng" : "37.669453"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Царицыно"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Orekhovo, Moscow, Russia, 115569",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.613195",
+            "lng" : "37.694966"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Орехово"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Domodedovskaya, Moscow, Russia, 115582",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.61095299999999",
+            "lng" : "37.71909"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Домодедовская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Krasnogvardeyskaya, Moscow, Russia, 115580",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.61386599999999",
+            "lng" : "37.744544"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 2,
+      "name" : "Красногвардейская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Shchelkovskaya, Moscow, Russia, 107207",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.809286",
+            "lng" : "37.798628"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Щёлковская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Pervomayskaya, Moscow, Russia, 105077",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.794507",
+            "lng" : "37.799363"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Первомайская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Izmaylovskaya, Moscow, Russia, 105037",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.787775",
+            "lng" : "37.78143499999999"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Измайловская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Partizanskaya, Moscow, Russia, 105187",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.78845099999999",
+            "lng" : "37.749619"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Партизанская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Semenovskaya, Moscow, Russia, 105318",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.78306",
+            "lng" : "37.719423"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Семёновская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Elektrozavodskaya, Moscow, Russia, 107023",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.782094",
+            "lng" : "37.705287"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Электрозаводская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Baumanskaya, Moscow, Russia, 105005",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.772481",
+            "lng" : "37.679163"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Бауманская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Kurskaya, Moscow, Russia, 105064",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.758727",
+            "lng" : "37.659577"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Курская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Ploshchad' Revolyutsii, Moscow, Russia, 109012",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.75657",
+            "lng" : "37.621656"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Площадь Революции"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Arbatskaya, Moscow, Russia, 119019",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.752161",
+            "lng" : "37.601518"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Арбатская"
+    }
+  }, {
+    "coords" : {
+      "results" : [ {
+        "formatted_address" : "Smolenskaya, Moscow, Russia, 119002",
+        "geometry" : {
+          "location" : {
+            "lat" : "55.74773",
+            "lng" : "37.583848"
+          }
+        }
+      } ]
+    },
+    "station" : {
+      "lineId" : 3,
+      "name" : "Смоленская"
+    }
+  } ]
+}

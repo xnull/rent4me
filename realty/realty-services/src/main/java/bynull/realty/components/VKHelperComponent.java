@@ -138,7 +138,8 @@ public class VKHelperComponent {
                 throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
             }
             String body = httpGet.getResponseBodyAsString();
-            LOGGER.info("Execution time: {} ms", (System.currentTimeMillis() - requestStartTime));
+            long time = System.currentTimeMillis() - requestStartTime;
+            LOGGER.info("Execution time: {} ms", time);
 
             VKVerificationInfoDTO response = jacksonObjectMapper.readValue(body, VKVerificationInfoDTO.class);
             Assert.notNull(response);

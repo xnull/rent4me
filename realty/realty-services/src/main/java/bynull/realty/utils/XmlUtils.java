@@ -116,9 +116,9 @@ public final class XmlUtils {
         Transformer transformer = null;
         try {
             StreamResult result = new StreamResult(new StringWriter());
-            transformer.transform(new DOMSource(xmlDoc), result);
             transformer = TransformerFactory.newInstance().newTransformer();
-            return ((StringWriter) result.getWriter()).toString();
+            transformer.transform(new DOMSource(xmlDoc), result);
+            return result.getWriter().toString();
         } catch (Exception e) {
             throw new XmlParseException(e);
         }
