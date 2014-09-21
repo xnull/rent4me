@@ -1,0 +1,10 @@
+- name: installing mc
+  apt: pkg=$item
+  with_items:
+      - sudo
+      - iftop
+      - tcpdump
+      - mc
+      - wget
+      - curl
+      - vim
