@@ -1,7 +1,7 @@
 package bynull.realty.web.rest;
 
 import bynull.realty.dto.ApartmentDTO;
-import bynull.realty.services.ApartmentService;
+import bynull.realty.services.api.ApartmentService;
 import bynull.realty.web.json.ApartmentJSON;
 import org.springframework.stereotype.Component;
 

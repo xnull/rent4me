@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="rentApp">
 <head>
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Аренда жилья без посредников">
@@ -12,76 +12,53 @@
     <title>Rent4Me - аренда недвижимости без посредников</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
     <link rel="stylesheet" href="index.css">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="vendor/html5shiv/dist/html5shiv.js"></script>
-    <script src="vendor/respond/dest/respond.min.js"></script>
-    <![endif]-->
+    <!-- frameworks -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
 
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?v=3&sensor=true&libraries=places&language=ru"></script>
-    <script src="vendor/jquery/dist/jquery.js"></script>
-
-    <script src="vendor/angular/angular.js"></script>
-    <script src="vendor/angular-resource/angular-resource.js"></script>
-    <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="vendor/google-maps-utility-library-v3/markerclusterer/src/markerclusterer.js"></script>
-    <script src="vendor/angular-cookies/angular-cookies.js"></script>
-    <script src="vendor/blockui/jquery.blockUI.js"></script>
-
-    <script src="components/index/index-controller.js"></script>
-    <script src="components/rent/rent-controller.js"></script>
-    <script src="components/navigation/navigation-controller.js"></script>
-    <script src="components/login/login-controller.js"></script>
-    <script src="components/authorization/authorization.js"></script>
-    <script src="components/register/register-controller.js"></script>
-
-    <script src="components/rent-search/google-maps-service.js"></script>
-    <script src="components/rent-search/rent-search-controller.js"></script>
-
-    <script src="components/personal/personal-controller.js"></script>
-    <script src="components/renter-search/renter-search-controller.js"></script>
-    <script src="components/apartment-info/apartment-info-controller.js"></script>
-    <script src="main.js"></script>
     <script src="app.js"></script>
 </head>
 
 <body>
 
-<div class="container"  ng-controller="NavigationController as navController">
+<div class="container" ng-controller="NavigationController as navController">
     <div class="navbar-login-wrapper navbar navbar-default">
         <div class="container">
-        <div class="col-md-offset-8 pull-right">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
+            <div class="col-md-offset-8 pull-right">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
 
-            <div class="masthead collapse navbar-collapse " ng-controller="AuthorizationController as authController">
-                <ul class="nav nav-justified panel panel-default">
-                    <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isRegister() }">
-                        <a href="#/register"><strong>Регистрация</strong></a>
-                    </li>
-                    <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isLogin() }">
-                        <a href="#/login"><strong>Вход</strong></a>
-                    </li>
-                    <li ng-show="authInfo.authorized" ng-class="{ active: navController.isPersonal() }">
-                        <a href="#/personal"><strong>Личный кабинет</strong></a>
-                    </li>
-                    <li ng-show="authInfo.authorized" ng-click="authController.logout()">
-                        <a href="#"><strong>Выход</strong></a>
-                    </li>
-                </ul>
+                <div class="masthead collapse navbar-collapse "
+                     ng-controller="AuthorizationController as authController">
+                    <ul class="nav nav-justified panel panel-default">
+                        <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isRegister() }">
+                            <a href="#/register"><strong>Регистрация</strong></a>
+                        </li>
+                        <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isLogin() }">
+                            <a href="#/login"><strong>Вход</strong></a>
+                        </li>
+                        <li ng-show="authInfo.authorized" ng-class="{ active: navController.isPersonal() }">
+                            <a href="#/personal"><strong>Личный кабинет</strong></a>
+                        </li>
+                        <li ng-show="authInfo.authorized" ng-click="authController.logout()">
+                            <a href="#"><strong>Выход</strong></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-            </div>
     </div>
 
     <div class="navbar-wrapper navbar navbar-default">
@@ -130,7 +107,6 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $(".navbar ul li a").click(function (event) {

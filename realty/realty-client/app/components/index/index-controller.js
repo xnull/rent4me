@@ -100,3 +100,4 @@ var indexModule = (function () {
 })();
 
 indexModule.init();
+module.exports = indexModule;

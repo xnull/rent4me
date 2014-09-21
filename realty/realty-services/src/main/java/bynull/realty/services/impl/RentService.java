@@ -1,4 +1,4 @@
-package bynull.realty.services;
+package bynull.realty.services.impl;
 
 import org.springframework.stereotype.Service;
 
@@ -10,10 +10,11 @@ public class RentService {
 
     /**
      * Put your property for rent
+     *
      * @param userId
      * @param propertyId
      */
-    public void putForRent(Long userId, Long propertyId){
+    public void putForRent(Long userId, Long propertyId) {
 
     }
 }

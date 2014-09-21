@@ -1,4 +1,4 @@
-package bynull.realty.services;
+package bynull.realty.services.api;
 
 import bynull.realty.data.business.User;
 import org.springframework.security.authentication.BadCredentialsException;

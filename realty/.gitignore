@@ -11,3 +11,4 @@ realty-client/app/vendor
 .idea
 
 realty-web/src/main/webapp/view
+realty-client/build-js/*

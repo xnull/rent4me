@@ -1,8 +1,10 @@
-package bynull.realty.services;
+package bynull.realty.services.impl;
 
 import bynull.realty.dao.UserTokenRepository;
 import bynull.realty.data.business.User;
 import bynull.realty.data.business.UserToken;
+import bynull.realty.services.api.UserService;
+import bynull.realty.services.api.UserTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;

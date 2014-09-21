@@ -1,40 +1,23 @@
 /**
  * Application configuration
  */
-var scriptLoader = (function () {
-    'use strict';
+require('../node_modules/client/angular-resource/angular-resource.js');
+require('../node_modules/client/angular-ui-router/release/angular-ui-router.js');
+require('../node_modules/client/google-maps-utility-library-v3/markerclusterer/src/markerclusterer.js');
+require('../node_modules/client/angular-cookies/angular-cookies.js');
+require('../node_modules/client/blockui/jquery.blockUI.js');
 
-    var scripts = [
-        'components/index/index-controller.js',
-        'components/rent/rent-controller.js',
-        'components/navigation/navigation-controller.js',
-        'components/login/login-controller.js',
-        'components/authorization/authorization.js',
-        'components/register/register-controller.js',
-        'components/rent-search/rent-search-controller.js',
-        'components/personal/personal-controller.js',
-        'components/renter-search/renter-search-controller.js',
-        'components/apartment-info/apartment-info-controller.js',
-        'main.js'
-    ];
-
-    function loadScript(url) {
-        document.write('<' + 'script src="' + url + '"' + ' type="text/javascript"><' + '/script>');
-    }
-
-    function loadScripts() {
-        for (var i = 0; i < scripts.length; ++i) {
-            loadScript(scripts[i]);
-        }
-    }
-
-    return{
-        loadScripts: loadScripts
-    };
-})();
-
-//Dynamic loading is not working, so we haven't choice we need to use requireJs, but it will be later
-//scriptLoader.loadScripts();
+require('./components/index/index-controller.js');
+require('./components/rent/rent-controller.js');
+require('./components/navigation/navigation-controller.js');
+require('./components/login/login-controller.js');
+require('./components/authorization/authorization.js');
+require('./components/register/register-controller.js');
+require('./components/rent-search/rent-search-controller.js');
+require('./components/personal/personal-controller.js');
+require('./components/renter-search/renter-search-controller.js');
+require('./components/apartment-info/apartment-info-controller.js');
+require('./main.js');
 
 var rentApplication = (function () {
     'use strict';
@@ -69,3 +52,4 @@ var rentApplication = (function () {
 })();
 
 rentApplication.init();
+module.exports = rentApplication;

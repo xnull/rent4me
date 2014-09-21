@@ -1,7 +1,7 @@
 /**
  * Created by null on 07.08.14.
  */
-var rentSearchMapModule = (function () {
+module.exports = (function () {
     'use strict';
 
     var service = {};

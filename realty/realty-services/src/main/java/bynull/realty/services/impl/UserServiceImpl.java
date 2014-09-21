@@ -1,10 +1,13 @@
-package bynull.realty.services;
+package bynull.realty.services.impl;
 
 import bynull.realty.components.FacebookHelperComponent;
 import bynull.realty.components.VKHelperComponent;
 import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.Authority;
 import bynull.realty.data.business.User;
+import bynull.realty.services.api.AuthorityService;
+import bynull.realty.services.api.UserService;
+import bynull.realty.services.api.UserTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AuthorizationServiceException;

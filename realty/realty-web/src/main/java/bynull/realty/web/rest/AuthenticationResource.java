@@ -1,8 +1,8 @@
 package bynull.realty.web.rest;
 
 import bynull.realty.data.business.User;
-import bynull.realty.services.UserService;
-import bynull.realty.services.UserTokenService;
+import bynull.realty.services.api.UserService;
+import bynull.realty.services.api.UserTokenService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,6 +1,8 @@
 /**
  * Created by null on 06.07.14.
  */
+var mapScript = require('./google-maps-service.js');
+
 var rentSearchModule = (function () {
     'use strict';
 
@@ -15,7 +17,7 @@ var rentSearchModule = (function () {
             },
             {
                 serviceName: 'rentSearchMapService',
-                service: rentSearchMapModule.googleMapService
+                service: mapScript.googleMapService
             }
         ],
 
@@ -119,7 +121,7 @@ var rentSearchModule = (function () {
         init: init,
         ctl: controller,
         searchService: SearchService,
-        googleMapsService: rentSearchMapModule.googleMapService
+        googleMapsService: mapScript.googleMapService
     };
 })();
 

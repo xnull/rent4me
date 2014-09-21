@@ -16,8 +16,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.moowork.gradle:gradle-node-plugin:0.4'
-        //classpath 'com.moowork.gradle:gradle-node-plugin:0.6'
+        classpath 'com.moowork.gradle:gradle-node-plugin:0.6'
         classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
     }
 }
@@ -30,7 +29,7 @@ def nodeJsDir = file("${rootProject.projectDir}/.gradle/nodejs")
 
 node {
     // Version of node to use.
-    version = '0.11.10'
+    version = '0.10.31'
 
     // Base URL for fetching node distributions (change if you have a mirror).
     distBaseUrl = 'http://nodejs.org/dist'
@@ -70,11 +69,25 @@ task jsBuild(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     args = ['jsBuild']
 }
 
+task jsWebServer(type: JsTaskRunner, dependsOn: 'bowerInstall') {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['webserver']
+}
+
 task jsHint(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
     args = ['lint']
 }
 check.dependsOn jsHint
+
+task jsBro(type: JsTaskRunner, dependsOn: 'bowerInstall') {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['brodist']
+}
+task jsFiles(type: JsTaskRunner, dependsOn: 'bowerInstall') {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['files']
+}
 
 task packApp(dependsOn: bowerInstall, type: Tar) {
     group = 'Packaging'
@@ -144,7 +157,7 @@ task startWebDriverManager(dependsOn: updateWebDriverManager, type: JsTaskRunner
     args = ['start']
 }*/
 
-task jsE2E (type: JsTaskRunner, dependsOn: updateWebDriverManager){
+task jsE2E(type: JsTaskRunner, dependsOn: updateWebDriverManager) {
     script = new File(project.projectDir, '/node_modules/protractor/bin/protractor')
     args = ['test/protractor-conf.js']
 }

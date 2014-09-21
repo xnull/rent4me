@@ -1,7 +1,7 @@
 package bynull.realty.components;
 
-import bynull.realty.services.UserService;
-import bynull.realty.services.UserTokenService;
+import bynull.realty.services.api.UserService;
+import bynull.realty.services.api.UserTokenService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

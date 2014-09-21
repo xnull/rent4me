@@ -1,7 +1,8 @@
-package bynull.realty.services;
+package bynull.realty.services.impl;
 
 import bynull.realty.dao.AuthorityRepository;
 import bynull.realty.data.business.Authority;
+import bynull.realty.services.api.AuthorityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;

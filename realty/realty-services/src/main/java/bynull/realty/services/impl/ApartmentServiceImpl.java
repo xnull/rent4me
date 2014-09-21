@@ -1,8 +1,9 @@
-package bynull.realty.services;
+package bynull.realty.services.impl;
 
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.data.business.Apartment;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.services.api.ApartmentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
