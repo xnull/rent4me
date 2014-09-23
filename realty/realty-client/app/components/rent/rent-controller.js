@@ -1,3 +1,5 @@
+var rentService = require('./rent-service.js');
+
 var rentModule = (function () {
     'use strict';
 
@@ -6,7 +8,7 @@ var rentModule = (function () {
         moduleDependencies: ['ui.router'],
 
         ctlName: 'RentController',
-        serviceName: 'rentService',
+        serviceName: 'RentService',
         stateName: 'rentState',
         stateConfig: {
             url: '/rent',
@@ -26,7 +28,7 @@ var rentModule = (function () {
         });
 
         angularModule.controller(cfg.ctlName, controller);
-        angularModule.factory(cfg.serviceName, service);
+        angularModule.factory(cfg.serviceName, rentService(cfg.serviceName));
     }
 
     /**
@@ -50,32 +52,10 @@ var rentModule = (function () {
         });
     }
 
-    function service($resource, $log, $scope) {
-        function hello () {
-            return 'hey hello';
-        }
-
-        function putForRent() {
-            $log.debug('Rent service: put for rent');
-
-            var putResource = $resource('putForRent');
-            putResource.save(angular.toJson($scope.rentData));
-
-            putResource.query(function (response) {
-                $scope.rentData = response;
-            });
-        }
-
-        return {
-            hello: hello,
-            putForRent: putForRent
-        };
-    }
-
     return {
         init: init,
         ctl: controller,
-        srv: service
+        srv: rentService(cfg.serviceName)
     };
 })();
 

@@ -2,6 +2,7 @@
  * Created by null on 06.07.14.
  */
 var mapScript = require('./google-maps-service.js');
+var rentSearchService = require('./rent-search-service.js');
 
 var rentSearchModule = (function () {
     'use strict';
@@ -12,11 +13,11 @@ var rentSearchModule = (function () {
 
         services: [
             {
-                serviceName: 'rentSearchService',
-                service: SearchService
+                serviceName: 'RentSearchService',
+                service: rentSearchService('RentSearchService')
             },
             {
-                serviceName: 'rentSearchMapService',
+                serviceName: 'RentSearchMapService',
                 service: mapScript.googleMapService
             }
         ],
@@ -54,7 +55,7 @@ var rentSearchModule = (function () {
      * @param rentSearchService
      * @param navigationService
      */
-    function controller($log, $scope, rentSearchMapService, navigationService) {
+    function controller($log, $scope, RentSearchMapService, navigationService) {
         $log.debug('Rent search controller initialization');
 
         $scope.apartment = {};
@@ -79,48 +80,10 @@ var rentSearchModule = (function () {
         });
     }
 
-
-    function SearchService($log, $resource) {
-
-        var searchRequest = {
-            floorsNumber: 1,
-            metro: 'begovaya',
-            address: 'kremlin'
-        };
-
-        var searchResponse = [
-            {
-                id: 1,
-                lat: 55.752020,
-                lng: 37.617526
-            }
-        ];
-
-        /**
-         * Send request to the server
-         * @param searchRequest
-         */
-        function searchByParams(searchRequest) {
-            var User = $resource('/rest/rent-search/:userId', {userId:'@id'});
-            User.get({userId:123}, function(u, getResponseHeaders){
-                u.abc = true;
-                u.$save(function(u, putResponseHeaders) {
-                    //u => saved user object
-                    //putResponseHeaders => $http header getter
-                });
-            });
-        }
-
-
-        return {
-            searchByParams: searchByParams
-        };
-    }
-
     return {
         init: init,
         ctl: controller,
-        searchService: SearchService,
+        searchService: rentSearchService('RentSearchService'),
         googleMapsService: mapScript.googleMapService
     };
 })();
