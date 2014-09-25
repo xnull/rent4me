@@ -10,7 +10,7 @@ var indexModule = (function () {
         stateName: 'indexState',
         stateConfig: {
             url: '/',
-            templateUrl: 'components/index/index-view.html',
+            templateUrl: 'index/index-view.html',
             controller: 'IndexController'
         }
     };
@@ -42,7 +42,7 @@ var indexModule = (function () {
             {
                 img: 'components/index/images/2.jpg',
                 header: 'Только проверенные объявления',
-                text: 'Мы делаем акцент на том, что бы защитить наших пользователей.',
+                text: 'Мы делаем акцент на том, чтобы защитить наших пользователей.',
                 isActive: ''
             },
             {

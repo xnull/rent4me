@@ -13,7 +13,7 @@ var renterSearchModule = (function () {
         stateName: 'renterSearchState',
         stateConfig: {
             url: '/renter-search',
-            templateUrl: 'components/renter-search/renter-search-view.html',
+            templateUrl: 'renter-search/renter-search-view.html',
             controller: 'RenterSearchController'
         }
     };

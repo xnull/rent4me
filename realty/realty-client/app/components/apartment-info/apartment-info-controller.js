@@ -16,7 +16,7 @@ var ApartmentInfoModule = (function () {
         stateConfig: {
             //https://github.com/angular-ui/ui-router/wiki/URL-Routing
             url: '/apartment-info/{apartmentId}',
-            templateUrl: 'components/apartment-info/apartment-info-view.html',
+            templateUrl: 'apartment-info/apartment-info-view.html',
             controller: 'ApartmentInfoController' //cfg.ctlName
         }
     };

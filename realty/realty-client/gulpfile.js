@@ -2,7 +2,7 @@
 var paths = {};
 paths.app = ['app/components/**/*.js', 'app/*js'];
 paths.jsHintFiles = 'app/components/**/*.js';
-paths.buildDir = 'build-js';
+paths.buildDir = './build-js';
 paths.dist = [paths.buildDir, '../realty-web/src/main/webapp/view'];
 
 // Includes
@@ -17,6 +17,7 @@ var source = require('vinyl-source-stream');
 var minifyCSS = require('gulp-minify-css');
 var open = require("gulp-open");
 var webserver = require('gulp-webserver');
+var ngHtml2Js = require("gulp-ng-html2js");
 
 gulp.task('bower-files', function () {
     gulpBowerFiles().pipe(gulp.dest('./node_modules/client'));
@@ -41,13 +42,24 @@ gulp.task('files', function () {
 
 /**
  * Build distribution with browserify
+ *
+ * http://markgoodyear.com/2014/01/getting-started-with-gulp/
+ * https://www.npmjs.org/package/gulp-ng-html2js - html files minification and saving to js
+ * live reload http://mindthecode.com/lets-build-an-angularjs-app-with-browserify-and-gulp/
  */
 gulp.task('jsBuild', ['cleanDist'], function () {
+    gulp.src("./app/components/**/*.html")
+        .pipe(ngHtml2Js({
+            moduleName: "html.templates",
+            prefix: ''
+        }))
+        .pipe(concat("html-templates.js"))
+        .pipe(gulp.dest("./build-js/"));
 
     gulp.src('app/app.js')
         .pipe(browserify({
             insertGlobals: true,
-            debug: false
+            debug: true
         }))
         .pipe(gulp.dest(paths.buildDir));
 
@@ -55,11 +67,12 @@ gulp.task('jsBuild', ['cleanDist'], function () {
         .pipe(concat('index.css'))
         .pipe(gulp.dest(paths.buildDir));
 
-    gulp.src(['app/components/**/*.html', 'app/components/**/*.jpg'])
+    gulp.src(['./app/components/**/*.jpg', './app/components/**/*.png', './app/components/**/*.gif'])
         .pipe(gulp.dest(paths.buildDir + '/components'));
 
-    gulp.src(['app/*.html'])
+    gulp.src('./app/index.html')
         .pipe(gulp.dest(paths.buildDir))
+
 });
 
 gulp.task("browser", ['webserver'], function () {
@@ -67,7 +80,6 @@ gulp.task("browser", ['webserver'], function () {
         .pipe(open("<%file.path%>", {app: "google-chrome"}));
 });
 
-//live reload http://mindthecode.com/lets-build-an-angularjs-app-with-browserify-and-gulp/
 //http://habrahabr.ru/post/224825/
 gulp.task('webserver', ['jsBuild'], function () {
     gulp.src(paths.buildDir)

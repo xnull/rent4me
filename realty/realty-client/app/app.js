@@ -25,6 +25,7 @@ var rentApplication = (function () {
     var appName = 'rentApp';
 
     var moduleDependencies = [
+        'html.templates',
         'ui.router', 'ngResource', 'ngCookies', /*, 'facebook'*/
         'rentApp.index', 'rentApp.rent', 'rentApp.auth', 'rentApp.navigation', 'rentApp.login',
         'rentApp.register', 'rentApp.rentSearch', 'rentApp.renterSearch', 'rentApp.personal', 'rentApp.apartmentInfo'

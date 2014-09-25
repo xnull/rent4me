@@ -13,7 +13,7 @@ var personalModule = (function () {
         stateName: 'personalState',
         stateConfig: {
             url: '/personal',
-            templateUrl: 'components/personal/personal-view.html',
+            templateUrl: 'personal/personal-view.html',
             controller: 'PersonalController'
         }
     };

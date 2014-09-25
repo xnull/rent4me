@@ -10,7 +10,7 @@ var registerModule = (function () {
         stateName: 'registerState',
         stateConfig: {
             url: '/register',
-            templateUrl: 'components/register/register-view.html'
+            templateUrl: 'register/register-view.html'
         }
     };
 

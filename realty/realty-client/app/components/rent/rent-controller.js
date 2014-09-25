@@ -12,7 +12,7 @@ var rentModule = (function () {
         stateName: 'rentState',
         stateConfig: {
             url: '/rent',
-            templateUrl: 'components/rent/rent-view.html',
+            templateUrl: 'rent/rent-view.html',
             controller: 'RentController'
         }
     };

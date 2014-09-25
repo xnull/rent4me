@@ -10,7 +10,7 @@ var loginModule = (function () {
         stateName: 'loginState',
         stateConfig: {
             url: '/login',
-            templateUrl: 'components/login/login-view.html',
+            templateUrl: 'login/login-view.html',
             controller: 'LoginController'
         }
     };

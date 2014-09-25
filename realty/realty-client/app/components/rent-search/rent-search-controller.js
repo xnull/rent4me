@@ -26,7 +26,7 @@ var rentSearchModule = (function () {
         stateName: 'rentSearchState',
         stateConfig: {
             url: '/rent-search',
-            templateUrl: 'components/rent-search/rent-search-view.html',
+            templateUrl: 'rent-search/rent-search-view.html',
             controller: 'RentSearchController'
         }
     };
