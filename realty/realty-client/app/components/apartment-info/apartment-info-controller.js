@@ -21,10 +21,12 @@ var ApartmentInfoModule = (function () {
         }
     };
 
-    var angularModule = angular.module(cfg.moduleName, cfg.moduleDependencies);
-    var angularLogger = angular.injector([cfg.moduleName, 'ng']).get('$log');
+    var angularModule;
+    var angularLogger;
 
     function init() {
+        angularModule = angular.module(cfg.moduleName, cfg.moduleDependencies);
+        angularLogger = angular.injector([cfg.moduleName, 'ng']).get('$log');
         angularLogger.debug('Loading "' + cfg.moduleName + '" module');
 
         angularModule.config(function ($stateProvider) {

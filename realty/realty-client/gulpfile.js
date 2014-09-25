@@ -67,6 +67,8 @@ gulp.task("browser", ['webserver'], function () {
         .pipe(open("<%file.path%>", {app: "google-chrome"}));
 });
 
+//live reload http://mindthecode.com/lets-build-an-angularjs-app-with-browserify-and-gulp/
+//http://habrahabr.ru/post/224825/
 gulp.task('webserver', ['jsBuild'], function () {
     gulp.src(paths.buildDir)
         .pipe(webserver({
