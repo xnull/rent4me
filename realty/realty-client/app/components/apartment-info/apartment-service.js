@@ -1,8 +1,8 @@
 /**
  * Created by null on 9/24/14.
  */
-module.exports = function ApartmentInfoService($resource, $log) {
 
+function ApartmentInfoService($resource, $log) {
     /**
      * @type {Object}
      */
@@ -64,4 +64,8 @@ module.exports = function ApartmentInfoService($resource, $log) {
     return {
         getApartmentById: getApartmentById
     };
+}
+
+module.exports = function () {
+    return ApartmentInfoService;
 };

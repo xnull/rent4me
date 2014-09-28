@@ -1,51 +1,4 @@
-var authModule = angular.module('rentApp.auth', []);
-
-authModule.controller('AuthorizationController', function ($scope, $log, $cookies, authorizationService) {
-    "use strict";
-
-    var logPrefix = "auth_ctrl ";
-
-    $scope.authInfo = {
-        authorized: authorizationService.isAuthorized()
-    };
-
-
-//    $scope.authorized = authorizationService.isAuthorized();
-
-    $log.info(logPrefix + "Authorized? " + $scope.authInfo.authorized);
-
-    //var _self = this;
-
-    $log.info(logPrefix + "Binding for scope event: " + authorizationService.EVENT_AUTH_STATE_CHANGED);
-    $scope.$on(authorizationService.EVENT_AUTH_STATE_CHANGED, function (event, args) {
-        $log.info(logPrefix + "Received event: " + authorizationService.EVENT_AUTH_STATE_CHANGED);
-
-//        $scope.$apply(
-//            function () {
-        $log.info('args');
-        $log.info(args);
-
-        $log.info(logPrefix + "Setting authorized to " + args.authorized);
-        $scope.authInfo.authorized = args.authorized;
-//        $scope.$apply();
-//        });
-    });
-
-//    $scope.$watch(authorizationService.EVENT_AUTH_STATE_CHANGED, function(){
-//        $log.info(logPrefix+"Received event on watch: "+authorizationService.EVENT_AUTH_STATE_CHANGED);
-//        var authorized = authorizationService.isAuthorized();
-//        $log.info(logPrefix+"Setting authorized to(on watch) "+authorized);
-//        $scope.authInfo.authorized = authorized;
-//    });
-
-    this.loginWithFacebook = authorizationService.loginWithFacebook;
-    this.loginWithVK = authorizationService.loginWithVK;
-    this.logout = authorizationService.logout;
-
-});
-
-
-authModule.factory('authorizationService', function ($http, $resource, $rootScope, $log, $cookies) {
+function AuthService($http, $resource, $rootScope, $log, $cookies) {
     'use strict';
 
     var logPrefix = "auth_service ";
@@ -348,4 +301,8 @@ authModule.factory('authorizationService', function ($http, $resource, $rootScop
     };
 
     return  authorization;
-});
+}
+
+module.exports = function () {
+    return AuthService;
+};

@@ -1,7 +1,7 @@
 /**
  * Created by null on 9/24/14.
  */
-module.exports = function RentSearchService($log, $resource) {
+function RentSearchService($log, $resource) {
 
     var searchRequest = {
         floorsNumber: 1,
@@ -22,10 +22,12 @@ module.exports = function RentSearchService($log, $resource) {
      * @param searchRequest
      */
     function searchByParams(searchRequest) {
-        var User = $resource('/rest/rent-search/:userId', {userId:'@id'});
-        User.get({userId:123}, function(u, getResponseHeaders){
+        $log.debug('Search by params');
+
+        var User = $resource('/rest/rent-search/:userId', {userId: '@id'});
+        User.get({userId: 123}, function (u, getResponseHeaders) {
             u.abc = true;
-            u.$save(function(u, putResponseHeaders) {
+            u.$save(function (u, putResponseHeaders) {
                 //u => saved user object
                 //putResponseHeaders => $http header getter
             });
@@ -36,4 +38,8 @@ module.exports = function RentSearchService($log, $resource) {
     return {
         searchByParams: searchByParams
     };
+}
+
+module.exports = function () {
+    return RentSearchService;
 };

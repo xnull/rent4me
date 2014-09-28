@@ -1,6 +1,7 @@
-var navigationModule = angular.module('rentApp.navigation', []);
+var configurator = require('../core/configurator.js');
+//var auth = require('');
 
-navigationModule.controller('NavigationController', function ($scope, navigationService, authorizationService, $log) {
+function NavigationController($scope, navigationService, AuthService, $log) {
     'use strict';
 
     $log.debug("Nav controller");
@@ -30,10 +31,10 @@ navigationModule.controller('NavigationController', function ($scope, navigation
     this.isPersonal = navigationService.isPersonal;
     this.setPersonal = navigationService.setPersonal;
 
-    this.isAuthorized = authorizationService.isAuthorized();
-});
+    this.isAuthorized = AuthService.isAuthorized();
+}
 
-navigationModule.factory('navigationService', function () {
+function navigationService() {
     "use strict";
 
     var home = 'home';
@@ -107,4 +108,17 @@ navigationModule.factory('navigationService', function () {
             this.selectTab(personal);
         }
     };
-});
+}
+
+var cfg = {
+    moduleName: 'rentApp.navigation',
+    moduleDependencies: [],
+
+    ctlName: 'NavigationController',
+    serviceName: 'navigationService',
+
+    service: navigationService,
+    controller: NavigationController
+};
+
+configurator().configureWithoutUi(cfg);

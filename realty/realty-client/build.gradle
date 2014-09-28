@@ -69,6 +69,11 @@ task jsBuild(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     args = ['jsBuild']
 }
 
+task jsWatch(type: JsTaskRunner, dependsOn: 'bowerInstall') {
+    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
+    args = ['watch']
+}
+
 task jsWebServer(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
     args = ['webserver']

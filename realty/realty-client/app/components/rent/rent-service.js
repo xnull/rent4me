@@ -1,10 +1,8 @@
 /**
  * Created by null on 9/24/14.
  */
-module.exports = function RentService($resource, $log, $scope) {
-    function hello () {
-        return 'hey hello';
-    }
+function RentService($resource, $log, $scope) {
+    $log.debug('Rent service initialization');
 
     function putForRent() {
         $log.debug('Rent service: put for rent');
@@ -18,7 +16,10 @@ module.exports = function RentService($resource, $log, $scope) {
     }
 
     return {
-        hello: hello,
         putForRent: putForRent
     };
+}
+
+module.exports = function () {
+    return RentService;
 };

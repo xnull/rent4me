@@ -1,7 +1,7 @@
 /**
  * Created by null on 07.08.14.
  */
-module.exports = (function () {
+function MapService() {
     'use strict';
 
     var service = {};
@@ -71,4 +71,8 @@ module.exports = (function () {
     return {
         googleMapService: service.googleMapService
     };
-})();
+}
+
+module.exports = function () {
+    return MapService;
+};

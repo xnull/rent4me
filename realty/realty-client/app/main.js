@@ -5,7 +5,7 @@
  }]);*/
 
 //TODO: clean up this shit
-var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
+function DefaultSetup($rootScope, $window, AuthService, $log) {
     'use strict';
 
     $log.debug('Loading default settings');
@@ -29,7 +29,7 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
             // Logged into your app and Facebook.
             $log.debug('Welcome!  Fetching your information.... ');
 
-            authorizationService.setFacebookUser(true);
+            AuthService.setFacebookUser(true);
             FB.api('/me', function (response) {
                 $log.debug('Successful login for: ' + response.name);
                 $log.debug(response);
@@ -37,13 +37,13 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
 //                    'Thanks for logging in, ' + response.name + '!';
             });
         } else if (response.status === 'not_authorized') {
-            authorizationService.setFacebookUser(null);
+            AuthService.setFacebookUser(null);
             // The person is logged into Facebook, but not your app.
             innerHTML = 'Please log into this app.';
             $log.debug(innerHTML);
 //                document.getElementById('status').innerHTML = innerHTML;
         } else {
-            authorizationService.setFacebookUser(null);
+            AuthService.setFacebookUser(null);
             // The person is not logged into Facebook, so we're not sure if
             // they are logged into this app or not.
             innerHTML = 'Please log into Facebook.';
@@ -107,8 +107,12 @@ var defaultSetup = function ($rootScope, $window, authorizationService, $log) {
 
     /*$.getScript('//vk.com/js/api/openapi.js', function () {
      VK.init({
-            apiId: vkAppId
-        });
+     apiId: vkAppId
+     });
 
      });*/
+}
+
+module.exports = function () {
+    return DefaultSetup;
 };
