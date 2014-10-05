@@ -1,10 +1,11 @@
 var configurator = require('../core/configurator.js');
-//var auth = require('');
+var validator = require('../core/validator.js');
 
 function NavigationController($scope, navigationService, AuthService, $log) {
     'use strict';
-
     $log.debug("Nav controller");
+
+    validator().checkUndefinedBatch([$scope, navigationService, AuthService, $log]);
 
     this.getTab = navigationService.getTab;
     this.isSelected = navigationService.isSelected;

@@ -2,9 +2,12 @@
  * Created by null on 28.09.14.
  */
 var googleMaps = require('./google-maps-service.js');
+var validator = require('../core/validator.js');
 
 function controller($log, $scope, navigationService) {
     $log.debug('Rent search controller initialization');
+
+    validator().checkUndefinedBatch([$log, $scope, navigationService]);
 
     $scope.apartment = {};
     $scope.search = function () {

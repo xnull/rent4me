@@ -4,9 +4,13 @@
  FacebookProvider.init('270007246518198');
  }]);*/
 
+var validator = require('./components/core/validator.js');
+
 //TODO: clean up this shit
 function DefaultSetup($rootScope, $window, AuthService, $log) {
     'use strict';
+
+    validator().checkUndefinedBatch([$rootScope, $window, AuthService, $log]);
 
     $log.debug('Loading default settings');
 

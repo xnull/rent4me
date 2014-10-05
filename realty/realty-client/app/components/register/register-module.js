@@ -1,7 +1,10 @@
 var configurator = require('../core/configurator.js');
+var validator = require('../core/validator.js');
 
 function controller($scope, registerService, navigationService, $log) {
     $log.debug('Register controller execution');
+
+    validator().checkUndefinedBatch([$scope, registerService, navigationService, $log]);
 
     $scope.register = registerService.register;
 
@@ -12,6 +15,9 @@ function controller($scope, registerService, navigationService, $log) {
 }
 
 function service($http) {
+
+    validator().checkUndefinedBatch([$http]);
+
     return {
         register: function () {
             $http({method: 'POST', url: 'register'}).

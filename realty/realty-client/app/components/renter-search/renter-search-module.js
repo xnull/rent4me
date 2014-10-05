@@ -2,12 +2,15 @@
  * Created by null on 13.07.14.
  */
 var configurator = require('../core/configurator.js');
+var validator = require('../core/validator.js');
 
 function controller($log, $scope, renterSearchService, navigationService) {
     $log.debug('Renter search controller initialization');
 
+    validator().checkUndefinedBatch([]);
+
     $(function () {
-        navigationService.setRenterSearch();
+        navigationService.setRenterSearch($log, $scope, renterSearchService, navigationService);
     });
 }
 

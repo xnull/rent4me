@@ -1,7 +1,10 @@
 var configurator = require('../core/configurator.js');
+var validator = require('../core/validator.js');
 
 function controller($scope, $log, loginService, navigationService, AuthService) {
     $log.debug('Login controller execution');
+
+    validator.checkUndefinedBatch([$scope, $log, loginService, navigationService, AuthService]);
 
     $scope.login = loginService.login;
 
@@ -33,6 +36,8 @@ function controller($scope, $log, loginService, navigationService, AuthService) 
 }
 
 function service($http) {
+    validator().checkUndefined($http);
+
     return {
         login: function () {
             $http({method: 'POST', url: 'login'}).

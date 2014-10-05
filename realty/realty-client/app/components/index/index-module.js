@@ -1,7 +1,10 @@
 var configurator = require('../core/configurator.js');
+var validator = require('../core/validator.js');
 
 function IndexCtl($scope, indexService, navigationService, $log) {
     $log.debug('Index controller execution');
+
+    validator().checkUndefinedBatch([$scope, indexService, navigationService, $log]);
 
     $scope.carouselData = [
         {
@@ -45,6 +48,8 @@ function IndexCtl($scope, indexService, navigationService, $log) {
 }
 
 function IndexService($http, $log) {
+    validator().checkUndefinedBatch($http, $log);
+
     return {
         login: function () {
             $http({method: 'POST', url: 'login'}).
@@ -82,7 +87,3 @@ var cfg = {
 };
 
 configurator().configure(cfg);
-
-module.exports = function () {
-    return '';
-};

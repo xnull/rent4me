@@ -2,8 +2,11 @@
  * Created by null on 06.07.14.
  */
 var configurator = require('../core/configurator.js');
+var validator = require('../core/validator.js');
 
 function controller($log, $scope, personalService, navigationService) {
+    validator.checkUndefinedBatch([$log, $scope, personalService, navigationService]);
+
     $scope.menuTabs = [
         {id: 'myAds', name: 'Мои объявления'},
         {id: 'addAds', name: 'Создать объявление'},

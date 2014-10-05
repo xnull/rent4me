@@ -1,6 +1,8 @@
 /**
  * Created by null on 07.08.14.
  */
+var validator = require('../core/validator.js');
+
 function MapService() {
     'use strict';
 
@@ -35,6 +37,8 @@ function MapService() {
 
     service.googleMapService = function googleMapInitialization($log) {
         $log.debug('Initialize google maps');
+
+        validator().checkUndefined($log);
 
         if (navigator.geolocation) {
             //alert("Geeeooo");

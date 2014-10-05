@@ -1,8 +1,11 @@
 /**
  * Created by null on 9/24/14.
  */
+var validator = require('../core/validator.js');
 
 function ApartmentInfoService($resource, $log) {
+
+    validator().checkUndefinedBatch([$resource, $log]);
     /**
      * @type {Object}
      */

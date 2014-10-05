@@ -2,6 +2,8 @@
  * Angular module configuration function
  * Created by null on 27.09.14.
  */
+var validator = require('./validator.js');
+
 function Configurator() {
     'use strict';
 
@@ -70,6 +72,7 @@ function Configurator() {
     }
 
     function checkCfg(cfg) {
+        validator().checkUndefined(cfg);
         checkProperty(cfg, 'moduleName');
         checkProperty(cfg, 'moduleDependencies');
         checkProperty(cfg, 'ctlName');

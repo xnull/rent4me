@@ -9,8 +9,12 @@
  * @param rentService
  * @param navigationService
  */
+var validator = require('../core/validator.js');
+
 function controller($log, $scope, $stateParams, navigationService, ApartmentInfoService) {
     $log.debug('Apartment info controller: execution');
+
+    validator().checkUndefinedBatch([$log, $scope, $stateParams, navigationService, ApartmentInfoService]);
 
     $scope.apartmentInfo = ApartmentInfoService.getApartmentById($stateParams.apartmentId);
 

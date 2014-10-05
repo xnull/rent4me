@@ -1,8 +1,12 @@
 /**
  * Created by null on 9/24/14.
  */
+var validator = require('../core/validator.js');
+
 function RentService($resource, $log, $scope) {
     $log.debug('Rent service initialization');
+
+    validator().checkUndefinedBatch([$resource, $log, $scope]);
 
     function putForRent() {
         $log.debug('Rent service: put for rent');
