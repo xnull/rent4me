@@ -4,7 +4,7 @@
 var configurator = require('../core/configurator.js');
 
 function controller($log, $scope, renterSearchService, navigationService) {
-    $log.debug('Renter search controller initialization');
+    $log.debug('Renter search controller initialization');d
 
     $(function () {
         navigationService.setRenterSearch();
