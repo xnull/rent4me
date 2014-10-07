@@ -96,8 +96,8 @@ task jsFiles(type: JsTaskRunner, dependsOn: 'bowerInstall') {
 
 task packApp(dependsOn: bowerInstall, type: Tar) {
     group = 'Packaging'
-    from 'app'
-    baseName = 'app'
+    from 'htmltemplate/app'
+    baseName = 'app-1.0'
 }
 
 task deployFrontendDev(dependsOn: packApp, type: SshTask) {
@@ -108,6 +108,7 @@ task deployFrontendDev(dependsOn: packApp, type: SshTask) {
     ssh {
         knownHosts = allowAnyHosts
     }
+
 
     remotes {
         webServer {

@@ -36,7 +36,7 @@ function controller($scope, $log, loginService, navigationService, AuthService) 
 }
 
 function service($http) {
-    validator().checkUndefined($http);
+    //validator().checkUndefined($http);
 
     return {
         login: function () {

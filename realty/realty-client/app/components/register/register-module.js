@@ -4,7 +4,7 @@ var validator = require('../core/validator.js');
 function controller($scope, registerService, navigationService, $log) {
     $log.debug('Register controller execution');
 
-    validator().checkUndefinedBatch([$scope, registerService, navigationService, $log]);
+    //validator().checkUndefinedBatch([$scope, registerService, navigationService, $log]);
 
     $scope.register = registerService.register;
 
@@ -16,7 +16,7 @@ function controller($scope, registerService, navigationService, $log) {
 
 function service($http) {
 
-    validator().checkUndefinedBatch([$http]);
+    //validator().checkUndefinedBatch([$http]);
 
     return {
         register: function () {

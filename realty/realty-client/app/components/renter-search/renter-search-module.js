@@ -5,9 +5,10 @@ var configurator = require('../core/configurator.js');
 var validator = require('../core/validator.js');
 
 function controller($log, $scope, renterSearchService, navigationService) {
-    $log.debug('Renter search controller initialization');d
+    $log.debug('Renter search controller initialization');
+    d
 
-    validator().checkUndefinedBatch([]);
+    //validator().checkUndefinedBatch([]);
 
     $(function () {
         navigationService.setRenterSearch($log, $scope, renterSearchService, navigationService);

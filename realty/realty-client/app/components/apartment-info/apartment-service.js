@@ -5,7 +5,7 @@ var validator = require('../core/validator.js');
 
 function ApartmentInfoService($resource, $log) {
 
-    validator().checkUndefinedBatch([$resource, $log]);
+    //validator().checkUndefinedBatch([$resource, $log]);
     /**
      * @type {Object}
      */

@@ -72,7 +72,7 @@ function Configurator() {
     }
 
     function checkCfg(cfg) {
-        validator().checkUndefined(cfg);
+        //validator().checkUndefined(cfg);
         checkProperty(cfg, 'moduleName');
         checkProperty(cfg, 'moduleDependencies');
         checkProperty(cfg, 'ctlName');

@@ -817,7 +817,7 @@
 	{
 		position: relative;
 		margin: 0;
-		background-image:			url('images/overlay.png'),			url('../images/header.jpg');
+        /*background-image:			url('images/overlay.png'),			url('../app/images/flats/nature.jpg');*/
 		background-size:			auto,								cover;
 		background-position:		top left,							center center;
 		background-repeat:			repeat,								no-repeat;

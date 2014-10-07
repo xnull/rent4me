@@ -10,7 +10,7 @@ var validator = require('./components/core/validator.js');
 function DefaultSetup($rootScope, $window, AuthService, $log) {
     'use strict';
 
-    validator().checkUndefinedBatch([$rootScope, $window, AuthService, $log]);
+    //validator().checkUndefinedBatch([$rootScope, $window, AuthService, $log]);
 
     $log.debug('Loading default settings');
 

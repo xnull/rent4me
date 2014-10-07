@@ -5,7 +5,7 @@ var validator = require('../core/validator.js');
 
 function RentSearchService($log, $resource) {
 
-    validator().checkUndefinedBatch([$log, $resource]);
+    //validator().checkUndefinedBatch([$log, $resource]);
 
     var searchRequest = {
         floorsNumber: 1,

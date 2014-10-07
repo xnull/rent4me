@@ -7,7 +7,7 @@ var validator = require('../core/validator.js');
 function AuthCtl($scope, $log, $cookies, AuthService) {
     "use strict";
 
-    validator().checkUndefinedBatch([$scope, $log, $cookies, AuthService]);
+    //validator().checkUndefinedBatch([$scope, $log, $cookies, AuthService]);
 
     var logPrefix = "authCtrl ";
 

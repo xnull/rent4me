@@ -3,7 +3,7 @@ var validator = require('../core/validator.js');
 function AuthService($http, $resource, $rootScope, $log, $cookies) {
     'use strict';
 
-    validator().checkUndefinedBatch([$http, $resource, $rootScope, $log, $cookies]);
+    //validator().checkUndefinedBatch([$http, $resource, $rootScope, $log, $cookies]);
 
     var logPrefix = "auth_service ";
     var authorization = {};

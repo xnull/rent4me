@@ -7,7 +7,7 @@ var validator = require('../core/validator.js');
 function controller($log, $scope, navigationService) {
     $log.debug('Rent search controller initialization');
 
-    validator().checkUndefinedBatch([$log, $scope, navigationService]);
+    //validator().checkUndefinedBatch([$log, $scope, navigationService]);
 
     $scope.apartment = {};
     $scope.search = function () {
