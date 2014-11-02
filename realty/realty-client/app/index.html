@@ -1,143 +1,108 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="rentApp">
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Аренда жилья без посредников">
-    <meta name="Keywords" CONTENT="Сдать, снять квартиру">
-    <meta name="author" content="rent4.me">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-
-    <title>Rent4Me - аренда недвижимости без посредников</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
-    <link rel="stylesheet" href="index.css">
-
-    <!-- frameworks -->
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
-
-    <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?v=3&sensor=true&libraries=places&language=ru"></script>
-    <script src="html-templates.js"></script>
-    <script src="app.js"></script>
+    <title>Аренда недвижимости без посредников</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <!--[if lte IE 8]>
+    <script src="css/ie/html5shiv.js"></script><![endif]-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.scrolly.min.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/init.js"></script>
+    <noscript>
+        <link rel="stylesheet" href="css/skel.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
+        <link rel="stylesheet" href="css/style-wide.css"/>
+    </noscript>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="css/ie/v8.css"/><![endif]-->
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="css/ie/v9.css"/><![endif]-->
 </head>
-
 <body>
 
-<div class="container" ng-controller="NavigationController as navController">
-    <div class="navbar-login-wrapper navbar navbar-default">
-        <div class="container">
-            <div class="col-md-offset-8 pull-right">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
+<!-- Header -->
+<section id="header" class="dark" style="background-image:url('images/flats/nature.jpg');">
+    <header>
+        <h1 style="color: #da5037;">Аренда недвижимости</h1>
 
-                <div class="masthead collapse navbar-collapse "
-                     ng-controller="AuthCtl as authController">
-                <ul class="nav nav-justified panel panel-default">
-                        <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isRegister() }">
-                            <a href="#/register"><strong>Регистрация</strong></a>
-                        </li>
-                        <li ng-hide="authInfo.authorized" ng-class="{ active: navController.isLogin() }">
-                            <a href="#/login"><strong>Вход</strong></a>
-                        </li>
-                        <li ng-show="authInfo.authorized" ng-class="{ active: navController.isPersonal() }">
-                            <a href="#/personal"><strong>Личный кабинет</strong></a>
-                        </li>
-                        <li ng-show="authInfo.authorized" ng-click="authController.logout()">
-                            <a href="#"><strong>Выход</strong></a>
-                        </li>
-                    </ul>
+        <p>Прозрачность, отсутствие посредников</p>
+    </header>
+    <footer>
+        <a href="#first" class="button scrolly">Подробности</a>
+    </footer>
+</section>
+
+<!-- First -->
+<section id="first" class="main">
+    <header>
+        <div class="container">
+            <h2>Аренда недвижимости без посредников</h2>
+
+            <p class="text-justify">Возможно ли такое в наше время в России? Этим вопросом задаются все,
+                кто хоть раз пытался снять квартиру.
+                <br/>
+                Реалии нашей жизни таковы, что агенства недвижимости захватили рынок аренды жилья. Найти квартиру
+                самостоятельно очень сложно.
+                <br/>
+                <strong>Итог</strong>: недопустимо низкое качество предоставляемых услуг,
+                от которого стардают все кроме самих посредников, которые и являются причиной царящего хаоса на рынке.
+            </p>
+        </div>
+    </header>
+
+    <div class="content dark style1 featured">
+        <div class="container">
+            <div class="row">
+                <div class="12u">
+                    <footer>
+                        <div class="content style4 featured">
+                            <div class="container small">
+                                <form action="//rent4.us8.list-manage.com/subscribe/post?u=0a209f5f0573bb38236e00eb5&amp;id=df5a96106d"
+                                      method="post" name="mc-embedded-subscribe-form"
+                                      target="_blank">
+                                    <div style="position: absolute; left: -5000px;">
+                                        <input type="text" name="b_0a209f5f0573bb38236e00eb5_df5a96106d" tabindex="-1"
+                                               value="">
+                                    </div>
+
+                                    <div class="row half">
+                                        <div class="12u"><input type="email" name="EMAIL" placeholder="E-mail"/></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="12u">
+                                            <ul class="actions">
+                                                <li><input type="submit" class="button" value="Следить за новостями"
+                                                           name="subscribe" id="mc-embedded-subscribe"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <div class="navbar-wrapper navbar navbar-default">
-        <div class="container">
-
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-
-            <div class="masthead collapse navbar-collapse">
-                <ul class="nav nav-justified panel panel-default">
-                    <li ng-class="{ active: navController.isHome() }">
-                        <a href="#/"><strong>Главная</strong></a>
-                    </li>
-                    <li ng-class="{ active: navController.isRentSearch() }">
-                        <a href="#/rent-search"><strong>Поиск объявлений</strong></a>
-                    </li>
-
-                    <li ng-class="{ active: navController.isRenterSearch() }">
-                        <a href="#/renter-search"><strong>Поиск арендаторов</strong></a>
-                    </li>
-
-                    <li ng-show="authInfo.authorized" ng-class="{ active: navController.isRent() }">
-                        <a href="#/rent"><strong>Разместить объявление</strong></a>
-                    </li>
-
-                    <li ng-show="authInfo.authorized" ng-class="{ active: navController.isPersonal() }">
-                        <a href="#/personal"><strong>Личный кабинет</strong></a>
-                    </li>
-                    <li ng-show="authInfo.authorized" ng-click="authController.logout()">
-                        <a href="#"><strong>Выход</strong></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+<!-- Footer -->
+<section id="footer">
+    <ul class="icons">
+        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+    </ul>
+    <div class="copyright">
+        <ul class="menu">
+            <li>&copy; Designed by null. All rights reserved.</li>
+        </ul>
     </div>
-</div>
+</section>
 
-<div ui-view></div>
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".navbar ul li a").click(function (event) {
-            // check if window is small enough so dropdown is created
-//            alert('clicked');
-            var $nav = $(".navbar-collapse");
-
-            $nav.collapse('hide');
-//            console.log($nav.hasClass('collapse'));
-
-//            $nav.removeClass("in");
-//            $nav.addClass("collapse");
-        });
-    });
-</script>
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-52484973-1', 'auto');
-    ga('send', 'pageview');
-</script>
 </body>
 </html>
