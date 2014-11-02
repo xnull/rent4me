@@ -163,6 +163,9 @@ task startWebDriverManager(dependsOn: updateWebDriverManager, type: JsTaskRunner
     args = ['start']
 }*/
 
+/**
+ * Запуск интеграционны файлов
+ */
 task jsE2E(type: JsTaskRunner, dependsOn: updateWebDriverManager) {
     script = new File(project.projectDir, '/node_modules/protractor/bin/protractor')
     args = ['test/protractor-conf.js']
