@@ -2,10 +2,22 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
 
+    <script src="http://fb.me/react-0.12.0.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.12.0.js"></script>
+
     <link rel="stylesheet" href="index.css">
+    <script type="text/jsx" src="components/user.js"></script>
+    <script type="text/jsx" src="components/personal.js"></script>
+    <script type="text/jsx" src="components/news.js"></script>
+    <script type="text/jsx" src="components/legal.js"></script>
+    <script type="text/jsx" src="components/main/looking-for.js"></script>
+    <script type="text/jsx" src="components/main/lenta.js"></script>
 
     <title></title>
 </head>
@@ -18,152 +30,24 @@
     <!-- the row -->
     <div class="row">
 
-
         <div class="col-md-4">
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h4>Пользователь</h4>
-                    <div class="well well-sm">
-                        <div class="media">
-                            <a class="thumbnail pull-left" href="#">
-                                <img class="media-object" src="//placehold.it/80">
-                            </a>
-
-                            <div class="media-body">
-                                <h4 class="media-heading">John Doe</h4>
-                                <br>
-                                <p>
-                                    <a href="#" class="btn btn-default">Настройки</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h4>Личный кабинет</h4>
-                    <div class="bs-component">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Соц. сети</h4>
-                                <p class="list-group-item-text">Поиск недвижимости для аренды в социальных сетях</p>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Арендатору</h4>
-                                <p class="list-group-item-text"> Поиск недвижимости для аренды</p>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Арендодателю</h4>
-                                <p class="list-group-item-text">Поиск арендаторов</p>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Сдать квартиру</h4>
-
-                                <p class="list-group-item-text">Выставить объявление о сдаче квартиры в аренду</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-
-                <div class="panel-body">
-                    <h4>Недвижимость</h4>
-
-                    <div class="bs-component">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item">
-                                <p class="list-group-item-text">Новости</p>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <p class="list-group-item-text">Аналитика</p>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <p class="list-group-item-text">Цены на жилье по районам</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h4>Квартирный вопрос</h4>
-
-                    <div class="bs-component">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Типовой договор</h4>
-
-                                <p class="list-group-item-text">Типовой договор аренды недвижимости</p>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Рассылки</h4>
-
-                                <p class="list-group-item-text">Подпишитесь на рассылки чтобы немедленно узнавать
-                                    о новых объявлениях
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
+            <div id="userComponent"></div>
+            <div id="personalCabinet"></div>
+            <div id="newsComponent"></div>
+            <div id="legalComponent"></div>
         </div>
 
         <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading"><h4><!--Лента событий--></h4></div>
-                <div class="panel-body">
+            <div id="lookingForComponent"></div>
+        </div>
 
-                    <!-- events and news -->
-                    <!--<div class="bs-component">
-                        <div class="list-group">
-                            &lt;!&ndash; an event &ndash;&gt;
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Предложение месяца (пример)</h4>
-
-                                <div class="panel-thumbnail">
-                                    <img class="img-responsive"
-                                         src="http://1.bp.blogspot.com/-8RhvioXdNaU/TpbO6jD4NwI/AAAAAAAAAMo/zw_cHZPv66s/s1600/2832815136_88231c1067_o-1-.jpg">
-                                </div>
-
-                                <hr>
-                                <p>Mega text yuo</p>
-                                <hr>
-
-                                <p>
-                                    <img src="http://api.randomuser.me/portraits/med/women/4.jpg" height="32px">
-                                    <img src="http://api.randomuser.me/portraits/med/men/4.jpg" width="32px"
-                                         height="28px">
-                                </p>
-                            </a>
-                            &lt;!&ndash; end of the event &ndash;&gt;
-
-                            <br>
-
-                            <a href="#" class="list-group-item">
-                                <h4 class="list-group-item-heading">Второе событие</h4>
-
-                                <p class="list-group-item-text">Ничто не вечно под луной</p>
-                            </a>
-                        </div>
-                    </div>-->
-                    <!-- end of events and news section -->
-
-                </div>
-            </div>
+        <div class="col-md-8">
+            <div id="lentaComponent"></div>
         </div>
 
     </div>
     <!-- end of the row -->
 </div>
-
 
 </body>
 </html>
