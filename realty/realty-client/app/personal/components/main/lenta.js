@@ -26,8 +26,7 @@ var LentaComponent = React.createClass({
 
                                 <p>
                                     <img src="http://api.randomuser.me/portraits/med/women/4.jpg" height="32px"/>
-                                    <img src="http://api.randomuser.me/portraits/med/men/4.jpg" width="32px"
-                                        height="28px"/>
+                                    <img src="http://api.randomuser.me/portraits/med/men/4.jpg" width="32px" height="28px"/>
                                 </p>
                             </a>
 
@@ -45,7 +44,3 @@ var LentaComponent = React.createClass({
         );
     }
 });
-React.render(
-    <LentaComponent />,
-    document.getElementById('lentaComponent')
-);

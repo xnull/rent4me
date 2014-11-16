@@ -5,19 +5,24 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
 
-    <script src="http://fb.me/react-0.12.0.js"></script>
-    <script src="http://fb.me/JSXTransformer-0.12.0.js"></script>
+    <script src="//fb.me/react-0.12.0.js"></script>
+    <script src="//fb.me/JSXTransformer-0.12.0.js"></script>
+    <script src="/realty/realty-client/node_modules/react-router/dist/react-router.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 
     <link rel="stylesheet" href="index.css">
-    <script type="text/jsx" src="components/user.js"></script>
-    <script type="text/jsx" src="components/personal.js"></script>
-    <script type="text/jsx" src="components/news.js"></script>
-    <script type="text/jsx" src="components/legal.js"></script>
+    <script type="text/jsx" src="components/left-pane/user.js"></script>
+    <script type="text/jsx" src="components/left-pane/personal.js"></script>
+    <script type="text/jsx" src="components/left-pane/news.js"></script>
+    <script type="text/jsx" src="components/left-pane/legal.js"></script>
     <script type="text/jsx" src="components/main/looking-for.js"></script>
     <script type="text/jsx" src="components/main/lenta.js"></script>
+
+    <script type="text/jsx" src="components/router.js"></script>
 
     <title></title>
 </head>
@@ -30,19 +35,19 @@
     <!-- the row -->
     <div class="row">
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div id="userComponent"></div>
             <div id="personalCabinet"></div>
             <div id="newsComponent"></div>
             <div id="legalComponent"></div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div id="lookingForComponent"></div>
         </div>
 
-        <div class="col-md-8">
-            <div id="lentaComponent"></div>
+        <div class="col-md-9">
+            <div id="lentaView"></div>
         </div>
 
     </div>
