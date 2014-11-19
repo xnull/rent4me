@@ -15,9 +15,9 @@ var App = React.createClass({
 var routes = (
     <Routes>
         <Route name="app" path="/" handler={App}>
-            <Route name="lenta" path="lenta" handler={LentaComponent}/>
+            <Route name="main" path="main" handler={NewsPaneComponent}/>
         </Route>
     </Routes>
 );
 
-React.renderComponent(routes, document.getElementById('lentaView'));
+React.renderComponent(routes, document.getElementById('mainView'));
