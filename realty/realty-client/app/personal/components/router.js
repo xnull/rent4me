@@ -16,8 +16,10 @@ var routes = (
     <Routes>
         <Route name="app" path="/" handler={App}>
             <Route name="main" path="main" handler={NewsPaneComponent}/>
+            <Route name="user" path="user" handler={Settings}/>
+            <Route name="landlord" path="user/landlord" handler={LandlordSettings}/>
         </Route>
     </Routes>
 );
 
-React.renderComponent(routes, document.getElementById('mainView'));
+React.render(routes, document.getElementById('mainView'));

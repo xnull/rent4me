@@ -28,7 +28,3 @@ var LegalComponent = React.createClass({
         );
     }
 });
-React.render(
-    <LegalComponent />,
-    document.getElementById('legalComponent')
-);

@@ -38,7 +38,6 @@ var LookingForComponent = React.createClass({
     },
 
     handleAddressChange: function (address) {
-        console.log('handle ad change: ' + address);
         this.setState({
             data: {address: address}
         });
@@ -68,7 +67,6 @@ var AddressBox = React.createClass({
     },
 
     onAddressChange: function (event) {
-        console.log('on address change');
         this.props.onChange(event.target.value);
     }
 });

@@ -20,12 +20,9 @@ var NewsPaneComponent = React.createClass({
     },
 
     handleSearchNews: function (searchNewsRequest) {
-        console.log('Handle search news, data: ' + JSON.stringify(searchNewsRequest));
-
-        //var data = this.fakeData({address: "youniga"});
         this.setState({
-            showResults: true,
-            data: {address: "youniga"}
+            showResults: true
+            //data: {address: "youniga"}
         });
         //this.getNews();
     },

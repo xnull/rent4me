@@ -41,7 +41,3 @@ var PersonalCabinetComponent = React.createClass({
         );
     }
 });
-React.render(
-    <PersonalCabinetComponent />,
-    document.getElementById('personalCabinet')
-);

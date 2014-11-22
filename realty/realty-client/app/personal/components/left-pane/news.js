@@ -26,7 +26,3 @@ var NewsComponent = React.createClass({
         );
     }
 });
-React.render(
-    <NewsComponent />,
-    document.getElementById('newsComponent')
-);
