@@ -11,6 +11,13 @@
     <script src="//fb.me/react-with-addons-0.12.0.js"></script>
     <script src="//fb.me/JSXTransformer-0.12.0.js"></script>
     <script src="../node_modules/react-router/dist/react-router.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            if(window.location.href.indexOf('rent4.me/dev') != -1) {
+                $.getScript('../dist/react-router.js');
+            }
+        });
+    </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 
