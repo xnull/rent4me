@@ -96,7 +96,7 @@ task jsFiles(type: JsTaskRunner, dependsOn: 'bowerInstall') {
 
 task packApp(dependsOn: bowerInstall, type: Tar) {
     group = 'Packaging'
-    from 'app'
+    from 'app', 'node_modules/react-router'
     baseName = 'app-1.0'
 }
 
