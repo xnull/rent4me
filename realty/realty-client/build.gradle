@@ -96,7 +96,7 @@ task jsFiles(type: JsTaskRunner, dependsOn: 'bowerInstall') {
 
 task packApp(dependsOn: bowerInstall, type: Tar) {
     group = 'Packaging'
-    from 'htmltemplate/app'
+    from 'app'
     baseName = 'app-1.0'
 }
 
