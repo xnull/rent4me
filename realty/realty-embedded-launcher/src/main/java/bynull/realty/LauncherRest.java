@@ -13,6 +13,7 @@ public final class LauncherRest {
         new BaseLauncher(LauncherRest.class.getResource("LauncherRest.class"), LauncherRest.class, Arrays.asList(
                 new BaseLauncher.HandlerDesc("src/main/webapp", "realty-web/src/main/webapp", "")
                 , new BaseLauncher.HandlerDesc("app", "realty-client/app", "client")
+                , new BaseLauncher.HandlerDesc("node_modules", "realty-client/node_modules", "node_modules")
         )).doStart("8888");
     }
 }
