@@ -2,24 +2,28 @@
 
 var Router = ReactRouter;
 var Route = ReactRouter.Route;
-var Routes = ReactRouter.Routes;
+var NotFoundRoute = ReactRouter.NotFoundRoute;
+var DefaultRoute = ReactRouter.DefaultRoute;
+var Link = ReactRouter.Link;
+var RouteHandler = ReactRouter.RouteHandler;
 
 var App = React.createClass({
     render: function () {
         return (
-            <this.props.activeRouteHandler/>
+            <RouteHandler/>
         )
     }
 });
 
 var routes = (
-    <Routes>
-        <Route name="app" path="/" handler={App}>
-            <Route name="main" path="main" handler={NewsPaneComponent}/>
-            <Route name="user" path="user" handler={Settings}/>
-            <Route name="landlord" path="user/landlord" handler={LandlordSettings}/>
-        </Route>
-    </Routes>
+    <Route path="/" handler={App}>
+        <Route name="user" path="user" handler={Settings}/>
+        <Route name="landlord" path="user/landlord" handler={LandlordSettings}/>
+        <DefaultRoute handler={NewsPaneComponent}/>
+    </Route>
+
 );
 
-React.render(routes, document.getElementById('mainView'));
+Router.run(routes, function (Handler) {
+    React.render(<Handler/>, document.getElementById('mainView'));
+});
