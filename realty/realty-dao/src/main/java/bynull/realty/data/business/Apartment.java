@@ -42,10 +42,24 @@ public class Apartment implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "fee_period")
     private FeePeriod feePeriod;
+
+    //TODO: instead two description fields use one
     @Column(name = "short_desc")
     private String shortDescription;
     @Column(name = "extended_desc")
     private String extendedDescription;
+
+    @Column(name = "room_count")
+    private Integer roomCount;
+
+    @Column(name = "floor_number")
+    private Integer floorNumber;
+
+    @Column(name = "floors_total")
+    private Integer floorsTotal;
+
+    @Column(name = "area")
+    private Integer area;
 
     public Long getId() {
         return id;
@@ -141,6 +155,38 @@ public class Apartment implements Serializable {
         this.setCreated(apartment.getCreated());
         this.setUpdated(apartment.getUpdated());
         this.setLocation(apartment.getLocation());
+    }
+
+    public Integer getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(Integer roomCount) {
+        this.roomCount = roomCount;
+    }
+
+    public Integer getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(Integer floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public Integer getFloorsTotal() {
+        return floorsTotal;
+    }
+
+    public void setFloorsTotal(Integer floorsTotal) {
+        this.floorsTotal = floorsTotal;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public void setArea(Integer area) {
+        this.area = area;
     }
 
     @PrePersist

@@ -36,9 +36,27 @@ var UserComponent = React.createClass({
 });
 
 var LandlordSettings = React.createClass({
+    componentDidMount: function (rootNode) {
+        var currentPlace = null;
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            console.log(place);
+            console.log(place.geometry.location.lat());
+            console.log(place.geometry.location.lng());
+            currentPlace = {
+                location: {
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng()
+                }
+            };
+        });
+
+        //autocomplete.bindTo('bounds', map);
+    },
     render: function () {
 
-        var addressProp = {name: 'Адрес', placeholder: 'Начните печатать...'};
+        var addressProp = {id: 'addressInput', name: 'Адрес', placeholder: 'Начните печатать...'};
         var rentTypeProp = {name: 'Тип сдачи',
             defaultDescription: 'Выберите тип сдачи',
             keyValuePairs: [
@@ -139,6 +157,7 @@ var UserProperty = React.createClass({
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
                     <div className="col-md-4">
                         <input
+                            id={this.props.data.id}
                             className="form-control"
                             type="text"
                             placeholder={this.props.data.placeholder}
@@ -167,7 +186,7 @@ var UserSelect = React.createClass({
                 <div className="form-group">
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
                     <div className="col-md-4">
-                        <select className="form-control">
+                        <select id={this.props.data.id} className="form-control">
                             {optionNodes}
                         </select>
                     </div>
@@ -185,6 +204,7 @@ var UserText = React.createClass({
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
                     <div className="col-md-4">
                         <textarea
+                        id={this.props.data.id}
                         className="form-control"
                         rows="7"
                         placeholder={this.props.data.placeholder}
@@ -200,7 +220,7 @@ var UserButton = React.createClass({
     render: function () {
         return (
             <div className="col-md-2 col-md-offset-4">
-                <a className="btn btn-primary center-block" href={this.props.data.url}>{this.props.data.value}</a>
+                <a id={this.props.data.id} className="btn btn-primary center-block" href={this.props.data.url}>{this.props.data.value}</a>
             </div>
         )
     }
