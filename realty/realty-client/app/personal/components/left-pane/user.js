@@ -37,7 +37,16 @@ var UserComponent = React.createClass({
 
 var LandlordSettings = React.createClass({
     componentDidMount: function (rootNode) {
+        var mapOptions = {
+            center: { lat: -34.397, lng: 150.644},
+            zoom: 18
+        };
+
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+
         var currentPlace = null;
+        var marker = null;
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
             var place = autocomplete.getPlace();
@@ -50,8 +59,22 @@ var LandlordSettings = React.createClass({
                     lng: place.geometry.location.lng()
                 }
             };
+            var latLng = new google.maps.LatLng(currentPlace.location.lat, currentPlace.location.lng)
+            map.setCenter(latLng);
+            if(marker != null) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Позиция на карте"
+            });
         });
 
+
+        $('#saveApartmentBtn').on('click', function(){
+           alert('saving');
+        });
         //autocomplete.bindTo('bounds', map);
     },
     render: function () {
@@ -83,30 +106,40 @@ var LandlordSettings = React.createClass({
 
         var descriptionProp = {name: 'Описание'};
 
-        var submitButton = {url: '#/user/submit', value: 'Сохранить'};
+        var submitButton = {id: 'saveApartmentBtn', value: 'Сохранить'};
+
+        var styles = {
+            width: '300px',
+            height: '300px'
+        };
 
         return (
             <div className="col-md-9">
                 <div className="panel">
-
                     <div className="panel-body">
                         <h4>Собственность</h4>
 
                         <br/>
+                        <div class="container-fluid">
+                        <div class="row">
+                            <div className="col-md-7" >
+                                <form className="form-horizontal" role="form">
+                                    <UserProperty data={addressProp}/>
+                                    <UserSelect data={rentTypeProp}/>
+                                    <UserProperty data={rentalFeeProp}/>
+                                    <UserSelect data={feePeriodProp}/>
+                                    <UserProperty data={roomCount}/>
+                                    <UserProperty data={floorNumber}/>
+                                    <UserProperty data={floorsTotal}/>
+                                    <UserProperty data={area}/>
+                                    <UserText data={descriptionProp}/>
 
-                        <form className="form-horizontal" role="form">
-                            <UserProperty data={addressProp}/>
-                            <UserSelect data={rentTypeProp}/>
-                            <UserProperty data={rentalFeeProp}/>
-                            <UserSelect data={feePeriodProp}/>
-                            <UserProperty data={roomCount}/>
-                            <UserProperty data={floorNumber}/>
-                            <UserProperty data={floorsTotal}/>
-                            <UserProperty data={area}/>
-                            <UserText data={descriptionProp}/>
-
-                            <UserButton data={submitButton}/>
-                        </form>
+                                    <UserButton data={submitButton}/>
+                                </form>
+                            </div>
+                            <div id="map-canvas" className="col-md-4" style={styles}></div>
+                        </div>
+                        </div>
 
                     </div>
                 </div>
