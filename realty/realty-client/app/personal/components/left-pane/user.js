@@ -39,7 +39,7 @@ var LandlordSettings = React.createClass({
     componentDidMount: function (rootNode) {
         var mapOptions = {
             center: { lat: -34.397, lng: 150.644},
-            zoom: 18
+            zoom: 16
         };
 
         var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
