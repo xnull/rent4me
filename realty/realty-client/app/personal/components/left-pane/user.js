@@ -38,7 +38,34 @@ var UserComponent = React.createClass({
 var LandlordSettings = React.createClass({
     render: function () {
 
-        var addressProp = {name: 'Адрес'};
+        var addressProp = {name: 'Адрес', placeholder: 'Начните печатать...'};
+        var rentTypeProp = {name: 'Тип сдачи',
+            defaultDescription: 'Выберите тип сдачи',
+            keyValuePairs: [
+                ['LONG_TERM','Долгосрочная'],
+                ['SHORT_TERM','Краткосрочная']
+            ]
+        };
+
+        var rentalFeeProp = {name: 'Плата'};
+        var feePeriodProp = {name: 'Интервал оплаты',
+            defaultDescription: 'Минимальный период сдачи',
+            keyValuePairs: [
+                ['HOURLY','Час'],
+                ['DAILY','День'],
+                ['WEEKLY','Неделя'],
+                ['MONTHLY','Месяц']
+            ]
+        };
+
+        var roomCount = {name: 'Количество комнат', placeholder: '2'};
+        var floorNumber = {name: 'Этаж', placeholder: '1'};
+        var floorsTotal = {name: 'Всего этажей', placeholder: '9'};
+        var area = {name: 'Площадь', placeholder: '42 м2'};
+
+        var descriptionProp = {name: 'Описание'};
+
+        var submitButton = {url: '#/user/submit', value: 'Сохранить'};
 
         return (
             <div className="col-md-9">
@@ -49,7 +76,19 @@ var LandlordSettings = React.createClass({
 
                         <br/>
 
-                        <p>Хата в центре мира</p>
+                        <form className="form-horizontal" role="form">
+                            <UserProperty data={addressProp}/>
+                            <UserSelect data={rentTypeProp}/>
+                            <UserProperty data={rentalFeeProp}/>
+                            <UserSelect data={feePeriodProp}/>
+                            <UserProperty data={roomCount}/>
+                            <UserProperty data={floorNumber}/>
+                            <UserProperty data={floorsTotal}/>
+                            <UserProperty data={area}/>
+                            <UserText data={descriptionProp}/>
+
+                            <UserButton data={submitButton}/>
+                        </form>
 
                     </div>
                 </div>
@@ -102,12 +141,58 @@ var UserProperty = React.createClass({
                         <input
                             className="form-control"
                             type="text"
-                            placeholder=""
+                            placeholder={this.props.data.placeholder}
                         />
                     </div>
                 </div>
             </div>
         )
+    }
+});
+
+var UserSelect = React.createClass({
+    render: function () {
+        var keyValuePairs = this.props.data.keyValuePairs || [];
+        var description = this.props.data.defaultDescription || 'Выберите из списка';
+        keyValuePairs.unshift(['', description]);
+
+        var optionNodes = keyValuePairs.map(function(pair){
+            return (
+                    <option value={pair[0]}>{pair[1]}</option>
+                );
+        });
+
+        return (
+            <div>
+                <div className="form-group">
+                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <div className="col-md-4">
+                        <select className="form-control">
+                            {optionNodes}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            )
+    }
+});
+
+var UserText = React.createClass({
+    render: function () {
+        return (
+            <div>
+                <div className="form-group">
+                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <div className="col-md-4">
+                        <textarea
+                        className="form-control"
+                        rows="7"
+                        placeholder={this.props.data.placeholder}
+                        />
+                    </div>
+                </div>
+            </div>
+            )
     }
 });
 
