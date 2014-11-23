@@ -43,11 +43,8 @@ public class Apartment implements Serializable {
     @Column(name = "fee_period")
     private FeePeriod feePeriod;
 
-    //TODO: instead two description fields use one
-    @Column(name = "short_desc")
-    private String shortDescription;
-    @Column(name = "extended_desc")
-    private String extendedDescription;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "room_count")
     private Integer roomCount;
@@ -59,7 +56,7 @@ public class Apartment implements Serializable {
     private Integer floorsTotal;
 
     @Column(name = "area")
-    private Integer area;
+    private BigDecimal area;
 
     public Long getId() {
         return id;
@@ -133,20 +130,12 @@ public class Apartment implements Serializable {
         this.feePeriod = feePeriod;
     }
 
-    public String getShortDescription() {
-        return shortDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
-
-    public String getExtendedDescription() {
-        return extendedDescription;
-    }
-
-    public void setExtendedDescription(String extendedDescription) {
-        this.extendedDescription = extendedDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void updateFrom(Apartment apartment) {
@@ -181,11 +170,11 @@ public class Apartment implements Serializable {
         this.floorsTotal = floorsTotal;
     }
 
-    public Integer getArea() {
+    public BigDecimal getArea() {
         return area;
     }
 
-    public void setArea(Integer area) {
+    public void setArea(BigDecimal area) {
         this.area = area;
     }
 
