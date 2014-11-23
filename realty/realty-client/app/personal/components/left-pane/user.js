@@ -79,16 +79,17 @@ var LandlordSettings = React.createClass({
     },
     render: function () {
 
-        var addressProp = {id: 'addressInput', name: 'Адрес', placeholder: 'Начните печатать...'};
+        var addressProp = {id: 'addressInput', name: 'Адрес', placeholder: 'Начните печатать...', customClassName: 'col-md-8'};
         var rentTypeProp = {name: 'Тип сдачи',
             defaultDescription: 'Выберите тип сдачи',
             keyValuePairs: [
                 ['LONG_TERM','Долгосрочная'],
                 ['SHORT_TERM','Краткосрочная']
-            ]
+            ],
+            customClassName: 'col-md-8'
         };
 
-        var rentalFeeProp = {name: 'Плата'};
+        var rentalFeeProp = {name: 'Плата', customClassName: 'col-md-8'};
         var feePeriodProp = {name: 'Интервал оплаты',
             defaultDescription: 'Минимальный период сдачи',
             keyValuePairs: [
@@ -96,17 +97,18 @@ var LandlordSettings = React.createClass({
                 ['DAILY','День'],
                 ['WEEKLY','Неделя'],
                 ['MONTHLY','Месяц']
-            ]
+            ],
+            customClassName: 'col-md-8'
         };
 
-        var roomCount = {name: 'Количество комнат', placeholder: '2'};
-        var floorNumber = {name: 'Этаж', placeholder: '1'};
-        var floorsTotal = {name: 'Всего этажей', placeholder: '9'};
-        var area = {name: 'Площадь', placeholder: '42 м2'};
+        var roomCount = {name: 'Количество комнат', placeholder: '2', customClassName: 'col-md-8'};
+        var floorNumber = {name: 'Этаж', placeholder: '1', customClassName: 'col-md-8'};
+        var floorsTotal = {name: 'Всего этажей', placeholder: '9', customClassName: 'col-md-8'};
+        var area = {name: 'Площадь', placeholder: '42 м2', customClassName: 'col-md-8'};
 
-        var descriptionProp = {name: 'Описание'};
+        var descriptionProp = {name: 'Описание', customClassName: 'col-md-8'};
 
-        var submitButton = {id: 'saveApartmentBtn', value: 'Сохранить'};
+        var submitButton = {id: 'saveApartmentBtn', value: 'Сохранить', customClassName: 'col-md-4 col-md-offset-4'};
 
         var styles = {
             width: '300px',
@@ -184,11 +186,13 @@ var Settings = React.createClass({
 
 var UserProperty = React.createClass({
     render: function () {
+        var customClassName = this.props.data.customClassName || 'col-md-4';
+
         return (
             <div>
                 <div className="form-group">
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
-                    <div className="col-md-4">
+                    <div className={customClassName}>
                         <input
                             id={this.props.data.id}
                             className="form-control"
@@ -204,6 +208,8 @@ var UserProperty = React.createClass({
 
 var UserSelect = React.createClass({
     render: function () {
+        var customClassName = this.props.data.customClassName || 'col-md-4';
+
         var keyValuePairs = this.props.data.keyValuePairs || [];
         var description = this.props.data.defaultDescription || 'Выберите из списка';
         keyValuePairs.unshift(['', description]);
@@ -218,7 +224,7 @@ var UserSelect = React.createClass({
             <div>
                 <div className="form-group">
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
-                    <div className="col-md-4">
+                    <div className={customClassName}>
                         <select id={this.props.data.id} className="form-control">
                             {optionNodes}
                         </select>
@@ -231,11 +237,13 @@ var UserSelect = React.createClass({
 
 var UserText = React.createClass({
     render: function () {
+        var customClassName = this.props.data.customClassName || 'col-md-4';
+
         return (
             <div>
                 <div className="form-group">
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
-                    <div className="col-md-4">
+                    <div className={customClassName}>
                         <textarea
                         id={this.props.data.id}
                         className="form-control"
@@ -251,8 +259,10 @@ var UserText = React.createClass({
 
 var UserButton = React.createClass({
     render: function () {
+        var customClassName = this.props.data.customClassName || 'col-md-2 col-md-offset-4';
+
         return (
-            <div className="col-md-2 col-md-offset-4">
+            <div className={customClassName}>
                 <a id={this.props.data.id} className="btn btn-primary center-block" href={this.props.data.url}>{this.props.data.value}</a>
             </div>
         )

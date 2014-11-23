@@ -10,6 +10,9 @@ public final class LauncherRest {
     }
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("spring.profiles.active", "local");
+//        System.setProperty("spring.profiles.active", "dev");
+
         new BaseLauncher(LauncherRest.class.getResource("LauncherRest.class"), LauncherRest.class, Arrays.asList(
                 new BaseLauncher.HandlerDesc("src/main/webapp", "realty-web/src/main/webapp", "")
                 , new BaseLauncher.HandlerDesc("app", "realty-client/app", "client")
