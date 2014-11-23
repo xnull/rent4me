@@ -19,3 +19,5 @@ allprojects {
         pathToJavaProjectScript = "${rootDir}/gradle/java-project.gradle"
     }
 }
+
+apply plugin: "sonar-runner"

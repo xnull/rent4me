@@ -1,9 +1,14 @@
 /** @jsx React.DOM */
 
 var LookingForComponent = React.createClass({
+    /**
+     * https://developers.google.com/places/?hl=ru
+     * https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete?hl=ru
+     *
+     * @param rootNode
+     */
     componentDidMount: function (rootNode) {
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
-        //autocomplete.bindTo('bounds', map);
     },
 
     render: function () {
