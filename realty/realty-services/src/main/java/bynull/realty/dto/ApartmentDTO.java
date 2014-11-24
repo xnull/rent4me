@@ -1,7 +1,11 @@
 package bynull.realty.dto;
 
+import bynull.realty.data.business.AddressComponents;
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.business.FeePeriod;
+import bynull.realty.data.business.RentType;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -13,7 +17,16 @@ public class ApartmentDTO {
     private Long id;
     private GeoPointDTO location;
     private String city;
-    private String address;
+    private AddressComponentsDTO address;
+    private String description;
+    private Integer roomCount;
+    private Integer floorNumber;
+    private Integer floorsTotal;
+    private BigDecimal area;
+    private RentType typeOfRent;
+    private BigDecimal rentalFee;
+    private FeePeriod feePeriod;
+
     private Date created;
     private Date updated;
 
@@ -22,8 +35,17 @@ public class ApartmentDTO {
         ApartmentDTO dto = new ApartmentDTO();
         dto.setId(apartment.getId());
         dto.setLocation(GeoPointDTO.from(apartment.getLocation()));
-//        dto.setCity(apartment.getCity());
-//        dto.setAddress(apartment.getAddress());
+        dto.setAddress(AddressComponentsDTO.from(apartment.getAddressComponents()));
+        dto.setDescription(apartment.getDescription());
+        dto.setRoomCount(apartment.getRoomCount());
+        dto.setFloorNumber(apartment.getFloorNumber());
+        dto.setFloorsTotal(apartment.getFloorsTotal());
+        dto.setArea(apartment.getArea());
+
+        dto.setTypeOfRent(apartment.getTypeOfRent());
+        dto.setRentalFee(apartment.getRentalFee());
+        dto.setFeePeriod(apartment.getFeePeriod());
+
         dto.setCreated(apartment.getCreated());
         dto.setUpdated(apartment.getUpdated());
         return dto;
@@ -53,12 +75,76 @@ public class ApartmentDTO {
         this.city = city;
     }
 
-    public String getAddress() {
+    public AddressComponentsDTO getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(AddressComponentsDTO address) {
         this.address = address;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(Integer roomCount) {
+        this.roomCount = roomCount;
+    }
+
+    public Integer getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(Integer floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public Integer getFloorsTotal() {
+        return floorsTotal;
+    }
+
+    public void setFloorsTotal(Integer floorsTotal) {
+        this.floorsTotal = floorsTotal;
+    }
+
+    public BigDecimal getArea() {
+        return area;
+    }
+
+    public void setArea(BigDecimal area) {
+        this.area = area;
+    }
+
+    public RentType getTypeOfRent() {
+        return typeOfRent;
+    }
+
+    public void setTypeOfRent(RentType typeOfRent) {
+        this.typeOfRent = typeOfRent;
+    }
+
+    public BigDecimal getRentalFee() {
+        return rentalFee;
+    }
+
+    public void setRentalFee(BigDecimal rentalFee) {
+        this.rentalFee = rentalFee;
+    }
+
+    public FeePeriod getFeePeriod() {
+        return feePeriod;
+    }
+
+    public void setFeePeriod(FeePeriod feePeriod) {
+        this.feePeriod = feePeriod;
     }
 
     public Date getCreated() {
@@ -81,10 +167,20 @@ public class ApartmentDTO {
         Apartment apartment = new Apartment();
         apartment.setId(getId());
 //        apartment.setCity(getCity());
-//        apartment.setAddress(getAddress());
+        AddressComponentsDTO address = getAddress();
+        apartment.setAddressComponents(address != null ? address.toInternal() :  null);
+        apartment.setArea(getArea());
+        apartment.setRoomCount(getRoomCount());
+        apartment.setFloorNumber(getFloorNumber());
+        apartment.setFloorsTotal(getFloorsTotal());
+        apartment.setDescription(getDescription());
         apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
         apartment.setCreated(getCreated());
         apartment.setUpdated(getUpdated());
+
+        apartment.setTypeOfRent(getTypeOfRent());
+        apartment.setRentalFee(getRentalFee());
+        apartment.setFeePeriod(getFeePeriod());
         return apartment;
     }
 }

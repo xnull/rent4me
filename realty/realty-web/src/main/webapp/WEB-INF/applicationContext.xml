@@ -23,7 +23,7 @@
     <!--</bean>-->
 
     <beans profile="local">
-        <context:property-placeholder location="classpath*:config.properties"/>
+        <context:property-placeholder location="classpath*:local-config.properties"/>
 
         <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
             <property name="driverClass" value="${jdbc.driverClass}"/>

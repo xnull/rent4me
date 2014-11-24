@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 @Embeddable
 public class AddressComponents implements Serializable {
+    @Column(name = "formatted_address")
+    private String formattedAddress;
     @Column(name = "street_address")
     private String streetAddress;
     @Column(name = "district")
@@ -19,6 +21,8 @@ public class AddressComponents implements Serializable {
     private String county;
     @Column(name = "country")
     private String country;
+    @Column(name = "country_code")
+    private String countryCode;
     @Column(name = "zip_code")
     private String zipCode;
 
@@ -62,11 +66,27 @@ public class AddressComponents implements Serializable {
         this.country = country;
     }
 
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
     public String getZipCode() {
         return zipCode;
     }
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 }

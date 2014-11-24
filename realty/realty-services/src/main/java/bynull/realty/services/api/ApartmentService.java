@@ -10,6 +10,8 @@ import java.util.List;
 public interface ApartmentService {
     ApartmentDTO create(ApartmentDTO dto);
 
+    boolean createForAuthorizedPerson(ApartmentDTO dto);
+
     void update(ApartmentDTO dto);
 
     ApartmentDTO find(Long id);
@@ -17,4 +19,6 @@ public interface ApartmentService {
     void delete(Long id);
 
     List<ApartmentDTO> findAll();
+
+    ApartmentDTO findAuthorizedPersonApartment();
 }

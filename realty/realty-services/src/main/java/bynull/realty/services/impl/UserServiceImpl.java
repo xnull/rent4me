@@ -8,6 +8,7 @@ import bynull.realty.data.business.User;
 import bynull.realty.services.api.AuthorityService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
+import bynull.realty.utils.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.ws.rs.NotAuthorizedException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 

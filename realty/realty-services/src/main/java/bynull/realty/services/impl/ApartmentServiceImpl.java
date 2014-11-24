@@ -1,9 +1,15 @@
 package bynull.realty.services.impl;
 
 import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.business.User;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.api.UserService;
+import bynull.realty.utils.SecurityUtils;
+import com.google.common.collect.Iterables;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +25,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Resource
     ApartmentRepository apartmentRepository;
 
+    @Resource
+    UserRepository userRepository;
+
     @Transactional
     @Override
     public ApartmentDTO create(ApartmentDTO dto) {
@@ -28,6 +37,22 @@ public class ApartmentServiceImpl implements ApartmentService {
         Apartment created = apartmentRepository.saveAndFlush(apartment);
 
         return ApartmentDTO.from(created);
+    }
+
+    @Transactional
+    @Override
+    public boolean createForAuthorizedPerson(ApartmentDTO dto) {
+        User user = userRepository.getOne(SecurityUtils.getAuthorizedUser().getId());
+
+        if(user.getApartments().isEmpty()) {
+            Apartment apartment = dto.toInternal();
+            apartment.setOwner(user);
+            apartment = apartmentRepository.saveAndFlush(apartment);
+            boolean result = user.getApartments().add(apartment);
+            return result;
+        } else {
+            return false;
+        }
     }
 
     @Transactional
@@ -63,5 +88,14 @@ public class ApartmentServiceImpl implements ApartmentService {
             result.add(ApartmentDTO.from(apartment));
         }
         return result;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ApartmentDTO findAuthorizedPersonApartment() {
+        User user = userRepository.getOne(SecurityUtils.getAuthorizedUser().getId());
+        return user != null
+                ? ApartmentDTO.from(Iterables.getFirst(user.getApartments(), null))
+                : null;
     }
 }
