@@ -221,6 +221,15 @@ var LandlordSettings = React.createClass({
             return addressBuilder;
         };
 
+        var changeDataStateValue = function(property, value) {
+            var map = {};
+            map[property] = value;
+
+            that.setState({
+                data: jQuery.extend(that.state.data, map)
+            });
+        };
+
         var mapOptions = {
             center: { lat: -34.397, lng: 150.644},
             zoom: 16
@@ -228,39 +237,14 @@ var LandlordSettings = React.createClass({
 
         var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-        var currentPlace = null;
-        var marker = null;
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-            var place = autocomplete.getPlace();
-            var addressComponents = place['address_components'];
 
-            that.setState(
-                {
-                    data: jQuery.extend(that.state.data,
-                        {
-                            location:{
-                                lat: place['geometry']['location'].lat(),
-                                lng: place['geometry']['location'].lng()
-                            },
-                            address: {
-                                city: getCity(addressComponents),
-                                country: getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY_LONG'),
-                                country_code: getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY'),
-                                county: getAddressComponentOfTypeOrNull(addressComponents, 'STATE'),
-                                district: getAddressComponentOfTypeOrNull(addressComponents, 'DISTRICT'),
-                                street_address: buildAddress(addressComponents),
-                                zip_code: getAddressComponentOfTypeOrNull(addressComponents, 'ZIP'),
-                                formatted_address: place['formatted_address']
-                            }
-                        }
-                    )
-                }
-            );
-            currentPlace = {
+        var marker = null;
+
+        var centerMapAndSetMarker = function(lat, lng) {
+            var currentPlace = {
                 location: {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng()
+                    lat: lat,
+                    lng: lng
                 }
             };
             var latLng = new google.maps.LatLng(currentPlace.location.lat, currentPlace.location.lng);
@@ -271,8 +255,87 @@ var LandlordSettings = React.createClass({
             marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
-                title: "Позиция на карте"
+                title: "Объект для сдачи"
             });
+        }
+
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            var addressComponents = place['address_components'];
+
+            var location = {
+                latitude: place['geometry']['location'].lat(),
+                longitude: place['geometry']['location'].lng()
+            };
+
+            console.log(location);
+
+            changeDataStateValue('location', location);
+
+            changeDataStateValue('address', {
+                city: getCity(addressComponents),
+                country: getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY_LONG'),
+                country_code: getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY'),
+                county: getAddressComponentOfTypeOrNull(addressComponents, 'STATE'),
+                district: getAddressComponentOfTypeOrNull(addressComponents, 'DISTRICT'),
+                street_address: buildAddress(addressComponents),
+                zip_code: getAddressComponentOfTypeOrNull(addressComponents, 'ZIP'),
+                formatted_address: place['formatted_address']
+            });
+
+
+            centerMapAndSetMarker(place.geometry.location.lat(), place.geometry.location.lng());
+        });
+
+        $('#typeOfRent').on('change', function(){
+            console.log('Type of rent changed');
+            var selectedValue = $('#typeOfRent').find('option:selected').val();
+            console.log('Selected: '+selectedValue);
+            changeDataStateValue('type_of_rent', selectedValue);
+        });
+
+        $('#rentalFee').bind('input propertychange', function(){
+            var value = $('#rentalFee').val();
+            console.log('changed to: '+value);
+            changeDataStateValue('rental_fee', value);
+        });
+
+        $('#feePeriod').on('change', function(){
+            console.log('Type of rent changed');
+            var selectedValue = $('#feePeriod').find('option:selected').val();
+            console.log('Selected: '+selectedValue);
+            changeDataStateValue('fee_period', selectedValue);
+        });
+
+        $('#roomCount').bind('input propertychange', function(){
+            var value = $('#roomCount').val();
+            console.log('changed to: '+value);
+            changeDataStateValue('room_count', value);
+        });
+
+        $('#floorNumber').bind('input propertychange', function(){
+            var value = $('#floorNumber').val();
+            console.log('changed to: '+value);
+            changeDataStateValue('floor_number', value);
+        });
+
+        $('#floorsTotal').bind('input propertychange', function(){
+            var value = $('#floorsTotal').val();
+            console.log('changed to: '+value);
+            changeDataStateValue('floors_total', value);
+        });
+
+        $('#area').bind('input propertychange', function(){
+            var value = $('#area').val();
+            console.log('changed to: '+value);
+            changeDataStateValue('area', value);
+        });
+
+        $('#description').bind('input propertychange', function(){
+            var value = $('#description').val();
+            console.log('changed to: '+value);
+            changeDataStateValue('description', value);
         });
 
         var __base64Encode = function (data) {
@@ -331,6 +394,7 @@ var LandlordSettings = React.createClass({
         var userNamePasswordHardCode = __base64Encode("user_083af554-d3f8-4644-9090-ab50cfb612e1:eccafc45-2c2c-4028-931a-648975605899");
 
         var loadApartment = function() {
+            $.blockUI({message: 'Loading...'});
             $.ajax({
                 url: '/rest/users/apartment',
                 dataType: 'json',
@@ -341,27 +405,59 @@ var LandlordSettings = React.createClass({
                 },
                 success: function(data) {
                     that.setState({data: data});
+                    centerMapAndSetMarker(data.location.latitude, data.location.longitude);
+                    $.unblockUI();
                 }.bind(that),
                 error: function(xhr, status, err) {
-                    console.error('/rest/apartments', status, err.toString());
+                    console.error('/rest/apartment', status, err.toString());
+                    $.unblockUI();
                 }.bind(that)
             });
         };
 
         var saveApartment = function() {
+            $.blockUI({message: 'Loading...'});
             $.ajax({
                 url: '/rest/users/apartment',
                 dataType: 'json',
                 type: 'POST',
+                data: JSON.stringify(that.state.data),
+                contentType: 'application/json; charset=utf-8',
                 beforeSend: function (request)
                 {
                     request.setRequestHeader("Authorization", "Basic " + userNamePasswordHardCode);
                 },
                 success: function(data) {
+                    loadApartment();
+                    $.unblockUI();
 //                    that.setState({data: data});
                 }.bind(that),
                 error: function(xhr, status, err) {
-                    console.error('/rest/apartments', status, err.toString());
+                    console.error('/rest/apartment', status, err.toString());
+                    $.unblockUI();
+                }.bind(that)
+            });
+        };
+
+        var deleteApartment = function() {
+            $.blockUI({message: 'Loading...'});
+            $.ajax({
+                url: '/rest/users/apartment',
+//                dataType: 'json',
+                type: 'DELETE',
+//                contentType: 'application/json; charset=utf-8',
+                beforeSend: function (request)
+                {
+                    request.setRequestHeader("Authorization", "Basic " + userNamePasswordHardCode);
+                },
+                success: function(data) {
+                    loadApartment();
+                    $.unblockUI();
+//                    that.setState({data: data});
+                }.bind(that),
+                error: function(xhr, status, err) {
+                    console.error('/rest/apartment', status, err.toString());
+                    $.unblockUI();
                 }.bind(that)
             });
         };
@@ -371,25 +467,36 @@ var LandlordSettings = React.createClass({
         $('#saveApartmentBtn').on('click', function(){
             console.log('saving data:');
             console.log(that.state.data);
-//            saveApartment();
+            if(that.state.data.id) {
+                alert('Sorry, already saved');
+            } else {
+                deleteApartment();
+            }
+        });
+
+        $('#deleteApartmentBtn').on('click', function(){
+            deleteApartment();
         });
     },
     render: function () {
         var data = this.state.data || {};
 
-        var addressProp = {id: 'addressInput', name: 'Адрес', placeholder: 'Начните печатать...', customClassName: 'col-md-8' };
+        var addressProp = {id: 'addressInput', name: 'Адрес', placeholder: 'Начните печатать...', customClassName: 'col-md-8', elementValue: data['address'] ? data['address']['formatted_address']:null };
         var rentTypeProp = {name: 'Тип сдачи',
+            id: 'typeOfRent',
             defaultDescription: 'Выберите тип сдачи',
             keyValuePairs: [
                 ['LONG_TERM','Долгосрочная'],
                 ['SHORT_TERM','Краткосрочная']
             ],
             customClassName: 'col-md-8',
-            selectedValue: data?data['type_of_rent']:null
+            selectedValue: data['type_of_rent']
         };
 
-        var rentalFeeProp = {name: 'Плата', customClassName: 'col-md-8', elementValue: data['rental_fee']};
-        var feePeriodProp = {name: 'Интервал оплаты',
+        var rentalFeeProp = {id: 'rentalFee', name: 'Плата', customClassName: 'col-md-8', elementValue: data['rental_fee']};
+        var feePeriodProp = {
+            id: 'feePeriod',
+            name: 'Интервал оплаты',
             defaultDescription: 'Минимальный период сдачи',
             keyValuePairs: [
                 ['HOURLY','Час'],
@@ -401,14 +508,15 @@ var LandlordSettings = React.createClass({
             selectedValue: data['fee_period']
         };
 
-        var roomCount = {name: 'Количество комнат', placeholder: '2', customClassName: 'col-md-8', elementValue: data['room_count']};
-        var floorNumber = {name: 'Этаж', placeholder: '1', customClassName: 'col-md-8', elementValue: data['floor_number']};
-        var floorsTotal = {name: 'Всего этажей', placeholder: '9', customClassName: 'col-md-8', elementValue: data['floors_total']};
-        var area = {name: 'Площадь', placeholder: '42 м2', customClassName: 'col-md-8', elementValue: data['area']};
+        var roomCount = {id: 'roomCount', name: 'Количество комнат', placeholder: '2', customClassName: 'col-md-8', elementValue: data['room_count']};
+        var floorNumber = {id: 'floorNumber', name: 'Этаж', placeholder: '1', customClassName: 'col-md-8', elementValue: data['floor_number']};
+        var floorsTotal = {id: 'floorsTotal', name: 'Всего этажей', placeholder: '9', customClassName: 'col-md-8', elementValue: data['floors_total']};
+        var area = {id: 'area', name: 'Площадь', placeholder: '42 м2', customClassName: 'col-md-8', elementValue: data['area']};
 
-        var descriptionProp = {name: 'Описание', customClassName: 'col-md-8', elementValue: data['description']};
+        var descriptionProp = {id: 'description',name: 'Описание', customClassName: 'col-md-8', elementValue: data['description']};
 
         var submitButton = {id: 'saveApartmentBtn', value: 'Сохранить', customClassName: 'col-md-4 col-md-offset-4'};
+        var deleteButton = {id: 'deleteApartmentBtn', value: 'Удалить(тест)', customClassName: 'col-md-4 col-md-offset-4'};
 
         var styles = {
             width: '300px',
@@ -437,6 +545,10 @@ var LandlordSettings = React.createClass({
                                     <UserText data={descriptionProp}/>
 
                                     <UserButton data={submitButton}/>
+
+                                    <br/><br/>
+
+                                    <UserButton data={deleteButton}/>
                                 </form>
                             </div>
                             <div id="map-canvas" className="col-md-4" style={styles}></div>

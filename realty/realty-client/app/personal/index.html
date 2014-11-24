@@ -14,7 +14,8 @@
     <script src="../../node_modules/react-router/dist/react-router.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.66.0-2013.10.09/jquery.blockUI.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
 
 
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
@@ -31,14 +32,6 @@
     <script type="text/jsx" src="components/main/news-pane.js"></script>
 
     <script type="text/jsx" src="components/router.js"></script>
-
-    <script type="text/javascript">
-        $(function(){
-            $(document).ajaxStart(function(){
-                return $.blockUI;
-            }).ajaxStop($.unblockUI);
-        });
-    </script>
 
     <title></title>
 </head>

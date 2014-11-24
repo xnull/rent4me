@@ -6,16 +6,15 @@ import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.User;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.services.api.ApartmentService;
-import bynull.realty.services.api.UserService;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author dionis on 22/06/14.
@@ -41,8 +40,8 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional
     @Override
-    public boolean createForAuthorizedPerson(ApartmentDTO dto) {
-        User user = userRepository.getOne(SecurityUtils.getAuthorizedUser().getId());
+    public boolean createForAuthorizedUser(ApartmentDTO dto) {
+        User user = getAuthorizedUser();
 
         if(user.getApartments().isEmpty()) {
             Apartment apartment = dto.toInternal();
@@ -92,10 +91,24 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public ApartmentDTO findAuthorizedPersonApartment() {
-        User user = userRepository.getOne(SecurityUtils.getAuthorizedUser().getId());
+    public ApartmentDTO findAuthorizedUserApartment() {
+        User user = getAuthorizedUser();
         return user != null
                 ? ApartmentDTO.from(Iterables.getFirst(user.getApartments(), null))
                 : null;
+    }
+
+    private User getAuthorizedUser() {
+        return userRepository.getOne(SecurityUtils.getAuthorizedUser().getId());
+    }
+
+    @Transactional
+    @Override
+    public void deleteApartmentForAuthorizedUser() {
+        User user = getAuthorizedUser();
+        Set<Apartment> apartments = user.getApartments();
+        if(!apartments.isEmpty()) {
+            apartmentRepository.delete(apartments);
+        }
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public interface ApartmentService {
     ApartmentDTO create(ApartmentDTO dto);
 
-    boolean createForAuthorizedPerson(ApartmentDTO dto);
+    boolean createForAuthorizedUser(ApartmentDTO dto);
 
     void update(ApartmentDTO dto);
 
@@ -20,5 +20,7 @@ public interface ApartmentService {
 
     List<ApartmentDTO> findAll();
 
-    ApartmentDTO findAuthorizedPersonApartment();
+    ApartmentDTO findAuthorizedUserApartment();
+
+    void deleteApartmentForAuthorizedUser();
 }

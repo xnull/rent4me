@@ -9,8 +9,6 @@ import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author dionis on 24/11/14.
@@ -27,7 +25,7 @@ public class UserRestResource {
     @Path("/apartment")
     public Response getApartment() {
 
-        ApartmentDTO apartment = apartmentService.findAuthorizedPersonApartment();
+        ApartmentDTO apartment = apartmentService.findAuthorizedUserApartment();
         return Response
                 .status(apartment != null ? Response.Status.OK : Response.Status.NOT_FOUND)
                 .entity(ApartmentJSON.from(apartment))
@@ -38,9 +36,19 @@ public class UserRestResource {
     @Path("/apartment")
     public Response createApartment(ApartmentJSON apartmentJSON) {
         ApartmentDTO dto = apartmentJSON.toDTO();
-        boolean result = apartmentService.createForAuthorizedPerson(dto);
+        boolean result = apartmentService.createForAuthorizedUser(dto);
         return Response
                 .status(result ? Response.Status.CREATED : Response.Status.CONFLICT)
+                .entity(result ? apartmentService.findAuthorizedUserApartment() : null)
+                .build();
+    }
+
+    @DELETE
+    @Path("/apartment")
+    public Response deleteApartment() {
+        apartmentService.deleteApartmentForAuthorizedUser();
+        return Response
+                .status(Response.Status.OK)
                 .build();
     }
 }
