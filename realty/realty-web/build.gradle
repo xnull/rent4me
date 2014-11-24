@@ -84,4 +84,4 @@ dependencies {
     compile libraries."c3p0:c3p0"
 }
 
-war.dependsOn project(':realty-client').jsBuild
+//war.dependsOn project(':realty-client').jsBuild

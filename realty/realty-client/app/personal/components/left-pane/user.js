@@ -470,7 +470,7 @@ var LandlordSettings = React.createClass({
             if(that.state.data.id) {
                 alert('Sorry, already saved');
             } else {
-                deleteApartment();
+                saveApartment();
             }
         });
 

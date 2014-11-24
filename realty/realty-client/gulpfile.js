@@ -54,7 +54,7 @@ var tasks = new Tasks();
  */
 plugins.gulp.task(tasks.watch, function () {
     plugins.gulp.src(['./app/**/*.*', this.gulpFile])
-        .pipe(watch(['./app/**/*.*', this.gulpFile], function (files) {
+        .pipe(plugins.watch(['./app/**/*.*', this.gulpFile], function (files) {
             plugins.gulp.start(tasks.build);
         }));
 });
@@ -82,7 +82,7 @@ function jsBuild() {
 
 function buildBrowserify() {
     plugins.gulp.src('app/app.js')
-        .pipe(browserify({
+        .pipe(plugins.browserify({
             insertGlobals: true,
             debug: true
         }))
@@ -91,7 +91,7 @@ function buildBrowserify() {
 
 function buildHtmlFiles() {
     plugins.gulp.src("./app/components/**/*.html")
-        .pipe(ngHtml2Js({
+        .pipe(plugins.ngHtml2Js({
             moduleName: '',
             prefix: ''
         }))
