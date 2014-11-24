@@ -35,7 +35,7 @@ function Settings() {
 }
 
 function Tasks() {
-    this.bowerFiles = 'bowerFiles';
+    this.bowerFiles = 'bower-files';
     this.clean = 'clean';
     this.jsHint = 'jsHint';
     this.files = 'files';
@@ -52,10 +52,10 @@ var tasks = new Tasks();
 /**
  * Наблюдение за исходниками и если они изменились, то производится пересборка проекта
  */
-gulp.task(tasks.watch, function () {
-    gulp.src(['./app/**/*.*', this.gulpFile])
+plugins.gulp.task(tasks.watch, function () {
+    plugins.gulp.src(['./app/**/*.*', this.gulpFile])
         .pipe(watch(['./app/**/*.*', this.gulpFile], function (files) {
-            gulp.start(tasks.build);
+            plugins.gulp.start(tasks.build);
         }));
 });
 
@@ -68,7 +68,7 @@ gulp.task(tasks.watch, function () {
  *
  * live reload rus: http://frontender.info/getting-started-with-gulp-2/
  */
-gulp.task(tasks.build, [tasks.clean], function () {
+plugins.gulp.task(tasks.build, [tasks.clean], function () {
     jsBuild();
 });
 
@@ -81,42 +81,42 @@ function jsBuild() {
 }
 
 function buildBrowserify() {
-    gulp.src('app/app.js')
+    plugins.gulp.src('app/app.js')
         .pipe(browserify({
             insertGlobals: true,
             debug: true
         }))
-        .pipe(gulp.dest(paths.buildDir));
+        .pipe(plugins.gulp.dest(paths.buildDir));
 }
 
 function buildHtmlFiles() {
-    gulp.src("./app/components/**/*.html")
+    plugins.gulp.src("./app/components/**/*.html")
         .pipe(ngHtml2Js({
             moduleName: '',
             prefix: ''
         }))
         .pipe(concat("html-templates.js"))
-        .pipe(gulp.dest("./build-js/"));
+        .pipe(plugins.gulp.dest("./build-js/"));
 }
 
 function cssBuild() {
-    gulp.src(['app/components/**/*.css', 'app/*.css'])
+    plugins.gulp.src(['app/components/**/*.css', 'app/*.css'])
         .pipe(concat('index.css'))
-        .pipe(gulp.dest(paths.buildDir));
+        .pipe(plugins.gulp.dest(paths.buildDir));
 }
 
 function imgBuild() {
-    gulp.src([
+    plugins.gulp.src([
         './app/components/**/*.jpg',
         './app/components/**/*.png',
         './app/components/**/*.gif'
     ])
-        .pipe(gulp.dest(paths.buildDir + '/components'));
+        .pipe(plugins.gulp.dest(paths.buildDir + '/components'));
 }
 
 function indexHtmlBuild() {
-    gulp.src('./app/index.html')
-        .pipe(gulp.dest(paths.buildDir))
+    plugins.gulp.src('./app/index.html')
+        .pipe(plugins.gulp.dest(paths.buildDir))
 }
 
 // ------------------------------------ малозначимые бизнес таски ------------------------------------------- //
@@ -124,15 +124,15 @@ function indexHtmlBuild() {
 /**
  * Очистка билдовой папки проекта
  */
-gulp.task(tasks.clean, function () {
-    return gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));
+plugins.gulp.task(tasks.clean, function () {
+    return plugins.gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));
 });
 
 /**
  * Проверка качества js кода. Наподобие джавашного findbugs-a
  */
-gulp.task(tasks.jsHint, function () {
-    return gulp.src(paths.jsHintFiles)
+plugins.gulp.task(tasks.jsHint, function () {
+    return plugins.gulp.src(paths.jsHintFiles)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -146,13 +146,13 @@ gulp.task(tasks.jsHint, function () {
  * то в них может не быть многих клиентских библиотек, например bootstrap. Для всех таких библиотек нам приходится
  * пользоваться bower-ом. Чтобы отличать боверские либы от npm-ных, таска кладет их в папку bower внутрь node_modules
  */
-gulp.task(tasks.bowerFiles, function () {
-    gulpBowerFiles().pipe(gulp.dest(settings.bowerDir));
+plugins.gulp.task(tasks.bowerFiles, function () {
+    plugins.gulpBowerFiles().pipe(plugins.gulp.dest(settings.bowerDir));
 });
 
 /**
  * Print all javascript files
  */
-gulp.task(tasks.files, function () {
-    gulp.src(paths.app).pipe(print());
+plugins.gulp.task(tasks.files, function () {
+    plugins.gulp.src(paths.app).pipe(print());
 });
