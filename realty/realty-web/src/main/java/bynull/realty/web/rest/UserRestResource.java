@@ -23,9 +23,20 @@ public class UserRestResource {
     @Resource
     ApartmentService apartmentService;
 
+    @GET
+    @Path("/apartment")
+    public Response getApartment() {
+
+        ApartmentDTO apartment = apartmentService.findAuthorizedPersonApartment();
+        return Response
+                .status(apartment != null ? Response.Status.OK : Response.Status.NOT_FOUND)
+                .entity(ApartmentJSON.from(apartment))
+                .build();
+    }
+
     @POST
     @Path("/apartment")
-    public Response create(ApartmentJSON apartmentJSON) {
+    public Response createApartment(ApartmentJSON apartmentJSON) {
         ApartmentDTO dto = apartmentJSON.toDTO();
         boolean result = apartmentService.createForAuthorizedPerson(dto);
         return Response
