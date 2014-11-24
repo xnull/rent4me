@@ -29,7 +29,7 @@ def nodeJsDir = file("${rootProject.projectDir}/.gradle/nodejs")
 
 node {
     // Version of node to use.
-    version = '0.10.31'
+    version = '0.10.33'
 
     // Base URL for fetching node distributions (change if you have a mirror).
     distBaseUrl = 'http://nodejs.org/dist'

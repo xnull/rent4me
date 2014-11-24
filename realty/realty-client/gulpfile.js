@@ -1,51 +1,61 @@
+/**
+ * Плагины для галпа
+ * @constructor
+ */
+function Plugins() {
+    this.gulp = require('gulp');
+    this.jshint = require('gulp-jshint');
+    this.print = require('gulp-print');
+    this.concat = require('gulp-concat');
+    this.clean = require('gulp-clean');
+    this.gulpBowerFiles = require('gulp-bower-files');
+    this.browserify = require('gulp-browserify');
+    this.source = require('vinyl-source-stream');
+    this.open = require("gulp-open");
+    this.webserver = require('gulp-webserver');
+    this.ngHtml2Js = require("gulp-ng-html2js");
+    this.watch = require('gulp-watch');
+    //this.watchify = require('watchify');
+    this.livereload = require('gulp-livereload');
+}
+
 //Common variables
-var paths = {};
-paths.app = ['app/components/**/*.js', 'app/*js'];
-paths.jsHintFiles = 'app/components/**/*.js';
-paths.buildDir = './build-js';
-paths.dist = [paths.buildDir, '../realty-web/src/main/webapp/view'];
+function Settings() {
+    this.projectDir = 'app';
+    this.buildDir = './build-js';
 
-// Includes
-var gulp = require('gulp');
-var jshint = require('gulp-jshint');
-var print = require('gulp-print');
-var concat = require('gulp-concat');
-var clean = require('gulp-clean');
-var gulpBowerFiles = require('gulp-bower-files');
-var browserify = require('gulp-browserify');
-var source = require('vinyl-source-stream');
-var open = require("gulp-open");
-var webserver = require('gulp-webserver');
-var ngHtml2Js = require("gulp-ng-html2js");
-var watch = require('gulp-watch');
-//var watchify = require('watchify');
-var livereload = require('gulp-livereload');
+    this.nodeModules = 'node_modules';
+    this.bowerDir = this.nodeModules + '/bower';
 
-gulp.task('bower-files', function () {
-    gulpBowerFiles().pipe(gulp.dest('./node_modules/client'));
-});
-gulp.task('cleanDist', function () {
-    return gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));
-});
+    this.dist = [this.buildDir];
+    this.appFiles = [this.projectDir + '/*js'];
+    this.jsHintFiles = this.projectDir + '/**/*.js';
 
-// Lint Task
-gulp.task('lint', function () {
-    return gulp.src(paths.jsHintFiles)
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
-});
+    this.gulpFile = 'gulpfile.js';
+}
+
+function Tasks() {
+    this.bowerFiles = 'bowerFiles';
+    this.clean = 'clean';
+    this.jsHint = 'jsHint';
+    this.files = 'files';
+    this.watch = 'watch';
+    this.build = 'build';
+}
+
+var plugins = new Plugins();
+var settings = new Settings();
+var tasks = new Tasks();
+
+// ----------------------------------- Главные бизнес таски -------------------------------- //
 
 /**
- * Print all javascript files
+ * Наблюдение за исходниками и если они изменились, то производится пересборка проекта
  */
-gulp.task('files', function () {
-    gulp.src(paths.app).pipe(print());
-});
-
-gulp.task('watch', function () {
-    gulp.src(['./app/**/*.*', 'gulpfile.js'])
-        .pipe(watch(['./app/**/*.*', 'gulpfile.js'], function (files) {
-            gulp.start('jsBuild');
+gulp.task(tasks.watch, function () {
+    gulp.src(['./app/**/*.*', this.gulpFile])
+        .pipe(watch(['./app/**/*.*', this.gulpFile], function (files) {
+            gulp.start(tasks.build);
         }));
 });
 
@@ -58,7 +68,7 @@ gulp.task('watch', function () {
  *
  * live reload rus: http://frontender.info/getting-started-with-gulp-2/
  */
-gulp.task('jsBuild', ['cleanDist'], function () {
+gulp.task(tasks.build, [tasks.clean], function () {
     jsBuild();
 });
 
@@ -108,3 +118,41 @@ function indexHtmlBuild() {
     gulp.src('./app/index.html')
         .pipe(gulp.dest(paths.buildDir))
 }
+
+// ------------------------------------ малозначимые бизнес таски ------------------------------------------- //
+
+/**
+ * Очистка билдовой папки проекта
+ */
+gulp.task(tasks.clean, function () {
+    return gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));
+});
+
+/**
+ * Проверка качества js кода. Наподобие джавашного findbugs-a
+ */
+gulp.task(tasks.jsHint, function () {
+    return gulp.src(paths.jsHintFiles)
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
+});
+
+
+// ---------------------------- системные (утилитные) таски ---------------------------- //
+
+/**
+ * Скачивание bower зависимостей. Сами зависимости можно посмотреть в bower.json
+ * Для скачивания зависимостей у нас используется npmJs (см. package.json) то так как это нодовские зависимости,
+ * то в них может не быть многих клиентских библиотек, например bootstrap. Для всех таких библиотек нам приходится
+ * пользоваться bower-ом. Чтобы отличать боверские либы от npm-ных, таска кладет их в папку bower внутрь node_modules
+ */
+gulp.task(tasks.bowerFiles, function () {
+    gulpBowerFiles().pipe(gulp.dest(settings.bowerDir));
+});
+
+/**
+ * Print all javascript files
+ */
+gulp.task(tasks.files, function () {
+    gulp.src(paths.app).pipe(print());
+});
