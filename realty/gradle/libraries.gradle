@@ -28,6 +28,7 @@ project.ext.libraries = [
         //hibernate
         'org.hibernate:hibernate-core'                            : ["org.hibernate:hibernate-core:${hibernateVersion}"],
         'org.hibernate:hibernate-entitymanager'                   : ["org.hibernate:hibernate-entitymanager:${hibernateVersion}"],
+        'org.hibernate:hibernate-validator'                       : ["org.hibernate:hibernate-validator:4.3.2.Final"],
         'org.hibernate.javax.persistence:hibernate-jpa-2.0-api'   : ["org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final"],
 
         //jersey(rest)

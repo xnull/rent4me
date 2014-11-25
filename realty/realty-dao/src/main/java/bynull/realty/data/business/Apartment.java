@@ -1,8 +1,12 @@
 package bynull.realty.data.business;
 
 import bynull.realty.data.common.GeoPoint;
+import bynull.realty.hibernate.validation.annotations.LessThanOrEqual;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,6 +18,7 @@ import static bynull.realty.util.CommonUtils.copy;
  */
 @Entity
 @Table(name = "apartments")
+@LessThanOrEqual(targetField = "floorNumber", fieldForComparison = "floorsTotal", message = "Количество этажей всего должно быть больше или равно указанному этажу")
 public class Apartment implements Serializable {
     @Id
     @Column(name = "id")
@@ -21,7 +26,9 @@ public class Apartment implements Serializable {
     @SequenceGenerator(name = "apartment_id_generator", sequenceName = "apartment_id_seq", allocationSize = 1)
     private Long id;
     @Column(name = "location")
+    @NotNull
     private GeoPoint location;
+    @NotNull
     @Embedded
     private AddressComponents addressComponents;
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,14 +38,22 @@ public class Apartment implements Serializable {
     @Column(name = "updated_dt")
     private Date updated;
 
+    @NotNull
     @JoinColumn(name = "owner_id")
     @ManyToOne
     private User owner;
+
+    @NotNull
     @Column(name = "type_of_rent")
     @Enumerated(EnumType.STRING)
     private RentType typeOfRent;
+
+    @Min(1)
+    @NotNull
     @Column(name = "rental_fee")
     private BigDecimal rentalFee;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "fee_period")
     private FeePeriod feePeriod;
@@ -46,15 +61,20 @@ public class Apartment implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @NotNull
+    @Min(1)
     @Column(name = "room_count")
     private Integer roomCount;
 
+    @Min(1)
     @Column(name = "floor_number")
     private Integer floorNumber;
 
+    @Min(1)
     @Column(name = "floors_total")
     private Integer floorsTotal;
 
+    @Min(1)
     @Column(name = "area")
     private BigDecimal area;
 
