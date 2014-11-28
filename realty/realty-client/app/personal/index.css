@@ -10,6 +10,13 @@ body {
     width: 75%;
 }
 
+@media (max-width: 1480px) {
+    .container {
+        width: 90%;
+        min-width: 1250px;
+    }
+}
+
 .navbar-default {
     background-color: #f4f4f4;
     margin-top: 50px;
