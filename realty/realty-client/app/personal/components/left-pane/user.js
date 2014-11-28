@@ -226,7 +226,7 @@ var LandlordSettings = React.createClass({
             map[property] = value;
 
             that.setState({
-                data: jQuery.extend(that.state.data, map)
+                data: $.extend(that.state.data, map)
             });
         };
 
@@ -257,7 +257,7 @@ var LandlordSettings = React.createClass({
                 map: map,
                 title: "Объект для сдачи"
             });
-        }
+        };
 
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
@@ -338,61 +338,6 @@ var LandlordSettings = React.createClass({
             changeDataStateValue('description', value);
         });
 
-        var __base64Encode = function (data) {
-            //  discuss at: http://phpjs.org/functions/base64_encode/
-            // original by: Tyler Akins (http://rumkin.com)
-            // improved by: Bayron Guevara
-            // improved by: Thunder.m
-            // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // improved by: Rafał Kukawski (http://kukawski.pl)
-            // bugfixed by: Pellentesque Malesuada
-            //   example 1: base64_encode('Kevin van Zonneveld');
-            //   returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
-            //   example 2: base64_encode('a');
-            //   returns 2: 'YQ=='
-            //   example 3: base64_encode('✓ à la mode');
-            //   returns 3: '4pyTIMOgIGxhIG1vZGU='
-
-            var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-            var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
-                ac = 0,
-                enc = '',
-                tmp_arr = [];
-
-            if (!data) {
-                return data;
-            }
-
-            data = unescape(encodeURIComponent(data));
-
-            do {
-                // pack three octets into four hexets
-                o1 = data.charCodeAt(i++);
-                o2 = data.charCodeAt(i++);
-                o3 = data.charCodeAt(i++);
-
-                bits = o1 << 16 | o2 << 8 | o3;
-
-                h1 = bits >> 18 & 0x3f;
-                h2 = bits >> 12 & 0x3f;
-                h3 = bits >> 6 & 0x3f;
-                h4 = bits & 0x3f;
-
-                // use hexets to index into b64, and append result to encoded string
-                tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-            } while (i < data.length);
-
-            enc = tmp_arr.join('');
-
-            var r = data.length % 3;
-
-            return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
-        };
-
-        //TODO: un-hardcode it and move.
-        var userNamePasswordHardCode = __base64Encode("user_083af554-d3f8-4644-9090-ab50cfb612e1:eccafc45-2c2c-4028-931a-648975605899");
-
         var loadApartment = function() {
             $.blockUI({message: 'Loading...'});
             $.ajax({
@@ -401,7 +346,7 @@ var LandlordSettings = React.createClass({
                 type: 'GET',
                 beforeSend: function (request)
                 {
-                    request.setRequestHeader("Authorization", "Basic " + userNamePasswordHardCode);
+                    request.setRequestHeader("Authorization", "Basic " + Auth.userNamePasswordHardCode);
                 },
                 success: function(data) {
                     that.setState({data: data});
@@ -409,13 +354,60 @@ var LandlordSettings = React.createClass({
                     $.unblockUI();
                 }.bind(that),
                 error: function(xhr, status, err) {
+                    if(xhr.status=='404') {
+                        that.setState({data: {}})
+                    }
                     console.error('/rest/apartment', status, err.toString());
                     $.unblockUI();
                 }.bind(that)
             });
         };
 
+        var validateForm = function() {
+            console.log('validating form');
+            var data = that.state.data;
+            console.log(data);
+
+            var Assert = Validator.Assert;
+            var Constraint = Validator.Constraint;
+            var validator = new Validator.Validator();
+            var constraintMap = {};
+            constraintMap['location'] = [new Assert().NotNull()];
+            constraintMap['address'] = [new Assert().NotNull()];
+            constraintMap['type_of_rent'] = [new Assert().NotNull(), new Assert().Choice( ['LONG_TERM', 'SHORT_TERM'] )];
+            constraintMap['room_count'] = [new Assert().NotNull(), new Assert().GreaterThan( 0 ) ];
+            constraintMap['floor_number'] = [new Assert().NotNull(), new Assert().GreaterThan( 0 ) ];
+            constraintMap['floors_total'] = [new Assert().NotNull(), new Assert().GreaterThan( 0 ) ];
+            constraintMap['area'] = [new Assert().NotNull(), new Assert().Required()];
+            constraintMap['description'] = [new Assert().Length({max: 2000})];
+
+            var defaultValueMap = {
+                'location': null,
+                'address': null,
+                'type_of_rent': null,
+                'rental_fee': null,
+                'fee_period': null,
+                'room_count': null,
+                'floor_number': null,
+                'floors_total': null,
+                'area': null,
+                'description': ''
+            };
+
+            var mergedMap = $.extend(defaultValueMap, data);
+
+            var constraint = new Constraint( constraintMap, {strict: true});
+
+            var validationResult = validator.validate(mergedMap, constraint);
+
+            console.log(validationResult);
+
+            return validationResult === true;
+        };
+
         var saveApartment = function() {
+            if(!validateForm()) return;
+
             $.blockUI({message: 'Loading...'});
             $.ajax({
                 url: '/rest/users/apartment',
@@ -425,7 +417,7 @@ var LandlordSettings = React.createClass({
                 contentType: 'application/json; charset=utf-8',
                 beforeSend: function (request)
                 {
-                    request.setRequestHeader("Authorization", "Basic " + userNamePasswordHardCode);
+                    request.setRequestHeader("Authorization", "Basic " + Auth.userNamePasswordHardCode);
                 },
                 success: function(data) {
                     loadApartment();
@@ -448,7 +440,7 @@ var LandlordSettings = React.createClass({
 //                contentType: 'application/json; charset=utf-8',
                 beforeSend: function (request)
                 {
-                    request.setRequestHeader("Authorization", "Basic " + userNamePasswordHardCode);
+                    request.setRequestHeader("Authorization", "Basic " + Auth.userNamePasswordHardCode);
                 },
                 success: function(data) {
                     loadApartment();
@@ -481,7 +473,7 @@ var LandlordSettings = React.createClass({
     render: function () {
         var data = this.state.data || {};
 
-        var addressProp = {id: 'addressInput', name: 'Адрес', placeholder: 'Начните печатать...', customClassName: 'col-md-8', elementValue: data['address'] ? data['address']['formatted_address']:null };
+        var addressProp = {id: 'addressInput', name: 'Адрес', placeholder: (data['address'] ? data['address']['formatted_address']:null) || 'Начните печатать...', customClassName: 'col-md-8' };
         var rentTypeProp = {name: 'Тип сдачи',
             id: 'typeOfRent',
             defaultDescription: 'Выберите тип сдачи',
