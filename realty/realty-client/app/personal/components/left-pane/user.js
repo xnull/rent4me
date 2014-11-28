@@ -356,8 +356,10 @@ var LandlordSettings = React.createClass({
                 error: function(xhr, status, err) {
                     if(xhr.status=='404') {
                         that.setState({data: {}})
+                    } else {
+//                        console.error('/rest/apartment', status, err.toString());
+                        alert('Service unavailable');
                     }
-                    console.error('/rest/apartment', status, err.toString());
                     $.unblockUI();
                 }.bind(that)
             });
@@ -372,14 +374,34 @@ var LandlordSettings = React.createClass({
             var Constraint = Validator.Constraint;
             var validator = new Validator.Validator();
             var constraintMap = {};
+
             constraintMap['location'] = [new Assert().NotNull()];
             constraintMap['address'] = [new Assert().NotNull()];
             constraintMap['type_of_rent'] = [new Assert().NotNull(), new Assert().Choice( ['LONG_TERM', 'SHORT_TERM'] )];
+            constraintMap['fee_period'] = [new Assert().NotNull(), new Assert().Choice(
+                ['HOURLY',
+                'DAILY',
+                'WEEKLY',
+                'MONTHLY']
+            )];
+            constraintMap['rental_fee'] = [new Assert().NotNull(), new Assert().GreaterThan( 0 ) ];
             constraintMap['room_count'] = [new Assert().NotNull(), new Assert().GreaterThan( 0 ) ];
             constraintMap['floor_number'] = [new Assert().NotNull(), new Assert().GreaterThan( 0 ) ];
             constraintMap['floors_total'] = [new Assert().NotNull(), new Assert().GreaterThan( 0 ) ];
             constraintMap['area'] = [new Assert().NotNull(), new Assert().Required()];
             constraintMap['description'] = [new Assert().Length({max: 2000})];
+
+            var fieldToFormIdMap = {
+                'address': 'addressInput',
+                'type_of_rent': 'typeOfRent',
+                'rental_fee': 'rentalFee',
+                'fee_period': 'feePeriod',
+                'room_count': 'roomCount',
+                'floor_number': 'floorNumber',
+                'floors_total': 'floorsTotal',
+                'area': 'area',
+                'description': 'description'
+            };
 
             var defaultValueMap = {
                 'location': null,
@@ -394,6 +416,25 @@ var LandlordSettings = React.createClass({
                 'description': ''
             };
 
+            var fieldToErrorMessageMap = {
+                'address': 'Необходимо указать адрес',
+                'type_of_rent': 'Необходимо указать тип сдачи',
+                'rental_fee': 'Необходимо указать цену сдачи',
+                'fee_period': 'Период оплаты обязателен',
+                'room_count': 'Количество комнат обязательно',
+                'floor_number': 'Номер этажа обязателен',
+                'floors_total': 'Количество этажей обязателньно',
+                'area': 'Необходимо указать площадь',
+                'description': 'Описание не должно превышать 2000 символов'
+            };
+
+            //hide container
+            var errorMessagesContainer = $('#errorMessages');
+
+            errorMessagesContainer.hide();
+            errorMessagesContainer.empty();
+            //remove all appended child nodes
+
             var mergedMap = $.extend(defaultValueMap, data);
 
             var constraint = new Constraint( constraintMap, {strict: true});
@@ -402,7 +443,34 @@ var LandlordSettings = React.createClass({
 
             console.log(validationResult);
 
-            return validationResult === true;
+            var validationSucceeded = validationResult === true;
+
+            if(!validationSucceeded) {
+                var ul = $('<ul></ul>');
+
+                var errorMessagesDivElements = _.map(validationResult, function(val,k){
+                    return fieldToErrorMessageMap[k];
+                }).filter(function(v){
+                    return v;
+                }).map(function(errorMessage){
+                    var li = $('<li></li>');
+                    li.html(errorMessage);
+                    return  li;
+                });
+
+
+                _.each(errorMessagesDivElements, function(v){
+                    console.log(v);
+                    v.appendTo(ul);
+                });
+                console.log(ul);
+                ul.appendTo(errorMessagesContainer);
+                errorMessagesContainer.show();
+            } else {
+                errorMessagesContainer.hide();
+            }
+
+            return  validationSucceeded;
         };
 
         var saveApartment = function() {
@@ -425,7 +493,7 @@ var LandlordSettings = React.createClass({
 //                    that.setState({data: data});
                 }.bind(that),
                 error: function(xhr, status, err) {
-                    console.error('/rest/apartment', status, err.toString());
+//                    console.error('/rest/apartment', status, err.toString());
                     $.unblockUI();
                 }.bind(that)
             });
@@ -448,7 +516,8 @@ var LandlordSettings = React.createClass({
 //                    that.setState({data: data});
                 }.bind(that),
                 error: function(xhr, status, err) {
-                    console.error('/rest/apartment', status, err.toString());
+//                    console.error('/rest/apartment', status, err.toString());
+                    alert('Service unavailable');
                     $.unblockUI();
                 }.bind(that)
             });
@@ -460,7 +529,7 @@ var LandlordSettings = React.createClass({
             console.log('saving data:');
             console.log(that.state.data);
             if(that.state.data.id) {
-                alert('Sorry, already saved');
+                alert('Вы уже сохраняли форму. Нельзя изменить данные.');
             } else {
                 saveApartment();
             }
@@ -515,6 +584,10 @@ var LandlordSettings = React.createClass({
             height: '300px'
         };
 
+        var errorMessageStyles = {
+            display: 'none'
+        };
+
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -522,6 +595,9 @@ var LandlordSettings = React.createClass({
                         <h4>Собственность</h4>
 
                         <br/>
+
+                        <div id="errorMessages" className="alert alert-danger" role="alert" style={errorMessageStyles}>
+                        </div>
 
                         <div className="row">
                             <div className="col-md-7" >
