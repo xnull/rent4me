@@ -38,6 +38,8 @@ var UserButton = React.createClass({
 
 module.exports = React.createClass({
     render: function () {
+        console.log('user render');
+
         var nameProp = {name: 'Имя'};
         var phoneProp = {name: 'Телефон'};
         var emailProp = {name: 'Email'};

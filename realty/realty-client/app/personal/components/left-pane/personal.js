@@ -7,6 +7,7 @@
  */
 module.exports = React.createClass({
     render: function () {
+        console.log('personal render');
         return (
             <div className="panel panel-default">
                 <div className="panel-body">
@@ -27,7 +28,9 @@ module.exports = React.createClass({
     }
 });
 
-/* <a href="#" className="list-group-item">
+/*
+ console.log('faking comment');
+ <a href="#" className="list-group-item">
  <h4 className="list-group-item-heading">Соц. сети</h4>
 
  <p className="list-group-item-text">Поиск недвижимости для аренды в социальных сетях</p>

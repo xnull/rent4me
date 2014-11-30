@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+var LookingForComponent = require('./looking-for.js');
 
 module.exports = React.createClass({
     render: function () {

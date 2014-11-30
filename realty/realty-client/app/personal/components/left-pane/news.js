@@ -3,6 +3,7 @@
  */
 module.exports = React.createClass({
     render: function () {
+        console.log('news render');
         return (
             <div className="panel panel-default">
 

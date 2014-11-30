@@ -58,4 +58,4 @@ var AuthClass = function() {
     this.userNamePasswordHardCode = this.__base64Encode("user_083af554-d3f8-4644-9090-ab50cfb612e1:eccafc45-2c2c-4028-931a-648975605899");
 };
 
-var Auth = new AuthClass();
+module.exports = new AuthClass();

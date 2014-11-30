@@ -1,10 +1,8 @@
-require('react');
-
 var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');
 
-var UserComponent = React.createClass({
+var UserPanel = React.createClass({
     render: function () {
         return (
             <div className="panel panel-default">
@@ -45,10 +43,10 @@ module.exports = React.createClass({
 
         return (
             <div className="col-md-3">
-                <UserComponent/>
+                <UserPanel/>
                 <PersonalCabinetComponent/>
-                { this.develop ? <NewsComponent /> : null }
-                { this.develop ? <LegalComponent/> : null }
+                { develop ? <NewsComponent /> : null }
+                { develop ? <LegalComponent/> : null }
             </div>
         )
     }
