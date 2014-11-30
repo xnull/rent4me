@@ -3,41 +3,30 @@
 <head lang="en">
     <meta charset="UTF-8">
 
+    <!-- JQuery section -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
-
-    <script src="//fb.me/react-with-addons-0.12.0.js"></script>
-    <script src="//fb.me/JSXTransformer-0.12.0.js"></script>
-    <script src="../node_modules/react-router/dist/react-router.js"></script>
-    <script src="../../node_modules/react-router/dist/react-router.js"></script>
-
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.66.0-2013.10.09/jquery.blockUI.min.js"></script>
+
+    <!-- Utils -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
     <!--TODO: embed it in better way -->
     <script src="https://raw.githubusercontent.com/guillaumepotier/validator.js/v0.5.5/dist/validator.min.js"></script>
 
+    <!-- Bootstrap section -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
 
+    <!-- React  -->
+    <script src="//fb.me/react-with-addons-0.12.1.js"></script>
+    <script src="//fb.me/JSXTransformer-0.12.1.js"></script>
+
+    <!-- google section -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 
-
+    <!-- Project section -->
     <link rel="stylesheet" href="index.css">
-
-    <script type="text/javascript" src="components/common/auth.js"></script>
-
-    <script type="text/jsx" src="components/left-pane/user.js"></script>
-    <script type="text/jsx" src="components/left-pane/personal.js"></script>
-    <script type="text/jsx" src="components/left-pane/news.js"></script>
-    <script type="text/jsx" src="components/left-pane/legal.js"></script>
-    <script type="text/jsx" src="components/main/looking-for.js"></script>
-
-    <script type="text/jsx" src="components/left-pane/left-pane.js"></script>
-    <script type="text/jsx" src="components/main/news-pane.js"></script>
-
-    <script type="text/jsx" src="components/router.js"></script>
-
+    <script type="text/jsx" src="main.js"></script>
     <title></title>
 </head>
 <body>
@@ -46,14 +35,10 @@
 <br>
 
 <div class="container">
-    <!-- the row -->
     <div class="row">
-
         <div id="leftPane"></div>
         <div id="mainView"></div>
-
     </div>
-    <!-- end of the row -->
 </div>
 
 </body>

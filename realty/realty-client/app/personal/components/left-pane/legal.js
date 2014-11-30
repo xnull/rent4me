@@ -1,6 +1,7 @@
-/** @jsx React.DOM */
-
-var LegalComponent = React.createClass({
+/**
+ * Все что связано с юридической стороной вопроса: договор аренды, юр. вопросы, налог для собственника и т.д.
+ */
+module.exports = React.createClass({
     render: function () {
         return (
             <div className="panel panel-default">

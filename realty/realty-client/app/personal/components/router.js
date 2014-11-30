@@ -1,29 +1,40 @@
-/** @jsx React.DOM */
+var React = require('react');
+var Router = require('react-router');
 
-var Router = ReactRouter;
-var Route = ReactRouter.Route;
-var NotFoundRoute = ReactRouter.NotFoundRoute;
-var DefaultRoute = ReactRouter.DefaultRoute;
-var Link = ReactRouter.Link;
-var RouteHandler = ReactRouter.RouteHandler;
+var Route = Router.Route;
+var NotFoundRoute = Router.NotFoundRoute;
+var DefaultRoute = Router.DefaultRoute;
+var Link = Router.Link;
+var RouteHandler = Router.RouteHandler;
 
+/**
+ * Расписано как надо юзать реакт компоненты через browserify:
+ * https://gist.github.com/sebmarkbage/d7bce729f38730399d28
+ * https://github.com/facebook/react/issues/2436
+ */
 var App = React.createClass({
     render: function () {
         return (
-            <RouteHandler/>
+            <div>
+                <RouteHandler/>
+            </div>
         )
     }
 });
 
-var routes = (
+var route = (
     <Route path="/" handler={App}>
-        <Route name="user" path="user" handler={Settings}/>
-        <Route name="landlord" path="user/landlord" handler={LandlordSettings}/>
-        <DefaultRoute handler={NewsPaneComponent}/>
+        <Route name="user" path="user" handler={require('./left-pane/user.js')}/>
+
     </Route>
 
 );
 
-Router.run(routes, function (Handler) {
+Router.run(route, function (Handler) {
     React.render(<Handler/>, document.getElementById('mainView'));
 });
+
+/*
+ <Route name="landlord" path="user/landlord" handler={require('./left-pane/settings/landlord.js')}/>
+ <DefaultRoute handler={require('./main/news-pane.js')}/>
+ */

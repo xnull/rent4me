@@ -1,62 +1,3 @@
-/** @jsx React.DOM */
-
-var LookingForComponent = React.createClass({
-    /**
-     * https://developers.google.com/places/?hl=ru
-     * https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete?hl=ru
-     *
-     * @param rootNode
-     */
-    componentDidMount: function (rootNode) {
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
-    },
-
-    render: function () {
-        return (
-            <div className="col-md-9">
-                <div className="panel">
-
-                    <div className="panel-body">
-                        <h4>Мне интересно</h4>
-
-
-                        <form className="form-horizontal" role="form">
-                            <div className="form-group">
-                                <label className="col-md-2 control-label">Адрес</label>
-                                <div className="col-md-10">
-                                    <AddressBox
-                                        data={this.state !== null ? this.state.data : this.props.data}
-                                        onChange={this.handleAddressChange}
-                                        ref = "addressInput"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-md-offset-9">
-                                <a className="btn btn-primary center-block" onClick={this.onClick}>Поиск</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        );
-    },
-
-    handleAddressChange: function (address) {
-        this.setState({
-            data: {address: address}
-        });
-    },
-
-    onClick: function () {
-        this.props.onSearchNews(
-            {
-                address: this.refs.addressInput.getDOMNode().value
-            }
-        );
-    }
-});
-
 var AddressBox = React.createClass({
     render: function () {
         return (
@@ -131,3 +72,61 @@ var NewsItem = React.createClass({
         );
     }
 });
+
+module.exports = React.createClass({
+    /**
+     * https://developers.google.com/places/?hl=ru
+     * https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete?hl=ru
+     *
+     * @param rootNode
+     */
+    componentDidMount: function (rootNode) {
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
+    },
+
+    render: function () {
+        return (
+            <div className="col-md-9">
+                <div className="panel">
+
+                    <div className="panel-body">
+                        <h4>Мне интересно</h4>
+
+
+                        <form className="form-horizontal" role="form">
+                            <div className="form-group">
+                                <label className="col-md-2 control-label">Адрес</label>
+                                <div className="col-md-10">
+                                    <AddressBox
+                                        data={this.state !== null ? this.state.data : this.props.data}
+                                        onChange={this.handleAddressChange}
+                                        ref = "addressInput"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-md-offset-9">
+                                <a className="btn btn-primary center-block" onClick={this.onClick}>Поиск</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        );
+    },
+
+    handleAddressChange: function (address) {
+        this.setState({
+            data: {address: address}
+        });
+    },
+
+    onClick: function () {
+        this.props.onSearchNews(
+            {
+                address: this.refs.addressInput.getDOMNode().value
+            }
+        );
+    }
+});
+

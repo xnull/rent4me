@@ -1,6 +1,4 @@
-/** @jsx React.DOM */
-
-var Articles = React.createClass({
+module.exports = React.createClass({
     render: function () {
         return (
             <div>

@@ -1,6 +1,7 @@
-/** @jsx React.DOM */
-
-var NewsComponent = React.createClass({
+/**
+ * Панель новостей и аналитики, в общем всего что связано с экономической составляющей вопроса
+ */
+module.exports = React.createClass({
     render: function () {
         return (
             <div className="panel panel-default">

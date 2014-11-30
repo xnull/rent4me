@@ -2,18 +2,21 @@
  * Плагины для галпа
  * @constructor
  */
+var gulp = require('gulp');
 function Plugins() {
-    this.gulp = require('gulp');
     this.jshint = require('gulp-jshint');
     this.print = require('gulp-print');
     this.concat = require('gulp-concat');
     this.clean = require('gulp-clean');
+
     this.gulpBowerFiles = require('gulp-bower-files');
-    this.browserify = require('gulp-browserify');
+    this.browserify = require('browserify');
     this.source = require('vinyl-source-stream');
+    this.reactify = require('reactify');
+
     this.open = require("gulp-open");
     this.webserver = require('gulp-webserver');
-    this.ngHtml2Js = require("gulp-ng-html2js");
+    //this.ngHtml2Js = require("gulp-ng-html2js");
     this.watch = require('gulp-watch');
     //this.watchify = require('watchify');
     this.livereload = require('gulp-livereload');
@@ -21,21 +24,28 @@ function Plugins() {
 
 //Common variables
 function Settings() {
-    this.projectDir = 'app';
+    this.projectDir = './app/personal';
     this.buildDir = './build-js';
+    this.mainJsFile = this.projectDir + '/app.js';
 
-    this.nodeModules = 'node_modules';
+    this.nodeModules = './node_modules';
     this.bowerDir = this.nodeModules + '/bower';
 
     this.dist = [this.buildDir];
+    this.indexHtml = this.projectDir + '/index.html';
+
     this.appFiles = [this.projectDir + '/*js'];
+    this.cssFiles = [this.projectDir + '/**/*.css', this.projectDir + '/*.css'];
+    this.images = [this.projectDir + 'img/**/*.jpg', this.projectDir + 'img/**/*.png', this.projectDir + 'img/**/*.gif'];
+
     this.jsHintFiles = this.projectDir + '/**/*.js';
 
     this.gulpFile = 'gulpfile.js';
+    this.watchDirs = [this.projectDir + '/**/*.*'];
 }
 
 function Tasks() {
-    this.bowerFiles = 'bower-files';
+    this.bowerInstall = 'bowerInstall';
     this.clean = 'clean';
     this.jsHint = 'jsHint';
     this.files = 'files';
@@ -52,10 +62,10 @@ var tasks = new Tasks();
 /**
  * Наблюдение за исходниками и если они изменились, то производится пересборка проекта
  */
-plugins.gulp.task(tasks.watch, function () {
-    plugins.gulp.src(['./app/**/*.*', this.gulpFile])
-        .pipe(plugins.watch(['./app/**/*.*', this.gulpFile], function (files) {
-            plugins.gulp.start(tasks.build);
+gulp.task(tasks.watch, function () {
+    gulp.src(settings.watchDirs)
+        .pipe(plugins.watch(settings.watchDirs, function (files) {
+            gulp.start(tasks.build);
         }));
 });
 
@@ -68,12 +78,11 @@ plugins.gulp.task(tasks.watch, function () {
  *
  * live reload rus: http://frontender.info/getting-started-with-gulp-2/
  */
-plugins.gulp.task(tasks.build, [tasks.clean], function () {
-    jsBuild();
+gulp.task(tasks.build, [tasks.clean], function () {
+    build();
 });
 
-function jsBuild() {
-    buildHtmlFiles();
+function build() {
     buildBrowserify();
     cssBuild();
     imgBuild();
@@ -81,42 +90,27 @@ function jsBuild() {
 }
 
 function buildBrowserify() {
-    plugins.gulp.src('app/app.js')
-        .pipe(plugins.browserify({
-            insertGlobals: true,
-            debug: true
-        }))
-        .pipe(plugins.gulp.dest(paths.buildDir));
-}
-
-function buildHtmlFiles() {
-    plugins.gulp.src("./app/components/**/*.html")
-        .pipe(plugins.ngHtml2Js({
-            moduleName: '',
-            prefix: ''
-        }))
-        .pipe(concat("html-templates.js"))
-        .pipe(plugins.gulp.dest("./build-js/"));
+    var b = plugins.browserify();
+    b.transform(plugins.reactify); // use the reactify transform
+    b.add(settings.mainJsFile);
+    return b.bundle()
+        .pipe(plugins.source('main.js'))
+        .pipe(gulp.dest(settings.buildDir));
 }
 
 function cssBuild() {
-    plugins.gulp.src(['app/components/**/*.css', 'app/*.css'])
-        .pipe(concat('index.css'))
-        .pipe(plugins.gulp.dest(paths.buildDir));
+    gulp.src(settings.cssFiles)
+        .pipe(plugins.concat('index.css'))
+        .pipe(gulp.dest(settings.buildDir));
 }
 
 function imgBuild() {
-    plugins.gulp.src([
-        './app/components/**/*.jpg',
-        './app/components/**/*.png',
-        './app/components/**/*.gif'
-    ])
-        .pipe(plugins.gulp.dest(paths.buildDir + '/components'));
+    gulp.src(settings.images).pipe(gulp.dest(settings.buildDir + '/img'));
 }
 
 function indexHtmlBuild() {
-    plugins.gulp.src('./app/index.html')
-        .pipe(plugins.gulp.dest(paths.buildDir))
+    gulp.src(settings.indexHtml)
+        .pipe(gulp.dest(settings.buildDir))
 }
 
 // ------------------------------------ малозначимые бизнес таски ------------------------------------------- //
@@ -124,17 +118,17 @@ function indexHtmlBuild() {
 /**
  * Очистка билдовой папки проекта
  */
-plugins.gulp.task(tasks.clean, function () {
-    return plugins.gulp.src(paths.dist, {read: false}).pipe(clean({force: true}));
+gulp.task(tasks.clean, function () {
+    return gulp.src(settings.dist, {read: false}).pipe(plugins.clean({force: true}));
 });
 
 /**
  * Проверка качества js кода. Наподобие джавашного findbugs-a
  */
-plugins.gulp.task(tasks.jsHint, function () {
-    return plugins.gulp.src(paths.jsHintFiles)
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+gulp.task(tasks.jsHint, function () {
+    return gulp.src(settings.jsHintFiles)
+        .pipe(plugins.jshint())
+        .pipe(plugins.jshint.reporter('default'));
 });
 
 
@@ -146,13 +140,13 @@ plugins.gulp.task(tasks.jsHint, function () {
  * то в них может не быть многих клиентских библиотек, например bootstrap. Для всех таких библиотек нам приходится
  * пользоваться bower-ом. Чтобы отличать боверские либы от npm-ных, таска кладет их в папку bower внутрь node_modules
  */
-plugins.gulp.task(tasks.bowerFiles, function () {
-    plugins.gulpBowerFiles().pipe(plugins.gulp.dest(settings.bowerDir));
+gulp.task(tasks.bowerInstall, function () {
+    plugins.gulpBowerFiles().pipe(gulp.dest(settings.bowerDir));
 });
 
 /**
  * Print all javascript files
  */
-plugins.gulp.task(tasks.files, function () {
-    plugins.gulp.src(paths.app).pipe(print());
+gulp.task(tasks.files, function () {
+    gulp.src(settings.app).pipe(print());
 });

@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var NewsPaneComponent = React.createClass({
+module.exports = React.createClass({
     render: function () {
         return (
             <div>
