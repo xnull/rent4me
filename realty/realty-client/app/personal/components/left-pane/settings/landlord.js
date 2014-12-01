@@ -1,6 +1,7 @@
 /**
  * Настройки собственности юзера
  */
+var JSON = require('JSON2');
 var Validator = require('validator.js');
 var _ = require('underscore');
 var React = require('react');
