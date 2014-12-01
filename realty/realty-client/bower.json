@@ -4,22 +4,12 @@
     "main": "index.html",
 
     "dependencies": {
-        "angular-resource": "v1.3.0-beta.11",
-        "angular-route": "v1.3.0-beta.11",
-        "angular-ui-router": "0.2.10",
-        "angular-cookies": "v1.3.0-beta.11",
         "blockui": "v2.65",
         "bootstrap": "3.2.0",
         "respond": "1.4.2",
         "html5shiv": "3.7.2",
         "google-maps-utility-library-v3": "latest"
     },
-    "devDependencies": {
-        "angular-loader": "v1.3.0-beta.11",
-        "angular-mocks": "v1.3.0-beta.11",
-        "html5-boilerplate": "~4.3.0"
-    },
-
     "overrides": {
         "blockui": {
             "main": "./jquery.blockUI.js"

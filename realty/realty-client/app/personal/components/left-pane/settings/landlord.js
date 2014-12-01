@@ -1,6 +1,8 @@
 /**
  * Настройки собственности юзера
  */
+var Validator = require('validator.js');
+var _ = require('underscore');
 var React = require('react');
 var Auth = require('../../common/auth.js');
 
