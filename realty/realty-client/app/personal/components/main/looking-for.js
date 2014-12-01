@@ -1,3 +1,5 @@
+require('react');
+
 var AddressBox = React.createClass({
     render: function () {
         return (

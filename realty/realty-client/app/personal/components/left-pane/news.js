@@ -1,9 +1,10 @@
 /**
  * Панель новостей и аналитики, в общем всего что связано с экономической составляющей вопроса
  */
+require('react');
+
 module.exports = React.createClass({
     render: function () {
-        console.log('news render');
         return (
             <div className="panel panel-default">
 

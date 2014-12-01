@@ -1,6 +1,8 @@
 /**
  * Компонент настроек профиля пользователя. Пользователь задает свою контактную информацию на этой панели
  */
+require('react');
+
 var UserProperty = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName || 'col-md-4';
@@ -38,14 +40,14 @@ var UserButton = React.createClass({
 
 module.exports = React.createClass({
     render: function () {
-        console.log('user render');
-
         var nameProp = {name: 'Имя'};
         var phoneProp = {name: 'Телефон'};
         var emailProp = {name: 'Email'};
         var roleProp = {name: 'Роль в системе'};
 
         var submitButton = {url: '#/user/submit', value: 'Сохранить'};
+
+        console.log('user widget');
 
         return (
             <div className="col-md-9">

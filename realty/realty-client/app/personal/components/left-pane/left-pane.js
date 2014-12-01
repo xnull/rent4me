@@ -1,3 +1,4 @@
+require('react');
 var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');
@@ -39,7 +40,7 @@ var UserPanel = React.createClass({
 
 module.exports = React.createClass({
     render: function () {
-        var develop = true;
+        var develop = false;
 
         return (
             <div className="col-md-3">

@@ -5,9 +5,10 @@
  *  - кнопки манипулирования объявлениями - выставить квартиру, выставить объявление о поиске жилья и т.д.
  *
  */
+require('react');
+
 module.exports = React.createClass({
     render: function () {
-        console.log('personal render');
         return (
             <div className="panel panel-default">
                 <div className="panel-body">
