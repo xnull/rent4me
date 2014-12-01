@@ -38,15 +38,9 @@ var UserSelect = React.createClass({
         keyValuePairs.unshift(['', description]);
 
         var optionNodes = keyValuePairs.map(function (pair) {
-            if (selectedValue == pair[0]) {
-                return (
-                    <option selected="selected" value={pair[0]}>{pair[1]}</option>
-                );
-            } else {
-                return (
-                    <option value={pair[0]}>{pair[1]}</option>
-                );
-            }
+            return (
+                <option key={pair[0]} value={pair[0]}>{pair[1]}</option>
+            );
         });
 
         return (
@@ -54,7 +48,7 @@ var UserSelect = React.createClass({
                 <div className="form-group">
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
-                        <select id={this.props.data.id} className="form-control">
+                        <select id={this.props.data.id} className="form-control" value={selectedValue}>
                             {optionNodes}
                         </select>
                     </div>
