@@ -4,12 +4,25 @@
     "description": "The realty project",
     "author": "bynull",
     "scripts": {},
+
     "browser": {
-        "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js"
+      "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
+      "blockui": "./node_modules/bower/blockui/jquery.blockUI.js",
+      "jquery": "./node_modules/jquery/dist/jquery.js"
     },
+    "jquery": {
+      "exports": "$"
+    },
+    "blockui": {
+      "exports": "blockui",
+      "depends": {
+        "jquery": "$"
+      }
+    },
+
     "browserify": {
-        "transform": [
-            "browserify-shim"
+      "transform": [
+        "browserify-shim"
         ]
     },
     "browserify-shim": {

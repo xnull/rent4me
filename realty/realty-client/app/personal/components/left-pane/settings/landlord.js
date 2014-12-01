@@ -1,6 +1,8 @@
 /**
  * Настройки собственности юзера
  */
+//var $ = require('jquery');
+//require('blockui');
 var JSON = require('JSON2');
 var Validator = require('validator.js');
 var _ = require('underscore');
