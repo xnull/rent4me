@@ -94,11 +94,11 @@ task prepareReactRouterNodeModule(type: Copy) {
     into 'build/tmp/node_modules/react-router'
 }
 
-task packApp(dependsOn: ['cleanUpBuildTmp','bowerInstall', 'prepareReactRouterNodeModule'], type: Tar) {
+task packApp(dependsOn: ['cleanUpBuildTmp','jsBuild', 'prepareReactRouterNodeModule'], type: Tar) {
     //copy node modules from one file to another
 //    reactRouter = new File(project.projectDir, 'node_modules/react-router')
 //    new File(project.projectDir, 'tmp_node_modules')
-    from 'app', 'build/tmp'
+    from 'build-js'
     baseName = 'app-1.0'
 }
 
