@@ -1,7 +1,7 @@
 /**
  * Все что связано с юридической стороной вопроса: договор аренды, юр. вопросы, налог для собственника и т.д.
  */
-require('react');
+var React = require('react');
 
 module.exports = React.createClass({
     render: function () {

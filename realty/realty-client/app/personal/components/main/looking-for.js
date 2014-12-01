@@ -1,4 +1,4 @@
-require('react');
+var React = require('react');
 
 var AddressBox = React.createClass({
     render: function () {

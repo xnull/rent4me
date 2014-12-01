@@ -1,7 +1,7 @@
 /**
  * Настройки собственности юзера
  */
-require('react');
+var React = require('react');
 var Auth = require('../../common/auth.js');
 
 var UserProperty = React.createClass({

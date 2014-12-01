@@ -1,4 +1,4 @@
-require('react');
+var React = require('react');
 var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');

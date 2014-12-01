@@ -1,7 +1,7 @@
 /**
  * Панель новостей и аналитики, в общем всего что связано с экономической составляющей вопроса
  */
-require('react');
+var React = require('react');
 
 module.exports = React.createClass({
     render: function () {

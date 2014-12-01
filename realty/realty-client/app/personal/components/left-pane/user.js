@@ -1,7 +1,7 @@
 /**
  * Компонент настроек профиля пользователя. Пользователь задает свою контактную информацию на этой панели
  */
-require('react');
+var React = require('react');
 
 var UserProperty = React.createClass({
     render: function () {
