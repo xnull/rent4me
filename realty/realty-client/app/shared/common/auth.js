@@ -1,61 +1,19 @@
+//var $ = require('jquery');
+var Cookies = require('./cookies.js');
+
+var JSON = require('JSON2');
+
+var Utils = require('./utils.js');
+
 /**
  * Created by dionis on 28/11/14.
  */
 var AuthClass = function() {
-    this. __base64Encode = function (data) {
-        //  discuss at: http://phpjs.org/functions/base64_encode/
-        // original by: Tyler Akins (http://rumkin.com)
-        // improved by: Bayron Guevara
-        // improved by: Thunder.m
-        // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-        // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-        // improved by: Rafał Kukawski (http://kukawski.pl)
-        // bugfixed by: Pellentesque Malesuada
-        //   example 1: base64_encode('Kevin van Zonneveld');
-        //   returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
-        //   example 2: base64_encode('a');
-        //   returns 2: 'YQ=='
-        //   example 3: base64_encode('✓ à la mode');
-        //   returns 3: '4pyTIMOgIGxhIG1vZGU='
+    this.username = null;
+    this.token = null;
 
-        var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-        var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
-            ac = 0,
-            enc = '',
-            tmp_arr = [];
-
-        if (!data) {
-            return data;
-        }
-
-        data = unescape(encodeURIComponent(data));
-
-        do {
-            // pack three octets into four hexets
-            o1 = data.charCodeAt(i++);
-            o2 = data.charCodeAt(i++);
-            o3 = data.charCodeAt(i++);
-
-            bits = o1 << 16 | o2 << 8 | o3;
-
-            h1 = bits >> 18 & 0x3f;
-            h2 = bits >> 12 & 0x3f;
-            h3 = bits >> 6 & 0x3f;
-            h4 = bits & 0x3f;
-
-            // use hexets to index into b64, and append result to encoded string
-            tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-        } while (i < data.length);
-
-        enc = tmp_arr.join('');
-
-        var r = data.length % 3;
-
-        return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
-    };
-
-    //TODO: un-hardcode it and move.
-    this.userNamePasswordHardCode = this.__base64Encode("user_083af554-d3f8-4644-9090-ab50cfb612e1:eccafc45-2c2c-4028-931a-648975605899");
+    this.fbUserId = null;
+    this.fbAccessToken = null;
 
     this.getFbId = function() {
         var isProduction = window.location.href.indexOf('rent4.me') != -1;
@@ -74,13 +32,14 @@ var AuthClass = function() {
     };
 
     this.statusChangeCallback = function (response) {
+        console.log(response);
         if (response.status === 'connected') {
-            // Logged into your app and Facebook.
-//            testAPI();
-            //redirect to personal page
-            alert('INFO: Logged in via FB');
-            alert('TODO: check cookies');
-            alert('TODO: if has cookies - redirect to personal page');
+
+
+            this.fbUserId = response.authResponse.userID;
+            this.fbAccessToken = response.authResponse.accessToken;
+
+            this.authOnBackendWithFacebook();
         } else if (response.status === 'not_authorized') {
             // The person is logged into Facebook, but not your app.
 //            document.getElementById('status').innerHTML = 'Please log ' +
@@ -93,6 +52,51 @@ var AuthClass = function() {
         }
     };
 
+    this.authOnBackendWithFacebook = function() {
+        var that = this;
+        $.blockUI();
+
+        var data = {"facebook_id": this.fbUserId, "access_token": this.fbAccessToken};
+
+        console.log('data to send');
+        console.log(data);
+
+        $.ajax({
+            url: '/rest/auth/facebook',
+            dataType: 'json',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function (request) {
+//                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
+            },
+            success: function (data) {
+                console.log("Success!");
+                console.log("Data:");
+                console.log(data);
+
+                that.username = data.username;
+                that.token = data.token;
+
+                that.storeUsernameAndTokenInCookies();
+
+                $.unblockUI();
+
+                Utils.navigateToPersonal();
+//                    that.setState({data: data});
+            }.bind(that),
+            error: function (xhr, status, err) {
+//                    console.error('/rest/apartment', status, err.toString());
+                console.log("Error!");
+                that.username = null;
+                that.token = null;
+                that.fbUserId = null;
+                that.fbAccessToken = null;
+                $.unblockUI();
+            }.bind(that)
+        });
+    };
+
     this.checkLoginState = function() {
         var that = this;
         FB.getLoginStatus(function(response) {
@@ -100,7 +104,30 @@ var AuthClass = function() {
         });
     };
 
+    this.restoreUsernameAndTokenFromCookies = function() {
+        this.username = Cookies.getCookie("rent4me_uname");
+        this.token = Cookies.getCookie("rent4me_token");
+    };
 
+    this.storeUsernameAndTokenInCookies = function() {
+        if(this.hasCredentials()) {
+            Cookies.setCookieTemp("rent4me_uname", this.username) ;
+            Cookies.setCookieTemp("rent4me_token", this.token);
+        }
+    };
+
+    this.hasCredentials = function() {
+        return this.username && this.token;
+    };
+
+    //TODO: un-hardcode.
+    this.getAuthHeader = function(){
+        if(this.hasCredentials()) {
+            return Utils.__base64Encode(this.username+":"+this.token);
+        } else {
+            return null;
+        }
+    }
 };
 
 module.exports = new AuthClass();

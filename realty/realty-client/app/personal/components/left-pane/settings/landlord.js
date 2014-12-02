@@ -418,7 +418,7 @@ module.exports = React.createClass({
                 dataType: 'json',
                 type: 'GET',
                 beforeSend: function (request) {
-                    request.setRequestHeader("Authorization", "Basic " + Auth.userNamePasswordHardCode);
+                    request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
                 },
                 success: function (data) {
                     that.setState({data: data});
@@ -556,7 +556,7 @@ module.exports = React.createClass({
                 data: JSON.stringify(that.state.data),
                 contentType: 'application/json; charset=utf-8',
                 beforeSend: function (request) {
-                    request.setRequestHeader("Authorization", "Basic " + Auth.userNamePasswordHardCode);
+                    request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
                 },
                 success: function (data) {
                     loadApartment();
@@ -578,7 +578,7 @@ module.exports = React.createClass({
                 type: 'DELETE',
 //                contentType: 'application/json; charset=utf-8',
                 beforeSend: function (request) {
-                    request.setRequestHeader("Authorization", "Basic " + Auth.userNamePasswordHardCode);
+                    request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
                 },
                 success: function (data) {
                     loadApartment();

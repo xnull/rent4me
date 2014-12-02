@@ -11,6 +11,7 @@
     <![endif]-->
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.66.0-2013.10.09/jquery.blockUI.min.js"></script>
     <script src="js/jquery.scrolly.min.js"></script>
     <script src="js/skel.min.js"></script>
     <script src="js/init.js"></script>
@@ -120,16 +121,23 @@
 </section>
 <script type="text/javascript">
     $(document).ready(function() {
-        $.ajaxSetup({ cache: true });
-        $.getScript('//connect.facebook.net/en_UK/all.js', function(){
-            FB.init({
-                appId: Auth.getFbId(),
-                xfbml: true,
-                cookie: true,
-                version: 'v2.1'
+        Auth.restoreUsernameAndTokenFromCookies();
+        if(!Auth.hasCredentials()) {
+            $.ajaxSetup({ cache: true });
+            $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+                FB.init({
+                    appId: Auth.getFbId(),
+                    xfbml: true,
+                    cookie: true,
+                    version: 'v2.1'
+                });
+                Auth.checkLoginState();
             });
-            Auth.checkLoginState();
-        });
+        } else {
+            //TODO: redirect to personal page
+            alert("Already authorized. You could proceed");
+            Utils.navigateToPersonal();
+        }
     });
 </script>
 </body>
