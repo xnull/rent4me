@@ -66,9 +66,9 @@ function R4MEUtils() {
     this.navigateToStart = function() {
         var isDev = document.location.href.indexOf('/dev/') != -1;
         if(isDev) {
-            document.location.href = '/dev/start';
+            document.location.href = '/dev/';
         } else {
-            document.location.href = '/start';
+            document.location.href = '/';
         }
     };
 }

@@ -31,6 +31,10 @@ function Settings() {
         '/start'
     ];
 
+    this.projectBuildSubPaths = {
+        '/start': '/'
+    };
+
     this.moduleInfo = {};
 
     this.projectDir = this.projectBaseDir;
@@ -64,7 +68,7 @@ function Settings() {
         var moduleName = this.projectSubModules[i];
         var projectDir = this.projectBaseDir + moduleName;
         this.moduleInfo[moduleName]['projectDir'] = projectDir;
-        this.moduleInfo[moduleName]['buildDir'] = this.buildDir + moduleName;
+        this.moduleInfo[moduleName]['buildDir'] = this.buildDir + (this.projectBuildSubPaths[moduleName] || moduleName);
         this.moduleInfo[moduleName]['mainJsFile'] = projectDir + '/app.js';
         this.moduleInfo[moduleName]['dist'] = [ this.moduleInfo[moduleName]['buildDir'] ];
         this.moduleInfo[moduleName]['indexHtml'] = projectDir + '/index.html';
