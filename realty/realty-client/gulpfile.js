@@ -71,7 +71,7 @@ function Settings() {
         this.moduleInfo[moduleName]['appFiles'] = [ projectDir + '/*js' ];
         this.moduleInfo[moduleName]['cssFiles'] = [projectDir + '/**/*.css', projectDir + '/*.css'];
         this.moduleInfo[moduleName]['fontFiles'] = [projectDir + '/fonts/*.*'];
-        this.moduleInfo[moduleName]['images'] = [projectDir + 'img/**/*.jpg', projectDir + 'img/**/*.png', projectDir + 'img/**/*.gif'];
+        this.moduleInfo[moduleName]['images'] = [projectDir + 'images/**/*.jpg', projectDir + 'images/**/*.png', projectDir + 'images/**/*.gif'];
         this.moduleInfo[moduleName]['jsHintFiles'] = projectDir + '/**/*.js';
         this.moduleInfo[moduleName]['watchDir'] = projectDir + '/**/*.*';
     }
@@ -127,14 +127,27 @@ function build() {
             indexHtmlBuild(moduleInfo);
             fontsBuild(moduleInfo);
         } else {
-            copyContents(moduleInfo);
+            buildStart(moduleInfo);
         }
     }
 }
 
-function copyContents(moduleInfo) {
-    gulp.src(moduleInfo['projectDir']+"/**/*.*")
-        .pipe(gulp.dest(moduleInfo['buildDir']));
+function buildStart(moduleInfo) {
+    buildBrowserify(moduleInfo);//build js stuff
+    indexHtmlBuild(moduleInfo);
+    fontsBuild(moduleInfo);
+
+    //simply copy all images
+    gulp.src([moduleInfo['projectDir']+"/images/**/*.*"])
+        .pipe(gulp.dest(moduleInfo['buildDir']+"/images"));
+
+//    imgBuild(moduleInfo);
+    //simply copy all content of js
+    gulp.src([moduleInfo['projectDir']+"/css/**/*.*"])
+        .pipe(gulp.dest(moduleInfo['buildDir']+"/css"));
+    //simply copy all content of js
+    gulp.src([moduleInfo['projectDir']+"/js/*.*"])
+        .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
 }
 
 function buildBrowserify(moduleInfo) {
