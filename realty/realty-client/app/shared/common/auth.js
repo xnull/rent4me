@@ -58,10 +58,49 @@ var AuthClass = function() {
     this.userNamePasswordHardCode = this.__base64Encode("user_083af554-d3f8-4644-9090-ab50cfb612e1:eccafc45-2c2c-4028-931a-648975605899");
 
     this.getFbId = function() {
-        //TODO: move auth logic here
+        var isProduction = window.location.href.indexOf('rent4.me') != -1;
+
+        var fbAppId;
+        var vkAppId;
+        if (isProduction) {
+            fbAppId = '270007246518198';
+            vkAppId = '4463597';
+        } else {
+            fbAppId = '271375949714661';
+            vkAppId = '4463597';
+        }
 
         return fbAppId;
-    }
+    };
+
+    this.statusChangeCallback = function (response) {
+        if (response.status === 'connected') {
+            // Logged into your app and Facebook.
+//            testAPI();
+            //redirect to personal page
+            alert('INFO: Logged in via FB');
+            alert('TODO: check cookies');
+            alert('TODO: if has cookies - redirect to personal page');
+        } else if (response.status === 'not_authorized') {
+            // The person is logged into Facebook, but not your app.
+//            document.getElementById('status').innerHTML = 'Please log ' +
+//                    'into this app.';
+        } else {
+            // The person is not logged into Facebook, so we're not sure if
+            // they are logged into this app or not.
+//            document.getElementById('status').innerHTML = 'Please log ' +
+//                    'into Facebook.';
+        }
+    };
+
+    this.checkLoginState = function() {
+        var that = this;
+        FB.getLoginStatus(function(response) {
+            that.statusChangeCallback(response);
+        });
+    };
+
+
 };
 
 module.exports = new AuthClass();

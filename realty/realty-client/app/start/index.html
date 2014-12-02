@@ -102,7 +102,7 @@
     <div id="fb-root"></div>
     <ul class="icons">
         <li>
-            <div class="fb-login-button" data-max-rows="2" data-size="large" data-show-faces="true" data-auto-logout-link="true" onlogin="checkLoginState();">
+            <div class="fb-login-button" data-max-rows="2" data-size="large" data-show-faces="true" data-auto-logout-link="true" onlogin="Auth.checkLoginState();">
                 Connect with Facebook
             </div>
         </li>
@@ -119,54 +119,16 @@
     </div>
 </section>
 <script type="text/javascript">
-    function statusChangeCallback(response) {
-        if (response.status === 'connected') {
-            // Logged into your app and Facebook.
-//            testAPI();
-            //redirect to personal page
-            alert('INFO: Logged in via FB');
-            alert('TODO: check cookies');
-            alert('TODO: if has cookies - redirect to personal page');
-        } else if (response.status === 'not_authorized') {
-            // The person is logged into Facebook, but not your app.
-//            document.getElementById('status').innerHTML = 'Please log ' +
-//                    'into this app.';
-        } else {
-            // The person is not logged into Facebook, so we're not sure if
-            // they are logged into this app or not.
-//            document.getElementById('status').innerHTML = 'Please log ' +
-//                    'into Facebook.';
-        }
-    }
-
-    function checkLoginState() {
-        FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-        });
-    }
-
     $(document).ready(function() {
-        var isProduction = window.location.href.indexOf('rent4.me') != -1;
-
-        var fbAppId;
-        var vkAppId;
-        if (isProduction) {
-            fbAppId = '270007246518198';
-            vkAppId = '4463597';
-        } else {
-            fbAppId = '271375949714661';
-            vkAppId = '4463597';
-        }
-
         $.ajaxSetup({ cache: true });
         $.getScript('//connect.facebook.net/en_UK/all.js', function(){
             FB.init({
-                appId: fbAppId,
+                appId: Auth.getFbId(),
                 xfbml: true,
                 cookie: true,
                 version: 'v2.1'
             });
-            checkLoginState();
+            Auth.checkLoginState();
         });
     });
 </script>
