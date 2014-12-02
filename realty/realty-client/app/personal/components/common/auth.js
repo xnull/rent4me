@@ -56,6 +56,12 @@ var AuthClass = function() {
 
     //TODO: un-hardcode it and move.
     this.userNamePasswordHardCode = this.__base64Encode("user_083af554-d3f8-4644-9090-ab50cfb612e1:eccafc45-2c2c-4028-931a-648975605899");
+
+    this.getFbId = function() {
+        //TODO: move auth logic here
+
+        return fbAppId;
+    }
 };
 
 module.exports = new AuthClass();
