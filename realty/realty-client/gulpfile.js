@@ -24,24 +24,57 @@ function Plugins() {
 
 //Common variables
 function Settings() {
-    this.projectDir = './app/personal';
+    this.projectBaseDir = './app';
+
+    this.projectSubModules = [
+        '/personal',
+        '/start'
+    ];
+
+    this.moduleInfo = {};
+
+    this.projectDir = this.projectBaseDir;
     this.buildDir = './build-js';
-    this.mainJsFile = this.projectDir + '/app.js';
+    this.mainJsFile = this.projectBaseDir + '/app.js';
 
     this.nodeModules = './node_modules';
     this.bowerDir = this.nodeModules + '/bower';
 
     this.dist = [this.buildDir];
-    this.indexHtml = this.projectDir + '/index.html';
+    this.indexHtml = this.projectBaseDir + '/index.html';
 
-    this.appFiles = [this.projectDir + '/*js'];
-    this.cssFiles = [this.projectDir + '/**/*.css', this.projectDir + '/*.css'];
-    this.images = [this.projectDir + 'img/**/*.jpg', this.projectDir + 'img/**/*.png', this.projectDir + 'img/**/*.gif'];
+    this.appFiles = [this.projectBaseDir + '/*js'];
+    this.cssFiles = [this.projectBaseDir + '/**/*.css', this.projectBaseDir + '/*.css'];
+    this.images = [this.projectBaseDir + 'img/**/*.jpg', this.projectBaseDir + 'img/**/*.png', this.projectBaseDir + 'img/**/*.gif'];
 
-    this.jsHintFiles = this.projectDir + '/**/*.js';
+    this.jsHintFiles = this.projectBaseDir + '/**/*.js';
 
     this.gulpFile = 'gulpfile.js';
-    this.watchDirs = [this.projectDir + '/**/*.*'];
+    this.watchDirs = [this.projectBaseDir + '/**/*.*'];
+
+    //init module info
+    var len = this.projectSubModules.length;
+    for(var i = 0; i < len; i++) {
+        var moduleName = this.projectSubModules[i];
+        console.log('Initializing module '+moduleName);
+        this.moduleInfo[moduleName] = {};
+    }
+
+    for(var i = 0; i < len; i++) {
+        var moduleName = this.projectSubModules[i];
+        var projectDir = this.projectBaseDir + moduleName;
+        this.moduleInfo[moduleName]['projectDir'] = projectDir;
+        this.moduleInfo[moduleName]['buildDir'] = this.buildDir + moduleName;
+        this.moduleInfo[moduleName]['mainJsFile'] = projectDir + '/app.js';
+        this.moduleInfo[moduleName]['dist'] = [ this.moduleInfo[moduleName]['buildDir'] ];
+        this.moduleInfo[moduleName]['indexHtml'] = projectDir + '/index.html';
+        this.moduleInfo[moduleName]['appFiles'] = [ projectDir + '/*js' ];
+        this.moduleInfo[moduleName]['cssFiles'] = [projectDir + '/**/*.css', projectDir + '/*.css'];
+        this.moduleInfo[moduleName]['fontFiles'] = [projectDir + '/fonts/*.*'];
+        this.moduleInfo[moduleName]['images'] = [projectDir + 'img/**/*.jpg', projectDir + 'img/**/*.png', projectDir + 'img/**/*.gif'];
+        this.moduleInfo[moduleName]['jsHintFiles'] = projectDir + '/**/*.js';
+        this.moduleInfo[moduleName]['watchDir'] = projectDir + '/**/*.*';
+    }
 }
 
 function Tasks() {
@@ -83,34 +116,55 @@ gulp.task(tasks.build, [tasks.clean], function () {
 });
 
 function build() {
-    buildBrowserify();
-    cssBuild();
-    imgBuild();
-    indexHtmlBuild();
+    var len = settings.projectSubModules.length;
+    for(var i = 0; i < len; i++) {
+        var moduleName = settings.projectSubModules[i];
+        var moduleInfo = settings.moduleInfo[moduleName];
+        if(moduleName != '/start') {
+            buildBrowserify(moduleInfo);
+            cssBuild(moduleInfo);
+            imgBuild(moduleInfo);
+            indexHtmlBuild(moduleInfo);
+            fontsBuild(moduleInfo);
+        } else {
+            copyContents(moduleInfo);
+        }
+    }
 }
 
-function buildBrowserify() {
+function copyContents(moduleInfo) {
+    gulp.src(moduleInfo['projectDir']+"/**/*.*")
+        .pipe(gulp.dest(moduleInfo['buildDir']));
+}
+
+function buildBrowserify(moduleInfo) {
     var b = plugins.browserify();
     b.transform(plugins.reactify); // use the reactify transform
-    b.add(settings.mainJsFile);
-    return b.bundle()
+    b.add(moduleInfo['mainJsFile']);
+    b.bundle()
         .pipe(plugins.source('main.js'))
-        .pipe(gulp.dest(settings.buildDir));
+        .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
 }
 
-function cssBuild() {
-    gulp.src(settings.cssFiles)
-        .pipe(plugins.concat('index.css'))
-        .pipe(gulp.dest(settings.buildDir));
+function cssBuild(moduleInfo) {
+    gulp.src(moduleInfo['cssFiles'])
+            .pipe(plugins.concat('index.css'))
+            .pipe(gulp.dest(moduleInfo['buildDir']+"/css"));
 }
 
-function imgBuild() {
-    gulp.src(settings.images).pipe(gulp.dest(settings.buildDir + '/img'));
+function imgBuild(moduleInfo) {
+    gulp.src(moduleInfo['images'])
+            .pipe(gulp.dest(moduleInfo['buildDir'] + '/images'));
 }
 
-function indexHtmlBuild() {
-    gulp.src(settings.indexHtml)
-        .pipe(gulp.dest(settings.buildDir))
+function indexHtmlBuild(moduleInfo) {
+    gulp.src(moduleInfo['indexHtml'])
+            .pipe(gulp.dest(moduleInfo['buildDir']))
+}
+
+function fontsBuild(moduleInfo) {
+    gulp.src(moduleInfo['fontFiles'])
+            .pipe(gulp.dest(moduleInfo['buildDir'] + '/fonts'))
 }
 
 // ------------------------------------ малозначимые бизнес таски ------------------------------------------- //
@@ -119,7 +173,8 @@ function indexHtmlBuild() {
  * Очистка билдовой папки проекта
  */
 gulp.task(tasks.clean, function () {
-    return gulp.src(settings.dist, {read: false}).pipe(plugins.clean({force: true}));
+    return gulp.src(settings.dist, {read: false})
+        .pipe(plugins.clean({force: true}));
 });
 
 /**
