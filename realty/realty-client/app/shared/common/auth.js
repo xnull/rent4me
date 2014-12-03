@@ -159,10 +159,10 @@ var AuthClass = function() {
                 error: function (xhr, status, err) {
 //                    console.error('/rest/apartment', status, err.toString());
                     console.log("Error!");
-                    that.username = null;
-                    that.token = null;
-                    that.fbUserId = null;
-                    that.fbAccessToken = null;
+//                    that.username = null;
+//                    that.token = null;
+//                    that.fbUserId = null;
+//                    that.fbAccessToken = null;
                     $.unblockUI();
                 }.bind(that)
             });
