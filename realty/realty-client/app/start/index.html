@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="css/ie/v9.css"/><![endif]-->
 </head>
 <body>
-
+<div id="fb-root"></div>
 <!-- Header -->
 <section id="header" class="dark" style="background-image:url('images/flats/nature.jpg');">
     <header>
@@ -40,6 +40,12 @@
     </header>
     <footer>
         <a href="#first" class="button scrolly">Подробности</a>
+        <div>
+            <br/>
+            <br/>
+            <br/>
+            <img class="clickable" src="images/signin/FBX-Large_278x44.png" onclick="Auth.loginWithFB();">
+        </div>
     </footer>
 </section>
 
@@ -101,18 +107,6 @@
 
 <!-- Footer -->
 <section id="footer">
-    <div id="fb-root"></div>
-    <ul>
-        <li>
-            <div>
-                <img class="clickable" src="images/signin/FBX-Large_278x44.png" onclick="Auth.loginWithFB();">
-            </div>
-            <!--<div class="fb-login-button" data-max-rows="2" data-size="large" data-show-faces="true" data-default-audience="everyone" data-auto-logout-link="true" onlogin="Auth.checkLoginState();">-->
-                <!--Connect with Facebook-->
-            <!--</div>-->
-        </li>
-    </ul>
-
     <ul class="icons">
         <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
         <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
