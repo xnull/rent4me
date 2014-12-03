@@ -3,7 +3,15 @@ var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');
 
+var Auth = require('../../../shared/common/auth.js');
+var Utils = require('../../../shared/common/utils.js');
+
 var UserPanel = React.createClass({
+    componentDidMount: function(root){
+        $('#logoutBtn').on('click', function(){
+            Auth.logoutOnBackend();
+        });
+    },
     render: function () {
         return (
             <div className="panel panel-default">
@@ -28,7 +36,11 @@ var UserPanel = React.createClass({
                         </div>
                     </div>
 
-                    <div className="col-md-6 col-md-offset-6">
+                    <div className="col-md-6">
+                        <a className="btn btn-danger" href="#" id="logoutBtn">Выход</a>
+                    </div>
+
+                    <div className="col-md-6">
                         <a className="btn btn-success" href="#/user/landlord">Я собственник</a>
                     </div>
 

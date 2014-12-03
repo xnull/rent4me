@@ -104,6 +104,16 @@ var AuthClass = function() {
         });
     };
 
+    this.loginWithFB = function() {
+        var that = this;
+        var opts = {
+            scope: 'public_profile,user_friends,email'
+        };
+        FB.login(function(response) {
+            that.statusChangeCallback(response);
+        }, opts);
+    };
+
     this.restoreUsernameAndTokenFromCookies = function() {
         this.username = Cookies.getCookie("rent4me_uname");
         this.token = Cookies.getCookie("rent4me_token");
@@ -113,6 +123,48 @@ var AuthClass = function() {
         if(this.hasCredentials()) {
             Cookies.setCookieTemp("rent4me_uname", this.username) ;
             Cookies.setCookieTemp("rent4me_token", this.token);
+        }
+    };
+
+    this.logoutOnBackend = function() {
+        var that = this;
+        if(this.hasCredentials()) {
+            var data = {"token" : Auth.token};
+            $.ajax({
+                url: '/rest/auth',
+//                dataType: 'json',
+                type: 'DELETE',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
+                },
+                success: function (data) {
+                    console.log("Success!");
+                    console.log("Data:");
+
+                    Cookies.deleteCookie("rent4me_uname");
+                    Cookies.deleteCookie("rent4me_token");
+                    that.username = null;
+                    that.token = null;
+                    that.fbUserId = null;
+                    that.fbAccessToken = null;
+
+                    $.unblockUI();
+
+                    Utils.navigateToStart();
+//                    that.setState({data: data});
+                }.bind(that),
+                error: function (xhr, status, err) {
+//                    console.error('/rest/apartment', status, err.toString());
+                    console.log("Error!");
+                    that.username = null;
+                    that.token = null;
+                    that.fbUserId = null;
+                    that.fbAccessToken = null;
+                    $.unblockUI();
+                }.bind(that)
+            });
         }
     };
 

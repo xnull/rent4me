@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="css/style.css"/>
         <link rel="stylesheet" href="css/style-wide.css"/>
     </noscript>
+    <link rel="stylesheet" href="css/custom.css"/>
 
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="css/ie/v8.css"/><![endif]-->
@@ -101,11 +102,14 @@
 <!-- Footer -->
 <section id="footer">
     <div id="fb-root"></div>
-    <ul class="icons">
+    <ul>
         <li>
-            <div class="fb-login-button" data-max-rows="2" data-size="large" data-show-faces="true" data-default-audience="everyone" data-auto-logout-link="true" onlogin="Auth.checkLoginState();">
-                Connect with Facebook
+            <div>
+                <img class="clickable" src="images/signin/FBX-Large_278x44.png" onclick="Auth.loginWithFB();">
             </div>
+            <!--<div class="fb-login-button" data-max-rows="2" data-size="large" data-show-faces="true" data-default-audience="everyone" data-auto-logout-link="true" onlogin="Auth.checkLoginState();">-->
+                <!--Connect with Facebook-->
+            <!--</div>-->
         </li>
     </ul>
 
@@ -131,12 +135,13 @@
                     cookie: true,
                     version: 'v2.1'
                 });
+
                 //TODO: don't check login state
-                Auth.checkLoginState();
+//                Auth.checkLoginState();
             });
         } else {
             //TODO: redirect to personal page
-            alert("Already authorized. You could proceed");
+//            alert("Already authorized. You could proceed");
             Utils.navigateToPersonal();
         }
     });

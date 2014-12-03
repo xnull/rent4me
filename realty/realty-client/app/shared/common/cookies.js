@@ -28,7 +28,11 @@ function R4MECookies() {
             if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
         }
         return null;
-    }
+    };
+
+    this.deleteCookie = function (c_name) {
+        this.setCookie(c_name,"",-1);
+    };
 }
 
 module.exports = new R4MECookies();
