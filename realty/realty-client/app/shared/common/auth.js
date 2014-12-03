@@ -130,6 +130,7 @@ var AuthClass = function() {
         var that = this;
         if(this.hasCredentials()) {
             var data = {"token" : Auth.token};
+            $.blockUI();
             $.ajax({
                 url: '/rest/auth',
 //                dataType: 'json',
