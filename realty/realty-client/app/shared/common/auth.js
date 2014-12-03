@@ -21,10 +21,10 @@ var AuthClass = function() {
         var fbAppId;
         var vkAppId;
         if (isProduction) {
-            fbAppId = '270007246518198';
+            fbAppId = '271375949714661';
             vkAppId = '4463597';
         } else {
-            fbAppId = '271375949714661';
+            fbAppId = '270007246518198';
             vkAppId = '4463597';
         }
 
@@ -40,10 +40,10 @@ var AuthClass = function() {
         var fbAppId;
         var vkAppId;
         if (isProduction) {
-            fbAppId = '270007246518198';
+            fbAppId = '271375949714661';
             vkAppId = '4463597';
         } else {
-            fbAppId = '271375949714661';
+            fbAppId = '270007246518198';
             vkAppId = '4463597';
         }
 
