@@ -1,5 +1,6 @@
 package bynull.realty.components;
 
+import bynull.realty.config.Config;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -32,8 +34,13 @@ import static bynull.realty.util.CommonUtils.copy;
 public class VKHelperComponent {
     private static final String VK_SECRET = "DkAHHjYk8ZvAvAgBQMJd";
     private static final String VK_APP_ID = "4463597";
-    //TODO: change url
-    private static final String REDIRECT_URI = "http://localhost:8888/dev" + "/vk_auth_return_page";
+
+    @Resource
+    Config config;
+
+    private String getRedirectUri() {
+        return config.getVkRedirectURL() + "/vk_auth_return_page";
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VKHelperComponent.class);
 
@@ -122,8 +129,8 @@ public class VKHelperComponent {
         long requestStartTime = System.currentTimeMillis();
         String redirectUri = null;
         try {
-            redirectUri = URLEncoder.encode(REDIRECT_URI, "UTF-8");
-            redirectUri = REDIRECT_URI;
+            redirectUri = URLEncoder.encode(getRedirectUri(), "UTF-8");
+            redirectUri = getRedirectUri();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

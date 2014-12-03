@@ -35,6 +35,10 @@
             <property name="maxPoolSize" value="10"/>
             <property name="maxIdleTime" value="30"/>
         </bean>
+
+        <bean id="appConfig" class="bynull.realty.config.Config">
+            <property name="vkRedirectURL" value="http://localhost:8888/dev"/>
+        </bean>
     </beans>
 
     <beans profile="dev">
@@ -49,6 +53,10 @@
             <property name="minPoolSize" value="2"/>
             <property name="maxPoolSize" value="10"/>
             <property name="maxIdleTime" value="30"/>
+        </bean>
+
+        <bean id="appConfig" class="bynull.realty.config.Config">
+            <property name="vkRedirectURL" value="http://rent4.me/dev"/>
         </bean>
     </beans>
 
