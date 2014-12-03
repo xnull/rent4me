@@ -31,7 +31,7 @@ var AuthClass = function() {
         return fbAppId;
     };
     this.isProduction = function() {
-        return window.location.href.indexOf('rent4.me') != -1;
+        return window.location.href.indexOf('rent4.me') != -1 && window.location.href.indexOf('dev') == -1;
     };
 
     this.getVkId = function() {
