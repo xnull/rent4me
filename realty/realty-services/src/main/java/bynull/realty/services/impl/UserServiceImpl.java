@@ -66,28 +66,30 @@ public class UserServiceImpl implements UserService {
             FacebookHelperComponent.FacebookVerificationInfoDTO verify = facebookHelperComponent.verify(new FacebookHelperComponent.ClientShortInfo(facebookId, accessToken));
             User user = userRepository.findByFacebookId(verify.facebookId);
             if (user == null) {
-                LOGGER.debug("No user found that matches facebook id. Creating new one.");
-                Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
+                user = userRepository.findByEmail(verify.email);
+                if(user == null) {
+                    LOGGER.debug("No user found that matches facebook id or email. Creating new one.");
+                    Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
 
-                user = new User();
+                    user = new User();
 //                TODO: get more details from FB if possible to fill account in a proper way
 //                user.setFirstName(verify.name);
 //                user.setLastName(verify.name);
-                user.setEmail(verify.email);
-                user.setUsername("user_" + UUID.randomUUID());
-                String rawPass = "password" + UUID.randomUUID();
-                LOGGER.info("Generated password for user with fb id [{}]: []", verify.facebookId, rawPass);
-                user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
+                    user.setEmail(verify.email);
+                    user.setUsername("user_" + UUID.randomUUID());
+                    String rawPass = "password" + UUID.randomUUID();
+                    LOGGER.info("Generated password for user with fb id [{}]: []", verify.facebookId, rawPass);
+                    user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
+                    user.setDisplayName(verify.name);
+                    user.setFirstName(verify.firstName);
+                    user.setLastName(verify.lastName);
+                    user.setAge(verify.birthday != null
+                            ? (int) (TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - verify.birthday.getTime(), TimeUnit.DAYS) / 365.24)
+                            : null);
+                    user.addAuthority(authority);
+                }
                 user.setFacebookId(verify.facebookId);
-                user.setDisplayName(verify.name);
-                user.setFirstName(verify.firstName);
-                user.setLastName(verify.lastName);
-                user.setAge(verify.birthday != null
-                        ? (int) (TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - verify.birthday.getTime(), TimeUnit.DAYS) / 365.24)
-                        : null);
-                user.addAuthority(authority);
                 user = userRepository.saveAndFlush(user);
-//                userRepository.saveAndFlush(user);
             } else {
                 LOGGER.debug("Found user from facebook");
             }
@@ -105,31 +107,36 @@ public class UserServiceImpl implements UserService {
         try {
             VKHelperComponent.VKVerificationInfoDTO verify = vkHelperComponent.verify(new VKHelperComponent.ClientShortInfo(authCode));
 
-
             User user = userRepository.findByVkontakteId(verify.vkUserId);
             if (user == null) {
-                LOGGER.debug("No user found that matches vkontakte id. Creating new one.");
-                Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
+                user = userRepository.findByEmail(verify.email);
 
-                user = new User();
+                if (user == null) {
+                    LOGGER.debug("No user found that matches vkontakte id or email. Creating new one.");
+                    Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
+
+                    user = new User();
 //                TODO: get more details from FB if possible to fill account in a proper way
 //                user.setFirstName(verify.name);
 //                user.setLastName(verify.name);
-                user.setEmail(verify.email);
-                user.setUsername("user_" + UUID.randomUUID());
-                String rawPass = "password" + UUID.randomUUID();
-                LOGGER.info("Generated password for user with vk id [{}]: []", verify.vkUserId, rawPass);
-                user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
-                user.setVkontakteId(verify.vkUserId);
-                //TODO: get more data from VK.
+                    user.setEmail(verify.email);
+                    user.setUsername("user_" + UUID.randomUUID());
+                    String rawPass = "password" + UUID.randomUUID();
+                    LOGGER.info("Generated password for user with vk id [{}]: []", verify.vkUserId, rawPass);
+                    user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
+
+                    //TODO: get more data from VK.
 //                user.setDisplayName(verify.name);
 //                user.setFirstName(verify.firstName);
 //                user.setLastName(verify.lastName);
-                Date birthday = null;
-                user.setAge(birthday != null
-                        ? (int) (TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - birthday.getTime(), TimeUnit.DAYS) / 365.24)
-                        : null);
-                user.addAuthority(authority);
+                    Date birthday = null;
+                    user.setAge(birthday != null
+                            ? (int) (TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - birthday.getTime(), TimeUnit.DAYS) / 365.24)
+                            : null);
+                    user.addAuthority(authority);
+                }
+                //update VK id here because user might have already other account.
+                user.setVkontakteId(verify.vkUserId);
                 user = userRepository.saveAndFlush(user);
 //                userRepository.saveAndFlush(user);
             } else {

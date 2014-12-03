@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByFacebookId(String facebookId);
 
     User findByVkontakteId(String vkontakteId);
+
+    User findByEmail(String email);
 }
