@@ -16,16 +16,13 @@ var AuthClass = function() {
     this.fbAccessToken = null;
 
     this.getFbId = function() {
-        var isProduction = this.isProduction();
+        var isLocalhost = this.isLocalhost();
 
         var fbAppId;
-        var vkAppId;
-        if (isProduction) {
+        if (isLocalhost) {
             fbAppId = '271375949714661';
-            vkAppId = '4463597';
         } else {
             fbAppId = '270007246518198';
-            vkAppId = '4463597';
         }
 
         return fbAppId;
@@ -35,17 +32,10 @@ var AuthClass = function() {
     };
 
     this.getVkId = function() {
-        var isProduction = this.isProduction();
-
-        var fbAppId;
         var vkAppId;
-        if (isProduction) {
-            fbAppId = '271375949714661';
-            vkAppId = '4463597';
-        } else {
-            fbAppId = '270007246518198';
-            vkAppId = '4463597';
-        }
+
+        vkAppId = '4463597';
+
 
         return vkAppId;
     };
