@@ -31,6 +31,7 @@
 </head>
 <body>
 <div id="fb-root"></div>
+<div id="vk_api_transport"></div>
 <!-- Header -->
 <section id="header" class="dark" style="background-image:url('images/flats/nature.jpg');">
     <header>
@@ -44,8 +45,10 @@
             <br/>
             <br/>
             <br/>
-            <img class="clickable" src="images/signin/FBX-Large_278x44.png" onclick="Auth.loginWithFB();">
+            <img class="clickable" src="images/signin/FBX-Large_278x44.png" onclick="Auth.loginWithFB();"><br/>
+            <img class="clickable" width="280" src="images/signin/Full.png" onclick="Auth.loginWithVK();">
         </div>
+
     </footer>
 </section>
 
@@ -118,6 +121,9 @@
     </div>
 </section>
 <script type="text/javascript">
+
+
+
     $(document).ready(function() {
         Auth.restoreUsernameAndTokenFromCookies();
         if(!Auth.hasCredentials()) {
@@ -133,6 +139,8 @@
                 //TODO: don't check login state
 //                Auth.checkLoginState();
             });
+
+
         } else {
             //TODO: redirect to personal page
 //            alert("Already authorized. You could proceed");

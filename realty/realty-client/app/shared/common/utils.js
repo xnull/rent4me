@@ -71,6 +71,17 @@ function R4MEUtils() {
             document.location.href = '/';
         }
     };
+
+    this.getQueryParams = function(paramName) {
+        paramName = paramName.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexString = "[\\?&]" + paramName + "=([^&#]*)";
+        var regex = new RegExp(regexString);
+        var found = regex.exec(window.location.search);
+        if (found == null)
+            return null;
+        else
+            return decodeURIComponent(found[1].replace(/\+/g, " "));
+    };
 }
 
 module.exports = new R4MEUtils();

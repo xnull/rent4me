@@ -28,7 +28,8 @@ function Settings() {
 
     this.projectSubModules = [
         '/personal',
-        '/start'
+        '/start',
+        '/vk_auth_return_page'
     ];
 
     this.projectBuildSubPaths = {

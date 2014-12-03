@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.ws.rs.NotAuthorizedException;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -100,12 +101,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UsernameTokenPair authenticateVkUser(String vkId, String accessToken) {
+    public UsernameTokenPair authenticateVkUser(String authCode) {
         try {
-            VKHelperComponent.VKVerificationInfoDTO verify = vkHelperComponent.verify(new VKHelperComponent.ClientShortInfo(vkId, accessToken));
-            User user = userRepository.findByFacebookId(verify.vkId);
+            VKHelperComponent.VKVerificationInfoDTO verify = vkHelperComponent.verify(new VKHelperComponent.ClientShortInfo(authCode));
+
+
+            User user = userRepository.findByVkontakteId(verify.vkUserId);
             if (user == null) {
-                LOGGER.debug("No user found that matches facebook id. Creating new one.");
+                LOGGER.debug("No user found that matches vkontakte id. Creating new one.");
                 Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
 
                 user = new User();
@@ -115,23 +118,26 @@ public class UserServiceImpl implements UserService {
                 user.setEmail(verify.email);
                 user.setUsername("user_" + UUID.randomUUID());
                 String rawPass = "password" + UUID.randomUUID();
-                LOGGER.info("Generated password for user with fb id [{}]: []", verify.vkId, rawPass);
+                LOGGER.info("Generated password for user with vk id [{}]: []", verify.vkUserId, rawPass);
                 user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
-                user.setFacebookId(verify.vkId);
-                user.setDisplayName(verify.name);
-                user.setFirstName(verify.firstName);
-                user.setLastName(verify.lastName);
-                user.setAge(verify.birthday != null
-                        ? (int) (TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - verify.birthday.getTime(), TimeUnit.DAYS) / 365.24)
+                user.setVkontakteId(verify.vkUserId);
+                //TODO: get more data from VK.
+//                user.setDisplayName(verify.name);
+//                user.setFirstName(verify.firstName);
+//                user.setLastName(verify.lastName);
+                Date birthday = null;
+                user.setAge(birthday != null
+                        ? (int) (TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - birthday.getTime(), TimeUnit.DAYS) / 365.24)
                         : null);
                 user.addAuthority(authority);
                 user = userRepository.saveAndFlush(user);
 //                userRepository.saveAndFlush(user);
             } else {
-                LOGGER.debug("Found user from facebook");
+                LOGGER.debug("Found user from vkontakte");
             }
             String token = userTokenService.getTokenForUser(user);
             return new UsernameTokenPair(user.getUsername(), token);
+
         } catch (VKHelperComponent.VKAuthorizationException e) {
             LOGGER.error("Exception occurred while trying to authorize", e);
             throw new AuthorizationServiceException("Unable to authorize with facebook", e);

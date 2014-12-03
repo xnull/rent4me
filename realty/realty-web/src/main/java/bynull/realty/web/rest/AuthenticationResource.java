@@ -41,14 +41,14 @@ public class AuthenticationResource {
     @Path("/facebook")
     public Response authenticateWithFacebook(RequestFacebookLoginJSON facebookLoginJSON) {
         UserService.UsernameTokenPair usernameTokenPair = userService.authenticateFacebookUser(facebookLoginJSON.getFacebookId(), facebookLoginJSON.getAccessToken());
-        return Response.ok(new UsernameTokenPairJSON(usernameTokenPair.username, usernameTokenPair.token)).build();
+        return Response.ok(UsernameTokenPairJSON.from(usernameTokenPair)).build();
     }
 
     @POST
     @Path("/vk")
     public Response authenticateWithVK(RequestVKLoginJSON vkLoginJSON) {
-        UserService.UsernameTokenPair usernameTokenPair = userService.authenticateVkUser(vkLoginJSON.getVkId(), vkLoginJSON.getAccessToken());
-        return Response.ok(new UsernameTokenPairJSON(usernameTokenPair.username, usernameTokenPair.token)).build();
+        UserService.UsernameTokenPair usernameTokenPair = userService.authenticateVkUser(vkLoginJSON.getCode());
+        return Response.ok(UsernameTokenPairJSON.from(usernameTokenPair)).build();
     }
 
     @DELETE
@@ -74,6 +74,13 @@ public class AuthenticationResource {
         private String username;
         @JsonProperty("token")
         private String token;
+
+        public static UsernameTokenPairJSON from(UserService.UsernameTokenPair pair) {
+            if(pair == null) {
+                return null;
+            }
+            return new UsernameTokenPairJSON(pair.username, pair.token);
+        }
 
         public UsernameTokenPairJSON(String username, String token) {
             this.username = username;
@@ -118,25 +125,15 @@ public class AuthenticationResource {
     }
 
     public static class RequestVKLoginJSON {
-        @JsonProperty("vk_id")
-        private String vkId;
-        @JsonProperty("access_token")
-        private String accessToken;
+        @JsonProperty("code")
+        private String code;
 
-        public String getVkId() {
-            return vkId;
+        public String getCode() {
+            return code;
         }
 
-        public void setVkId(String vkId) {
-            this.vkId = vkId;
-        }
-
-        public String getAccessToken() {
-            return accessToken;
-        }
-
-        public void setAccessToken(String accessToken) {
-            this.accessToken = accessToken;
+        public void setCode(String code) {
+            this.code = code;
         }
     }
 

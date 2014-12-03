@@ -13,7 +13,7 @@ public interface UserService extends UserDetailsService {
 
     UsernameTokenPair authenticateFacebookUser(String facebookId, String accessToken);
 
-    UsernameTokenPair authenticateVkUser(String vkId, String accessToken);
+    UsernameTokenPair authenticateVkUser(String authCode);
 
     class UsernameTokenPair {
         public final String username;

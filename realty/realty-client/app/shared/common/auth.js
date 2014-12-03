@@ -16,7 +16,7 @@ var AuthClass = function() {
     this.fbAccessToken = null;
 
     this.getFbId = function() {
-        var isProduction = window.location.href.indexOf('rent4.me') != -1;
+        var isProduction = this.isProduction();
 
         var fbAppId;
         var vkAppId;
@@ -29,6 +29,84 @@ var AuthClass = function() {
         }
 
         return fbAppId;
+    };
+    this.isProduction = function() {
+        return window.location.href.indexOf('rent4.me') != -1;
+    };
+
+    this.getVkId = function() {
+        var isProduction = this.isProduction();
+
+        var fbAppId;
+        var vkAppId;
+        if (isProduction) {
+            fbAppId = '270007246518198';
+            vkAppId = '4463597';
+        } else {
+            fbAppId = '271375949714661';
+            vkAppId = '4463597';
+        }
+
+        return vkAppId;
+    };
+
+    this.isLocalhost = function() {
+        return window.location.href.indexOf('localhost') != -1;
+    };
+
+    this.loginWithVK = function() {
+        var vkAppId = this.getVkId();
+        var redirectHost = this.isLocalhost() ? "http://localhost:8888/dev" : (this.isProduction() ? "http://rent4.me" :  "http://rent4.me/dev" ) ;
+        var redirectUrl = redirectHost + "/vk_auth_return_page";
+        var permissions = "email";
+        document.location.href="https://oauth.vk.com/authorize?client_id="+vkAppId+"&scope="+permissions+"&redirect_uri="+redirectUrl+"&response_type=code&v=5.27";
+    };
+
+    this.authOnBackendWithVK = function(vkAccessCode) {
+        var that = this;
+        $.blockUI();
+
+        var data = {"code": vkAccessCode};
+
+        console.log('data to send');
+        console.log(data);
+
+        $.ajax({
+            url: '/rest/auth/vk',
+            dataType: 'json',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function (request) {
+//                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
+            },
+            success: function (data) {
+                console.log("Success!");
+                console.log("Data:");
+                console.log(data);
+
+                that.username = data.username;
+                that.token = data.token;
+
+                that.storeUsernameAndTokenInCookies();
+
+                $.unblockUI();
+
+                Utils.navigateToPersonal();
+//                    that.setState({data: data});
+            }.bind(that),
+            error: function (xhr, status, err) {
+//                    console.error('/rest/apartment', status, err.toString());
+                console.log("Error!");
+                that.username = null;
+                that.token = null;
+                that.fbUserId = null;
+                that.fbAccessToken = null;
+                $.unblockUI();
+                alert("Не удалось авторизоваться через VK");
+                Utils.navigateToStart();
+            }.bind(that)
+        });
     };
 
     this.statusChangeCallback = function (response) {
@@ -93,6 +171,8 @@ var AuthClass = function() {
                 that.fbUserId = null;
                 that.fbAccessToken = null;
                 $.unblockUI();
+                alert("Не удалось авторизоваться через Facebook");
+                Utils.navigateToStart();
             }.bind(that)
         });
     };

@@ -18,6 +18,8 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
@@ -28,8 +30,12 @@ import static bynull.realty.util.CommonUtils.copy;
  */
 @Component
 public class VKHelperComponent {
+    private static final String VK_SECRET = "DkAHHjYk8ZvAvAgBQMJd";
+    private static final String VK_APP_ID = "4463597";
+    //TODO: change url
+    private static final String REDIRECT_URI = "http://localhost:8888/dev" + "/vk_auth_return_page";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(VKHelperComponent.class);
-    public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
 
 
     private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
@@ -46,21 +52,17 @@ public class VKHelperComponent {
     }};
 
     public static class ClientShortInfo {
-        public final String vkId;
-        public final String vkOAuthToken;
+        public final String exchangeCode;
 
-        public ClientShortInfo(String vkId, String vkOAuthToken) {
-            this.vkId = vkId;
-            this.vkOAuthToken = vkOAuthToken;
+        public ClientShortInfo(String exchangeCode) {
+            this.exchangeCode = exchangeCode;
         }
     }
 
     public VKVerificationInfoDTO verify(final ClientShortInfo person) throws VKAuthorizationException {
-        Assert.notNull(person.vkId, "facebook id should not be empty");
-        Assert.notNull(person.vkOAuthToken, "facebook oauth token should not be empty");
+        Assert.notNull(person.exchangeCode, "vk exchange code should not be empty");
 
         // Facebook URL example
-        //  https://graph.facebook.com/me?fields=id&access_token=AAACEdEose0cBALgAbRhQ6csZAg3Uyj100d0LMSSPdp2vZCw5093GEK3h2Wm9dKebfpRZCCn4v1hjaLrynHYSHZB5WWpAl7rf51lXQfY1ke5n39Orb4AZB
 
         VKVerificationInfoDTO result;
         try {
@@ -99,37 +101,33 @@ public class VKHelperComponent {
     }
 
     public static class VKVerificationInfoDTO {
-        public final String vkId;
+        public final String vkUserId;
+        public final String accessToken;
         public final String email;
-        public final String name;
-        public final String firstName;
-        public final String lastName;
-        public final Date birthday;
-        public final boolean verified;
+        public final long expiresIn;
 
-        public VKVerificationInfoDTO(@JsonProperty("id") String vkId,
+        public VKVerificationInfoDTO(@JsonProperty("user_id") String vkUserId,
+                                     @JsonProperty("access_token") String accessToken,
                                      @JsonProperty("email") String email,
-                                     @JsonProperty("name") String name,
-                                     @JsonProperty("first_name") String firstName,
-                                     @JsonProperty("last_name") String lastName,
-                                     @JsonProperty("birthday")
-                                     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy") Date birthday,
-                                     @JsonProperty("verified") boolean verified,
-                                     @JsonProperty("is_verified") boolean verifiedManuallyByFB
+                                     @JsonProperty("expires_in") int expiresIn
         ) {
-            this.vkId = vkId;
+            this.vkUserId = vkUserId;
+            this.accessToken = accessToken;
             this.email = email;
-            this.name = name;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.birthday = copy(birthday);
-            this.verified = verified || verifiedManuallyByFB;
+            this.expiresIn = expiresIn;
         }
     }
 
     private VKVerificationInfoDTO performVerification(ClientShortInfo person) {
         long requestStartTime = System.currentTimeMillis();
-        String uri = MY_PROFILE_FACEBOOK_URL + person.vkOAuthToken;
+        String redirectUri = null;
+        try {
+            redirectUri = URLEncoder.encode(REDIRECT_URI, "UTF-8");
+            redirectUri = REDIRECT_URI;
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        String uri =  "https://oauth.vk.com/access_token?client_id="+VK_APP_ID+"&client_secret="+VK_SECRET+"&code="+person.exchangeCode+"&redirect_uri="+ redirectUri;
         GetMethod httpGet = new GetMethod(uri);
         httpGet.setFollowRedirects(false);
         try {
@@ -141,23 +139,26 @@ public class VKHelperComponent {
             long time = System.currentTimeMillis() - requestStartTime;
             LOGGER.info("Execution time: {} ms", time);
 
+            LOGGER.info("Response received for VK auth request: [{}]", body);
+
             VKVerificationInfoDTO response = jacksonObjectMapper.readValue(body, VKVerificationInfoDTO.class);
             Assert.notNull(response);
-            Assert.notNull(response.vkId, "Facebook id should not be empty");
+            Assert.notNull(response.expiresIn, "Expires in should not be empty");
+            Assert.notNull(response.vkUserId, "User not empty");
+            Assert.notNull(response.accessToken, "Access token should not be empty");
             Assert.notNull(response.email, "Email should not be empty");
-            Assert.notNull(response.name, "Name should not be empty");
 
-            if (!response.vkId.equals(person.vkId)) {
-                throw new BadRequestException("Facebook id differs");
-            }
-
-            if (!response.verified) {
-                throw new WebApplicationException("Account not verified", Response.Status.EXPECTATION_FAILED);
-            }
-
-            Assert.isTrue(response.vkId.equals(person.vkId), "Invalid facebook id");
-
-            // returned string example {"id":"100000169700800"}
+//            if (!response.vkId.equals(person.vkId)) {
+//                throw new BadRequestException("Facebook id differs");
+//            }
+//
+//            if (!response.verified) {
+//                throw new WebApplicationException("Account not verified", Response.Status.EXPECTATION_FAILED);
+//            }
+//
+//            Assert.isTrue(response.vkId.equals(person.vkId), "Invalid facebook id");
+//
+//            // returned string example {"id":"100000169700800"}
 
             LOGGER.info("Status line: {}", httpGet.getStatusLine());
 

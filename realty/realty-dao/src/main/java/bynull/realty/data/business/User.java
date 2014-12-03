@@ -36,6 +36,8 @@ public class User implements UserDetails {
     private Integer age;
     @Column(name = "facebook_id")
     private String facebookId;
+    @Column(name = "vkontakte_id")
+    private String vkontakteId;
 
     @JoinTable(name = "realty_users_authorities", joinColumns = {
             @JoinColumn(name = "user_id")
@@ -203,6 +205,14 @@ public class User implements UserDetails {
 
     public void setFacebookId(String facebookId) {
         this.facebookId = facebookId;
+    }
+
+    public String getVkontakteId() {
+        return vkontakteId;
+    }
+
+    public void setVkontakteId(String vkontakteId) {
+        this.vkontakteId = vkontakteId;
     }
 
     @Override
