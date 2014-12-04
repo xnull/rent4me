@@ -5,6 +5,7 @@ import bynull.realty.components.VKHelperComponent;
 import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.Authority;
 import bynull.realty.data.business.User;
+import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.AuthorityService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
@@ -149,5 +150,27 @@ public class UserServiceImpl implements UserService {
             LOGGER.error("Exception occurred while trying to authorize", e);
             throw new AuthorizationServiceException("Unable to authorize with facebook", e);
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserDTO getMyProfile() {
+        User user = userRepository.getOne(SecurityUtils.getAuthorizedUser().getId());
+        return UserDTO.from(user);
+    }
+
+    @Transactional
+    @Override
+    public boolean updateMyProfile(UserDTO dto) {
+        User user = userRepository.findOne(SecurityUtils.getAuthorizedUser().getId());
+
+        user.setDisplayName(dto.getDisplayName());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setPhoneNumber(dto.getPhoneNumber());
+
+        user = userRepository.saveAndFlush(user);
+        return true;
     }
 }

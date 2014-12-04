@@ -7,7 +7,7 @@ var JSON = require('JSON2');
 var Validator = require('validator.js');
 var _ = require('underscore');
 var React = require('react');
-var Auth = require('../../../../shared/common/auth.js');
+var Auth = require('../../../../shared/common/Auth');
 
 var UserProperty = React.createClass({
     render: function () {

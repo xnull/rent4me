@@ -7,7 +7,10 @@ var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
 var RouteHandler = Router.RouteHandler;
 
-var UserStore = require('../../shared/stores/UserStore');
+var UserActions = require('../../shared/actions/UserActions');
+
+var Auth = require('../../shared/common/Auth');
+var Utils = require('../../shared/common/Utils');
 
 /**
  * Расписано как надо юзать реакт компоненты через browserify:
@@ -15,6 +18,17 @@ var UserStore = require('../../shared/stores/UserStore');
  * https://github.com/facebook/react/issues/2436
  */
 var App = React.createClass({
+    componentWillMount: function() {
+        //restore username & token from cookies before component mounted
+        Auth.restoreUsernameAndTokenFromCookies();
+        if(!Auth.hasCredentials()) {
+//            alert('wtf? you\'re not logged in!');
+            Utils.navigateToStart();
+        } else {
+//            alert('Welcome back, '+Auth.username+"!");
+            //TODO: redirect to personal page
+        }
+    },
     render: function () {
         return (
             <RouteHandler/>

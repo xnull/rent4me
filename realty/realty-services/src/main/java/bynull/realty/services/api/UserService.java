@@ -1,6 +1,7 @@
 package bynull.realty.services.api;
 
 import bynull.realty.data.business.User;
+import bynull.realty.dto.UserDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -14,6 +15,10 @@ public interface UserService extends UserDetailsService {
     UsernameTokenPair authenticateFacebookUser(String facebookId, String accessToken);
 
     UsernameTokenPair authenticateVkUser(String authCode);
+
+    UserDTO getMyProfile();
+
+    boolean updateMyProfile(UserDTO dto);
 
     class UsernameTokenPair {
         public final String username;

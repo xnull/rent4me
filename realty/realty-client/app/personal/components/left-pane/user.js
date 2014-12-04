@@ -5,6 +5,7 @@ var React = require('react');
 
 var UserStore = require('../../../shared/stores/UserStore');
 var UserActions = require('../../../shared/actions/UserActions');
+var JSON = require('JSON2');
 
 var assign = require('object-assign');
 
@@ -51,10 +52,14 @@ var getMyProfile = function() {
 
 module.exports = React.createClass({
     getInitialState: function() {
+        console.log('get initial state');
         return UserStore.getMyProfile();
     },
-    componentDidMount: function() {
-        UserStore.addChangeListener(this._onChange);
+    componentWillMount: function() {
+        console.log('component will mount');
+        UserStore.addChangeListener(this._onLoad);
+
+        UserActions.loadMyProfile();
 
 //        $('#saveMyInfoBtn').on('click', function(){
 //            UserStore.saveMyProfile();
@@ -62,7 +67,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        UserStore.removeChangeListener(this._onChange);
+        UserStore.removeChangeListener(this._onLoad);
     },
 
     _onSave: function(event) {
@@ -70,7 +75,17 @@ module.exports = React.createClass({
         console.log(event);
         console.log(event.target);
 
-        UserActions.create(assign(getMyProfile(), this.state));
+        UserActions.save(assign(getMyProfile(), this.state));
+    },
+
+    _onLoad: function() {
+        console.log('on load triggered');
+        var user = UserStore.getMyProfile();
+        console.log('user:'+JSON.stringify(user));
+        var newState = assign(this.state, user);
+
+        console.log(newState);
+        this.setState(newState);
     },
 
     _onChange: function(event) {
@@ -98,7 +113,6 @@ module.exports = React.createClass({
         var nameProp = {name: 'Имя', elementName: 'name', elementValue: this.state.name};
         var phoneProp = {name: 'Телефон', elementName: 'phone', elementValue: this.state.phone};
         var emailProp = {name: 'Email', elementName: 'email', elementValue: this.state.email};
-        var roleProp = {name: 'Роль в системе', elementName: 'role', elementValue: this.state.role};
 
         var submitButton = {value: 'Сохранить', id: 'saveMyInfoBtn'};
 
@@ -117,7 +131,6 @@ module.exports = React.createClass({
                             <UserProperty data={nameProp} onChange={this._onChange}/>
                             <UserProperty data={phoneProp} onChange={this._onChange}/>
                             <UserProperty data={emailProp} onChange={this._onChange}/>
-                            <UserProperty data={roleProp} onChange={this._onChange}/>
 
                             <UserButton data={submitButton} onClick={this._onSave}/>
                         </form>

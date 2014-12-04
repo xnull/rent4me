@@ -1,8 +1,11 @@
 package bynull.realty.web.rest;
 
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.api.UserService;
 import bynull.realty.web.json.ApartmentJSON;
+import bynull.realty.web.json.UserJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,6 +23,31 @@ import javax.ws.rs.core.Response;
 public class UserRestResource {
     @Resource
     ApartmentService apartmentService;
+
+    @Resource
+    UserService userService;
+
+    @GET
+    @Path("/me")
+    public Response getMyProfile() {
+        UserDTO user = userService.getMyProfile();
+
+        return Response
+                .status(user != null ? Response.Status.OK : Response.Status.NOT_FOUND)
+                .entity(UserJSON.from(user))
+                .build();
+    }
+
+    @PUT
+    @Path("/me")
+    public Response updateMyProfile(UserJSON userJSON) {
+        UserDTO dto = userJSON.toDTO();
+        boolean result = userService.updateMyProfile(dto);
+        return Response
+                .status(result ? Response.Status.OK : Response.Status.CONFLICT)
+//                .entity(result ? userJSON.findAuthorizedUserApartment() : null)
+                .build();
+    }
 
     @GET
     @Path("/apartment")

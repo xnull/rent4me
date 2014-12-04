@@ -3,10 +3,11 @@ var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');
 
-var Auth = require('../../../shared/common/auth.js');
-var Utils = require('../../../shared/common/utils.js');
+var Auth = require('../../../shared/common/Auth');
+var Utils = require('../../../shared/common/Utils');
 
 var UserStore = require('../../../shared/stores/UserStore');
+var UserActions = require('../../../shared/actions/UserActions');
 
 var assign = require('object-assign');
 
@@ -17,6 +18,8 @@ var UserPanel = React.createClass({
 
     componentDidMount: function(){
         UserStore.addChangeListener(this._onChange);
+
+        UserActions.loadMyProfile();
     },
 
     componentWillUnmount: function(){

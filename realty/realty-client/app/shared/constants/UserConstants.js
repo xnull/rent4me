@@ -3,7 +3,10 @@
  */
 var keyMirror = require('react/lib/keymirror');
 module.exports = keyMirror({
-    USER_CREATE: null,
+    USER_PROFILE_SAVE: null,
+    USER_PROFILE_LOADED: null,
+
+
     USER_COMPLETE: null,
     USER_DESTROY: null,
     USER_DESTROY_COMPLETED: null,

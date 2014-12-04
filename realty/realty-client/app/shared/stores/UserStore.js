@@ -10,7 +10,7 @@ var UserConstants = require('../constants/UserConstants');
 var assign = require('object-assign');
 
 var _users = {};
-var _me = {'name': 'Dionis', phone: '+372582xxxx6', email: 'dionis.argiri@gmail.com', role: 'developer'};
+var _me = {};
 
 
 var CHANGE_EVENT = 'change';
@@ -64,7 +64,10 @@ AppDispatcher.register(function(payload){
     console.log(userObject);
 
     switch(action.actionType) {
-        case UserConstants.USER_CREATE:
+        case UserConstants.USER_PROFILE_SAVE:
+            saveMyProfile(userObject);
+            break;
+        case UserConstants.USER_PROFILE_LOADED:
             saveMyProfile(userObject);
             break;
         default:
