@@ -7,6 +7,8 @@ var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
 var RouteHandler = Router.RouteHandler;
 
+var UserStore = require('../../shared/stores/UserStore');
+
 /**
  * Расписано как надо юзать реакт компоненты через browserify:
  * https://gist.github.com/sebmarkbage/d7bce729f38730399d28

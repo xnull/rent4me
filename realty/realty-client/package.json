@@ -73,7 +73,11 @@
         "reactify": "~0.17.1",
         "jstransform": "~8.2.0",
         "react-tools": "~0.12.1",
-        "through": "~2.3.6"
+        "through": "~2.3.6",
+
+        "flux": "~2.0.1",
+        "events": "~1.0.2",
+        "object-assign": "~2.0.0"
     },
     "devDependencies": {
         "karma": "~0.10",

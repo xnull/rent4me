@@ -6,12 +6,31 @@ var LegalComponent = require('./legal.js');
 var Auth = require('../../../shared/common/auth.js');
 var Utils = require('../../../shared/common/utils.js');
 
+var UserStore = require('../../../shared/stores/UserStore');
+
+var assign = require('object-assign');
+
 var UserPanel = React.createClass({
-    componentDidMount: function(root){
-        $('#logoutBtn').on('click', function(){
-            Auth.logoutOnBackend();
-        });
+    getInitialState: function() {
+        return UserStore.getMyProfile();
     },
+
+    componentDidMount: function(){
+        UserStore.addChangeListener(this._onChange);
+    },
+
+    componentWillUnmount: function(){
+        UserStore.removeChangeListener(this._onChange);
+    },
+
+    _onChange: function(event) {
+        this.setState(UserStore.getMyProfile());
+    },
+
+    _logout: function() {
+        Auth.logoutOnBackend();
+    },
+
     render: function () {
         return (
             <div className="panel panel-default">
@@ -25,7 +44,7 @@ var UserPanel = React.createClass({
                             </a>
 
                             <div className="media-body">
-                                <h4 className="media-heading">John Doe</h4>
+                                <h4 className="media-heading">{this.state.name}</h4>
 
                                 <br/>
 
@@ -37,7 +56,7 @@ var UserPanel = React.createClass({
                     </div>
 
                     <div className="col-md-6">
-                        <a className="btn btn-danger" href="#" id="logoutBtn">Выход</a>
+                        <a className="btn btn-danger" href="#" id="logoutBtn" onClick={this._logout}>Выход</a>
                     </div>
 
                     <div className="col-md-6">
