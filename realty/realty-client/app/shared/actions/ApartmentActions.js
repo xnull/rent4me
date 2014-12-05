@@ -12,7 +12,7 @@ var ApartmentActions = {
      * @param {object} obj
      */
     save: function (obj) {
-        $.blockUI();
+        //$.blockUI();
 
         var data = assign({}, obj);
 
@@ -34,16 +34,16 @@ var ApartmentActions = {
                     apartment: data
                 });
 
-                $.unblockUI();
+                //$.unblockUI();
             },
             error: function (xhr, status, err) {
-                $.unblockUI();
+                //$.unblockUI();
             }
         });
     },
 
     loadMyApartment: function() {
-        $.blockUI();
+        //$.blockUI();
 
         $.ajax({
             url: '/rest/users/apartment',
@@ -62,7 +62,7 @@ var ApartmentActions = {
                     apartment: data
                 });
 
-                $.unblockUI();
+                //$.unblockUI();
             },
             error: function (xhr, status, err) {
                 if (xhr.status == '404') {
@@ -75,13 +75,13 @@ var ApartmentActions = {
 //                        console.error('/rest/apartment', status, err.toString());
                     alert('Service unavailable');
                 }
-                $.unblockUI();
+                //$.unblockUI();
             }
         });
     },
 
     deleteMyApartment: function() {
-        $.blockUI();
+        //$.blockUI();
 
         $.ajax({
             url: '/rest/users/apartment',
@@ -99,10 +99,10 @@ var ApartmentActions = {
                     apartment: {}
                 });
 
-                $.unblockUI();
+                //$.unblockUI();
             },
             error: function (xhr, status, err) {
-                $.unblockUI();
+                //$.unblockUI();
             }
         });
     }

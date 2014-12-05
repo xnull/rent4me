@@ -43,7 +43,7 @@ function loginWithVK() {
 }
 
 function authOnBackendWithVK(vkAccessCode) {
-    $.blockUI();
+    //$.blockUI();
 
     var data = {"code": vkAccessCode};
 
@@ -69,7 +69,7 @@ function authOnBackendWithVK(vkAccessCode) {
 
             storeUsernameAndTokenInCookies();
 
-            $.unblockUI();
+            //$.unblockUI();
 
             Utils.navigateToPersonal();
         },
@@ -80,7 +80,7 @@ function authOnBackendWithVK(vkAccessCode) {
             _token = null;
             _fbUserId = null;
             _fbAccessToken = null;
-            $.unblockUI();
+            //$.unblockUI();
             alert("Не удалось авторизоваться через VK");
             Utils.navigateToStart();
         }
@@ -109,7 +109,7 @@ function statusChangeCallback(response) {
 }
 
 function authOnBackendWithFacebook() {
-    $.blockUI();
+    //$.blockUI();
 
     var data = {"facebook_id": _fbUserId, "access_token": _fbAccessToken};
 
@@ -135,7 +135,7 @@ function authOnBackendWithFacebook() {
 
             storeUsernameAndTokenInCookies();
 
-            $.unblockUI();
+            //$.unblockUI();
 
             Utils.navigateToPersonal();
         },
@@ -146,7 +146,7 @@ function authOnBackendWithFacebook() {
             _token = null;
             _fbUserId = null;
             _fbAccessToken = null;
-            $.unblockUI();
+            //$.unblockUI();
             alert("Не удалось авторизоваться через Facebook");
             Utils.navigateToStart();
         }
@@ -183,7 +183,7 @@ function storeUsernameAndTokenInCookies() {
 function logoutOnBackend() {
     if(hasCredentials()) {
         var data = {"token" : _token};
-        $.blockUI();
+        //$.blockUI();
         $.ajax({
             url: '/rest/auth',
 //                dataType: 'json',
@@ -204,14 +204,14 @@ function logoutOnBackend() {
                 _fbUserId = null;
                 _fbAccessToken = null;
 
-                $.unblockUI();
+                //$.unblockUI();
 
                 Utils.navigateToStart();
             },
             error: function (xhr, status, err) {
 //                    console.error('/rest/apartment', status, err.toString());
                 console.log("Error!");
-                $.unblockUI();
+                //$.unblockUI();
             }
         });
     }

@@ -12,7 +12,7 @@ var UserActions = {
      * @param {object} obj
      */
     save: function (obj) {
-        $.blockUI();
+        //$.blockUI();
 
         var data = assign({}, obj);
 
@@ -34,16 +34,16 @@ var UserActions = {
                     user: obj
                 });
 
-                $.unblockUI();
+                //$.unblockUI();
             },
             error: function (xhr, status, err) {
-                $.unblockUI();
+                //$.unblockUI();
             }
         });
     },
 
     loadMyProfile: function() {
-        $.blockUI();
+        //$.blockUI();
 
         $.ajax({
             url: '/rest/users/me',
@@ -62,10 +62,10 @@ var UserActions = {
                     user: data
                 });
 
-                $.unblockUI();
+                //$.unblockUI();
             },
             error: function (xhr, status, err) {
-                $.unblockUI();
+                //$.unblockUI();
             }
         });
     }
