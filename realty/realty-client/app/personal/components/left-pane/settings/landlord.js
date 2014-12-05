@@ -133,6 +133,7 @@ module.exports = React.createClass({
         var dropZone = new Dropzone('#my-awesome-dropzone', {
             maxFilesize: 5,
 //            maxFiles: 10,
+            addRemoveLinks: true,
             acceptedFiles: ".png, .jpg, .jpeg, .jpe, .gif, .bmp, .tif, .tiff",
             dictDefaultMessage: "Перетащите картинки сюда, что бы добавить их",
             url: '/rest/users/apartment/pictures',
