@@ -131,6 +131,10 @@ module.exports = React.createClass({
     componentDidMount: function() {
         Dropzone.autoDiscover = false;
         var dropZone = new Dropzone('#my-awesome-dropzone', {
+            maxFilesize: 5,
+//            maxFiles: 10,
+            acceptedFiles: ".png, .jpg, .jpeg, .jpe, .gif, .bmp, .tif, .tiff",
+            dictDefaultMessage: "Перетащите картинки сюда, что бы добавить их",
             url: '/rest/users/apartment/pictures',
             headers: {
                 "Authorization": "Basic " + Auth.getAuthHeader()
