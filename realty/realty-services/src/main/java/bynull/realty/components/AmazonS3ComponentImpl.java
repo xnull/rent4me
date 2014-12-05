@@ -29,9 +29,6 @@ public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBea
     private static final String         bucketName  = "rent4.me";
     private static final Logger LOGGER      = LoggerFactory.getLogger(AmazonS3ComponentImpl.class);
 
-    //https://hellomobil.ee.s3.amazonaws.com/dev%2Fimages%2FPlaces%2F6ce12f13-aabf-4aaa-9178-c08e028d7951%2F6ce12f13-aabf-4aaa-9178-c08e028d7951.jpg?Expires=1376317551&
-    // AWSAccessKeyId=AKIAIPBXWLN46TR423DA&Signature=M6cgeW6LZfch4P5LhMlKw53YGM4%3D
-
     @Resource
     private Config config ;
     private AmazonS3Client s3Client;
