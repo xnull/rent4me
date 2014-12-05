@@ -6,19 +6,24 @@ import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.UserJSON;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.util.HashMap;
 
 /**
  * @author dionis on 24/11/14.
  */
 @Component
 @Path("users")
-@Consumes(MediaType.APPLICATION_JSON)
+@Consumes({MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA})
 @Produces(MediaType.APPLICATION_JSON)
 public class UserRestResource {
     @Resource
@@ -68,6 +73,19 @@ public class UserRestResource {
         return Response
                 .status(result ? Response.Status.CREATED : Response.Status.CONFLICT)
                 .entity(result ? ApartmentJSON.from(apartmentService.findAuthorizedUserApartment()) : null)
+                .build();
+    }
+
+    @POST
+    @Path("/apartment/pictures")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadPictures(FormDataMultiPart form) {
+
+        HashMap<String, String> entity = new HashMap<>();
+        entity.put("id", "1");
+        return Response
+                .status( Response.Status.OK)
+                .entity(entity)
                 .build();
     }
 

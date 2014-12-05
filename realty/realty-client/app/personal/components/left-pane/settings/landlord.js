@@ -13,6 +13,8 @@ var ApartmentStore = require('../../../../shared/stores/ApartmentStore');
 var ApartmentActions = require('../../../../shared/actions/ApartmentActions');
 var assign = require('object-assign');
 
+var Dropzone = require("dropzone");
+
 var UserProperty = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName || 'col-md-4';
@@ -127,6 +129,14 @@ module.exports = React.createClass({
         return ApartmentStore.getMyProfile();
     },
     componentDidMount: function() {
+        Dropzone.autoDiscover = false;
+        var dropZone = new Dropzone('#my-awesome-dropzone', {
+            url: '/rest/users/apartment/pictures',
+            headers: {
+                "Authorization": "Basic " + Auth.getAuthHeader()
+            }
+        });
+
 //        console.log('component mounted');
         ApartmentStore.addChangeListener(this._onLoad);
 
@@ -487,6 +497,13 @@ module.exports = React.createClass({
                             </div>
                             <div id="map-canvas" className="col-md-4" style={styles}></div>
                         </div>
+
+                        <h4>Фотографии</h4>
+
+                        <p>
+                            <div className="dropzone"
+                                    id="my-awesome-dropzone"></div>
+                        </p>
 
 
                     </div>

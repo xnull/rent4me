@@ -79,7 +79,8 @@ function Settings() {
         this.moduleInfo[moduleName]['appFiles'] = [ projectDir + '/*js' ];
         this.moduleInfo[moduleName]['cssFiles'] = [projectDir + '/**/*.css', projectDir + '/*.css'];
         this.moduleInfo[moduleName]['fontFiles'] = [projectDir + '/fonts/*.*'];
-        this.moduleInfo[moduleName]['images'] = [projectDir + 'images/**/*.jpg', projectDir + 'images/**/*.png', projectDir + 'images/**/*.gif'];
+//        this.moduleInfo[moduleName]['images'] = [projectDir + 'images/**/*.jpg', projectDir + 'images/**/*.png', projectDir + 'images/**/*.gif'];
+        this.moduleInfo[moduleName]['images'] = [projectDir + '/images/**/*.*'];
         this.moduleInfo[moduleName]['jsHintFiles'] = projectDir + '/**/*.js';
         this.moduleInfo[moduleName]['watchDir'] = projectDir + '/**/*.*';
     }
@@ -129,6 +130,7 @@ function build() {
     var len = settings.projectSubModules.length;
     for(var i = 0; i < len; i++) {
         var moduleName = settings.projectSubModules[i];
+        console.log('Building: '+moduleName);
         var moduleInfo = settings.moduleInfo[moduleName];
         if(moduleName != '/start') {
             buildBrowserify(moduleInfo);
@@ -176,6 +178,8 @@ function cssBuild(moduleInfo) {
 }
 
 function imgBuild(moduleInfo) {
+    console.log("Image build for: ");
+    console.log(moduleInfo['images']);
     gulp.src(moduleInfo['images'])
             .pipe(gulp.dest(moduleInfo['buildDir'] + '/images'));
 }
