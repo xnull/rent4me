@@ -1,11 +1,10 @@
 /**
- * Created by dionis on 03/12/14.
+ * Created by dionis on 04/12/14.
  */
-//var Dispatcher = require('flux/lib/Dispatcher');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 
 var EventEmitter = require('events').EventEmitter;
-var UserConstants = require('../constants/UserConstants');
+var ApartmentConstants = require('../constants/ApartmentConstants');
 
 var assign = require('object-assign');
 
@@ -17,7 +16,7 @@ var CHANGE_EVENT = 'change';
 
 var saveMyProfile = function(myProfile){
     //copy props
-    _me = assign({},_me, myProfile);
+    _me = assign({}, _me, myProfile);
 };
 
 var getMyProfile = function() {
@@ -25,10 +24,24 @@ var getMyProfile = function() {
     return assign({}, _me);
 };
 
-//var UserStore = assign({}, EventEmitter.prototype, {
-var UserStore = assign({}, EventEmitter.prototype, {
+var ApartmentStore = assign({}, EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT);
+    },
+
+    emptyApartment: function() {
+        return {
+            'location': null,
+            'address': null,
+            'type_of_rent': '',
+            'rental_fee': null,
+            'fee_period': '',
+            'room_count': null,
+            'floor_number': null,
+            'floors_total': null,
+            'area': null,
+            'description': ''
+        };
     },
 
     getMyProfile: function() {
@@ -56,21 +69,32 @@ var UserStore = assign({}, EventEmitter.prototype, {
 // Register to handle all updates
 AppDispatcher.register(function(payload){
     var action = payload.action;
-//    console.log('Payload received in User dispatcher');
-    var userObject = assign({}, action.user);
+//    console.log('Apartment store payload received in dispatcher');
+    var apartmentObject = assign({}, action.apartment);
 //    console.log("Action:");
 //    console.log(action);
-//    console.log("User:");
-//    console.log(userObject);
+//    console.log("Apartment:");
+//    console.log(apartmentObject);
 
     switch(action.actionType) {
-        case UserConstants.USER_PROFILE_SAVE:
-            saveMyProfile(userObject);
+        case ApartmentConstants.APARTMENT_SAVE:
+//            console.log("case: Apartment save");
+            saveMyProfile(apartmentObject);
             break;
-        case UserConstants.USER_PROFILE_LOADED:
-            saveMyProfile(userObject);
+        case ApartmentConstants.APARTMENT_LOADED:
+//            console.log("case: Apartment loaded");
+            saveMyProfile(apartmentObject);
+            break;
+        case ApartmentConstants.APARTMENT_DESTROY:
+//            console.log("case: Apartment destroy");
+            var newProfileForDeletion = ApartmentStore.emptyApartment();
+//            console.log("New profile for delete:");
+//            console.log(newProfileForDeletion);
+//            saveMyProfile(newProfileForDeletion);
+            _me = newProfileForDeletion;
             break;
         default:
+//            console.log("case: default");
             return false;
     }
 
@@ -79,8 +103,8 @@ AppDispatcher.register(function(payload){
     // needs to trigger a UI change after every view action, so we can make the
     // code less repetitive by putting it here. We need the default case,
     // however, to make sure this only gets called after one of the cases above.
-    UserStore.emitChange();
+    ApartmentStore.emitChange();
     return true; // No errors. Needed by promise in Dispatcher.
 });
 
-module.exports = UserStore;
+module.exports = ApartmentStore;

@@ -25,9 +25,9 @@ var UserActions = {
                 request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
             },
             success: function (data) {
-                console.log("Success!");
-                console.log("Data:");
-                console.log(data);
+//                console.log("Success!");
+//                console.log("Data:");
+//                console.log(data);
 
                 AppDispatcher.handleViewAction({
                     actionType: UserConstants.USER_PROFILE_SAVE,
@@ -53,10 +53,10 @@ var UserActions = {
                 request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
             },
             success: function (data) {
-                console.log("Success!");
-                console.log("Data:");
-                console.log(data);
-
+//                console.log("Success!");
+//                console.log("Data:");
+//                console.log(data);
+//
                 AppDispatcher.handleViewAction({
                     actionType: UserConstants.USER_PROFILE_LOADED,
                     user: data

@@ -52,11 +52,11 @@ var getMyProfile = function() {
 
 module.exports = React.createClass({
     getInitialState: function() {
-        console.log('get initial state');
+//        console.log('get initial state');
         return UserStore.getMyProfile();
     },
     componentWillMount: function() {
-        console.log('component will mount');
+//        console.log('component will mount');
         UserStore.addChangeListener(this._onLoad);
 
         UserActions.loadMyProfile();
@@ -71,41 +71,41 @@ module.exports = React.createClass({
     },
 
     _onSave: function(event) {
-        console.log('on save');
-        console.log(event);
-        console.log(event.target);
-
+//        console.log('on save');
+//        console.log(event);
+//        console.log(event.target);
+//
         UserActions.save(assign(getMyProfile(), this.state));
     },
 
     _onLoad: function() {
-        console.log('on load triggered');
+//        console.log('on load triggered');
         var user = UserStore.getMyProfile();
-        console.log('user:'+JSON.stringify(user));
+//        console.log('user:'+JSON.stringify(user));
         var newState = assign(this.state, user);
 
-        console.log(newState);
+//        console.log(newState);
         this.setState(newState);
     },
 
     _onChange: function(event) {
         if(!event) {
-            console.log('no event specified');
+//            console.log('no event specified');
             return;
         }
 
-        console.log('on change');
-        console.log(event);
-        console.log(event.target);
-        console.log(event.target.name);
-        console.log(event.target.value);
+//        console.log('on change');
+//        console.log(event);
+//        console.log(event.target);
+//        console.log(event.target.name);
+//        console.log(event.target.value);
 
         var diffObj = {};
         diffObj[event.target.name] = event.target.value;
 
         var newState = assign(this.state, diffObj);
 
-        console.log(newState);
+//        console.log(newState);
         this.setState(newState);
     },
 
@@ -116,7 +116,7 @@ module.exports = React.createClass({
 
         var submitButton = {value: 'Сохранить', id: 'saveMyInfoBtn'};
 
-        console.log('user widget');
+//        console.log('user widget');
 
         return (
             <div className="col-md-9">

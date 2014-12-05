@@ -67,7 +67,7 @@ public class UserRestResource {
         boolean result = apartmentService.createForAuthorizedUser(dto);
         return Response
                 .status(result ? Response.Status.CREATED : Response.Status.CONFLICT)
-                .entity(result ? apartmentService.findAuthorizedUserApartment() : null)
+                .entity(result ? ApartmentJSON.from(apartmentService.findAuthorizedUserApartment()) : null)
                 .build();
     }
 
