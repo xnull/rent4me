@@ -2,19 +2,21 @@ package bynull.realty.web.rest;
 
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.UserDTO;
+import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.UserJSON;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -28,6 +30,9 @@ import java.util.HashMap;
 public class UserRestResource {
     @Resource
     ApartmentService apartmentService;
+
+    @Resource
+    ApartmentPhotoService apartmentPhotoService;
 
     @Resource
     UserService userService;
@@ -77,16 +82,24 @@ public class UserRestResource {
     }
 
     @POST
-    @Path("/apartment/pictures")
+    @Path("/apartment/pictures/temp")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadPictures(FormDataMultiPart form) {
-
-        HashMap<String, String> entity = new HashMap<>();
-        entity.put("id", "1");
-        return Response
-                .status( Response.Status.OK)
-                .entity(entity)
-                .build();
+        FormDataBodyPart filePart = form.getField("file");
+        ContentDisposition contentDisposition = filePart.getContentDisposition();
+        InputStream inputStream = filePart.getValueAs(InputStream.class);
+        try {
+            byte[] content = IOUtils.toByteArray(inputStream);
+            String photoTempGUID = apartmentPhotoService.createPhotoTemp(content);
+            HashMap<String, String> entity = new HashMap<>();
+            entity.put("guid", photoTempGUID);
+            return Response
+                    .status( Response.Status.OK)
+                    .entity(entity)
+                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DELETE

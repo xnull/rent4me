@@ -136,7 +136,7 @@ module.exports = React.createClass({
             addRemoveLinks: true,
             acceptedFiles: ".png, .jpg, .jpeg, .jpe, .gif, .bmp, .tif, .tiff",
             dictDefaultMessage: "Перетащите картинки сюда, что бы добавить их",
-            url: '/rest/users/apartment/pictures',
+            url: '/rest/users/apartment/pictures/temp',
             headers: {
                 "Authorization": "Basic " + Auth.getAuthHeader()
             }

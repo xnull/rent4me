@@ -67,6 +67,12 @@ project.ext.libraries = [
         //common stuff
         'commons-io:commons-io'                                   : ["commons-io:commons-io:2.4"],
 
+        'joda-time:joda-time'                                     : ['joda-time:joda-time:2.5'],
+
+        'org.imgscalr:imgscalr-lib'                               : ['org.imgscalr:imgscalr-lib:4.2'],
+        'org.apache.sanselan:sanselan'                            : ['org.apache.sanselan:sanselan:0.97-incubator'],
+        'com.amazonaws:aws-java-sdk'                             : ['com.amazonaws:aws-java-sdk:1.9.9'],
+
         //test
         'junit:junit'                                             : ['junit:junit:4.11'],
         'org.hamcrest:hamcrest-all'                               : ["org.hamcrest:hamcrest-all:1.3"],

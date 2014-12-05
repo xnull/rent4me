@@ -38,6 +38,7 @@
 
         <bean id="appConfig" class="bynull.realty.config.Config">
             <property name="vkRedirectURL" value="http://localhost:8888/dev"/>
+            <property name="s3Folder" value="dev_local"/>
         </bean>
     </beans>
 
@@ -57,6 +58,7 @@
 
         <bean id="appConfig" class="bynull.realty.config.Config">
             <property name="vkRedirectURL" value="http://rent4.me/dev"/>
+            <property name="s3Folder" value="dev"/>
         </bean>
     </beans>
 

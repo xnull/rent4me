@@ -17,4 +17,9 @@ dependencies {
     compile libraries.'org.springframework.security:spring-security-core'
     compile libraries.'org.glassfish.jersey.media:jersey-media-json-jackson'
     compile libraries.'commons-httpclient:commons-httpclient'
+    compile libraries.'joda-time:joda-time'
+    compile libraries.'org.imgscalr:imgscalr-lib'
+    compile libraries.'org.apache.sanselan:sanselan'
+    compile libraries.'com.amazonaws:aws-java-sdk'
+    compile libraries.'commons-io:commons-io'
 }
