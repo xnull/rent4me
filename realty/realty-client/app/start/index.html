@@ -40,14 +40,18 @@
         <p>Прозрачность, отсутствие посредников</p>
     </header>
     <footer>
-        <a href="#first" class="button scrolly">Подробности</a>
-        <div>
-            <br/>
-            <br/>
-            <br/>
-            <img class="clickable" src="images/signin/FBX-Large_278x44.png" onclick="Auth.loginWithFB();"><br/>
-            <img class="clickable" width="280" src="images/signin/Full.png" onclick="Auth.loginWithVK();">
+        <div class="row row-centered">
+            <div class="col-centered">
+                <img class="clickable" width="100" src="images/signin/fb-icon.png"
+                     onclick="Auth.loginWithFB();"><br/>
+            </div>
+            <div class="col-centered">
+                <img class="clickable" width="100" src="images/signin/vk.png" onclick="Auth.loginWithVK();">
+            </div>
         </div>
+        <br/>
+
+        <a href="#first" class="button scrolly">Подробности</a>
 
     </footer>
 </section>
@@ -123,12 +127,11 @@
 <script type="text/javascript">
 
 
-
-    $(document).ready(function() {
+    $(document).ready(function () {
         Auth.restoreUsernameAndTokenFromCookies();
-        if(!Auth.hasCredentials()) {
-            $.ajaxSetup({ cache: true });
-            $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+        if (!Auth.hasCredentials()) {
+            $.ajaxSetup({cache: true});
+            $.getScript('//connect.facebook.net/en_UK/all.js', function () {
                 FB.init({
                     appId: Auth.getFbId(),
                     xfbml: true,
