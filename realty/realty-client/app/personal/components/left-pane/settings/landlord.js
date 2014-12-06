@@ -202,7 +202,7 @@ module.exports = React.createClass({
 
         //initialize google maps
         var mapOptions = {
-            center: {lat: -34.397, lng: 150.644},
+            center: {lat: 55.752129, lng: 37.617531},
             zoom: 16
         };
 
