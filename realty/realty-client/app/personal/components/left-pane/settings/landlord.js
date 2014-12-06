@@ -160,6 +160,7 @@ var UserButton = React.createClass({
 
 var _marker = null;
 var _map = null;
+var _uploadFileNameToGuidMap = {};
 var _dropZone = null;
 
 module.exports = React.createClass({
@@ -180,20 +181,31 @@ module.exports = React.createClass({
             headers: {
                 "Authorization": "Basic " + Auth.getAuthHeader()
             },
-            success: function(file, data) {
-                console.log('Complete file upload');
-                console.log(file);
-                console.log('Data');
-                console.log(data);
-                if(data && data.guid) {
-                    //change state of added photos
-                    var newState = assign({}, that.state);
-                    newState.added_photos_guids.push(data.guid);
-                    that.setState(newState);
-                }
-                if (file.previewElement) {
-                    return file.previewElement.classList.add("dz-success");
-                }
+            init: function() {
+                this.on("removedfile", function(file) {
+                   var guid = _uploadFileNameToGuidMap[file.name];
+                   if(guid) {
+                       alert("File removed with guid: "+file.name);
+                       alert("Guid: "+guid);
+                       that._onPhotoDelete(guid);
+                   } else {
+                       alert("File removed withoud guid: "+file.name);
+                       alert("No guid");
+                   }
+                });
+                this.on("success", function(file, data){
+                    console.log('Complete file upload');
+                    console.log(file);
+                    console.log('Data');
+                    console.log(data);
+                    if(data && data.guid) {
+                        _uploadFileNameToGuidMap[file.name] = data.guid;
+                        //change state of added photos
+                        var newState = assign({}, that.state);
+                        newState.added_photos_guids.push(data.guid);
+                        that.setState(newState);
+                    }
+                });
             }
         });
 
@@ -267,6 +279,9 @@ module.exports = React.createClass({
     },
 
     _onLoad: function() {
+        console.log('on load');
+        //clear this map state
+        _uploadFileNameToGuidMap = {};
 //        console.log("On load apartment");
         var newState = ApartmentStore.getMyProfile();
 //        console.log("New apartment state: "+JSON.stringify(newState));
@@ -423,12 +438,37 @@ module.exports = React.createClass({
         var oldState = this.state;
         var newState = assign({}, oldState);
 
-        var _filterFunc = function(photo) {
-            return photo.guid != guid;
+        var _filterFunc = function(photoGuid) {
+            var result = photoGuid != guid;
+            console.log("Value for compare: " + photoGuid + "; compare with: " + guid+" = "+result);
+            return result;
         };
 
-        newState.photos = _.filter(oldState.photos, _filterFunc);
-        newState.deleted_photos_guids.push(guid);
+        var _photosFilterFunc = function(photo) {
+            return _filterFunc(photo.guid);
+        };
+
+        //remove guid for added photos
+        console.log('old added photos:');
+        console.log(oldState.added_photos_guids);
+
+        newState.added_photos_guids = _.filter(oldState.added_photos_guids, _filterFunc);
+
+        console.log('new added photos:');
+        console.log(newState.added_photos_guids);
+        //remove from photos list
+        newState.photos = _.filter(oldState.photos, _photosFilterFunc);
+
+        var photoGuids = _.map(oldState.photos, function(it){
+            return it.guid;
+        });
+
+        console.log("Photo guids:");
+        console.log(photoGuids);
+
+        if(_.contains(photoGuids, guid)) {
+            newState.deleted_photos_guids.push(guid);
+        }
 
         if(_.contains(oldState.added_photos_guids, guid)) {
             newState.added_photos_guids = _.filter(oldState.added_photos_guids, _filterFunc);
