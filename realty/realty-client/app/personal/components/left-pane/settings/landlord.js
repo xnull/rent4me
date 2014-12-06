@@ -422,10 +422,18 @@ module.exports = React.createClass({
         console.log(guid);
         var oldState = this.state;
         var newState = assign({}, oldState);
-        newState.photos = _.filter(oldState.photos, function(photo) {
+
+        var _filterFunc = function(photo) {
             return photo.guid != guid;
-        });
+        };
+
+        newState.photos = _.filter(oldState.photos, _filterFunc);
         newState.deleted_photos_guids.push(guid);
+
+        if(_.contains(oldState.added_photos_guids, guid)) {
+            newState.added_photos_guids = _.filter(oldState.added_photos_guids, _filterFunc);
+        }
+
         this.setState(newState);
     },
 
