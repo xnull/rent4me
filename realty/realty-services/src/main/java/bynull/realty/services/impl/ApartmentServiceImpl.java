@@ -1,11 +1,19 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.dao.ApartmentPhotoRepository;
 import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.PhotoTempRepository;
 import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.business.ApartmentPhoto;
+import bynull.realty.data.business.PhotoTemp;
 import bynull.realty.data.business.User;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.ApartmentPhotoDTO;
+import bynull.realty.dto.PhotoTempDTO;
+import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.api.PhotoTempService;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
 import org.springframework.stereotype.Service;
@@ -13,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author dionis on 22/06/14.
@@ -26,6 +36,15 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Resource
     UserRepository userRepository;
+
+    @Resource
+    ApartmentPhotoService apartmentPhotoService;
+
+    @Resource
+    ApartmentPhotoRepository apartmentPhotoRepository;
+
+    @Resource
+    PhotoTempRepository photoTempRepository;
 
     @Transactional
     @Override
@@ -47,6 +66,26 @@ public class ApartmentServiceImpl implements ApartmentService {
             Apartment apartment = dto.toInternal();
             apartment.setOwner(user);
             apartment = apartmentRepository.saveAndFlush(apartment);
+
+            List<String> addedTempPhotoGUIDs = dto.getAddedTempPhotoGUIDs();
+
+            //find added photo temps
+            List<PhotoTemp> photoTempByGUIDs = !addedTempPhotoGUIDs.isEmpty()
+                    ? photoTempRepository.findByGuidIn(addedTempPhotoGUIDs)
+                    : Collections.emptyList();
+
+
+            for (PhotoTemp photoTemp : photoTempByGUIDs) {
+                ApartmentPhotoDTO apartmentPhotoWithThumbnails = apartmentPhotoService.createApartmentPhotoWithThumbnails(photoTemp);
+                apartment.addApartmentPhoto(apartmentPhotoRepository.findOne(apartmentPhotoWithThumbnails.getId()));
+            }
+
+            List<String> deletePhotoGUIDs = dto.getDeletePhotoGUIDs();
+
+
+
+
+
             boolean result = user.getApartments().add(apartment);
             return result;
         } else {
@@ -73,7 +112,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void delete(long id) {
         apartmentRepository.delete(id);
         apartmentRepository.flush();
     }
@@ -108,6 +147,17 @@ public class ApartmentServiceImpl implements ApartmentService {
         User user = getAuthorizedUser();
         Set<Apartment> apartments = user.getApartments();
         if(!apartments.isEmpty()) {
+            for (Apartment apartment : apartments) {
+                SecurityUtils.verifySameUser(apartment.getOwner());
+                List<ApartmentPhoto> apartmentPhotos = apartment.listPhotosNewestFirst();
+
+                //delete all photos first
+                apartmentPhotoService.deleteAll(
+                        apartmentPhotos.stream()
+                                .map(ApartmentPhotoDTO::from)
+                                .collect(Collectors.toList())
+                );
+            }
             apartmentRepository.delete(apartments);
         }
     }

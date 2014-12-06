@@ -6,7 +6,11 @@ import bynull.realty.data.business.FeePeriod;
 import bynull.realty.data.business.RentType;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -30,6 +34,10 @@ public class ApartmentDTO {
     private Date created;
     private Date updated;
 
+    private List<ApartmentPhotoDTO> photos = Collections.emptyList();
+    private List<String> addedTempPhotoGUIDs = Collections.emptyList();
+    private List<String> deletePhotoGUIDs = Collections.emptyList();
+
     public static ApartmentDTO from(Apartment apartment) {
         if (apartment == null) return null;
         ApartmentDTO dto = new ApartmentDTO();
@@ -48,6 +56,13 @@ public class ApartmentDTO {
 
         dto.setCreated(apartment.getCreated());
         dto.setUpdated(apartment.getUpdated());
+
+        dto.setPhotos(apartment.listPhotosNewestFirst()
+                                    .stream()
+                                    .map(ApartmentPhotoDTO::from)
+                                    .collect(Collectors.toList())
+        );
+
         return dto;
     }
 
@@ -161,6 +176,30 @@ public class ApartmentDTO {
 
     public void setUpdated(Date updated) {
         this.updated = copy(updated);
+    }
+
+    public List<ApartmentPhotoDTO> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<ApartmentPhotoDTO> photos) {
+        this.photos = photos;
+    }
+
+    public List<String> getAddedTempPhotoGUIDs() {
+        return addedTempPhotoGUIDs;
+    }
+
+    public void setAddedTempPhotoGUIDs(List<String> addedTempPhotoGUIDs) {
+        this.addedTempPhotoGUIDs = new ArrayList<>(addedTempPhotoGUIDs);
+    }
+
+    public List<String> getDeletePhotoGUIDs() {
+        return deletePhotoGUIDs;
+    }
+
+    public void setDeletePhotoGUIDs(List<String> deletePhotoGUIDs) {
+        this.deletePhotoGUIDs = new ArrayList<>(deletePhotoGUIDs);
     }
 
     public Apartment toInternal() {

@@ -37,7 +37,7 @@ public class PhotoTempServiceImpl implements PhotoTempService {
     @Resource
     AfterCommitExecutor afterCommitExecutor;
     @Resource
-    ImageComponent placeImageComponent;
+    ImageComponent imageComponent;
 
     @Resource
     UserRepository userRepository;
@@ -60,7 +60,7 @@ public class PhotoTempServiceImpl implements PhotoTempService {
     @Override
     public void collectGarbage() {
         //garbage collect all the temp stuff that was created more than 1 day ago.
-        Date date = new DateTime().minusDays(1).toDate();
+        Date date = new DateTime().minusMinutes(1).toDate();
         LOGGER.info("Finding GC candidates that were created before [{}]", date);
         List<PhotoTemp> gcCandidates = photoTempRepository.findPlacesForGarbageCollection(date);
         LOGGER.info("Found [{}] gc candidates", gcCandidates.size());
@@ -79,9 +79,9 @@ public class PhotoTempServiceImpl implements PhotoTempService {
             final String guid = gcCandidate.getGuid();
             if(!idsThatShouldNotBeDeleted.contains(guid)) {
                 LOGGER.info("GC'ing image from Amazon S3 with id [{}]", guid);
-                afterCommitExecutor.execute(() -> placeImageComponent.deleteJpegSilently(guid));
+                afterCommitExecutor.execute(() -> imageComponent.deleteJpegSilently(guid));
             } else {
-                LOGGER.info("NOT GC'ing image from Amazon S3 with id [{}] because it has link to place profile photo dto", guid);
+                LOGGER.info("NOT GC'ing image from Amazon S3 with id [{}] because it has link to apartment photo", guid);
             }
         }
 

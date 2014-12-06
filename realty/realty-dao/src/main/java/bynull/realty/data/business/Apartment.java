@@ -4,12 +4,11 @@ import bynull.realty.data.common.GeoPoint;
 import bynull.realty.hibernate.validation.annotations.LessThanOrEqual;
 
 import javax.persistence.*;
-import javax.validation.Constraint;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.*;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -77,6 +76,14 @@ public class Apartment implements Serializable {
     @Min(1)
     @Column(name = "area")
     private BigDecimal area;
+
+    @JoinTable(
+            name = "apartment_apartment_photos",
+            joinColumns = @JoinColumn(name = "apartment_id"),
+            inverseJoinColumns = @JoinColumn(name = "apartment_photo_id")
+    )
+    @OneToMany
+    private Set<ApartmentPhoto> photos;
 
     public Long getId() {
         return id;
@@ -196,6 +203,39 @@ public class Apartment implements Serializable {
 
     public void setArea(BigDecimal area) {
         this.area = area;
+    }
+
+    public void addApartmentPhoto(ApartmentPhoto photo) {
+        Set<ApartmentPhoto> apartmentPhotos = this.photos;
+        if (apartmentPhotos == null) {
+            apartmentPhotos = new HashSet<>();
+            this.photos = apartmentPhotos;
+        }
+        apartmentPhotos.add(photo);
+    }
+
+    public void deleteApartmentPhoto(ApartmentPhoto photo) {
+        Set<ApartmentPhoto> apartmentPhotos = this.photos;
+        if (apartmentPhotos == null) {
+            return;
+        }
+        apartmentPhotos.remove(photo);
+    }
+
+    public List<ApartmentPhoto> listPhotosNewestFirst() {
+        Set<ApartmentPhoto> photos = this.photos;
+        if (photos == null) {
+            return Collections.emptyList();
+        } else {
+            List<ApartmentPhoto> result = new ArrayList<>(photos);
+            Collections.sort(result, new Comparator<ApartmentPhoto>() {
+                @Override
+                public int compare(ApartmentPhoto o1, ApartmentPhoto o2) {
+                    return o2.getCreationTimestamp().compareTo(o1.getCreationTimestamp());
+                }
+            });
+            return result;
+        }
     }
 
     @PrePersist

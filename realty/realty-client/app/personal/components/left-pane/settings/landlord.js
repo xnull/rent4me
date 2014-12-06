@@ -15,6 +15,44 @@ var assign = require('object-assign');
 
 var Dropzone = require("dropzone");
 
+var ApartmentPhoto = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <img src={this.props.photo.small_thumbnail_url}/>
+                <br/>
+                <a className="clickable" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
+            </div>
+            );
+    }
+});
+
+var ApartmentPhotoList = React.createClass({
+    render: function() {
+        var _photos = this.props.photos || [];
+        var onDelete = this.props.onDelete;
+        var photos = _photos.map(function(photo){
+            return <ApartmentPhoto key={photo.guid} photo={photo} onDelete={onDelete}/>
+        });
+
+        return (
+            <div>
+                {photos}
+            </div>
+            );
+    }
+});
+
+var ApartmentPhotosBlock = React.createClass({
+    render: function() {
+        return (
+                <div>
+                    <ApartmentPhotoList photos={this.props.photos} onDelete={this.props.onDelete}/>
+                </div>
+            );
+    }
+});
+
 var UserProperty = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName || 'col-md-4';
@@ -122,6 +160,7 @@ var UserButton = React.createClass({
 
 var _marker = null;
 var _map = null;
+var _dropZone = null;
 
 module.exports = React.createClass({
     getInitialState: function() {
@@ -129,8 +168,9 @@ module.exports = React.createClass({
         return ApartmentStore.getMyProfile();
     },
     componentDidMount: function() {
+        var that = this;
         Dropzone.autoDiscover = false;
-        var dropZone = new Dropzone('#my-awesome-dropzone', {
+        _dropZone = new Dropzone('#my-awesome-dropzone', {
             maxFilesize: 5,
 //            maxFiles: 10,
             addRemoveLinks: true,
@@ -139,6 +179,21 @@ module.exports = React.createClass({
             url: '/rest/users/apartment/pictures/temp',
             headers: {
                 "Authorization": "Basic " + Auth.getAuthHeader()
+            },
+            success: function(file, data) {
+                console.log('Complete file upload');
+                console.log(file);
+                console.log('Data');
+                console.log(data);
+                if(data && data.guid) {
+                    //change state of added photos
+                    var newState = assign({}, that.state);
+                    newState.added_photos_guids.push(data.guid);
+                    that.setState(newState);
+                }
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
             }
         });
 
@@ -153,7 +208,6 @@ module.exports = React.createClass({
 
         _map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-        var that = this;
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var place = autocomplete.getPlace();
@@ -222,6 +276,11 @@ module.exports = React.createClass({
         var data = this.state;
         if(data && data.location) {
             this.centerMapAndSetMarker(data.location.latitude, data.location.longitude);
+        }
+
+        if(_dropZone) {
+            console.log('removing all files');
+            _dropZone.removeAllFiles();
         }
     },
 
@@ -355,6 +414,18 @@ module.exports = React.createClass({
         var newState = assign(this.state, diffObj);
 
 //        console.log(newState);
+        this.setState(newState);
+    },
+
+    _onPhotoDelete: function(guid) {
+        console.log('Deleting ');
+        console.log(guid);
+        var oldState = this.state;
+        var newState = assign({}, oldState);
+        newState.photos = _.filter(oldState.photos, function(photo) {
+            return photo.guid != guid;
+        });
+        newState.deleted_photos_guids.push(guid);
         this.setState(newState);
     },
 
@@ -504,7 +575,9 @@ module.exports = React.createClass({
                         </div>
 
                         <h4>Фотографии</h4>
-
+                        <p>
+                            <ApartmentPhotosBlock photos={this.state.photos} onDelete={this._onPhotoDelete}/>
+                        </p>
                         <p>
                             <div className="dropzone"
                                     id="my-awesome-dropzone"></div>

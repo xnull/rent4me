@@ -10,7 +10,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -54,6 +57,12 @@ public class ApartmentJSON {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.ISO_DATE_TIME_FORMAT)
     @JsonProperty("updated")
     private Date updated;
+    @JsonProperty("photos")
+    private List<ApartmentPhotoJSON> photos = Collections.emptyList();
+    @JsonProperty("added_photos_guids")
+    private List<String> addedTempPhotoGUIDs = Collections.emptyList();
+    @JsonProperty("deleted_photos_guids")
+    private List<String> deletePhotoGUIDs = Collections.emptyList();
 
     public static ApartmentJSON from(ApartmentDTO apartment) {
         if (apartment == null) return null;
@@ -73,6 +82,12 @@ public class ApartmentJSON {
         json.setTypeOfRent(apartment.getTypeOfRent());
         json.setRentalFee(apartment.getRentalFee());
         json.setFeePeriod(apartment.getFeePeriod());
+
+        json.setPhotos(apartment.getPhotos()
+                                    .stream()
+                                    .map(ApartmentPhotoJSON::from)
+                                    .collect(Collectors.toList())
+        );
 
         return json;
     }
@@ -181,6 +196,30 @@ public class ApartmentJSON {
         this.updated = copy(updated);
     }
 
+    public List<ApartmentPhotoJSON> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<ApartmentPhotoJSON> photos) {
+        this.photos = photos;
+    }
+
+    public List<String> getAddedTempPhotoGUIDs() {
+        return addedTempPhotoGUIDs;
+    }
+
+    public void setAddedTempPhotoGUIDs(List<String> addedTempPhotoGUIDs) {
+        this.addedTempPhotoGUIDs = addedTempPhotoGUIDs;
+    }
+
+    public List<String> getDeletePhotoGUIDs() {
+        return deletePhotoGUIDs;
+    }
+
+    public void setDeletePhotoGUIDs(List<String> deletePhotoGUIDs) {
+        this.deletePhotoGUIDs = deletePhotoGUIDs;
+    }
+
     public ApartmentDTO toDTO() {
         ApartmentDTO dto = new ApartmentDTO();
         dto.setId(getId());
@@ -198,6 +237,10 @@ public class ApartmentJSON {
         dto.setTypeOfRent(getTypeOfRent());
         dto.setRentalFee(getRentalFee());
         dto.setFeePeriod(getFeePeriod());
+
+        dto.setAddedTempPhotoGUIDs(getAddedTempPhotoGUIDs());
+        dto.setDeletePhotoGUIDs(getDeletePhotoGUIDs());
+
         return dto;
     }
 }

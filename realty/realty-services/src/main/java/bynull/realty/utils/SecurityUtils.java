@@ -4,6 +4,7 @@ import bynull.realty.data.business.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAuthorizedException;
 
 /**
@@ -24,6 +25,17 @@ public class SecurityUtils {
             throw new NotAuthorizedException("User not authorized");
         }
         return new UserIDHolder(authorizedUser.getId());
+    }
+
+    /**
+     * Check that user is the same as authorized user
+     * @param user
+     */
+    public static void verifySameUser(User user) {
+        UserIDHolder authorizedUser = getAuthorizedUser();
+        if(authorizedUser.getId() != user.getId()) {
+            throw new ForbiddenException("User #"+user.getId()+" differs from authorized user #"+authorizedUser.getId());
+        }
     }
 
     public static class UserIDHolder {

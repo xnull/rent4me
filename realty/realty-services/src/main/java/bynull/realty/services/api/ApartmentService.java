@@ -16,7 +16,7 @@ public interface ApartmentService {
 
     ApartmentDTO find(Long id);
 
-    void delete(Long id);
+    void delete(long id);
 
     List<ApartmentDTO> findAll();
 

@@ -9,7 +9,25 @@ var ApartmentConstants = require('../constants/ApartmentConstants');
 var assign = require('object-assign');
 
 var _users = {};
-var _me = {};
+
+function emptyApartment() {
+    return {
+        'location': null,
+        'address': null,
+        'type_of_rent': '',
+        'rental_fee': null,
+        'fee_period': '',
+        'room_count': null,
+        'floor_number': null,
+        'floors_total': null,
+        'area': null,
+        'description': '',
+        'added_photos_guids': [],
+        'deleted_photos_guids': []
+    };
+}
+
+var _me = emptyApartment();
 
 
 var CHANGE_EVENT = 'change';
@@ -30,18 +48,7 @@ var ApartmentStore = assign({}, EventEmitter.prototype, {
     },
 
     emptyApartment: function() {
-        return {
-            'location': null,
-            'address': null,
-            'type_of_rent': '',
-            'rental_fee': null,
-            'fee_period': '',
-            'room_count': null,
-            'floor_number': null,
-            'floors_total': null,
-            'area': null,
-            'description': ''
-        };
+        return emptyApartment();
     },
 
     getMyProfile: function() {

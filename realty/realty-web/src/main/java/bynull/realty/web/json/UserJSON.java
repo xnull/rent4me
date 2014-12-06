@@ -3,6 +3,9 @@ package bynull.realty.web.json;
 import bynull.realty.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author dionis on 04/12/14.
  */
