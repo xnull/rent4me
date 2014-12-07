@@ -190,12 +190,12 @@ module.exports = React.createClass({
                 this.on("removedfile", function(file) {
                    var guid = _uploadFileNameToGuidMap[file.name];
                    if(guid) {
-                       alert("File removed with guid: "+file.name);
-                       alert("Guid: "+guid);
+//                       alert("File removed with guid: "+file.name);
+//                       alert("Guid: "+guid);
                        that._onPhotoDelete(guid);
                    } else {
-                       alert("File removed withoud guid: "+file.name);
-                       alert("No guid");
+//                       alert("File removed withoud guid: "+file.name);
+//                       alert("No guid");
                    }
                 });
                 this.on("success", function(file, data){
