@@ -52,7 +52,8 @@ var ApartmentPhotoPreview = React.createClass({
     render: function() {
         var style = {
             maxWidth: '75%',
-            border: '1px solid black'
+            border: '1px solid black',
+            background: "url('images/spin.gif')"
         };
 
         return (
