@@ -32,7 +32,7 @@ function changeTransient(ctxt, transient) {
 }
 
 var ApartmentPhoto = React.createClass({
-    render: function() {
+    render: function () {
         var style = {
             border: '1px solid black'
         };
@@ -44,12 +44,12 @@ var ApartmentPhoto = React.createClass({
                     <a className="clickable" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
                 </div>
             </li>
-            );
+        );
     }
 });
 
 var ApartmentPhotoPreview = React.createClass({
-    render: function() {
+    render: function () {
         var style = {
             maxWidth: '75%'
         };
@@ -58,16 +58,16 @@ var ApartmentPhotoPreview = React.createClass({
             <div>
                 <img src={this.props.photo.full_picture_url} style={style}/>
             </div>
-            );
+        );
     }
 });
 
 var ApartmentPhotoList = React.createClass({
-    render: function() {
+    render: function () {
         var _photos = this.props.photos || [];
         var onDelete = this.props.onDelete;
         var onSelect = this.props.onSelect;
-        var photos = _photos.map(function(photo){
+        var photos = _photos.map(function (photo) {
             return <ApartmentPhoto key={photo.guid} photo={photo} onDelete={onDelete} onSelect={onSelect}/>
         });
         var style = {
@@ -78,22 +78,22 @@ var ApartmentPhotoList = React.createClass({
             <ul className="list-inline">
                 {photos}
             </ul>
-            );
+        );
     }
 });
 
 var ApartmentPhotosBlock = React.createClass({
-    render: function() {
+    render: function () {
         var photos = this.props.photos || [];
         var selectedPhoto = this.props.selectedPhoto;
         var photoPreviewOrZero = selectedPhoto ? (<ApartmentPhotoPreview photo={selectedPhoto}/>) : null;
 
         return (
-                <div>
-                    <ApartmentPhotoList photos={photos} onDelete={this.props.onDelete} onSelect={this.props.onSelect} />
+            <div>
+                <ApartmentPhotoList photos={photos} onDelete={this.props.onDelete} onSelect={this.props.onSelect} />
                     {photoPreviewOrZero}
-                </div>
-            );
+            </div>
+        );
     }
 });
 
@@ -106,11 +106,13 @@ var UserPreview = React.createClass({
                 <div className="form-group">
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
-                    <div className="control-label"><strong>{this.props.data.previewValue}</strong></div>
+                        <div className="control-label">
+                            <strong>{this.props.data.previewValue}</strong>
+                        </div>
                     </div>
                 </div>
             </div>
-            )
+        )
     }
 });
 
@@ -162,11 +164,11 @@ var UserSelect = React.createClass({
                     <label className="col-md-2 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
                         <select
-                        id={this.props.data.id}
-                        className="form-control"
-                        value={selectedValue}
-                        name={this.props.data.elementName}
-                        onChange={this.props.onChange} >
+                            id={this.props.data.id}
+                            className="form-control"
+                            value={selectedValue}
+                            name={this.props.data.elementName}
+                            onChange={this.props.onChange} >
                             {optionNodes}
                         </select>
                     </div>
@@ -225,11 +227,11 @@ var _uploadFileNameToGuidMap = {};
 var _dropZone = null;
 
 module.exports = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
 //        console.log('get initial state');
         return {data: ApartmentStore.getMyProfile(), transient: {}};
     },
-    componentDidMount: function() {
+    componentDidMount: function () {
         var that = this;
         Dropzone.autoDiscover = false;
         _dropZone = new Dropzone('#my-awesome-dropzone', {
@@ -242,19 +244,19 @@ module.exports = React.createClass({
             headers: {
                 "Authorization": "Basic " + Auth.getAuthHeader()
             },
-            init: function() {
-                this.on("removedfile", function(file) {
-                   var guid = _uploadFileNameToGuidMap[file.name];
-                   if(guid) {
-                       that._onPhotoDelete(guid);
-                   }
+            init: function () {
+                this.on("removedfile", function (file) {
+                    var guid = _uploadFileNameToGuidMap[file.name];
+                    if (guid) {
+                        that._onPhotoDelete(guid);
+                    }
                 });
-                this.on("success", function(file, data){
+                this.on("success", function (file, data) {
                     console.log('Complete file upload');
                     console.log(file);
                     console.log('Data');
                     console.log(data);
-                    if(data && data.guid) {
+                    if (data && data.guid) {
                         _uploadFileNameToGuidMap[file.name] = data.guid;
                         //change state of added photos
                         var newState = assign({}, that.state.data);
@@ -310,7 +312,7 @@ module.exports = React.createClass({
         ApartmentActions.loadMyApartment();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         ApartmentStore.removeChangeListener(this._onLoad);
     },
 
@@ -334,7 +336,7 @@ module.exports = React.createClass({
         });
     },
 
-    _onLoad: function() {
+    _onLoad: function () {
         console.log('on load');
         //clear this map state
         _uploadFileNameToGuidMap = {};
@@ -348,28 +350,28 @@ module.exports = React.createClass({
         }));
 
         var data = this.state.data;
-        if(data && data.location) {
+        if (data && data.location) {
             this.centerMapAndSetMarker(data.location.latitude, data.location.longitude);
         }
 
-        if(_dropZone) {
+        if (_dropZone) {
             console.log('removing all files');
             _dropZone.removeAllFiles();
         }
     },
 
-    _onSave: function() {
+    _onSave: function () {
         if (this.state.id) {
             alert('Вы уже сохраняли форму. Нельзя изменить данные.');
             return;
         }
 
-        if(!this.validateForm()) return;
+        if (!this.validateForm()) return;
 
         ApartmentActions.save(assign({}, this.state.data));
     },
 
-    _onDelete: function() {
+    _onDelete: function () {
         ApartmentActions.deleteMyApartment();
     },
 
@@ -468,8 +470,8 @@ module.exports = React.createClass({
         return validationSucceeded;
     },
 
-    _onChange: function(event) {
-        if(!event) {
+    _onChange: function (event) {
+        if (!event) {
             return;
         }
 
@@ -490,26 +492,26 @@ module.exports = React.createClass({
         changeData(this, diffObj);
     },
 
-    _onPhotoSelected: function(photo) {
+    _onPhotoSelected: function (photo) {
         console.log("Photo seleceted:");
         console.log(photo);
 //        changeTransient(this, assign(this.state.transient, {selectedPhoto: {photo:{full_picture_url: 'images/spin.gif' }}}))
         changeTransient(this, assign(this.state.transient, {selectedPhoto: photo}))
     },
 
-    _onPhotoDelete: function(guid) {
+    _onPhotoDelete: function (guid) {
         console.log('Deleting ');
         console.log(guid);
         var oldState = this.state.data;
         var newState = assign({}, oldState);
 
-        var _filterFunc = function(photoGuid) {
+        var _filterFunc = function (photoGuid) {
             var result = photoGuid != guid;
-            console.log("Value for compare: " + photoGuid + "; compare with: " + guid+" = "+result);
+            console.log("Value for compare: " + photoGuid + "; compare with: " + guid + " = " + result);
             return result;
         };
 
-        var _photosFilterFunc = function(photo) {
+        var _photosFilterFunc = function (photo) {
             return _filterFunc(photo.guid);
         };
 
@@ -524,18 +526,18 @@ module.exports = React.createClass({
         //remove from photos list
         newState.photos = _.filter(oldState.photos, _photosFilterFunc);
 
-        var photoGuids = _.map(oldState.photos, function(it){
+        var photoGuids = _.map(oldState.photos, function (it) {
             return it.guid;
         });
 
         console.log("Photo guids:");
         console.log(photoGuids);
 
-        if(_.contains(photoGuids, guid)) {
+        if (_.contains(photoGuids, guid)) {
             newState.deleted_photos_guids.push(guid);
         }
 
-        if(_.contains(oldState.added_photos_guids, guid)) {
+        if (_.contains(oldState.added_photos_guids, guid)) {
             newState.added_photos_guids = _.filter(oldState.added_photos_guids, _filterFunc);
         }
 
@@ -694,7 +696,7 @@ module.exports = React.createClass({
                         </p>
                         <p>
                             <div className="dropzone"
-                                    id="my-awesome-dropzone"></div>
+                                id="my-awesome-dropzone"></div>
                         </p>
 
 
