@@ -51,8 +51,7 @@ var ApartmentPhoto = React.createClass({
 var ApartmentPhotoPreview = React.createClass({
     render: function() {
         var style = {
-            maxWidth: '75%',
-            background: "url('images/spin.gif')"
+            maxWidth: '75%'
         };
 
         return (
@@ -477,7 +476,7 @@ module.exports = React.createClass({
     _onPhotoSelected: function(photo) {
         console.log("Photo seleceted:");
         console.log(photo);
-        changeTransient(this, assign(this.state.transient, {selectedPhoto: {photo:{full_picture_url: 'images/spin.gif' }}}))
+//        changeTransient(this, assign(this.state.transient, {selectedPhoto: {photo:{full_picture_url: 'images/spin.gif' }}}))
         changeTransient(this, assign(this.state.transient, {selectedPhoto: photo}))
     },
 
