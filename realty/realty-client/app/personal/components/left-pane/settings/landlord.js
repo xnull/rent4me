@@ -51,11 +51,10 @@ var ApartmentPhoto = React.createClass({
 var ApartmentPhotoPreview = React.createClass({
     render: function() {
         var style = {
-            maxWidth: '75%'
-        };
-        var blockStyle = {
+            maxWidth: '75%',
             border: '1px solid black'
         };
+
         return (
             <div style={blockStyle}>
                 <img src={this.props.photo.full_picture_url} style={style}/>
