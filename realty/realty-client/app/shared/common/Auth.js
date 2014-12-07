@@ -4,6 +4,7 @@ var Cookies = require('./Cookies');
 var JSON = require('JSON2');
 
 var Utils = require('./Utils');
+var BlockUI = require('./BlockUI');
 
 
 var _username = null;
@@ -43,7 +44,7 @@ function loginWithVK() {
 }
 
 function authOnBackendWithVK(vkAccessCode) {
-    //$.blockUI();
+    BlockUI.blockUI();
 
     var data = {"code": vkAccessCode};
 
@@ -69,7 +70,7 @@ function authOnBackendWithVK(vkAccessCode) {
 
             storeUsernameAndTokenInCookies();
 
-            //$.unblockUI();
+            BlockUI.unblockUI();
 
             Utils.navigateToPersonal();
         },
@@ -80,7 +81,7 @@ function authOnBackendWithVK(vkAccessCode) {
             _token = null;
             _fbUserId = null;
             _fbAccessToken = null;
-            //$.unblockUI();
+            BlockUI.unblockUI();
             alert("Не удалось авторизоваться через VK");
             Utils.navigateToStart();
         }
@@ -109,7 +110,7 @@ function statusChangeCallback(response) {
 }
 
 function authOnBackendWithFacebook() {
-    //$.blockUI();
+    BlockUI.blockUI();
 
     var data = {"facebook_id": _fbUserId, "access_token": _fbAccessToken};
 
@@ -135,7 +136,7 @@ function authOnBackendWithFacebook() {
 
             storeUsernameAndTokenInCookies();
 
-            //$.unblockUI();
+            BlockUI.unblockUI();
 
             Utils.navigateToPersonal();
         },
@@ -146,7 +147,7 @@ function authOnBackendWithFacebook() {
             _token = null;
             _fbUserId = null;
             _fbAccessToken = null;
-            //$.unblockUI();
+            BlockUI.unblockUI();
             alert("Не удалось авторизоваться через Facebook");
             Utils.navigateToStart();
         }
@@ -183,7 +184,7 @@ function storeUsernameAndTokenInCookies() {
 function logoutOnBackend() {
     if(hasCredentials()) {
         var data = {"token" : _token};
-        //$.blockUI();
+        BlockUI.blockUI();
         $.ajax({
             url: '/rest/auth',
 //                dataType: 'json',
@@ -204,14 +205,14 @@ function logoutOnBackend() {
                 _fbUserId = null;
                 _fbAccessToken = null;
 
-                //$.unblockUI();
+                BlockUI.unblockUI();
 
                 Utils.navigateToStart();
             },
             error: function (xhr, status, err) {
 //                    console.error('/rest/apartment', status, err.toString());
                 console.log("Error!");
-                //$.unblockUI();
+                BlockUI.unblockUI();
             }
         });
     }
