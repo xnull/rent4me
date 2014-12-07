@@ -56,7 +56,7 @@ var ApartmentPhotoPreview = React.createClass({
         };
 
         return (
-            <div style={blockStyle}>
+            <div>
                 <img src={this.props.photo.full_picture_url} style={style}/>
             </div>
             );
