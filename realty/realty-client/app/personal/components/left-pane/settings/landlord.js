@@ -39,7 +39,7 @@ var ApartmentPhoto = React.createClass({
         return (
             <li>
                 <div>
-                    <img src={this.props.photo.small_thumbnail_url} height="100" className="clickable" onClick={this.props.onSelect && this.props.onSelect.bind(this, this.props.photo)} />
+                    <img src={this.props.photo.small_thumbnail_url} height="100" style={style} className="clickable" onClick={this.props.onSelect && this.props.onSelect.bind(this, this.props.photo)} />
                     <br/>
                     <a className="clickable" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
                 </div>
