@@ -5,6 +5,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var ApartmentConstants = require('../constants/ApartmentConstants');
 var Auth = require('../common/Auth');
+var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 
 var ApartmentActions = {
@@ -12,7 +13,7 @@ var ApartmentActions = {
      * @param {object} obj
      */
     save: function (obj) {
-        //$.blockUI();
+        BlockUI.blockUI();
 
         var data = assign({}, obj);
 
@@ -34,16 +35,16 @@ var ApartmentActions = {
                     apartment: data
                 });
 
-                //$.unblockUI();
+                BlockUI.unblockUI();
             },
             error: function (xhr, status, err) {
-                //$.unblockUI();
+                BlockUI.unblockUI();
             }
         });
     },
 
     loadMyApartment: function() {
-        //$.blockUI();
+        BlockUI.blockUI();
 
         $.ajax({
             url: '/rest/users/apartment',
@@ -62,7 +63,7 @@ var ApartmentActions = {
                     apartment: data
                 });
 
-                //$.unblockUI();
+                BlockUI.unblockUI();
             },
             error: function (xhr, status, err) {
                 if (xhr.status == '404') {
@@ -75,13 +76,13 @@ var ApartmentActions = {
 //                        console.error('/rest/apartment', status, err.toString());
                     alert('Service unavailable');
                 }
-                //$.unblockUI();
+                BlockUI.unblockUI();
             }
         });
     },
 
     deleteMyApartment: function() {
-        //$.blockUI();
+        BlockUI.blockUI();
 
         $.ajax({
             url: '/rest/users/apartment',
@@ -99,10 +100,10 @@ var ApartmentActions = {
                     apartment: {}
                 });
 
-                //$.unblockUI();
+                BlockUI.unblockUI();
             },
             error: function (xhr, status, err) {
-                //$.unblockUI();
+                BlockUI.unblockUI();
             }
         });
     }

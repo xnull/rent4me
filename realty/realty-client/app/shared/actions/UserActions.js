@@ -5,6 +5,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var UserConstants = require('../constants/UserConstants');
 var Auth = require('../common/Auth');
+var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 
 var UserActions = {
@@ -12,7 +13,7 @@ var UserActions = {
      * @param {object} obj
      */
     save: function (obj) {
-        //$.blockUI();
+        BlockUI.blockUI();
 
         var data = assign({}, obj);
 
@@ -34,16 +35,16 @@ var UserActions = {
                     user: obj
                 });
 
-                //$.unblockUI();
+                BlockUI.unblockUI();
             },
             error: function (xhr, status, err) {
-                //$.unblockUI();
+                BlockUI.unblockUI();
             }
         });
     },
 
     loadMyProfile: function() {
-        //$.blockUI();
+        BlockUI.blockUI();
 
         $.ajax({
             url: '/rest/users/me',
@@ -62,10 +63,10 @@ var UserActions = {
                     user: data
                 });
 
-                //$.unblockUI();
+                BlockUI.unblockUI();
             },
             error: function (xhr, status, err) {
-                //$.unblockUI();
+                BlockUI.unblockUI();
             }
         });
     }
