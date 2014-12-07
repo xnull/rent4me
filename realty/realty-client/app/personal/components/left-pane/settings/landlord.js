@@ -15,12 +15,31 @@ var assign = require('object-assign');
 
 var Dropzone = require("dropzone");
 
+function changeData(ctxt, data) {
+    var target = {
+        data: assign(ctxt.state.data, data),
+        transient: ctxt.state.transient
+    };
+    ctxt.setState(assign(ctxt.state, target));
+}
+
+function changeTransient(ctxt, transient) {
+    var target = {
+        transient: assign(ctxt.state.transient, transient),
+        data: ctxt.state.data
+    };
+    ctxt.setState(assign(ctxt.state, target));
+}
+
 var ApartmentPhoto = React.createClass({
     render: function() {
+        var style = {
+            border: '1px solid black'
+        };
         return (
             <li>
                 <div>
-                    <img src={this.props.photo.small_thumbnail_url} height="100"/>
+                    <img src={this.props.photo.small_thumbnail_url} height="100" className="clickable" onClick={this.props.onSelect && this.props.onSelect.bind(this, this.props.photo)} />
                     <br/>
                     <a className="clickable" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
                 </div>
@@ -29,12 +48,29 @@ var ApartmentPhoto = React.createClass({
     }
 });
 
+var ApartmentPhotoPreview = React.createClass({
+    render: function() {
+        var style = {
+            maxWidth: '75%'
+        };
+        var blockStyle = {
+            border: '1px solid black'
+        };
+        return (
+            <div style={blockStyle}>
+                <img src={this.props.photo.full_picture_url} style={style}/>
+            </div>
+            );
+    }
+});
+
 var ApartmentPhotoList = React.createClass({
     render: function() {
         var _photos = this.props.photos || [];
         var onDelete = this.props.onDelete;
+        var onSelect = this.props.onSelect;
         var photos = _photos.map(function(photo){
-            return <ApartmentPhoto key={photo.guid} photo={photo} onDelete={onDelete}/>
+            return <ApartmentPhoto key={photo.guid} photo={photo} onDelete={onDelete} onSelect={onSelect}/>
         });
         var style = {
             display: "inline-block"
@@ -50,9 +86,14 @@ var ApartmentPhotoList = React.createClass({
 
 var ApartmentPhotosBlock = React.createClass({
     render: function() {
+        var photos = this.props.photos || [];
+        var selectedPhoto = this.props.selectedPhoto;
+        var photoPreviewOrZero = selectedPhoto ? (<ApartmentPhotoPreview photo={selectedPhoto}/>) : null;
+
         return (
                 <div>
-                    <ApartmentPhotoList photos={this.props.photos} onDelete={this.props.onDelete}/>
+                    <ApartmentPhotoList photos={photos} onDelete={this.props.onDelete} onSelect={this.props.onSelect} />
+                    {photoPreviewOrZero}
                 </div>
             );
     }
@@ -171,7 +212,7 @@ var _dropZone = null;
 module.exports = React.createClass({
     getInitialState: function() {
 //        console.log('get initial state');
-        return ApartmentStore.getMyProfile();
+        return {data: ApartmentStore.getMyProfile(), transient: {}};
     },
     componentDidMount: function() {
         var that = this;
@@ -190,12 +231,7 @@ module.exports = React.createClass({
                 this.on("removedfile", function(file) {
                    var guid = _uploadFileNameToGuidMap[file.name];
                    if(guid) {
-//                       alert("File removed with guid: "+file.name);
-//                       alert("Guid: "+guid);
                        that._onPhotoDelete(guid);
-                   } else {
-//                       alert("File removed withoud guid: "+file.name);
-//                       alert("No guid");
                    }
                 });
                 this.on("success", function(file, data){
@@ -206,9 +242,9 @@ module.exports = React.createClass({
                     if(data && data.guid) {
                         _uploadFileNameToGuidMap[file.name] = data.guid;
                         //change state of added photos
-                        var newState = assign({}, that.state);
+                        var newState = assign({}, that.state.data);
                         newState.added_photos_guids.push(data.guid);
-                        that.setState(newState);
+                        changeData(that, newState);
                     }
                 });
             }
@@ -251,7 +287,7 @@ module.exports = React.createClass({
                 }
             };
 
-            that.setState(assign(that.state, delta));
+            changeData(that, delta);
 
             that.centerMapAndSetMarker(place.geometry.location.lat(), place.geometry.location.lng());
         });
@@ -287,13 +323,16 @@ module.exports = React.createClass({
         console.log('on load');
         //clear this map state
         _uploadFileNameToGuidMap = {};
-//        console.log("On load apartment");
         var newState = ApartmentStore.getMyProfile();
-//        console.log("New apartment state: "+JSON.stringify(newState));
-//        console.log(newState);
-        this.setState(newState);
 
-        var data = this.state;
+        this.setState(assign({}, this.state, {
+            data: newState,
+            transient: {
+                selectedPhoto: (newState.photos.length > 0 ? newState.photos[0] : null)
+            }
+        }));
+
+        var data = this.state.data;
         if(data && data.location) {
             this.centerMapAndSetMarker(data.location.latitude, data.location.longitude);
         }
@@ -312,7 +351,7 @@ module.exports = React.createClass({
 
         if(!this.validateForm()) return;
 
-        ApartmentActions.save(assign({}, this.state));
+        ApartmentActions.save(assign({}, this.state.data));
     },
 
     _onDelete: function() {
@@ -320,9 +359,7 @@ module.exports = React.createClass({
     },
 
     validateForm: function () {
-//        console.log('validating form');
-        var data = this.state;
-//        console.log(data);
+        var data = this.state.data;
 
         var Assert = Validator.Assert;
         var Constraint = Validator.Constraint;
@@ -418,29 +455,36 @@ module.exports = React.createClass({
 
     _onChange: function(event) {
         if(!event) {
-//            console.log('no event specified');
             return;
         }
-
-//        console.log('on change');
-//        console.log(event);
-//        console.log(event.target);
-//        console.log(event.target.name);
-//        console.log(event.target.value);
 
         var diffObj = {};
         diffObj[event.target.name] = event.target.value;
 
-        var newState = assign(this.state, diffObj);
+        console.log('diff obj');
+        console.log(diffObj);
 
-//        console.log(newState);
-        this.setState(newState);
+        console.log('old state');
+        console.log(this.state.data);
+
+        var newState = {data: diffObj};
+
+        console.log('new state');
+        console.log(newState.data);
+
+        changeData(this, diffObj);
+    },
+
+    _onPhotoSelected: function(photo) {
+        console.log("Photo seleceted:");
+        console.log(photo);
+        changeTransient(this, assign(this.state.transient, {selectedPhoto: photo}))
     },
 
     _onPhotoDelete: function(guid) {
         console.log('Deleting ');
         console.log(guid);
-        var oldState = this.state;
+        var oldState = this.state.data;
         var newState = assign({}, oldState);
 
         var _filterFunc = function(photoGuid) {
@@ -479,11 +523,12 @@ module.exports = React.createClass({
             newState.added_photos_guids = _.filter(oldState.added_photos_guids, _filterFunc);
         }
 
-        this.setState(newState);
+
+        changeData(this, newState);
     },
 
     render: function () {
-        var data = this.state || {};
+        var data = this.state.data || {};
 
         var addressPreviewProp = {
             id: 'addressPreview',
@@ -629,7 +674,7 @@ module.exports = React.createClass({
 
                         <h4>Фотографии</h4>
                         <p>
-                            <ApartmentPhotosBlock photos={this.state.photos} onDelete={this._onPhotoDelete}/>
+                            <ApartmentPhotosBlock photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} selectedPhoto={this.state.transient.selectedPhoto}/>
                         </p>
                         <p>
                             <div className="dropzone"
