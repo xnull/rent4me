@@ -8,6 +8,7 @@ var Utils = require('../../../shared/common/Utils');
 
 var UserStore = require('../../../shared/stores/UserStore');
 var UserActions = require('../../../shared/actions/UserActions');
+var SocialNet = require('./socialnet/socialnet');
 
 var assign = require('object-assign');
 
@@ -80,8 +81,9 @@ module.exports = React.createClass({
             <div className="col-md-3">
                 <UserPanel/>
                 <PersonalCabinetComponent/>
-                { develop ? <NewsComponent /> : null }
-                { develop ? <LegalComponent/> : null }
+                <NewsComponent />
+                <LegalComponent/>
+                <SocialNet/>
             </div>
         )
     }

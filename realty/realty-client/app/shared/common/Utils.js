@@ -76,6 +76,9 @@ function isProduction() {
 }
 
 function navigateToStart() {
+    if (document.location.href.indexOf('build-js') != -1) {
+        return;
+    }
     if(isDev()) {
         document.location.href = '/dev/';
     } else {

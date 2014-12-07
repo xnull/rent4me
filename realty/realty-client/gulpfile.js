@@ -3,10 +3,8 @@
  * @constructor
  */
 var gulp = require('gulp');
-
-var gutil = require('gulp-util');
-
 function Plugins() {
+    this.gutil = require('gulp-util');
     this.jshint = require('gulp-jshint');
     this.print = require('gulp-print');
     this.concat = require('gulp-concat');
@@ -109,7 +107,7 @@ gulp.task(tasks.watch, function () {
         .pipe(plugins.watch(settings.watchDirs, function (files) {
             gulp.start(tasks.build);
         }))
-        .on('error', gutil.log)
+        .on('error', plugins.gutil.log)
     ;
 });
 
