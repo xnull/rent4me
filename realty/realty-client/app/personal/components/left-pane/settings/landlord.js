@@ -18,11 +18,13 @@ var Dropzone = require("dropzone");
 var ApartmentPhoto = React.createClass({
     render: function() {
         return (
-            <div>
-                <img src={this.props.photo.small_thumbnail_url}/>
-                <br/>
-                <a className="clickable" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
-            </div>
+            <li>
+                <div>
+                    <img src={this.props.photo.small_thumbnail_url} height="100"/>
+                    <br/>
+                    <a className="clickable" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
+                </div>
+            </li>
             );
     }
 });
@@ -34,11 +36,14 @@ var ApartmentPhotoList = React.createClass({
         var photos = _photos.map(function(photo){
             return <ApartmentPhoto key={photo.guid} photo={photo} onDelete={onDelete}/>
         });
+        var style = {
+            display: "inline-block"
+        };
 
         return (
-            <div>
+            <ul className="list-inline">
                 {photos}
-            </div>
+            </ul>
             );
     }
 });
