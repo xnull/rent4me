@@ -97,6 +97,23 @@ var ApartmentPhotosBlock = React.createClass({
     }
 });
 
+var UserPreview = React.createClass({
+    render: function () {
+        var customClassName = this.props.data.customClassName || 'col-md-4';
+
+        return (
+            <div>
+                <div className="form-group">
+                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <div className={customClassName}>
+                    <div className="control-label"><strong>{this.props.data.previewValue}</strong></div>
+                    </div>
+                </div>
+            </div>
+            )
+    }
+});
+
 var UserProperty = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName || 'col-md-4';
@@ -532,7 +549,7 @@ module.exports = React.createClass({
         var addressPreviewProp = {
             id: 'addressPreview',
             name: 'Выбранный адрес',
-            placeholder: (data['address'] ? data['address']['formatted_address'] : null) || '',
+            previewValue: (data['address'] ? data['address']['formatted_address'] : null) || '',
             customClassName: 'col-md-8'
         };
 
@@ -649,7 +666,7 @@ module.exports = React.createClass({
                         <div className="row">
                             <div className="col-md-7" >
                                 <form className="form-horizontal" role="form">
-                                    <UserProperty data={addressPreviewProp} readOnly={true}/>
+                                    <UserPreview data={addressPreviewProp} readOnly={true}/>
                                     <UserProperty data={addressProp}/>
                                     <UserSelect data={rentTypeProp} onChange={this._onChange}/>
                                     <UserProperty data={rentalFeeProp} onChange={this._onChange}/>
