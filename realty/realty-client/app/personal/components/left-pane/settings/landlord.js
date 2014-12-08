@@ -780,6 +780,15 @@ module.exports = React.createClass({
                         <form className="form-horizontal" role="form">
                             <div className="row">
                                 <div className="col-md-6" >
+                                    &nbsp;
+
+                                </div>
+                                <div className="col-md-6">
+                                    <div id="map-canvas" style={styles}></div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6" >
                                     <UserSelect data={rentTypeProp} onChange={this._onChange} />
                                     <UserProperty data={rentalFeeProp} onChange={this._onChange} />
                                     <UserSelect data={feePeriodProp} onChange={this._onChange} />
@@ -808,9 +817,6 @@ module.exports = React.createClass({
                             <p>
                                 <div className="dropzone"
                                 id="my-awesome-dropzone"></div>
-                            </p>
-                            <p>
-                                <div id="map-canvas" style={styles}></div>
                             </p>
                             <p>
                                 <UserButton data={submitButton} onClick={this._onSave}/>
