@@ -761,6 +761,10 @@ module.exports = React.createClass({
 
         var onChangeIfNotSaved = saved ? null : this._onChange;
 
+
+        var selectedPhoto = this.props.selectedPhoto;
+        var photoPreviewOrZero = selectedPhoto ? (<ApartmentPhotoPreview photo={selectedPhoto}/>) : null;
+
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -780,15 +784,6 @@ module.exports = React.createClass({
                         <form className="form-horizontal" role="form">
                             <div className="row">
                                 <div className="col-md-6" >
-                                    &nbsp;
-
-                                </div>
-                                <div className="col-md-6">
-                                    <div id="map-canvas" style={styles}></div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-6" >
                                     <UserSelect data={rentTypeProp} onChange={this._onChange} />
                                     <UserProperty data={rentalFeeProp} onChange={this._onChange} />
                                     <UserSelect data={feePeriodProp} onChange={this._onChange} />
@@ -796,9 +791,13 @@ module.exports = React.createClass({
                                     <UserText data={descriptionProp} onChange={this._onChange} />
 
                                     <UserCheckbox data={publishedProp} onChange={this._onChangeCheckbox} />
-
+                                    <div>
+                                        <h4>Фотографии</h4>
+                                        <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
+                                    </div>
                                 </div>
                                 <div className="col-md-6">
+                                    <div id="map-canvas" style={styles}></div>
                                     <UserPreview data={addressPreviewProp}/>
                                     <UserProperty data={addressProp} readOnly={saved}/>
                                     <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
@@ -810,9 +809,9 @@ module.exports = React.createClass({
                                     }}>Изменить данные о квартире</a>
                                 </div>
                             </div>
-                            <h4>Фотографии</h4>
+                            <!-- Preview here -->
                             <p>
-                                <ApartmentPhotosBlock photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} selectedPhoto={this.state.transient.selectedPhoto}/>
+                                {photoPreviewOrZero}
                             </p>
                             <p>
                                 <div className="dropzone"
