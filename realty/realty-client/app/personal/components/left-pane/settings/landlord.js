@@ -773,17 +773,21 @@ module.exports = React.createClass({
                         </div>
 
                         <UserSuccessOrDangerBlock
-                            errorMessage="Ваша квартира не участвует в поиске"
-                            successMessage="Ваша квартира отображается в поиске"
-                            successCondition={data.published}
+                        errorMessage="Ваша квартира не участвует в поиске"
+                        successMessage="Ваша квартира отображается в поиске"
+                        successCondition={data.published}
                         />
-
+                        <h4>Фотографии</h4>
                         <p>
-                            <div id="map-canvas" style={styles}></div>
+                            <ApartmentPhotosBlock photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} selectedPhoto={this.state.transient.selectedPhoto}/>
+                        </p>
+                        <p>
+                            <div className="dropzone"
+                            id="my-awesome-dropzone"></div>
                         </p>
                         <form className="form-horizontal" role="form">
-                        <div className="row">
-                            <div className="col-md-6" >
+                            <div className="row">
+                                <div className="col-md-6" >
                                     <UserSelect data={rentTypeProp} onChange={this._onChange} />
                                     <UserProperty data={rentalFeeProp} onChange={this._onChange} />
                                     <UserSelect data={feePeriodProp} onChange={this._onChange} />
@@ -792,26 +796,22 @@ module.exports = React.createClass({
 
                                     <UserCheckbox data={publishedProp} onChange={this._onChangeCheckbox} />
 
+                                </div>
+                                <div className="col-md-6">
+                                    <UserPreview data={addressPreviewProp}/>
+                                    <UserProperty data={addressProp} readOnly={saved}/>
+                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <a className="clickable" onClick={function () {
+                                        alert('Хера лысого а не изменить данные о квартире')
+                                    }}>Изменить данные о квартире</a>
+                                </div>
                             </div>
-                            <div className="col-md-6">
-                                <UserPreview data={addressPreviewProp}/>
-                                <UserProperty data={addressProp} readOnly={saved}/>
-                                <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <a className="clickable" onClick={function(){alert('Хера лысого а не изменить данные о квартире')}}>Изменить данные о квартире</a>
-                            </div>
-                        </div>
-
-                        <h4>Фотографии</h4>
-                        <p>
-                            <ApartmentPhotosBlock photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} selectedPhoto={this.state.transient.selectedPhoto}/>
-                        </p>
-                        <p>
-                            <div className="dropzone"
-                                id="my-awesome-dropzone"></div>
-                        </p>
+                            <p>
+                                <div id="map-canvas" style={styles}></div>
+                            </p>
                             <p>
                                 <UserButton data={submitButton} onClick={this._onSave}/>
 
