@@ -1,13 +1,7 @@
 package bynull.realty.services.impl;
 
-import bynull.realty.dao.ApartmentPhotoRepository;
-import bynull.realty.dao.ApartmentRepository;
-import bynull.realty.dao.PhotoTempRepository;
-import bynull.realty.dao.UserRepository;
-import bynull.realty.data.business.Apartment;
-import bynull.realty.data.business.ApartmentPhoto;
-import bynull.realty.data.business.PhotoTemp;
-import bynull.realty.data.business.User;
+import bynull.realty.dao.*;
+import bynull.realty.data.business.*;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
@@ -48,6 +42,9 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Resource
     PhotoTempRepository photoTempRepository;
+
+    @Resource
+    ApartmentLocationDeltaRepository apartmentLocationDeltaRepository;
 
     @Transactional
     @Override
@@ -119,17 +116,26 @@ public class ApartmentServiceImpl implements ApartmentService {
         //TODO: check distance between current point and previous,
         // if it exceeds allowed maximum - don't change data.
         // Put it in special table that will be handled manually by admins.
+        boolean result;
         if(distanceDeltaMeters > 200) {
             apartment.mergeWithExcludingAddressAndLocationInformation(updatedApartment);
+
+            ApartmentLocationDelta delta = new ApartmentLocationDelta();
+            delta.setAddressComponents(updatedApartment.getAddressComponents());
+            delta.setLocation(updatedApartment.getLocation());
+            delta.setApartment(apartment);
+            delta = apartmentLocationDeltaRepository.saveAndFlush(delta);
+            result = false;
         } else {
             apartment.mergeWith(updatedApartment);
+            result = true;
         }
 
         handlePhotoDiff(dto, apartment);
 
         apartmentRepository.saveAndFlush(apartment);
 
-        return true;
+        return result;
     }
 
     @Transactional
@@ -198,6 +204,25 @@ public class ApartmentServiceImpl implements ApartmentService {
                 );
             }
             apartmentRepository.delete(apartments);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void applyLatestLocationInfoDeltaForApartment(ApartmentDTO dto) {
+        Assert.notNull(dto);
+        Assert.notNull(dto.getId());
+        Apartment apartment = apartmentRepository.findOne(dto.getId());
+        Assert.notNull(apartment);
+        List<ApartmentLocationDelta> deltas = apartmentLocationDeltaRepository.findLatestForApartment(dto.getId());
+        ApartmentLocationDelta delta = Iterables.getFirst(deltas, null);
+        if (delta != null && !delta.isApplied()) {
+            apartment.setAddressComponents(delta.getAddressComponents());
+            apartment.setLocation(delta.getLocation());
+            apartment = apartmentRepository.saveAndFlush(apartment);
+
+            delta.setApplied(true);
+            delta = apartmentLocationDeltaRepository.saveAndFlush(delta);
         }
     }
 }

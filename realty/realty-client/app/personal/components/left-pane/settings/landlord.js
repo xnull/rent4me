@@ -364,9 +364,9 @@ module.exports = React.createClass({
         if (!this.validateForm()) return;
         if (this.state.data.id) {
             ApartmentActions.updateApartment(assign({}, this.state.data));
-            alert('Вы уже сохраняли форму. \n' +
-                'Так как вы изменили адрес объекта, \nто это требует подтверждения модератора, \n' +
-                'после чего изменения будут отображены.');
+            alert(
+                'Если вы изменили адрес объекта, \nто это требует подтверждения модератора, \n' +
+                'после чего изменения будут отображены в системе.');
         } else {
             ApartmentActions.createApartment(assign({}, this.state.data));
         }

@@ -25,4 +25,6 @@ public interface ApartmentService {
     void deleteApartmentForAuthorizedUser();
 
     boolean updateForAuthorizedUser(ApartmentDTO dto);
+
+    void applyLatestLocationInfoDeltaForApartment(ApartmentDTO dto);
 }
