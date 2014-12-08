@@ -643,7 +643,7 @@ module.exports = React.createClass({
             id: 'addressPreview',
             name: 'Выбранный адрес',
             previewValue: (data['address'] ? data['address']['formatted_address'] : null) || '',
-            customClassName: 'col-md-9'
+            customClassName: 'col-md-8'
         };
 
         var addressProp = {
@@ -791,23 +791,28 @@ module.exports = React.createClass({
                                     <UserText data={descriptionProp} onChange={this._onChange} />
 
                                     <UserCheckbox data={publishedProp} onChange={this._onChangeCheckbox} />
-                                    <div>
-                                        <h4>Фотографии</h4>
-                                        <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
-                                    </div>
+
                                 </div>
                                 <div className="col-md-6">
                                     <div id="map-canvas" style={styles}></div>
-                                    <UserPreview data={addressPreviewProp}/>
-                                    <UserProperty data={addressProp} readOnly={saved}/>
-                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <a className="clickable" onClick={function () {
-                                        alert('Хера лысого а не изменить данные о квартире')
-                                    }}>Изменить данные о квартире</a>
                                 </div>
+                            </div>
+
+                            <div>
+                                <UserPreview data={addressPreviewProp}/>
+                                <UserProperty data={addressProp} readOnly={saved}/>
+                                <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <a className="clickable" onClick={function () {
+                                    alert('Хера лысого а не изменить данные о квартире')
+                                }}>Изменить данные о квартире</a>
+                            </div>
+
+                            <div>
+                                <h4>Фотографии</h4>
+                                <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
                             </div>
 
                             <p>
