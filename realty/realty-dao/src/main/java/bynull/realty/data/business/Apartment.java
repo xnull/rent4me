@@ -2,6 +2,7 @@ package bynull.realty.data.business;
 
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.hibernate.validation.annotations.LessThanOrEqual;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -249,6 +250,31 @@ public class Apartment implements Serializable {
     void preUpdate() {
         Date date = new Date();
         setUpdated(date);
+    }
+
+    public void mergeWith(Apartment apartment) {
+        mergeWith(apartment, true);
+    }
+
+    public void mergeWithExcludingAddressAndLocationInformation(Apartment apartment) {
+        mergeWith(apartment, false);
+    }
+
+    private void mergeWith(Apartment apartment, boolean updateAddressAndLocationInfo) {
+        Assert.notNull(apartment);
+
+        if(updateAddressAndLocationInfo) {
+            setAddressComponents(apartment.getAddressComponents());
+            setLocation(apartment.getLocation());
+        }
+        setArea(apartment.getArea());
+        setDescription(apartment.getDescription());
+        setFeePeriod(apartment.getFeePeriod());
+        setFloorNumber(apartment.getFloorNumber());
+        setFloorsTotal(apartment.getFloorsTotal());
+        setRentalFee(apartment.getRentalFee());
+        setRoomCount(apartment.getRoomCount());
+        setTypeOfRent(apartment.getTypeOfRent());
     }
 
     @Override

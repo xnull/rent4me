@@ -81,6 +81,17 @@ public class UserRestResource {
                 .build();
     }
 
+    @PUT
+    @Path("/apartment")
+    public Response updateApartment(ApartmentJSON apartmentJSON) {
+        ApartmentDTO dto = apartmentJSON.toDTO();
+        boolean result = apartmentService.updateForAuthorizedUser(dto);
+        return Response
+                .status(result ? Response.Status.CREATED : Response.Status.CONFLICT)
+                .entity(result ? ApartmentJSON.from(apartmentService.findAuthorizedUserApartment()) : null)
+                .build();
+    }
+
     @POST
     @Path("/apartment/pictures/temp")
     @Consumes(MediaType.MULTIPART_FORM_DATA)

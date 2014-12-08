@@ -85,7 +85,11 @@ AppDispatcher.register(function(payload){
 //    console.log(apartmentObject);
 
     switch(action.actionType) {
-        case ApartmentConstants.APARTMENT_SAVE:
+        case ApartmentConstants.APARTMENT_CREATE:
+//            console.log("case: Apartment save");
+            saveMyProfile(apartmentObject);
+            break;
+        case ApartmentConstants.APARTMENT_UPDATE:
 //            console.log("case: Apartment save");
             saveMyProfile(apartmentObject);
             break;

@@ -361,14 +361,17 @@ module.exports = React.createClass({
     },
 
     _onSave: function () {
-        if (this.state.id) {
-            alert('Вы уже сохраняли форму. Нельзя изменить данные.');
-            return;
+        if (!this.validateForm()) return;
+        if (this.state.data.id) {
+            ApartmentActions.updateApartment(assign({}, this.state.data));
+            alert('Вы уже сохраняли форму. \n' +
+                'Так как вы изменили адрес объекта, \nто это требует подтверждения модератора, \n' +
+                'после чего изменения будут отображены.');
+        } else {
+            ApartmentActions.createApartment(assign({}, this.state.data));
         }
 
-        if (!this.validateForm()) return;
 
-        ApartmentActions.save(assign({}, this.state.data));
     },
 
     _onDelete: function () {

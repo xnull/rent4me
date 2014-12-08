@@ -8,16 +8,19 @@ import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.ApartmentPhoto;
 import bynull.realty.data.business.PhotoTemp;
 import bynull.realty.data.business.User;
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.dto.PhotoTempDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.PhotoTempService;
+import bynull.realty.utils.CoordinateUtils;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -50,7 +53,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentDTO create(ApartmentDTO dto) {
 
-        Apartment apartment = dto.toInternal();
+        Apartment apartment = new Apartment();
+        apartment.mergeWith(dto.toInternal());
 
         Apartment created = apartmentRepository.saveAndFlush(apartment);
 
@@ -67,30 +71,65 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setOwner(user);
             apartment = apartmentRepository.saveAndFlush(apartment);
 
-            List<String> addedTempPhotoGUIDs = dto.getAddedTempPhotoGUIDs();
-
-            //find added photo temps
-            List<PhotoTemp> photoTempByGUIDs = !addedTempPhotoGUIDs.isEmpty()
-                    ? photoTempRepository.findByGuidIn(addedTempPhotoGUIDs)
-                    : Collections.emptyList();
-
-
-            for (PhotoTemp photoTemp : photoTempByGUIDs) {
-                ApartmentPhotoDTO apartmentPhotoWithThumbnails = apartmentPhotoService.createApartmentPhotoWithThumbnails(photoTemp);
-                apartment.addApartmentPhoto(apartmentPhotoRepository.findOne(apartmentPhotoWithThumbnails.getId()));
-            }
-
-            List<String> deletePhotoGUIDs = dto.getDeletePhotoGUIDs();
-
-
-
-
+            handlePhotoDiff(dto, apartment);
 
             boolean result = user.getApartments().add(apartment);
             return result;
         } else {
             return false;
         }
+    }
+
+    private void handlePhotoDiff(ApartmentDTO dto, Apartment apartment) {
+        List<String> addedTempPhotoGUIDs = dto.getAddedTempPhotoGUIDs();
+
+        //find added photo temps
+        List<PhotoTemp> photoTempByGUIDs = !addedTempPhotoGUIDs.isEmpty()
+                ? photoTempRepository.findByGuidIn(addedTempPhotoGUIDs)
+                : Collections.emptyList();
+
+
+        for (PhotoTemp photoTemp : photoTempByGUIDs) {
+            ApartmentPhotoDTO apartmentPhotoWithThumbnails = apartmentPhotoService.createApartmentPhotoWithThumbnails(photoTemp);
+            apartment.addApartmentPhoto(apartmentPhotoRepository.findOne(apartmentPhotoWithThumbnails.getId()));
+        }
+
+        List<String> deletePhotoGUIDs = dto.getDeletePhotoGUIDs();
+        List<ApartmentPhotoDTO> photosToDelete = apartmentPhotoService.findPlaceProfilePhotosByGUIDs(deletePhotoGUIDs);
+        apartmentPhotoService.deleteAll(photosToDelete);
+    }
+
+    @Transactional
+    @Override
+    public boolean updateForAuthorizedUser(ApartmentDTO dto) {
+        Assert.notNull(dto);
+        Assert.notNull(dto.getId());
+
+        Apartment apartment = apartmentRepository.findOne(dto.getId());
+
+        Assert.notNull(apartment);
+
+        SecurityUtils.verifySameUser(apartment.getOwner());
+
+        GeoPoint currentLocation = apartment.getLocation();
+
+        Apartment updatedApartment = dto.toInternal();
+
+        double distanceDeltaMeters = CoordinateUtils.calculateDistance(currentLocation, updatedApartment.getLocation());
+        //TODO: check distance between current point and previous,
+        // if it exceeds allowed maximum - don't change data.
+        // Put it in special table that will be handled manually by admins.
+        if(distanceDeltaMeters > 200) {
+            apartment.mergeWithExcludingAddressAndLocationInformation(updatedApartment);
+        } else {
+            apartment.mergeWith(updatedApartment);
+        }
+
+        handlePhotoDiff(dto, apartment);
+
+        apartmentRepository.saveAndFlush(apartment);
+
+        return true;
     }
 
     @Transactional

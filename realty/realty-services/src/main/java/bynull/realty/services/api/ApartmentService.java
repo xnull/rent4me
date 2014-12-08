@@ -23,4 +23,6 @@ public interface ApartmentService {
     ApartmentDTO findAuthorizedUserApartment();
 
     void deleteApartmentForAuthorizedUser();
+
+    boolean updateForAuthorizedUser(ApartmentDTO dto);
 }

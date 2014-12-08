@@ -110,7 +110,8 @@ public class ApartmentPhotoServiceImpl implements ApartmentPhotoService {
 
         for (ApartmentPhoto apartmentPhoto : apartmentPhotos) {
             SecurityUtils.verifySameUser(apartmentPhoto.getAuthor());
-            afterCommitExecutor.execute(() -> imageComponent.deleteJpegSilently(apartmentPhoto.getGuid()));
+            afterCommitExecutor.execute(() -> imageComponent.deleteJpegSilently(apartmentPhoto.getSmallThumbnailObjectId()));
+            afterCommitExecutor.execute(() -> imageComponent.deleteJpegSilently(apartmentPhoto.getOriginalImageObjectId()));
         }
 
         apartmentPhotoRepository.deleteInBatch(apartmentPhotos);
