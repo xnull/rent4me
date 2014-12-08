@@ -745,7 +745,9 @@ module.exports = React.createClass({
         };
 
         var styles = {
-            width: '300px',
+            margin: '0 auto',
+            width: '100%',
+            'min-width': '300px',
             height: '300px'
         };
 
@@ -776,16 +778,12 @@ module.exports = React.createClass({
                             successCondition={data.published}
                         />
 
+                        <p>
+                            <div id="map-canvas" style={styles}></div>
+                        </p>
+                        <form className="form-horizontal" role="form">
                         <div className="row">
-                            <div className="col-md-7" >
-                                <form className="form-horizontal" role="form">
-                                    <UserPreview data={addressPreviewProp}/>
-                                    <UserProperty data={addressProp} readOnly={saved}/>
-                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-
+                            <div className="col-md-6" >
                                     <UserSelect data={rentTypeProp} onChange={this._onChange} />
                                     <UserProperty data={rentalFeeProp} onChange={this._onChange} />
                                     <UserSelect data={feePeriodProp} onChange={this._onChange} />
@@ -794,15 +792,16 @@ module.exports = React.createClass({
 
                                     <UserCheckbox data={publishedProp} onChange={this._onChangeCheckbox} />
 
-                                    <UserButton data={submitButton} onClick={this._onSave}/>
-
-                                    <br/>
-                                    <br/>
-
-                                    <UserButton data={deleteButton} onClick={this._onDelete}/>
-                                </form>
                             </div>
-                            <div id="map-canvas" className="col-md-4" style={styles}></div>
+                            <div className="col-md-6">
+                                <UserPreview data={addressPreviewProp}/>
+                                <UserProperty data={addressProp} readOnly={saved}/>
+                                <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <a className="clickable" onClick={function(){alert('Хера лысого а не изменить данные о квартире')}}>Изменить данные о квартире</a>
+                            </div>
                         </div>
 
                         <h4>Фотографии</h4>
@@ -813,6 +812,15 @@ module.exports = React.createClass({
                             <div className="dropzone"
                                 id="my-awesome-dropzone"></div>
                         </p>
+                            <p>
+                                <UserButton data={submitButton} onClick={this._onSave}/>
+
+                                <br/>
+                                <br/>
+
+                                <UserButton data={deleteButton} onClick={this._onDelete}/>
+                            </p>
+                        </form>
 
 
                     </div>
