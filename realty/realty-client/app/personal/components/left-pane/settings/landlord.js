@@ -762,7 +762,7 @@ module.exports = React.createClass({
         var onChangeIfNotSaved = saved ? null : this._onChange;
 
 
-        var selectedPhoto = data.selectedPhoto;
+        var selectedPhoto = this.state.transient.selectedPhoto;
         var photoPreviewOrZero = selectedPhoto ? (<ApartmentPhotoPreview photo={selectedPhoto}/>) : null;
 
         return (
