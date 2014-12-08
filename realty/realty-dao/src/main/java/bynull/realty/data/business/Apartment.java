@@ -286,6 +286,7 @@ public class Apartment implements Serializable {
         setFeePeriod(apartment.getFeePeriod());
         setRentalFee(apartment.getRentalFee());
         setTypeOfRent(apartment.getTypeOfRent());
+        setPublished(apartment.isPublished());
     }
 
     @Override

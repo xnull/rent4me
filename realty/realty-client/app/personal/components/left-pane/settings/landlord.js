@@ -142,6 +142,75 @@ var UserProperty = React.createClass({
     }
 });
 
+var UserSuccessOrDangerBlock = React.createClass({
+    render: function () {
+
+        var errorMessage = this.props.errorMessage || '';
+        var successMessage = this.props.successMessage || '';
+        var success = this.props.successCondition || false;
+
+        if(success) {
+            return (
+                <div className="alert alert-success" role="alert" >
+                {successMessage}
+                </div>
+                );
+        } else {
+            return (
+                <div className="alert alert-danger" role="alert" >
+                {errorMessage}
+                </div>
+                );
+        }
+
+        return (
+            <div>
+                <div className="form-group">
+                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <div className={customClassName}>
+                        <input
+                        id={this.props.data.id}
+                        className="form-control"
+                        type="text"
+                        readOnly={this.props.readOnly}
+                        name={this.props.data.elementName}
+                        onChange={this.props.onChange}
+                        placeholder={this.props.data.placeholder}
+                        value={this.props.data.elementValue}
+                        />
+                    </div>
+                </div>
+            </div>
+            )
+    }
+});
+
+var UserCheckbox = React.createClass({
+    render: function () {
+        var customClassName = this.props.data.customClassName || 'col-md-4';
+
+        return (
+            <div>
+                <div className="form-group">
+                    <label className="col-md-2 control-label">
+                        {this.props.data.name}
+                    </label>
+                    <div className={customClassName}>
+                        <input
+                        id={this.props.data.id}
+                        type="checkbox"
+                        readOnly={this.props.readOnly}
+                        name={this.props.data.elementName}
+                        onChange={this.props.onChange}
+                        checked={this.props.data.checked}
+                        />
+                    </div>
+                </div>
+            </div>
+            )
+    }
+});
+
 var UserSelect = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName || 'col-md-4';
@@ -492,6 +561,28 @@ module.exports = React.createClass({
         changeData(this, diffObj);
     },
 
+    _onChangeCheckbox: function (event) {
+        if (!event) {
+            return;
+        }
+
+        var diffObj = {};
+        diffObj[event.target.name] = event.target.checked;
+
+        console.log('diff obj');
+        console.log(diffObj);
+
+        console.log('old state');
+        console.log(this.state.data);
+
+        var newState = {data: diffObj};
+
+        console.log('new state');
+        console.log(newState.data);
+
+        changeData(this, diffObj);
+    },
+
     _onPhotoSelected: function (photo) {
         console.log("Photo seleceted:");
         console.log(photo);
@@ -638,6 +729,14 @@ module.exports = React.createClass({
             elementValue: data['description']
         };
 
+        var publishedProp = {
+            id: 'published',
+            name: 'Опубликовано',
+            customClassName: 'col-md-4 col-md-offset-1',
+            elementName: 'published',
+            checked: data['published']
+        };
+
         var submitButton = {id: 'saveApartmentBtn', value: 'Сохранить', customClassName: 'col-md-4 col-md-offset-4'};
         var deleteButton = {
             id: 'deleteApartmentBtn',
@@ -671,6 +770,12 @@ module.exports = React.createClass({
                         <div id="errorMessages" className="alert alert-danger" role="alert" style={errorMessageStyles}>
                         </div>
 
+                        <UserSuccessOrDangerBlock
+                            errorMessage="Ваша квартира не участвует в поиске"
+                            successMessage="Ваша квартира отображается в поиске"
+                            successCondition={data.published}
+                        />
+
                         <div className="row">
                             <div className="col-md-7" >
                                 <form className="form-horizontal" role="form">
@@ -686,6 +791,8 @@ module.exports = React.createClass({
                                     <UserSelect data={feePeriodProp} onChange={this._onChange} />
 
                                     <UserText data={descriptionProp} onChange={this._onChange} />
+
+                                    <UserCheckbox data={publishedProp} onChange={this._onChangeCheckbox} />
 
                                     <UserButton data={submitButton} onClick={this._onSave}/>
 
