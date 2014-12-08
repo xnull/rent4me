@@ -363,10 +363,7 @@ module.exports = React.createClass({
     _onSave: function () {
         if (!this.validateForm()) return;
         if (this.state.data.id) {
-            ApartmentActions.updateApartment(assign({}, this.state.data));
-            alert(
-                'Если вы изменили адрес объекта, \nто это требует подтверждения модератора, \n' +
-                'после чего изменения будут отображены в системе.');
+            ApartmentActions.updateApartmentRentInfo(assign({}, this.state.data));
         } else {
             ApartmentActions.createApartment(assign({}, this.state.data));
         }
@@ -657,6 +654,12 @@ module.exports = React.createClass({
             display: 'none'
         };
 
+
+        var saved = !!data.id;
+        var readOnly = saved;
+
+        var onChangeIfNotSaved = saved ? null : this._onChange;
+
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -671,16 +674,18 @@ module.exports = React.createClass({
                         <div className="row">
                             <div className="col-md-7" >
                                 <form className="form-horizontal" role="form">
-                                    <UserPreview data={addressPreviewProp} readOnly={true}/>
-                                    <UserProperty data={addressProp}/>
-                                    <UserSelect data={rentTypeProp} onChange={this._onChange}/>
-                                    <UserProperty data={rentalFeeProp} onChange={this._onChange}/>
-                                    <UserSelect data={feePeriodProp} onChange={this._onChange}/>
-                                    <UserProperty data={roomCount} onChange={this._onChange}/>
-                                    <UserProperty data={floorNumber} onChange={this._onChange}/>
-                                    <UserProperty data={floorsTotal} onChange={this._onChange}/>
-                                    <UserProperty data={area} onChange={this._onChange}/>
-                                    <UserText data={descriptionProp} onChange={this._onChange}/>
+                                    <UserPreview data={addressPreviewProp}/>
+                                    <UserProperty data={addressProp} readOnly={saved}/>
+                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+
+                                    <UserSelect data={rentTypeProp} onChange={this._onChange} />
+                                    <UserProperty data={rentalFeeProp} onChange={this._onChange} />
+                                    <UserSelect data={feePeriodProp} onChange={this._onChange} />
+
+                                    <UserText data={descriptionProp} onChange={this._onChange} />
 
                                     <UserButton data={submitButton} onClick={this._onSave}/>
 

@@ -46,14 +46,14 @@ var ApartmentActions = {
     /**
      * @param {object} obj
      */
-    updateApartment: function (obj) {
+    updateApartmentRentInfo: function (obj) {
         BlockUI.blockUI();
 
         var data = assign({}, obj);
 
         $.ajax({
             url: '/rest/users/apartment',
-            type: 'PUT',
+            type: 'PATCH',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data),
             beforeSend: function (request) {

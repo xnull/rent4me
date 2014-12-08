@@ -5,6 +5,7 @@ import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.UserService;
+import bynull.realty.web.annotation.PATCH;
 import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.UserJSON;
 import org.apache.commons.io.IOUtils;
@@ -81,9 +82,9 @@ public class UserRestResource {
                 .build();
     }
 
-    @PUT
+    @PATCH
     @Path("/apartment")
-    public Response updateApartment(ApartmentJSON apartmentJSON) {
+    public Response updateApartmentRentInfo(ApartmentJSON apartmentJSON) {
         ApartmentDTO dto = apartmentJSON.toDTO();
         boolean result = apartmentService.updateForAuthorizedUser(dto);
         return Response
