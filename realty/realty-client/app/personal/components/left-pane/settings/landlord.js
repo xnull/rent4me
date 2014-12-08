@@ -643,7 +643,7 @@ module.exports = React.createClass({
             id: 'addressPreview',
             name: 'Выбранный адрес',
             previewValue: (data['address'] ? data['address']['formatted_address'] : null) || '',
-            customClassName: 'col-md-8'
+            customClassName: 'col-md-9'
         };
 
         var addressProp = {
@@ -810,9 +810,6 @@ module.exports = React.createClass({
                                 </div>
                             </div>
 
-                            <p>
-                                {photoPreviewOrZero}
-                            </p>
                             <p>
                                 <div className="dropzone"
                                 id="my-awesome-dropzone"></div>
