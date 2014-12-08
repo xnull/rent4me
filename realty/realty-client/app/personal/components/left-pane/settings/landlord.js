@@ -791,10 +791,6 @@ module.exports = React.createClass({
                                     <UserText data={descriptionProp} onChange={this._onChange} />
 
                                     <UserCheckbox data={publishedProp} onChange={this._onChangeCheckbox} />
-                                    <div>
-                                        <h4>Фотографии</h4>
-                                        <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
-                                    </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div id="map-canvas" style={styles}></div>
@@ -808,6 +804,11 @@ module.exports = React.createClass({
                                         alert('Хера лысого а не изменить данные о квартире')
                                     }}>Изменить данные о квартире</a>
                                 </div>
+                            </div>
+
+                            <div>
+                                <h4>Фотографии</h4>
+                                <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
                             </div>
 
                             <p>
