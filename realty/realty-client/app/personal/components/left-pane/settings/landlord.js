@@ -809,7 +809,7 @@ module.exports = React.createClass({
                                     }}>Изменить данные о квартире</a>
                                 </div>
                             </div>
-                            <!-- Preview here -->
+
                             <p>
                                 {photoPreviewOrZero}
                             </p>
