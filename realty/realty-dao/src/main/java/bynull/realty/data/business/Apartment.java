@@ -267,24 +267,24 @@ public class Apartment implements Serializable {
         mergeWith(apartment, true);
     }
 
-    public void mergeWithExcludingAddressAndLocationInformation(Apartment apartment) {
+    public void mergeWithRentInfoOnly(Apartment apartment) {
         mergeWith(apartment, false);
     }
 
-    private void mergeWith(Apartment apartment, boolean updateAddressAndLocationInfo) {
+    private void mergeWith(Apartment apartment, boolean updateAllInfo) {
         Assert.notNull(apartment);
 
-        if(updateAddressAndLocationInfo) {
+        if(updateAllInfo) {
             setAddressComponents(apartment.getAddressComponents());
             setLocation(apartment.getLocation());
+            setArea(apartment.getArea());
+            setFloorNumber(apartment.getFloorNumber());
+            setFloorsTotal(apartment.getFloorsTotal());
+            setRoomCount(apartment.getRoomCount());
         }
-        setArea(apartment.getArea());
         setDescription(apartment.getDescription());
         setFeePeriod(apartment.getFeePeriod());
-        setFloorNumber(apartment.getFloorNumber());
-        setFloorsTotal(apartment.getFloorsTotal());
         setRentalFee(apartment.getRentalFee());
-        setRoomCount(apartment.getRoomCount());
         setTypeOfRent(apartment.getTypeOfRent());
     }
 

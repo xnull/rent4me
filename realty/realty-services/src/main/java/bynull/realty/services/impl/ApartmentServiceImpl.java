@@ -5,10 +5,8 @@ import bynull.realty.data.business.*;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
-import bynull.realty.dto.PhotoTempDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
-import bynull.realty.services.api.PhotoTempService;
 import bynull.realty.utils.CoordinateUtils;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
@@ -112,30 +110,15 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         Apartment updatedApartment = dto.toInternal();
 
-        double distanceDeltaMeters = CoordinateUtils.calculateDistance(currentLocation, updatedApartment.getLocation());
-        //TODO: check distance between current point and previous,
-        // if it exceeds allowed maximum - don't change data.
-        // Put it in special table that will be handled manually by admins.
-        boolean result;
-        if(distanceDeltaMeters > 200) {
-            apartment.mergeWithExcludingAddressAndLocationInformation(updatedApartment);
 
-            ApartmentLocationDelta delta = new ApartmentLocationDelta();
-            delta.setAddressComponents(updatedApartment.getAddressComponents());
-            delta.setLocation(updatedApartment.getLocation());
-            delta.setApartment(apartment);
-            delta = apartmentLocationDeltaRepository.saveAndFlush(delta);
-            result = false;
-        } else {
-            apartment.mergeWith(updatedApartment);
-            result = true;
-        }
+        apartment.mergeWithRentInfoOnly(updatedApartment);
+
 
         handlePhotoDiff(dto, apartment);
 
-        apartmentRepository.saveAndFlush(apartment);
+        apartment = apartmentRepository.saveAndFlush(apartment);
 
-        return result;
+        return true;
     }
 
     @Transactional

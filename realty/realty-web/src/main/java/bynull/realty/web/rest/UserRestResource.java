@@ -87,7 +87,7 @@ public class UserRestResource {
         ApartmentDTO dto = apartmentJSON.toDTO();
         boolean result = apartmentService.updateForAuthorizedUser(dto);
         return Response
-                .status(result ? Response.Status.OK : Response.Status.OK)
+                .status(result ? Response.Status.OK : Response.Status.CONFLICT)
                 .entity(result ? ApartmentJSON.from(apartmentService.findAuthorizedUserApartment()) : null)
                 .build();
     }
