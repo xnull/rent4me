@@ -16,10 +16,18 @@ var BlockUI = {
                 },
                 message: '<img src="images/spin.gif" width="64px" height="64px"/>',
                 css: {
-                    background: 'none',
-                    border: 0,
-                    opacity:         0.6,
-                    cursor:          'wait'
+//                    background: 'none',
+                    backgroundColor: '#000',
+                    width: '70px',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    border: '3px solid #fff',
+                    opacity: 0.7,
+                    cursor: 'wait',
+                    'border-radius': '10px',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius':    '10px'
                 }
             });
         }

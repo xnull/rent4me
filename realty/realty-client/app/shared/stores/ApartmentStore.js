@@ -24,7 +24,8 @@ function emptyApartment() {
         'description': '',
         'photos': [],
         'added_photos_guids': [],
-        'deleted_photos_guids': []
+        'deleted_photos_guids': [],
+        'published': false
     };
 }
 
