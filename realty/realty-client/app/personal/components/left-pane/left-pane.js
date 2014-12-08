@@ -31,10 +31,6 @@ var UserPanel = React.createClass({
         this.setState(UserStore.getMyProfile());
     },
 
-    _logout: function() {
-        Auth.logoutOnBackend();
-    },
-
     render: function () {
         return (
             <div className="panel panel-default">
@@ -57,14 +53,6 @@ var UserPanel = React.createClass({
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="col-md-6">
-                        <a className="btn btn-danger" href="#" id="logoutBtn" onClick={this._logout}>Выход</a>
-                    </div>
-
-                    <div className="col-md-6">
-                        <a className="btn btn-success" href="#/user/landlord">Я собственник</a>
                     </div>
 
                 </div>

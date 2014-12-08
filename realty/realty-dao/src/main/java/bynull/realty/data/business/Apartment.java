@@ -78,6 +78,9 @@ public class Apartment implements Serializable {
     @Column(name = "area")
     private BigDecimal area;
 
+    @Column(name = "published")
+    private boolean published;
+
     @JoinTable(
             name = "apartment_apartment_photos",
             joinColumns = @JoinColumn(name = "apartment_id"),
@@ -204,6 +207,14 @@ public class Apartment implements Serializable {
 
     public void setArea(BigDecimal area) {
         this.area = area;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 
     public void addApartmentPhoto(ApartmentPhoto photo) {

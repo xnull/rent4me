@@ -57,6 +57,10 @@ public class ApartmentJSON {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.ISO_DATE_TIME_FORMAT)
     @JsonProperty("updated")
     private Date updated;
+
+    @JsonProperty("published")
+    private boolean published;
+
     @JsonProperty("photos")
     private List<ApartmentPhotoJSON> photos = Collections.emptyList();
     @JsonProperty("added_photos_guids")
@@ -88,6 +92,8 @@ public class ApartmentJSON {
                                     .map(ApartmentPhotoJSON::from)
                                     .collect(Collectors.toList())
         );
+
+        json.setPublished(apartment.isPublished());
 
         return json;
     }
@@ -196,6 +202,14 @@ public class ApartmentJSON {
         this.updated = copy(updated);
     }
 
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
     public List<ApartmentPhotoJSON> getPhotos() {
         return photos;
     }
@@ -240,6 +254,8 @@ public class ApartmentJSON {
 
         dto.setAddedTempPhotoGUIDs(getAddedTempPhotoGUIDs());
         dto.setDeletePhotoGUIDs(getDeletePhotoGUIDs());
+
+        dto.setPublished(isPublished());
 
         return dto;
     }

@@ -30,6 +30,7 @@ public class ApartmentDTO {
     private RentType typeOfRent;
     private BigDecimal rentalFee;
     private FeePeriod feePeriod;
+    private boolean published;
 
     private Date created;
     private Date updated;
@@ -62,6 +63,8 @@ public class ApartmentDTO {
                                     .map(ApartmentPhotoDTO::from)
                                     .collect(Collectors.toList())
         );
+
+        dto.setPublished(apartment.isPublished());
 
         return dto;
     }
@@ -202,10 +205,17 @@ public class ApartmentDTO {
         this.deletePhotoGUIDs = new ArrayList<>(deletePhotoGUIDs);
     }
 
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
     public Apartment toInternal() {
         Apartment apartment = new Apartment();
         apartment.setId(getId());
-//        apartment.setCity(getCity());
         AddressComponentsDTO address = getAddress();
         apartment.setAddressComponents(address != null ? address.toInternal() :  null);
         apartment.setArea(getArea());
@@ -220,6 +230,7 @@ public class ApartmentDTO {
         apartment.setTypeOfRent(getTypeOfRent());
         apartment.setRentalFee(getRentalFee());
         apartment.setFeePeriod(getFeePeriod());
+        apartment.setPublished(isPublished());
         return apartment;
     }
 }
