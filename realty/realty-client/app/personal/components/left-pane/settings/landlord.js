@@ -777,14 +777,6 @@ module.exports = React.createClass({
                         successMessage="Ваша квартира отображается в поиске"
                         successCondition={data.published}
                         />
-                        <h4>Фотографии</h4>
-                        <p>
-                            <ApartmentPhotosBlock photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} selectedPhoto={this.state.transient.selectedPhoto}/>
-                        </p>
-                        <p>
-                            <div className="dropzone"
-                            id="my-awesome-dropzone"></div>
-                        </p>
                         <form className="form-horizontal" role="form">
                             <div className="row">
                                 <div className="col-md-6" >
@@ -809,6 +801,14 @@ module.exports = React.createClass({
                                     }}>Изменить данные о квартире</a>
                                 </div>
                             </div>
+                            <h4>Фотографии</h4>
+                            <p>
+                                <ApartmentPhotosBlock photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} selectedPhoto={this.state.transient.selectedPhoto}/>
+                            </p>
+                            <p>
+                                <div className="dropzone"
+                                id="my-awesome-dropzone"></div>
+                            </p>
                             <p>
                                 <div id="map-canvas" style={styles}></div>
                             </p>
