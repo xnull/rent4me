@@ -799,15 +799,24 @@ module.exports = React.createClass({
                             </div>
 
                             <div>
-                                <UserPreview data={addressPreviewProp}/>
-                                <UserProperty data={addressProp} readOnly={saved}/>
-                                <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                <a className="clickable" onClick={function () {
-                                    alert('Хера лысого а не изменить данные о квартире')
-                                }}>Изменить данные о квартире</a>
+                                <h4>Данные о квартире</h4>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-6" >
+                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+
+                                </div>
+                                <div className="col-md-6">
+                                    <UserPreview data={addressPreviewProp}/>
+                                    <UserProperty data={addressProp} readOnly={saved}/>
+                                    <a className="clickable" onClick={function () {
+                                        alert('Хера лысого а не изменить данные о квартире')
+                                    }}>Изменить данные о квартире</a>
+                                </div>
                             </div>
 
                             <div>
