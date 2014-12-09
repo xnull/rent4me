@@ -1,9 +1,6 @@
 package bynull.realty.dto;
 
-import bynull.realty.data.business.AddressComponents;
-import bynull.realty.data.business.Apartment;
-import bynull.realty.data.business.FeePeriod;
-import bynull.realty.data.business.RentType;
+import bynull.realty.data.business.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -231,6 +228,21 @@ public class ApartmentDTO {
         apartment.setRentalFee(getRentalFee());
         apartment.setFeePeriod(getFeePeriod());
         apartment.setPublished(isPublished());
+        return apartment;
+    }
+
+    public ApartmentInfoDelta toApartmentInfoDelta() {
+        ApartmentInfoDelta apartment = new ApartmentInfoDelta();
+
+        AddressComponentsDTO address = getAddress();
+        apartment.setAddressComponents(address != null ? address.toInternal() :  null);
+        apartment.setArea(getArea());
+        apartment.setRoomCount(getRoomCount());
+        apartment.setFloorNumber(getFloorNumber());
+        apartment.setFloorsTotal(getFloorsTotal());
+
+        apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
+
         return apartment;
     }
 }

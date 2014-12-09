@@ -7,7 +7,6 @@ import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
-import bynull.realty.utils.CoordinateUtils;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     PhotoTempRepository photoTempRepository;
 
     @Resource
-    ApartmentLocationDeltaRepository apartmentLocationDeltaRepository;
+    ApartmentInfoDeltaRepository apartmentInfoDeltaRepository;
 
     @Transactional
     @Override
@@ -192,20 +191,39 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional
     @Override
-    public void applyLatestLocationInfoDeltaForApartment(ApartmentDTO dto) {
+    public void applyLatestApartmentInfoDeltaForApartment(ApartmentDTO dto) {
         Assert.notNull(dto);
         Assert.notNull(dto.getId());
         Apartment apartment = apartmentRepository.findOne(dto.getId());
         Assert.notNull(apartment);
-        List<ApartmentLocationDelta> deltas = apartmentLocationDeltaRepository.findLatestForApartment(dto.getId());
-        ApartmentLocationDelta delta = Iterables.getFirst(deltas, null);
+        List<ApartmentInfoDelta> deltas = apartmentInfoDeltaRepository.findLatestForApartment(dto.getId());
+        ApartmentInfoDelta delta = Iterables.getFirst(deltas, null);
         if (delta != null && !delta.isApplied()) {
             apartment.setAddressComponents(delta.getAddressComponents());
             apartment.setLocation(delta.getLocation());
+            apartment.setArea(delta.getArea());
+            apartment.setFloorNumber(delta.getFloorNumber());
+            apartment.setFloorsTotal(delta.getFloorsTotal());
+            apartment.setRoomCount(delta.getRoomCount());
             apartment = apartmentRepository.saveAndFlush(apartment);
 
             delta.setApplied(true);
-            delta = apartmentLocationDeltaRepository.saveAndFlush(delta);
+            delta = apartmentInfoDeltaRepository.saveAndFlush(delta);
         }
+    }
+
+    @Transactional
+    @Override
+    public void requestApartmentInfoChangeForAuthorizedUser(ApartmentDTO dto) {
+        Assert.notNull(dto);
+        Assert.notNull(dto.getId());
+
+        Apartment apartment = apartmentRepository.findOne(dto.getId());
+        SecurityUtils.verifySameUser(apartment.getOwner());
+
+        ApartmentInfoDelta delta = dto.toApartmentInfoDelta();
+        delta.setApartment(apartment);
+
+        delta = apartmentInfoDeltaRepository.saveAndFlush(delta);
     }
 }

@@ -26,5 +26,7 @@ public interface ApartmentService {
 
     boolean updateForAuthorizedUser(ApartmentDTO dto);
 
-    void applyLatestLocationInfoDeltaForApartment(ApartmentDTO dto);
+    void applyLatestApartmentInfoDeltaForApartment(ApartmentDTO dto);
+
+    void requestApartmentInfoChangeForAuthorizedUser(ApartmentDTO dto);
 }

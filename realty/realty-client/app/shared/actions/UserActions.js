@@ -26,7 +26,7 @@ var UserActions = {
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
                     actionType: UserConstants.USER_PROFILE_SAVE,
-                    user: obj
+                    user: data
                 });
 
                 BlockUI.unblockUI();

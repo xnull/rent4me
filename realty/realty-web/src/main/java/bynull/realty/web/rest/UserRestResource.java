@@ -56,7 +56,7 @@ public class UserRestResource {
         boolean result = userService.updateMyProfile(dto);
         return Response
                 .status(result ? Response.Status.OK : Response.Status.CONFLICT)
-//                .entity(result ? userJSON.findAuthorizedUserApartment() : null)
+                .entity(result ? UserJSON.from(userService.getMyProfile()) : null)
                 .build();
     }
 
@@ -97,10 +97,11 @@ public class UserRestResource {
     @Path("/apartment/data_change_request")
     public Response createApartmentDataChangeRequest(ApartmentJSON apartmentJSON) {
         ApartmentDTO dto = apartmentJSON.toDTO();
-        boolean result = true;//apartmentService.updateForAuthorizedUser(dto);
+
+        apartmentService.requestApartmentInfoChangeForAuthorizedUser(dto);
+
         return Response
-                .status(result ? Response.Status.OK : Response.Status.CONFLICT)
-                .entity(result ? ApartmentJSON.from(apartmentService.findAuthorizedUserApartment()) : null)
+                .status(Response.Status.CREATED)
                 .build();
     }
 
@@ -117,7 +118,7 @@ public class UserRestResource {
             HashMap<String, String> entity = new HashMap<>();
             entity.put("guid", photoTempGUID);
             return Response
-                    .status( Response.Status.OK)
+                    .status(Response.Status.OK)
                     .entity(entity)
                     .build();
         } catch (IOException e) {
