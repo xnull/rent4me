@@ -183,3 +183,8 @@ h3, h4, h5 {
 #main {
     padding-top: 120px;
 }
+
+/*fix google autocomplete container for modal's*/
+.pac-container {
+    z-index: 1051 !important;
+}

@@ -7,6 +7,11 @@ var JSON = require('JSON2');
 var Validator = require('validator.js');
 var _ = require('underscore');
 var React = require('react');
+var Modal = require('react-bootstrap/Modal');
+var ModalTrigger = require('react-bootstrap/ModalTrigger');
+var Button = require('react-bootstrap/Button');
+//var ReactBootstrap = require('react-bootstrap/main');
+
 var Auth = require('../../../../shared/common/Auth');
 var AddressUtils = require('../../../../shared/common/AddressUtils');
 var ApartmentStore = require('../../../../shared/stores/ApartmentStore');
@@ -44,6 +49,184 @@ var ApartmentPhoto = React.createClass({
                     <a className="clickable" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
                 </div>
             </li>
+        );
+    }
+});
+
+var ApartmentInfoChangeRequestForm = React.createClass({
+    getInitialState: function() {
+        return {
+            data: ApartmentStore.getMyProfile()
+        };
+    },
+
+    componentDidMount: function() {
+        var that = this;
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInputChange'));
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            var place = autocomplete.getPlace();
+            var addressComponents = place['address_components'];
+
+            var location = {
+                latitude: place['geometry']['location'].lat(),
+                longitude: place['geometry']['location'].lng()
+            };
+
+//            console.log(location);
+
+            var delta = {
+                'location': location,
+                'address': {
+                    city: AddressUtils.getCity(addressComponents),
+                    country: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY_LONG'),
+                    country_code: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY'),
+                    county: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'STATE'),
+                    district: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'DISTRICT'),
+                    street_address: AddressUtils.buildAddress(addressComponents),
+                    zip_code: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'ZIP'),
+                    formatted_address: place['formatted_address']
+                }
+            };
+
+            changeData(that, delta);
+        });
+    },
+
+    _onSave: function() {
+        //TODO: validate
+        ApartmentActions.sendApartmentRentInfo(this.state.data);
+    },
+
+    _onChange: function(event) {
+        if (!event) {
+            return;
+        }
+
+        var diffObj = {};
+        diffObj[event.target.name] = event.target.value;
+
+        console.log('diff obj');
+        console.log(diffObj);
+
+        console.log('old state');
+        console.log(this.state.data);
+
+        var newState = {data: diffObj};
+
+        console.log('new state');
+        console.log(newState.data);
+
+        changeData(this, diffObj);
+    },
+
+    render: function() {
+
+        var data = this.state.data || {};
+
+        var addressPreviewProp = {
+            id: 'addressPreviewChange',
+            name: 'Выбранный адрес',
+            previewValue: (data['address'] ? data['address']['formatted_address'] : null) || '',
+            customClassName: 'col-md-8'
+        };
+
+        var addressProp = {
+            id: 'addressInputChange',
+            name: 'Адрес',
+            placeholder: 'Начните печатать...',
+            customClassName: 'col-md-8'
+        };
+
+        var roomCount = {
+            id: 'roomCountChange',
+            name: 'Количество комнат',
+            placeholder: '2',
+            customClassName: 'col-md-8',
+            elementName: 'room_count',
+            elementValue: data['room_count']
+        };
+        var floorNumber = {
+            id: 'floorNumberChange',
+            name: 'Этаж',
+            placeholder: '1',
+            customClassName: 'col-md-8',
+            elementName: 'floor_number',
+            elementValue: data['floor_number']
+        };
+        var floorsTotal = {
+            id: 'floorsTotalChange',
+            name: 'Всего этажей',
+            placeholder: '9',
+            customClassName: 'col-md-8',
+            elementName: 'floors_total',
+            elementValue: data['floors_total']
+        };
+        var area = {
+            id: 'areaChange',
+            name: 'Площадь',
+            placeholder: '42 м2',
+            customClassName: 'col-md-8',
+            elementName: 'area',
+            elementValue: data['area']
+        };
+
+        var submitButton = {id: 'saveApartmentChangeBtn', value: 'Отправить', customClassName: 'col-md-4 col-md-offset-4'};
+
+        return (
+            <div>
+                <form className="form-horizontal" role="form">
+                    <div className="row">
+                        <div className="col-md-12" >
+                            <UserProperty data={roomCount} onChange={this._onChange} />
+                            <UserProperty data={floorNumber} onChange={this._onChange} />
+                            <UserProperty data={floorsTotal} onChange={this._onChange} />
+                            <UserProperty data={area} onChange={this._onChange} />
+                            <UserPreview data={addressPreviewProp}/>
+                            <UserProperty data={addressProp} />
+                            <UserButton data={submitButton} onClick={this._onSave}/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+});
+
+var ApartmentInfoChangeRequestModal = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <Modal {...this.props} title="Запрос на изменение данных о квартире" animation={false}>
+                    <div className="modal-body">
+                        <ApartmentInfoChangeRequestForm/>
+                    </div>
+                    <div className="modal-footer">
+                        <Button onClick={this.props.onRequestHide}>Close</Button>
+                    </div>
+                </Modal>
+            </div>
+        );
+    }
+});
+
+var ApartmentInfoChangeRequestButton = React.createClass({
+    render: function() {
+        var show = this.props.show;
+
+        var elementOrEmpty = show ?
+            (
+                <div>
+                    <ModalTrigger modal={<ApartmentInfoChangeRequestModal />}>
+                        <Button bsStyle="default" bsSize="medium">Изменить данные о квартире</Button>
+                    </ModalTrigger>
+                </div>
+            )
+            : "";
+
+        return (
+            <div>
+            {elementOrEmpty}
+            </div>
         );
     }
 });
@@ -104,7 +287,7 @@ var UserPreview = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
                         <div className="control-label">
                             <strong>{this.props.data.previewValue}</strong>
@@ -123,7 +306,7 @@ var UserProperty = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
                         <input
                             id={this.props.data.id}
@@ -166,8 +349,8 @@ var UserSuccessOrDangerBlock = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
-                    <div className={customClassName}>
+                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
+                    <div>
                         <input
                         id={this.props.data.id}
                         className="form-control"
@@ -192,7 +375,7 @@ var UserCheckbox = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-2 control-label">
+                    <label className="col-md-3 control-label">
                         {this.props.data.name}
                     </label>
                     <div className={customClassName}>
@@ -230,7 +413,7 @@ var UserSelect = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
                         <select
                             id={this.props.data.id}
@@ -254,7 +437,7 @@ var UserText = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
                         <textarea
                             id={this.props.data.id}
@@ -747,7 +930,7 @@ module.exports = React.createClass({
         var styles = {
             margin: '0 auto',
             width: '100%',
-            'min-width': '300px',
+            minWidth: '300px',
             height: '300px'
         };
 
@@ -813,9 +996,7 @@ module.exports = React.createClass({
                                 <div className="col-md-6">
                                     <UserPreview data={addressPreviewProp}/>
                                     <UserProperty data={addressProp} readOnly={saved}/>
-                                    <a className="clickable" onClick={function () {
-                                        alert('Хера лысого а не изменить данные о квартире')
-                                    }}>Изменить данные о квартире</a>
+                                    <ApartmentInfoChangeRequestButton show={readOnly}/>
                                 </div>
                             </div>
 

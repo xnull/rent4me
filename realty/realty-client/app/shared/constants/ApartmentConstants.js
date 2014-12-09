@@ -6,5 +6,6 @@ module.exports = keyMirror({
     APARTMENT_CREATE: null,
     APARTMENT_UPDATE: null,
     APARTMENT_LOADED: null,
+    APARTMENT_CHANGE_REQUEST_CREATED: null,
     APARTMENT_DESTROY: null
 });

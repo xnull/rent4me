@@ -106,6 +106,8 @@ AppDispatcher.register(function(payload){
 //            saveMyProfile(newProfileForDeletion);
             _me = newProfileForDeletion;
             break;
+        case ApartmentConstants.APARTMENT_CHANGE_REQUEST_CREATED:
+            break;
         default:
 //            console.log("case: default");
             return false;
