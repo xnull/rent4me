@@ -193,15 +193,33 @@ var ApartmentInfoChangeRequestForm = React.createClass({
 });
 
 var ApartmentInfoChangeRequestModal = React.createClass({
+    getInitialState: function() {
+        return {visible: false};
+    },
+
+    componentDidMount: function() {
+        console.log('modal mounted');
+        ApartmentStore.addChangeListener(this._onLoad);
+    },
+
+    componentWillUnmount: function(){
+        ApartmentStore.removeChangeListener(this._onLoad);
+        console.log('modal will unmount');
+    },
+
+    _onLoad: function() {
+        var hideFunc = this.props.onRequestHide;
+        if(hideFunc) {
+            hideFunc();
+        }
+    },
+
     render: function() {
         return (
             <div>
                 <Modal {...this.props} title="Запрос на изменение данных о квартире" animation={false}>
                     <div className="modal-body">
                         <ApartmentInfoChangeRequestForm/>
-                    </div>
-                    <div className="modal-footer">
-                        <Button onClick={this.props.onRequestHide}>Close</Button>
                     </div>
                 </Modal>
             </div>
