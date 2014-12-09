@@ -90,8 +90,24 @@ function AjaxBuilder(httpMethod) {
 }
 
 var Ajax = {
-    postTo: function(url) {
+    POST: function(url) {
         return new AjaxBuilder('POST').withUrl(url)
+    },
+
+    GET: function(url) {
+        return new AjaxBuilder('GET').withUrl(url)
+    },
+
+    PUT: function(url) {
+        return new AjaxBuilder('PUT').withUrl(url)
+    },
+
+    DELETE: function(url) {
+        return new AjaxBuilder('DELETE').withUrl(url)
+    },
+
+    PATCH: function(url) {
+        return new AjaxBuilder('patch').withUrl(url)
     }
 };
 

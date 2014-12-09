@@ -19,30 +19,22 @@ var ApartmentActions = {
 
         var data = assign({}, obj);
 
-        $.ajax({
-            url: '/rest/users/apartment',
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
-            },
-            success: function (data) {
-//                console.log("Success!");
-//                console.log("Data:");
-//                console.log(data);
-
+        Ajax
+            .POST('/rest/users/apartment')
+            .authorized()
+            .withJsonBody(data)
+            .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
                     actionType: ApartmentConstants.APARTMENT_CREATE,
                     apartment: data
                 });
 
                 BlockUI.unblockUI();
-            },
-            error: function (xhr, status, err) {
+            })
+            .onError(function (xhr, status, err) {
                 BlockUI.unblockUI();
-            }
-        });
+            })
+            .execute();
     },
 
     /**
@@ -53,30 +45,22 @@ var ApartmentActions = {
 
         var data = assign({}, obj);
 
-        $.ajax({
-            url: '/rest/users/apartment',
-            type: 'PATCH',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
-            },
-            success: function (data) {
-//                console.log("Success!");
-//                console.log("Data:");
-//                console.log(data);
-
+        Ajax
+            .PATCH('/rest/users/apartment')
+            .authorized()
+            .withJsonBody(data)
+            .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
                     actionType: ApartmentConstants.APARTMENT_UPDATE,
                     apartment: data
                 });
 
                 BlockUI.unblockUI();
-            },
-            error: function (xhr, status, err) {
+            })
+            .onError(function (xhr, status, err) {
                 BlockUI.unblockUI();
-            }
-        });
+            })
+            .execute();
     },
 
     /**
@@ -88,7 +72,7 @@ var ApartmentActions = {
         var data = assign({}, obj);
 
         Ajax
-            .postTo('/rest/users/apartment/data_change_request')
+            .POST('/rest/users/apartment/data_change_request')
             .authorized()
             .withJsonBody(data)
             .onSuccess(function (data) {
@@ -108,66 +92,47 @@ var ApartmentActions = {
     loadMyApartment: function() {
         BlockUI.blockUI();
 
-        $.ajax({
-            url: '/rest/users/apartment',
-            dataType: 'json',
-            type: 'GET',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
-            },
-            success: function (data) {
-//                console.log("Success!");
-//                console.log("Data:");
-//                console.log(data);
-
+        Ajax
+            .GET('/rest/users/apartment')
+            .authorized()
+            .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
                     actionType: ApartmentConstants.APARTMENT_LOADED,
                     apartment: data
                 });
 
                 BlockUI.unblockUI();
-            },
-            error: function (xhr, status, err) {
-                if (xhr.status == '404') {
+            })
+            .onError(function (xhr, status, err) {
+                if(xhr.status == '404'){
                     AppDispatcher.handleViewAction({
                         actionType: ApartmentConstants.APARTMENT_LOADED,
                         apartment: {}
                     });
-//                    that.setState({data: {}})
-                } else {
-//                        console.error('/rest/apartment', status, err.toString());
-                    alert('Service unavailable');
                 }
                 BlockUI.unblockUI();
-            }
-        });
+            })
+            .execute();
     },
 
     deleteMyApartment: function() {
         BlockUI.blockUI();
 
-        $.ajax({
-            url: '/rest/users/apartment',
-            type: 'DELETE',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
-            },
-            success: function (data) {
-//                console.log("Success!");
-//                console.log("Data:");
-//                console.log(data);
-
+        Ajax
+            .DELETE('/rest/users/apartment')
+            .authorized()
+            .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
                     actionType: ApartmentConstants.APARTMENT_DESTROY,
                     apartment: {}
                 });
 
                 BlockUI.unblockUI();
-            },
-            error: function (xhr, status, err) {
+            })
+            .onError(function (xhr, status, err) {
                 BlockUI.unblockUI();
-            }
-        });
+            })
+            .execute();
     }
 };
 

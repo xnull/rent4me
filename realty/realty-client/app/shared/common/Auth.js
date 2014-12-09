@@ -6,7 +6,6 @@ var JSON = require('JSON2');
 var Utils = require('./Utils');
 var BlockUI = require('./BlockUI');
 
-
 var _username = null;
 var _token = null;
 var _fbUserId = null;
