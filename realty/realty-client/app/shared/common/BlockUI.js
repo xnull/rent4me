@@ -27,7 +27,8 @@ var BlockUI = {
                     cursor: 'wait',
                     'border-radius': '10px',
                     '-webkit-border-radius': '10px',
-                    '-moz-border-radius':    '10px'
+                    '-moz-border-radius':    '10px',
+                    'z-index': 1052
                 }
             });
         }
