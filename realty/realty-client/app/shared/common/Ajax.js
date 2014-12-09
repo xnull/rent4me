@@ -1,0 +1,98 @@
+/**
+ * Created by dionis on 09/12/14.
+ */
+
+var Auth = require('./Auth');
+var assign = require('object-assign');
+var JSON = require('JSON2');
+
+function AjaxBuilder(httpMethod) {
+    //initialize variables
+    var _httpMethod = httpMethod;
+
+    var _url = null;
+    var _data = null;
+    var _contentType = null;
+    var _withAuth = false;
+    var _responseType = null;
+    var _succ = null;
+    var _error = null;
+
+    this.withUrl = function(url) {
+        _url = url;
+
+        return this;
+    };
+
+    this.withJsonResponse = function() {
+        _responseType = 'json';
+        return this;
+    };
+
+    this.withJsonBody = function(data) {
+        _data = JSON.stringify(data);
+        _contentType = 'application/json; charset=utf-8';
+
+        return this;
+    };
+
+    this.authorized = function() {
+        _withAuth = true;
+
+        return this;
+    };
+
+    this.onSuccess = function(succ) {
+        _succ = succ;
+
+        return this;
+    };
+
+    this.onError = function(err) {
+        _error = err;
+
+        return this;
+    };
+
+    this.execute = function() {
+        var resultingSettings = {};
+        resultingSettings['type'] = _httpMethod;
+
+        if(_url) {
+            resultingSettings['url'] = _url;
+        }
+
+        if(_data) {
+            resultingSettings['data'] = _data;
+        }
+
+        if(_contentType) {
+            resultingSettings['contentType'] = _contentType;
+        }
+
+        if(_withAuth) {
+            resultingSettings['beforeSend'] = function (request) {
+                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
+            };
+        }
+
+        if(_succ) {
+            resultingSettings['success'] =  _succ;
+        }
+
+        if(_error) {
+            resultingSettings['error'] =  _error;
+        }
+
+        $.ajax(resultingSettings);
+    }
+
+}
+
+var Ajax = {
+    postTo: function(url) {
+        return new AjaxBuilder('POST').withUrl(url)
+    }
+};
+
+module.exports = Ajax;
