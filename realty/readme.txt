@@ -89,6 +89,11 @@
 
 ------
 
+------
+jenkins account for bitbucket:
+username: jenkinsrealty
+email: jenkins-realty@fspare.com
+password: s82ks93l09d0a
 
 -------
  Postgresql for JIRA:
