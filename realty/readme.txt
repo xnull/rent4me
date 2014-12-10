@@ -73,7 +73,29 @@
  Username: tomcat
  Password: k124hfeoifs9
 
+ JIRA login:
+ host: jira.rent4.me
+ root: -[CSqFgs3!UChZv9
+ ----
+ Username: jira
+ Password: k28s01s0357da3j0
 
+
+ JIRA email account:
+ smtp: smtp.yandex.ru
+ smtp port: 587
+ email: jira@rent4.me
+ password: kj20sj39sk0
+
+------
+
+
+-------
+ Postgresql for JIRA:
+ Database: jiradb
+ Hostname: jira.rent4.me
+ username: jira_user
+ password: j28s3ja0su3a98
 
  ------
  mailchimp.com
