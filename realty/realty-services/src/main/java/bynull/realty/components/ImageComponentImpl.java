@@ -71,7 +71,7 @@ public class ImageComponentImpl implements ImageComponent {
     private List<Scalr.Rotation> getRotations(byte[] imageContent) {
         String orientationValue = getOrientationValue(imageContent);
         if (orientationValue == null) {
-            LOGGER.warn("No orientation value present. Can not rotate");
+            LOGGER.warn("No orientation value present. Can not rotate.");
             return Collections.emptyList();
         } else {
             switch (orientationValue) {
