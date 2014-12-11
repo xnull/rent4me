@@ -44,7 +44,7 @@ public class ImageComponentImpl implements ImageComponent {
     private String getOrientationValue(byte[] imageContent) {
         try {
             IImageMetadata metadata = Sanselan.getMetadata(imageContent);
-            if(metadata == null) {
+            if (metadata == null) {
                 LOGGER.info("No meta-data for image available. Skipping");
                 return null;
             }
@@ -64,16 +64,16 @@ public class ImageComponentImpl implements ImageComponent {
 
     /**
      * Get needed list of rotation's that should be applied to image
+     *
      * @param imageContent
      * @return list of rotation operation's or empty collection if not needed
      */
     private List<Scalr.Rotation> getRotations(byte[] imageContent) {
         String orientationValue = getOrientationValue(imageContent);
-        if(orientationValue == null) {
+        if (orientationValue == null) {
             LOGGER.warn("No orientation value present. Can not rotate");
             return Collections.emptyList();
-        }
-        else {
+        } else {
             switch (orientationValue) {
                 case "1":
                     return ImmutableList.of();
@@ -109,12 +109,13 @@ public class ImageComponentImpl implements ImageComponent {
         try {
             deleteJpeg(imageId);
         } catch (Exception e) {
-            LOGGER.error("Exception occurred while trying to delete image with id ["+imageId+"] from Amazon S3", e);
+            LOGGER.error("Exception occurred while trying to delete image with id [" + imageId + "] from Amazon S3", e);
         }
     }
 
     /**
      * NB!!! Original image content should be passed because it has EXIF metadata in it, which contains 'Orientation' in it.
+     *
      * @param imageContent
      * @return
      */
@@ -143,15 +144,14 @@ public class ImageComponentImpl implements ImageComponent {
             final Scalr.Mode resizeMode;
             if (original.getHeight() > original.getWidth()) {
                 resizeMode = Scalr.Mode.FIT_TO_WIDTH;
-            } else if(original.getHeight() < original.getWidth()){
+            } else if (original.getHeight() < original.getWidth()) {
                 resizeMode = Scalr.Mode.FIT_TO_HEIGHT;
-            }
-            else {
+            } else {
                 resizeMode = Scalr.Mode.AUTOMATIC;
             }
             BufferedImage resizedImage = Scalr.resize(original, Scalr.Method.AUTOMATIC, resizeMode, width, height);
-            int offsetX = (resizedImage.getWidth() - width)/2;
-            int offsetY = (resizedImage.getHeight() - height)/2;
+            int offsetX = (resizedImage.getWidth() - width) / 2;
+            int offsetY = (resizedImage.getHeight() - height) / 2;
             resizedImage = Scalr.crop(resizedImage, offsetX, offsetY, width, height);
 
             ByteArrayOutputStream resultOutputStream = new ByteArrayOutputStream();
