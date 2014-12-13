@@ -61,7 +61,7 @@ project.dependencies {
     compile libraries."ch.qos.logback:logback-core"
 
     compile 'com.google.guava:guava:17.0'
-    compile "org.projectlombok:lombok:1.14.4"
+    compile 'org.projectlombok:lombok:1.14.8'
 
     //testing
     testCompile libraries."junit:junit"
