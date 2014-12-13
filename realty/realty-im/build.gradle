@@ -1,0 +1,6 @@
+apply from: ext.pathToJavaProjectScript
+
+dependencies {
+    compile('com.hazelcast:hazelcast:3.3')
+    compile('com.hazelcast:hazelcast-client:3.3')
+}
