@@ -16,6 +16,7 @@ var AuthStore = require('../../../../shared/stores/AuthStore');
 var AddressUtils = require('../../../../shared/common/AddressUtils');
 var ApartmentStore = require('../../../../shared/stores/ApartmentStore');
 var ApartmentActions = require('../../../../shared/actions/ApartmentActions');
+var NavActions = require('../../../../shared/actions/NavActions');
 var assign = require('object-assign');
 
 var Dropzone = require("dropzone");
@@ -502,6 +503,9 @@ module.exports = React.createClass({
         return {data: ApartmentStore.getMyProfile(), transient: {}};
     },
     componentDidMount: function () {
+        NavActions.navigateToLandlord();
+        console.log('Navigated to landlord');
+
         var that = this;
         Dropzone.autoDiscover = false;
         _dropZone = new Dropzone('#my-awesome-dropzone', {

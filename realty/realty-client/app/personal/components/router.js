@@ -10,6 +10,7 @@ var RouteHandler = Router.RouteHandler;
 var UserActions = require('../../shared/actions/UserActions');
 
 var AuthActions = require('../../shared/actions/AuthActions');
+var NavStore = require('../../shared/stores/NavStore');
 var AuthStore = require('../../shared/stores/AuthStore');
 var Utils = require('../../shared/common/Utils');
 
@@ -20,6 +21,8 @@ var Utils = require('../../shared/common/Utils');
  */
 var App = React.createClass({
     componentWillMount: function() {
+        NavStore.addChangeListener(this._navStateChange);
+
         //restore username & token from cookies before component mounted
         AuthActions.restoreUsernameAndTokenFromCookies();
         if(!AuthStore.hasCredentials()) {
@@ -27,6 +30,15 @@ var App = React.createClass({
             Utils.navigateToStart();
         }
     },
+
+    componentWillUnmount: function() {
+        NavStore.removeChangeListener(this._navStateChange);
+    },
+
+    _navStateChange: function() {
+        //NB! This dummy function should be here because in othercase callback for nav store won't be initialized in proper order.
+    },
+
     render: function () {
         return (
             <RouteHandler/>

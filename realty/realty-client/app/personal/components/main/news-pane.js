@@ -1,7 +1,12 @@
 var React = require('react');
 var LookingForComponent = require('./looking-for.js');
+var NavActions = require('../../../shared/actions/NavActions');
 
 module.exports = React.createClass({
+    componentDidMount: function() {
+        NavActions.navigateToHome();
+    },
+
     render: function () {
         return (
             <div>
