@@ -15,7 +15,7 @@
         var code = Utils.getQueryParams("code");
         if(code) {
             console.log("Received code: "+code);
-            Auth.authOnBackendWithVK(code);
+            AuthActions.authOnBackendWithVK(code);
         } else {
             alert("Не получилось авторизоваться через VK. Попробуйте другой метод авторизации, либо попробуйте снова позже.");
             console.log("No code received");

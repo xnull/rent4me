@@ -2,7 +2,7 @@
  * Created by dionis on 09/12/14.
  */
 
-var Auth = require('./Auth');
+var AuthStore = require('../stores/AuthStore');
 var assign = require('object-assign');
 var JSON = require('JSON2');
 
@@ -72,7 +72,7 @@ function AjaxBuilder(httpMethod) {
 
         if(_withAuth) {
             resultingSettings['beforeSend'] = function (request) {
-                request.setRequestHeader("Authorization", "Basic " + Auth.getAuthHeader());
+                request.setRequestHeader("Authorization", "Basic " + AuthStore.getAuthHeader());
             };
         }
 
@@ -107,7 +107,7 @@ var Ajax = {
     },
 
     PATCH: function(url) {
-        return new AjaxBuilder('patch').withUrl(url)
+        return new AjaxBuilder('PATCH').withUrl(url)
     }
 };
 

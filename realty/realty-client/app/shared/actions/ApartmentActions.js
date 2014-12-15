@@ -4,7 +4,6 @@
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var ApartmentConstants = require('../constants/ApartmentConstants');
-var Auth = require('../common/Auth');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 var JSON = require('JSON2');

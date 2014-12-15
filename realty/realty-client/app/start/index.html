@@ -43,10 +43,10 @@
         <div class="row row-centered">
             <div class="col-centered">
                 <img class="clickable" width="100" src="images/signin/fb-icon.png"
-                     onclick="Auth.loginWithFB();"><br/>
+                     onclick="AuthActions.loginWithFB();"><br/>
             </div>
             <div class="col-centered">
-                <img class="clickable" width="103" src="images/signin/vk.png" onclick="Auth.loginWithVK();">
+                <img class="clickable" width="103" src="images/signin/vk.png" onclick="AuthActions.loginWithVK();">
             </div>
         </div>
         <br/>
@@ -129,19 +129,19 @@
 
 
     $(document).ready(function () {
-        Auth.restoreUsernameAndTokenFromCookies();
-        if (!Auth.hasCredentials()) {
+        AuthActions.restoreUsernameAndTokenFromCookies();
+        if (!AuthStore.hasCredentials()) {
             $.ajaxSetup({cache: true});
             $.getScript('//connect.facebook.net/en_UK/all.js', function () {
                 FB.init({
-                    appId: Auth.getFbId(),
+                    appId: AuthStore.getFbId(),
                     xfbml: true,
                     cookie: true,
                     version: 'v2.1'
                 });
 
                 //TODO: don't check login state
-//                Auth.checkLoginState();
+//                AuthActions.checkLoginState();
             });
 
 

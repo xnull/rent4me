@@ -3,7 +3,8 @@
  */
 var React = require('react');
 
-var Auth = require('../../../shared/common/Auth');
+var AuthActions = require('../../../shared/actions/AuthActions');
+var AuthStore = require('../../../shared/stores/AuthStore');
 
 var Header = React.createClass({
     render: function () {
@@ -15,7 +16,7 @@ var Header = React.createClass({
                             <li className="active"><a href="#" role="button">Home</a></li>
                             <li><a href="#/user/landlord" role="button">Я собственник</a></li>
                             <li><a href="#aboutModal" role="button">Я арендатор</a></li>
-                            <li><a href="javascript:none;" onClick={Auth.logoutOnBackend}>Выход</a></li>
+                            <li><a href="javascript:none;" onClick={AuthActions.logoutOnBackend}>Выход</a></li>
                         </ul>
                     </div>
                 </div>

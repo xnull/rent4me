@@ -57,7 +57,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(payload){
     var action = payload.action;
 //    console.log('Payload received in User dispatcher');
-    var userObject = assign({}, action.user);
+    var userObject = assign({}, action.user || {});
 //    console.log("Action:");
 //    console.log(action);
 //    console.log("User:");

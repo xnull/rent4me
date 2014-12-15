@@ -3,7 +3,6 @@ var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');
 
-var Auth = require('../../../shared/common/Auth');
 var Utils = require('../../../shared/common/Utils');
 
 var UserStore = require('../../../shared/stores/UserStore');

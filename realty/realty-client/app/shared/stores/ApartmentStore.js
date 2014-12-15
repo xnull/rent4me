@@ -79,7 +79,7 @@ var ApartmentStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(payload){
     var action = payload.action;
 //    console.log('Apartment store payload received in dispatcher');
-    var apartmentObject = assign({}, action.apartment);
+    var apartmentObject = assign({}, action.apartment || {});
 //    console.log("Action:");
 //    console.log(action);
 //    console.log("Apartment:");

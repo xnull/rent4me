@@ -12,7 +12,7 @@ var ModalTrigger = require('react-bootstrap/ModalTrigger');
 var Button = require('react-bootstrap/Button');
 //var ReactBootstrap = require('react-bootstrap/main');
 
-var Auth = require('../../../../shared/common/Auth');
+var AuthStore = require('../../../../shared/stores/AuthStore');
 var AddressUtils = require('../../../../shared/common/AddressUtils');
 var ApartmentStore = require('../../../../shared/stores/ApartmentStore');
 var ApartmentActions = require('../../../../shared/actions/ApartmentActions');
@@ -512,7 +512,7 @@ module.exports = React.createClass({
             dictDefaultMessage: "Перетащите картинки сюда, что бы добавить их",
             url: '/rest/users/apartment/pictures/temp',
             headers: {
-                "Authorization": "Basic " + Auth.getAuthHeader()
+                "Authorization": "Basic " + AuthStore.getAuthHeader()
             },
             init: function () {
                 this.on("removedfile", function (file) {

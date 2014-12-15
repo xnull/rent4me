@@ -4,13 +4,12 @@
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var UserConstants = require('../constants/UserConstants');
-var Auth = require('../common/Auth');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 
 var Ajax = require('../common/Ajax');
 
-var UserActions = {
+var AuthActions = {
     /**
      * @param {object} obj
      */
@@ -58,4 +57,4 @@ var UserActions = {
     }
 };
 
-module.exports = UserActions;
+module.exports = AuthActions;

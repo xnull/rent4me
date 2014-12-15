@@ -9,7 +9,8 @@ var RouteHandler = Router.RouteHandler;
 
 var UserActions = require('../../shared/actions/UserActions');
 
-var Auth = require('../../shared/common/Auth');
+var AuthActions = require('../../shared/actions/AuthActions');
+var AuthStore = require('../../shared/stores/AuthStore');
 var Utils = require('../../shared/common/Utils');
 
 /**
@@ -20,13 +21,10 @@ var Utils = require('../../shared/common/Utils');
 var App = React.createClass({
     componentWillMount: function() {
         //restore username & token from cookies before component mounted
-        Auth.restoreUsernameAndTokenFromCookies();
-        if(!Auth.hasCredentials()) {
+        AuthActions.restoreUsernameAndTokenFromCookies();
+        if(!AuthStore.hasCredentials()) {
 //            alert('wtf? you\'re not logged in!');
             Utils.navigateToStart();
-        } else {
-//            alert('Welcome back, '+Auth.username+"!");
-            //TODO: redirect to personal page
         }
     },
     render: function () {
