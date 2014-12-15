@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -132,7 +135,8 @@ public class ImageComponentImpl implements ImageComponent {
     @Override
     public byte[] createThumbnailWithSize(byte[] imageContent, int height, int width) {
         try {
-            BufferedImage original = ImageIO.read(new ByteArrayInputStream(imageContent));
+            ByteArrayInputStream input = new ByteArrayInputStream(imageContent);
+            BufferedImage original = ImageIO.read(input);
 
             //rotate original image, not the resized one.
             List<Scalr.Rotation> rotations = getRotations(imageContent);
@@ -155,7 +159,30 @@ public class ImageComponentImpl implements ImageComponent {
             resizedImage = Scalr.crop(resizedImage, offsetX, offsetY, width, height);
 
             ByteArrayOutputStream resultOutputStream = new ByteArrayOutputStream();
-            ImageIO.write(resizedImage, "jpg", resultOutputStream);
+
+            input.reset();
+            ImageInputStream imageInputStream = ImageIO.createImageInputStream(input);
+            Iterator<ImageReader> imageReaders = ImageIO.getImageReaders(imageInputStream);
+
+            String formatName = "jpg";
+
+            while (imageReaders.hasNext()) {
+                ImageReader imageReader = imageReaders.next();
+                String imageReaderFormatName = imageReader.getFormatName();
+                imageReaderFormatName = (imageReaderFormatName == null ? "" : imageReaderFormatName).toLowerCase();
+
+                if(imageReaderFormatName.contains("jpg")) {
+                    formatName = "jpg";
+                } else if(imageReaderFormatName.contains("gif")) {
+                    formatName = "gif";
+                } else if(imageReaderFormatName.contains("png")) {
+                    formatName = "png";
+                }
+
+                LOGGER.info("formatName: [{}]", imageReaderFormatName);
+            }
+
+            ImageIO.write(resizedImage, formatName, resultOutputStream);
             return resultOutputStream.toByteArray();
         } catch (Exception e) {
             throw new RuntimeException(e);
