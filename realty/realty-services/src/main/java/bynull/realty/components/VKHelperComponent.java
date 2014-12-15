@@ -3,8 +3,11 @@ package bynull.realty.components;
 import bynull.realty.config.Config;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -22,7 +25,9 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -155,21 +160,122 @@ public class VKHelperComponent {
             Assert.notNull(response.accessToken, "Access token should not be empty");
             Assert.notNull(response.email, "Email should not be empty");
 
-//            if (!response.vkId.equals(person.vkId)) {
-//                throw new BadRequestException("Facebook id differs");
-//            }
-//
-//            if (!response.verified) {
-//                throw new WebApplicationException("Account not verified", Response.Status.EXPECTATION_FAILED);
-//            }
-//
-//            Assert.isTrue(response.vkId.equals(person.vkId), "Invalid facebook id");
-//
-//            // returned string example {"id":"100000169700800"}
-
             LOGGER.info("Status line: {}", httpGet.getStatusLine());
 
             return response;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            httpGet.releaseConnection();
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class VkUserInfo {
+        @JsonProperty("first_name")
+        private String firstName;
+        @JsonProperty("last_name")
+        private String lastName;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+    }
+
+    public VkUserInfo retrieveMoreInfo(String vkId, String accessToken) throws VKAuthorizationException {
+        Assert.notNull(vkId, "vk user id required");
+        Assert.notNull(accessToken, "vk access token required");
+
+        // Facebook URL example
+
+        VkUserInfo result;
+        try {
+            result = new RetryRunner<VkUserInfo>(2).doWithRetry(new Callable<VkUserInfo>() {
+                @Override
+                public VkUserInfo call() throws Exception {
+                    return doRetrieveMoreInfo(vkId, accessToken);
+                }
+            });
+        } catch (Exception e) {
+            throw new VKAuthorizationException(e);
+        }
+
+        return result;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class VkUserInfoResponse {
+        @JsonProperty("response")
+        List<VkUserInfo> response = Collections.emptyList();
+
+        public List<VkUserInfo> getResponse() {
+            return response;
+        }
+
+        public void setResponse(List<VkUserInfo> response) {
+            this.response = response;
+        }
+    }
+
+    private VkUserInfo doRetrieveMoreInfo(String vkId, String accessToken) {
+        long requestStartTime = System.currentTimeMillis();
+        //https://api.vk.com/method/'''METHOD_NAME'''?'''PARAMETERS'''&access_token='''ACCESS_TOKEN'''
+        String uri = "https://api.vk.com/method/users.get?user_ids="+vkId+"&access_token="+accessToken;
+
+
+        //https://vk.com/dev/users.get
+        //user_ids, fields,
+        //name_case: падеж для склонения имени и фамилии пользователя. Возможные значения: именительный – nom, родительный – gen, дательный – dat, винительный – acc, творительный – ins, предложный – abl. По умолчанию nom.
+
+        /**
+         * Response fields:
+         * https://vk.com/dev/fields :
+         id	идентификатор пользователя.
+         положительное число
+         first_name	имя пользователя.
+         строка
+         last_name	фамилия пользователя.
+         строка
+         deactivated	возвращается, если страница пользователя удалена или заблокирована, содержит значение deleted или banned. Обратите внимание, в этом случае дополнительные поля fields не возвращаются.
+         hidden: 1	возвращается при вызове без access_token, если пользователь установил настройку «Кому в интернете видна моя страница» — «Только пользователям ВКонтакте». Обратите внимание, в этом случае дополнительные поля fields не возвращаются.
+
+         */
+
+        GetMethod httpGet = new GetMethod(uri);
+        httpGet.setFollowRedirects(false);
+        try {
+            int responseCode = httpManager.executeMethod(httpGet);
+            if (responseCode != HttpStatus.SC_OK) {
+                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
+            }
+            String body = httpGet.getResponseBodyAsString();
+            long time = System.currentTimeMillis() - requestStartTime;
+            LOGGER.info("Execution time: {} ms", time);
+
+            LOGGER.info("Response received for VK auth request: [{}]", body);
+
+            VkUserInfoResponse response = jacksonObjectMapper.readValue(body, VkUserInfoResponse.class);
+            Assert.notNull(response);
+            VkUserInfo userInfo = Iterables.getFirst(response.getResponse(), null);
+            Assert.notNull(userInfo);
+//            Assert.notNull(userInfo.firstName, "First name required");
+//            Assert.notNull(userInfo.lastName, "Last name required");
+
+            LOGGER.info("Status line: {}", httpGet.getStatusLine());
+
+            return userInfo;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {

@@ -10,6 +10,7 @@ import bynull.realty.services.api.AuthorityService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
 import bynull.realty.utils.SecurityUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -126,6 +127,16 @@ public class UserServiceImpl implements UserService {
                     LOGGER.info("Generated password for user with vk id [{}]: []", verify.vkUserId, rawPass);
                     user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
 
+
+                    VKHelperComponent.VkUserInfo vkUserInfo = vkHelperComponent.retrieveMoreInfo(verify.vkUserId, verify.accessToken);
+                    String lastName = vkUserInfo.getLastName();
+                    String firstName = vkUserInfo.getFirstName();
+
+                    user.setLastName(lastName);
+                    user.setFirstName(firstName);
+
+                    String displayName = StringUtils.trimToEmpty(firstName) + " " + StringUtils.trimToEmpty(lastName);
+                    user.setDisplayName(StringUtils.trimToNull(displayName));
                     //TODO: get more data from VK.
 //                user.setDisplayName(verify.name);
 //                user.setFirstName(verify.firstName);
