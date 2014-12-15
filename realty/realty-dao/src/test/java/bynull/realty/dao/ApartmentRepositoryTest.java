@@ -1,10 +1,8 @@
 package bynull.realty.dao;
 
 import bynull.realty.DbTest;
-import bynull.realty.data.business.Apartment;
-import bynull.realty.data.business.FeePeriod;
-import bynull.realty.data.business.RentType;
-import bynull.realty.data.business.User;
+import bynull.realty.data.business.*;
+import bynull.realty.data.common.GeoPoint;
 import org.junit.Test;
 
 import javax.annotation.Resource;
@@ -26,6 +24,11 @@ public class ApartmentRepositoryTest extends DbTest {
         apartment.setTypeOfRent(RentType.LONG_TERM);
         apartment.setRentalFee(new BigDecimal("1000"));
         apartment.setFeePeriod(FeePeriod.MONTHLY);
+        apartment.setFloorNumber(1);
+        apartment.setFloorsTotal(2);
+        apartment.setRoomCount(1);
+        apartment.setLocation(new GeoPoint());
+        apartment.setAddressComponents(new AddressComponents());
         apartment = repository.saveAndFlush(apartment);
 
 

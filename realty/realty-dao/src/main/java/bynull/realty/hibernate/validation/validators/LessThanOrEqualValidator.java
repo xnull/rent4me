@@ -49,7 +49,7 @@ public class LessThanOrEqualValidator implements ConstraintValidator<LessThanOrE
                 }
             }
 
-            boolean result = targetValue.longValue() <= forComparisonValue.longValue();
+            boolean result = targetValue != null && forComparisonValue != null && targetValue.longValue() <= forComparisonValue.longValue();
             return result;
         } catch (Exception e) {
             e.printStackTrace();
