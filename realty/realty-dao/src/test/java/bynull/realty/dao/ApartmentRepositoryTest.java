@@ -57,7 +57,9 @@ public class ApartmentRepositoryTest extends DbTest {
             location.setLongitude(24.7931234);
             location.setLatitude(59.4282397);
             apartment.setLocation(location);
-            apartment.setAddressComponents(new AddressComponents());
+            AddressComponents addressComponents = new AddressComponents();
+            addressComponents.setCountryCode("EE");
+            apartment.setAddressComponents(addressComponents);
             apartment = repository.saveAndFlush(apartment);
         }
 
@@ -68,6 +70,9 @@ public class ApartmentRepositoryTest extends DbTest {
             apartment.setTypeOfRent(RentType.LONG_TERM);
             apartment.setRentalFee(new BigDecimal("1000"));
             apartment.setFeePeriod(FeePeriod.MONTHLY);
+            AddressComponents addressComponents = new AddressComponents();
+            addressComponents.setCountryCode("EE");
+            apartment.setAddressComponents(addressComponents);
             apartment.setFloorNumber(1);
             apartment.setFloorsTotal(2);
             apartment.setRoomCount(1);
@@ -90,7 +95,7 @@ public class ApartmentRepositoryTest extends DbTest {
             GeoPoint location = new GeoPoint();
             location.setLongitude(24.6811760313352);
             location.setLatitude(59.3965599419749);
-            List<Apartment> nearest = repository.findNearest(location.getLongitude(), location.getLatitude(), 100, 0);
+            List<Apartment> nearest = repository.findNearest(location.getLongitude(), location.getLatitude(), "EE", 100, 0);
             assertThat(nearest.size(), is(2));
         }
     }

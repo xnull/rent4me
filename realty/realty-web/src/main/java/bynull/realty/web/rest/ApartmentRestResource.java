@@ -4,6 +4,7 @@ import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.util.LimitAndOffset;
+import bynull.realty.utils.CoordinateUtils;
 import bynull.realty.web.json.ApartmentJSON;
 import org.springframework.stereotype.Component;
 
@@ -66,11 +67,12 @@ public class ApartmentRestResource {
 
     @Path("/nearest")
     @GET
-    public Response findNearest(@QueryParam("lng") double lng, @QueryParam("lat") double lat) {
+    public Response findNearest(@QueryParam("lng") double lng, @QueryParam("lat") double lat, @QueryParam("country_code") String countryCode) {
         GeoPoint geoPoint = new GeoPoint();
         geoPoint.setLongitude(lng);
         geoPoint.setLatitude(lat);
-        List<ApartmentDTO> nearest = apartmentService.findNearest(geoPoint, LimitAndOffset.builder().withLimit(100).create());
+        List<ApartmentDTO> nearest = apartmentService.findNearestForCountry(geoPoint, countryCode, LimitAndOffset.builder().withLimit(100).create());
+        nearest.forEach(n->System.out.println(CoordinateUtils.calculateDistance(geoPoint, n.getLocation().toInternal())));
         List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
         return Response
                 .ok(json)

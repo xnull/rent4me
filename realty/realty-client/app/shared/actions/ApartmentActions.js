@@ -140,11 +140,11 @@ var ApartmentActions = {
         });
     },
 
-    findNear: function(lng, lat) {
+    findNear: function(lng, lat, countryCode) {
         BlockUI.blockUI();
 
         Ajax
-            .GET('/rest/apartments/nearest?lng='+lng+'&lat='+lat)
+            .GET('/rest/apartments/nearest?lng='+lng+'&lat='+lat+"&country_code="+countryCode)
             .authorized()
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
