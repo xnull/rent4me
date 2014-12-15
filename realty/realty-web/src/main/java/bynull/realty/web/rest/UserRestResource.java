@@ -110,7 +110,7 @@ public class UserRestResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadPictures(FormDataMultiPart form) {
         FormDataBodyPart filePart = form.getField("file");
-        ContentDisposition contentDisposition = filePart.getContentDisposition();
+//        ContentDisposition contentDisposition = filePart.getContentDisposition();
         InputStream inputStream = filePart.getValueAs(InputStream.class);
         try {
             byte[] content = IOUtils.toByteArray(inputStream);
