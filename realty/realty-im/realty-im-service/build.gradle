@@ -1,0 +1,6 @@
+apply from: ext.pathToJavaProjectScript
+
+dependencies {
+    compile project(':realty-im:realty-im-dao')
+    compile project(':realty-im:realty-im-common')
+}
