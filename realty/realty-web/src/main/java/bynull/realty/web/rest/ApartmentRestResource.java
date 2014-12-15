@@ -64,9 +64,9 @@ public class ApartmentRestResource {
                 .build();
     }
 
-    @Path("/near/{lng}/{lat}")
+    @Path("/nearest")
     @GET
-    public Response findNearest(@PathParam("lng") double lng, @PathParam("lat") double lat) {
+    public Response findNearest(@QueryParam("lng") double lng, @QueryParam("lat") double lat) {
         GeoPoint geoPoint = new GeoPoint();
         geoPoint.setLongitude(lng);
         geoPoint.setLatitude(lat);

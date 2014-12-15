@@ -1,4 +1,10 @@
 var React = require('react');
+var ApartmentActions = require('../../../shared/actions/ApartmentActions');
+var ApartmentStore = require('../../../shared/stores/ApartmentStore');
+
+var assign = require('object-assign');
+var _ = require('underscore');
+
 
 var AddressBox = React.createClass({
     render: function () {
@@ -8,21 +14,38 @@ var AddressBox = React.createClass({
                 className="form-control"
                 type="text"
                 placeholder="Введите местоположение"
-                value={this.props.data.address}
                 onChange={this.onAddressChange}
             />
         )
     },
 
     onAddressChange: function (event) {
-        this.props.onChange(event.target.value);
+        //this.props.onChange(event.target.value);
     }
 });
 
 var News = React.createClass({
+
     render: function () {
+        var shown = this.props.shown || false;
+        var items = this.props.items || [];
+
+        console.log('shown?');
+        console.log(shown);
+
+        var style = {};
+        if(!shown) {
+            style['display'] = 'none';
+        }
+
+        var newsItems = items.map(function (item) {
+            return (
+                <NewsItem item={item}/>
+            );
+        });
+
         return (
-            <div className="col-md-9">
+            <div className="col-md-9" style={style}>
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <h4>Нововсти</h4>
@@ -32,27 +55,8 @@ var News = React.createClass({
 
                         <div className="bs-component">
                             <div className="list-group">
-                                <a href="#" className="list-group-item">
-                                    <h4 className="list-group-item-heading">Предложение месяца (пример)</h4>
 
-                                    <div className="panel-thumbnail">
-                                        <img className="img-responsive"
-                                            src="http://1.bp.blogspot.com/-8RhvioXdNaU/TpbO6jD4NwI/AAAAAAAAAMo/zw_cHZPv66s/s1600/2832815136_88231c1067_o-1-.jpg"/>
-                                    </div>
-
-                                    <hr/>
-                                    <p>Mega text yuo</p>
-                                    <hr/>
-
-                                    <p>
-                                        <img src="http://api.randomuser.me/portraits/med/women/4.jpg" height="32px"/>
-                                        <img src="http://api.randomuser.me/portraits/med/men/4.jpg" width="32px" height="28px"/>
-                                    </p>
-                                </a>
-
-                                <br/>
-
-                                <NewsItem/>
+                            {newsItems}
 
                             </div>
                         </div>
@@ -65,17 +69,85 @@ var News = React.createClass({
 
 var NewsItem = React.createClass({
     render: function () {
+        var item = this.props.item || {};
+
+        var firstImage = _.first(item.photos.map(function(photo) {
+            return (
+                <img className="img-responsive"
+                    src={photo.small_thumbnail_url}/>
+            );
+        }));
+
+        var imagePreviews = firstImage ? (
+            <div>
+            <div className="panel-thumbnail">
+                {firstImage}
+            </div>
+
+            <hr/>
+            </div>
+        ) : null;
+
         return (
             <a href="#" className="list-group-item">
-                <h4 className="list-group-item-heading">Второе событие</h4>
+                <h4 className="list-group-item-heading">{item.address ? item.address.formatted_address : 'no address'}</h4>
 
-                <p className="list-group-item-text">Ничто не вечно под луной</p>
+                {imagePreviews}
+
+                <p className="list-group-item-text">
+                    <div className="row">
+                        <div className="col-md-6">
+                            Этаж: {item.floor_number}/{item.floors_total}
+                        </div>
+                        <div className="col-md-6">
+                            Площадь: {item.area} м<sup>2</sup>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            Цена: {item.rental_fee}/{item.fee_period}
+                        </div>
+                        <div className="col-md-6">
+                            Тип аренды: {item.type_of_rent}
+                        </div>
+                    </div>
+
+                </p>
+                <hr/>
+
+                <br/>
+
+
             </a>
         );
     }
 });
 
 module.exports = React.createClass({
+    getInitialState: function () {
+        return {
+            location: null,
+            apartments: ApartmentStore.getSearchResults()
+        };
+    },
+
+    componentWillMount: function () {
+        ApartmentStore.addChangeListener(this.onSearchResultsChanged);
+    },
+
+    componentWillUnmount: function () {
+        ApartmentStore.removeChangeListener(this.onSearchResultsChanged);
+    },
+
+    onSearchResultsChanged: function () {
+        console.log('on search results changed');
+        var newSearchResults = ApartmentStore.getSearchResults();
+        console.log(newSearchResults);
+        this.setState(assign(this.state, {
+            apartments: newSearchResults
+        }));
+    },
+
     /**
      * https://developers.google.com/places/?hl=ru
      * https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete?hl=ru
@@ -83,10 +155,40 @@ module.exports = React.createClass({
      * @param rootNode
      */
     componentDidMount: function (rootNode) {
+        var that = this;
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            var place = autocomplete.getPlace();
+            var addressComponents = place['address_components'];
+
+            var location = {
+                latitude: place['geometry']['location'].lat(),
+                longitude: place['geometry']['location'].lng()
+            };
+
+            console.log('new location:');
+            console.log(location);
+
+            that.setState(assign(that.state, {location: location}));
+            that.onSearchStart();
+        });
+    },
+
+    onSearchStart: function () {
+        var location = this.state.location;
+        console.log('On search start');
+        console.log(location);
+        if (!location) {
+            alert('Пожалуйста, введите адрес');
+        } else {
+            ApartmentActions.resetSearchState();
+            ApartmentActions.findNear(location.longitude, location.latitude);
+        }
     },
 
     render: function () {
+        var items = this.state.apartments || [];
+
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -100,7 +202,7 @@ module.exports = React.createClass({
                                 <label className="col-md-2 control-label">Адрес</label>
                                 <div className="col-md-10">
                                     <AddressBox
-                                        data={this.state !== null ? this.state.data : this.props.data}
+                                        data=""
                                         onChange={this.handleAddressChange}
                                         ref = "addressInput"
                                     />
@@ -113,22 +215,21 @@ module.exports = React.createClass({
                         </form>
                     </div>
                 </div>
+
+                <News items={items} shown={items.length > 0}/>
             </div>
         );
     },
 
     handleAddressChange: function (address) {
-        this.setState({
-            data: {address: address}
-        });
+        console.log(address);
+        //this.setState({
+        //    data: {address: address}
+        //});
     },
 
     onClick: function () {
-        this.props.onSearchNews(
-            {
-                address: this.refs.addressInput.getDOMNode().value
-            }
-        );
+        this.onSearchStart();
     }
 });
 

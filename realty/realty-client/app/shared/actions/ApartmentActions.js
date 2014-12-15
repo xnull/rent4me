@@ -132,6 +132,32 @@ var ApartmentActions = {
                 BlockUI.unblockUI();
             })
             .execute();
+    },
+
+    resetSearchState: function(){
+        AppDispatcher.handleViewAction({
+            actionType: ApartmentConstants.APARTMENTS_RESET_SEARCH
+        });
+    },
+
+    findNear: function(lng, lat) {
+        BlockUI.blockUI();
+
+        Ajax
+            .GET('/rest/apartments/nearest?lng='+lng+'&lat='+lat)
+            .authorized()
+            .onSuccess(function (data) {
+                AppDispatcher.handleViewAction({
+                    actionType: ApartmentConstants.APARTMENTS_FOUND,
+                    apartments: data
+                });
+
+                BlockUI.unblockUI();
+            })
+            .onError(function (xhr, status, err) {
+                BlockUI.unblockUI();
+            })
+            .execute();
     }
 };
 
