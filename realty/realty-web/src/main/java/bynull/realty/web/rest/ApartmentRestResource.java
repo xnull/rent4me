@@ -1,7 +1,9 @@
 package bynull.realty.web.rest;
 
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.json.ApartmentJSON;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author dionis on 22/06/14.
@@ -58,6 +61,19 @@ public class ApartmentRestResource {
         apartmentService.create(dto);
         return Response
                 .status(Response.Status.CREATED)
+                .build();
+    }
+
+    @Path("/near/{lng}/{lat}")
+    @GET
+    public Response findNearest(@PathParam("lng") double lng, @PathParam("lat") double lat) {
+        GeoPoint geoPoint = new GeoPoint();
+        geoPoint.setLongitude(lng);
+        geoPoint.setLatitude(lat);
+        List<ApartmentDTO> nearest = apartmentService.findNearest(geoPoint, LimitAndOffset.builder().withLimit(100).create());
+        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
+        return Response
+                .ok(json)
                 .build();
     }
 

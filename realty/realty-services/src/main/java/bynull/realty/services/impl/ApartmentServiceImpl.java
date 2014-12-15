@@ -7,6 +7,7 @@ import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
 import org.springframework.stereotype.Service;
@@ -225,5 +226,17 @@ public class ApartmentServiceImpl implements ApartmentService {
         delta.setApartment(apartment);
 
         delta = apartmentInfoDeltaRepository.saveAndFlush(delta);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ApartmentDTO> findNearest(GeoPoint geoPoint, LimitAndOffset limitAndOffset) {
+        Assert.notNull(geoPoint);
+        Assert.notNull(limitAndOffset);
+        List<Apartment> result = apartmentRepository.findNearest(geoPoint.getLongitude(), geoPoint.getLatitude(), limitAndOffset.limit, limitAndOffset.offset);
+        return result.stream()
+                .map(ApartmentDTO::from)
+                .collect(Collectors.toList())
+        ;
     }
 }

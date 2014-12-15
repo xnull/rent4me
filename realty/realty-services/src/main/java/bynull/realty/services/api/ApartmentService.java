@@ -1,6 +1,8 @@
 package bynull.realty.services.api;
 
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.util.LimitAndOffset;
 
 import java.util.List;
 
@@ -29,4 +31,6 @@ public interface ApartmentService {
     void applyLatestApartmentInfoDeltaForApartment(ApartmentDTO dto);
 
     void requestApartmentInfoChangeForAuthorizedUser(ApartmentDTO dto);
+
+    List<ApartmentDTO> findNearest(GeoPoint geoPoint, LimitAndOffset limitAndOffset);
 }
