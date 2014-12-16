@@ -104,10 +104,12 @@ var NewsItem = React.createClass({
             </div>
 
             <hr/>
+
             </div>
         ) : null;
 
         return (
+            <div>
             <a href="#" className="list-group-item">
                 <h4 className="list-group-item-heading">{item.address ? item.address.formatted_address : 'no address'}</h4>
 
@@ -134,10 +136,10 @@ var NewsItem = React.createClass({
                 </p>
                 <hr/>
 
-                <br/>
-
 
             </a>
+                <br/>
+            </div>
         );
     }
 });
