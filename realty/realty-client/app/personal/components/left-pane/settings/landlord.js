@@ -17,6 +17,7 @@ var AddressUtils = require('../../../../shared/common/AddressUtils');
 var ApartmentStore = require('../../../../shared/stores/ApartmentStore');
 var ApartmentActions = require('../../../../shared/actions/ApartmentActions');
 var NavActions = require('../../../../shared/actions/NavActions');
+var Translations = require('../../../../shared/l10n/Translations');
 var assign = require('object-assign');
 
 var Dropzone = require("dropzone");
@@ -863,8 +864,8 @@ module.exports = React.createClass({
             id: 'typeOfRent',
             defaultDescription: 'Выберите тип сдачи',
             keyValuePairs: [
-                ['LONG_TERM', 'Долгосрочная'],
-                ['SHORT_TERM', 'Краткосрочная']
+                ['LONG_TERM', Translations['ru']['LONG_TERM']],
+                ['SHORT_TERM', Translations['ru']['SHORT_TERM']]
             ],
             customClassName: 'col-md-8',
             elementName: 'type_of_rent',
@@ -883,10 +884,10 @@ module.exports = React.createClass({
             name: 'Интервал оплаты',
             defaultDescription: 'Минимальный период сдачи',
             keyValuePairs: [
-                ['HOURLY', 'Час'],
-                ['DAILY', 'День'],
-                ['WEEKLY', 'Неделя'],
-                ['MONTHLY', 'Месяц']
+                ['HOURLY', Translations['ru']['HOURLY']],
+                ['DAILY', Translations['ru']['DAILY']],
+                ['WEEKLY', Translations['ru']['WEEKLY']],
+                ['MONTHLY', Translations['ru']['MONTHLY']]
             ],
             customClassName: 'col-md-8',
             elementName: 'fee_period',

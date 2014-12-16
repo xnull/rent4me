@@ -2,10 +2,13 @@ var React = require('react');
 var ApartmentActions = require('../../../shared/actions/ApartmentActions');
 var ApartmentStore = require('../../../shared/stores/ApartmentStore');
 var AddressUtils = require('../../../shared/common/AddressUtils');
+var Translations = require('../../../shared/l10n/Translations');
 
 var assign = require('object-assign');
 var _ = require('underscore');
 var JSON2 = require('JSON2');
+
+var moment = require('moment');
 
 
 var AddressBox = React.createClass({
@@ -124,12 +127,27 @@ var NewsItem = React.createClass({
                             Площадь: {item.area} м<sup>2</sup>
                         </div>
                     </div>
+
+                    <br/>
+
                     <div className="row">
                         <div className="col-md-6">
-                            Цена: {item.rental_fee}/{item.fee_period}
+                            Цена: {item.rental_fee}/{Translations['ru'][item.fee_period]}
                         </div>
                         <div className="col-md-6">
-                            Тип аренды: {item.type_of_rent}
+                            Тип аренды: {Translations['ru'][item.type_of_rent]}
+                        </div>
+
+                    </div>
+
+                    <br/>
+
+                    <div className="row">
+                        <div className="col-md-6">
+                            Добавлено: {moment(item.created).format("lll")}
+                        </div>
+                        <div className="col-md-6">
+                            Обновлено: {moment(item.updated).format("lll")}
                         </div>
                     </div>
 
