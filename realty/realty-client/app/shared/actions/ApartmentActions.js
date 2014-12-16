@@ -140,11 +140,24 @@ var ApartmentActions = {
         });
     },
 
-    findNear: function(lng, lat, countryCode) {
+    //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
+    findNear: function(lng, lat, countryCode, bounds) {
         BlockUI.blockUI();
 
+        var url = '/rest/apartments/nearest?lng='+lng+'&lat='+lat+"&country_code="+countryCode;
+        if(bounds) {
+            var ne = bounds.getNorthEast();
+            var sw = bounds.getSouthWest();
+
+            var urlValue = "lat_lo="+sw.lat()+"&lng_lo="+sw.lng()+"&lat_hi="+ne.lat()+"&lng_hi="+ne.lng();
+            url = url + "&"+urlValue;
+            console.log("Bounds urlValue: " + urlValue);
+        } else {
+            console.log("Bounds no urlValue ");
+        }
+
         Ajax
-            .GET('/rest/apartments/nearest?lng='+lng+'&lat='+lat+"&country_code="+countryCode)
+            .GET(url)
             .authorized()
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({

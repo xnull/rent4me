@@ -32,5 +32,5 @@ public interface ApartmentService {
 
     void requestApartmentInfoChangeForAuthorizedUser(ApartmentDTO dto);
 
-    List<ApartmentDTO> findNearestForCountry(GeoPoint geoPoint, String countryCode, LimitAndOffset limitAndOffset);
+    List<ApartmentDTO> findNearestForCountry(GeoPoint geoPoint, String countryCode, Double latLow, Double lngLow, Double latHigh, Double lngHigh, LimitAndOffset limitAndOffset);
 }

@@ -230,11 +230,36 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ApartmentDTO> findNearestForCountry(GeoPoint geoPoint, String countryCode, LimitAndOffset limitAndOffset) {
+    public List<ApartmentDTO> findNearestForCountry(GeoPoint geoPoint, String countryCode, Double latLow, Double lngLow, Double latHigh, Double lngHigh, LimitAndOffset limitAndOffset) {
         Assert.notNull(geoPoint);
         Assert.notNull(countryCode);
         Assert.notNull(limitAndOffset);
-        List<Apartment> result = apartmentRepository.findNearest(geoPoint.getLongitude(), geoPoint.getLatitude(), countryCode, limitAndOffset.limit, limitAndOffset.offset);
+
+        boolean boundingBoxSpecified = latLow != null && lngLow != null && latHigh != null && lngHigh != null;
+
+        final List<Apartment> result;
+
+        if(boundingBoxSpecified) {
+            result = apartmentRepository.findNearestInBoundingBox(
+                    geoPoint.getLongitude(),
+                    geoPoint.getLatitude(),
+                    countryCode,
+                    latLow,
+                    lngLow,
+                    latHigh,
+                    lngHigh,
+                    limitAndOffset.limit,
+                    limitAndOffset.offset
+            );
+        } else {
+            result = apartmentRepository.findNearest(
+                    geoPoint.getLongitude(),
+                    geoPoint.getLatitude(),
+                    countryCode,
+                    limitAndOffset.limit,
+                    limitAndOffset.offset
+            );
+        }
         return result.stream()
                 .map(ApartmentDTO::from)
                 .collect(Collectors.toList())

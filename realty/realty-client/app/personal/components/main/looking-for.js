@@ -130,6 +130,7 @@ module.exports = React.createClass({
         return {
             location: null,
             countryCode: null,
+            bounds: null,
             apartments: ApartmentStore.getSearchResults()
         };
     },
@@ -160,7 +161,6 @@ module.exports = React.createClass({
     componentDidMount: function (rootNode) {
         var that = this;
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
-        //var service = new google.maps.places.PlacesService(map);
 
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var place = autocomplete.getPlace();
@@ -168,6 +168,15 @@ module.exports = React.createClass({
             console.log('dump:');
             console.log(dump);
             var addressComponents = place['address_components'];
+
+            var bounds = place.geometry.viewport;
+
+            //console.log("Bounds:");
+            //console.log(JSON2.stringify(bounds));
+            //console.log("NE:");
+            //console.log(bounds.getNorthEast());
+            //console.log("SW:");
+            //console.log(bounds.getSouthWest());
 
             var countryCode = AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY');
 
@@ -179,7 +188,7 @@ module.exports = React.createClass({
             console.log('new location:');
             console.log(location);
 
-            that.setState(assign(that.state, {location: location, countryCode: countryCode}));
+            that.setState(assign(that.state, {location: location, countryCode: countryCode, bounds: bounds}));
             that.onSearchStart();
         });
     },
@@ -187,13 +196,14 @@ module.exports = React.createClass({
     onSearchStart: function () {
         var location = this.state.location;
         var countryCode = this.state.countryCode;
+        var bounds = this.state.bounds;
         console.log('On search start');
         console.log(location);
         if (!location) {
             alert('Пожалуйста, введите адрес');
         } else {
             ApartmentActions.resetSearchState();
-            ApartmentActions.findNear(location.longitude, location.latitude, countryCode);
+            ApartmentActions.findNear(location.longitude, location.latitude, countryCode, bounds);
         }
     },
 
