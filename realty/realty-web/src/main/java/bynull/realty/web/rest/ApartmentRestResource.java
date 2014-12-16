@@ -76,13 +76,22 @@ public class ApartmentRestResource {
             @QueryParam("lat_lo") Double latLow,
             @QueryParam("lng_lo") Double lngLow,
             @QueryParam("lat_hi") Double latHigh,
-            @QueryParam("lng_hi") Double lngHigh
+            @QueryParam("lng_hi") Double lngHigh,
+            @QueryParam("limit") int limit,
+            @QueryParam("offset") int offset
             ) {
+
         GeoPoint geoPoint = new GeoPoint();
         geoPoint.setLongitude(lng);
         geoPoint.setLatitude(lat);
-        List<ApartmentDTO> nearest = apartmentService.findNearestForCountry(geoPoint, countryCode, latLow, lngLow, latHigh, lngHigh, LimitAndOffset.builder().withLimit(100).create());
-        nearest.forEach(n->System.out.println(CoordinateUtils.calculateDistance(geoPoint, n.getLocation().toInternal())));
+
+        LimitAndOffset limitAndOffset = LimitAndOffset.builder()
+                .withLimit(limit)
+                .withOffset(offset)
+                .create();
+
+        List<ApartmentDTO> nearest = apartmentService.findNearestForCountry(geoPoint, countryCode, latLow, lngLow, latHigh, lngHigh, limitAndOffset);
+
         List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
         return Response
                 .ok(json)

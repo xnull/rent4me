@@ -31,9 +31,22 @@ var News = React.createClass({
     render: function () {
         var shown = this.props.shown || false;
         var items = this.props.items || [];
+        var hasMore = this.props.hasMore || false;
 
-        console.log('shown?');
-        console.log(shown);
+        console.log("Has more?"+hasMore);
+
+        var onHasMoreClicked = this.props.onHasMoreClicked;
+
+        var hasMoreElement = hasMore ?
+            (
+                <a href="javascript:none;" onClick={onHasMoreClicked} className="list-group-item">
+
+                    <p className="list-group-item-text">
+                        Загрузить еще
+                    </p>
+
+                </a>
+            ) : null;
 
         var style = {};
         if(!shown) {
@@ -59,6 +72,10 @@ var News = React.createClass({
                             <div className="list-group">
 
                             {newsItems}
+
+                                <br/>
+
+                            {hasMoreElement}
 
                             </div>
                         </div>
@@ -131,7 +148,8 @@ module.exports = React.createClass({
             location: null,
             countryCode: null,
             bounds: null,
-            apartments: ApartmentStore.getSearchResults()
+            apartments: ApartmentStore.getSearchResults(),
+            hasMoreSearchResults: ApartmentStore.hasMoreSearchResults()
         };
     },
 
@@ -148,7 +166,8 @@ module.exports = React.createClass({
         var newSearchResults = ApartmentStore.getSearchResults();
         console.log(newSearchResults);
         this.setState(assign(this.state, {
-            apartments: newSearchResults
+            apartments: newSearchResults,
+            hasMoreSearchResults: ApartmentStore.hasMoreSearchResults()
         }));
     },
 
@@ -164,6 +183,7 @@ module.exports = React.createClass({
 
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var place = autocomplete.getPlace();
+            if(!place) return;
             var dump = JSON2.stringify(place);
             console.log('dump:');
             console.log(dump);
@@ -207,8 +227,19 @@ module.exports = React.createClass({
         }
     },
 
+    loadMoreResults: function() {
+        if(this.state.hasMoreSearchResults){
+            var location = this.state.location;
+            var countryCode = this.state.countryCode;
+            var bounds = this.state.bounds;
+
+            ApartmentActions.findNear(location.longitude, location.latitude, countryCode, bounds);
+        }
+    },
+
     render: function () {
         var items = this.state.apartments || [];
+        var hasMoreResults = this.state.hasMoreSearchResults || false;
 
         return (
             <div className="col-md-9">
@@ -237,7 +268,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
 
-                <News items={items} shown={items.length > 0}/>
+                <News items={items} shown={items.length > 0} hasMore={hasMoreResults} onHasMoreClicked={this.loadMoreResults} />
             </div>
         );
     },

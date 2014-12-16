@@ -31,7 +31,7 @@ var _me = emptyApartment();
 
 var _apartments = [];
 var _offset = 0;
-var _limit = 100;
+var _limit = 30;
 var _hasMoreResults = false;
 
 
@@ -79,6 +79,14 @@ var ApartmentStore = assign({}, EventEmitter.prototype, {
 
     getSearchResults: function() {
         return _apartments;
+    },
+
+    getOffset: function() {
+        return _offset;
+    },
+
+    getLimit: function() {
+        return _limit;
     },
 
     hasMoreSearchResults: function() {

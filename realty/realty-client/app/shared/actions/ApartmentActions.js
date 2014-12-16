@@ -4,6 +4,7 @@
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var ApartmentConstants = require('../constants/ApartmentConstants');
+var ApartmentStore = require('../stores/ApartmentStore');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 var JSON = require('JSON2');
@@ -144,7 +145,12 @@ var ApartmentActions = {
     findNear: function(lng, lat, countryCode, bounds) {
         BlockUI.blockUI();
 
-        var url = '/rest/apartments/nearest?lng='+lng+'&lat='+lat+"&country_code="+countryCode;
+        var limit = ApartmentStore.getLimit();
+        var offset = ApartmentStore.getOffset();
+
+        var url = '/rest/apartments/nearest?lng=' + lng +
+            '&lat=' + lat + "&country_code=" + countryCode +
+            "&limit=" + limit + "&offset=" + offset;
         if(bounds) {
             var ne = bounds.getNorthEast();
             var sw = bounds.getSouthWest();
