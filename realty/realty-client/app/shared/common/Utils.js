@@ -79,7 +79,7 @@ function navigateToStart() {
     if (document.location.href.indexOf('build-js') != -1) {
         return;
     }
-    if(isDev()) {
+    if(isLocalhost()) {
         document.location.href = '/dev/';
     } else {
         document.location.href = '/';
