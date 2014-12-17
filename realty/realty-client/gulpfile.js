@@ -10,6 +10,7 @@ function Plugins() {
     this.concat = require('gulp-concat');
     this.clean = require('gulp-clean');
     this.uglify = require('gulp-uglify');
+    this.replace = require('gulp-replace');
 
     this.gulpBowerFiles = require('gulp-bower-files');
     this.browserify = require('browserify');
@@ -125,7 +126,7 @@ gulp.task(tasks.build, [tasks.clean], function () {
     build();
 });
 
-gulp.task('compress', [], function () {
+gulp.task('compressDev', [], function () {
 
     var len = settings.projectSubModules.length;
     for(var i = 0; i < len; i++) {
@@ -138,14 +139,41 @@ gulp.task('compress', [], function () {
             console.log('Js will be compressed and replaced:'+jsToCompress);
 
             gulp.src(jsToCompress)
-                .pipe(plugins.uglify({mangle: true, compress: true}))
+                .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
         } else {
             var jsToCompress = moduleInfo['buildDir']+"js/main.js";
             console.log('Js will be compressed and replaced:'+jsToCompress);
 
             gulp.src(jsToCompress)
-                .pipe(plugins.uglify({mangle: true, compress: true}))
+                .pipe(plugins.uglify({mangle: false, compress: true}))
+                .pipe(gulp.dest(moduleInfo['buildDir']+"js"));
+        }
+    }
+
+});
+
+gulp.task('compressProd', [], function () {
+
+    var len = settings.projectSubModules.length;
+    for(var i = 0; i < len; i++) {
+        var moduleName = settings.projectSubModules[i];
+        console.log('Building: '+moduleName);
+        var moduleInfo = settings.moduleInfo[moduleName];
+        console.log('Compressing js for: '+moduleName);
+        if(moduleName != '/start') {
+            var jsToCompress = moduleInfo['buildDir']+"/js/main.js";
+            console.log('Js will be compressed and replaced:'+jsToCompress);
+
+            gulp.src(jsToCompress)
+                .pipe(plugins.uglify({mangle: false, compress: true}))
+                .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
+        } else {
+            var jsToCompress = moduleInfo['buildDir']+"js/main.js";
+            console.log('Js will be compressed and replaced:'+jsToCompress);
+
+            gulp.src(jsToCompress)
+                .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir']+"js"));
         }
     }

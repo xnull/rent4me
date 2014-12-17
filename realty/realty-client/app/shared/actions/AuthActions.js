@@ -10,8 +10,6 @@ var Ajax = require('../common/Ajax');
 var Utils = require('../common/Utils');
 var assign = require('object-assign');
 
-var Ajax = require('../common/Ajax');
-
 
 var AuthActions = {
     /**

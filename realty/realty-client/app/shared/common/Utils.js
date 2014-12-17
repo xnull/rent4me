@@ -55,11 +55,11 @@ function __base64Encode(data) {
 }
 
 function isDev() {
-    return document.location.href.indexOf('/dev/') != -1;
+    return document.location.href.indexOf('dev') != -1;
 }
 
 function navigateToPersonal() {
-    var isDev = document.location.href.indexOf('/dev/') != -1;
+    var isDev = document.location.href.indexOf('localhost') != -1;
     if(isDev) {
         document.location.href = '/dev/personal';
     } else {

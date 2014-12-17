@@ -113,3 +113,9 @@ password: s82ks93l09d0a
  digitalocean.com
  email: dionis.argiri@gmail.com
  password: asdjlk2332kj320d12
+
+
+ -----
+ VK fake users:
+ 79148742035
+ zafeni66
