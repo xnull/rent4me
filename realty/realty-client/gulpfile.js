@@ -11,6 +11,7 @@ function Plugins() {
     this.clean = require('gulp-clean');
     this.uglify = require('gulp-uglify');
     this.replace = require('gulp-replace');
+    this.stripDebug = require('gulp-strip-debug');
 
     this.gulpBowerFiles = require('gulp-bower-files');
     this.browserify = require('browserify');
@@ -139,6 +140,7 @@ gulp.task('compressDev', [], function () {
             console.log('Js will be compressed and replaced:'+jsToCompress);
 
             gulp.src(jsToCompress)
+                .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
         } else {
@@ -146,6 +148,7 @@ gulp.task('compressDev', [], function () {
             console.log('Js will be compressed and replaced:'+jsToCompress);
 
             gulp.src(jsToCompress)
+                .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir']+"js"));
         }
@@ -166,6 +169,7 @@ gulp.task('compressProd', [], function () {
             console.log('Js will be compressed and replaced:'+jsToCompress);
 
             gulp.src(jsToCompress)
+                .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
         } else {
@@ -173,6 +177,7 @@ gulp.task('compressProd', [], function () {
             console.log('Js will be compressed and replaced:'+jsToCompress);
 
             gulp.src(jsToCompress)
+                .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir']+"js"));
         }
