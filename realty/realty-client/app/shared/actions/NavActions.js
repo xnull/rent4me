@@ -26,6 +26,14 @@ var NavActions = {
             actionType: NavConstants.NAVIGATE_TO,
             page: 'landlord'
         });
+    },
+
+    navigateToRenter: function () {
+        console.log('NavAction: Navigating to renter');
+        AppDispatcher.handleViewAction({
+            actionType: NavConstants.NAVIGATE_TO,
+            page: 'renter'
+        });
     }
 };
 
