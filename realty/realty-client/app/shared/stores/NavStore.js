@@ -11,7 +11,6 @@ var assign = require('object-assign');
 
 var _currentPage = 'home';
 
-
 var CHANGE_EVENT = 'change';
 
 //var UserStore = assign({}, EventEmitter.prototype, {
@@ -30,6 +29,10 @@ var NavStore = assign({}, EventEmitter.prototype, {
 
     isLandLordSelected: function() {
         return _currentPage == 'landlord';
+    },
+
+    isRenterSelected: function(){
+        return _currentPage == 'renter';
     },
 
     /**

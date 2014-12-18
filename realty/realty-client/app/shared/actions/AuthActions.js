@@ -10,8 +10,6 @@ var Ajax = require('../common/Ajax');
 var Utils = require('../common/Utils');
 var assign = require('object-assign');
 
-var Ajax = require('../common/Ajax');
-
 
 var AuthActions = {
     /**
@@ -19,7 +17,7 @@ var AuthActions = {
      */
     loginWithVK: function () {
         var vkAppId = AuthStore.getVkId();
-        var redirectHost = Utils.isLocalhost() ? "http://localhost:8888/dev" : (Utils.isProduction() ? "http://rent4.me" :  "http://rent4.me/dev" ) ;
+        var redirectHost = Utils.isLocalhost() ? "http://localhost:8888/dev" : (Utils.isProduction() ? "http://rent4.me" :  "http://dev.rent4.me" ) ;
         var redirectUrl = redirectHost + "/vk_auth_return_page";
         var permissions = "email";
         document.location.href="https://oauth.vk.com/authorize?client_id="+vkAppId+"&scope="+permissions+"&redirect_uri="+redirectUrl+"&response_type=code&v=5.27";

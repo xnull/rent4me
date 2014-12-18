@@ -52,7 +52,7 @@ var Header = React.createClass({
                         <ul className="nav navbar-nav navbar-right">
                             <li className={NavStore.isHomeSelected() ? "active": ""}><a href="#" role="button">Home</a></li>
                             <li className={NavStore.isLandLordSelected() ? "active": ""}><a href="#/user/landlord" role="button">Я собственник</a></li>
-                            <li><a href="#aboutModal" role="button">Я арендатор</a></li>
+                            <li className={NavStore.isRenterSelected() ? "active": ""}><a href="#/user/renter" role="button">Я арендатор</a></li>
                             <li><a href="javascript:none;" onClick={AuthActions.logoutOnBackend}>Выход</a></li>
                         </ul>
                     </div>

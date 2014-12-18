@@ -55,11 +55,11 @@ function __base64Encode(data) {
 }
 
 function isDev() {
-    return document.location.href.indexOf('/dev/') != -1;
+    return document.location.href.indexOf('dev') != -1;
 }
 
 function navigateToPersonal() {
-    var isDev = document.location.href.indexOf('/dev/') != -1;
+    var isDev = document.location.href.indexOf('localhost') != -1;
     if(isDev) {
         document.location.href = '/dev/personal';
     } else {
@@ -79,7 +79,7 @@ function navigateToStart() {
     if (document.location.href.indexOf('build-js') != -1) {
         return;
     }
-    if(isDev()) {
+    if(isLocalhost()) {
         document.location.href = '/dev/';
     } else {
         document.location.href = '/';

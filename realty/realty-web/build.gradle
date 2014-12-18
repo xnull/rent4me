@@ -21,23 +21,23 @@ task deployBackendDev(dependsOn: war, type: SshTask) {
 
     remotes {
         webServer {
-            host = "rent4.me"
+            host = "dev.rent4.me"
             user = "tomcat"
             password = passphrase
         }
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7 ; bin/catalina.sh stop ; rm -rf webapps/* ; rm -rf work/*'
-        put war.archivePath, '/home/tomcat/tc7/webapps/'
-        execute 'cd /home/tomcat/tc7 ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
+        execute 'cd /home/tomcat/tc7-dev ; bin/catalina.sh stop ; rm -rf webapps/* ; rm -rf work/*'
+        put war.archivePath, '/home/tomcat/tc7-dev/webapps/'
+        execute 'cd /home/tomcat/tc7-dev ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
     }
 }
 
 task deployBackendRelease(dependsOn: deployBackendDev, type: SshTask) {
     group = 'Deployment'
 
-    /*def passphrase = "k124hfeoifs9";
+    def passphrase = "k124hfeoifs9";
 
     ssh {
         knownHosts = allowAnyHosts
@@ -52,10 +52,10 @@ task deployBackendRelease(dependsOn: deployBackendDev, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7 ; bin/catalina.sh stop ; rm -rf webapps/* ; rm -rf work/*'
-        put war.archivePath, '/home/tomcat/tc7/webapps/'
-        execute 'cd /home/tomcat/tc7 ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; bin/catalina.sh start'
-    }*/
+        execute 'cd /home/tomcat/tc7-prod ; bin/catalina.sh stop ; rm -rf webapps/* ; rm -rf work/*'
+        put war.archivePath, '/home/tomcat/tc7-prod/webapps/'
+        execute 'cd /home/tomcat/tc7-prod ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
+    }
 }
 
 /**
