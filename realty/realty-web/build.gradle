@@ -34,7 +34,7 @@ task deployBackendDev(dependsOn: war, type: SshTask) {
     }
 }
 
-task deployBackendRelease(dependsOn: deployBackendDev, type: SshTask) {
+task deployBackendRelease(dependsOn: war, type: SshTask) {
     group = 'Deployment'
 
     def passphrase = "k124hfeoifs9";
