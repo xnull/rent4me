@@ -35,6 +35,7 @@ public class ApartmentDTO {
     private List<ApartmentPhotoDTO> photos = Collections.emptyList();
     private List<String> addedTempPhotoGUIDs = Collections.emptyList();
     private List<String> deletePhotoGUIDs = Collections.emptyList();
+    private UserDTO owner;
 
     public static ApartmentDTO from(Apartment apartment) {
         if (apartment == null) return null;
@@ -62,6 +63,8 @@ public class ApartmentDTO {
         );
 
         dto.setPublished(apartment.isPublished());
+
+        dto.setOwner(UserDTO.from(apartment.getOwner()));
 
         return dto;
     }
@@ -244,5 +247,13 @@ public class ApartmentDTO {
         apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
 
         return apartment;
+    }
+
+    public UserDTO getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserDTO owner) {
+        this.owner = owner;
     }
 }

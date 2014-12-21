@@ -95,7 +95,7 @@ var NewsItem = React.createClass({
 
         var firstImage = _.first(item.photos.map(function(photo) {
             return (
-                <img className="img-responsive"
+                <img className="img-responsive" width="128"
                     src={photo.small_thumbnail_url}/>
             );
         }));
@@ -142,12 +142,33 @@ var NewsItem = React.createClass({
 
                     <br/>
 
+                    <h4>Описание</h4>
+
+                    <div className="row">
+                        <div className="col-md-12">
+                            {item.description}
+                        </div>
+
+                    </div>
+
+                    <br/>
+
+                    <h4>Контакты</h4>
+
+                    <div className="row">
+                        <div className="col-md-6">
+                            Телефон: {item.owner.phone}
+                        </div>
+                    </div>
+
+                    <hr/>
+
                     <div className="row">
                         <div className="col-md-6">
                             Добавлено: {moment(item.created).format("lll")}
                         </div>
                         <div className="col-md-6">
-                            Обновлено: {moment(item.updated).format("lll")}
+                            Личное сообщение: {moment(item.updated).format("lll")}
                         </div>
                     </div>
 

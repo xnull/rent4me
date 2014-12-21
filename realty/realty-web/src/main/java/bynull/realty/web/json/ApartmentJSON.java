@@ -61,6 +61,9 @@ public class ApartmentJSON {
     @JsonProperty("published")
     private boolean published;
 
+    @JsonProperty("owner")
+    private UserJSON owner;
+
     @JsonProperty("photos")
     private List<ApartmentPhotoJSON> photos = Collections.emptyList();
     @JsonProperty("added_photos_guids")
@@ -94,6 +97,8 @@ public class ApartmentJSON {
         );
 
         json.setPublished(apartment.isPublished());
+
+        json.setOwner(UserJSON.from(apartment.getOwner()));
 
         return json;
     }
@@ -232,6 +237,14 @@ public class ApartmentJSON {
 
     public void setDeletePhotoGUIDs(List<String> deletePhotoGUIDs) {
         this.deletePhotoGUIDs = deletePhotoGUIDs;
+    }
+
+    public UserJSON getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserJSON owner) {
+        this.owner = owner;
     }
 
     public ApartmentDTO toDTO() {
