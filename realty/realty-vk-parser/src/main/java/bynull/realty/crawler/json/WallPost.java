@@ -1,59 +1,33 @@
 package bynull.realty.crawler.json;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by trierra on 12/6/14.
  */
-public class WallPost {
-    private Long id;
-    private Long fromId;
-    private Date date;
-    private String postType;
-    private String text;
+public class WallPost extends BaseEntity {
 
+    private Long count;
+
+
+    private List<Item> items;
 
     public WallPost() {
     }
 
-    public Long getId() {
-
-        return id;
+    public Long getCount() {
+        return count;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCount(Long count) {
+        this.count = count;
     }
 
-    public Long getFromId() {
-        return fromId;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setFromId(Long fromId) {
-        this.fromId = fromId;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getPostType() {
-        return postType;
-    }
-
-    public void setPostType(String postType) {
-        this.postType = postType;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }

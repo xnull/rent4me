@@ -1,15 +1,14 @@
 package bynull.realty.crawler;
 
 import bynull.realty.crawler.api.VkApiGroups;
-import bynull.realty.crawler.json.ThreadPost;
+import bynull.realty.crawler.api.VkDataStore;
+import bynull.realty.crawler.json.BaseEntity;
 import bynull.realty.crawler.json.WallPost;
 import bynull.realty.exeptions.EmptyHiddenVkValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -19,32 +18,35 @@ import java.util.List;
  */
 
 @Component
-@Path("vk")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class VkLauncher {
 
     @Autowired
     private VkApiGroups vkApiGroups;
+
+    @Autowired
+    private VkDataStore vkDataStore;
     private String accessToken;
 
-    @GET
-    @Path("/{groupId}")
-    public Response launch(@PathParam("groupId") String groupId) throws EmptyHiddenVkValue, IOException, URISyntaxException {
+    @Scheduled
+    public void launch() throws EmptyHiddenVkValue, IOException, URISyntaxException {
         VkAuth vkAuth = new VkAuth();
         accessToken = vkAuth.receiveToken();
+        List<BaseEntity> club22062158 = vkApiGroups.wallGetPostsList("club22062158", accessToken);
+        vkDataStore.savePost(club22062158);
+        List<BaseEntity> kvarnado = vkApiGroups.wallGetPostsList("kvarnado", accessToken);
+        List<BaseEntity> sdalsnyal = vkApiGroups.wallGetPostsList("sdalsnyal", accessToken);
+
+    }
+
+    private List<WallPost> getPostDiffList() {
         return null;
     }
 
-    public List<WallPost> getWallPostsList() throws URISyntaxException {
-        return vkApiGroups.wallGetPostsList(accessToken);
+    public void setVkApiGroups(VkApiGroups vkApiGroups) {
+        this.vkApiGroups = vkApiGroups;
     }
 
-    public List<ThreadPost> getThreadPostsList(){
-        return vkApiGroups.getThreadPosts();
-    }
-
-    private void getPostDiffList(){
-
+    public void setVkDataStore(VkDataStore vkDataStore) {
+        this.vkDataStore = vkDataStore;
     }
 }

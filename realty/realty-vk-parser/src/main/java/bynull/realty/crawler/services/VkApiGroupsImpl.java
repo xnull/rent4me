@@ -1,10 +1,15 @@
-package bynull.realty.crawler;
+package bynull.realty.crawler.services;
 
 import bynull.realty.crawler.api.VkApiGroups;
-import bynull.realty.crawler.json.ThreadPost;
+import bynull.realty.crawler.json.Item;
+import bynull.realty.crawler.json.Response;
 import bynull.realty.crawler.json.WallPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.net.URI;
@@ -18,6 +23,7 @@ import java.util.Map;
  */
 @Component
 public class VkApiGroupsImpl implements VkApiGroups {
+    private static final Logger LOG = LoggerFactory.getLogger(VkApiGroupsImpl.class);
     private Map<String, String> groupWallParams = new HashMap<>();
     private Map<String, String> groupConversationParams = new HashMap<>();
 
@@ -26,14 +32,14 @@ public class VkApiGroupsImpl implements VkApiGroups {
     }
 
     @PostConstruct
-    private void init() {
+    public void init() {
         groupWallParams.put("owner_id", "");
         groupWallParams.put("domain", "");
         groupWallParams.put("offset", "1");
         groupWallParams.put("count", "30");
         groupWallParams.put("filter", "");
         groupWallParams.put("extended", "");
-        groupWallParams.put("version", "5.27");
+        groupWallParams.put("v", "5.27");
     }
 
     private URI requestBuilder(String methodName, Map<String, String> parameters, String accessToken) throws URISyntaxException {
@@ -48,11 +54,16 @@ public class VkApiGroupsImpl implements VkApiGroups {
     }
 
     @Override
-    public List<WallPost> wallGetPostsList(String accessToken) throws URISyntaxException {
+    public List<Item> wallGetPostsList(String groupDomain, String accessToken) throws URISyntaxException {
+        LOG.debug("getting posts from '" + groupDomain + "' group");
         groupWallParams.replace("domain", "kvarnado");
         URI uri = requestBuilder("wall.get", groupWallParams, accessToken);
 
-        return null;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Response> entity = restTemplate.getForEntity(uri.toString(), Response.class);
+        Response post = entity.getBody();
+
+        return post.getResponse().getItems();
     }
 
     @Override
@@ -71,7 +82,7 @@ public class VkApiGroupsImpl implements VkApiGroups {
     }
 
     @Override
-    public List<ThreadPost> getThreadPosts() {
+    public List<WallPost> getThreadPosts() {
 
         return null;
     }
