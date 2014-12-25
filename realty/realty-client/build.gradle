@@ -112,6 +112,14 @@ task packApp(dependsOn: ['cleanUpBuildTmp','jsBuild', 'prepareReactRouterNodeMod
     baseName = 'app-1.0'
 }
 
+task packAppRelease(dependsOn: ['cleanUpBuildTmp','jsBuildRelease', 'prepareReactRouterNodeModule'], type: Tar) {
+    //copy node modules from one file to another
+//    reactRouter = new File(project.projectDir, 'node_modules/react-router')
+//    new File(project.projectDir, 'tmp_node_modules')
+    from 'build-js'
+    baseName = 'app-1.0'
+}
+
 task deployFrontendDev(dependsOn: packApp, type: SshTask) {
     group = 'Deployment'
 
@@ -136,7 +144,7 @@ task deployFrontendDev(dependsOn: packApp, type: SshTask) {
     }
 }
 
-task deployFrontendRelease(dependsOn: packApp, type: SshTask) {
+task deployFrontendRelease(dependsOn: packAppRelease, type: SshTask) {
     group = 'Deployment'
 
     def passphrase = "hnzjnjwbfjao";

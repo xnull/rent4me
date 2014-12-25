@@ -205,8 +205,12 @@ function build() {
 
 function buildStart(moduleInfo) {
     buildBrowserify(moduleInfo);//build js stuff
-    indexHtmlBuild(moduleInfo);
+    //indexHtmlBuild(moduleInfo);
     fontsBuild(moduleInfo);
+
+    //simply copy all html files
+    gulp.src([moduleInfo['projectDir']+"/**/*.html"])
+        .pipe(gulp.dest(moduleInfo['buildDir']));
 
     //simply copy all images
     gulp.src([moduleInfo['projectDir']+"/images/**/*.*"])
