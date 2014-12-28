@@ -756,8 +756,7 @@ input[type="reset"].alt:hover,
     margin: 0;
     /*background-image:			url('images/overlay.png'),			url('../app/images/flats/nature.jpg');*/
     background-size: auto, cover;
-    background-position: top left, center center;
-    background-repeat: repeat, no-repeat;
+    background: repeat, no-repeat top left, center center;
     padding: 14em 0 14em 0;
     text-align: center;
     color: #fff;

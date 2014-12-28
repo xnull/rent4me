@@ -50,7 +50,7 @@ var Header = React.createClass({
                 <div className="col-md-12">
                     <div className="collapse navbar-collapse" id="navbar-collapse2">
                         <ul className="nav navbar-nav navbar-right">
-                            <li className={NavStore.isHomeSelected() ? "active": ""}><a href="#" role="button">Home</a></li>
+                            <li className={NavStore.isHomeSelected() ? "active": ""}><a href="#" role="button">Главная</a></li>
                             <li className={NavStore.isLandLordSelected() ? "active": ""}><a href="#/user/landlord" role="button">Я собственник</a></li>
                             <li className={NavStore.isRenterSelected() ? "active": ""}><a href="#/user/renter" role="button">Я арендатор</a></li>
                             <li><a href="javascript:none;" onClick={AuthActions.logoutOnBackend}>Выход</a></li>
