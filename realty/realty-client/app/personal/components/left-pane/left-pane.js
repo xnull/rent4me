@@ -2,12 +2,11 @@ var React = require('react');
 var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');
+var SocialNet = require('./socialnet/socialnet');
 
 var Utils = require('../../../shared/common/Utils');
-
 var UserStore = require('../../../shared/stores/UserStore');
 var UserActions = require('../../../shared/actions/UserActions');
-var SocialNet = require('./socialnet/socialnet');
 
 var assign = require('object-assign');
 

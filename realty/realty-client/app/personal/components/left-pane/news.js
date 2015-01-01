@@ -2,11 +2,12 @@
  * Панель новостей и аналитики, в общем всего что связано с экономической составляющей вопроса
  */
 var React = require('react');
+var Util = require('rent4meUtil');
 
 module.exports = React.createClass({
     render: function () {
         return (
-            <div className="panel panel-default">
+            <div className="panel panel-default" style={Util.inactiveUi}>
 
                 <div className="panel-body">
                     <h4>Недвижимость</h4>

@@ -9,27 +9,28 @@ var NavStore = require('../../../shared/stores/NavStore');
 var NavActions = require('../../../shared/actions/NavActions');
 
 var assign = require('object-assign');
+var Utils = require('rent4meUtil');
 
 var Header = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {page: NavStore.getCurrentPage()};
     },
 
-    componentWillMount: function() {
+    componentWillMount: function () {
         console.log('Nav header will mount');
         NavStore.addChangeListener(this._navStateChangeListener);
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         console.log('Header mounted');
         //this._navStateChangeListener();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         NavStore.removeChangeListener(this._navStateChangeListener);
     },
 
-    _navStateChangeListener: function() {
+    _navStateChangeListener: function () {
         console.log('Nav changed from:');
         console.log(this.state.page);
         console.log("To:");
@@ -50,11 +51,25 @@ var Header = React.createClass({
                 <div className="col-md-12">
                     <div className="collapse navbar-collapse" id="navbar-collapse2">
                         <ul className="nav navbar-nav navbar-right">
-                            <li className={NavStore.isHomeSelected() ? "active": ""}><a href="#" role="button">Главная</a></li>
-                            <li className={NavStore.isLandLordSelected() ? "active": ""}><a href="#/user/landlord" role="button">Я собственник</a></li>
-                            <li className={NavStore.isRenterSelected() ? "active": ""}><a href="#/user/renter" role="button">Я арендатор</a></li>
-                            <li className={NavStore.isSupportSelected() ? "active": ""}><a href="#/support" role="button">Поддержка</a></li>
-                            <li><a href="javascript:none;" onClick={AuthActions.logoutOnBackend}>Выход</a></li>
+                            <li className={NavStore.isHomeSelected() ? "active" : ""}>
+                                <a href="#" role="button">Главная</a>
+                            </li>
+
+                            <li className={NavStore.isLandLordSelected() ? "active" : ""}>
+                                <a href="#/user/landlord" role="button">Я собственник</a>
+                            </li>
+
+                            <li className={NavStore.isRenterSelected() ? "active" : ""} style={Utils.inactiveUi}>
+                                <a href="#/user/renter" role="button">Я арендатор</a>
+                            </li>
+
+                            <li className={NavStore.isSupportSelected() ? "active" : ""} style={Utils.inactiveUi}>
+                                <a href="#/support" role="button">Поддержка</a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:none;" onClick={AuthActions.logoutOnBackend}>Выход</a>
+                            </li>
                         </ul>
                     </div>
                 </div>

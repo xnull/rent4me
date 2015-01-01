@@ -6,11 +6,12 @@
  * Created by null on 07.12.14.
  */
 var React = require('react');
+var Util = require('rent4meUtil');
 
 module.exports = React.createClass({
     render: function () {
         return (
-            <div className="panel panel-default">
+            <div className="panel panel-default" style={Util.inactiveUi}>
                 <div className="panel-body">
                     <h4>Социальные сети</h4>
 
