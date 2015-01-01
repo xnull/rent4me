@@ -35,6 +35,10 @@ var NavStore = assign({}, EventEmitter.prototype, {
         return _currentPage == 'renter';
     },
 
+    isSupportSelected: function(){
+        return _currentPage == 'support';
+    },
+
     /**
      * @param {function} callback
      */

@@ -9,31 +9,31 @@ var assign = require('object-assign');
 
 var Ajax = require('../common/Ajax');
 
+function navigateTo(path) {
+    console.log('NavAction: Navigating to ' + path);
+    AppDispatcher.handleViewAction({
+        actionType: NavConstants.NAVIGATE_TO,
+        page: path
+    });
+}
+
 var NavActions = {
     /**
      */
     navigateToHome: function () {
-        console.log('NavAction: Navigating to home');
-        AppDispatcher.handleViewAction({
-            actionType: NavConstants.NAVIGATE_TO,
-            page: 'home'
-        });
+        navigateTo('home');
     },
 
     navigateToLandlord: function () {
-        console.log('NavAction: Navigating to landlord');
-        AppDispatcher.handleViewAction({
-            actionType: NavConstants.NAVIGATE_TO,
-            page: 'landlord'
-        });
+        navigateTo('landlord');
     },
 
     navigateToRenter: function () {
-        console.log('NavAction: Navigating to renter');
-        AppDispatcher.handleViewAction({
-            actionType: NavConstants.NAVIGATE_TO,
-            page: 'renter'
-        });
+        navigateTo('renter');
+    },
+
+    navigateToSupport: function () {
+        navigateTo('support');
     }
 };
 

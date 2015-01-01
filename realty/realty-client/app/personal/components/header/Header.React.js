@@ -53,12 +53,13 @@ var Header = React.createClass({
                             <li className={NavStore.isHomeSelected() ? "active": ""}><a href="#" role="button">Главная</a></li>
                             <li className={NavStore.isLandLordSelected() ? "active": ""}><a href="#/user/landlord" role="button">Я собственник</a></li>
                             <li className={NavStore.isRenterSelected() ? "active": ""}><a href="#/user/renter" role="button">Я арендатор</a></li>
+                            <li className={NavStore.isSupportSelected() ? "active": ""}><a href="#/support" role="button">Поддержка</a></li>
                             <li><a href="javascript:none;" onClick={AuthActions.logoutOnBackend}>Выход</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            )
+        )
     }
 });
 
