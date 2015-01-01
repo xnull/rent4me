@@ -104,7 +104,8 @@ var R4MEUtils = {
     getQueryParams: getQueryParams,
     isLocalhost: isLocalhost,
     isDev: isDev,
-    isProduction: isProduction
+    isProduction: isProduction,
+    inactiveUi: {opacity: 0.6, pointerEvents: 'none'}
 };
 
 module.exports = R4MEUtils;

@@ -8,7 +8,8 @@
     "browser": {
       "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
       "blockui": "./node_modules/bower/blockui/jquery.blockUI.js",
-      "jquery": "./node_modules/jquery/dist/jquery.js"
+        "jquery": "./node_modules/jquery/dist/jquery.js",
+        "rent4meUtil": "./app/shared/common/Utils.js"
     },
     "jquery": {
       "exports": "$"
