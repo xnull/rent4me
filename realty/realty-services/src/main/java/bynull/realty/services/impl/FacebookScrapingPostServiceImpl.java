@@ -8,6 +8,8 @@ import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.services.api.FacebookScrapingPostService;
 import com.google.common.collect.Iterables;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FacebookScrapingPostServiceImpl.class);
+
     @Resource
     FacebookPageToScrapRepository facebookPageToScrapRepository;
 
@@ -49,34 +53,38 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
             Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
 
-            List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab);
-            List<FacebookScrapedPost> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? facebookScrapedPostRepository.findByExternalIdIn(facebookPostItemDTOs.stream()
-                            .map(FacebookHelperComponent.FacebookPostItemDTO::getId)
-                            .collect(Collectors.toList())
-            ) : Collections.emptyList();
-            Set<String> ids = byExternalIdIn.stream()
-                    .map(FacebookScrapedPost::getExternalId)
-                    .collect(Collectors.toSet());
+            try {
+                List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab);
+                List<FacebookScrapedPost> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? facebookScrapedPostRepository.findByExternalIdIn(facebookPostItemDTOs.stream()
+                                .map(FacebookHelperComponent.FacebookPostItemDTO::getId)
+                                .collect(Collectors.toList())
+                ) : Collections.emptyList();
+                Set<String> ids = byExternalIdIn.stream()
+                        .map(FacebookScrapedPost::getExternalId)
+                        .collect(Collectors.toSet());
 
-            List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
-                    .stream()
-                    .filter(i -> !ids.contains(i.getId()))
-                    .collect(Collectors.toList());
+                List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
+                        .stream()
+                        .filter(i -> !ids.contains(i.getId()))
+                        .collect(Collectors.toList());
 
-            em.clear();
+                em.clear();
 
-            Iterable<List<FacebookHelperComponent.FacebookPostItemDTO>> partitions = Iterables.partition(facebookPostItemDTOsToPersist, 20);
-            for (List<FacebookHelperComponent.FacebookPostItemDTO> partition : partitions) {
-                FacebookPageToScrap page = new FacebookPageToScrap(fbPage.getId());
-                for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : partition) {
-                    FacebookScrapedPost post = postItemDTO.toInternal();
-                    post.setFacebookPageToScrap(page);
-                    facebookScrapedPostRepository.save(post);
+                Iterable<List<FacebookHelperComponent.FacebookPostItemDTO>> partitions = Iterables.partition(facebookPostItemDTOsToPersist, 20);
+                for (List<FacebookHelperComponent.FacebookPostItemDTO> partition : partitions) {
+                    FacebookPageToScrap page = new FacebookPageToScrap(fbPage.getId());
+                    for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : partition) {
+                        FacebookScrapedPost post = postItemDTO.toInternal();
+                        post.setFacebookPageToScrap(page);
+                        facebookScrapedPostRepository.save(post);
+                    }
+                    em.flush();
+                    em.clear();
                 }
                 em.flush();
-                em.clear();
+            } catch (Exception e) {
+                LOGGER.error("Failed to parse ["+fbPage.getExternalId()+"]", e);
             }
-            em.flush();
         }
     }
 
