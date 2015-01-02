@@ -1,4 +1,4 @@
-package bynull.realty.web.util;
+package bynull.realty.dao.util;
 
 /**
  * @author dionis on 23/06/14.

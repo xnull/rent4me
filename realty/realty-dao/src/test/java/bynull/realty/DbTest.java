@@ -1,6 +1,7 @@
 package bynull.realty;
 
 import bynull.realty.data.business.User;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
  */
 @Transactional
 @TransactionConfiguration(transactionManager = "txManager")
+@ContextConfiguration(locations = {"classpath:data-test-context.xml"})
 public abstract class DbTest extends SpringTest {
     @PersistenceContext
     EntityManager entityManager;

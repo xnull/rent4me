@@ -1,9 +1,14 @@
 package bynull.realty.components;
 
+import bynull.realty.data.business.external.facebook.FacebookPostType;
+import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Iterables;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -18,7 +23,10 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -168,55 +176,220 @@ public class FacebookHelperComponent {
         }
     }
 
-    /*public List<PersonInformationDTO> findFacebookFriends(final Person person){
-        Assert.notNull(person);
-        RetryRunner<List<PersonInformationDTO>> retryRunner = new RetryRunner<>(3);
-        try {
-            List<PersonInformationDTO> personInformationDTOs = retryRunner.doWithRetry(new Callable<List<PersonInformationDTO>>() {
+    /**
+     * https://developers.facebook.com/docs/graph-api/reference/v2.2/post
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class FacebookPostItemDTO {
+        public static enum Type {
+            link {
                 @Override
-                public List<PersonInformationDTO> call() throws Exception {
-                    return doFindFacebookFriends(person);
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.LINK;
                 }
-            });
-            return personInformationDTOs;
-        } catch (RetryRunner.RetryFailedException e) {
-            LOGGER.error("Exception occurred while running in parallel", e);
-            return Collections.emptyList();
+            }, status {
+                @Override
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.STATUS;
+                }
+            }, photo {
+                @Override
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.PHOTO;
+                }
+            }, video {
+                @Override
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.VIDEO;
+                }
+            };
+
+            public abstract FacebookPostType toInternal();
+        }
+
+        private final String id;
+        private final String message;
+        private final String picture;
+        private final String link;
+        private final Type type;
+        private final Date createdDtime;
+        private final Date updatedDtime;
+
+        public FacebookPostItemDTO(
+                @JsonProperty("id")
+                String id,
+                @JsonProperty("message")
+                String message,
+                //yyyy-MM-dd'T'HH:mm:ssZ
+//                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.ISO_DATE_TIME_FORMAT)
+                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+                @JsonProperty("created_time")
+                Date createdDtime,
+                //yyyy-MM-dd'T'HH:mm:ssZ
+//                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.ISO_DATE_TIME_FORMAT)
+                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+                @JsonProperty("updated_time")
+                Date updatedDtime,
+                @JsonProperty("picture")
+                String picture,
+                @JsonProperty("link")
+                String link,
+                @JsonProperty("type")
+                Type type
+        ) {
+            this.id = id;
+            this.message = message;
+            this.createdDtime = createdDtime;
+            this.updatedDtime = updatedDtime;
+            this.picture = picture;
+            this.link = link;
+            this.type = type;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Date getCreatedDtime() {
+            return copy(createdDtime);
+        }
+
+        public Date getUpdatedDtime() {
+            return copy(updatedDtime);
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public FacebookScrapedPost toInternal() {
+            FacebookScrapedPost post = new FacebookScrapedPost();
+            post.setExternalId(getId());
+            post.setLink(getLink());
+            post.setMessage(getMessage());
+            post.setPicture(getPicture());
+            post.setType(getType().toInternal());
+            post.setCreated(getCreatedDtime());
+            post.setUpdated(getUpdatedDtime());
+            return post;
         }
     }
 
-    List<PersonInformationDTO> doFindFacebookFriends(Person _person) {
-        Assert.notNull(_person);
-        Assert.notNull(_person.getFbAccessToken());
-        String uri = "https://graph.facebook.com/me/friends?fields=username,name,id&access_token=" + _person.getFbAccessToken();
-        return doFindFacebookFriends0(new ArrayList<PersonInformationDTO>(), uri);
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class FacebookFeedItems {
+        private final List<FacebookPostItemDTO> items;
+        private final FacebookPaging paging;
+
+        public List<FacebookPostItemDTO> getItems() {
+            return Collections.unmodifiableList(items);
+        }
+
+        public FacebookPaging getPaging() {
+            return paging != null ? paging : FacebookPaging.NONE;
+        }
+
+        public FacebookFeedItems(
+                @JsonProperty("data")
+                List<FacebookPostItemDTO> items,
+                @JsonProperty("paging")
+                FacebookPaging paging) {
+            this.items = items;
+            this.paging = paging;
+        }
     }
 
-    private List<PersonInformationDTO> doFindFacebookFriends0(List<PersonInformationDTO> accu, String url) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class FacebookPaging {
+        public static final FacebookPaging NONE = new FacebookPaging(null, null);
+
+        private final String prev;
+        private final String next;
+
+        public FacebookPaging(
+                @JsonProperty("previous")
+                String prev,
+                @JsonProperty("next")
+                String next) {
+            this.prev = prev;
+            this.next = next;
+        }
+
+        public String getNext() {
+            return next;
+        }
+
+        public boolean hasNextPage() {
+            return getNext() != null;
+        }
+    }
+
+    public List<FacebookPostItemDTO> loadPostsFromPage(String pageId, Date maxAge) {
+        return doLoadPostsFromPage(pageId, maxAge);
+    }
+
+    @VisibleForTesting
+    List<FacebookPostItemDTO> doLoadPostsFromPage(String pageId, Date maxAge) {
+        String accessToken = "CAAE0ncj24EcBAHJZAtcgGNHRWe4kPmRMaGpFDjpRj27mwqBXI2sigVDdptRJUvjDOrMJ8LQZAQj53atfKa8ZCTqEVqWm7g8moivnSoMevEuPVPWYhCaOfkX6KkWDXAe8VvGiNN1VhcLAzV1Lra9imuLZBSkNjZCQOtGgZCeJHJIVadlZCp6Yl7g";
+        String uri = "https://graph.facebook.com/v2.2/"+pageId+"/feed";
+
+        return doLoadPostsFromPage0(maxAge, uri, accessToken, new ArrayList<>(), 0);
+    }
+
+    private List<FacebookPostItemDTO> doLoadPostsFromPage0(Date maxAge, String _url, String accessToken, List<FacebookPostItemDTO> accu, int retryNumber) {
+        String url = _url + (_url.contains("?")  ? "&" : "?")+"access_token=" + accessToken;
+        LOGGER.info("Attempt #[{}] for getting url [{}]", retryNumber, _url);
 
         long requestStartTime = System.currentTimeMillis();
 
         GetMethod httpGet = new GetMethod(url);
         httpGet.setFollowRedirects(false);
         try {
-            externalApiLogger.log(DataSource.FACEBOOK, url, ExternalApiUsageLog.ExternalApiType.FACEBOOK);
-            int responseCode = httpManager.getNormalHttpClient().executeMethod(httpGet);
+            int responseCode = httpManager.executeMethod(httpGet);
             if (responseCode != HttpStatus.SC_OK) {
                 throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
             }
             String body = httpGet.getResponseBodyAsString();
-            LOGGER.info("Execution time: {} ms", (System.currentTimeMillis() - requestStartTime));
+            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
             LOGGER.info("Status line: {}", httpGet.getStatusLine());
+            LOGGER.info("Body: {}", body);
 
-            FacebookFriendsResponse response = jacksonObjectMapper.readValue(body, FacebookFriendsResponse.class);
-            accu.addAll(response.toPersonInformationDTOs());
-
-
-            return response.isNotEmpty() && response.hasNextPage() ? doFindFacebookFriends0(accu, response.getPaging().getNextPage()) : accu;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            FacebookFeedItems response = jacksonObjectMapper.readValue(body, FacebookFeedItems.class);
+            if(response.getItems().isEmpty()){
+                return accu;
+            } else {
+                accu.addAll(response.getItems());
+                if(response.getPaging().hasNextPage()) {
+                    FacebookPostItemDTO last = Iterables.getLast(response.getItems(), null);
+                    if(last != null && last.getCreatedDtime().after(maxAge)) {
+                        return doLoadPostsFromPage0(maxAge, response.getPaging().getNext(), accessToken, accu, 0);
+                    } else {
+                        return accu;
+                    }
+                } else {
+                    return accu;
+                }
+            }
+        } catch (IOException e){
+            LOGGER.warn("Exception occurred while trying to load posts from page", e);
+            if(retryNumber < 3) {
+                return doLoadPostsFromPage0(maxAge, _url, accessToken, accu, retryNumber+1);
+            } else {
+                throw new RuntimeException(e);
+            }
         } finally {
             httpGet.releaseConnection();
         }
-    }*/
+    }
 }

@@ -1,10 +1,9 @@
 package bynull.realty.web.json;
 
-import bynull.realty.data.business.AddressComponents;
 import bynull.realty.data.business.FeePeriod;
 import bynull.realty.data.business.RentType;
 import bynull.realty.dto.ApartmentDTO;
-import bynull.realty.web.util.Constants;
+import bynull.realty.dao.util.Constants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
