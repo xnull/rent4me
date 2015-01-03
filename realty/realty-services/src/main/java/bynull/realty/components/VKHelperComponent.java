@@ -144,14 +144,14 @@ public class VKHelperComponent {
         httpGet.setFollowRedirects(false);
         try {
             int responseCode = httpManager.executeMethod(httpGet);
+            long time = System.currentTimeMillis() - requestStartTime;
+            LOGGER.info("Execution time: {} ms", time);
+            String body = httpGet.getResponseBodyAsString();
+            LOGGER.info("Response received for VK auth request: [{}]", body);
             if (responseCode != HttpStatus.SC_OK) {
                 throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
             }
-            String body = httpGet.getResponseBodyAsString();
-            long time = System.currentTimeMillis() - requestStartTime;
-            LOGGER.info("Execution time: {} ms", time);
 
-            LOGGER.info("Response received for VK auth request: [{}]", body);
 
             VKVerificationInfoDTO response = jacksonObjectMapper.readValue(body, VKVerificationInfoDTO.class);
             Assert.notNull(response);

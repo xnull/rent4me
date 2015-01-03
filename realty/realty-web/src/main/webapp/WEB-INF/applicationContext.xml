@@ -44,7 +44,7 @@
         </bean>
 
         <bean id="appConfig" class="bynull.realty.config.Config">
-            <property name="vkRedirectURL" value="http://localhost:8888"/>
+            <property name="vkRedirectURL" value="http://localhost:8888/dev"/>
             <property name="s3Folder" value="dev_local"/>
             <property name="esConfig" ref="esConfig"/>
         </bean>
