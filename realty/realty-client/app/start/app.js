@@ -10,6 +10,7 @@ var Utils = require('../shared/common/Utils');
 var FooterComponent = require('./components/footer');
 var FirstDisplayComponent = require('./components/first-display');
 var HeaderComponent = require('./components/header');
+
 var Analytics = require('../shared/common/analytics');
 
 function fbAuth() {
