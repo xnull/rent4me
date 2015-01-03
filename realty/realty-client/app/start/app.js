@@ -10,10 +10,9 @@ var Utils = require('../shared/common/Utils');
 var FooterComponent = require('./components/footer');
 var FirstDisplayComponent = require('./components/first-display');
 var HeaderComponent = require('./components/header');
+var Analytics = require('../shared/common/analytics');
 
 function fbAuth() {
-
-    console.log('Fb auth start');
     $(document).ready(function () {
         AuthActions.restoreUsernameAndTokenFromCookies();
         if (!AuthStore.hasCredentials()) {
@@ -36,8 +35,6 @@ function fbAuth() {
             //alert("Already authorized. You could proceed");
             Utils.navigateToPersonal();
         }
-
-        console.log('End fb auth init');
     });
 }
 
@@ -47,3 +44,5 @@ React.render(<HeaderComponent/>, document.getElementById('headerComponent'));
 React.render(<FirstDisplayComponent/>, document.getElementById('firstDisplay'));
 React.render(<FooterComponent/>, document.getElementById('footerComponent'));
 
+Analytics.google();
+Analytics.yandex();

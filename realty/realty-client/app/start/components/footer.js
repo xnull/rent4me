@@ -6,7 +6,6 @@ var React = require('react');
 
 var FooterComponent = React.createClass({
     render: function () {
-        console.log('Footer render');
         return (
             <section id="footer">
                 <ul className="icons">

@@ -60,7 +60,6 @@ var MailChimpComponent = React.createClass({
 
 var FirstComponent = React.createClass({
     render: function () {
-        console.log('First display render');
         return (
             <section id="first" className="main">
                 <header>

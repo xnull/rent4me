@@ -17,7 +17,6 @@ var AuthComponent = React.createClass({
     },
 
     render: function () {
-        console.log('Social net auth render');
         return (
             <div className="row row-centered">
                 <div className="col-centered" onclick={this.handleFacebookLogin}>
