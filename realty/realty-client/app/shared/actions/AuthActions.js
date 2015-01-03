@@ -10,7 +10,6 @@ var Ajax = require('../common/Ajax');
 var Utils = require('../common/Utils');
 var assign = require('object-assign');
 
-
 var AuthActions = {
     /**
      *
@@ -139,12 +138,16 @@ var AuthActions = {
 
     checkLoginState: function () {
         var that = this;
+
         FB.getLoginStatus(function(response) {
             that.statusChangeCallback(response);
         });
     },
 
     loginWithFB: function () {
+        console.log('Atttttentione');
+        console.log(FB);
+
         var that = this;
 
         var opts = {

@@ -1,11 +1,49 @@
 /**
  * Created by dionis on 02/12/14.
  */
+var React = require('react');
+
 var AuthActions = require('../shared/actions/AuthActions');
 var AuthStore = require('../shared/stores/AuthStore');
 var Utils = require('../shared/common/Utils');
 
-//export to the window
-window.AuthActions = AuthActions;
-window.AuthStore = AuthStore;
-window.Utils = Utils;
+var FooterComponent = require('./components/footer');
+var FirstDisplayComponent = require('./components/first-display');
+var HeaderComponent = require('./components/header');
+
+function fbAuth() {
+
+    console.log('Fb auth start');
+    $(document).ready(function () {
+        AuthActions.restoreUsernameAndTokenFromCookies();
+        if (!AuthStore.hasCredentials()) {
+            $.ajaxSetup({cache: true});
+            $.getScript('//connect.facebook.net/en_US/all.js', function () {
+                FB.init({
+                    appId: AuthStore.getFbId(),
+                    xfbml: true,
+                    cookie: true,
+                    version: 'v2.1'
+                });
+
+                //TODO: don't check login state
+                //AuthActions.checkLoginState();
+            });
+
+
+        } else {
+            //TODO: redirect to personal page
+            //alert("Already authorized. You could proceed");
+            Utils.navigateToPersonal();
+        }
+
+        console.log('End fb auth init');
+    });
+}
+
+fbAuth();
+
+React.render(<HeaderComponent/>, document.getElementById('headerComponent'));
+React.render(<FirstDisplayComponent/>, document.getElementById('firstDisplay'));
+React.render(<FooterComponent/>, document.getElementById('footerComponent'));
+
