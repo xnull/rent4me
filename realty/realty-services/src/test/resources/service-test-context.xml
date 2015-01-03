@@ -2,10 +2,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-       <import resource="classpath:data-test-context.xml"/>
+    <import resource="classpath:data-test-context.xml"/>
 
-       <bean class="bynull.realty.config.Config">
-              <property name="s3Folder" value="test"/>
-              <property name="vkRedirectURL" value="none"/>
-       </bean>
+    <bean id="esConfig" class="bynull.realty.config.ESConfig">
+        <property name="dbJdbcUrl" value="${jdbc.url}"/>
+        <property name="dbUsername" value="${jdbc.username}"/>
+        <property name="dbPassword" value="${jdbc.password}"/>
+        <property name="index" value="test_fb_posts"/>
+        <property name="type" value="test_fb_posts"/>
+        <property name="river" value="test_river"/>
+    </bean>
+
+    <bean class="bynull.realty.config.Config">
+        <property name="s3Folder" value="test"/>
+        <property name="vkRedirectURL" value="none"/>
+        <property name="esConfig" ref="esConfig"/>
+    </bean>
 </beans>

@@ -69,6 +69,6 @@ project.dependencies {
     testCompile libraries."org.mockito:mockito-all"
     testCompile libraries."org.dbunit:dbunit"
     testCompile libraries."org.springframework:spring-test"
-    testCompile libraries."com.jolbox:bonecp"
+    testCompile libraries."c3p0:c3p0"
 
 }
