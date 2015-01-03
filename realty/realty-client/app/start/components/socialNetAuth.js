@@ -19,12 +19,12 @@ var AuthComponent = React.createClass({
     render: function () {
         return (
             <div className="row row-centered">
-                <div className="col-centered" onclick={this.handleFacebookLogin}>
-                    <img className="clickable" width="100" src="images/signin/fb-icon.png"/>
+                <div className="col-centered" onClick={this.handleFacebookLogin}>
+                    <img className="clickable" width="100" src="images/signin/fb-icon.png" />
                     <br/>
                 </div>
 
-                <div className="col-centered" onclick={this.handleVkLogin}>
+                <div className="col-centered" onClick={this.handleVkLogin}>
                     <img className="clickable" width="103" src="images/signin/vk.png"/>
                 </div>
             </div>
