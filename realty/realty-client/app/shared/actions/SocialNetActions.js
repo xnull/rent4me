@@ -33,7 +33,7 @@ var SocialNetActions = {
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
                     actionType: SocialNetConstants.SOCIAL_NET_POSTS_FOUND,
-                    apartments: data
+                    posts: data
                 });
 
                 BlockUI.unblockUI();

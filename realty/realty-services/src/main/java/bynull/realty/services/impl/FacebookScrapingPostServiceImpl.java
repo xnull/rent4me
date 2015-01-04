@@ -6,12 +6,19 @@ import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.dao.external.FacebookScrapedPostRepository;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
+import bynull.realty.dto.FacebookPostDTO;
 import bynull.realty.services.api.FacebookScrapingPostService;
+import bynull.realty.util.LimitAndOffset;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
@@ -182,6 +189,191 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
             LOGGER.info("Response code for ES sync: [{}]", responseCode);
             LOGGER.info("Response body for ES sync: [{}]", body);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            method.releaseConnection();
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    public static class ESResponse {
+        @JsonProperty("hits")
+        HitSuperEntry hits;
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        public static class HitSuperEntry {
+            @JsonProperty("total")
+            long total;
+            @JsonProperty("hits")
+            List<HitEntry> hits;
+
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            public static class HitEntry {
+                @JsonProperty("_source")
+                FacebookPostESJson source;
+            }
+        }
+    }
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    public static class FindQuery {
+        @JsonProperty("query")
+        Query query;
+        @JsonProperty("from")
+        int from;
+        @JsonProperty("size")
+        int size;
+
+        public static interface Query {
+
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        public static class BoolQuery implements Query {
+            @JsonProperty("bool")
+            final BoolWrapper bool;
+
+            public BoolQuery(List<Query> must, List<Query> mustNot, List<Query> should) {
+                this.bool = new BoolWrapper(must, mustNot, should);
+            }
+
+
+            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            public static class BoolWrapper {
+                @JsonProperty("must")
+                public final List<Query> must;
+                @JsonProperty("must_not")
+                public final List<Query> mustNot;
+                @JsonProperty("should")
+                public final List<Query> should;
+
+                public BoolWrapper(List<Query> must, List<Query> mustNot, List<Query> should) {
+                    this.must = must;
+                    this.mustNot = mustNot;
+                    this.should = should;
+                }
+            }
+        }
+
+        public static interface BoolSubQuery extends Query {
+
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        public static class FuzzyQueryByMessage implements Query {
+            @JsonProperty("fuzzy")
+            final MessageMatch fuzzy;
+
+            public FuzzyQueryByMessage(MessageMatch fuzzy) {
+                this.fuzzy = fuzzy;
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        public static class MatchQueryByMessage implements Query {
+            @JsonProperty("match")
+            final MessageMatch match;
+
+            public MatchQueryByMessage(MessageMatch match) {
+                this.match = match;
+            }
+
+
+        }
+
+    }
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    public static class MessageMatch {
+        @JsonProperty("message")
+        final String message;
+
+        public MessageMatch(String message) {
+            this.message = message;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class FacebookPostESJson {
+        @JsonProperty("external_id")
+        String id;
+        @JsonProperty("message")
+        String message;
+        @JsonProperty("link")
+        String link;
+        @JsonProperty("picture")
+        String picture;
+    }
+
+    @Override
+    public List<FacebookPostDTO> findPosts(String text, LimitAndOffset limitAndOffset) {
+        PostMethod method = null;
+
+        try {
+            FindQuery query = new FindQuery();
+            query.from = limitAndOffset.offset;
+            query.size = limitAndOffset.limit;
+            query.query =
+                    new FindQuery.BoolQuery(
+                            ImmutableList.of(
+                                    new FindQuery.BoolQuery(
+                                            ImmutableList.of(
+                                                    new FindQuery.MatchQueryByMessage(new MessageMatch(text))
+                                            ),
+                                            null,
+                                            null
+                                    ),
+                                    new FindQuery.BoolQuery(
+                                            null,
+                                            null,
+                                            ImmutableList.of(
+                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдаю")),
+                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдам")),
+                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("отдам")),
+                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("отдаю")),
+                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдается"))
+                                            )
+                                    )
+                            ),
+                            null,
+                            null
+                    )
+            ;
+
+            String value = jacksonObjectMapper.writeValueAsString(query);
+
+            method = new PostMethod("http://localhost:9200/"+config.getEsConfig().getIndex()+"/_search");
+            LOGGER.info("DB config for ES sync: [{}]", value);
+
+            method.setRequestEntity(new StringRequestEntity(value, null, "UTF-8"));
+            int responseCode = httpManager.executeMethod(method);
+            String body = method.getResponseBodyAsString();
+
+            LOGGER.info("Response code for ES sync: [{}]", responseCode);
+            LOGGER.info("Response body for ES sync: [{}]", body);
+
+            ESResponse response = jacksonObjectMapper.readValue(body, ESResponse.class);
+
+            List<FacebookPostDTO> resultList = response.hits
+                    .hits.stream()
+                    .map(e -> e.source)
+                    .map(e->{
+                        FacebookPostDTO dto = new FacebookPostDTO();
+                        dto.setMessage(e.message);
+                        dto.setLink(e.link);
+                        dto.setImageUrls(e.picture != null ? Collections.singletonList(e.picture) : Collections.emptyList());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+
+            return resultList;
+
+
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {

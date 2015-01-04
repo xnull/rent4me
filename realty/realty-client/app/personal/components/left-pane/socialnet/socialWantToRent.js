@@ -8,7 +8,10 @@ var assign = require('object-assign');
 var SocialNetStore = require('../../../../shared/stores/SocialNetStore');
 var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 
-var News = React.createClass({
+var _ = require('underscore');
+var moment = require('moment');
+
+var Posts = React.createClass({
 
     render: function () {
         var shown = this.props.shown || false;
@@ -35,9 +38,9 @@ var News = React.createClass({
             style['display'] = 'none';
         }
 
-        var newsItems = items.map(function (item) {
+        var posts = items.map(function (item) {
             return (
-                <NewsItem item={item}/>
+                <Post item={item}/>
             );
         });
 
@@ -45,7 +48,7 @@ var News = React.createClass({
             <div className="col-md-9" style={style}>
                 <div className="panel panel-default">
                     <div className="panel-heading">
-                        <h4>Нововсти</h4>
+                        <h4>Объявления</h4>
                     </div>
 
                     <div className="panel-body">
@@ -53,7 +56,7 @@ var News = React.createClass({
                         <div className="bs-component">
                             <div className="list-group">
 
-                            {newsItems}
+                            {posts}
 
                                 <br/>
 
@@ -68,14 +71,14 @@ var News = React.createClass({
     }
 });
 
-var NewsItem = React.createClass({
+var Post = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
-        var firstImage = _.first(item.photos.map(function(photo) {
+        var firstImage = _.first(item.imageUrls.map(function(photo) {
             return (
                 <img className="img-responsive" width="128"
-                    src={photo.small_thumbnail_url}/>
+                    src={photo}/>
             );
         }));
 
@@ -93,51 +96,18 @@ var NewsItem = React.createClass({
         return (
             <div>
                 <a href="#" className="list-group-item">
-                    <h4 className="list-group-item-heading">{item.address ? item.address.formatted_address : 'no address'}</h4>
 
                 {imagePreviews}
 
                     <p className="list-group-item-text">
-                        <div className="row">
-                            <div className="col-md-6">
-                                Этаж: {item.floor_number}/{item.floors_total}
-                            </div>
-                            <div className="col-md-6">
-                                Площадь: {item.area} м<sup>2</sup>
-                            </div>
-                        </div>
-
-                        <br/>
-
-                        <div className="row">
-                            <div className="col-md-6">
-                                Цена: {item.rental_fee}/{Translations['ru'][item.fee_period]}
-                            </div>
-                            <div className="col-md-6">
-                                Тип аренды: {Translations['ru'][item.type_of_rent]}
-                            </div>
-
-                        </div>
-
-                        <br/>
 
                         <h4>Описание</h4>
 
                         <div className="row">
                             <div className="col-md-12">
-                            {item.description}
+                            {item.message}
                             </div>
 
-                        </div>
-
-                        <br/>
-
-                        <h4>Контакты</h4>
-
-                        <div className="row">
-                            <div className="col-md-6">
-                                Телефон: {item.owner.phone}
-                            </div>
                         </div>
 
                         <hr/>
@@ -147,7 +117,7 @@ var NewsItem = React.createClass({
                                 Добавлено: {moment(item.created).format("lll")}
                             </div>
                             <div className="col-md-6">
-                                Личное сообщение: {moment(item.updated).format("lll")}
+                                Обновлено: {moment(item.updated).format("lll")}
                             </div>
                         </div>
 
@@ -184,7 +154,7 @@ module.exports = React.createClass({
         var newSearchResults = SocialNetStore.getSearchResults();
         console.log(newSearchResults);
         this.setState(assign(this.state, {
-            apartments: newSearchResults,
+            posts: newSearchResults,
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults()
         }));
     },
@@ -242,7 +212,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
 
-                <News items={items} shown={items.length > 0} hasMore={hasMoreResults} onHasMoreClicked={this.loadMoreResults} />
+                <Posts items={items} shown={items.length > 0} hasMore={hasMoreResults} onHasMoreClicked={this.loadMoreResults} />
             </div>
         );
     }
