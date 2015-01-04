@@ -170,7 +170,7 @@ task deployFrontendRelease(dependsOn: packAppRelease, type: SshTask) {
 
 clean << {
     //project.delete './node_modules'
-    project.delete './app/vendor'
+    project.delete './build-js'
 }
 
 task updateWebDriverManager(type: JsTaskRunner, dependsOn: 'bowerInstall') {

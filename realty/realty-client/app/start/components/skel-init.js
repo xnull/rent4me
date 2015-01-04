@@ -1,13 +1,22 @@
-(function ($) {
+/**
+ * Created by null on 04.01.15.
+ */
+
+function skelInit() {
 
     skel.init({
         reset: 'full',
         breakpoints: {
-            'global': { range: '*', href: 'css/style.css', containers: 1360, grid: { gutters: 50 } },
-            'wide': { range: '-1680', href: 'css/style-wide.css', containers: 1200, grid: { gutters: 40 } },
-            'normal': { range: '-1280', href: 'css/style-normal.css', containers: 960, grid: { gutters: 30 } },
-            'narrow': { range: '-1000', href: 'css/style-narrow.css', containers: '100%', grid: { gutters: 25, collapse: true } },
-            'mobile': { range: '-736', href: 'css/style-mobile.css', grid: { gutters: 10 }, viewport: { scalable: false } }
+            'global': {range: '*', href: 'css/style.css', containers: 1360, grid: {gutters: 50}},
+            'wide': {range: '-1680', href: 'css/style-wide.css', containers: 1200, grid: {gutters: 40}},
+            'normal': {range: '-1280', href: 'css/style-normal.css', containers: 960, grid: {gutters: 30}},
+            'narrow': {
+                range: '-1000',
+                href: 'css/style-narrow.css',
+                containers: '100%',
+                grid: {gutters: 25, collapse: true}
+            },
+            'mobile': {range: '-736', href: 'css/style-mobile.css', grid: {gutters: 10}, viewport: {scalable: false}}
         }
     });
 
@@ -162,4 +171,8 @@
 
     });
 
-})(jQuery);
+}
+
+module.exports = {
+    init: skelInit
+};
