@@ -4,12 +4,14 @@ import bynull.realty.components.FacebookHelperComponent;
 import bynull.realty.config.Config;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.dao.external.FacebookScrapedPostRepository;
+import bynull.realty.dao.util.Constants;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.dto.FacebookPostDTO;
 import bynull.realty.services.api.FacebookScrapingPostService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +22,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -37,8 +38,6 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -236,8 +235,48 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         @JsonProperty("size")
         private int size;
 
+        @JsonProperty("sort")
+        private List<Sort> sort;
+
         public static interface Query {
 
+        }
+
+        public static interface Sort {
+
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class SortParams {
+            @JsonProperty("order")
+            private final Order order;
+            @JsonProperty("mode")
+            private final Mode mode;
+
+            public SortParams(Order order, Mode mode) {
+                this.order = order;
+                this.mode = mode;
+            }
+
+            public static enum Mode {
+                min, max, sum, avg
+            }
+
+            public static enum Order {
+                asc, desc
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class SortByExternalCreatedDt implements Sort {
+            @JsonProperty("ext_created_dt")
+            private final SortParams extCreatedDt;
+
+            public SortByExternalCreatedDt(SortParams extCreatedDt) {
+                this.extCreatedDt = extCreatedDt;
+            }
         }
 
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -275,12 +314,25 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
         @Getter
-        public static class FuzzyQueryByMessage implements Query {
-            @JsonProperty("fuzzy")
-            private final MessageMatch fuzzy;
+        public static class FuzzyLikeThisQueryByMessage implements Query {
+            @JsonProperty("fuzzy_like_this")
+            private final Message fuzzy;
 
-            public FuzzyQueryByMessage(MessageMatch fuzzy) {
+            public FuzzyLikeThisQueryByMessage(Message fuzzy) {
                 this.fuzzy = fuzzy;
+            }
+
+            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            @Getter
+            public static class Message {
+                @JsonProperty("fields")
+                private final List<String> fields = ImmutableList.of("message");
+                @JsonProperty("like_text")
+                private final String likeText;
+
+                public Message(String likeText) {
+                    this.likeText = likeText;
+                }
             }
         }
 
@@ -322,30 +374,35 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         private String link;
         @JsonProperty("picture")
         private String picture;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        @JsonProperty("ext_created_dt")
+        private Date createdDt;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        @JsonProperty("ext_updated_dt")
+        private Date updatedDt;
     }
 
     @Override
     public List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
 
-        SecurityUtils.UserIDHolder authorizedUser = SecurityUtils.getAuthorizedUser();
-        System.out.println(authorizedUser.getId());
-
+        if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
 
         String index = config.getEsConfig().getIndex();
-//        index = "prod_fb_posts";
+        index = "prod_fb_posts";
 
-        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");;
+//        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");;
+        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
         List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))
                 .stream()
-                .map(e->new FindQuery.FuzzyQueryByMessage(new MessageMatch(e)))
+                .map(e->new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message(e)))
                 .collect(Collectors.toCollection(ArrayList::new));
 
         if(withSubway) {
             searchQueries.add(new FindQuery.BoolQuery(null, null,
                     ImmutableList.of(
                             new FindQuery.MatchQueryByMessage(new MessageMatch("м.")),
-                            new FindQuery.FuzzyQueryByMessage(new MessageMatch("метро"))
+                            new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("метро"))
                     )));
         }
 
@@ -365,11 +422,11 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                                             null,
                                             null,
                                             ImmutableList.of(
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдаю")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдам")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("отдам")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("отдаю")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдается"))
+                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдаю")),
+                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдам")),
+                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдам")),
+                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдаю")),
+                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдается"))
                                             )
                                     )
                             ),
@@ -377,6 +434,9 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                             null
                     ))
             ;
+            query.setSort(ImmutableList.of(
+                    new FindQuery.SortByExternalCreatedDt(new FindQuery.SortParams(FindQuery.SortParams.Order.desc, FindQuery.SortParams.Mode.min))
+            ));
 
             String value = jacksonObjectMapper.writeValueAsString(query);
 
@@ -399,6 +459,8 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                         dto.setMessage(e.message);
                         dto.setLink(e.link);
                         dto.setImageUrls(e.picture != null ? Collections.singletonList(e.picture) : Collections.emptyList());
+                        dto.setCreated(e.createdDt);
+                        dto.setUpdated(e.updatedDt);
                         return dto;
                     })
                     .collect(Collectors.toList());
