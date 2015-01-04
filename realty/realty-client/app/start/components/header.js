@@ -20,9 +20,14 @@ var HeaderComponent = React.createClass({
                     <p>Прозрачность, отсутствие посредников</p>
                 </header>
                 <footer>
-                    <AuthComponent />
-                    <br/>
-                    <a href='#first' className='button scrolly'>Подробности</a>
+                    <div className="row row-centered">
+                        <div className="col-centered">
+                            <AuthComponent />
+                        </div>
+                        <div className="col-centered">
+                            <a href='#first' className='button scrolly'>Подробности</a>
+                        </div>
+                    </div>
                 </footer>
             </section>
         )
