@@ -19,13 +19,13 @@ var SocialNetActions = {
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findPosts: function(text) {
+    findPosts: function(text,withSubway) {
         BlockUI.blockUI();
 
         var limit = SocialNetStore.getLimit();
         var offset = SocialNetStore.getOffset();
 
-        var url = '/rest/social/search?text=' + text+ "&limit=" + limit + "&offset=" + offset;
+        var url = '/rest/social/search?text=' + text + "&with_subway=" + withSubway + "&limit=" + limit + "&offset=" + offset;
 
         Ajax
             .GET(url)

@@ -32,6 +32,7 @@ public class SocialRestResource {
     @GET
     public Response findPosts(
             @QueryParam("text") String text,
+            @QueryParam("with_subway") boolean withSubway,
             @QueryParam("limit") int limit,
             @QueryParam("offset") int offset
             ) {
@@ -41,7 +42,7 @@ public class SocialRestResource {
                 .withOffset(offset)
                 .create();
 
-        List<FacebookPostDTO> found = facebookScrapingPostService.findPosts(text, limitAndOffset);
+        List<FacebookPostDTO> found = facebookScrapingPostService.findPosts(text, withSubway, limitAndOffset);
 
 //        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
         return Response

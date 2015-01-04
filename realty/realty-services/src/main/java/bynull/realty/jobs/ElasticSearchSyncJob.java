@@ -18,7 +18,11 @@ public class ElasticSearchSyncJob implements Runnable {
     @Resource
     FacebookScrapingPostService facebookScrapingPostService;
 
-    @Scheduled(initialDelay = 20*1000, fixedDelay = 60*60*1000)//start each hour, default delay - one minute
+    @Scheduled(
+            cron = "0 */5 * * * *" //start each five minutes
+//            ,initialDelay = 20*1000, fixedDelay = 60*60*1000
+            //start each hour, default delay - one minute
+    )
     @Override
     public void run() {
         LOGGER.info("Starting to sync ES");

@@ -135,6 +135,7 @@ var Post = React.createClass({
 module.exports = React.createClass({
     getInitialState: function () {
         return {
+            withSubway: false,
             text: null,
             posts: SocialNetStore.getSearchResults(),
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults()
@@ -175,17 +176,32 @@ module.exports = React.createClass({
         }));
     },
 
+    onSubwayChange: function(e) {
+        console.log(e);
+        var value = e.target.checked;
+        console.log("With subway new value: "+value);
+
+        this.setState(assign(this.state, {
+            withSubway: value
+        }));
+    },
+
     onClick: function(){
         var text = this.state.text;
+        var withSubway = this.state.withSubway;
         console.log('Searching for text: '+text);
 
         SocialNetActions.resetSearchState();
-        SocialNetActions.findPosts(text);
+        SocialNetActions.findPosts(text, withSubway);
     },
 
     render: function() {
         var items = this.state.posts || [];
         var hasMoreResults = this.state.hasMoreSearchResults || false;
+        var text = this.state.text || '';
+        var withSubWay = this.state.withSubway || false;
+
+        console.log('with subway? '+withSubWay);
 
         return (
             <div className="col-md-9">
@@ -200,10 +216,25 @@ module.exports = React.createClass({
                                 <label className="col-md-2 control-label">Поиск</label>
                                 <div className="col-md-10">
                                     <input type="text" className="form-control"
-                                    placeholder="Введите текст для поиска по объявлениям"
-                                    onChange={this.onSearchChange} ></input>
+                                        value={text}
+                                        placeholder="Введите текст для поиска по объявлениям"
+                                        onChange={this.onSearchChange} ></input>
                                 </div>
                             </div>
+
+                            <div className="form-group">
+                                <label className="col-md-2 control-label">
+                                    С метро
+                                </label>
+                                <div className="col-md-10">
+                                    <input
+                                        type="checkbox"
+                                        onChange={this.onSubwayChange}
+                                        checked={withSubWay}
+                                    />
+                                </div>
+                            </div>
+
 
                             <div className="col-md-offset-9">
                                 <a className="btn btn-primary center-block" onClick={this.onClick}>Поиск</a>

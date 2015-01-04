@@ -18,7 +18,10 @@ public class PhotoTempCleanupJob implements Runnable {
     @Resource
     PhotoTempService photoTempService;
 
-    @Scheduled(initialDelay = 60*1000, fixedDelay = 60*60*1000)//start each hour, default delay - one minute
+    @Scheduled(
+            cron = "0 0 * * * *" //start every hour
+//            initialDelay = 60*1000, fixedDelay = 60*60*1000
+    )//start each hour, default delay - one minute
     @Override
     public void run() {
         LOGGER.info("Starting to collect garbage");

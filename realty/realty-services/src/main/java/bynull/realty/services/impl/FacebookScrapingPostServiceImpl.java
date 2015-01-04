@@ -9,12 +9,15 @@ import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.dto.FacebookPostDTO;
 import bynull.realty.services.api.FacebookScrapingPostService;
 import bynull.realty.util.LimitAndOffset;
+import bynull.realty.utils.SecurityUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -22,12 +25,14 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -204,11 +209,12 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
         public static class HitSuperEntry {
             @JsonProperty("total")
-            long total;
+            private long total;
             @JsonProperty("hits")
-            List<HitEntry> hits;
+            private List<HitEntry> hits;
 
             @JsonIgnoreProperties(ignoreUnknown = true)
             @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -220,22 +226,25 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     }
 
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @Getter
+    @Setter
     public static class FindQuery {
         @JsonProperty("query")
-        Query query;
+        private Query query;
         @JsonProperty("from")
-        int from;
+        private int from;
         @JsonProperty("size")
-        int size;
+        private int size;
 
         public static interface Query {
 
         }
 
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
         public static class BoolQuery implements Query {
             @JsonProperty("bool")
-            final BoolWrapper bool;
+            private final BoolWrapper bool;
 
             public BoolQuery(List<Query> must, List<Query> mustNot, List<Query> should) {
                 this.bool = new BoolWrapper(must, mustNot, should);
@@ -243,13 +252,14 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
 
             @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            @Getter
             public static class BoolWrapper {
                 @JsonProperty("must")
-                public final List<Query> must;
+                private final List<Query> must;
                 @JsonProperty("must_not")
-                public final List<Query> mustNot;
+                private final List<Query> mustNot;
                 @JsonProperty("should")
-                public final List<Query> should;
+                private final List<Query> should;
 
                 public BoolWrapper(List<Query> must, List<Query> mustNot, List<Query> should) {
                     this.must = must;
@@ -264,9 +274,10 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         }
 
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
         public static class FuzzyQueryByMessage implements Query {
             @JsonProperty("fuzzy")
-            final MessageMatch fuzzy;
+            private final MessageMatch fuzzy;
 
             public FuzzyQueryByMessage(MessageMatch fuzzy) {
                 this.fuzzy = fuzzy;
@@ -274,9 +285,10 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         }
 
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
         public static class MatchQueryByMessage implements Query {
             @JsonProperty("match")
-            final MessageMatch match;
+            private final MessageMatch match;
 
             public MatchQueryByMessage(MessageMatch match) {
                 this.match = match;
@@ -288,9 +300,10 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     }
 
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @Getter
     public static class MessageMatch {
         @JsonProperty("message")
-        final String message;
+        private final String message;
 
         public MessageMatch(String message) {
             this.message = message;
@@ -298,32 +311,53 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @Getter
+    @Setter
     public static class FacebookPostESJson {
         @JsonProperty("external_id")
-        String id;
+        private String id;
         @JsonProperty("message")
-        String message;
+        private String message;
         @JsonProperty("link")
-        String link;
+        private String link;
         @JsonProperty("picture")
-        String picture;
+        private String picture;
     }
 
     @Override
-    public List<FacebookPostDTO> findPosts(String text, LimitAndOffset limitAndOffset) {
-        PostMethod method = null;
+    public List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
+        Assert.notNull(text);
+
+        SecurityUtils.UserIDHolder authorizedUser = SecurityUtils.getAuthorizedUser();
+        System.out.println(authorizedUser.getId());
+
+
+        String index = config.getEsConfig().getIndex();
+//        index = "prod_fb_posts";
+
+        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");;
+        List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))
+                .stream()
+                .map(e->new FindQuery.FuzzyQueryByMessage(new MessageMatch(e)))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if(withSubway) {
+            searchQueries.add(new FindQuery.BoolQuery(null, null,
+                    ImmutableList.of(
+                            new FindQuery.MatchQueryByMessage(new MessageMatch("м.")),
+                            new FindQuery.FuzzyQueryByMessage(new MessageMatch("метро"))
+                    )));
+        }
 
         try {
             FindQuery query = new FindQuery();
-            query.from = limitAndOffset.offset;
-            query.size = limitAndOffset.limit;
-            query.query =
+            query.setFrom(limitAndOffset.offset);
+            query.setSize(limitAndOffset.limit);
+            query.setQuery(
                     new FindQuery.BoolQuery(
                             ImmutableList.of(
                                     new FindQuery.BoolQuery(
-                                            ImmutableList.of(
-                                                    new FindQuery.MatchQueryByMessage(new MessageMatch(text))
-                                            ),
+                                            searchQueries,
                                             null,
                                             null
                                     ),
@@ -341,12 +375,11 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                             ),
                             null,
                             null
-                    )
+                    ))
             ;
 
             String value = jacksonObjectMapper.writeValueAsString(query);
 
-            method = new PostMethod("http://localhost:9200/"+config.getEsConfig().getIndex()+"/_search");
             LOGGER.info("DB config for ES sync: [{}]", value);
 
             method.setRequestEntity(new StringRequestEntity(value, null, "UTF-8"));
