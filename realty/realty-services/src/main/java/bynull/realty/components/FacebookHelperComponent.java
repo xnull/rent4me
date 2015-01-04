@@ -348,8 +348,11 @@ public class FacebookHelperComponent {
     }
 
     private List<FacebookPostItemDTO> doLoadPostsFromPage0(Date maxAge, String _url, String accessToken, List<FacebookPostItemDTO> accu, int retryNumber) {
-        String url = _url + (_url.contains("?")  ? "&" : "?")+"access_token=" + accessToken;
-        LOGGER.info("Attempt #[{}] for getting url [{}]", retryNumber, _url);
+        String url = !_url.contains("access_token")
+                ? _url + (_url.contains("?")  ? "&" : "?")+"access_token=" + accessToken
+                : _url;
+
+        LOGGER.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
 
         long requestStartTime = System.currentTimeMillis();
 

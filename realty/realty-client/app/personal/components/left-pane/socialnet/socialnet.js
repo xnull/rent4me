@@ -11,14 +11,14 @@ var Util = require('rent4meUtil');
 module.exports = React.createClass({
     render: function () {
         return (
-            <div className="panel panel-default" style={Util.inactiveUi}>
+            <div className="panel panel-default">
                 <div className="panel-body">
                     <h4>Социальные сети</h4>
 
                     <div className="bs-component">
                         <div className="list-group">
 
-                            <a href="#" className="list-group-item">
+                            <a href="#/social/want_to_rent" className="list-group-item">
                                 <h4 className="list-group-item-heading">Сдам</h4>
                                 <p className="list-group-item-text">Поиск недвижимости для аренды в социальных сетях</p>
                             </a>

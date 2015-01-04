@@ -18,7 +18,7 @@ public class FacebookScrappingJob implements Runnable {
     @Resource
     FacebookScrapingPostService facebookScrapingPostService;
 
-    @Scheduled(initialDelay = 60*1000, fixedDelay = 60*60*1000)//start each hour, default delay - one minute
+    @Scheduled(initialDelay = 60*60*1000, fixedDelay = 60*60*1000)//start each hour, default delay - one minute
     @Override
     public void run() {
         LOGGER.info("Starting to scrap new FB posts");

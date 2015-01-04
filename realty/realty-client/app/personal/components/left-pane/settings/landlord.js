@@ -839,7 +839,10 @@ module.exports = React.createClass({
         }
 
 
-        changeData(this, newState);
+
+
+
+        (this, newState);
     },
 
     render: function () {

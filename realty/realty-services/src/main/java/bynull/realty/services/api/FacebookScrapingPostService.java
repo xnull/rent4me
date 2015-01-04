@@ -11,4 +11,6 @@ public interface FacebookScrapingPostService {
     void scrapNewPosts();
 
     void syncElasticSearchWithDB();
+
+
 }
