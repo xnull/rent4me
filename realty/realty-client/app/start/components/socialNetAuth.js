@@ -4,8 +4,7 @@
 var React = require('react');
 var AuthActions = require('../../shared/actions/AuthActions');
 
-var AuthComponent = React.createClass({
-
+var AuthFormOld = React.createClass({
     handleFacebookLogin: function () {
         console.log('handle fb login');
         AuthActions.loginWithFB();
@@ -32,49 +31,47 @@ var AuthComponent = React.createClass({
     }
 });
 
+var AuthForm = React.createClass({
+
+    render: function () {
+        return (
+            <div className="col-centered">
+                /*<a className='button' data-toggle="modal" data-target="#myModal">Авторизация</a>*/
+                <div className="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span className="sr-only">Close</span>
+                                </button>
+                                <h4 className="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div className="modal-body">
+                                ...
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+});
+
+
+var AuthComponent = React.createClass({
+
+    render: function () {
+        return (
+            <div>
+                <AuthFormOld />
+            </div>
+        )
+    }
+});
+
 module.exports = AuthComponent;
-
-/*
- <ul className="actions">
- <li>
- <input type="submit" className="button" value="Send Message"/>
- </li>
- <li>
- <input type="reset" className="button alt" value="Clear Form"/>
- </li>
- </ul>*/
-/* <div>
- <form className="aui login-form"
- action="/account/signin/" method="post" id="login-form" data-modules="js/login/login-form">
-
-
- <input type="hidden" name="next" value="/account/team_check/?next=" />
-
-
- <div className="field-group username">
- <label for="id_username">Username or email</label>
- <input type="text" className="text long-field" id="id_username" name="username" autofocus="autofocus" />
- </div>
-
-
- <div className="field-group">
- <label for="id_password">Password</label>
- <input type="password" id="id_password" className="password long-field" name="password" />
- </div>
-
- <input type='hidden' name='csrfmiddlewaretoken' value='jcug2Km35RdQXym1hx9VLDSOFQoDqIdz' />
- <div className="buttons-container">
- <div className="buttons">
- <button type="submit" name="submit" className="aui-button aui-button-primary">
- Log in
- </button>
- <a href="/account/password/reset/" className="forgot-password">Forgot your password</a>
- </div>
-
- <div className="sign-up">
- <a href="/account/signup/">Need an account! Sign up free.</a>
- </div>
-
- </div>
- </form>
- </div>*/
