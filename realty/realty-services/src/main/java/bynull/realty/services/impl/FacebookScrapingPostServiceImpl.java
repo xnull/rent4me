@@ -389,10 +389,10 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
 
         String index = config.getEsConfig().getIndex();
-        index = "prod_fb_posts";
+//        index = "prod_fb_posts";
 
-//        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");;
-        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
+        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");;
+//        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
         List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))
                 .stream()
                 .map(e->new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message(e)))
