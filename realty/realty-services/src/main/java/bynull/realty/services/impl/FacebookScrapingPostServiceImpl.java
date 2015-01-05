@@ -4,13 +4,11 @@ import bynull.realty.components.FacebookHelperComponent;
 import bynull.realty.config.Config;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.dao.external.FacebookScrapedPostRepository;
-import bynull.realty.dao.util.Constants;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.dto.FacebookPostDTO;
 import bynull.realty.services.api.FacebookScrapingPostService;
 import bynull.realty.util.LimitAndOffset;
-import bynull.realty.utils.SecurityUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -383,15 +381,55 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     }
 
     @Override
-    public List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
+    public List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
 
         if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
 
+        FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
+                null,
+                null,
+                ImmutableList.of(
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдаю")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдам")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдам")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдаю")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдается"))
+                )
+        );
+
+        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+    }
+
+    @Override
+    public List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
+        Assert.notNull(text);
+
+        if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
+
+        FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
+                null,
+                null,
+                ImmutableList.of(
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сниму")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("снимаю")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("снять")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("снял")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("возьму")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("взял")),
+                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("взять"))
+                )
+        );
+
+        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+    }
+
+    private List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindQuery.BoolQuery typeQuery) {
         String index = config.getEsConfig().getIndex();
 //        index = "prod_fb_posts";
 
-        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");;
+        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");
+        ;
 //        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
         List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))
                 .stream()
@@ -410,6 +448,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
             FindQuery query = new FindQuery();
             query.setFrom(limitAndOffset.offset);
             query.setSize(limitAndOffset.limit);
+
             query.setQuery(
                     new FindQuery.BoolQuery(
                             ImmutableList.of(
@@ -418,17 +457,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                                             null,
                                             null
                                     ),
-                                    new FindQuery.BoolQuery(
-                                            null,
-                                            null,
-                                            ImmutableList.of(
-                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдаю")),
-                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдам")),
-                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдам")),
-                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдаю")),
-                                                    new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдается"))
-                                            )
-                                    )
+                                    typeQuery
                             ),
                             null,
                             null

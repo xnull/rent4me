@@ -5,34 +5,67 @@
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var SocialNetConstants = require('../constants/SocialNetConstants');
-var SocialNetStore = require('../stores/SocialNetStore');
+var SocialNetRenterStore = require('../stores/SocialNetRenterStore');
+var SocialNetLessorStore = require('../stores/SocialNetLessorStore');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 var JSON = require('JSON2');
 var Ajax = require('../common/Ajax');
 
 var SocialNetActions = {
-    resetSearchState: function(){
+    resetRenterSearchState: function(){
         AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_POSTS_RESET_SEARCH
+            actionType: SocialNetConstants.SOCIAL_NET_RENTER_POSTS_RESET_SEARCH
+        });
+    },
+
+    resetLessorSearchState: function(){
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_LESSOR_POSTS_RESET_SEARCH
         });
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findPosts: function(text,withSubway) {
+    findRenterPosts: function(text,withSubway) {
         BlockUI.blockUI();
 
-        var limit = SocialNetStore.getLimit();
-        var offset = SocialNetStore.getOffset();
+        var limit = SocialNetRenterStore.getLimit();
+        var offset = SocialNetRenterStore.getOffset();
 
-        var url = '/rest/social/search?text=' + text + "&with_subway=" + withSubway + "&limit=" + limit + "&offset=" + offset;
+        var url = '/rest/social/renter/search?text=' + text + "&with_subway=" + withSubway + "&limit=" + limit + "&offset=" + offset;
 
         Ajax
             .GET(url)
             .authorized()
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
-                    actionType: SocialNetConstants.SOCIAL_NET_POSTS_FOUND,
+                    actionType: SocialNetConstants.SOCIAL_NET_RENTER_POSTS_FOUND,
+                    posts: data
+                });
+
+                BlockUI.unblockUI();
+            })
+            .onError(function (xhr, status, err) {
+                BlockUI.unblockUI();
+            })
+            .execute();
+    },
+
+    //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
+    findLessorPosts: function(text,withSubway) {
+        BlockUI.blockUI();
+
+        var limit = SocialNetLessorStore.getLimit();
+        var offset = SocialNetLessorStore.getOffset();
+
+        var url = '/rest/social/lessor/search?text=' + text + "&with_subway=" + withSubway + "&limit=" + limit + "&offset=" + offset;
+
+        Ajax
+            .GET(url)
+            .authorized()
+            .onSuccess(function (data) {
+                AppDispatcher.handleViewAction({
+                    actionType: SocialNetConstants.SOCIAL_NET_LESSOR_POSTS_FOUND,
                     posts: data
                 });
 

@@ -94,13 +94,13 @@ AppDispatcher.register(function(payload){
 //    console.log(apartmentObject);
 
     switch(action.actionType) {
-        case SocialNetConstants.SOCIAL_NET_POSTS_FOUND:
+        case SocialNetConstants.SOCIAL_NET_RENTER_POSTS_FOUND:
             console.log('found posts:');
             console.log(action.posts);
             Store.saveSearchResults(action.posts || []);
             break;
 
-        case SocialNetConstants.SOCIAL_NET_POSTS_RESET_SEARCH:
+        case SocialNetConstants.SOCIAL_NET_RENTER_POSTS_RESET_SEARCH:
             _posts = [];
             _hasMoreResults = false;
             _offset = 0;

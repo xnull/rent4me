@@ -53,7 +53,8 @@ var route = (
         <Route name="renter" path="user/renter" handler={require('./left-pane/settings/renter.js')}/>
 
         <Route name="support" path="support" handler={require('./main/support.js')}/>
-        <Route name="socialWantToRent" path="social/want_to_rent" handler={require('./left-pane/socialnet/socialWantToRent')}/>
+        <Route name="socialRenter" path="social/renter" handler={require('./left-pane/socialnet/socialForRenter')}/>
+        <Route name="socialLesser" path="social/lessor" handler={require('./left-pane/socialnet/socialForLessor')}/>
 
         <DefaultRoute handler={require('./main/news-pane.js')}/>
     </Route>
