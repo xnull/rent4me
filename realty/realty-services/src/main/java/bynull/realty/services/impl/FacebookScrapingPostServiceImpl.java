@@ -390,11 +390,11 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                 null,
                 null,
                 ImmutableList.of(
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдаю")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдам")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдам")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("отдаю")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сдается"))
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сдаю")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сдам")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("отдам")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("отдаю")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сдается"))
                 )
         );
 
@@ -411,13 +411,13 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                 null,
                 null,
                 ImmutableList.of(
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("сниму")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("снимаю")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("снять")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("снял")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("возьму")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("взял")),
-                        new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("взять"))
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сниму")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("снимаю")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("снять")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("снял")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("возьму")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("взял")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("взять"))
                 )
         );
 
