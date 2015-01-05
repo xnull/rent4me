@@ -67,9 +67,9 @@ module.exports = React.createClass({
             <div className="col-md-3">
                 <UserPanel/>
                 <PersonalCabinetComponent/>
+                <SocialNet/>
                 <NewsComponent />
                 <LegalComponent/>
-                <SocialNet/>
             </div>
         )
     }
