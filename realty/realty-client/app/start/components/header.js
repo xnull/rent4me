@@ -20,7 +20,7 @@ var HeaderComponent = React.createClass({
                     <p>Прозрачность, отсутствие посредников</p>
                 </header>
                 <footer>
-                    <div className="row row-centered">
+                    <div className="row">
                         <div className="col-centered">
                             <AuthComponent />
                         </div>
