@@ -25,6 +25,34 @@ var SocialNetActions = {
         });
     },
 
+    changeRenterSearchText: function(text){
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_RENTER_POSTS_SAVE_SEARCH_TEXT,
+            text: text
+        });
+    },
+
+    changeLessorSearchText: function(text){
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_LESSOR_POSTS_SAVE_SEARCH_TEXT,
+            text: text
+        });
+    },
+
+    changeRenterSearchWithSubway: function(value){
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_RENTER_POSTS_SAVE_SEARCH_WITH_SUBWAY,
+            value: value
+        });
+    },
+
+    changeLessorSearchWithSubway: function(value){
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_LESSOR_POSTS_SAVE_SEARCH_WITH_SUBWAY,
+            value: value
+        });
+    },
+
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
     findRenterPosts: function(text,withSubway) {
         BlockUI.blockUI();

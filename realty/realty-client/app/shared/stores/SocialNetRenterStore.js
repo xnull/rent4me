@@ -27,6 +27,8 @@ function emptyPost() {
     };
 }
 
+var _searchText = null;
+var _searchWithSubway = false;
 var _posts = [];
 var _offset = 0;
 var _limit = 30;
@@ -38,6 +40,14 @@ var CHANGE_EVENT = 'change';
 var Store = assign({}, EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT);
+    },
+
+    getSearchText: function() {
+        return _searchText;
+    },
+
+    isSearchWithSubway: function() {
+        return _searchWithSubway;
     },
 
     saveSearchResults: function(posts) {
@@ -101,10 +111,22 @@ AppDispatcher.register(function(payload){
             break;
 
         case SocialNetConstants.SOCIAL_NET_RENTER_POSTS_RESET_SEARCH:
+            _searchText = null;
             _posts = [];
             _hasMoreResults = false;
             _offset = 0;
             break;
+
+        case SocialNetConstants.SOCIAL_NET_RENTER_POSTS_SAVE_SEARCH_TEXT:
+            _searchText = action.text || null;
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_RENTER_POSTS_SAVE_SEARCH_WITH_SUBWAY:
+            _searchWithSubway = action.value || false;
+            return true;//don't emit any event
+            break;
+
         default:
 //            console.log("case: default");
             return false;

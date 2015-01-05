@@ -15,8 +15,8 @@ var Posts = require('./posts');
 module.exports = React.createClass({
     getInitialState: function () {
         return {
-            withSubway: false,
-            text: null,
+            withSubway: SocialNetStore.isSearchWithSubway(),
+            text: SocialNetStore.getSearchText(),
             posts: SocialNetStore.getSearchResults(),
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults()
         };
@@ -51,6 +51,8 @@ module.exports = React.createClass({
     onSearchChange: function(e) {
         var value = e.target.value;
 
+        SocialNetActions.changeLessorSearchText(value);
+
         this.setState(assign(this.state, {
             text: value
         }));
@@ -60,6 +62,8 @@ module.exports = React.createClass({
         console.log(e);
         var value = e.target.checked;
         console.log("With subway new value: "+value);
+
+        SocialNetActions.changeLessorSearchWithSubway(value);
 
         this.setState(assign(this.state, {
             withSubway: value
@@ -72,6 +76,8 @@ module.exports = React.createClass({
         console.log('Searching for text: '+text);
 
         SocialNetActions.resetLessorSearchState();
+        SocialNetActions.changeLessorSearchText(text);
+        SocialNetActions.changeLessorSearchWithSubway(withSubway);
         SocialNetActions.findLessorPosts(text, withSubway);
     },
 
