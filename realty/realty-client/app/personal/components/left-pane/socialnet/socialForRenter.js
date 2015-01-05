@@ -72,6 +72,17 @@ module.exports = React.createClass({
         }));
     },
 
+    onClear: function(){
+        SocialNetActions.resetRenterSearchState();
+        SocialNetActions.changeRenterSearchText(null);
+        SocialNetActions.changeRenterSearchWithSubway(false);
+
+        this.setState(assign(this.state, {
+            withSubway: SocialNetStore.isSearchWithSubway(),
+            text: SocialNetStore.getSearchText()
+        }));
+    },
+
     onClick: function(){
         var text = this.state.text;
         var withSubway = this.state.withSubway;
@@ -124,7 +135,10 @@ module.exports = React.createClass({
                             </div>
 
 
-                            <div className="col-md-offset-9">
+                            <div className="col-md-offset-6 col-md-3">
+                                <a className="btn btn-danger center-block" onClick={this.onClear}>Очистить</a>
+                            </div>
+                            <div className="col-md-3">
                                 <a className="btn btn-primary center-block" onClick={this.onClick}>Поиск</a>
                             </div>
                         </form>

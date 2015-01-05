@@ -111,6 +111,7 @@ AppDispatcher.register(function(payload){
             break;
 
         case SocialNetConstants.SOCIAL_NET_RENTER_POSTS_RESET_SEARCH:
+            _searchWithSubway = false;
             _searchText = null;
             _posts = [];
             _hasMoreResults = false;
