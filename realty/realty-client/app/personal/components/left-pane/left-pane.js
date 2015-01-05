@@ -30,8 +30,11 @@ var UserPanel = React.createClass({
     },
 
     render: function () {
+        var s = {
+            marginTop: '60px'
+        };
         return (
-            <div className="panel panel-default">
+            <div className="panel panel-default" style={s}>
                 <div className="panel-body">
                     <h4>Пользователь</h4>
 
