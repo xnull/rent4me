@@ -49,6 +49,17 @@ public class UserRestResource {
     ChatService chatService;
 
     @GET
+    @Path("/find")
+    public Response findUsersByName(@QueryParam("name") String name) {
+        List<UserDTO> users = userService.findByName(name);
+
+        return Response
+                .ok()
+                .entity(users.stream().map(UserJSON::from).collect(Collectors.toList()))
+                .build();
+    }
+
+    @GET
     @Path("/me")
     public Response getMyProfile() {
         UserDTO user = userService.getMyProfile();

@@ -13,17 +13,22 @@ import bynull.realty.utils.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.ws.rs.NotAuthorizedException;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author dionis on 23/06/14.
@@ -183,5 +188,17 @@ public class UserServiceImpl implements UserService {
 
         user = userRepository.saveAndFlush(user);
         return true;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserDTO> findByName(String name) {
+        Assert.notNull(name);
+        PageRequest pageable = new PageRequest(0, 10, Sort.Direction.ASC, "id");
+        if(name.isEmpty()) {
+            return userRepository.findAll(pageable).getContent().stream().map(UserDTO::from).collect(Collectors.toList());
+        }
+
+        return userRepository.findByName("%"+name+"%", pageable).stream().map(UserDTO::from).collect(Collectors.toList());
     }
 }

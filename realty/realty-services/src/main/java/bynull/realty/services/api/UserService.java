@@ -5,6 +5,8 @@ import bynull.realty.dto.UserDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.List;
+
 /**
  * @author dionis on 09/07/14.
  */
@@ -19,6 +21,8 @@ public interface UserService extends UserDetailsService {
     UserDTO getMyProfile();
 
     boolean updateMyProfile(UserDTO dto);
+
+    List<UserDTO> findByName(String name);
 
     class UsernameTokenPair {
         public final String username;

@@ -4,7 +4,11 @@
 
 var React = require('react');
 var assign = require('object-assign');
+var Ajax = require('rent4meAjax');
+var _ = require('underscore');
+var BlockUI = require('rent4meBlockUI');
 
+var ReactAutocomplete = require('rent4meAutocomplete');
 
 var ChatStore = require('../../../../shared/stores/ChatStore');
 var ChatActions = require('../../../../shared/actions/ChatActions');
@@ -54,14 +58,37 @@ module.exports = React.createClass({
         }));
     },
 
-    onTargetPersonChanged: function(e) {
+    onTargetPersonChanged: function(item) {
         this.setState(assign(this.state, {
-            targetPersonId: e.target.value
+            targetPersonId: item.id
         }));
     },
 
     onSendMessage: function() {
         ChatActions.startNewConversation(this.state.targetPersonId, this.state.messageText);
+    },
+
+    _searchRemote: function(options, searchTerm, cb) {
+        var that = this;
+        Ajax
+            .GET('/rest/users/find?name='+searchTerm)
+            .authorized()
+            .onSuccess(function (data) {
+                //assign(this.state, {
+                //    suggestionUsers: {items: data}
+                //});
+                cb(null, _.filter(_.map(data, function(item){
+                    return {id: item.id, title: item.name};
+                }), function(item) {
+                    return item.id != that.state.me.id;
+                }));
+
+                //BlockUI.unblockUI();
+            })
+            .onError(function (xhr, status, err) {
+                //BlockUI.unblockUI();
+            })
+            .execute();
     },
 
     render: function () {
@@ -80,7 +107,7 @@ module.exports = React.createClass({
                             <div className="form-group">
                                 <label className="col-md-2 control-label">ID пользователя</label>
                                 <div className="col-md-10">
-                                    <input type="text" placeholder="Введите ID пользователя" value={targetPersonId} onChange={this.onTargetPersonChanged}/>
+                                    <ReactAutocomplete search={this._searchRemote} onChange={this.onTargetPersonChanged}/>
                                 </div>
                             </div>
                             <div className="form-group">

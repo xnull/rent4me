@@ -5,7 +5,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var UserConstants = require('../constants/UserConstants');
 var UserStore = require('../stores/UserStore');
-var BlockUI = require('../common/BlockUI');
+var BlockUI = require('rent4meBlockUI');
 var assign = require('object-assign');
 var _ = require('underscore');
 
