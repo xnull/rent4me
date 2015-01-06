@@ -10,39 +10,32 @@ var Post = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
-        var firstImage = _.first(item.imageUrls.map(function(photo) {
+        var firstImage = _.first(item.imageUrls.map(function (photo) {
             return (
-                <img className="img-responsive" width="128"
-                    src={photo}/>
+                <img className="img-responsive" width="128" src={photo}/>
             );
         }));
 
         var imagePreviews = firstImage ? (
             <div>
                 <div className="panel-thumbnail">
-                {firstImage}
+                    {firstImage}
                 </div>
-
                 <hr/>
-
             </div>
         ) : null;
 
         return (
-            <div>
+            <div className='panel'>
                 <a href="#" className="list-group-item">
-
-                {imagePreviews}
-
+                    {imagePreviews}
                     <p className="list-group-item-text">
-
                         <h4>Описание</h4>
 
                         <div className="row">
                             <div className="col-md-12">
                             {item.message}
                             </div>
-
                         </div>
 
                         <hr/>
@@ -58,8 +51,6 @@ var Post = React.createClass({
 
                     </p>
                     <hr/>
-
-
                 </a>
                 <br/>
             </div>
@@ -74,7 +65,7 @@ var Posts = React.createClass({
         var items = this.props.items || [];
         var hasMore = this.props.hasMore || false;
 
-        console.log("Has more?"+hasMore);
+        console.log("Has more?" + hasMore);
 
         var onHasMoreClicked = this.props.onHasMoreClicked;
 
@@ -90,7 +81,7 @@ var Posts = React.createClass({
             ) : null;
 
         var style = {};
-        if(!shown) {
+        if (!shown) {
             style['display'] = 'none';
         }
 
