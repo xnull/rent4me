@@ -1,12 +1,17 @@
 package bynull.realty.web.rest;
 
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.api.ChatService;
 import bynull.realty.services.api.UserService;
+import bynull.realty.util.LimitAndOffset;
+import bynull.realty.utils.SecurityUtils;
 import bynull.realty.web.annotation.PATCH;
 import bynull.realty.web.json.ApartmentJSON;
+import bynull.realty.web.json.ChatMessageJSON;
 import bynull.realty.web.json.UserJSON;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.*;
@@ -20,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author dionis on 24/11/14.
@@ -37,6 +44,9 @@ public class UserRestResource {
 
     @Resource
     UserService userService;
+
+    @Resource
+    ChatService chatService;
 
     @GET
     @Path("/me")
@@ -134,4 +144,38 @@ public class UserRestResource {
                 .status(Response.Status.OK)
                 .build();
     }
+
+    @POST
+    @Path("/{id}/chats")
+    public Response createChatMessage(@PathParam("id") long id, ChatMessageJSON message) {
+        String content = message.getMessage();
+        ChatMessageDTO result = chatService.createChatMessage(id, content);
+        return Response
+                .status(Response.Status.CREATED)
+                .entity(ChatMessageJSON.from(result))
+                .build();
+    }
+
+    @GET
+    @Path("/me/chats")
+    public Response listMyChats() {
+        List<ChatMessageDTO> result = chatService.listMyLatestChatMessages();
+        return Response
+                .ok()
+                .entity(result.stream().map(ChatMessageJSON::from).collect(Collectors.toList()))
+                .build();
+    }
+
+    @GET
+    @Path("/me/chats/{chatKey}")
+    public Response listMyConversation(@PathParam("chatKey") String chatKey, ChatMessageJSON message) {
+        String content = message.getMessage();
+        long myId = SecurityUtils.getAuthorizedUser().getId();
+        List<ChatMessageDTO> result = chatService.listMyLatestChatMessagesByKey(new ChatMessageDTO.ChatKeyDTO(chatKey), LimitAndOffset.builder().withLimit(100).create());
+        return Response
+                .ok()
+                .entity(result.stream().map(ChatMessageJSON::from).collect(Collectors.toList()))
+                .build();
+    }
+
 }
