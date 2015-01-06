@@ -14,16 +14,22 @@ configuration of users & extensions:
 
 $ psql
 
-> CREATE ROLE realty_test_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;
-> CREATE ROLE realty_test_user LOGIN PASSWORD '<password>' NOINHERIT;
-> GRANT realty_test_group TO realty_test_user;
+> CREATE ROLE gis_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;
+> CREATE ROLE gis LOGIN PASSWORD 'password' NOINHERIT;
+> GRANT gis_group TO gis;
 > \q
 
 
-$ createdb -O realty_test_user realty_testdb
+$ createdb -O gis test_gisdb
 
-$ psql --dbname=realty_testdb
+createdb -O gis gisdb
+
+$ psql --dbname=gisdb
 
  > CREATE EXTENSION postgis;
  > CREATE EXTENSION postgis_topology;
  > CREATE EXTENSION btree_gist;
+
+> create extension "uuid-ossp";
+> create extension pg_trgm;
+> CREATE extension pg_stat_statements;

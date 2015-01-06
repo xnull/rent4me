@@ -14,5 +14,7 @@ public interface FacebookScrapingPostService {
 
     void syncElasticSearchWithDB();
 
-    List<FacebookPostDTO> findPosts(String text, LimitAndOffset limitAndOffset);
+    List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
+
+    List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
 }

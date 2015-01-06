@@ -47,7 +47,7 @@ var Header = React.createClass({
 
     render: function () {
         return (
-            <div className="navbar navbar-default">
+            <div className="navbar navbar-default" >
                 <div className="col-md-12">
                     <div className="collapse navbar-collapse" id="navbar-collapse2">
                         <ul className="nav navbar-nav navbar-right">

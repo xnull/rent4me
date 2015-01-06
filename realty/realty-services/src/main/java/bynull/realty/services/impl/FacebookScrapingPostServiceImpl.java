@@ -9,31 +9,33 @@ import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.dto.FacebookPostDTO;
 import bynull.realty.services.api.FacebookScrapingPostService;
 import bynull.realty.util.LimitAndOffset;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -204,11 +206,12 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
         public static class HitSuperEntry {
             @JsonProperty("total")
-            long total;
+            private long total;
             @JsonProperty("hits")
-            List<HitEntry> hits;
+            private List<HitEntry> hits;
 
             @JsonIgnoreProperties(ignoreUnknown = true)
             @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -220,22 +223,65 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     }
 
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @Getter
+    @Setter
     public static class FindQuery {
         @JsonProperty("query")
-        Query query;
+        private Query query;
         @JsonProperty("from")
-        int from;
+        private int from;
         @JsonProperty("size")
-        int size;
+        private int size;
+
+        @JsonProperty("sort")
+        private List<Sort> sort;
 
         public static interface Query {
 
         }
 
+        public static interface Sort {
+
+        }
+
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class SortParams {
+            @JsonProperty("order")
+            private final Order order;
+            @JsonProperty("mode")
+            private final Mode mode;
+
+            public SortParams(Order order, Mode mode) {
+                this.order = order;
+                this.mode = mode;
+            }
+
+            public static enum Mode {
+                min, max, sum, avg
+            }
+
+            public static enum Order {
+                asc, desc
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class SortByExternalCreatedDt implements Sort {
+            @JsonProperty("ext_created_dt")
+            private final SortParams extCreatedDt;
+
+            public SortByExternalCreatedDt(SortParams extCreatedDt) {
+                this.extCreatedDt = extCreatedDt;
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
         public static class BoolQuery implements Query {
             @JsonProperty("bool")
-            final BoolWrapper bool;
+            private final BoolWrapper bool;
 
             public BoolQuery(List<Query> must, List<Query> mustNot, List<Query> should) {
                 this.bool = new BoolWrapper(must, mustNot, should);
@@ -243,13 +289,14 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
 
             @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            @Getter
             public static class BoolWrapper {
                 @JsonProperty("must")
-                public final List<Query> must;
+                private final List<Query> must;
                 @JsonProperty("must_not")
-                public final List<Query> mustNot;
+                private final List<Query> mustNot;
                 @JsonProperty("should")
-                public final List<Query> should;
+                private final List<Query> should;
 
                 public BoolWrapper(List<Query> must, List<Query> mustNot, List<Query> should) {
                     this.must = must;
@@ -264,19 +311,34 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         }
 
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-        public static class FuzzyQueryByMessage implements Query {
-            @JsonProperty("fuzzy")
-            final MessageMatch fuzzy;
+        @Getter
+        public static class FuzzyLikeThisQueryByMessage implements Query {
+            @JsonProperty("fuzzy_like_this")
+            private final Message fuzzy;
 
-            public FuzzyQueryByMessage(MessageMatch fuzzy) {
+            public FuzzyLikeThisQueryByMessage(Message fuzzy) {
                 this.fuzzy = fuzzy;
+            }
+
+            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            @Getter
+            public static class Message {
+                @JsonProperty("fields")
+                private final List<String> fields = ImmutableList.of("message");
+                @JsonProperty("like_text")
+                private final String likeText;
+
+                public Message(String likeText) {
+                    this.likeText = likeText;
+                }
             }
         }
 
         @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
         public static class MatchQueryByMessage implements Query {
             @JsonProperty("match")
-            final MessageMatch match;
+            private final MessageMatch match;
 
             public MatchQueryByMessage(MessageMatch match) {
                 this.match = match;
@@ -288,9 +350,10 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     }
 
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @Getter
     public static class MessageMatch {
         @JsonProperty("message")
-        final String message;
+        private final String message;
 
         public MessageMatch(String message) {
             this.message = message;
@@ -298,55 +361,114 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @Getter
+    @Setter
     public static class FacebookPostESJson {
         @JsonProperty("external_id")
-        String id;
+        private String id;
         @JsonProperty("message")
-        String message;
+        private String message;
         @JsonProperty("link")
-        String link;
+        private String link;
         @JsonProperty("picture")
-        String picture;
+        private String picture;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        @JsonProperty("ext_created_dt")
+        private Date createdDt;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        @JsonProperty("ext_updated_dt")
+        private Date updatedDt;
     }
 
     @Override
-    public List<FacebookPostDTO> findPosts(String text, LimitAndOffset limitAndOffset) {
-        PostMethod method = null;
+    public List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
+        Assert.notNull(text);
+
+        if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
+
+        FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
+                null,
+                null,
+                ImmutableList.of(
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сдаю")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сдам")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("отдам")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("отдаю")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сдается"))
+                )
+        );
+
+        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+    }
+
+    @Override
+    public List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
+        Assert.notNull(text);
+
+        if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
+
+        FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
+                null,
+                null,
+                ImmutableList.of(
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("сниму")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("снимаю")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("снять")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("снял")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("возьму")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("взял")),
+                        new FindQuery.MatchQueryByMessage(new MessageMatch("взять"))
+                )
+        );
+
+        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+    }
+
+    private List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindQuery.BoolQuery typeQuery) {
+        String index = config.getEsConfig().getIndex();
+//        index = "prod_fb_posts";
+
+        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");
+        ;
+//        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
+        List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))
+                .stream()
+                .map(e->new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message(e)))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if(withSubway) {
+            searchQueries.add(new FindQuery.BoolQuery(null, null,
+                    ImmutableList.of(
+                            new FindQuery.MatchQueryByMessage(new MessageMatch("м.")),
+                            new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message("метро"))
+                    )));
+        }
 
         try {
             FindQuery query = new FindQuery();
-            query.from = limitAndOffset.offset;
-            query.size = limitAndOffset.limit;
-            query.query =
+            query.setFrom(limitAndOffset.offset);
+            query.setSize(limitAndOffset.limit);
+
+            query.setQuery(
                     new FindQuery.BoolQuery(
                             ImmutableList.of(
                                     new FindQuery.BoolQuery(
-                                            ImmutableList.of(
-                                                    new FindQuery.MatchQueryByMessage(new MessageMatch(text))
-                                            ),
+                                            searchQueries,
                                             null,
                                             null
                                     ),
-                                    new FindQuery.BoolQuery(
-                                            null,
-                                            null,
-                                            ImmutableList.of(
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдаю")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдам")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("отдам")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("отдаю")),
-                                                    new FindQuery.FuzzyQueryByMessage(new MessageMatch("сдается"))
-                                            )
-                                    )
+                                    typeQuery
                             ),
                             null,
                             null
-                    )
+                    ))
             ;
+            query.setSort(ImmutableList.of(
+                    new FindQuery.SortByExternalCreatedDt(new FindQuery.SortParams(FindQuery.SortParams.Order.desc, FindQuery.SortParams.Mode.min))
+            ));
 
             String value = jacksonObjectMapper.writeValueAsString(query);
 
-            method = new PostMethod("http://localhost:9200/"+config.getEsConfig().getIndex()+"/_search");
             LOGGER.info("DB config for ES sync: [{}]", value);
 
             method.setRequestEntity(new StringRequestEntity(value, null, "UTF-8"));
@@ -366,6 +488,8 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                         dto.setMessage(e.message);
                         dto.setLink(e.link);
                         dto.setImageUrls(e.picture != null ? Collections.singletonList(e.picture) : Collections.emptyList());
+                        dto.setCreated(e.createdDt);
+                        dto.setUpdated(e.updatedDt);
                         return dto;
                     })
                     .collect(Collectors.toList());
