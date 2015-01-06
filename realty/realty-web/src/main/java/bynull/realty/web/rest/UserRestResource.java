@@ -168,9 +168,7 @@ public class UserRestResource {
 
     @GET
     @Path("/me/chats/{chatKey}")
-    public Response listMyConversation(@PathParam("chatKey") String chatKey, ChatMessageJSON message) {
-        String content = message.getMessage();
-        long myId = SecurityUtils.getAuthorizedUser().getId();
+    public Response listMyConversation(@PathParam("chatKey") String chatKey) {
         List<ChatMessageDTO> result = chatService.listMyLatestChatMessagesByKey(new ChatMessageDTO.ChatKeyDTO(chatKey), LimitAndOffset.builder().withLimit(100).create());
         return Response
                 .ok()
