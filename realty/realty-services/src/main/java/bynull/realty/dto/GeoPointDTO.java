@@ -1,10 +1,14 @@
 package bynull.realty.dto;
 
 import bynull.realty.data.common.GeoPoint;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author dionis on 22/06/14.
  */
+@Getter
+@Setter
 public class GeoPointDTO {
     public static GeoPointDTO from(GeoPoint geoPoint) {
         if(geoPoint == null) return null;
@@ -17,22 +21,6 @@ public class GeoPointDTO {
 
     private double latitude;
     private double longitude;
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
 
     public GeoPoint toInternal() {
         GeoPoint geoPoint = new GeoPoint();

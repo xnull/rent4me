@@ -1,6 +1,8 @@
 package bynull.realty.dto;
 
 import bynull.realty.data.business.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import static bynull.realty.util.CommonUtils.copy;
 /**
  * @author dionis on 22/06/14.
  */
+@Getter
+@Setter
 public class ApartmentDTO {
     private Long id;
     private GeoPointDTO location;
@@ -69,102 +73,6 @@ public class ApartmentDTO {
         return dto;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public GeoPointDTO getLocation() {
-        return location;
-    }
-
-    public void setLocation(GeoPointDTO location) {
-        this.location = location;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public AddressComponentsDTO getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressComponentsDTO address) {
-        this.address = address;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getRoomCount() {
-        return roomCount;
-    }
-
-    public void setRoomCount(Integer roomCount) {
-        this.roomCount = roomCount;
-    }
-
-    public Integer getFloorNumber() {
-        return floorNumber;
-    }
-
-    public void setFloorNumber(Integer floorNumber) {
-        this.floorNumber = floorNumber;
-    }
-
-    public Integer getFloorsTotal() {
-        return floorsTotal;
-    }
-
-    public void setFloorsTotal(Integer floorsTotal) {
-        this.floorsTotal = floorsTotal;
-    }
-
-    public BigDecimal getArea() {
-        return area;
-    }
-
-    public void setArea(BigDecimal area) {
-        this.area = area;
-    }
-
-    public RentType getTypeOfRent() {
-        return typeOfRent;
-    }
-
-    public void setTypeOfRent(RentType typeOfRent) {
-        this.typeOfRent = typeOfRent;
-    }
-
-    public BigDecimal getRentalFee() {
-        return rentalFee;
-    }
-
-    public void setRentalFee(BigDecimal rentalFee) {
-        this.rentalFee = rentalFee;
-    }
-
-    public FeePeriod getFeePeriod() {
-        return feePeriod;
-    }
-
-    public void setFeePeriod(FeePeriod feePeriod) {
-        this.feePeriod = feePeriod;
-    }
-
     public Date getCreated() {
         return copy(created);
     }
@@ -186,7 +94,7 @@ public class ApartmentDTO {
     }
 
     public void setPhotos(List<ApartmentPhotoDTO> photos) {
-        this.photos = photos;
+        this.photos = new ArrayList<>(photos);
     }
 
     public List<String> getAddedTempPhotoGUIDs() {

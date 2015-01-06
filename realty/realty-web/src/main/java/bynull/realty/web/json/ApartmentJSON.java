@@ -7,6 +7,8 @@ import bynull.realty.dao.util.Constants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -20,6 +22,8 @@ import static bynull.realty.util.CommonUtils.copy;
  * @author dionis on 22/06/14.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@Getter
+@Setter
 public class ApartmentJSON {
     @JsonProperty("id")
     private Long id;
@@ -100,150 +104,6 @@ public class ApartmentJSON {
         json.setOwner(UserJSON.from(apartment.getOwner()));
 
         return json;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public GeoPointJSON getLocation() {
-        return location;
-    }
-
-    public void setLocation(GeoPointJSON location) {
-        this.location = location;
-    }
-
-    public AddressComponentsJSON getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressComponentsJSON address) {
-        this.address = address;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getRoomCount() {
-        return roomCount;
-    }
-
-    public void setRoomCount(Integer roomCount) {
-        this.roomCount = roomCount;
-    }
-
-    public Integer getFloorNumber() {
-        return floorNumber;
-    }
-
-    public void setFloorNumber(Integer floorNumber) {
-        this.floorNumber = floorNumber;
-    }
-
-    public Integer getFloorsTotal() {
-        return floorsTotal;
-    }
-
-    public void setFloorsTotal(Integer floorsTotal) {
-        this.floorsTotal = floorsTotal;
-    }
-
-    public BigDecimal getArea() {
-        return area;
-    }
-
-    public void setArea(BigDecimal area) {
-        this.area = area;
-    }
-
-    public RentType getTypeOfRent() {
-        return typeOfRent;
-    }
-
-    public void setTypeOfRent(RentType typeOfRent) {
-        this.typeOfRent = typeOfRent;
-    }
-
-    public BigDecimal getRentalFee() {
-        return rentalFee;
-    }
-
-    public void setRentalFee(BigDecimal rentalFee) {
-        this.rentalFee = rentalFee;
-    }
-
-    public FeePeriod getFeePeriod() {
-        return feePeriod;
-    }
-
-    public void setFeePeriod(FeePeriod feePeriod) {
-        this.feePeriod = feePeriod;
-    }
-
-    public Date getCreated() {
-        return copy(created);
-    }
-
-    public void setCreated(Date created) {
-        this.created = copy(created);
-    }
-
-    public Date getUpdated() {
-        return copy(updated);
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = copy(updated);
-    }
-
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean published) {
-        this.published = published;
-    }
-
-    public List<ApartmentPhotoJSON> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<ApartmentPhotoJSON> photos) {
-        this.photos = photos;
-    }
-
-    public List<String> getAddedTempPhotoGUIDs() {
-        return addedTempPhotoGUIDs;
-    }
-
-    public void setAddedTempPhotoGUIDs(List<String> addedTempPhotoGUIDs) {
-        this.addedTempPhotoGUIDs = addedTempPhotoGUIDs;
-    }
-
-    public List<String> getDeletePhotoGUIDs() {
-        return deletePhotoGUIDs;
-    }
-
-    public void setDeletePhotoGUIDs(List<String> deletePhotoGUIDs) {
-        this.deletePhotoGUIDs = deletePhotoGUIDs;
-    }
-
-    public UserJSON getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserJSON owner) {
-        this.owner = owner;
     }
 
     public ApartmentDTO toDTO() {

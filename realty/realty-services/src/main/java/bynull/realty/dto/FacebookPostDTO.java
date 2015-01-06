@@ -1,5 +1,8 @@
 package bynull.realty.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,36 +11,14 @@ import static bynull.realty.util.CommonUtils.copy;
 /**
  * Created by dionis on 04/01/15.
  */
+@Getter
+@Setter
 public class FacebookPostDTO {
     private String message;
     private List<String> imageUrls;
     private String link;
     private Date created;
     private Date updated;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
 
     public Date getCreated() {
         return copy(created);

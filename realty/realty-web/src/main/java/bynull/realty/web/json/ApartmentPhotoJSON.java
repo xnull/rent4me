@@ -2,10 +2,14 @@ package bynull.realty.web.json;
 
 import bynull.realty.dto.ApartmentPhotoDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author dionis on 05/12/14.
  */
+@Getter
+@Setter
 public class ApartmentPhotoJSON {
 
     @JsonProperty("id")
@@ -16,38 +20,6 @@ public class ApartmentPhotoJSON {
     private String fullPictureUrl;
     @JsonProperty("guid")
     private String guid;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSmallThumbnailUrl() {
-        return smallThumbnailUrl;
-    }
-
-    public void setSmallThumbnailUrl(String smallThumbnailUrl) {
-        this.smallThumbnailUrl = smallThumbnailUrl;
-    }
-
-    public String getFullPictureUrl() {
-        return fullPictureUrl;
-    }
-
-    public void setFullPictureUrl(String fullPictureUrl) {
-        this.fullPictureUrl = fullPictureUrl;
-    }
-
-    public String getGuid() {
-        return guid;
-    }
-
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
 
     public static ApartmentPhotoJSON from(ApartmentPhotoDTO apartmentPhoto) {
         if (apartmentPhoto == null) {
