@@ -74,19 +74,13 @@ module.exports = React.createClass({
             .GET('/rest/users/find?name='+searchTerm)
             .authorized()
             .onSuccess(function (data) {
-                //assign(this.state, {
-                //    suggestionUsers: {items: data}
-                //});
                 cb(null, _.filter(_.map(data, function(item){
                     return {id: item.id, title: item.name};
                 }), function(item) {
                     return item.id != that.state.me.id;
                 }));
-
-                //BlockUI.unblockUI();
             })
             .onError(function (xhr, status, err) {
-                //BlockUI.unblockUI();
             })
             .execute();
     },
