@@ -3,8 +3,8 @@
  */
 var React = require('react');
 
-var UserStore = require('../../../shared/stores/UserStore');
-var UserActions = require('../../../shared/actions/UserActions');
+var UserStore = require('../../../../shared/stores/UserStore');
+var UserActions = require('../../../../shared/actions/UserActions');
 var JSON = require('JSON2');
 
 var assign = require('object-assign');
