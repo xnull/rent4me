@@ -59,7 +59,7 @@ module.exports = React.createClass({
 //        console.log('component will mount');
         UserStore.addChangeListener(this._onLoad);
 
-        UserActions.loadMyProfile();
+        UserActions.loadMyProfileIfNotLoaded();
 
 //        $('#saveMyInfoBtn').on('click', function(){
 //            UserStore.saveMyProfile();

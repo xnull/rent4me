@@ -17,7 +17,7 @@ public class UserDTO {
 
         UserDTO dto = new UserDTO();
 
-        dto.setId(dto.getId());
+        dto.setId(user.getId());
         dto.setDisplayName(user.getDisplayName());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());

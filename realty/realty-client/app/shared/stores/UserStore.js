@@ -68,6 +68,8 @@ AppDispatcher.register(function(payload){
             saveMyProfile(userObject);
             break;
         case UserConstants.USER_PROFILE_LOADED:
+            console.log('My profile loaded');
+            console.log(userObject);
             saveMyProfile(userObject);
             break;
         default:

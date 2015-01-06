@@ -4,18 +4,49 @@
 var React = require('react');
 
 var _ = require('underscore');
+var assign = require('object-assign');
 var moment = require('moment');
 
+var UserStore = require('../../../../shared/stores/UserStore');
+var UserActions = require('../../../../shared/actions/UserActions');
+
 var Chat = React.createClass({
+    getInitialState: function() {
+        return {
+            me: UserStore.getMyProfile()
+        };
+    },
+
+    componentWillMount: function() {
+        UserStore.addChangeListener(this.meLoadListener);
+        UserActions.loadMyProfileIfNotLoaded();
+    },
+
+    componentWillUnmount: function() {
+        UserStore.removeChangeListener(this.meLoadListener);
+    },
+
+    meLoadListener: function() {
+        this.setState(assign(this.state, {
+            me: UserStore.getMyProfile()
+        }));
+    },
+
     render: function () {
         var item = this.props.item || {};
+        var me = this.state.me;
+
+        console.log("Me:");
+        console.log(me);
+
+        var targetPerson = item.receiver.id == me.id ? item.sender : item.receiver;
 
         return (
             <div className='panel'>
                 <a href="#" className="list-group-item">
-                    {imagePreviews}
+
                     <p className="list-group-item-text">
-                        <h4>{item.receiver.name} vs {item.sender.name} </h4>
+                        <h4>{targetPerson.name} </h4>
 
                         <div className="row">
                             <div className="col-md-12">

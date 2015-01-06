@@ -3,19 +3,40 @@
  */
 
 var React = require('react');
+var assign = require('object-assign');
+
 var Chats = require('./chats');
+var ChatStore = require('../../../../shared/stores/ChatStore');
+var ChatActions = require('../../../../shared/actions/ChatActions');
 
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            chats: [],
+            chats: ChatStore.getMyChats(),
             hasMoreSearchResults: []
         }
     },
 
+    componentWillMount: function() {
+        ChatStore.addChangeListener(this.myChatsListener);
+        ChatActions.loadMyChats();
+    },
+
+    componentWillUnmount: function() {
+        ChatStore.removeChangeListener(this.myChatsListener);
+    },
+
+    myChatsListener: function() {
+        this.setState(assign(this.state, {
+            chats: ChatStore.getMyChats()
+        }));
+    },
+
     render: function () {
         var items = this.state.chats || [];
-        var hasMoreResults = this.state.hasMoreSearchResults || false;
+        console.log('Chats:');
+        console.log(items);
+        var hasMoreResults = (this.state.hasMoreSearchResults || false) && false;//disable for now
 
         return (
             <div className="col-md-9">
@@ -26,6 +47,9 @@ module.exports = React.createClass({
 
 
                         <form className="form-horizontal" role="form">
+                            <div className="col-md-offset-9">
+                                <a className="btn btn-primary center-block" href="#/user/chats/newMessage" >Новое сообщение</a>
+                            </div>
                             <div className="form-group">
                                 <label className="col-md-2 control-label">Поиск по текущим адресатам</label>
                                 <div className="col-md-10">

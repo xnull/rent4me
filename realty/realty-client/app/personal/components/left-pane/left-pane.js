@@ -18,7 +18,7 @@ var UserPanel = React.createClass({
     componentDidMount: function(){
         UserStore.addChangeListener(this._onChange);
 
-        UserActions.loadMyProfile();
+        UserActions.loadMyProfileIfNotLoaded();
     },
 
     componentWillUnmount: function(){

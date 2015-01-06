@@ -21,7 +21,7 @@ public class UserJSON {
 
         UserJSON json = new UserJSON();
 
-        json.setId(json.getId());
+        json.setId(dto.getId());
         json.setDisplayName(dto.getDisplayName());
         json.setFirstName(dto.getFirstName());
         json.setLastName(dto.getLastName());

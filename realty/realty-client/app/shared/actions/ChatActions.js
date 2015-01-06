@@ -1,33 +1,31 @@
+
 /**
  * Created by dionis on 04/12/14.
  */
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var UserConstants = require('../constants/UserConstants');
-var UserStore = require('../stores/UserStore');
+var Constants = require('../constants/ChatConstants');
+var Store = require('../stores/ChatStore');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
-var _ = require('underscore');
 
 var Ajax = require('../common/Ajax');
 
-var AuthActions = {
-    /**
-     * @param {object} obj
-     */
-    save: function (obj) {
+module.exports = {
+
+    loadMyChats: function() {
         BlockUI.blockUI();
 
-        var data = assign({}, obj);
+        //var limit = Store.getLimit();
+        //var offset = Store.getOffset();
 
         Ajax
-            .PUT('/rest/users/me')
+            .GET('/rest/users/me/chats')
             .authorized()
-            .withJsonBody(data)
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
-                    actionType: UserConstants.USER_PROFILE_SAVE,
-                    user: data
+                    actionType: Constants.CHAT_LIST_LOADED,
+                    chats: data
                 });
 
                 BlockUI.unblockUI();
@@ -38,16 +36,24 @@ var AuthActions = {
             .execute();
     },
 
-    loadMyProfile: function() {
+    startNewConversation: function(personId, text) {
         BlockUI.blockUI();
 
+        //var limit = Store.getLimit();
+        //var offset = Store.getOffset();
+
+        var obj = {
+            message: text
+        };
+
         Ajax
-            .GET('/rest/users/me')
+            .POST('/rest/users/'+personId+'/chats')
             .authorized()
+            .withJsonBody(obj)
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
-                    actionType: UserConstants.USER_PROFILE_LOADED,
-                    user: data
+                    actionType: Constants.CHAT_NEW_CONVERSATION_STARTED,
+                    newMessage: data
                 });
 
                 BlockUI.unblockUI();
@@ -56,16 +62,5 @@ var AuthActions = {
                 BlockUI.unblockUI();
             })
             .execute();
-    },
-
-    loadMyProfileIfNotLoaded: function() {
-        var myProfile = UserStore.getMyProfile();
-        if(_.isEmpty(myProfile)) {
-            console.log('My profile is empty. Loading.');
-            console.log(myProfile);
-            this.loadMyProfile();
-        }
     }
 };
-
-module.exports = AuthActions;

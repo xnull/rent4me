@@ -2,6 +2,7 @@ package bynull.realty.services.impl;
 
 import bynull.realty.dao.ChatMessageRepository;
 import bynull.realty.dao.UserRepository;
+import bynull.realty.data.business.User;
 import bynull.realty.data.business.chat.ChatMessage;
 import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.services.api.ChatService;
@@ -30,15 +31,21 @@ public class ChatServiceImpl implements ChatService {
     @Transactional
     @Override
     public ChatMessageDTO createChatMessage(long receiverId, String text) {
-        long sender = SecurityUtils.getAuthorizedUser().getId();
+        long senderId = SecurityUtils.getAuthorizedUser().getId();
 
-        if(sender == receiverId) {
+        if(senderId == receiverId) {
             throw new BadRequestException("Sender and receiver could not be the same");
         }
 
+        User sender = userRepository.findOne(senderId);
+        Assert.notNull(sender);
+        User receiver = userRepository.findOne(receiverId);
+        Assert.notNull(receiver);
+
         ChatMessage entity = new ChatMessage();
-        entity.setSender(userRepository.findOne(sender));
-        entity.setReceiver(userRepository.findOne(receiverId));
+        entity.setSender(sender);
+        entity.setReceiver(receiver);
+        entity.setMessage(text);
         entity = chatMessageRepository.saveAndFlush(entity);
         return ChatMessageDTO.from(entity);
     }
