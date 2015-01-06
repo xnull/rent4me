@@ -56,6 +56,7 @@ var route = (
         <Route name="socialRenter" path="social/renter" handler={require('./left-pane/socialnet/socialForRenter')}/>
         <Route name="socialLesser" path="social/lessor" handler={require('./left-pane/socialnet/socialForLessor')}/>
         <Route name="chats" path="user/chats" handler={require('./left-pane/chats/main')}/>
+        <Route name="chat" path="user/chat" handler={require('./left-pane/chats/chat')}/>
         <Route name="newMessageInChat" path="user/chats/newMessage" handler={require('./left-pane/chats/newMessage')}/>
 
         <DefaultRoute handler={require('./main/news-pane.js')}/>

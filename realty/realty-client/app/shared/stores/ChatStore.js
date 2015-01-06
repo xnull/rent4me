@@ -28,6 +28,7 @@ function emptyPost() {
 }
 
 var _myChats = [];
+var _chatMessages = [];
 
 var _offset = 0;
 var _limit = 30;
@@ -36,6 +37,7 @@ var _hasMoreResults = false;
 
 var CHAT_CHANGE_EVENT = 'chat_change';
 var CHAT_NEW_CONVERSATION_STARTED_EVENT = 'chat_new_conv_started';
+var CHAT_MESSAGES_LOADED_EVENT = 'chat_msgs_loaded';
 
 var Store = assign({}, EventEmitter.prototype, {
     emitChange: function() {
@@ -46,9 +48,10 @@ var Store = assign({}, EventEmitter.prototype, {
         this.emit(CHAT_NEW_CONVERSATION_STARTED_EVENT);
     },
 
-    isSearchWithSubway: function() {
-        return _searchWithSubway;
+    emitChatMessagesLoadedEvent: function() {
+        this.emit(CHAT_MESSAGES_LOADED_EVENT);
     },
+
 
     saveChats: function(chats) {
         console.log('Saving chats:');
@@ -66,6 +69,14 @@ var Store = assign({}, EventEmitter.prototype, {
 
     getMyChats: function() {
         return _myChats;
+    },
+
+    saveChatMessages: function(chatKey, messages) {
+        _chatMessages[chatKey] = messages || [];
+    },
+
+    getChatMessages: function(chatKey) {
+        return _chatMessages[chatKey] || [];
     },
 
     //hasMoreSearchResults: function() {
@@ -96,6 +107,19 @@ var Store = assign({}, EventEmitter.prototype, {
      */
     removeNewConversationStartedListener: function(callback) {
         this.removeListener(CHAT_NEW_CONVERSATION_STARTED_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    addChatMessagesLoadedListener: function(callback) {
+        this.on(CHAT_MESSAGES_LOADED_EVENT, callback);
+    },
+    /**
+     * @param {function} callback
+     */
+    removeChatMessagesLoadedListener: function(callback) {
+        this.removeListener(CHAT_MESSAGES_LOADED_EVENT, callback);
     }
 
 
@@ -124,6 +148,16 @@ AppDispatcher.register(function(payload){
             console.log(action.newMessage);
 
             Store.emitNewConversationStarted();
+            return true;
+            break;
+
+        case Constants.CHAT_MESSAGES_LOADED:
+            console.log('chat messages loaded for chat '+action.chatKey+':');
+            console.log(action.messages);
+
+            Store.saveChatMessages(action.chatKey, action.messages || []);
+
+            Store.emitChatMessagesLoadedEvent();
             return true;
             break;
 

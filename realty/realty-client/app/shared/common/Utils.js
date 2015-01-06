@@ -90,9 +90,25 @@ function getQueryParams(paramName) {
     paramName = paramName.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regexString = "[\\?&]" + paramName + "=([^&#]*)";
     var regex = new RegExp(regexString);
+    console.log('window.location='+window.location.search);
     var found = regex.exec(window.location.search);
-    if (found == null)
-        return null;
+    if (found == null) {
+        //try otherwise
+        var _url = window.location.href || '';
+        var _idx = _url.indexOf('?');
+        if(_idx >= 0 ) {
+            _url = _url.substr(_idx);
+
+            found = regex.exec(_url);
+            if(found == null) {
+                return null;
+            } else {
+                return decodeURIComponent(found[1].replace(/\+/g, " "));
+            }
+        } else {
+            return null;
+        }
+    }
     else
         return decodeURIComponent(found[1].replace(/\+/g, " "));
 }

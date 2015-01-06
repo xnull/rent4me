@@ -41,9 +41,11 @@ var Chat = React.createClass({
 
         var targetPerson = item.receiver.id == me.id ? item.sender : item.receiver;
 
+        var url = "#/user/chat?id="+item.chat_key+"&receiver_id="+targetPerson.id;
+
         return (
             <div className='panel'>
-                <a href="#" className="list-group-item">
+                <a href={url} className="list-group-item">
 
                     <p className="list-group-item-text">
                         <div className="row">
@@ -55,9 +57,7 @@ var Chat = React.createClass({
                                 <strong>{item.sender.name}</strong>: {item.message}
                             </div>
                         </div>
-
                     </p>
-                    <hr/>
                 </a>
                 <br/>
             </div>

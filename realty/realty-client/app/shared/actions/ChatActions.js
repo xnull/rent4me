@@ -36,7 +36,7 @@ module.exports = {
             .execute();
     },
 
-    startNewConversation: function(personId, text) {
+    sendNewMessage: function(personId, text) {
         BlockUI.blockUI();
 
         //var limit = Store.getLimit();
@@ -62,5 +62,29 @@ module.exports = {
                 BlockUI.unblockUI();
             })
             .execute();
-    }
+    },
+
+    loadChatMessages: function(chatKey) {
+        BlockUI.blockUI();
+
+        //var limit = Store.getLimit();
+        //var offset = Store.getOffset();
+
+        Ajax
+            .GET('/rest/users/me/chats/'+chatKey)
+            .authorized()
+            .onSuccess(function (data) {
+                AppDispatcher.handleViewAction({
+                    actionType: Constants.CHAT_MESSAGES_LOADED,
+                    messages: data,
+                    chatKey: chatKey
+                });
+
+                BlockUI.unblockUI();
+            })
+            .onError(function (xhr, status, err) {
+                BlockUI.unblockUI();
+            })
+            .execute();
+    },
 };
