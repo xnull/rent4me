@@ -14,17 +14,18 @@ import java.util.List;
 @Component
 public class VkDataStoreImpl implements VkDataStoreService {
 
-    @Resource
-    private VkRepository vkRepository;
+//    @Resource
+//    private VkRepository vkRepository;
 
     @Override
     public void savePost(Item post) {
-        vkRepository.save(post);
+//        vkRepository.save(post);
     }
 
     @Override
     public void savePosts(List<Item> post) {
-        vkRepository.save(post);
+
+//        vkRepository.save(post);
     }
 
     @Override
