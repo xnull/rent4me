@@ -1,4 +1,4 @@
-package bynull.realty.crawler.json;
+package bynull.realty.data.business.vk;
 
 /**
  * Created by trierra on 12/13/14.

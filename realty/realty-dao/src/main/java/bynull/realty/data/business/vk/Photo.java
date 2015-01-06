@@ -1,4 +1,4 @@
-package bynull.realty.crawler.json;
+package bynull.realty.data.business.vk;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

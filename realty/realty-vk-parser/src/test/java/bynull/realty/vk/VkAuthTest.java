@@ -1,6 +1,6 @@
 package bynull.realty.vk;
 
-import bynull.realty.crawler.VkAuth;
+import bynull.realty.grabber.VkAuth;
 import org.junit.Before;
 import org.junit.Test;
 

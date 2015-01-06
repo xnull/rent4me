@@ -1,20 +1,17 @@
-package bynull.realty.crawler.json;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package bynull.realty.dto.vk;
 
 /**
  * Created by trierra on 12/22/14.
  */
-public class Link extends BaseEntity {
+public class LinkDTO extends BaseEntity {
     private String description;
 
-    @JsonProperty("image_src")
     private String imageSrc;
 
     private String title;
     private String url;
 
-    public Link() {
+    public LinkDTO() {
     }
 
     public String getDescription() {

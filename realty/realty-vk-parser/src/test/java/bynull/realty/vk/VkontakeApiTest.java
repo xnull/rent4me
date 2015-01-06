@@ -25,12 +25,12 @@ public class VkontakeApiTest {
 
 //    @Test
 //    public void testRequestBuilder(){
-//        VkCrowler crawler = new VkCrowler();
+//        VkCrowler grabber = new VkCrowler();
 //        ParametersCollector collector = new ParametersCollector();
 //        collector.setUrl(String url);
 //
 //
-//        crawler.buildRequest(collector);
+//        grabber.buildRequest(collector);
 //
 //    }
 

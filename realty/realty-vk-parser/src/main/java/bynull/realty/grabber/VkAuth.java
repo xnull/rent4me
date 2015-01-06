@@ -1,4 +1,4 @@
-package bynull.realty.crawler;
+package bynull.realty.grabber;
 
 import bynull.realty.exeptions.EmptyHiddenVkValue;
 import org.apache.commons.io.IOUtils;
@@ -12,6 +12,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,6 +23,7 @@ import java.net.URISyntaxException;
  * Date: 11/4/14
  * Browser imitation parser receive the access_token
  */
+@Component
 public class VkAuth {
     private static final Logger LOGGER = LoggerFactory.getLogger(VkAuth.class);
 

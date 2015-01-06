@@ -1,4 +1,4 @@
-package bynull.realty.crawler.json;
+package bynull.realty.grabber.json;
 
 import java.util.List;
 

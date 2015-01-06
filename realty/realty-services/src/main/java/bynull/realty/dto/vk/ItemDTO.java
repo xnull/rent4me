@@ -1,6 +1,6 @@
-package bynull.realty.crawler.json;
+package bynull.realty.dto.vk;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import bynull.realty.data.business.vk.Item;
 
 import java.util.Date;
 import java.util.List;
@@ -8,18 +8,23 @@ import java.util.List;
 /**
  * Created by trierra on 12/20/14.
  */
-public class Item extends BaseEntity {
-    @JsonProperty("id")
+public class ItemDTO extends BaseEntity {
     Long formId;
 
-    @JsonProperty("owner_id")
     Long ownerId;
 
     Date date;
 
-    List<Attachment> attachments;
+    List<AttachmentDTO> attachmentDTOs;
 
-    public Item() {
+    public ItemDTO() {
+    }
+
+    public static ItemDTO from(Item model) {
+        if (model == null) return null;
+        ItemDTO dto = new ItemDTO();
+        //TODO: to complete
+        return dto;
     }
 
     public Long getFormId() {
@@ -46,11 +51,11 @@ public class Item extends BaseEntity {
         this.date = date;
     }
 
-    public List<Attachment> getAttachments() {
-        return attachments;
+    public List<AttachmentDTO> getAttachmentDTOs() {
+        return attachmentDTOs;
     }
 
-    public void setAttachments(List<Attachment> attachments) {
-        this.attachments = attachments;
+    public void setAttachmentDTOs(List<AttachmentDTO> attachmentDTOs) {
+        this.attachmentDTOs = attachmentDTOs;
     }
 }

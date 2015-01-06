@@ -1,12 +1,12 @@
-package bynull.realty.crawler.json;
+package bynull.realty.grabber.json;
 
 /**
  * Created by trierra on 12/22/14.
  */
-public class Response {
+public class VkResponse {
     private WallPost response;
 
-    public Response() {
+    public VkResponse() {
     }
 
     public WallPost getResponse() {

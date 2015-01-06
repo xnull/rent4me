@@ -1,14 +1,14 @@
-package bynull.realty.crawler.services;
+package bynull.realty.grabber.services.impl;
 
-import bynull.realty.crawler.api.VkApiGroups;
-import bynull.realty.crawler.json.Item;
-import bynull.realty.crawler.json.Response;
-import bynull.realty.crawler.json.WallPost;
+import bynull.realty.grabber.json.Item;
+import bynull.realty.grabber.json.VkResponse;
+import bynull.realty.grabber.json.WallPost;
+import bynull.realty.grabber.services.api.VkGroupPostsService;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -21,13 +21,14 @@ import java.util.Map;
 /**
  * Created by trierra on 12/4/14.
  */
-@Component
-public class VkApiGroupsImpl implements VkApiGroups {
-    private static final Logger LOG = LoggerFactory.getLogger(VkApiGroupsImpl.class);
+@Service
+public class VkGroupPostsServiceImpl implements VkGroupPostsService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VkGroupPostsServiceImpl.class);
     private Map<String, String> groupWallParams = new HashMap<>();
     private Map<String, String> groupConversationParams = new HashMap<>();
 
-    public VkApiGroupsImpl() {
+    public VkGroupPostsServiceImpl() {
         init();
     }
 
@@ -54,15 +55,13 @@ public class VkApiGroupsImpl implements VkApiGroups {
     }
 
     @Override
-    public List<Item> wallGetPostsList(String groupDomain, String accessToken) throws URISyntaxException {
+    public List<Item> getWallPostsList(String groupDomain, String accessToken) throws URISyntaxException {
         LOG.debug("getting posts from '" + groupDomain + "' group");
         groupWallParams.replace("domain", "kvarnado");
         URI uri = requestBuilder("wall.get", groupWallParams, accessToken);
-
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Response> entity = restTemplate.getForEntity(uri.toString(), Response.class);
-        Response post = entity.getBody();
-
+        ResponseEntity<VkResponse> entity = restTemplate.getForEntity(uri.toString(), VkResponse.class);
+        VkResponse post = entity.getBody();
         return post.getResponse().getItems();
     }
 
@@ -86,11 +85,5 @@ public class VkApiGroupsImpl implements VkApiGroups {
 
         return null;
     }
-
-//    arenda_v_moskve
-//    club22062158
-//    sdalsnyal
-//    arendakvartir_ru
-
 
 }
