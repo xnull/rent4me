@@ -137,15 +137,15 @@ module.exports = React.createClass({
                                     <div className="control-group">
                                         <div className="dropdown">
                                             <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                                                Срок аренды
+                                                Тип аренды
                                                 <span className="caret"></span>
                                             </button>
                                             <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                                 <li role="presentation">
-                                                    <a role="menuitem" tabindex="-1" href="#" style={{focus: {backgroundColor: '#000000'}}}>Посуточно</a>
+                                                    <a role="menuitem" tabindex="-1" href="#" style={{focus: {backgroundColor: '#000000'}}}>Сниму</a>
                                                 </li>
                                                 <li role="presentation">
-                                                    <a role="menuitem" tabindex="-1" href="#">Месяц</a>
+                                                    <a role="menuitem" tabindex="-1" href="#">Сдам</a>
                                                 </li>
                                             </ul>
                                         </div>
