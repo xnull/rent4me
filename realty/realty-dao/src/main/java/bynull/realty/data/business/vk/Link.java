@@ -1,14 +1,11 @@
 package bynull.realty.data.business.vk;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Created by trierra on 12/22/14.
  */
 public class Link extends BaseEntity {
     private String description;
 
-    @JsonProperty("image_src")
     private String imageSrc;
 
     private String title;

@@ -1,9 +1,9 @@
-package bynull.realty.grabber.services.impl;
+package bynull.realty.services.vk.impl;
 
-import bynull.realty.grabber.json.Item;
-import bynull.realty.grabber.json.VkResponse;
-import bynull.realty.grabber.json.WallPost;
-import bynull.realty.grabber.services.api.VkGroupPostsService;
+import bynull.realty.grabber.json.ItemJSON;
+import bynull.realty.grabber.json.VkResponseJSON;
+import bynull.realty.grabber.json.WallPostJSON;
+import bynull.realty.services.vk.VkGroupPostsService;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,13 +55,13 @@ public class VkGroupPostsServiceImpl implements VkGroupPostsService {
     }
 
     @Override
-    public List<Item> getWallPostsList(String groupDomain, String accessToken) throws URISyntaxException {
+    public List<ItemJSON> getWallPostsList(String groupDomain, String accessToken) throws URISyntaxException {
         LOG.debug("getting posts from '" + groupDomain + "' group");
         groupWallParams.replace("domain", "kvarnado");
         URI uri = requestBuilder("wall.get", groupWallParams, accessToken);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<VkResponse> entity = restTemplate.getForEntity(uri.toString(), VkResponse.class);
-        VkResponse post = entity.getBody();
+        ResponseEntity<VkResponseJSON> entity = restTemplate.getForEntity(uri.toString(), VkResponseJSON.class);
+        VkResponseJSON post = entity.getBody();
         return post.getResponse().getItems();
     }
 
@@ -81,7 +81,7 @@ public class VkGroupPostsServiceImpl implements VkGroupPostsService {
     }
 
     @Override
-    public List<WallPost> getThreadPosts() {
+    public List<WallPostJSON> getThreadPosts() {
 
         return null;
     }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by trierra on 12/22/14.
  */
-public class PhotoJSON extends BaseEntity {
+public class PhotoJSON {
     @JsonProperty("id")
     private Long photoId;
 

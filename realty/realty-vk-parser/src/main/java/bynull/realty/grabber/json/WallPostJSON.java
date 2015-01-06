@@ -5,14 +5,14 @@ import java.util.List;
 /**
  * Created by trierra on 12/6/14.
  */
-public class WallPost extends BaseEntity {
+public class WallPostJSON {
 
     private Long count;
 
 
-    private List<Item> items;
+    private List<ItemJSON> items;
 
-    public WallPost() {
+    public WallPostJSON() {
     }
 
     public Long getCount() {
@@ -23,11 +23,11 @@ public class WallPost extends BaseEntity {
         this.count = count;
     }
 
-    public List<Item> getItems() {
+    public List<ItemJSON> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<ItemJSON> items) {
         this.items = items;
     }
 }

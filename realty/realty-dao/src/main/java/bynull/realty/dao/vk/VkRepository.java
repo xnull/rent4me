@@ -1,6 +1,6 @@
 package bynull.realty.dao.vk;
 
-import bynull.realty.dto.vk.ItemDTO;
+import bynull.realty.data.business.vk.Item;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by trierra on 12/24/14.
  */
-public interface VkRepository extends JpaRepository<ItemDTO, Long> {
+public interface VkRepository extends JpaRepository<Item, Long> {
 
     /**
      * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the
@@ -19,7 +19,7 @@ public interface VkRepository extends JpaRepository<ItemDTO, Long> {
      * @return the saved entity
      */
     @Override
-    <S extends ItemDTO> S save(S entity);
+    <S extends Item> S save(S entity);
 
     /**
      * Returns whether an entity with the given id exists.
@@ -55,7 +55,7 @@ public interface VkRepository extends JpaRepository<ItemDTO, Long> {
      * @throws IllegalArgumentException in case the given entity is (@literal null}.
      */
     @Override
-    void delete(ItemDTO entity);
+    void delete(Item entity);
 
     /**
      * Retrieves an entity by its id.
@@ -65,7 +65,7 @@ public interface VkRepository extends JpaRepository<ItemDTO, Long> {
      * @throws IllegalArgumentException if {@code id} is {@literal null}
      */
     @Override
-    ItemDTO findOne(Long aLong);
+    Item findOne(Long aLong);
 
     /**
      * Returns a reference to the entity with the given identifier.
@@ -75,14 +75,14 @@ public interface VkRepository extends JpaRepository<ItemDTO, Long> {
      * @see EntityManager#getReference(Class, Object)
      */
     @Override
-    ItemDTO getOne(Long aLong);
+    Item getOne(Long aLong);
 
     @Override
-    List<ItemDTO> findAll();
+    List<Item> findAll();
 
     @Override
-    List<ItemDTO> findAll(Sort sort);
+    List<Item> findAll(Sort sort);
 
     @Override
-    List<ItemDTO> findAll(Iterable<Long> longs);
+    List<Item> findAll(Iterable<Long> longs);
 }

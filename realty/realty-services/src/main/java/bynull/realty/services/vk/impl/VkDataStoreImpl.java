@@ -1,8 +1,8 @@
-package bynull.realty.grabber.services.impl;
+package bynull.realty.services.vk.impl;
 
 import bynull.realty.dao.vk.VkRepository;
-import bynull.realty.dto.vk.ItemDTO;
-import bynull.realty.grabber.services.api.VkDataStoreService;
+import bynull.realty.data.business.vk.Item;
+import bynull.realty.services.vk.VkDataStoreService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,22 +18,22 @@ public class VkDataStoreImpl implements VkDataStoreService {
     private VkRepository vkRepository;
 
     @Override
-    public void savePost(ItemDTO post) {
+    public void savePost(Item post) {
         vkRepository.save(post);
     }
 
     @Override
-    public void savePosts(List<ItemDTO> post) {
+    public void savePosts(List<Item> post) {
         vkRepository.save(post);
     }
 
     @Override
-    public ItemDTO getPostById(Long id) {
+    public Item getPostById(Long id) {
         return null;
     }
 
     @Override
-    public List<ItemDTO> getPostsList() {
+    public List<Item> getPostsList() {
         return null;
     }
 

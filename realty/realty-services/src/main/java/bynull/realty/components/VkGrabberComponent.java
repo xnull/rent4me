@@ -3,7 +3,7 @@ package bynull.realty.components;
 import bynull.realty.dto.vk.ItemDTO;
 import bynull.realty.exeptions.EmptyHiddenVkValue;
 import bynull.realty.grabber.VkAuth;
-import bynull.realty.grabber.services.api.VkGroupPostsService;
+import bynull.realty.services.vk.VkGroupPostsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -32,7 +32,8 @@ public class VkGrabberComponent {
     }
 
     public List<ItemDTO> receiveWallPosts() throws URISyntaxException {
-        return vkGroupPostsService.getWallPostsList("club22062158", accessToken);
+        vkGroupPostsService.getWallPostsList("club22062158", accessToken);
+        return null;
 
     }
 }

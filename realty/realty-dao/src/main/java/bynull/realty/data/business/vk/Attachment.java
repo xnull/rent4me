@@ -1,12 +1,10 @@
 package bynull.realty.data.business.vk;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 /**
  * Created by trierra on 12/20/14.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Attachment extends BaseEntity {
+
     String type;
     Photo photo;
     Link link;

@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * Created by trierra on 12/20/14.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class AttachmentJSON extends BaseEntity {
+public class AttachmentJSON {
+
     String type;
-    Photo photo;
-    Link link;
+
+    PhotoJSON photo;
+
+    LinkJSON link;
 
     public AttachmentJSON() {
     }
@@ -22,19 +25,19 @@ public class AttachmentJSON extends BaseEntity {
         this.type = type;
     }
 
-    public Photo getPhoto() {
+    public PhotoJSON getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Photo photo) {
+    public void setPhoto(PhotoJSON photo) {
         this.photo = photo;
     }
 
-    public Link getLink() {
+    public LinkJSON getLink() {
         return link;
     }
 
-    public void setLink(Link link) {
+    public void setLink(LinkJSON link) {
         this.link = link;
     }
 }

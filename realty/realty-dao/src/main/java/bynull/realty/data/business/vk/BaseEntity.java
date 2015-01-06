@@ -4,16 +4,16 @@ package bynull.realty.data.business.vk;
  * Created by trierra on 12/18/14.
  */
 public class BaseEntity {
-    Long baseId;
+    Long id;
 
     public BaseEntity() {
     }
 
-    public Long getBaseId() {
-        return baseId;
+    public Long getId() {
+        return id;
     }
 
-    public void setBaseId(Long baseId) {
-        this.baseId = baseId;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

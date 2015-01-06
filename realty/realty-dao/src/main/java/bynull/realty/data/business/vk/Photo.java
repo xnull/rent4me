@@ -1,22 +1,13 @@
 package bynull.realty.data.business.vk;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Created by trierra on 12/22/14.
  */
 public class Photo extends BaseEntity {
-    @JsonProperty("id")
     private Long photoId;
-
-    @JsonProperty("album_id")
     private Long albumId;
-
-    @JsonProperty("owner_id")
     private Long ownerId;
-
     private String text;
-    @JsonProperty("photo_807")
     private String photoSrc;
 
     public Photo() {

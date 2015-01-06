@@ -5,13 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by trierra on 12/22/14.
  */
-public class LinkJSON extends BaseEntity {
+public class LinkJSON {
+
     private String description;
 
     @JsonProperty("image_src")
     private String imageSrc;
 
     private String title;
+
     private String url;
 
     public LinkJSON() {

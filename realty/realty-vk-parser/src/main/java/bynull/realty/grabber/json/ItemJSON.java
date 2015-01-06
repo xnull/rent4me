@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by trierra on 12/20/14.
  */
-public class ItemJSON extends BaseEntity {
+public class ItemJSON {
     @JsonProperty("id")
     Long formId;
 
