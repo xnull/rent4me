@@ -195,10 +195,11 @@ var Autocomplete = React.createClass({
     },
 
     onBlur: function() {
+        var that = this;
         // wrap in setTimeout so we can catch a click on results
         this.blurTimer = setTimeout(function() {
-            if (this.isMounted()) {
-                this.setState({showResults: false});
+            if (that.isMounted()) {
+                that.setState({showResults: false});
             }
         }, 100);
     },
