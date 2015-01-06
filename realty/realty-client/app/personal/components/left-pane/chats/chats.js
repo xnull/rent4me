@@ -46,22 +46,13 @@ var Chat = React.createClass({
                 <a href="#" className="list-group-item">
 
                     <p className="list-group-item-text">
-                        <h4>{targetPerson.name} </h4>
-
                         <div className="row">
-                            <div className="col-md-12">
-                            {item.message}
+                            <div className="col-md-2">
+                                <strong>{targetPerson.name}</strong><br/>
+                                <small>{moment(item.created).format("lll")}</small>
                             </div>
-                        </div>
-
-                        <hr/>
-
-                        <div className="row">
-                            <div className="col-md-6">
-                                Добавлено: {moment(item.created).format("lll")}
-                            </div>
-                            <div className="col-md-6">
-                                Обновлено: {moment(item.updated).format("lll")}
+                            <div className="col-md-10">
+                                <strong>{item.sender.name}</strong>: {item.message}
                             </div>
                         </div>
 
