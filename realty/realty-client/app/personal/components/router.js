@@ -55,6 +55,7 @@ var route = (
         <Route name="support" path="support" handler={require('./main/support.js')}/>
         <Route name="socialRenter" path="social/renter" handler={require('./left-pane/socialnet/socialForRenter')}/>
         <Route name="socialLesser" path="social/lessor" handler={require('./left-pane/socialnet/socialForLessor')}/>
+        <Route name="chats" path="user/chats" handler={require('./left-pane/chats/main')}/>
 
         <DefaultRoute handler={require('./main/news-pane.js')}/>
     </Route>

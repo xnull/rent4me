@@ -49,6 +49,13 @@ var UserPanel = React.createClass({
                                 <div className="col-md-12">
                                     <a className="btn btn-default center-block" href="#/user">Настройки</a>
                                 </div>
+
+                            </div>
+
+                            <br/>
+
+                            <div className="col-md-12">
+                                <a className="btn btn-default center-block" href="#/user/chats">Сообщения</a>
                             </div>
                         </div>
                     </div>
