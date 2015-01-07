@@ -8,6 +8,8 @@ var assign = require('object-assign');
 var SocialNetStore = require('../../../../shared/stores/SocialNetRenterStore');
 var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 
+var MetroSearch = require('../../../../shared/ui/metro-search');
+
 var _ = require('underscore');
 var moment = require('moment');
 var Posts = require('./posts');
@@ -142,7 +144,7 @@ module.exports = React.createClass({
                                             </button>
                                             <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                                 <li role="presentation">
-                                                    <a role="menuitem" tabindex="-1" href="#" style={{focus: {backgroundColor: '#000000'}}}>Сниму</a>
+                                                    <a role="menuitem" tabindex="-1" href="#">Сниму</a>
                                                 </li>
                                                 <li role="presentation">
                                                     <a role="menuitem" tabindex="-1" href="#">Сдам</a>
@@ -171,25 +173,7 @@ module.exports = React.createClass({
                                 </div>
 
                                 <div className='col-md-6'>
-                                    <div className="input-group">
-                                        <input type="text" className="form-control" aria-label="..." placeholder="Станция метро"/>
-                                        <div className="input-group-btn">
-                                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Выбрать
-                                                <span className="caret"></span>
-                                            </button>
-                                            <ul className="dropdown-menu dropdown-menu-right" role="menu">
-                                                <li>
-                                                    <a href="#">Станция цветной бульвар</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Новослободская</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">1905 года</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <MetroSearch />
                                 </div>
                             </div>
 
