@@ -3,7 +3,11 @@
  */
 var React = require('react');
 var NavActions = require('../../../../shared/actions/NavActions');
+
 var MetroSearch = require('../../../../shared/ui/metro-search');
+var RoomsCount = require('../../../../shared/ui/rooms-count');
+var PriceRange = require('../../../../shared/ui/price-range');
+var SearchAddress = require('../../../../shared/ui/search-address');
 
 var Renter = React.createClass({
     componentDidMount: function () {
@@ -19,27 +23,7 @@ var Renter = React.createClass({
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <div className='col-md-6'>
-                                    <div className="col-md-2">
-                                        <label className="control-label">Комнат</label>
-                                    </div>
-                                    <div className="col-md-10">
-                                        <div className="btn-group" data-toggle="buttons">
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">1</input>
-                                            </label>
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">2</input>
-                                            </label>
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">3</input>
-                                            </label>
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">4+</input>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                <RoomsCount />
 
                                 <div className='col-md-6'>
                                     <div className="control-group">
@@ -64,27 +48,14 @@ var Renter = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className='col-md-6'>
-                                    <div className="col-md-2">
-                                        <label className="control-label">Цена</label>
-                                    </div>
-                                    <div className="col-md-10">
-                                        <div className="col-md-6">
-                                            <input type="text" className="form-control col-md-3" placeholder="От"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <input type="text" className="form-control col-md-3" placeholder="До"/>
-                                        </div>
-                                    </div>
-                                </div>
+                                <PriceRange />
                             </div>
 
                             <hr/>
 
                             <div className='row'>
                                 <div className='col-md-6'>
-                                    <input type="text" className="form-control col-md-3" placeholder="Улица, район, адрес"/>
+                                    <SearchAddress />
                                 </div>
                             </div>
 

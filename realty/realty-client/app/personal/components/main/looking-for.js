@@ -36,7 +36,7 @@ var News = React.createClass({
         var items = this.props.items || [];
         var hasMore = this.props.hasMore || false;
 
-        console.log("Has more?"+hasMore);
+        console.log("Has more?" + hasMore);
 
         var onHasMoreClicked = this.props.onHasMoreClicked;
 
@@ -52,7 +52,7 @@ var News = React.createClass({
             ) : null;
 
         var style = {};
-        if(!shown) {
+        if (!shown) {
             style['display'] = 'none';
         }
 
@@ -73,13 +73,9 @@ var News = React.createClass({
 
                         <div className="bs-component">
                             <div className="list-group">
-
                             {newsItems}
-
                                 <br/>
-
                             {hasMoreElement}
-
                             </div>
                         </div>
                     </div>
@@ -93,7 +89,7 @@ var NewsItem = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
-        var firstImage = _.first(item.photos.map(function(photo) {
+        var firstImage = _.first(item.photos.map(function (photo) {
             return (
                 <img className="img-responsive" width="128"
                     src={photo.small_thumbnail_url}/>
@@ -102,81 +98,77 @@ var NewsItem = React.createClass({
 
         var imagePreviews = firstImage ? (
             <div>
-            <div className="panel-thumbnail">
+                <div className="panel-thumbnail">
                 {firstImage}
-            </div>
-
-            <hr/>
-
+                </div>
+                <hr/>
             </div>
         ) : null;
 
         return (
             <div>
-            <a href="#" className="list-group-item">
-                <h4 className="list-group-item-heading">{item.address ? item.address.formatted_address : 'no address'}</h4>
+                <a href="#" className="list-group-item">
+                    <h4 className="list-group-item-heading">{item.address ? item.address.formatted_address : 'no address'}</h4>
+                        {imagePreviews}
 
-                {imagePreviews}
-
-                <p className="list-group-item-text">
-                    <div className="row">
-                        <div className="col-md-6">
-                            Этаж: {item.floor_number}/{item.floors_total}
-                        </div>
-                        <div className="col-md-6">
-                            Площадь: {item.area} м<sup>2</sup>
-                        </div>
-                    </div>
-
-                    <br/>
-
-                    <div className="row">
-                        <div className="col-md-6">
-                            Цена: {item.rental_fee}/{Translations['ru'][item.fee_period]}
-                        </div>
-                        <div className="col-md-6">
-                            Тип аренды: {Translations['ru'][item.type_of_rent]}
+                    <p className="list-group-item-text">
+                        <div className="row">
+                            <div className="col-md-6">
+                                Этаж: {item.floor_number}/{item.floors_total}
+                            </div>
+                            <div className="col-md-6">
+                                Площадь: {item.area} м
+                                <sup>2</sup>
+                            </div>
                         </div>
 
-                    </div>
+                        <br/>
 
-                    <br/>
+                        <div className="row">
+                            <div className="col-md-6">
+                                Цена: {item.rental_fee}/{Translations['ru'][item.fee_period]}
+                            </div>
+                            <div className="col-md-6">
+                                Тип аренды: {Translations['ru'][item.type_of_rent]}
+                            </div>
 
-                    <h4>Описание</h4>
+                        </div>
 
-                    <div className="row">
-                        <div className="col-md-12">
+                        <br/>
+
+                        <h4>Описание</h4>
+
+                        <div className="row">
+                            <div className="col-md-12">
                             {item.description}
+                            </div>
+
                         </div>
 
-                    </div>
+                        <br/>
 
-                    <br/>
+                        <h4>Контакты</h4>
 
-                    <h4>Контакты</h4>
-
-                    <div className="row">
-                        <div className="col-md-6">
-                            Телефон: {item.owner.phone}
+                        <div className="row">
+                            <div className="col-md-6">
+                                Телефон: {item.owner.phone}
+                            </div>
                         </div>
-                    </div>
 
+                        <hr/>
+
+                        <div className="row">
+                            <div className="col-md-6">
+                                Добавлено: {moment(item.created).format("lll")}
+                            </div>
+                            <div className="col-md-6">
+                                Личное сообщение: {moment(item.updated).format("lll")}
+                            </div>
+                        </div>
+
+                    </p>
                     <hr/>
-
-                    <div className="row">
-                        <div className="col-md-6">
-                            Добавлено: {moment(item.created).format("lll")}
-                        </div>
-                        <div className="col-md-6">
-                            Личное сообщение: {moment(item.updated).format("lll")}
-                        </div>
-                    </div>
-
-                </p>
-                <hr/>
-
-
-            </a>
+                </a>
                 <br/>
             </div>
         );
@@ -224,7 +216,7 @@ module.exports = React.createClass({
 
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var place = autocomplete.getPlace();
-            if(!place) return;
+            if (!place) return;
             var dump = JSON2.stringify(place);
             console.log('dump:');
             console.log(dump);
@@ -268,8 +260,8 @@ module.exports = React.createClass({
         }
     },
 
-    loadMoreResults: function() {
-        if(this.state.hasMoreSearchResults){
+    loadMoreResults: function () {
+        if (this.state.hasMoreSearchResults) {
             var location = this.state.location;
             var countryCode = this.state.countryCode;
             var bounds = this.state.bounds;
