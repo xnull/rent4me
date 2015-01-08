@@ -9,7 +9,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class AttachmentDTO extends BaseEntity {
+public class AttachmentDTO{
+    private Long id;
     private String type;
     private PhotoDTO photoDTO;
     private LinkDTO linkDTO;
@@ -17,7 +18,7 @@ public class AttachmentDTO extends BaseEntity {
     public AttachmentDTO() {
     }
 
-    public AttachmentDTO from(Attachment model) {
+    public static AttachmentDTO from(Attachment model) {
         if (model == null) return null;
         AttachmentDTO dto = new AttachmentDTO();
         dto.setPhotoDTO(PhotoDTO.from(model.getPhoto()));
