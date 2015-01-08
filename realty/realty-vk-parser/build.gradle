@@ -2,6 +2,7 @@ apply from: ext.pathToJavaProjectScript
 
 dependencies {
     compile project(':realty-dao')
+    compile project(':realty-services')
     /**
      * https://developers.google.com/api-client-library/java/apis/coordinate/v1
      */

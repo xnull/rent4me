@@ -1,11 +1,17 @@
 package bynull.realty.grabber.json;
 
+import bynull.realty.dto.vk.LinkDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by trierra on 12/22/14.
  */
+@Getter
+@Setter
 public class LinkJSON {
+    private Long id;
 
     private String description;
 
@@ -19,35 +25,52 @@ public class LinkJSON {
     public LinkJSON() {
     }
 
-    public String getDescription() {
-        return description;
+
+    public static LinkJSON from(LinkDTO model) {
+        if (model == null) return null;
+        LinkJSON json = new LinkJSON();
+        json.setId(model.getId());
+        json.setDescription(model.getDescription());
+        json.setImageSrc(model.getImageSrc());
+        json.setTitle(model.getTitle());
+        json.setUrl(model.getUrl());
+
+        return json;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public LinkDTO toDto() {
+        LinkDTO dto = new LinkDTO();
+        dto.setImageSrc(getImageSrc());
+        dto.setId(getId());
+        dto.setUrl(getUrl());
+        dto.setDescription(getDescription());
+        dto.setTitle(getTitle());
+        return dto;
     }
 
-    public String getImageSrc() {
-        return imageSrc;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LinkJSON)) return false;
+
+        LinkJSON json = (LinkJSON) o;
+
+        if (description != null ? !description.equals(json.description) : json.description != null) return false;
+        if (id != null ? !id.equals(json.id) : json.id != null) return false;
+        if (imageSrc != null ? !imageSrc.equals(json.imageSrc) : json.imageSrc != null) return false;
+        if (title != null ? !title.equals(json.title) : json.title != null) return false;
+        if (url != null ? !url.equals(json.url) : json.url != null) return false;
+
+        return true;
     }
 
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (imageSrc != null ? imageSrc.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        return result;
     }
 }

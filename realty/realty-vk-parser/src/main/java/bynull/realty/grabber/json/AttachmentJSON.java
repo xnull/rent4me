@@ -1,43 +1,65 @@
 package bynull.realty.grabber.json;
 
+import bynull.realty.dto.vk.AttachmentDTO;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by trierra on 12/20/14.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@Getter
+@Setter
 public class AttachmentJSON {
 
-    String type;
-
-    PhotoJSON photo;
-
-    LinkJSON link;
+    private Long id;
+    private String type;
+    private PhotoJSON photo;
+    private LinkJSON link;
 
     public AttachmentJSON() {
     }
 
-    public String getType() {
-        return type;
+    public static AttachmentJSON from(AttachmentDTO dto) {
+        if (dto == null) return null;
+
+        AttachmentJSON json = new AttachmentJSON();
+        json.setType(dto.getType());
+        json.setLink(dto.getLinkDTO() != null ? LinkJSON.from(dto.getLinkDTO()) : null);
+        json.setPhoto(dto.getPhotoDTO() != null ? PhotoJSON.from(dto.getPhotoDTO()) : null);
+        json.setId(dto.getId());
+        return json;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public AttachmentDTO toDto() {
+        AttachmentDTO dto = new AttachmentDTO();
+        dto.setType(getType());
+        dto.setLinkDTO(getLink().toDto());
+        dto.setPhotoDTO(getPhoto().toDto());
+        dto.setId(getId());
+        return dto;
     }
 
-    public PhotoJSON getPhoto() {
-        return photo;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AttachmentJSON)) return false;
+
+        AttachmentJSON json = (AttachmentJSON) o;
+
+        if (!link.equals(json.link)) return false;
+        if (!photo.equals(json.photo)) return false;
+        if (!type.equals(json.type)) return false;
+
+        return true;
     }
 
-    public void setPhoto(PhotoJSON photo) {
-        this.photo = photo;
-    }
-
-    public LinkJSON getLink() {
-        return link;
-    }
-
-    public void setLink(LinkJSON link) {
-        this.link = link;
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + photo.hashCode();
+        result = 31 * result + link.hashCode();
+        return result;
     }
 }
