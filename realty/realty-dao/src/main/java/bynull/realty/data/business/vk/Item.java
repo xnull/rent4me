@@ -7,27 +7,27 @@ import java.util.List;
  * Created by trierra on 12/20/14.
  */
 public class Item extends BaseEntity {
-    Long formId;
-    Long ownerId;
+    String formId;
+    String ownerId;
     Date date;
     List<Attachment> attachments;
 
     public Item() {
     }
 
-    public Long getFormId() {
+    public String getFormId() {
         return formId;
     }
 
-    public void setFormId(Long formId) {
+    public void setFormId(String formId) {
         this.formId = formId;
     }
 
-    public Long getOwnerId() {
+    public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(Long ownerId) {
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 
