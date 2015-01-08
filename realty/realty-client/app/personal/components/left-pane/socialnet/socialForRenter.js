@@ -8,6 +8,10 @@ var assign = require('object-assign');
 var SocialNetStore = require('../../../../shared/stores/SocialNetRenterStore');
 var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 
+var MetroSearch = require('../../../../shared/ui/metro-search');
+var RoomsCount = require('../../../../shared/ui/rooms-count');
+var PriceRange = require('../../../../shared/ui/price-range');
+
 var _ = require('underscore');
 var moment = require('moment');
 var Posts = require('./posts');
@@ -111,27 +115,7 @@ module.exports = React.createClass({
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <div className='col-md-6'>
-                                    <div className="col-md-2">
-                                        <label className="control-label">Комнат</label>
-                                    </div>
-                                    <div className="col-md-10">
-                                        <div className="btn-group" data-toggle="buttons">
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">1</input>
-                                            </label>
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">2</input>
-                                            </label>
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">3</input>
-                                            </label>
-                                            <label className="btn btn-default">
-                                                <input type="checkbox">4+</input>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                <RoomsCount />
 
                                 <div className='col-md-6'>
                                     <div className="control-group">
@@ -142,7 +126,7 @@ module.exports = React.createClass({
                                             </button>
                                             <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                                 <li role="presentation">
-                                                    <a role="menuitem" tabindex="-1" href="#" style={{focus: {backgroundColor: '#000000'}}}>Сниму</a>
+                                                    <a role="menuitem" tabindex="-1" href="#">Сниму</a>
                                                 </li>
                                                 <li role="presentation">
                                                     <a role="menuitem" tabindex="-1" href="#">Сдам</a>
@@ -155,41 +139,9 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
+                                <PriceRange />
                                 <div className='col-md-6'>
-                                    <div className="col-md-2">
-                                        <label className="control-label">Цена</label>
-                                    </div>
-                                    <div className="col-md-10">
-                                        <div className="col-md-6">
-                                            <input type="text" className="form-control col-md-3" placeholder="От"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <input type="text" className="form-control col-md-3" placeholder="До"/>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className='col-md-6'>
-                                    <div className="input-group">
-                                        <input type="text" className="form-control" aria-label="..." placeholder="Станция метро"/>
-                                        <div className="input-group-btn">
-                                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Выбрать
-                                                <span className="caret"></span>
-                                            </button>
-                                            <ul className="dropdown-menu dropdown-menu-right" role="menu">
-                                                <li>
-                                                    <a href="#">Станция цветной бульвар</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Новослободская</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">1905 года</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <MetroSearch />
                                 </div>
                             </div>
 
