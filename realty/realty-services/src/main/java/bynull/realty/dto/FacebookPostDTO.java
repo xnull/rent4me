@@ -14,7 +14,6 @@ import static bynull.realty.util.CommonUtils.copy;
 @Getter
 @Setter
 public class FacebookPostDTO {
-    private Long id;
     private String message;
     private List<String> imageUrls;
     private String link;
