@@ -1,14 +1,10 @@
 package bynull.realty.components;
 
 import bynull.realty.dto.vk.ItemDTO;
-import bynull.realty.exeptions.EmptyHiddenVkValue;
-import bynull.realty.grabber.VkAuth;
 import bynull.realty.services.vk.VkGroupPostsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -18,21 +14,22 @@ import java.util.List;
 @Component
 public class VkGrabberComponent {
 
-    @Resource
-    private VkAuth vkAuth;
-
-    @Resource
+//    @Resource
+////    private VkAuth vkAuth;
+//
+//    @Resource
     private VkGroupPostsService vkGroupPostsService;
 
     private String accessToken;
 
     @PostConstruct
-    private void init() throws EmptyHiddenVkValue, IOException, URISyntaxException {
-        accessToken = vkAuth.receiveToken();
-    }
+//    private void init() throws EmptyHiddenVkValue, IOException, URISyntaxException {
+//        accessToken = vkAuth.receiveToken();
+//    }
 
     public List<ItemDTO> receiveWallPosts() throws URISyntaxException {
-        vkGroupPostsService.getWallPostsList("club22062158", accessToken);
+//       List<ItemJSON> fromVk =  vkGroupPostsService.getWallPostsList("club22062158", accessToken);
+//        List<ItemDTO> json = fromVk.stream().map(ItemJSON::to).collect(Collectors.toList());
         return null;
 
     }

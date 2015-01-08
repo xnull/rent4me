@@ -1,21 +1,15 @@
 package bynull.realty.services.vk.impl;
 
-import bynull.realty.grabber.json.ItemJSON;
-import bynull.realty.grabber.json.VkResponseJSON;
-import bynull.realty.grabber.json.WallPostJSON;
 import bynull.realty.services.vk.VkGroupPostsService;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,19 +45,20 @@ public class VkGroupPostsServiceImpl implements VkGroupPostsService {
         }
         builder.setParameter("access_token", accessToken);
         return builder.build();
-//        return "https://api.vk.com/method/users.get?user_id=66748&v=5.27&access_token=533bacf01e11f55b536a565b57531ac114461ae8736d6506a3";
     }
 
-    @Override
-    public List<ItemJSON> getWallPostsList(String groupDomain, String accessToken) throws URISyntaxException {
-        LOG.debug("getting posts from '" + groupDomain + "' group");
-        groupWallParams.replace("domain", "kvarnado");
-        URI uri = requestBuilder("wall.get", groupWallParams, accessToken);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<VkResponseJSON> entity = restTemplate.getForEntity(uri.toString(), VkResponseJSON.class);
-        VkResponseJSON post = entity.getBody();
-        return post.getResponse().getItems();
-    }
+//    @Override
+//    public List<ItemJSON> getWallPostsList(String groupDomain, String accessToken) throws URISyntaxException {
+//        LOG.debug("getting posts from '" + groupDomain + "' group");
+//
+//        groupWallParams.replace("domain", "kvarnado");
+//
+//        URI uri = requestBuilder("wall.get", groupWallParams, accessToken);
+//        RestTemplate restTemplate = new RestTemplate();
+//        ResponseEntity<VkResponseJSON> entity = restTemplate.getForEntity(uri.toString(), VkResponseJSON.class);
+//        VkResponseJSON post = entity.getBody();
+//        return post.getResponse().getItems();
+//    }
 
     @Override
     public void wallSearch() {
@@ -80,10 +75,10 @@ public class VkGroupPostsServiceImpl implements VkGroupPostsService {
 
     }
 
-    @Override
-    public List<WallPostJSON> getThreadPosts() {
-
-        return null;
-    }
+//    @Override
+//    public List<WallPostJSON> getThreadPosts() {
+//
+//        return null;
+//    }
 
 }

@@ -1,14 +1,20 @@
 package bynull.realty.dto.vk;
 
+import bynull.realty.data.business.vk.Photo;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by trierra on 12/22/14.
  */
+@Getter
+@Setter
 public class PhotoDTO extends BaseEntity {
-    private Long photoId;
+    private String photoId;
 
-    private Long albumId;
+    private String albumId;
 
-    private Long ownerId;
+    private String ownerId;
 
     private String text;
 
@@ -17,43 +23,29 @@ public class PhotoDTO extends BaseEntity {
     public PhotoDTO() {
     }
 
-    public Long getPhotoId() {
-        return photoId;
+    public static PhotoDTO from(Photo photo){
+        if (photo == null) return null;
+
+        PhotoDTO photoDTO = new PhotoDTO();
+        photoDTO.setPhotoSrc(photo.getPhotoSrc());
+        photoDTO.setId(photo.getId());
+        photoDTO.setText(photo.getText());
+        photoDTO.setOwnerId(photo.getOwnerId());
+        photoDTO.setAlbumId(photo.getAlbumId());
+        photoDTO.setPhotoId(photo.getPhotoId());
+
+        return photoDTO;
     }
 
-    public void setPhotoId(Long photoId) {
-        this.photoId = photoId;
-    }
+    public Photo toInternal() {
+        Photo photo = new Photo();
+        photo.setId(getId());
+        photo.setAlbumId(getAlbumId());
+        photo.setOwnerId(getOwnerId());
+        photo.setPhotoId(getPhotoId());
+        photo.setText(getText());
+        photo.setPhotoSrc(getPhotoSrc());
 
-    public Long getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(Long albumId) {
-        this.albumId = albumId;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getPhotoSrc() {
-        return photoSrc;
-    }
-
-    public void setPhotoSrc(String photoSrc) {
-        this.photoSrc = photoSrc;
+        return photo;
     }
 }

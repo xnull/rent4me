@@ -1,5 +1,7 @@
 package bynull.realty.dto.vk;
 
+import bynull.realty.data.business.vk.Link;
+
 /**
  * Created by trierra on 12/22/14.
  */
@@ -44,5 +46,15 @@ public class LinkDTO extends BaseEntity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Link toInternal() {
+        //TODO: complete
+
+        return null;
+    }
+
+    public static LinkDTO from(Link link) {
+        return null;
     }
 }
