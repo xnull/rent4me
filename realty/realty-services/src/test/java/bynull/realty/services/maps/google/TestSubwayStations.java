@@ -4,7 +4,6 @@ import bynull.realty.services.metro.MetroService;
 import bynull.realty.services.metro.MetroServiceException;
 import bynull.realty.services.metro.MetroStationsDto;
 import bynull.realty.services.metro.MetroSystemDto;
-import bynull.realty.services.metro.MetroSystemDto.MetroStationFullInfoDto;
 import bynull.realty.utils.JsonMapperException;
 import bynull.realty.utils.JsonUtils;
 import org.junit.Ignore;
@@ -37,7 +36,7 @@ public class TestSubwayStations {
         assertEquals("Сокольническая линия", stationsJson.getLines().get("1").getName());
     }
 
-    @Ignore("fix it later")
+    @Ignore("It's working, but we don't need to check it every time, because of download from yandex and google")
     @Test
     public void testGetMetroSystem() throws MetroServiceException, JsonMapperException {
         MetroService metroService = new MetroService();

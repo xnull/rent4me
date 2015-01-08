@@ -8,7 +8,6 @@ var assign = require('object-assign');
 var SocialNetStore = require('../../../../shared/stores/SocialNetRenterStore');
 var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 
-var MetroSearch = require('../../../../shared/ui/metro-search');
 var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
 
@@ -140,9 +139,6 @@ module.exports = React.createClass({
 
                             <div className='row'>
                                 <PriceRange />
-                                <div className='col-md-6'>
-                                    <MetroSearch />
-                                </div>
                             </div>
 
 

@@ -4,7 +4,6 @@
 var React = require('react');
 var NavActions = require('../../../../shared/actions/NavActions');
 
-var MetroSearch = require('../../../../shared/ui/metro-search');
 var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
 var SearchAddress = require('../../../../shared/ui/search-address');
@@ -56,14 +55,6 @@ var Renter = React.createClass({
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <SearchAddress />
-                                </div>
-                            </div>
-
-                            <br/>
-
-                            <div className='row'>
-                                <div className='col-md-6'>
-                                    <MetroSearch />
                                 </div>
                             </div>
 

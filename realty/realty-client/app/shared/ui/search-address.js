@@ -10,6 +10,12 @@ var React = require('react');
 
 var SearchAddress = React.createClass({
     componentDidMount: function (rootNode) {
+        /*
+         Показывать только города
+         var options = {
+         types: ['(cities)'],
+         componentRestrictions: {country: "us"}
+         };*/
         var autocomplete = new google.maps.places.Autocomplete(this.refs.googleSearchBox.getDOMNode());
     },
 
@@ -19,7 +25,7 @@ var SearchAddress = React.createClass({
                 id="searchbox"
                 className="form-control"
                 type="text"
-                placeholder="Введите местоположение"
+                placeholder="Введите "
                 onChange={this.onAddressChange}
                 ref="googleSearchBox"
             />

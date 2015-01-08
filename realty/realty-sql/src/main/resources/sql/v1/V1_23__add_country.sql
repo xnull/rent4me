@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS countries;
+
+CREATE TABLE countries (
+  id   BIGINT NOT NULL PRIMARY KEY,
+  name TEXT   NOT NULL
+);
+
+
+DROP SEQUENCE IF EXISTS countries_id_seq;
+
+CREATE SEQUENCE countries_id_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+CREATE INDEX countries$name__idx ON countries USING BTREE (name);

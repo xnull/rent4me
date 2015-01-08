@@ -72,13 +72,12 @@ public class MetroService {
 
         SslConfigurator sslConfig = SslConfigurator.newInstance();
         SSLContext sslContext = sslConfig.createSSLContext();
-        Client client = ClientBuilder.newBuilder().sslContext(sslContext).build();
-        WebTarget target = client.target("https://maps.googleapis.com/").path("maps/api/place/textsearch/json");
+        Client client = ClientBuilder.newBuilder().build();
+        WebTarget target = client.target("https://maps.google.com/maps/api/geocode/json");
         //target = target.queryParam("query", "метро+" + metroStation.replaceAll(" ", "+"));
-        target = target.queryParam("query", "город+Москва,+Москва,+метро+" + metroStation.replaceAll(" ", "+"));
-        target = target.queryParam("sensor", true);
-        target = target.queryParam("key", "AIzaSyCrj3YUycdJcFUzxQHUja3f4VbrgKv_cIM");
-        //target = target.queryParam("key", "AIzaSyD8FthnabTSsiQh9N6QTKGqePNTOEZOhXU");
+        target = target.queryParam("address", "город+Москва,+Москва,+метро+" + metroStation.replaceAll(" ", "+"));
+        target.queryParam("language", "ru");
+        target = target.queryParam("sensor", false);
 
         String response = target.request(MediaType.TEXT_HTML_TYPE).get(String.class);
         try {

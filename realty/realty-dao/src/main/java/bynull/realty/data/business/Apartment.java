@@ -40,18 +40,18 @@ public class Apartment implements Serializable {
     private Date updated;
 
     @NotNull
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     @ManyToOne
     private User owner;
 
     @NotNull
-    @Column(name = "type_of_rent")
+    @Column(name = "type_of_rent", nullable = false)
     @Enumerated(EnumType.STRING)
     private RentType typeOfRent;
 
     @Min(1)
     @NotNull
-    @Column(name = "rental_fee")
+    @Column(name = "rental_fee", nullable = false)
     private BigDecimal rentalFee;
 
     @NotNull

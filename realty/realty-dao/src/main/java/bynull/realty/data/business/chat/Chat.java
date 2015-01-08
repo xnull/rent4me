@@ -16,7 +16,6 @@ public class Chat {
     @JoinColumn(name = "conversation_target_id")
     @ManyToOne
     private User conversationTarget;
-//    @
     @ManyToOne
     private ChatMessage lastMessage;
 }
