@@ -4,7 +4,7 @@
 //var Dispatcher = require('flux/lib/Dispatcher');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 
-var EventEmitter = require('events').EventEmitter;
+var EventEmitter = require('rent4meEmitter');
 var AuthConstants = require('../constants/AuthConstants');
 
 var Cookies = require('../common/Cookies');

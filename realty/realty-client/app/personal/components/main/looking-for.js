@@ -186,7 +186,7 @@ module.exports = React.createClass({
         };
     },
 
-    componentWillMount: function () {
+    componentDidMount: function () {
         ApartmentStore.addChangeListener(this.onSearchResultsChanged);
     },
 

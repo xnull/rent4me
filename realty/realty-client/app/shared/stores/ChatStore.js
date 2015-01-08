@@ -3,7 +3,7 @@
  */
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 
-var EventEmitter = require('events').EventEmitter;
+var EventEmitter = require('rent4meEmitter');
 var Constants = require('../constants/ChatConstants');
 
 var assign = require('object-assign');

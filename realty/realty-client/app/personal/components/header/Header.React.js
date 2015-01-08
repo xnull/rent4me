@@ -16,12 +16,9 @@ var Header = React.createClass({
         return {page: NavStore.getCurrentPage()};
     },
 
-    componentWillMount: function () {
+    componentDidMount: function () {
         console.log('Nav header will mount');
         NavStore.addChangeListener(this._navStateChangeListener);
-    },
-
-    componentDidMount: function () {
         console.log('Header mounted');
         //this._navStateChangeListener();
     },

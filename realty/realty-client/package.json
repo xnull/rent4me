@@ -11,6 +11,7 @@
         "jquery": "./node_modules/jquery/dist/jquery.js",
         "rent4meUtil": "./app/shared/common/Utils.js",
         "rent4meAjax": "./app/shared/common/Ajax.js",
+        "rent4meEmitter": "./app/shared/common/Emitter.js",
         "rent4meBlockUI": "./app/shared/common/BlockUI.js",
         "rent4meAutocomplete": "./app/shared/common/Autocomplete.js"
     },
@@ -77,11 +78,11 @@
         "JSON2": "0.1.0",
         "dropzone": "3.12.0",
 
-        "react": "~0.12.1",
-        "react-router": "~0.11.1",
+        "react": "~0.12.2",
+        "react-router": "~0.11.6",
         "reactify": "~0.17.1",
         "jstransform": "~8.2.0",
-        "react-tools": "~0.12.1",
+        "react-tools": "~0.12.2",
         "through": "~2.3.6",
 
         "flux": "~2.0.1",

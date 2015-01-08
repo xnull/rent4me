@@ -55,7 +55,7 @@ module.exports = React.createClass({
 //        console.log('get initial state');
         return UserStore.getMyProfile();
     },
-    componentWillMount: function() {
+    componentDidMount: function() {
 //        console.log('component will mount');
         UserStore.addChangeListener(this._onLoad);
 

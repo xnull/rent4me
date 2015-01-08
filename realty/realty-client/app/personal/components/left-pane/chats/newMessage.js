@@ -25,7 +25,7 @@ module.exports = React.createClass({
         }
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         ChatStore.addNewConversationStartedListener(this.newConversationStartedListener);
         UserStore.addChangeListener(this.myUserListener);
         UserActions.loadMyProfileIfNotLoaded();

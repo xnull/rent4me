@@ -17,7 +17,7 @@ var Chat = React.createClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         UserStore.addChangeListener(this.meLoadListener);
         UserActions.loadMyProfileIfNotLoaded();
     },

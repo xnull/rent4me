@@ -26,7 +26,7 @@ module.exports = React.createClass({
         };
     },
 
-    componentWillMount: function () {
+    componentDidMount: function () {
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
     },
 

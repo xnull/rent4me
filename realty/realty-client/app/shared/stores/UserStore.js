@@ -4,7 +4,7 @@
 //var Dispatcher = require('flux/lib/Dispatcher');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 
-var EventEmitter = require('events').EventEmitter;
+var EventEmitter = require('rent4meEmitter');
 var UserConstants = require('../constants/UserConstants');
 
 var assign = require('object-assign');

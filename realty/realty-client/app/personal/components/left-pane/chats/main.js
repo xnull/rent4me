@@ -17,7 +17,7 @@ module.exports = React.createClass({
         }
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         ChatStore.addChangeListener(this.myChatsListener);
         ChatActions.loadMyChats();
     },

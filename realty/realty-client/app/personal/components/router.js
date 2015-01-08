@@ -21,14 +21,15 @@ var Utils = require('../../shared/common/Utils');
  */
 var App = React.createClass({
     componentWillMount: function() {
-        NavStore.addChangeListener(this._navStateChange);
-
         //restore username & token from cookies before component mounted
         AuthActions.restoreUsernameAndTokenFromCookies();
         if(!AuthStore.hasCredentials()) {
 //            alert('wtf? you\'re not logged in!');
             Utils.navigateToStart();
         }
+    },
+    componentDidMount: function() {
+        NavStore.addChangeListener(this._navStateChange);
     },
 
     componentWillUnmount: function() {
