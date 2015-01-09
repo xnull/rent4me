@@ -31,12 +31,13 @@ public class AdminRestResource {
 
     @GET
     @Path("syncmetro")
-    public Response listAll() {
+    public Response listAll() throws MetroServiceException {
         try {
             moscowMetroSynchronisationService.syncWithDatabase();
         } catch (MetroServiceException e) {
             log.error("Error sync", e);
+            throw e;
         }
-        return Response.ok().build();
+        return Response.ok("Success").build();
     }
 }
