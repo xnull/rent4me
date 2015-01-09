@@ -3,7 +3,6 @@ package bynull.realty;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.DataTypeException;
 import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -15,6 +14,7 @@ import javax.annotation.Resource;
 public class PostgreSQLWithPostgisDataTypeFactory extends PostgresqlDataTypeFactory {
     @Resource
     private GeometryDataType geometryDataType;
+
     @Override
     public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException {
         if ("geometry".equals(sqlTypeName)) {

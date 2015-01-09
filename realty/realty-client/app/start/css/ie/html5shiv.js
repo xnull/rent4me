@@ -4,7 +4,7 @@
 (function (l, f) {
     function m() {
         var a = e.elements;
-        return"string" == typeof a ? a.split(" ") : a
+        return "string" == typeof a ? a.split(" ") : a
     }
 
     function i(a) {
@@ -24,12 +24,12 @@
     function t(a, b) {
         if (!b.cache)b.cache = {}, b.createElem = a.createElement, b.createFrag = a.createDocumentFragment, b.frag = b.createFrag();
         a.createElement = function (c) {
-            return!e.shivMethods ? b.createElem(c) : p(c, a, b)
+            return !e.shivMethods ? b.createElem(c) : p(c, a, b)
         };
         a.createDocumentFragment = Function("h,f", "return function(){var n=f.cloneNode(),c=n.createElement;h.shivMethods&&(" + m().join().replace(/\w+/g, function (a) {
             b.createElem(a);
             b.frag.createElement(a);
-            return'c("' + a + '")'
+            return 'c("' + a + '")'
         }) + ");return n}")(e, b.frag)
     }
 
@@ -59,19 +59,29 @@
                 f.createElement("a");
                 var c = f.createDocumentFragment();
                 b = "undefined" == typeof c.cloneNode ||
-                    "undefined" == typeof c.createDocumentFragment || "undefined" == typeof c.createElement
+                "undefined" == typeof c.createDocumentFragment || "undefined" == typeof c.createElement
             }
             g = b
         } catch (d) {
             g = j = !0
         }
     })();
-    var e = {elements: k.elements || "abbr article aside audio bdi canvas data datalist details figcaption figure footer header hgroup main mark meter nav output progress section summary time video", version: "3.6.2", shivCSS: !1 !== k.shivCSS, supportsUnknownElements: g, shivMethods: !1 !== k.shivMethods, type: "default", shivDocument: q, createElement: p, createDocumentFragment: function (a, b) {
-        a || (a = f);
-        if (g)return a.createDocumentFragment();
-        for (var b = b || i(a), c = b.frag.cloneNode(), d = 0, e = m(), h = e.length; d < h; d++)c.createElement(e[d]);
-        return c
-    }};
+    var e = {
+        elements: k.elements || "abbr article aside audio bdi canvas data datalist details figcaption figure footer header hgroup main mark meter nav output progress section summary time video",
+        version: "3.6.2",
+        shivCSS: !1 !== k.shivCSS,
+        supportsUnknownElements: g,
+        shivMethods: !1 !== k.shivMethods,
+        type: "default",
+        shivDocument: q,
+        createElement: p,
+        createDocumentFragment: function (a, b) {
+            a || (a = f);
+            if (g)return a.createDocumentFragment();
+            for (var b = b || i(a), c = b.frag.cloneNode(), d = 0, e = m(), h = e.length; d < h; d++)c.createElement(e[d]);
+            return c
+        }
+    };
     l.html5 = e;
     q(f)
 })(this, document);

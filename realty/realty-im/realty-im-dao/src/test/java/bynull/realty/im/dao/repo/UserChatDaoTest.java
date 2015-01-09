@@ -33,7 +33,7 @@ public class UserChatDaoTest {
      */
     @Test
     //@Repeat(value = 10)
-    public void saveChat(){
+    public void saveChat() {
         long ts = System.currentTimeMillis();
         Timestamp creationTime = new Timestamp(ts);
 
@@ -41,7 +41,7 @@ public class UserChatDaoTest {
 
         int chatSize = 100;
         IntStream.rangeClosed(1, chatSize).forEach(i -> {
-            ChatEntity chat = new ChatEntity(creationTime, new ChatId(1, i+1), i * 10 + ts);
+            ChatEntity chat = new ChatEntity(creationTime, new ChatId(1, i + 1), i * 10 + ts);
             testEntities.add(chat);
             userChatDao.saveUserChat(chat, 1);
         });

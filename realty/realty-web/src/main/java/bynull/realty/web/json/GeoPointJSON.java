@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class GeoPointJSON {
     public static GeoPointJSON from(GeoPointDTO dto) {
-        if(dto == null) return null;
+        if (dto == null) return null;
         GeoPointJSON json = new GeoPointJSON();
         json.setLatitude(dto.getLatitude());
         json.setLongitude(dto.getLongitude());

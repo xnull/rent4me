@@ -3,8 +3,7 @@
  */
 @TypeDefs({
         @TypeDef(defaultForType = GeoPoint.class, typeClass = GeoPointType.class)
-})
-package bynull.realty.dao;
+}) package bynull.realty.dao;
 
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.hibernate.GeoPointType;

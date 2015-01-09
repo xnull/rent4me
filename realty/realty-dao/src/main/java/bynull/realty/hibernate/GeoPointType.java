@@ -31,7 +31,7 @@ public class GeoPointType implements UserType {
 
     @Override
     public boolean equals(Object x, Object y) throws HibernateException {
-        return x == y || x!= null && y!=null && x.equals(y);
+        return x == y || x != null && y != null && x.equals(y);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GeoPointType implements UserType {
 
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-        if(value == null){
+        if (value == null) {
             //        st.setNull(index, new PGgeometry().getGeoType());
             st.setNull(index, Types.NULL);
         } else {
@@ -82,10 +82,10 @@ public class GeoPointType implements UserType {
 
     @Override
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
-        if(original != null) {
+        if (original != null) {
             GeoPoint geoPoint = new GeoPoint();
-            geoPoint.setLongitude(((GeoPoint)original).getLongitude());
-            geoPoint.setLatitude(((GeoPoint)original).getLatitude());
+            geoPoint.setLongitude(((GeoPoint) original).getLongitude());
+            geoPoint.setLatitude(((GeoPoint) original).getLatitude());
             return geoPoint;
         }
 

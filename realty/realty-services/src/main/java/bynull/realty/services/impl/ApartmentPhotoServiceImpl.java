@@ -9,7 +9,6 @@ import bynull.realty.data.business.PhotoTemp;
 import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.PhotoTempService;
-
 import bynull.realty.utils.SecurityUtils;
 import bynull.realty.utils.URLUtil;
 import org.apache.commons.httpclient.HttpClient;
@@ -89,22 +88,22 @@ public class ApartmentPhotoServiceImpl implements ApartmentPhotoService {
     @Override
     public List<ApartmentPhotoDTO> findPlaceProfilePhotosByGUIDs(List<String> guids) {
         Assert.notNull(guids);
-        if(guids.isEmpty()) return Collections.emptyList();
+        if (guids.isEmpty()) return Collections.emptyList();
         return apartmentPhotoRepository.findByGuidIn(guids)
-                    .stream()
-                    .map(ApartmentPhotoDTO::from)
-                    .collect(Collectors.toList());
+                .stream()
+                .map(ApartmentPhotoDTO::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
     public void deleteAll(List<ApartmentPhotoDTO> list) {
         Assert.notNull(list);
-        if(list.isEmpty()) return;
+        if (list.isEmpty()) return;
 
         List<String> guids = list.stream()
-                    .map(ApartmentPhotoDTO::getGuid)
-                    .collect(Collectors.toList());
+                .map(ApartmentPhotoDTO::getGuid)
+                .collect(Collectors.toList());
 
         List<ApartmentPhoto> apartmentPhotos = apartmentPhotoRepository.findByGuidIn(guids);
 

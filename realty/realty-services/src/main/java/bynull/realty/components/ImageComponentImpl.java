@@ -171,11 +171,11 @@ public class ImageComponentImpl implements ImageComponent {
                 String imageReaderFormatName = imageReader.getFormatName();
                 imageReaderFormatName = (imageReaderFormatName == null ? "" : imageReaderFormatName).toLowerCase();
 
-                if(imageReaderFormatName.contains("jpg")) {
+                if (imageReaderFormatName.contains("jpg")) {
                     formatName = "jpg";
-                } else if(imageReaderFormatName.contains("gif")) {
+                } else if (imageReaderFormatName.contains("gif")) {
                     formatName = "gif";
-                } else if(imageReaderFormatName.contains("png")) {
+                } else if (imageReaderFormatName.contains("png")) {
                     formatName = "png";
                 }
 

@@ -10,23 +10,23 @@ var ChatStore = require('../../../../shared/stores/ChatStore');
 var ChatActions = require('../../../../shared/actions/ChatActions');
 
 module.exports = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             chats: ChatStore.getMyChats(),
             hasMoreSearchResults: []
         }
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         ChatStore.addChangeListener(this.myChatsListener);
         ChatActions.loadMyChats();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         ChatStore.removeChangeListener(this.myChatsListener);
     },
 
-    myChatsListener: function() {
+    myChatsListener: function () {
         this.setState(assign(this.state, {
             chats: ChatStore.getMyChats()
         }));

@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface FacebookScrapedPostRepository extends JpaRepository<FacebookScrapedPost, Long> {
     List<FacebookScrapedPost> findByExternalIdIn(List<String> externalIds);
+
     @Query("select p from FacebookScrapedPost p where p.externalId=:externalId order by created desc")
-    List<FacebookScrapedPost> findByExternalIdNewest(@Param("externalId")String externalId, Pageable pageable);
+    List<FacebookScrapedPost> findByExternalIdNewest(@Param("externalId") String externalId, Pageable pageable);
 }

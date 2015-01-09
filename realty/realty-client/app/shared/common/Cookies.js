@@ -1,11 +1,11 @@
 function setCookie(cname, cvalue, exdays) {
-    if(exdays > 0) {
+    if (exdays > 0) {
         var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires+"; path=/";
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/";
     } else {
-        document.cookie = cname + "=" + cvalue+"; path=/";
+        document.cookie = cname + "=" + cvalue + "; path=/";
     }
 
 }
@@ -21,16 +21,16 @@ function setCookieForYear(cname, cvalue) {
 function getCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
     }
     return null;
 }
 
 function deleteCookie(c_name) {
-    this.setCookie(c_name,"",-1);
+    this.setCookie(c_name, "", -1);
 }
 
 var R4MECookies = {

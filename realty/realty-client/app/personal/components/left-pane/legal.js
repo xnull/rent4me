@@ -21,7 +21,7 @@ module.exports = React.createClass({
                                 <h4 className="list-group-item-heading">Рассылки</h4>
 
                                 <p className="list-group-item-text">Подпишитесь на рассылки чтобы немедленно узнавать
-                                о новых объявлениях
+                                    о новых объявлениях
                                 </p>
                             </a>
                         </div>

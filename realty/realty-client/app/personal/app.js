@@ -1,4 +1,3 @@
-
 var React = require('react');
 
 require('./components/router.js');

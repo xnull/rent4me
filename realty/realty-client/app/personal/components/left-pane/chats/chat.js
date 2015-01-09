@@ -15,7 +15,7 @@ var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
 
 module.exports = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         var chatKey = Utils.getQueryParams('id');
         console.log("chatKey=");
         console.log(chatKey);
@@ -29,7 +29,7 @@ module.exports = React.createClass({
         }
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         ChatStore.addChatMessagesLoadedListener(this.myChatsListener);
         ChatStore.addNewConversationStartedListener(this.newMessageListener);
         ChatActions.loadChatMessages(this.state.chatKey);
@@ -38,38 +38,38 @@ module.exports = React.createClass({
         UserActions.loadMyProfileIfNotLoaded();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         ChatStore.removeChatMessagesLoadedListener(this.myChatsListener);
         ChatStore.removeNewConversationStartedListener(this.newMessageListener);
         UserStore.removeChangeListener(this.myUserListener);
     },
 
-    myChatsListener: function() {
+    myChatsListener: function () {
         this.setState(assign(this.state, {
             messages: ChatStore.getChatMessages(this.state.chatKey)
         }));
     },
 
-    newMessageListener: function() {
+    newMessageListener: function () {
         this.setState(assign(this.state, {
             messageText: null
         }));
         ChatActions.loadChatMessages(this.state.chatKey);
     },
 
-    myUserListener: function() {
+    myUserListener: function () {
         this.setState(assign(this.state, {
             me: UserStore.getMyProfile()
         }));
     },
 
-    onMessageChange: function(e) {
+    onMessageChange: function (e) {
         this.setState(assign(this.state, {
             messageText: e.target.value
         }));
     },
 
-    onSendMessage: function() {
+    onSendMessage: function () {
         ChatActions.sendNewMessage(this.state.targetPersonId, this.state.messageText);
     },
 
@@ -89,7 +89,7 @@ module.exports = React.createClass({
                 <div className="panel">
 
                     <div className="panel-body">
-                        <h4>Чат с пользователем {(otherPerson||{}).name}</h4>
+                        <h4>Чат с пользователем {(otherPerson || {}).name}</h4>
 
 
                         <form className="form-horizontal" role="form">
@@ -106,7 +106,6 @@ module.exports = React.createClass({
 
                             <br/>
                             <br/>
-
 
 
                         </form>

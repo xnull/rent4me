@@ -34,15 +34,15 @@ public class MessageEntity implements Serializable {
         this.sendingTimestamp = messageId.getSendingTimestamp().getTimestamp();
     }
 
-    public ChatId getChatId(){
+    public ChatId getChatId() {
         return messageId.getChatId();
     }
 
-    public Integer getSenderId(){
+    public Integer getSenderId() {
         return messageId.getSenderId();
     }
 
-    public Integer getReceiverId(){
+    public Integer getReceiverId() {
         return messageId.getReceiverId();
     }
 }

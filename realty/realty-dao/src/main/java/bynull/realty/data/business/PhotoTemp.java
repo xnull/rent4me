@@ -71,7 +71,7 @@ public class PhotoTemp {
     @PrePersist
     void prePersist() {
         setCreated(new Date());
-        if(getGuid() == null) {
+        if (getGuid() == null) {
             setGuid(UUID.randomUUID().toString());
         }
     }

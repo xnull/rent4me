@@ -21,7 +21,7 @@ public class Timestamp implements Comparable<Timestamp>, Serializable {
         this.timestamp = timestamp;
     }
 
-    public Timestamp (){
+    public Timestamp() {
         this.timestamp = System.currentTimeMillis();
     }
 

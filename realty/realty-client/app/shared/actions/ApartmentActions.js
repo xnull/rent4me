@@ -89,7 +89,7 @@ var ApartmentActions = {
             .execute();
     },
 
-    loadMyApartment: function() {
+    loadMyApartment: function () {
         BlockUI.blockUI();
 
         Ajax
@@ -104,7 +104,7 @@ var ApartmentActions = {
                 BlockUI.unblockUI();
             })
             .onError(function (xhr, status, err) {
-                if(xhr.status == '404'){
+                if (xhr.status == '404') {
                     AppDispatcher.handleViewAction({
                         actionType: ApartmentConstants.APARTMENT_LOADED,
                         apartment: {}
@@ -115,7 +115,7 @@ var ApartmentActions = {
             .execute();
     },
 
-    deleteMyApartment: function() {
+    deleteMyApartment: function () {
         BlockUI.blockUI();
 
         Ajax
@@ -135,14 +135,14 @@ var ApartmentActions = {
             .execute();
     },
 
-    resetSearchState: function(){
+    resetSearchState: function () {
         AppDispatcher.handleViewAction({
             actionType: ApartmentConstants.APARTMENTS_RESET_SEARCH
         });
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findNear: function(lng, lat, countryCode, bounds) {
+    findNear: function (lng, lat, countryCode, bounds) {
         BlockUI.blockUI();
 
         var limit = ApartmentStore.getLimit();
@@ -151,12 +151,12 @@ var ApartmentActions = {
         var url = '/rest/apartments/nearest?lng=' + lng +
             '&lat=' + lat + "&country_code=" + countryCode +
             "&limit=" + limit + "&offset=" + offset;
-        if(bounds) {
+        if (bounds) {
             var ne = bounds.getNorthEast();
             var sw = bounds.getSouthWest();
 
-            var urlValue = "lat_lo="+sw.lat()+"&lng_lo="+sw.lng()+"&lat_hi="+ne.lat()+"&lng_hi="+ne.lng();
-            url = url + "&"+urlValue;
+            var urlValue = "lat_lo=" + sw.lat() + "&lng_lo=" + sw.lng() + "&lat_hi=" + ne.lat() + "&lng_hi=" + ne.lng();
+            url = url + "&" + urlValue;
             console.log("Bounds urlValue: " + urlValue);
         } else {
             console.log("Bounds no urlValue ");

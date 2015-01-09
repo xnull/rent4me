@@ -13,7 +13,7 @@ public class MessageDto {
     private final MessageId messageId;
     private final String text;
 
-    public ChatId getChatId(){
+    public ChatId getChatId() {
         return new ChatId(messageId.getSenderId(), messageId.getReceiverId());
     }
 }

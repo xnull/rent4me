@@ -1,4 +1,3 @@
-
 /**
  * Created by dionis on 04/12/14.
  */
@@ -13,7 +12,7 @@ var Ajax = require('../common/Ajax');
 
 module.exports = {
 
-    loadMyChats: function() {
+    loadMyChats: function () {
         BlockUI.blockUI();
 
         //var limit = Store.getLimit();
@@ -36,7 +35,7 @@ module.exports = {
             .execute();
     },
 
-    sendNewMessage: function(personId, text) {
+    sendNewMessage: function (personId, text) {
         BlockUI.blockUI();
 
         //var limit = Store.getLimit();
@@ -47,7 +46,7 @@ module.exports = {
         };
 
         Ajax
-            .POST('/rest/users/'+personId+'/chats')
+            .POST('/rest/users/' + personId + '/chats')
             .authorized()
             .withJsonBody(obj)
             .onSuccess(function (data) {
@@ -64,14 +63,14 @@ module.exports = {
             .execute();
     },
 
-    loadChatMessages: function(chatKey) {
+    loadChatMessages: function (chatKey) {
         BlockUI.blockUI();
 
         //var limit = Store.getLimit();
         //var offset = Store.getOffset();
 
         Ajax
-            .GET('/rest/users/me/chats/'+chatKey)
+            .GET('/rest/users/me/chats/' + chatKey)
             .authorized()
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({

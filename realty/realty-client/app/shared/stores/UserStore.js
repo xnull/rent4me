@@ -15,46 +15,46 @@ var _me = {};
 
 var CHANGE_EVENT = 'change';
 
-var saveMyProfile = function(myProfile){
+var saveMyProfile = function (myProfile) {
     //copy props
-    _me = assign({},_me, myProfile);
+    _me = assign({}, _me, myProfile);
 };
 
-var getMyProfile = function() {
+var getMyProfile = function () {
     //copy props
     return assign({}, _me);
 };
 
 //var UserStore = assign({}, EventEmitter.prototype, {
 var UserStore = assign({}, EventEmitter.prototype, {
-    emitChange: function() {
+    emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
 
-    getMyProfile: function() {
+    getMyProfile: function () {
         return getMyProfile();
     },
 
-    saveMyProfile: function(myProfile) {
+    saveMyProfile: function (myProfile) {
         saveMyProfile(myProfile);
     },
 
     /**
      * @param {function} callback
      */
-    addChangeListener: function(callback) {
+    addChangeListener: function (callback) {
         this.on(CHANGE_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeChangeListener: function(callback) {
+    removeChangeListener: function (callback) {
         this.removeListener(CHANGE_EVENT, callback);
     }
 });
 
 // Register to handle all updates
-AppDispatcher.register(function(payload){
+AppDispatcher.register(function (payload) {
     var action = payload.action;
 //    console.log('Payload received in User dispatcher');
     var userObject = assign({}, action.user || {});
@@ -63,7 +63,7 @@ AppDispatcher.register(function(payload){
 //    console.log("User:");
 //    console.log(userObject);
 
-    switch(action.actionType) {
+    switch (action.actionType) {
         case UserConstants.USER_PROFILE_SAVE:
             saveMyProfile(userObject);
             break;

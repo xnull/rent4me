@@ -32,7 +32,7 @@ public class AddressComponentsJSON {
     private String zipCode;
 
     public static AddressComponentsJSON from(AddressComponentsDTO dto) {
-        if(dto == null) return null;
+        if (dto == null) return null;
         AddressComponentsJSON json = new AddressComponentsJSON();
         json.setFormattedAddress(dto.getFormattedAddress());
 

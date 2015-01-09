@@ -29,7 +29,7 @@ public class ChatId implements Serializable {
      * Участники диалога должны быть заданы и не должны совпадать
      */
     private void check(Integer user1, Integer user2) {
-        if (user1 == null || user2 == null || user1.equals(user2)){
+        if (user1 == null || user2 == null || user1.equals(user2)) {
             throw new IllegalArgumentException("Invalid chat id. First user: " + this.firstUser + ", second user: " + this.secondUser);
         }
     }

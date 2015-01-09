@@ -1,6 +1,5 @@
 package bynull.realty.services.api;
 
-import bynull.realty.data.business.ApartmentPhoto;
 import bynull.realty.data.business.PhotoTemp;
 import bynull.realty.dto.ApartmentPhotoDTO;
 

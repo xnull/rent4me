@@ -24,11 +24,11 @@ public class MessageId implements Serializable {
     private final Timestamp sendingTimestamp;
     private final String hash;
 
-    public static MessageId build(Integer senderId, Integer receiverId){
+    public static MessageId build(Integer senderId, Integer receiverId) {
         return new MessageId(senderId, receiverId, new Timestamp(), RandomGenerator.randomString(3));
     }
 
-    public ChatId getChatId(){
+    public ChatId getChatId() {
         return new ChatId(senderId, receiverId);
     }
 }

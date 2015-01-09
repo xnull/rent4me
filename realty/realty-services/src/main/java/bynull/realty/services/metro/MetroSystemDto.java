@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class MetroSystemDto {
         }
     }
 
-    public void addStation(MetroStationFullInfoDto station){
+    public void addStation(MetroStationFullInfoDto station) {
         stations.add(station);
     }
 }

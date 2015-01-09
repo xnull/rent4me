@@ -38,7 +38,7 @@ var AuthActions = {
             .execute();
     },
 
-    loadMyProfile: function() {
+    loadMyProfile: function () {
         BlockUI.blockUI();
 
         Ajax
@@ -58,9 +58,9 @@ var AuthActions = {
             .execute();
     },
 
-    loadMyProfileIfNotLoaded: function() {
+    loadMyProfileIfNotLoaded: function () {
         var myProfile = UserStore.getMyProfile();
-        if(_.isEmpty(myProfile)) {
+        if (_.isEmpty(myProfile)) {
             console.log('My profile is empty. Loading.');
             console.log(myProfile);
             this.loadMyProfile();

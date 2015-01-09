@@ -34,12 +34,12 @@
         <servlet-name>jersey-dispatcher</servlet-name>
         <servlet-class>bynull.realty.web.MyServletContainer</servlet-class>
         <!--<init-param>-->
-            <!--<param-name>jersey.config.server.provider.packages</param-name>-->
-            <!--<param-value>bynull.realty.web.rest</param-value>-->
+        <!--<param-name>jersey.config.server.provider.packages</param-name>-->
+        <!--<param-value>bynull.realty.web.rest</param-value>-->
         <!--</init-param>-->
         <!--<init-param>-->
-            <!--<param-name>jersey.config.server.provider.scanning.recursive</param-name>-->
-            <!--<param-value>false</param-value>-->
+        <!--<param-name>jersey.config.server.provider.scanning.recursive</param-name>-->
+        <!--<param-value>false</param-value>-->
         <!--</init-param>-->
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -57,9 +57,9 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
-     </welcome-file-list>
+    </welcome-file-list>
 
 </web-app>

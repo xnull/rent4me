@@ -5,14 +5,14 @@
 var _inProgressCount = 0;
 
 var BlockUI = {
-    blockUI: function() {
+    blockUI: function () {
         var oldInProgressCount = _inProgressCount++;
-        if(oldInProgressCount == 0) {
+        if (oldInProgressCount == 0) {
             $.blockUI({
-                overlayCSS:  {
+                overlayCSS: {
                     backgroundColor: '#000',
-                    opacity:         0.0,
-                    cursor:          'wait'
+                    opacity: 0.0,
+                    cursor: 'wait'
                 },
                 message: '<img src="images/spin.gif" width="64px" height="64px"/>',
                 css: {
@@ -27,15 +27,15 @@ var BlockUI = {
                     cursor: 'wait',
                     'border-radius': '10px',
                     '-webkit-border-radius': '10px',
-                    '-moz-border-radius':    '10px',
+                    '-moz-border-radius': '10px',
                     'z-index': 1052
                 }
             });
         }
     },
-    unblockUI: function() {
+    unblockUI: function () {
         var currInProgress = --_inProgressCount;
-        if(currInProgress == 0) {
+        if (currInProgress == 0) {
             $.unblockUI();
         }
     }

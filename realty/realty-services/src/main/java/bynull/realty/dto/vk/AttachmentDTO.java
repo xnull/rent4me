@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class AttachmentDTO{
+public class AttachmentDTO {
     private Long id;
     private String type;
     private PhotoDTO photoDTO;

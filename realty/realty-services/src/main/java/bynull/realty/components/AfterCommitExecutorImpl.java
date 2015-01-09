@@ -36,7 +36,7 @@ public class AfterCommitExecutorImpl extends TransactionSynchronizationAdapter i
 
     @Override
     public void executeMultiple(Runnable... runnables) {
-        if(runnables == null || runnables.length == 0) return;
+        if (runnables == null || runnables.length == 0) return;
         else {
             for (Runnable runnable : runnables) {
                 execute(runnable);

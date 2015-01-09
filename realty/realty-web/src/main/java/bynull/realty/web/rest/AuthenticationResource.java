@@ -76,7 +76,7 @@ public class AuthenticationResource {
         private String token;
 
         public static UsernameTokenPairJSON from(UserService.UsernameTokenPair pair) {
-            if(pair == null) {
+            if (pair == null) {
                 return null;
             }
             return new UsernameTokenPairJSON(pair.username, pair.token);

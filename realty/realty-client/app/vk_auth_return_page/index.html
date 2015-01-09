@@ -11,18 +11,18 @@
 </body>
 <script type="text/javascript" src="js/main.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         var code = Utils.getQueryParams("code");
-        if(code) {
-            console.log("Received code: "+code);
+        if (code) {
+            console.log("Received code: " + code);
             AuthActions.authOnBackendWithVK(code);
         } else {
             alert("Не получилось авторизоваться через VK. Попробуйте другой метод авторизации, либо попробуйте снова позже.");
             console.log("No code received");
             var error = Utils.getQueryParams("error");
             var errorDescription = Utils.getQueryParams("error_description");
-            console.log("Error: "+error);
-            console.log("Error desc: "+errorDescription);
+            console.log("Error: " + error);
+            console.log("Error desc: " + errorDescription);
         }
     });
 </script>

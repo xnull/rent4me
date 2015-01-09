@@ -6,5 +6,5 @@ import java.util.concurrent.Executor;
  * @author dionis on 05/12/14.
  */
 public interface AfterCommitExecutor extends Executor {
-    void executeMultiple(Runnable ... runnables);
+    void executeMultiple(Runnable... runnables);
 }

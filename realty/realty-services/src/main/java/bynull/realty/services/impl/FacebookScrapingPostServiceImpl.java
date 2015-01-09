@@ -102,7 +102,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                 }
                 em.flush();
             } catch (Exception e) {
-                LOGGER.error("Failed to parse ["+fbPage.getExternalId()+"]", e);
+                LOGGER.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
             }
         }
     }
@@ -126,13 +126,13 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
     public static class DbConfig {
         public String type;
-        public Jdbc jdbc=new Jdbc();
+        public Jdbc jdbc = new Jdbc();
 
         public static class Jdbc {
             public String url;
             public String user;
             public String password;
-            public List<Sql> sql=new ArrayList<>();
+            public List<Sql> sql = new ArrayList<>();
             public String index;
             public String type;
             public long interval;
@@ -157,14 +157,14 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
     @Override
     public void syncElasticSearchWithDB() {
-        PutMethod method = new PutMethod("http://localhost:9200/_river/"+config.getEsConfig().getRiver()+"/_meta");
+        PutMethod method = new PutMethod("http://localhost:9200/_river/" + config.getEsConfig().getRiver() + "/_meta");
 
         try {
             DbConfig dbConfig = new DbConfig();
             dbConfig.type = "jdbc";
-            dbConfig.jdbc.user=config.getEsConfig().getDbUsername();
-            dbConfig.jdbc.password=config.getEsConfig().getDbPassword();
-            dbConfig.jdbc.url=config.getEsConfig().getDbJdbcUrl();
+            dbConfig.jdbc.user = config.getEsConfig().getDbUsername();
+            dbConfig.jdbc.password = config.getEsConfig().getDbPassword();
+            dbConfig.jdbc.url = config.getEsConfig().getDbJdbcUrl();
 
             //execute incremental updates
             dbConfig.jdbc.sql.add(new DbConfig.Jdbc.Sql(
@@ -177,9 +177,9 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                     ImmutableList.of(),
                     true
             ));
-            dbConfig.jdbc.index=config.getEsConfig().getIndex();
-            dbConfig.jdbc.type=config.getEsConfig().getType();
-            dbConfig.jdbc.interval=30;
+            dbConfig.jdbc.index = config.getEsConfig().getIndex();
+            dbConfig.jdbc.type = config.getEsConfig().getType();
+            dbConfig.jdbc.interval = 30;
 
             String value = jacksonObjectMapper.writeValueAsString(dbConfig);
 
@@ -384,7 +384,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     public List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
 
-        if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
+        if (StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
 
         FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
                 null,
@@ -405,7 +405,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
     public List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
 
-        if(StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
+        if (StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
 
         FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
                 null,
@@ -428,15 +428,15 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         String index = config.getEsConfig().getIndex();
 //        index = "prod_fb_posts";
 
-        PostMethod method = new PostMethod("http://localhost:9200/"+ index +"/_search");
+        PostMethod method = new PostMethod("http://localhost:9200/" + index + "/_search");
         ;
 //        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
         List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))
                 .stream()
-                .map(e->new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message(e)))
+                .map(e -> new FindQuery.FuzzyLikeThisQueryByMessage(new FindQuery.FuzzyLikeThisQueryByMessage.Message(e)))
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        if(withSubway) {
+        if (withSubway) {
             searchQueries.add(new FindQuery.BoolQuery(null, null,
                     ImmutableList.of(
                             new FindQuery.MatchQueryByMessage(new MessageMatch("м.")),
@@ -483,7 +483,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
             List<FacebookPostDTO> resultList = response.hits
                     .hits.stream()
                     .map(e -> e.source)
-                    .map(e->{
+                    .map(e -> {
                         FacebookPostDTO dto = new FacebookPostDTO();
                         dto.setMessage(e.message);
                         dto.setLink(e.link);
@@ -495,7 +495,6 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                     .collect(Collectors.toList());
 
             return resultList;
-
 
 
         } catch (Exception e) {

@@ -61,7 +61,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     public boolean createForAuthorizedUser(ApartmentDTO dto) {
         User user = getAuthorizedUser();
 
-        if(user.getApartments().isEmpty()) {
+        if (user.getApartments().isEmpty()) {
             Apartment apartment = dto.toInternal();
             apartment.setOwner(user);
             apartment = apartmentRepository.saveAndFlush(apartment);
@@ -174,7 +174,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void deleteApartmentForAuthorizedUser() {
         User user = getAuthorizedUser();
         Set<Apartment> apartments = user.getApartments();
-        if(!apartments.isEmpty()) {
+        if (!apartments.isEmpty()) {
             for (Apartment apartment : apartments) {
                 SecurityUtils.verifySameUser(apartment.getOwner());
                 List<ApartmentPhoto> apartmentPhotos = apartment.listPhotosNewestFirst();
@@ -239,7 +239,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         final List<Apartment> result;
 
-        if(boundingBoxSpecified) {
+        if (boundingBoxSpecified) {
             result = apartmentRepository.findNearestInBoundingBox(
                     geoPoint.getLongitude(),
                     geoPoint.getLatitude(),
@@ -263,6 +263,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         return result.stream()
                 .map(ApartmentDTO::from)
                 .collect(Collectors.toList())
-        ;
+                ;
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class VkGrabberComponent {
 
-//    @Resource
+    //    @Resource
 ////    private VkAuth vkAuth;
 //
 //    @Resource

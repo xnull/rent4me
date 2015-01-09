@@ -46,16 +46,16 @@ var UserButton = React.createClass({
     }
 });
 
-var getMyProfile = function() {
+var getMyProfile = function () {
     return UserStore.getMyProfile();
 };
 
 module.exports = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
 //        console.log('get initial state');
         return UserStore.getMyProfile();
     },
-    componentDidMount: function() {
+    componentDidMount: function () {
 //        console.log('component will mount');
         UserStore.addChangeListener(this._onLoad);
 
@@ -66,11 +66,11 @@ module.exports = React.createClass({
 //        });
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         UserStore.removeChangeListener(this._onLoad);
     },
 
-    _onSave: function(event) {
+    _onSave: function (event) {
 //        console.log('on save');
 //        console.log(event);
 //        console.log(event.target);
@@ -78,7 +78,7 @@ module.exports = React.createClass({
         UserActions.save(assign(getMyProfile(), this.state));
     },
 
-    _onLoad: function() {
+    _onLoad: function () {
 //        console.log('on load triggered');
         var user = UserStore.getMyProfile();
 //        console.log('user:'+JSON.stringify(user));
@@ -88,8 +88,8 @@ module.exports = React.createClass({
         this.setState(newState);
     },
 
-    _onChange: function(event) {
-        if(!event) {
+    _onChange: function (event) {
+        if (!event) {
 //            console.log('no event specified');
             return;
         }

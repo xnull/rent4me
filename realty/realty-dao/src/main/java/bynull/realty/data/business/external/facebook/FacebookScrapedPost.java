@@ -131,10 +131,10 @@ public class FacebookScrapedPost {
     void prePersist() {
         Date date = new Date();
         setImported(date);
-        if(getCreated() == null) {
+        if (getCreated() == null) {
             setCreated(date);
         }
-        if(getUpdated() == null) {
+        if (getUpdated() == null) {
             setUpdated(date);
         }
     }

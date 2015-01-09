@@ -276,7 +276,7 @@ public class Apartment implements Serializable {
     private void mergeWith(Apartment apartment, boolean updateAllInfo) {
         Assert.notNull(apartment);
 
-        if(updateAllInfo) {
+        if (updateAllInfo) {
             setAddressComponents(apartment.getAddressComponents());
             setLocation(apartment.getLocation());
             setArea(apartment.getArea());

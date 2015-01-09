@@ -7,10 +7,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * {
- *     "error_message" : "You have exceeded your daily request quota for this API.",
- *     "html_attributions" : [],
- *     "results" : [],
- *     "status" : "OVER_QUERY_LIMIT"
+ * "error_message" : "You have exceeded your daily request quota for this API.",
+ * "html_attributions" : [],
+ * "results" : [],
+ * "status" : "OVER_QUERY_LIMIT"
  * }
  */
 @XmlRootElement

@@ -58,7 +58,7 @@ public class ApartmentPhoto {
         creationTimestamp = new Date();
 
         //if guid was not set by default - generate new one. Needed for backward compatibility
-        if(getGuid() == null) {
+        if (getGuid() == null) {
 
             setGuid(UUID.randomUUID().toString());
         }

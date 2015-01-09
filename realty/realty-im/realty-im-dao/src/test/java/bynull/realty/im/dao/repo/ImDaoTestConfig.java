@@ -18,7 +18,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 public class ImDaoTestConfig {
 
     @Bean
-    public HazelcastInstance hazelcastInstance(){
+    public HazelcastInstance hazelcastInstance() {
         return Hazelcast.newHazelcastInstance();
     }
 

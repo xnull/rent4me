@@ -10,7 +10,8 @@ import java.util.List;
 public interface PhotoTempService {
     /**
      * Create photo temp.
-     * @param url url to be saved in temp
+     *
+     * @param url  url to be saved in temp
      * @param guid
      * @return guid for this photo temp.
      */

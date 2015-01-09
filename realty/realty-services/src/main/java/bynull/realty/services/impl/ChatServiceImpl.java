@@ -8,7 +8,6 @@ import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.services.api.ChatService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -33,7 +32,7 @@ public class ChatServiceImpl implements ChatService {
     public ChatMessageDTO createChatMessage(long receiverId, String text) {
         long senderId = SecurityUtils.getAuthorizedUser().getId();
 
-        if(senderId == receiverId) {
+        if (senderId == receiverId) {
             throw new BadRequestException("Sender and receiver could not be the same");
         }
 

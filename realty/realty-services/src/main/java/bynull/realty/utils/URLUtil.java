@@ -17,13 +17,13 @@ public class URLUtil {
         try {
             getMethod.setFollowRedirects(true);
             final int responseCode = httpClient.executeMethod(getMethod);
-            if(responseCode != 200) {
+            if (responseCode != 200) {
                 result = null;
             } else {
                 result = getMethod.getResponseBody();
             }
         } catch (Exception e) {
-            LOGGER.warn("Exception happened while trying to load ["+url+"]", e);
+            LOGGER.warn("Exception happened while trying to load [" + url + "]", e);
             result = null;
         } finally {
             getMethod.releaseConnection();

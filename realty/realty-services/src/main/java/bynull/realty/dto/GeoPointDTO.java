@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class GeoPointDTO {
     public static GeoPointDTO from(GeoPoint geoPoint) {
-        if(geoPoint == null) return null;
+        if (geoPoint == null) return null;
 
         GeoPointDTO geoPointDTO = new GeoPointDTO();
         geoPointDTO.setLatitude(geoPoint.getLatitude());

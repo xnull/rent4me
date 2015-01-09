@@ -11,22 +11,22 @@ var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
 
 var Chat = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             me: UserStore.getMyProfile()
         };
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         UserStore.addChangeListener(this.meLoadListener);
         UserActions.loadMyProfileIfNotLoaded();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         UserStore.removeChangeListener(this.meLoadListener);
     },
 
-    meLoadListener: function() {
+    meLoadListener: function () {
         this.setState(assign(this.state, {
             me: UserStore.getMyProfile()
         }));
@@ -41,7 +41,7 @@ var Chat = React.createClass({
 
         var targetPerson = item.receiver.id == me.id ? item.sender : item.receiver;
 
-        var url = "#/user/chat?id="+item.chat_key+"&receiver_id="+targetPerson.id;
+        var url = "#/user/chat?id=" + item.chat_key + "&receiver_id=" + targetPerson.id;
 
         return (
             <div className='panel'>
@@ -50,11 +50,13 @@ var Chat = React.createClass({
                     <p className="list-group-item-text">
                         <div className="row">
                             <div className="col-md-2">
-                                <strong>{targetPerson.name}</strong><br/>
+                                <strong>{targetPerson.name}</strong>
+                                <br/>
                                 <small>{moment(item.created).format("lll")}</small>
                             </div>
                             <div className="col-md-10">
-                                <strong>{item.sender.name}</strong>: {item.message}
+                                <strong>{item.sender.name}</strong>
+                                : {item.message}
                             </div>
                         </div>
                     </p>

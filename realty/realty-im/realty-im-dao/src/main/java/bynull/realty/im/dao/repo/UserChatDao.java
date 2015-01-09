@@ -58,7 +58,7 @@ public class UserChatDao extends AbstractHazelcastDao<ChatEntity> {
         return sortedResult;
     }
 
-    public ChatEntity getUserChat(Integer userId, ChatId chatId){
+    public ChatEntity getUserChat(Integer userId, ChatId chatId) {
         return getUserChats(userId).get(chatId);
     }
 

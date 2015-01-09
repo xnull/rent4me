@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -73,11 +76,10 @@ public class PhotoTempServiceImpl implements PhotoTempService {
                 .collect(Collectors.toSet());
 
 
-
         LOGGER.info("Images from [{}] gc candidates should not be removed", idsThatShouldNotBeDeleted.size());
         for (PhotoTemp gcCandidate : gcCandidates) {
             final String guid = gcCandidate.getGuid();
-            if(!idsThatShouldNotBeDeleted.contains(guid)) {
+            if (!idsThatShouldNotBeDeleted.contains(guid)) {
                 LOGGER.info("GC'ing image from Amazon S3 with id [{}]", guid);
                 afterCommitExecutor.execute(() -> imageComponent.deleteJpegSilently(guid));
             } else {
@@ -90,7 +92,7 @@ public class PhotoTempServiceImpl implements PhotoTempService {
 
     @Override
     public List<PhotoTempDTO> findPhotoTempByGUIDs(List<String> addedTempPhotosGUIDs) {
-        if(addedTempPhotosGUIDs.isEmpty()) return Collections.emptyList();
+        if (addedTempPhotosGUIDs.isEmpty()) return Collections.emptyList();
         List<PhotoTemp> result = photoTempRepository.findByGuidIn(addedTempPhotosGUIDs);
         return result.stream().map(PhotoTempDTO::from).collect(Collectors.toList());
     }

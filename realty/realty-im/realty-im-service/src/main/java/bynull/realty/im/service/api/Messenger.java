@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface Messenger {
     void sendChatMessage(MessageDto message);
+
     void createChat(ChatId chatId);
 
     List<MessageDto> getAllMessages(ChatId chatId);

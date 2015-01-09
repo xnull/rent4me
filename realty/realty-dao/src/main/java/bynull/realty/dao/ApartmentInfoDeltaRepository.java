@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface ApartmentInfoDeltaRepository extends JpaRepository<ApartmentInfoDelta, Long> {
     @Query("select delta from ApartmentInfoDelta delta where apartment.id=:apartment_id order by created desc")
-    List<ApartmentInfoDelta> findLatestForApartment(@Param("apartment_id")Long id);
+    List<ApartmentInfoDelta> findLatestForApartment(@Param("apartment_id") Long id);
 }

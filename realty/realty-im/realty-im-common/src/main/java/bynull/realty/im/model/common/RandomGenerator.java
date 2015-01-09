@@ -11,7 +11,7 @@ import java.security.SecureRandom;
 public class RandomGenerator {
     private static final SecureRandom RND = new SecureRandom();
 
-    public static String randomString(int length){
+    public static String randomString(int length) {
         return RandomStringUtils.randomAlphabetic(length).toUpperCase();
     }
 }

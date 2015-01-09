@@ -40,42 +40,42 @@ var CHAT_NEW_CONVERSATION_STARTED_EVENT = 'chat_new_conv_started';
 var CHAT_MESSAGES_LOADED_EVENT = 'chat_msgs_loaded';
 
 var Store = assign({}, EventEmitter.prototype, {
-    emitChange: function() {
+    emitChange: function () {
         this.emit(CHAT_CHANGE_EVENT);
     },
 
-    emitNewConversationStarted: function() {
+    emitNewConversationStarted: function () {
         this.emit(CHAT_NEW_CONVERSATION_STARTED_EVENT);
     },
 
-    emitChatMessagesLoadedEvent: function() {
+    emitChatMessagesLoadedEvent: function () {
         this.emit(CHAT_MESSAGES_LOADED_EVENT);
     },
 
 
-    saveChats: function(chats) {
+    saveChats: function (chats) {
         console.log('Saving chats:');
         var len = chats.length;
-        console.log('Len: '+len);
+        console.log('Len: ' + len);
         //_hasMoreResults = len == _limit;
-        console.log('Has more results?: '+_hasMoreResults);
+        console.log('Has more results?: ' + _hasMoreResults);
         //_offset += len;
-        console.log('New offset: '+_offset);
+        console.log('New offset: ' + _offset);
         //_chats = _chats.concat(chats);
         _myChats = chats;
         console.log('Chats in cache: ');
         console.log(_myChats);
     },
 
-    getMyChats: function() {
+    getMyChats: function () {
         return _myChats;
     },
 
-    saveChatMessages: function(chatKey, messages) {
+    saveChatMessages: function (chatKey, messages) {
         _chatMessages[chatKey] = messages || [];
     },
 
-    getChatMessages: function(chatKey) {
+    getChatMessages: function (chatKey) {
         return _chatMessages[chatKey] || [];
     },
 
@@ -86,39 +86,39 @@ var Store = assign({}, EventEmitter.prototype, {
     /**
      * @param {function} callback
      */
-    addChangeListener: function(callback) {
+    addChangeListener: function (callback) {
         this.on(CHAT_CHANGE_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeChangeListener: function(callback) {
+    removeChangeListener: function (callback) {
         this.removeListener(CHAT_CHANGE_EVENT, callback);
     },
 
     /**
      * @param {function} callback
      */
-    addNewConversationStartedListener: function(callback) {
+    addNewConversationStartedListener: function (callback) {
         this.on(CHAT_NEW_CONVERSATION_STARTED_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeNewConversationStartedListener: function(callback) {
+    removeNewConversationStartedListener: function (callback) {
         this.removeListener(CHAT_NEW_CONVERSATION_STARTED_EVENT, callback);
     },
 
     /**
      * @param {function} callback
      */
-    addChatMessagesLoadedListener: function(callback) {
+    addChatMessagesLoadedListener: function (callback) {
         this.on(CHAT_MESSAGES_LOADED_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeChatMessagesLoadedListener: function(callback) {
+    removeChatMessagesLoadedListener: function (callback) {
         this.removeListener(CHAT_MESSAGES_LOADED_EVENT, callback);
     }
 
@@ -126,7 +126,7 @@ var Store = assign({}, EventEmitter.prototype, {
 });
 
 // Register to handle all updates
-AppDispatcher.register(function(payload){
+AppDispatcher.register(function (payload) {
     var action = payload.action;
 //    console.log('Apartment store payload received in dispatcher');
 //    var apartmentObject = assign({}, action.apartment || {});
@@ -135,7 +135,7 @@ AppDispatcher.register(function(payload){
 //    console.log("Apartment:");
 //    console.log(apartmentObject);
 
-    switch(action.actionType) {
+    switch (action.actionType) {
         case Constants.CHAT_LIST_LOADED:
             console.log('found posts:');
             console.log(action.chats);
@@ -152,7 +152,7 @@ AppDispatcher.register(function(payload){
             break;
 
         case Constants.CHAT_MESSAGES_LOADED:
-            console.log('chat messages loaded for chat '+action.chatKey+':');
+            console.log('chat messages loaded for chat ' + action.chatKey + ':');
             console.log(action.messages);
 
             Store.saveChatMessages(action.chatKey, action.messages || []);

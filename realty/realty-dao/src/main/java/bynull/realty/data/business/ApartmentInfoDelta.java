@@ -168,7 +168,8 @@ public class ApartmentInfoDelta {
 
         ApartmentInfoDelta apartmentInfoDelta = (ApartmentInfoDelta) o;
 
-        if (getId() != null ? !getId().equals(apartmentInfoDelta.getId()) : apartmentInfoDelta.getId() != null) return false;
+        if (getId() != null ? !getId().equals(apartmentInfoDelta.getId()) : apartmentInfoDelta.getId() != null)
+            return false;
 
         return true;
     }

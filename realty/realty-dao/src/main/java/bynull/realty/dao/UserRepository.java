@@ -21,5 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     @Query("select u from User u where lower(u.displayName) like lower(:name)")
-    List<User> findByName(@Param("name") String name, Pageable   pageable);
+    List<User> findByName(@Param("name") String name, Pageable pageable);
 }

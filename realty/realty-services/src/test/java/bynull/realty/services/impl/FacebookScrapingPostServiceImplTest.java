@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import javax.annotation.Resource;
 
-import static org.junit.Assert.*;
-
 @Ignore
 public class FacebookScrapingPostServiceImplTest extends ServiceTest {
 

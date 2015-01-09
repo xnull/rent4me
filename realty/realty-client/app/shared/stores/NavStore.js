@@ -15,55 +15,55 @@ var CHANGE_EVENT = 'change';
 
 //var UserStore = assign({}, EventEmitter.prototype, {
 var NavStore = assign({}, EventEmitter.prototype, {
-    emitChange: function() {
+    emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
 
-    getCurrentPage: function() {
+    getCurrentPage: function () {
         return _currentPage;
     },
 
-    isHomeSelected: function() {
+    isHomeSelected: function () {
         return _currentPage == 'home';
     },
 
-    isLandLordSelected: function() {
+    isLandLordSelected: function () {
         return _currentPage == 'landlord';
     },
 
-    isRenterSelected: function(){
+    isRenterSelected: function () {
         return _currentPage == 'renter';
     },
 
-    isSupportSelected: function(){
+    isSupportSelected: function () {
         return _currentPage == 'support';
     },
 
     /**
      * @param {function} callback
      */
-    addChangeListener: function(callback) {
+    addChangeListener: function (callback) {
         this.on(CHANGE_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeChangeListener: function(callback) {
+    removeChangeListener: function (callback) {
         this.removeListener(CHANGE_EVENT, callback);
     }
 });
 
 console.log('Dispatcher registered: Nav store');
 // Register to handle all updates
-AppDispatcher.register(function(payload){
+AppDispatcher.register(function (payload) {
     var action = payload.action;
     console.log('Payload received in Nav dispatcher');
     console.log(payload);
     var page = action.page;
 
-    switch(action.actionType) {
+    switch (action.actionType) {
         case NavConstants.NAVIGATE_TO:
-            console.log('Navigating to: '+page);
+            console.log('Navigating to: ' + page);
             _currentPage = page;
             break;
         default:

@@ -11,21 +11,21 @@ var UserActions = require('../../../shared/actions/UserActions');
 var assign = require('object-assign');
 
 var UserPanel = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return UserStore.getMyProfile();
     },
 
-    componentDidMount: function(){
+    componentDidMount: function () {
         UserStore.addChangeListener(this._onChange);
 
         UserActions.loadMyProfileIfNotLoaded();
     },
 
-    componentWillUnmount: function(){
+    componentWillUnmount: function () {
         UserStore.removeChangeListener(this._onChange);
     },
 
-    _onChange: function(event) {
+    _onChange: function (event) {
         this.setState(UserStore.getMyProfile());
     },
 

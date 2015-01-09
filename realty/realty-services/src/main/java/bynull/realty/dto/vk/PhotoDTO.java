@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class PhotoDTO{
+public class PhotoDTO {
 
     private Long id;
 
@@ -26,7 +26,7 @@ public class PhotoDTO{
     public PhotoDTO() {
     }
 
-    public static PhotoDTO from(Photo photo){
+    public static PhotoDTO from(Photo photo) {
         if (photo == null) return null;
 
         PhotoDTO photoDTO = new PhotoDTO();

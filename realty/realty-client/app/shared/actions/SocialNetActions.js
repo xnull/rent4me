@@ -1,4 +1,3 @@
-
 /**
  * Created by dionis on 04/12/14.
  */
@@ -13,40 +12,40 @@ var JSON = require('JSON2');
 var Ajax = require('../common/Ajax');
 
 var SocialNetActions = {
-    resetRenterSearchState: function(){
+    resetRenterSearchState: function () {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_RENTER_POSTS_RESET_SEARCH
         });
     },
 
-    resetLessorSearchState: function(){
+    resetLessorSearchState: function () {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_LESSOR_POSTS_RESET_SEARCH
         });
     },
 
-    changeRenterSearchText: function(text){
+    changeRenterSearchText: function (text) {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_RENTER_POSTS_SAVE_SEARCH_TEXT,
             text: text
         });
     },
 
-    changeLessorSearchText: function(text){
+    changeLessorSearchText: function (text) {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_LESSOR_POSTS_SAVE_SEARCH_TEXT,
             text: text
         });
     },
 
-    changeRenterSearchWithSubway: function(value){
+    changeRenterSearchWithSubway: function (value) {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_RENTER_POSTS_SAVE_SEARCH_WITH_SUBWAY,
             value: value
         });
     },
 
-    changeLessorSearchWithSubway: function(value){
+    changeLessorSearchWithSubway: function (value) {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_LESSOR_POSTS_SAVE_SEARCH_WITH_SUBWAY,
             value: value
@@ -54,7 +53,7 @@ var SocialNetActions = {
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findRenterPosts: function(text,withSubway) {
+    findRenterPosts: function (text, withSubway) {
         BlockUI.blockUI();
 
         var limit = SocialNetRenterStore.getLimit();
@@ -80,7 +79,7 @@ var SocialNetActions = {
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findLessorPosts: function(text,withSubway) {
+    findLessorPosts: function (text, withSubway) {
         BlockUI.blockUI();
 
         var limit = SocialNetLessorStore.getLimit();

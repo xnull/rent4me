@@ -35,11 +35,10 @@ import static bynull.realty.util.CommonUtils.copy;
  * @author dionis on 09/07/14.
  */
 @Component
-public class FacebookHelperComponent {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FacebookHelperComponent.class);
+public class
+        FacebookHelperComponent {
     public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
-
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(FacebookHelperComponent.class);
     private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
 
     private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
@@ -52,16 +51,6 @@ public class FacebookHelperComponent {
 
         this.setParams(params);
     }};
-
-    public static class ClientShortInfo {
-        public final String facebookId;
-        public final String facebookOAuthToken;
-
-        public ClientShortInfo(String facebookId, String facebookOAuthToken) {
-            this.facebookId = facebookId;
-            this.facebookOAuthToken = facebookOAuthToken;
-        }
-    }
 
     public FacebookVerificationInfoDTO verify(final ClientShortInfo person) throws FacebookAuthorizationException {
         Assert.notNull(person.facebookId, "facebook id should not be empty");
@@ -83,6 +72,118 @@ public class FacebookHelperComponent {
         }
 
         return result;
+    }
+
+    private FacebookVerificationInfoDTO performVerification(ClientShortInfo person) {
+        long requestStartTime = System.currentTimeMillis();
+        String uri = MY_PROFILE_FACEBOOK_URL + person.facebookOAuthToken;
+        GetMethod httpGet = new GetMethod(uri);
+        httpGet.setFollowRedirects(false);
+        try {
+            int responseCode = httpManager.executeMethod(httpGet);
+            if (responseCode != HttpStatus.SC_OK) {
+                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
+            }
+            String body = httpGet.getResponseBodyAsString();
+            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
+
+            FacebookVerificationInfoDTO response = jacksonObjectMapper.readValue(body, FacebookVerificationInfoDTO.class);
+            Assert.notNull(response);
+            Assert.notNull(response.facebookId, "Facebook id should not be empty");
+            Assert.notNull(response.email, "Email should not be empty");
+            Assert.notNull(response.name, "Name should not be empty");
+
+            if (!response.facebookId.equals(person.facebookId)) {
+                throw new BadRequestException("Facebook id differs");
+            }
+
+            if (!response.verified) {
+                throw new WebApplicationException("Account not verified", Response.Status.EXPECTATION_FAILED);
+            }
+
+            Assert.isTrue(response.facebookId.equals(person.facebookId), "Invalid facebook id");
+
+            // returned string example {"id":"100000169700800"}
+
+            LOGGER.info("Status line: {}", httpGet.getStatusLine());
+
+            return response;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            httpGet.releaseConnection();
+        }
+    }
+
+    public List<FacebookPostItemDTO> loadPostsFromPage(String pageId, Date maxAge) {
+        return doLoadPostsFromPage(pageId, maxAge);
+    }
+
+    @VisibleForTesting
+    List<FacebookPostItemDTO> doLoadPostsFromPage(String pageId, Date maxAge) {
+        String accessToken = "CAAE0ncj24EcBAHJZAtcgGNHRWe4kPmRMaGpFDjpRj27mwqBXI2sigVDdptRJUvjDOrMJ8LQZAQj53atfKa8ZCTqEVqWm7g8moivnSoMevEuPVPWYhCaOfkX6KkWDXAe8VvGiNN1VhcLAzV1Lra9imuLZBSkNjZCQOtGgZCeJHJIVadlZCp6Yl7g";
+        String uri = "https://graph.facebook.com/v2.2/" + pageId + "/feed";
+
+        return doLoadPostsFromPage0(maxAge, uri, accessToken, new ArrayList<>(), 0);
+    }
+
+    private List<FacebookPostItemDTO> doLoadPostsFromPage0(Date maxAge, String _url, String accessToken, List<FacebookPostItemDTO> accu, int retryNumber) {
+        String url = !_url.contains("access_token")
+                ? _url + (_url.contains("?") ? "&" : "?") + "access_token=" + accessToken
+                : _url;
+
+        LOGGER.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
+
+        long requestStartTime = System.currentTimeMillis();
+
+        GetMethod httpGet = new GetMethod(url);
+        httpGet.setFollowRedirects(false);
+        try {
+            int responseCode = httpManager.executeMethod(httpGet);
+            if (responseCode != HttpStatus.SC_OK) {
+                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
+            }
+            String body = httpGet.getResponseBodyAsString();
+            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
+            LOGGER.info("Status line: {}", httpGet.getStatusLine());
+            LOGGER.info("Body: {}", body);
+
+            FacebookFeedItems response = jacksonObjectMapper.readValue(body, FacebookFeedItems.class);
+            if (response.getItems().isEmpty()) {
+                return accu;
+            } else {
+                accu.addAll(response.getItems());
+                if (response.getPaging().hasNextPage()) {
+                    FacebookPostItemDTO last = Iterables.getLast(response.getItems(), null);
+                    if (last != null && last.getCreatedDtime().after(maxAge)) {
+                        return doLoadPostsFromPage0(maxAge, response.getPaging().getNext(), accessToken, accu, 0);
+                    } else {
+                        return accu;
+                    }
+                } else {
+                    return accu;
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.warn("Exception occurred while trying to load posts from page", e);
+            if (retryNumber < 3) {
+                return doLoadPostsFromPage0(maxAge, _url, accessToken, accu, retryNumber + 1);
+            } else {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            httpGet.releaseConnection();
+        }
+    }
+
+    public static class ClientShortInfo {
+        public final String facebookId;
+        public final String facebookOAuthToken;
+
+        public ClientShortInfo(String facebookId, String facebookOAuthToken) {
+            this.facebookId = facebookId;
+            this.facebookOAuthToken = facebookOAuthToken;
+        }
     }
 
     public static class FacebookAuthorizationException extends Exception {
@@ -135,78 +236,11 @@ public class FacebookHelperComponent {
         }
     }
 
-    private FacebookVerificationInfoDTO performVerification(ClientShortInfo person) {
-        long requestStartTime = System.currentTimeMillis();
-        String uri = MY_PROFILE_FACEBOOK_URL + person.facebookOAuthToken;
-        GetMethod httpGet = new GetMethod(uri);
-        httpGet.setFollowRedirects(false);
-        try {
-            int responseCode = httpManager.executeMethod(httpGet);
-            if (responseCode != HttpStatus.SC_OK) {
-                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
-            }
-            String body = httpGet.getResponseBodyAsString();
-            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
-
-            FacebookVerificationInfoDTO response = jacksonObjectMapper.readValue(body, FacebookVerificationInfoDTO.class);
-            Assert.notNull(response);
-            Assert.notNull(response.facebookId, "Facebook id should not be empty");
-            Assert.notNull(response.email, "Email should not be empty");
-            Assert.notNull(response.name, "Name should not be empty");
-
-            if (!response.facebookId.equals(person.facebookId)) {
-                throw new BadRequestException("Facebook id differs");
-            }
-
-            if (!response.verified) {
-                throw new WebApplicationException("Account not verified", Response.Status.EXPECTATION_FAILED);
-            }
-
-            Assert.isTrue(response.facebookId.equals(person.facebookId), "Invalid facebook id");
-
-            // returned string example {"id":"100000169700800"}
-
-            LOGGER.info("Status line: {}", httpGet.getStatusLine());
-
-            return response;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            httpGet.releaseConnection();
-        }
-    }
-
     /**
      * https://developers.facebook.com/docs/graph-api/reference/v2.2/post
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FacebookPostItemDTO {
-        public static enum Type {
-            link {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.LINK;
-                }
-            }, status {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.STATUS;
-                }
-            }, photo {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.PHOTO;
-                }
-            }, video {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.VIDEO;
-                }
-            };
-
-            public abstract FacebookPostType toInternal();
-        }
-
         private final String id;
         private final String message;
         private final String picture;
@@ -285,20 +319,38 @@ public class FacebookHelperComponent {
             post.setUpdated(getUpdatedDtime());
             return post;
         }
+
+        public static enum Type {
+            link {
+                @Override
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.LINK;
+                }
+            }, status {
+                @Override
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.STATUS;
+                }
+            }, photo {
+                @Override
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.PHOTO;
+                }
+            }, video {
+                @Override
+                public FacebookPostType toInternal() {
+                    return FacebookPostType.VIDEO;
+                }
+            };
+
+            public abstract FacebookPostType toInternal();
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FacebookFeedItems {
         private final List<FacebookPostItemDTO> items;
         private final FacebookPaging paging;
-
-        public List<FacebookPostItemDTO> getItems() {
-            return Collections.unmodifiableList(items);
-        }
-
-        public FacebookPaging getPaging() {
-            return paging != null ? paging : FacebookPaging.NONE;
-        }
 
         public FacebookFeedItems(
                 @JsonProperty("data")
@@ -307,6 +359,14 @@ public class FacebookHelperComponent {
                 FacebookPaging paging) {
             this.items = items;
             this.paging = paging;
+        }
+
+        public List<FacebookPostItemDTO> getItems() {
+            return Collections.unmodifiableList(items);
+        }
+
+        public FacebookPaging getPaging() {
+            return paging != null ? paging : FacebookPaging.NONE;
         }
     }
 
@@ -332,67 +392,6 @@ public class FacebookHelperComponent {
 
         public boolean hasNextPage() {
             return getNext() != null;
-        }
-    }
-
-    public List<FacebookPostItemDTO> loadPostsFromPage(String pageId, Date maxAge) {
-        return doLoadPostsFromPage(pageId, maxAge);
-    }
-
-    @VisibleForTesting
-    List<FacebookPostItemDTO> doLoadPostsFromPage(String pageId, Date maxAge) {
-        String accessToken = "CAAE0ncj24EcBAHJZAtcgGNHRWe4kPmRMaGpFDjpRj27mwqBXI2sigVDdptRJUvjDOrMJ8LQZAQj53atfKa8ZCTqEVqWm7g8moivnSoMevEuPVPWYhCaOfkX6KkWDXAe8VvGiNN1VhcLAzV1Lra9imuLZBSkNjZCQOtGgZCeJHJIVadlZCp6Yl7g";
-        String uri = "https://graph.facebook.com/v2.2/"+pageId+"/feed";
-
-        return doLoadPostsFromPage0(maxAge, uri, accessToken, new ArrayList<>(), 0);
-    }
-
-    private List<FacebookPostItemDTO> doLoadPostsFromPage0(Date maxAge, String _url, String accessToken, List<FacebookPostItemDTO> accu, int retryNumber) {
-        String url = !_url.contains("access_token")
-                ? _url + (_url.contains("?")  ? "&" : "?")+"access_token=" + accessToken
-                : _url;
-
-        LOGGER.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
-
-        long requestStartTime = System.currentTimeMillis();
-
-        GetMethod httpGet = new GetMethod(url);
-        httpGet.setFollowRedirects(false);
-        try {
-            int responseCode = httpManager.executeMethod(httpGet);
-            if (responseCode != HttpStatus.SC_OK) {
-                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
-            }
-            String body = httpGet.getResponseBodyAsString();
-            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
-            LOGGER.info("Status line: {}", httpGet.getStatusLine());
-            LOGGER.info("Body: {}", body);
-
-            FacebookFeedItems response = jacksonObjectMapper.readValue(body, FacebookFeedItems.class);
-            if(response.getItems().isEmpty()){
-                return accu;
-            } else {
-                accu.addAll(response.getItems());
-                if(response.getPaging().hasNextPage()) {
-                    FacebookPostItemDTO last = Iterables.getLast(response.getItems(), null);
-                    if(last != null && last.getCreatedDtime().after(maxAge)) {
-                        return doLoadPostsFromPage0(maxAge, response.getPaging().getNext(), accessToken, accu, 0);
-                    } else {
-                        return accu;
-                    }
-                } else {
-                    return accu;
-                }
-            }
-        } catch (IOException e){
-            LOGGER.warn("Exception occurred while trying to load posts from page", e);
-            if(retryNumber < 3) {
-                return doLoadPostsFromPage0(maxAge, _url, accessToken, accu, retryNumber+1);
-            } else {
-                throw new RuntimeException(e);
-            }
-        } finally {
-            httpGet.releaseConnection();
         }
     }
 }

@@ -40,15 +40,15 @@ module.exports = React.createClass({
         }));
     },
 
-    loadMoreResults: function() {
-        if(this.state.hasMoreSearchResults){
+    loadMoreResults: function () {
+        if (this.state.hasMoreSearchResults) {
             var text = this.state.text;
-            console.log('Searching for text: '+text);
+            console.log('Searching for text: ' + text);
             SocialNetActions.findLessorPosts(text);
         }
     },
 
-    onSearchChange: function(e) {
+    onSearchChange: function (e) {
         var value = e.target.value;
 
         SocialNetActions.changeLessorSearchText(value);
@@ -58,10 +58,10 @@ module.exports = React.createClass({
         }));
     },
 
-    onSubwayChange: function(e) {
+    onSubwayChange: function (e) {
         console.log(e);
         var value = e.target.checked;
-        console.log("With subway new value: "+value);
+        console.log("With subway new value: " + value);
 
         SocialNetActions.changeLessorSearchWithSubway(value);
 
@@ -70,7 +70,7 @@ module.exports = React.createClass({
         }));
     },
 
-    onClear: function(){
+    onClear: function () {
         SocialNetActions.resetLessorSearchState();
 
         this.setState(assign(this.state, {
@@ -79,10 +79,10 @@ module.exports = React.createClass({
         }));
     },
 
-    onClick: function(){
+    onClick: function () {
         var text = this.state.text;
         var withSubway = this.state.withSubway;
-        console.log('Searching for text: '+text);
+        console.log('Searching for text: ' + text);
 
         SocialNetActions.resetLessorSearchState();
         SocialNetActions.changeLessorSearchText(text);
@@ -90,13 +90,13 @@ module.exports = React.createClass({
         SocialNetActions.findLessorPosts(text, withSubway);
     },
 
-    render: function() {
+    render: function () {
         var items = this.state.posts || [];
         var hasMoreResults = this.state.hasMoreSearchResults || false;
         var text = this.state.text || '';
         var withSubWay = this.state.withSubway || false;
 
-        console.log('with subway? '+withSubWay);
+        console.log('with subway? ' + withSubWay);
 
         return (
             <div className="col-md-9">

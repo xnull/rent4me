@@ -38,63 +38,63 @@ var _hasMoreResults = false;
 var CHANGE_EVENT = 'change';
 
 var Store = assign({}, EventEmitter.prototype, {
-    emitChange: function() {
+    emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
 
-    getSearchText: function() {
+    getSearchText: function () {
         return _searchText;
     },
 
-    isSearchWithSubway: function() {
+    isSearchWithSubway: function () {
         return _searchWithSubway;
     },
 
-    saveSearchResults: function(posts) {
+    saveSearchResults: function (posts) {
         console.log('Saving search results:');
         var len = posts.length;
-        console.log('Len: '+len);
+        console.log('Len: ' + len);
         _hasMoreResults = len == _limit;
-        console.log('Has more results?: '+_hasMoreResults);
+        console.log('Has more results?: ' + _hasMoreResults);
         _offset += len;
-        console.log('New offset: '+_offset);
+        console.log('New offset: ' + _offset);
         _posts = _posts.concat(posts);
         console.log('Posts in cache: ');
         console.log(_posts);
     },
 
-    getSearchResults: function() {
+    getSearchResults: function () {
         return _posts;
     },
 
-    getOffset: function() {
+    getOffset: function () {
         return _offset;
     },
 
-    getLimit: function() {
+    getLimit: function () {
         return _limit;
     },
 
-    hasMoreSearchResults: function() {
+    hasMoreSearchResults: function () {
         return _hasMoreResults;
     },
 
     /**
      * @param {function} callback
      */
-    addChangeListener: function(callback) {
+    addChangeListener: function (callback) {
         this.on(CHANGE_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeChangeListener: function(callback) {
+    removeChangeListener: function (callback) {
         this.removeListener(CHANGE_EVENT, callback);
     }
 });
 
 // Register to handle all updates
-AppDispatcher.register(function(payload){
+AppDispatcher.register(function (payload) {
     var action = payload.action;
 //    console.log('Apartment store payload received in dispatcher');
     var apartmentObject = assign({}, action.apartment || {});
@@ -103,7 +103,7 @@ AppDispatcher.register(function(payload){
 //    console.log("Apartment:");
 //    console.log(apartmentObject);
 
-    switch(action.actionType) {
+    switch (action.actionType) {
         case SocialNetConstants.SOCIAL_NET_RENTER_POSTS_FOUND:
             console.log('found posts:');
             console.log(action.posts);

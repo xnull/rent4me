@@ -1,6 +1,5 @@
 package bynull.realty.services.api;
 
-import bynull.realty.data.business.chat.ChatMessage;
 import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.util.LimitAndOffset;
 
@@ -14,8 +13,10 @@ public interface ChatService {
 
     /**
      * Return grouped by chat key messages - unique per conversation.
+     *
      * @return
      */
     List<ChatMessageDTO> listMyLatestChatMessages();
+
     List<ChatMessageDTO> listMyLatestChatMessagesByKey(ChatMessageDTO.ChatKeyDTO chatKey, LimitAndOffset limitAndOffset);
 }

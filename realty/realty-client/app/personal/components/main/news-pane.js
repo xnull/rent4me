@@ -3,7 +3,7 @@ var LookingForComponent = require('./looking-for.js');
 var NavActions = require('../../../shared/actions/NavActions');
 
 module.exports = React.createClass({
-    componentDidMount: function() {
+    componentDidMount: function () {
         NavActions.navigateToHome();
     },
 

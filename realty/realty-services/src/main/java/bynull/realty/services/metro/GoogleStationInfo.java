@@ -16,25 +16,25 @@ import java.util.List;
 
 /**
  * {
- *     "html_attributions" : [],
- *     "results" : [
- *         {
- *             "formatted_address" : "Ulitsa Podbelskogo, Moscow, Russia, 107370",
- *             "geometry" : {
- *                 "location" : {
- *                     "lat" : 55.814527,
- *                     "lng" : 37.734261
- *                 }
- *             },
- *             "icon" : "http://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
- *             "id" : "b2483f401a4621330054425c32e84ce3fcb60b5b",
- *             "name" : "Ulitsa Podbelskogo",
- *             "place_id" : "ChIJSZ201Vc0tUYRwmlcMFj3S9o",
- *             "reference" : "CoQBfQAAAC3-eoq-ea66s-uSXQnG-cTcnUGbG7IN2B3Jqi6ANK9j4jXIYvoKcB3vbSMqPquKDBx0NZXWr-hK6egWo76JIDxU0FzvIirVb2BG9_5I_34Wecsg3SD2wwwYrvuPBXr7-li2Ozy12isbovaQnUw8Q8811nIs5Ym0beASse0Lti17EhCzqWBM-FxvyfuIuvW5oNPJGhT8YnGHvP8Rxyys8h9pxcuqJo4JIQ",
- *             "types" : [ "subway_station", "transit_station", "train_station", "establishment" ]
- *         }
- *     ],
- *     "status" : "OK"
+ * "html_attributions" : [],
+ * "results" : [
+ * {
+ * "formatted_address" : "Ulitsa Podbelskogo, Moscow, Russia, 107370",
+ * "geometry" : {
+ * "location" : {
+ * "lat" : 55.814527,
+ * "lng" : 37.734261
+ * }
+ * },
+ * "icon" : "http://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+ * "id" : "b2483f401a4621330054425c32e84ce3fcb60b5b",
+ * "name" : "Ulitsa Podbelskogo",
+ * "place_id" : "ChIJSZ201Vc0tUYRwmlcMFj3S9o",
+ * "reference" : "CoQBfQAAAC3-eoq-ea66s-uSXQnG-cTcnUGbG7IN2B3Jqi6ANK9j4jXIYvoKcB3vbSMqPquKDBx0NZXWr-hK6egWo76JIDxU0FzvIirVb2BG9_5I_34Wecsg3SD2wwwYrvuPBXr7-li2Ozy12isbovaQnUw8Q8811nIs5Ym0beASse0Lti17EhCzqWBM-FxvyfuIuvW5oNPJGhT8YnGHvP8Rxyys8h9pxcuqJo4JIQ",
+ * "types" : [ "subway_station", "transit_station", "train_station", "establishment" ]
+ * }
+ * ],
+ * "status" : "OK"
  * }
  */
 @XmlRootElement

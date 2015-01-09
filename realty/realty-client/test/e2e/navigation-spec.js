@@ -6,7 +6,7 @@
 /* https://github.com/angular/protractor/blob/master/docs/getting-started.md */
 
 function checkUrls(urls) {
-    for(var i = 0; i < urls.length; ++i){
+    for (var i = 0; i < urls.length; ++i) {
         var url = urls[i].url;
         var absUrl = urls[i].absLocation;
 

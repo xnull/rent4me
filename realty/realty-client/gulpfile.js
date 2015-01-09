@@ -63,21 +63,21 @@ function Settings() {
 
     //init module info
     var len = this.projectSubModules.length;
-    for(var i = 0; i < len; i++) {
+    for (var i = 0; i < len; i++) {
         var moduleName = this.projectSubModules[i];
-        console.log('Initializing module '+moduleName);
+        console.log('Initializing module ' + moduleName);
         this.moduleInfo[moduleName] = {};
     }
 
-    for(var i = 0; i < len; i++) {
+    for (var i = 0; i < len; i++) {
         var moduleName = this.projectSubModules[i];
         var projectDir = this.projectBaseDir + moduleName;
         this.moduleInfo[moduleName]['projectDir'] = projectDir;
         this.moduleInfo[moduleName]['buildDir'] = this.buildDir + (this.projectBuildSubPaths[moduleName] || moduleName);
         this.moduleInfo[moduleName]['mainJsFile'] = projectDir + '/app.js';
-        this.moduleInfo[moduleName]['dist'] = [ this.moduleInfo[moduleName]['buildDir'] ];
+        this.moduleInfo[moduleName]['dist'] = [this.moduleInfo[moduleName]['buildDir']];
         this.moduleInfo[moduleName]['indexHtml'] = projectDir + '/index.html';
-        this.moduleInfo[moduleName]['appFiles'] = [ projectDir + '/*js' ];
+        this.moduleInfo[moduleName]['appFiles'] = [projectDir + '/*js'];
         this.moduleInfo[moduleName]['cssFiles'] = [projectDir + '/**/*.css', projectDir + '/*.css'];
         this.moduleInfo[moduleName]['fontFiles'] = [projectDir + '/fonts/*.*'];
 //        this.moduleInfo[moduleName]['images'] = [projectDir + 'images/**/*.jpg', projectDir + 'images/**/*.png', projectDir + 'images/**/*.gif'];
@@ -130,27 +130,27 @@ gulp.task(tasks.build, [tasks.clean], function () {
 gulp.task('compressDev', [], function () {
 
     var len = settings.projectSubModules.length;
-    for(var i = 0; i < len; i++) {
+    for (var i = 0; i < len; i++) {
         var moduleName = settings.projectSubModules[i];
-        console.log('Building: '+moduleName);
+        console.log('Building: ' + moduleName);
         var moduleInfo = settings.moduleInfo[moduleName];
-        console.log('Compressing js for: '+moduleName);
-        if(moduleName != '/start') {
-            var jsToCompress = moduleInfo['buildDir']+"/js/main.js";
-            console.log('Js will be compressed and replaced:'+jsToCompress);
+        console.log('Compressing js for: ' + moduleName);
+        if (moduleName != '/start') {
+            var jsToCompress = moduleInfo['buildDir'] + "/js/main.js";
+            console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
-                .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
+                .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         } else {
-            var jsToCompress = moduleInfo['buildDir']+"js/main.js";
-            console.log('Js will be compressed and replaced:'+jsToCompress);
+            var jsToCompress = moduleInfo['buildDir'] + "js/main.js";
+            console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
-                .pipe(gulp.dest(moduleInfo['buildDir']+"js"));
+                .pipe(gulp.dest(moduleInfo['buildDir'] + "js"));
         }
     }
 
@@ -159,27 +159,27 @@ gulp.task('compressDev', [], function () {
 gulp.task('compressProd', [], function () {
 
     var len = settings.projectSubModules.length;
-    for(var i = 0; i < len; i++) {
+    for (var i = 0; i < len; i++) {
         var moduleName = settings.projectSubModules[i];
-        console.log('Building: '+moduleName);
+        console.log('Building: ' + moduleName);
         var moduleInfo = settings.moduleInfo[moduleName];
-        console.log('Compressing js for: '+moduleName);
-        if(moduleName != '/start') {
-            var jsToCompress = moduleInfo['buildDir']+"/js/main.js";
-            console.log('Js will be compressed and replaced:'+jsToCompress);
+        console.log('Compressing js for: ' + moduleName);
+        if (moduleName != '/start') {
+            var jsToCompress = moduleInfo['buildDir'] + "/js/main.js";
+            console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
-                .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
+                .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         } else {
-            var jsToCompress = moduleInfo['buildDir']+"js/main.js";
-            console.log('Js will be compressed and replaced:'+jsToCompress);
+            var jsToCompress = moduleInfo['buildDir'] + "js/main.js";
+            console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
-                .pipe(gulp.dest(moduleInfo['buildDir']+"js"));
+                .pipe(gulp.dest(moduleInfo['buildDir'] + "js"));
         }
     }
 
@@ -187,11 +187,11 @@ gulp.task('compressProd', [], function () {
 
 function build() {
     var len = settings.projectSubModules.length;
-    for(var i = 0; i < len; i++) {
+    for (var i = 0; i < len; i++) {
         var moduleName = settings.projectSubModules[i];
-        console.log('Building: '+moduleName);
+        console.log('Building: ' + moduleName);
         var moduleInfo = settings.moduleInfo[moduleName];
-        if(moduleName != '/start') {
+        if (moduleName != '/start') {
             buildBrowserify(moduleInfo);
             cssBuild(moduleInfo);
             imgBuild(moduleInfo);
@@ -209,20 +209,20 @@ function buildStart(moduleInfo) {
     fontsBuild(moduleInfo);
 
     //simply copy all html files
-    gulp.src([moduleInfo['projectDir']+"/**/*.html"])
+    gulp.src([moduleInfo['projectDir'] + "/**/*.html"])
         .pipe(gulp.dest(moduleInfo['buildDir']));
 
     //simply copy all images
-    gulp.src([moduleInfo['projectDir']+"/images/**/*.*"])
-        .pipe(gulp.dest(moduleInfo['buildDir']+"/images"));
+    gulp.src([moduleInfo['projectDir'] + "/images/**/*.*"])
+        .pipe(gulp.dest(moduleInfo['buildDir'] + "/images"));
 
 //    imgBuild(moduleInfo);
     //simply copy all content of js
-    gulp.src([moduleInfo['projectDir']+"/css/**/*.*"])
-        .pipe(gulp.dest(moduleInfo['buildDir']+"/css"));
+    gulp.src([moduleInfo['projectDir'] + "/css/**/*.*"])
+        .pipe(gulp.dest(moduleInfo['buildDir'] + "/css"));
     //simply copy all content of js
-    gulp.src([moduleInfo['projectDir']+"/js/*.*"])
-        .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
+    gulp.src([moduleInfo['projectDir'] + "/js/*.*"])
+        .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
 }
 
 function buildBrowserify(moduleInfo) {
@@ -231,30 +231,30 @@ function buildBrowserify(moduleInfo) {
     b.add(moduleInfo['mainJsFile']);
     b.bundle()
         .pipe(plugins.source('main.js'))
-        .pipe(gulp.dest(moduleInfo['buildDir']+"/js"));
+        .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
 }
 
 function cssBuild(moduleInfo) {
     gulp.src(moduleInfo['cssFiles'])
-            .pipe(plugins.concat('index.css'))
-            .pipe(gulp.dest(moduleInfo['buildDir']+"/css"));
+        .pipe(plugins.concat('index.css'))
+        .pipe(gulp.dest(moduleInfo['buildDir'] + "/css"));
 }
 
 function imgBuild(moduleInfo) {
     console.log("Image build for: ");
     console.log(moduleInfo['images']);
     gulp.src(moduleInfo['images'])
-            .pipe(gulp.dest(moduleInfo['buildDir'] + '/images'));
+        .pipe(gulp.dest(moduleInfo['buildDir'] + '/images'));
 }
 
 function indexHtmlBuild(moduleInfo) {
     gulp.src(moduleInfo['indexHtml'])
-            .pipe(gulp.dest(moduleInfo['buildDir']))
+        .pipe(gulp.dest(moduleInfo['buildDir']))
 }
 
 function fontsBuild(moduleInfo) {
     gulp.src(moduleInfo['fontFiles'])
-            .pipe(gulp.dest(moduleInfo['buildDir'] + '/fonts'))
+        .pipe(gulp.dest(moduleInfo['buildDir'] + '/fonts'))
 }
 
 // ------------------------------------ малозначимые бизнес таски ------------------------------------------- //

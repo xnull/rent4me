@@ -60,7 +60,7 @@ function isDev() {
 
 function navigateToPersonal() {
     var isDev = document.location.href.indexOf('localhost') != -1;
-    if(isDev) {
+    if (isDev) {
         document.location.href = '/dev/personal';
     } else {
         document.location.href = '/personal';
@@ -79,7 +79,7 @@ function navigateToStart() {
     if (document.location.href.indexOf('build-js') != -1) {
         return;
     }
-    if(isLocalhost()) {
+    if (isLocalhost()) {
         document.location.href = '/dev/';
     } else {
         document.location.href = '/';
@@ -90,17 +90,17 @@ function getQueryParams(paramName) {
     paramName = paramName.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regexString = "[\\?&]" + paramName + "=([^&#]*)";
     var regex = new RegExp(regexString);
-    console.log('window.location='+window.location.search);
+    console.log('window.location=' + window.location.search);
     var found = regex.exec(window.location.search);
     if (found == null) {
         //try otherwise
         var _url = window.location.href || '';
         var _idx = _url.indexOf('?');
-        if(_idx >= 0 ) {
+        if (_idx >= 0) {
             _url = _url.substr(_idx);
 
             found = regex.exec(_url);
-            if(found == null) {
+            if (found == null) {
                 return null;
             } else {
                 return decodeURIComponent(found[1].replace(/\+/g, " "));

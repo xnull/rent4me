@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import javax.ws.rs.NotAuthorizedException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findByFacebookId(verify.facebookId);
             if (user == null) {
                 user = userRepository.findByEmail(verify.email);
-                if(user == null) {
+                if (user == null) {
                     LOGGER.debug("No user found that matches facebook id or email. Creating new one.");
                     Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
 
@@ -195,10 +194,10 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findByName(String name) {
         Assert.notNull(name);
         PageRequest pageable = new PageRequest(0, 10, Sort.Direction.ASC, "id");
-        if(name.isEmpty()) {
+        if (name.isEmpty()) {
             return userRepository.findAll(pageable).getContent().stream().map(UserDTO::from).collect(Collectors.toList());
         }
 
-        return userRepository.findByName("%"+name+"%", pageable).stream().map(UserDTO::from).collect(Collectors.toList());
+        return userRepository.findByName("%" + name + "%", pageable).stream().map(UserDTO::from).collect(Collectors.toList());
     }
 }

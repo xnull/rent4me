@@ -20,23 +20,23 @@ var Utils = require('../../shared/common/Utils');
  * https://github.com/facebook/react/issues/2436
  */
 var App = React.createClass({
-    componentWillMount: function() {
+    componentWillMount: function () {
         //restore username & token from cookies before component mounted
         AuthActions.restoreUsernameAndTokenFromCookies();
-        if(!AuthStore.hasCredentials()) {
+        if (!AuthStore.hasCredentials()) {
 //            alert('wtf? you\'re not logged in!');
             Utils.navigateToStart();
         }
     },
-    componentDidMount: function() {
+    componentDidMount: function () {
         NavStore.addChangeListener(this._navStateChange);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         NavStore.removeChangeListener(this._navStateChange);
     },
 
-    _navStateChange: function() {
+    _navStateChange: function () {
         //NB! This dummy function should be here because in othercase callback for nav store won't be initialized in proper order.
     },
 

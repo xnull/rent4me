@@ -16,10 +16,10 @@ var AuthActions = {
      */
     loginWithVK: function () {
         var vkAppId = AuthStore.getVkId();
-        var redirectHost = Utils.isLocalhost() ? "http://localhost:8888/dev" : (Utils.isProduction() ? "http://rent4.me" :  "http://dev.rent4.me" ) ;
+        var redirectHost = Utils.isLocalhost() ? "http://localhost:8888/dev" : (Utils.isProduction() ? "http://rent4.me" : "http://dev.rent4.me" );
         var redirectUrl = redirectHost + "/vk_auth_return_page";
         var permissions = "email";
-        document.location.href="https://oauth.vk.com/authorize?client_id="+vkAppId+"&scope="+permissions+"&redirect_uri="+redirectUrl+"&response_type=code&v=5.27";
+        document.location.href = "https://oauth.vk.com/authorize?client_id=" + vkAppId + "&scope=" + permissions + "&redirect_uri=" + redirectUrl + "&response_type=code&v=5.27";
     },
 
     authOnBackendWithVK: function (vkAccessCode) {
@@ -96,7 +96,10 @@ var AuthActions = {
 
         var fbUserIdAccessTokenPair = AuthStore.getFbUserIdAccessTokenPair();
 
-        var data = {"facebook_id": fbUserIdAccessTokenPair.fb_id, "access_token": fbUserIdAccessTokenPair.fb_access_token};
+        var data = {
+            "facebook_id": fbUserIdAccessTokenPair.fb_id,
+            "access_token": fbUserIdAccessTokenPair.fb_access_token
+        };
 
         console.log('data to send');
         console.log(data);
@@ -139,7 +142,7 @@ var AuthActions = {
     checkLoginState: function () {
         var that = this;
 
-        FB.getLoginStatus(function(response) {
+        FB.getLoginStatus(function (response) {
             that.statusChangeCallback(response);
         });
     },
@@ -153,7 +156,7 @@ var AuthActions = {
         var opts = {
             scope: 'public_profile,user_friends,email'
         };
-        FB.login(function(response) {
+        FB.login(function (response) {
             that.statusChangeCallback(response);
         }, opts);
     },
@@ -171,12 +174,12 @@ var AuthActions = {
     },
 
     logoutOnBackend: function () {
-        if(AuthStore.hasCredentials()) {
+        if (AuthStore.hasCredentials()) {
             var usernameTokenPair = AuthStore.getUsernameTokenPair();
             console.log('Username token pair: ');
             console.log(usernameTokenPair);
             var token = usernameTokenPair.token;
-            var data = {"token" : token};
+            var data = {"token": token};
             console.log('data: ');
             console.log(data);
 

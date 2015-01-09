@@ -44,9 +44,9 @@ function hasCredentials() {
     return _username && _token;
 }
 
-function getAuthHeader(){
-    if(hasCredentials()) {
-        return Utils.__base64Encode(_username+":"+_token);
+function getAuthHeader() {
+    if (hasCredentials()) {
+        return Utils.__base64Encode(_username + ":" + _token);
     } else {
         return null;
     }
@@ -66,7 +66,7 @@ var CHANGE_EVENT = 'change';
 
 //var AuthStore = assign({}, EventEmitter.prototype, {
 var AuthStore = assign({}, EventEmitter.prototype, {
-    emitChange: function() {
+    emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
 
@@ -74,14 +74,14 @@ var AuthStore = assign({}, EventEmitter.prototype, {
 
     getVkId: getVkId,
 
-    getUsernameTokenPair: function() {
+    getUsernameTokenPair: function () {
         return {
             username: _username,
             token: _token
         };
     },
 
-    getFbUserIdAccessTokenPair: function() {
+    getFbUserIdAccessTokenPair: function () {
         return {
             fb_id: _fbUserId,
             fb_access_token: _fbAccessToken
@@ -95,19 +95,19 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     /**
      * @param {function} callback
      */
-    addChangeListener: function(callback) {
+    addChangeListener: function (callback) {
         this.on(CHANGE_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeChangeListener: function(callback) {
+    removeChangeListener: function (callback) {
         this.removeListener(CHANGE_EVENT, callback);
     }
 });
 
 // Register to handle all updates
-AppDispatcher.register(function(payload){
+AppDispatcher.register(function (payload) {
     var action = payload.action;
 //    console.log('Payload received in User dispatcher');
 //    console.log("Action:");
@@ -115,7 +115,7 @@ AppDispatcher.register(function(payload){
 //    console.log("User:");
 //    console.log(userObject);
 
-    switch(action.actionType) {
+    switch (action.actionType) {
         case AuthConstants.AUTH_AUTHENTICATED_WITH_VK:
             _username = action.data.username;
             _token = action.data.token;
@@ -143,8 +143,8 @@ AppDispatcher.register(function(payload){
             break;
 
         case AuthConstants.AUTH_STORE_USERNAME_AND_TOKEN_IN_COOKIES:
-            if(hasCredentials()) {
-                Cookies.setCookieTemp("rent4me_uname", _username) ;
+            if (hasCredentials()) {
+                Cookies.setCookieTemp("rent4me_uname", _username);
                 Cookies.setCookieTemp("rent4me_token", _token);
             }
             break;

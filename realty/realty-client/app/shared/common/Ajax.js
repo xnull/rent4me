@@ -18,70 +18,70 @@ function AjaxBuilder(httpMethod) {
     var _succ = null;
     var _error = null;
 
-    this.withUrl = function(url) {
+    this.withUrl = function (url) {
         _url = url;
 
         return this;
     };
 
-    this.withJsonResponse = function() {
+    this.withJsonResponse = function () {
         _responseType = 'json';
         return this;
     };
 
-    this.withJsonBody = function(data) {
+    this.withJsonBody = function (data) {
         _data = JSON.stringify(data);
         _contentType = 'application/json; charset=utf-8';
 
         return this;
     };
 
-    this.authorized = function() {
+    this.authorized = function () {
         _withAuth = true;
 
         return this;
     };
 
-    this.onSuccess = function(succ) {
+    this.onSuccess = function (succ) {
         _succ = succ;
 
         return this;
     };
 
-    this.onError = function(err) {
+    this.onError = function (err) {
         _error = err;
 
         return this;
     };
 
-    this.execute = function() {
+    this.execute = function () {
         var resultingSettings = {};
         resultingSettings['type'] = _httpMethod;
 
-        if(_url) {
+        if (_url) {
             resultingSettings['url'] = _url;
         }
 
-        if(_data) {
+        if (_data) {
             resultingSettings['data'] = _data;
         }
 
-        if(_contentType) {
+        if (_contentType) {
             resultingSettings['contentType'] = _contentType;
         }
 
-        if(_withAuth) {
+        if (_withAuth) {
             resultingSettings['beforeSend'] = function (request) {
                 request.setRequestHeader("Authorization", "Basic " + AuthStore.getAuthHeader());
             };
         }
 
-        if(_succ) {
-            resultingSettings['success'] =  _succ;
+        if (_succ) {
+            resultingSettings['success'] = _succ;
         }
 
-        if(_error) {
-            resultingSettings['error'] =  _error;
+        if (_error) {
+            resultingSettings['error'] = _error;
         }
 
         $.ajax(resultingSettings);
@@ -90,23 +90,23 @@ function AjaxBuilder(httpMethod) {
 }
 
 var Ajax = {
-    POST: function(url) {
+    POST: function (url) {
         return new AjaxBuilder('POST').withUrl(url)
     },
 
-    GET: function(url) {
+    GET: function (url) {
         return new AjaxBuilder('GET').withUrl(url)
     },
 
-    PUT: function(url) {
+    PUT: function (url) {
         return new AjaxBuilder('PUT').withUrl(url)
     },
 
-    DELETE: function(url) {
+    DELETE: function (url) {
         return new AjaxBuilder('DELETE').withUrl(url)
     },
 
-    PATCH: function(url) {
+    PATCH: function (url) {
         return new AjaxBuilder('PATCH').withUrl(url)
     }
 };

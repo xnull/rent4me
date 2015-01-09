@@ -56,13 +56,13 @@ var ApartmentPhoto = React.createClass({
 });
 
 var ApartmentInfoChangeRequestForm = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             data: ApartmentStore.getMyProfile()
         };
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         var that = this;
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInputChange'));
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -94,12 +94,12 @@ var ApartmentInfoChangeRequestForm = React.createClass({
         });
     },
 
-    _onSave: function() {
+    _onSave: function () {
         //TODO: validate
         ApartmentActions.sendApartmentRentInfo(this.state.data);
     },
 
-    _onChange: function(event) {
+    _onChange: function (event) {
         if (!event) {
             return;
         }
@@ -121,7 +121,7 @@ var ApartmentInfoChangeRequestForm = React.createClass({
         changeData(this, diffObj);
     },
 
-    render: function() {
+    render: function () {
 
         var data = this.state.data || {};
 
@@ -172,7 +172,11 @@ var ApartmentInfoChangeRequestForm = React.createClass({
             elementValue: data['area']
         };
 
-        var submitButton = {id: 'saveApartmentChangeBtn', value: 'Отправить', customClassName: 'col-md-4 col-md-offset-4'};
+        var submitButton = {
+            id: 'saveApartmentChangeBtn',
+            value: 'Отправить',
+            customClassName: 'col-md-4 col-md-offset-4'
+        };
 
         return (
             <div>
@@ -195,28 +199,28 @@ var ApartmentInfoChangeRequestForm = React.createClass({
 });
 
 var ApartmentInfoChangeRequestModal = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {visible: false};
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         console.log('modal mounted');
         ApartmentStore.addChangeListener(this._onLoad);
     },
 
-    componentWillUnmount: function(){
+    componentWillUnmount: function () {
         ApartmentStore.removeChangeListener(this._onLoad);
         console.log('modal will unmount');
     },
 
-    _onLoad: function() {
+    _onLoad: function () {
         var hideFunc = this.props.onRequestHide;
-        if(hideFunc) {
+        if (hideFunc) {
             hideFunc();
         }
     },
 
-    render: function() {
+    render: function () {
         return (
             <div>
                 <Modal {...this.props} title="Запрос на изменение данных о квартире" animation={false}>
@@ -230,7 +234,7 @@ var ApartmentInfoChangeRequestModal = React.createClass({
 });
 
 var ApartmentInfoChangeRequestButton = React.createClass({
-    render: function() {
+    render: function () {
         var show = this.props.show;
 
         var elementOrEmpty = show ?
@@ -352,18 +356,18 @@ var UserSuccessOrDangerBlock = React.createClass({
         var successMessage = this.props.successMessage || '';
         var success = this.props.successCondition || false;
 
-        if(success) {
+        if (success) {
             return (
                 <div className="alert alert-success" role="alert" >
                 {successMessage}
                 </div>
-                );
+            );
         } else {
             return (
                 <div className="alert alert-danger" role="alert" >
                 {errorMessage}
                 </div>
-                );
+            );
         }
 
         return (
@@ -372,19 +376,19 @@ var UserSuccessOrDangerBlock = React.createClass({
                     <label className="col-md-3 control-label">{this.props.data.name}:</label>
                     <div>
                         <input
-                        id={this.props.data.id}
-                        className="form-control"
-                        type="text"
-                        readOnly={this.props.readOnly}
-                        name={this.props.data.elementName}
-                        onChange={this.props.onChange}
-                        placeholder={this.props.data.placeholder}
-                        value={this.props.data.elementValue}
+                            id={this.props.data.id}
+                            className="form-control"
+                            type="text"
+                            readOnly={this.props.readOnly}
+                            name={this.props.data.elementName}
+                            onChange={this.props.onChange}
+                            placeholder={this.props.data.placeholder}
+                            value={this.props.data.elementValue}
                         />
                     </div>
                 </div>
             </div>
-            )
+        )
     }
 });
 
@@ -400,17 +404,17 @@ var UserCheckbox = React.createClass({
                     </label>
                     <div className={customClassName}>
                         <input
-                        id={this.props.data.id}
-                        type="checkbox"
-                        readOnly={this.props.readOnly}
-                        name={this.props.data.elementName}
-                        onChange={this.props.onChange}
-                        checked={this.props.data.checked}
+                            id={this.props.data.id}
+                            type="checkbox"
+                            readOnly={this.props.readOnly}
+                            name={this.props.data.elementName}
+                            onChange={this.props.onChange}
+                            checked={this.props.data.checked}
                         />
                     </div>
                 </div>
             </div>
-            )
+        )
     }
 });
 
@@ -839,9 +843,6 @@ module.exports = React.createClass({
         }
 
 
-
-
-
         (this, newState);
     },
 
@@ -986,9 +987,9 @@ module.exports = React.createClass({
                         </div>
 
                         <UserSuccessOrDangerBlock
-                        errorMessage="Ваша квартира не участвует в поиске"
-                        successMessage="Ваша квартира отображается в поиске"
-                        successCondition={data.published}
+                            errorMessage="Ваша квартира не участвует в поиске"
+                            successMessage="Ваша квартира отображается в поиске"
+                            successCondition={data.published}
                         />
                         <form className="form-horizontal" role="form">
                             <div className="row">
@@ -1033,7 +1034,7 @@ module.exports = React.createClass({
 
                             <p>
                                 <div className="dropzone"
-                                id="my-awesome-dropzone"></div>
+                                    id="my-awesome-dropzone"></div>
                             </p>
                             <p>
                                 <UserButton data={submitButton} onClick={this._onSave}/>

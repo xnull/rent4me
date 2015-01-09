@@ -31,17 +31,17 @@ public class ItemDTO {
         dto.setId(item.getId());
         dto.setFormId(item.getFormId());
         dto.setOwnerId(item.getOwnerId());
-        dto.setAttachmentDTOs(item.getAttachments() != null ? item.getAttachments().stream().map(AttachmentDTO :: from).collect(Collectors.toList()) : null);
+        dto.setAttachmentDTOs(item.getAttachments() != null ? item.getAttachments().stream().map(AttachmentDTO::from).collect(Collectors.toList()) : null);
         return dto;
     }
 
-    public Item toInternal(){
+    public Item toInternal() {
         Item item = new Item();
         item.setId(getId());
         item.setOwnerId(getOwnerId());
         item.setFormId(getFormId());
         item.setDate(getDate());
-        item.setAttachments(getAttachmentDTOs().stream().map(AttachmentDTO :: toInternal).collect(Collectors.toList()));
+        item.setAttachments(getAttachmentDTOs().stream().map(AttachmentDTO::toInternal).collect(Collectors.toList()));
         return item;
     }
 

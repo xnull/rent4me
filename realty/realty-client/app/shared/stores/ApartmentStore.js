@@ -37,78 +37,78 @@ var _hasMoreResults = false;
 
 var CHANGE_EVENT = 'change';
 
-var saveMyProfile = function(myProfile){
+var saveMyProfile = function (myProfile) {
     //copy props
     _me = assign({}, _me, myProfile);
 };
 
-var getMyProfile = function() {
+var getMyProfile = function () {
     //copy props
     return assign({}, _me);
 };
 
 var ApartmentStore = assign({}, EventEmitter.prototype, {
-    emitChange: function() {
+    emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
 
-    emptyApartment: function() {
+    emptyApartment: function () {
         return emptyApartment();
     },
 
-    getMyProfile: function() {
+    getMyProfile: function () {
         return getMyProfile();
     },
 
-    saveMyProfile: function(myProfile) {
+    saveMyProfile: function (myProfile) {
         saveMyProfile(myProfile);
     },
 
-    saveSearchResults: function(apartments) {
+    saveSearchResults: function (apartments) {
         console.log('Saving search results:');
         var len = apartments.length;
-        console.log('Len: '+len);
+        console.log('Len: ' + len);
         _hasMoreResults = len == _limit;
-        console.log('Has more results?: '+_hasMoreResults);
+        console.log('Has more results?: ' + _hasMoreResults);
         _offset += len;
-        console.log('New offset: '+_offset);
+        console.log('New offset: ' + _offset);
         _apartments = _apartments.concat(apartments);
         console.log('Apartments in cache: ');
         console.log(_apartments);
     },
 
-    getSearchResults: function() {
+    getSearchResults: function () {
         return _apartments;
     },
 
-    getOffset: function() {
+    getOffset: function () {
         return _offset;
     },
 
-    getLimit: function() {
+    getLimit: function () {
         return _limit;
     },
 
-    hasMoreSearchResults: function() {
+    hasMoreSearchResults: function () {
         return _hasMoreResults;
     },
 
     /**
      * @param {function} callback
      */
-    addChangeListener: function(callback) {
+    addChangeListener: function (callback) {
         this.on(CHANGE_EVENT, callback);
     },
     /**
      * @param {function} callback
      */
-    removeChangeListener: function(callback) {
+    removeChangeListener: function (callback) {
         this.removeListener(CHANGE_EVENT, callback);
     }
 });
 
 // Register to handle all updates
-AppDispatcher.register(function(payload){
+AppDispatcher.register(function (payload) {
     var action = payload.action;
 //    console.log('Apartment store payload received in dispatcher');
     var apartmentObject = assign({}, action.apartment || {});
@@ -117,7 +117,7 @@ AppDispatcher.register(function(payload){
 //    console.log("Apartment:");
 //    console.log(apartmentObject);
 
-    switch(action.actionType) {
+    switch (action.actionType) {
         case ApartmentConstants.APARTMENT_CREATE:
 //            console.log("case: Apartment save");
             saveMyProfile(apartmentObject);

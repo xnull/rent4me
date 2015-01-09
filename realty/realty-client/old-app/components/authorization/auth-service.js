@@ -59,7 +59,10 @@ function AuthService($http, $resource, $rootScope, $log, $cookies) {
 
                 if (response.authResponse) {
                     $log.info(logPrefix + 'Welcome!  Fetching your information.... ');
-                    var data = {"facebook_id": response.authResponse.userID, "access_token": response.authResponse.accessToken};
+                    var data = {
+                        "facebook_id": response.authResponse.userID,
+                        "access_token": response.authResponse.accessToken
+                    };
                     $log.info(data);
                     $log.info("JSON:");
                     $log.info(angular.toJson(data));
@@ -304,7 +307,7 @@ function AuthService($http, $resource, $rootScope, $log, $cookies) {
         });
     };
 
-    return  authorization;
+    return authorization;
 }
 
 module.exports = function () {

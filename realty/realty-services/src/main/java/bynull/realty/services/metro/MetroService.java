@@ -36,7 +36,8 @@ public class MetroService {
 
             int x = 0;
             for (String stationId : stationsDto.getStations().keySet()) {
-                x++; if (x > 50) break;
+                x++;
+                if (x > 50) break;
                 MetroStationDto stationDto = stationsDto.getStations().get(stationId);
                 GoogleStationInfo coords = getStationInfo(stationDto.getName());
                 MetroStationFullInfoDto metro = new MetroStationFullInfoDto(coords, stationDto);
@@ -82,7 +83,7 @@ public class MetroService {
         String response = target.request(MediaType.TEXT_HTML_TYPE).get(String.class);
         try {
             GoogleStationInfo result = JsonUtils.fromJson(response, GoogleStationInfo.class);
-            if (result.getResults().isEmpty()){
+            if (result.getResults().isEmpty()) {
                 throw new MetroServiceException("Error loading data: " + mapToErrorDto(response).getErrorMessage());
             }
             return result;

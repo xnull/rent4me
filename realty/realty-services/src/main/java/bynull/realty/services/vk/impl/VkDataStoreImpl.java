@@ -1,11 +1,9 @@
 package bynull.realty.services.vk.impl;
 
-import bynull.realty.dao.vk.VkRepository;
 import bynull.realty.data.business.vk.Item;
 import bynull.realty.services.vk.VkDataStoreService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

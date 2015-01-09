@@ -29,7 +29,7 @@ public class SocialRestResource {
             @QueryParam("with_subway") boolean withSubway,
             @QueryParam("limit") int limit,
             @QueryParam("offset") int offset
-            ) {
+    ) {
 
         LimitAndOffset limitAndOffset = LimitAndOffset.builder()
                 .withLimit(limit)

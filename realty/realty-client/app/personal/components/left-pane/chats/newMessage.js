@@ -17,7 +17,7 @@ var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
 
 module.exports = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             messageText: null,
             targetPersonId: null,
@@ -25,18 +25,18 @@ module.exports = React.createClass({
         }
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         ChatStore.addNewConversationStartedListener(this.newConversationStartedListener);
         UserStore.addChangeListener(this.myUserListener);
         UserActions.loadMyProfileIfNotLoaded();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         ChatStore.removeNewConversationStartedListener(this.newConversationStartedListener);
         UserStore.removeChangeListener(this.myUserListener);
     },
 
-    newConversationStartedListener: function() {
+    newConversationStartedListener: function () {
         console.log('New conversation started listener called');
         this.setState(assign(this.state, {
             messageText: null,
@@ -46,37 +46,37 @@ module.exports = React.createClass({
         document.location.href = '#/user/chats';
     },
 
-    myUserListener: function() {
+    myUserListener: function () {
         this.setState(assign(this.state, {
             me: UserStore.getMyProfile()
         }));
     },
 
-    onMessageChange: function(e) {
+    onMessageChange: function (e) {
         this.setState(assign(this.state, {
             messageText: e.target.value
         }));
     },
 
-    onTargetPersonChanged: function(item) {
+    onTargetPersonChanged: function (item) {
         this.setState(assign(this.state, {
             targetPersonId: item.id
         }));
     },
 
-    onSendMessage: function() {
+    onSendMessage: function () {
         ChatActions.sendNewMessage(this.state.targetPersonId, this.state.messageText);
     },
 
-    _searchRemote: function(options, searchTerm, cb) {
+    _searchRemote: function (options, searchTerm, cb) {
         var that = this;
         Ajax
-            .GET('/rest/users/find?name='+searchTerm)
+            .GET('/rest/users/find?name=' + searchTerm)
             .authorized()
             .onSuccess(function (data) {
-                cb(null, _.filter(_.map(data, function(item){
+                cb(null, _.filter(_.map(data, function (item) {
                     return {id: item.id, title: item.name};
-                }), function(item) {
+                }), function (item) {
                     return item.id != that.state.me.id;
                 }));
             })

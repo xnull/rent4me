@@ -35,12 +35,12 @@ public class VkontakeApiTest {
 //    }
 
     @Test
-    public void testParseField(){
+    public void testParseField() {
 
     }
 
     @Test
-    public void testParseToken(){
+    public void testParseToken() {
 
     }
 

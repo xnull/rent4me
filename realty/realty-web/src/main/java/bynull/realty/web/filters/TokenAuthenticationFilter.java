@@ -28,7 +28,7 @@ import java.io.IOException;
 public class TokenAuthenticationFilter extends GenericFilterBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
-    private final AuthenticationDetailsSource<HttpServletRequest,?> authenticationDetailsSource = new WebAuthenticationDetailsSource();
+    private final AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource = new WebAuthenticationDetailsSource();
 
     AuthenticationEntryPoint authenticationEntryPoint;
 
@@ -48,7 +48,7 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
         final HttpServletResponse response = (HttpServletResponse) resp;
 
         String token = request.getHeader("Token");
-        if(token == null) {
+        if (token == null) {
             chain.doFilter(request, response);
             return;
         }

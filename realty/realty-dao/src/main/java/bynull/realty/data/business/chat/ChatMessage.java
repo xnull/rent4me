@@ -3,13 +3,11 @@ package bynull.realty.data.business.chat;
 import bynull.realty.data.business.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -96,7 +94,7 @@ public class ChatMessage {
     }
 
     @PrePersist
-    void prePersist(){
+    void prePersist() {
         setCreated(new Date());
         User sender = getSender();
         User receiver = getReceiver();
@@ -171,7 +169,7 @@ public class ChatMessage {
 
             long minId = Math.min(id1, id2);
             long maxId = Math.max(id1, id2);
-            String key = minId+"_"+maxId;
+            String key = minId + "_" + maxId;
             return new ChatKey(key);
         }
     }

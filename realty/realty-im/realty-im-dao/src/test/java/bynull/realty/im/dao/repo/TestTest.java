@@ -18,7 +18,7 @@ public class TestTest {
     private static Random rnd = new SecureRandom();
 
     @Test
-    public void finderList(){
+    public void finderList() {
         ArrayList<Long> testData = new ArrayList<>();
         for (int i = 0; i < 1000000; i++) {
             testData.add(rnd.nextLong());
