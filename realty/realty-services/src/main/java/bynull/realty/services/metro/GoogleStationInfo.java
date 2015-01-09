@@ -4,6 +4,7 @@ package bynull.realty.services.metro;
  * Created by null on 13.08.14.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -47,13 +48,15 @@ public class GoogleStationInfo {
     @XmlElement(name = "results")
     private List<GoogleStationDetailedInfo> results;
 
-    /*public String getLat(){
-        return results.get(0).geometry.location.lat;
+    @JsonIgnore
+    public Double getLat() {
+        return Double.parseDouble(results.get(0).geometry.location.lat);
     }
 
-    public String getLng(){
-        return results.get(0).geometry.location.lng;
-    }*/
+    @JsonIgnore
+    public Double getLng() {
+        return Double.parseDouble(results.get(0).geometry.location.lng);
+    }
 
     @ToString
     @XmlRootElement

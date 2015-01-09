@@ -2,6 +2,8 @@ package bynull.realty.data.business.metro;
 
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +14,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = MetroEntity.TABLE)
+@Setter
+@Getter
 public class MetroEntity {
     public static final String TABLE = "metro_stations";
     private static final String ID_GEN = TABLE + "_id_generator";

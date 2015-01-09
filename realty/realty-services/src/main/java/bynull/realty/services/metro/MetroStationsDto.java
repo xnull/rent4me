@@ -17,11 +17,9 @@ import java.util.Map;
 @ToString
 public class MetroStationsDto {
 
-    @Getter
     @XmlElement(name = "stations")
     private Map<String, MetroStationDto> stations;
 
-    @Getter
     @XmlElement(name = "lines")
     private Map<String, LineOfMetroDto> lines;
 

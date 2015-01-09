@@ -1,6 +1,7 @@
 package bynull.realty.data.common;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
  * @since 08.01.15.
  */
 @Getter
+@ToString
 @Entity
 @Table(name = CityEntity.TABLE)
 public class CityEntity {

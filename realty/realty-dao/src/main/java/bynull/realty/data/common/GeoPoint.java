@@ -1,10 +1,15 @@
 package bynull.realty.data.common;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
  * @author dionis on 22/06/14.
  */
+@NoArgsConstructor
+@AllArgsConstructor
 public class GeoPoint implements Serializable {
     private double latitude;
     private double longitude;
