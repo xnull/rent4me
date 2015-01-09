@@ -11,7 +11,7 @@ public class MetroSyncJobTest extends ServiceTest {
     @Autowired
     private MetroSyncJob metroSyncJob;
 
-    @Ignore("It's working fine, but it's not necessary to run it every time")
+    @Ignore("It work fine, but it's not necessary to run it every time")
     @Test
     @Rollback(value = false)
     public void testRun() throws Exception {
