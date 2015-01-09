@@ -2,6 +2,7 @@ package bynull.realty.web.rest;
 
 import bynull.realty.services.metro.MetroServiceException;
 import bynull.realty.services.metro.MoscowMetroSynchronisationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.Response;
 @Path("admin")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Slf4j
 public class AdminRestResource {
 
     @Resource
@@ -29,8 +31,12 @@ public class AdminRestResource {
 
     @GET
     @Path("syncmetro")
-    public Response listAll() throws MetroServiceException {
-        moscowMetroSynchronisationService.syncWithDatabase();
+    public Response listAll() {
+        try {
+            moscowMetroSynchronisationService.syncWithDatabase();
+        } catch (MetroServiceException e) {
+            log.error("Error sync", e);
+        }
         return Response.ok().build();
     }
 }
