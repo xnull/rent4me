@@ -50,16 +50,6 @@ module.exports = React.createClass({
                             <div className="col-md-offset-9">
                                 <a className="btn btn-primary center-block" href="#/user/chats/newMessage" >Новое сообщение</a>
                             </div>
-                            <div className="form-group">
-                                <label className="col-md-2 control-label">Поиск по текущим адресатам</label>
-                                <div className="col-md-10">
-                                    <input type="text" placeholder="Фильтрация адресатов"/>
-                                </div>
-                            </div>
-
-                            <div className="col-md-offset-9">
-                                <a className="btn btn-primary center-block" >Поиск</a>
-                            </div>
                         </form>
                     </div>
                 </div>

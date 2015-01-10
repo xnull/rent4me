@@ -37,13 +37,17 @@ module.exports = React.createClass({
     },
 
     newConversationStartedListener: function () {
+        var myId = this.state.me.id;
+        var otherId = this.state.targetPersonId;
+        var min = Math.min(myId, otherId);
+        var max = Math.max(myId, otherId);
+        var chatKey = min+"_"+max;
         console.log('New conversation started listener called');
         this.setState(assign(this.state, {
             messageText: null,
             targetPersonId: null
         }));
-        //TODO: redirect to proper thread. For now simply redirect to store
-        document.location.href = '#/user/chats';
+        document.location.href = '#/user/chat?id=' + chatKey + "&receiver_id=" + otherId;
     },
 
     myUserListener: function () {
