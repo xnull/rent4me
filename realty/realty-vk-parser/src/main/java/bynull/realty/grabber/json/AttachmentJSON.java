@@ -48,18 +48,13 @@ public class AttachmentJSON {
 
         AttachmentJSON json = (AttachmentJSON) o;
 
-        if (!link.equals(json.link)) return false;
-        if (!photo.equals(json.photo)) return false;
-        if (!type.equals(json.type)) return false;
+        if (id != null ? !id.equals(json.id) : json.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = type.hashCode();
-        result = 31 * result + photo.hashCode();
-        result = 31 * result + link.hashCode();
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

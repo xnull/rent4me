@@ -1,26 +1,50 @@
 package bynull.realty.data.business.vk;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by trierra on 12/20/14.
  */
-public class Item extends BaseEntity {
-    String formId;
-    String ownerId;
-    Date date;
-    List<Attachment> attachments;
+@Entity
+@Table(name = "items")
+public class Item implements Serializable {
+    @Id
+    @GeneratedValue(generator = "item_id_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "item_id_generator", sequenceName = "item_id_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "form_id")
+    private String fromId;
+    @Column(name = "owner_id")
+    private String ownerId;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+
+    @OneToMany(mappedBy = "item")
+    private List<Attachment> attachments;
 
     public Item() {
     }
 
-    public String getFormId() {
-        return formId;
+    public Long getId() {
+        return id;
     }
 
-    public void setFormId(String formId) {
-        this.formId = formId;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFromId() {
+        return fromId;
+    }
+
+    public void setFromId(String formId) {
+        this.fromId = formId;
     }
 
     public String getOwnerId() {

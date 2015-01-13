@@ -29,7 +29,7 @@ public class ItemDTO {
         ItemDTO dto = new ItemDTO();
         dto.setDate(item.getDate());
         dto.setId(item.getId());
-        dto.setFormId(item.getFormId());
+        dto.setFormId(item.getFromId());
         dto.setOwnerId(item.getOwnerId());
         dto.setAttachmentDTOs(item.getAttachments() != null ? item.getAttachments().stream().map(AttachmentDTO::from).collect(Collectors.toList()) : null);
         return dto;
@@ -39,7 +39,7 @@ public class ItemDTO {
         Item item = new Item();
         item.setId(getId());
         item.setOwnerId(getOwnerId());
-        item.setFormId(getFormId());
+        item.setFromId(getFormId());
         item.setDate(getDate());
         item.setAttachments(getAttachmentDTOs().stream().map(AttachmentDTO::toInternal).collect(Collectors.toList()));
         return item;
@@ -52,23 +52,13 @@ public class ItemDTO {
 
         ItemDTO dto = (ItemDTO) o;
 
-        if (attachmentDTOs != null ? !attachmentDTOs.equals(dto.attachmentDTOs) : dto.attachmentDTOs != null)
-            return false;
-        if (date != null ? !date.equals(dto.date) : dto.date != null) return false;
-        if (formId != null ? !formId.equals(dto.formId) : dto.formId != null) return false;
         if (id != null ? !id.equals(dto.id) : dto.id != null) return false;
-        if (ownerId != null ? !ownerId.equals(dto.ownerId) : dto.ownerId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (formId != null ? formId.hashCode() : 0);
-        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (attachmentDTOs != null ? attachmentDTOs.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

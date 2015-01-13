@@ -23,7 +23,6 @@ public class AttachmentDTO {
         AttachmentDTO dto = new AttachmentDTO();
         dto.setPhotoDTO(PhotoDTO.from(model.getPhoto()));
         dto.setType(model.getType());
-        dto.setId(model.getId());
         dto.setLinkDTO(LinkDTO.from(model.getLink()));
 
         return dto;
@@ -34,7 +33,6 @@ public class AttachmentDTO {
         attachment.setType(getType());
         attachment.setLink(linkDTO != null ? linkDTO.toInternal() : null);
         attachment.setPhoto(photoDTO != null ? photoDTO.toInternal() : null);
-        attachment.setId(getId());
 
         return attachment;
     }
@@ -46,18 +44,13 @@ public class AttachmentDTO {
 
         AttachmentDTO dto = (AttachmentDTO) o;
 
-        if (linkDTO != null ? !linkDTO.equals(dto.linkDTO) : dto.linkDTO != null) return false;
-        if (photoDTO != null ? !photoDTO.equals(dto.photoDTO) : dto.photoDTO != null) return false;
-        if (type != null ? !type.equals(dto.type) : dto.type != null) return false;
+        if (id != null ? !id.equals(dto.id) : dto.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (photoDTO != null ? photoDTO.hashCode() : 0);
-        result = 31 * result + (linkDTO != null ? linkDTO.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

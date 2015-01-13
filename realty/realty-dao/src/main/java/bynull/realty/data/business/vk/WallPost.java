@@ -5,11 +5,8 @@ import java.util.List;
 /**
  * Created by trierra on 12/6/14.
  */
-public class WallPost extends BaseEntity {
-
+public class WallPost {
     private Long count;
-
-
     private List<Item> items;
 
     public WallPost() {

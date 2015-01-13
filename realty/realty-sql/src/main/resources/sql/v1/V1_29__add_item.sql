@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS items;
+
+CREATE TABLE items (
+  id          BIGINT                   NOT NULL PRIMARY KEY,
+  form_id     VARCHAR ,
+  owner_id    VARCHAR ,
+  date        TIMESTAMP
+);
+
+DROP SEQUENCE IF EXISTS item_id_seq;
+CREATE SEQUENCE item_id_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
