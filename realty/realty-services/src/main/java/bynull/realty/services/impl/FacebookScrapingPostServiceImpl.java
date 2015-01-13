@@ -157,7 +157,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
     @Override
     public void syncElasticSearchWithDB() {
-        PutMethod method = new PutMethod("http://localhost:9200/_river/" + config.getEsConfig().getRiver() + "/_meta");
+        PutMethod method = new PutMethod(config.getEsConfig().getEsConnectionUrl()+"/_river/" + config.getEsConfig().getRiver() + "/_meta");
 
         try {
             DbConfig dbConfig = new DbConfig();
@@ -428,7 +428,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         String index = config.getEsConfig().getIndex();
 //        index = "prod_fb_posts";
 
-        PostMethod method = new PostMethod("http://localhost:9200/" + index + "/_search");
+        PostMethod method = new PostMethod(config.getEsConfig().getEsConnectionUrl()+"/" + index + "/_search");
         ;
 //        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
         List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))

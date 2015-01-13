@@ -30,6 +30,7 @@
             <property name="index" value="dev_local_fb_posts"/>
             <property name="type" value="dev_local_fb_posts"/>
             <property name="river" value="dev_local_river"/>
+            <property name="esConnectionUrl" value="http://localhost:9200"/>
         </bean>
 
         <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
@@ -60,6 +61,7 @@
             <property name="index" value="dev_fb_posts"/>
             <property name="type" value="dev_fb_posts"/>
             <property name="river" value="dev_river"/>
+            <property name="esConnectionUrl" value="http://dev.rent4.me:9200"/>
         </bean>
 
         <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
@@ -90,6 +92,7 @@
             <property name="index" value="prod_fb_posts"/>
             <property name="type" value="prod_fb_posts"/>
             <property name="river" value="prod_river"/>
+            <property name="esConnectionUrl" value="http://rent4.me:9200"/>
         </bean>
 
         <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
