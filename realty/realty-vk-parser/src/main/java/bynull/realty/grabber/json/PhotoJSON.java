@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class PhotoJSON {
 
-    private Long id;
+    private Long entityId;
 
     @JsonProperty("id")
     private String photoId;
@@ -42,7 +42,7 @@ public class PhotoJSON {
         json.setOwnerId(dto.getOwnerId());
         json.setAlbumId(dto.getAlbumId());
         json.setPhotoId(dto.getPhotoId());
-        json.setId(dto.getId());
+        json.setEntityId(dto.getId());
         return json;
     }
 
@@ -53,7 +53,7 @@ public class PhotoJSON {
         dto.setText(getText());
         dto.setOwnerId(getOwnerId());
         dto.setPhotoSrc(getPhotoSrc());
-        dto.setId(getId());
+        dto.setId(getEntityId());
         return dto;
     }
 
@@ -65,7 +65,7 @@ public class PhotoJSON {
         PhotoJSON json = (PhotoJSON) o;
 
         if (albumId != null ? !albumId.equals(json.albumId) : json.albumId != null) return false;
-        if (id != null ? !id.equals(json.id) : json.id != null) return false;
+        if (entityId != null ? !entityId.equals(json.entityId) : json.entityId != null) return false;
         if (ownerId != null ? !ownerId.equals(json.ownerId) : json.ownerId != null) return false;
         if (photoId != null ? !photoId.equals(json.photoId) : json.photoId != null) return false;
         if (photoSrc != null ? !photoSrc.equals(json.photoSrc) : json.photoSrc != null) return false;
@@ -76,7 +76,7 @@ public class PhotoJSON {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = entityId != null ? entityId.hashCode() : 0;
         result = 31 * result + (photoId != null ? photoId.hashCode() : 0);
         result = 31 * result + (albumId != null ? albumId.hashCode() : 0);
         result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);

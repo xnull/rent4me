@@ -21,9 +21,9 @@ public class AttachmentDTO {
     public static AttachmentDTO from(Attachment model) {
         if (model == null) return null;
         AttachmentDTO dto = new AttachmentDTO();
-        dto.setPhotoDTO(PhotoDTO.from(model.getPhoto()));
+        dto.setPhotoDTO(model.getPhoto() != null ? PhotoDTO.from(model.getPhoto()) : null);
         dto.setType(model.getType());
-        dto.setLinkDTO(LinkDTO.from(model.getLink()));
+        dto.setLinkDTO(model.getLink() != null ? LinkDTO.from(model.getLink()) : null);
 
         return dto;
     }

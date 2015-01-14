@@ -1,28 +1,33 @@
-package bynull.realty.services.vk.impl;
+package bynull.realty.grabber.services;
 
-import bynull.realty.services.vk.VkGroupPostsService;
+import bynull.realty.grabber.json.ItemJSON;
+import bynull.realty.grabber.json.VkResponseJSON;
+import bynull.realty.grabber.json.WallPostJSON;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by trierra on 12/4/14.
  */
 @Service
-public class VkGroupPostsServiceImpl implements VkGroupPostsService {
+public class VkPostsServiceImpl implements VkPostsService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(VkGroupPostsServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VkPostsServiceImpl.class);
     private Map<String, String> groupWallParams = new HashMap<>();
     private Map<String, String> groupConversationParams = new HashMap<>();
 
-    public VkGroupPostsServiceImpl() {
+    public VkPostsServiceImpl() {
         init();
     }
 
@@ -47,18 +52,19 @@ public class VkGroupPostsServiceImpl implements VkGroupPostsService {
         return builder.build();
     }
 
-//    @Override
-//    public List<ItemJSON> getWallPostsList(String groupDomain, String accessToken) throws URISyntaxException {
-//        LOG.debug("getting posts from '" + groupDomain + "' group");
-//
-//        groupWallParams.replace("domain", "kvarnado");
-//
-//        URI uri = requestBuilder("wall.get", groupWallParams, accessToken);
-//        RestTemplate restTemplate = new RestTemplate();
-//        ResponseEntity<VkResponseJSON> entity = restTemplate.getForEntity(uri.toString(), VkResponseJSON.class);
-//        VkResponseJSON post = entity.getBody();
-//        return post.getResponse().getItems();
-//    }
+    @Override
+    public List<ItemJSON> getWallPostsList(String groupDomain, String accessToken) throws URISyntaxException {
+        LOG.debug("getting posts from '" + groupDomain + "' group");
+
+        groupWallParams.replace("domain", groupDomain);
+
+        URI uri = requestBuilder("wall.get", groupWallParams, accessToken);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<VkResponseJSON> entity = restTemplate.getForEntity(uri.toString(), VkResponseJSON.class);
+        VkResponseJSON post = entity.getBody();
+        return post.getResponse().getItems();
+    }
+
 
     @Override
     public void wallSearch() {
@@ -73,6 +79,11 @@ public class VkGroupPostsServiceImpl implements VkGroupPostsService {
     @Override
     public void getConversation() {
 
+    }
+
+    @Override
+    public List<WallPostJSON> getThreadPosts() {
+        return null;
     }
 
 //    @Override

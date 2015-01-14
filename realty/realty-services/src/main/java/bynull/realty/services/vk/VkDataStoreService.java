@@ -1,7 +1,7 @@
 package bynull.realty.services.vk;
 
 
-import bynull.realty.data.business.vk.Item;
+import bynull.realty.dto.vk.ItemDTO;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import java.util.List;
  */
 public interface VkDataStoreService {
 
-    void savePost(Item post);
+    void savePost(ItemDTO post);
 
-    void savePosts(List<Item> post);
+    void savePosts(List<ItemDTO> post);
 
-    Item getPostById(Long id);
+    ItemDTO getPostById(Long id);
 
-    List<Item> getPostsList();
+    List<ItemDTO> getPostsList();
 
     void removePost();
 }

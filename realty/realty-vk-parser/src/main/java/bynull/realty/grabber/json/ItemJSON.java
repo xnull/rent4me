@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Setter
 public class ItemJSON {
 
-    private Long id;
+    private Long entityId;
 
     @JsonProperty("id")
     private String formId;
@@ -40,8 +40,8 @@ public class ItemJSON {
         json.setDate(model.getDate());
         json.setFormId(model.getFormId());
         json.setOwnerId(model.getOwnerId());
-        json.setAttachmentJSONs(model.getAttachmentDTOs().stream().map(AttachmentJSON::from).collect(Collectors.toList()));
-        json.setId(model.getId());
+        json.setAttachmentJSONs(model.getAttachmentDTOs() != null ? model.getAttachmentDTOs().stream().map(AttachmentJSON::from).collect(Collectors.toList()) : null);
+        json.setEntityId(model.getId());
 
         return json;
     }
@@ -50,9 +50,9 @@ public class ItemJSON {
         ItemDTO dto = new ItemDTO();
         dto.setFormId(getFormId());
         dto.setOwnerId(getOwnerId());
-        dto.setAttachmentDTOs(getAttachmentJSONs().stream().map(AttachmentJSON::toDto).collect(Collectors.toList()));
+        dto.setAttachmentDTOs(getAttachmentJSONs() != null ? getAttachmentJSONs().stream().map(AttachmentJSON::toDto).collect(Collectors.toList()) : null);
         dto.setDate(getDate());
-        dto.setId(getId());
+        dto.setId(getEntityId());
         return dto;
     }
 

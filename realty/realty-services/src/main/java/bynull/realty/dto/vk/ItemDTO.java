@@ -41,7 +41,7 @@ public class ItemDTO {
         item.setOwnerId(getOwnerId());
         item.setFromId(getFormId());
         item.setDate(getDate());
-        item.setAttachments(getAttachmentDTOs().stream().map(AttachmentDTO::toInternal).collect(Collectors.toList()));
+        item.setAttachments(getAttachmentDTOs() != null ? getAttachmentDTOs().stream().map(AttachmentDTO::toInternal).collect(Collectors.toList()) : null);
         return item;
     }
 

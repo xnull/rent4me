@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LinkJSON {
-    private Long id;
+    private Long entityId;
 
     private String description;
 
@@ -29,7 +29,7 @@ public class LinkJSON {
     public static LinkJSON from(LinkDTO model) {
         if (model == null) return null;
         LinkJSON json = new LinkJSON();
-        json.setId(model.getId());
+        json.setEntityId(model.getId());
         json.setDescription(model.getDescription());
         json.setImageSrc(model.getImageSrc());
         json.setTitle(model.getTitle());
@@ -41,7 +41,7 @@ public class LinkJSON {
     public LinkDTO toDto() {
         LinkDTO dto = new LinkDTO();
         dto.setImageSrc(getImageSrc());
-        dto.setId(getId());
+        dto.setId(getEntityId());
         dto.setUrl(getUrl());
         dto.setDescription(getDescription());
         dto.setTitle(getTitle());
@@ -56,7 +56,7 @@ public class LinkJSON {
         LinkJSON json = (LinkJSON) o;
 
         if (description != null ? !description.equals(json.description) : json.description != null) return false;
-        if (id != null ? !id.equals(json.id) : json.id != null) return false;
+        if (entityId != null ? !entityId.equals(json.entityId) : json.entityId != null) return false;
         if (imageSrc != null ? !imageSrc.equals(json.imageSrc) : json.imageSrc != null) return false;
         if (title != null ? !title.equals(json.title) : json.title != null) return false;
         if (url != null ? !url.equals(json.url) : json.url != null) return false;
@@ -66,7 +66,7 @@ public class LinkJSON {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = entityId != null ? entityId.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (imageSrc != null ? imageSrc.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
