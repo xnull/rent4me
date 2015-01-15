@@ -3,6 +3,7 @@ package bynull.realty.services.vk.impl;
 import bynull.realty.dao.vk.VkRepository;
 import bynull.realty.dto.vk.ItemDTO;
 import bynull.realty.services.vk.VkDataStoreService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -11,13 +12,13 @@ import java.util.stream.Collectors;
 /**
  * Created by trierra on 12/17/14.
  */
-@Resource
-public class VkDataStoreImpl implements VkDataStoreService {
+@Service
+public class VkDataStoreServiceImpl implements VkDataStoreService {
 
     @Resource
     private VkRepository vkRepository;
 
-    public VkDataStoreImpl() {
+    public VkDataStoreServiceImpl() {
     }
 
     @Override
