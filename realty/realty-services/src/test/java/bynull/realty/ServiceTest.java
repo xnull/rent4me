@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @TransactionConfiguration(transactionManager = "txManager")
 @ContextConfiguration(locations = {"classpath:service-test-context.xml"})
-public class ServiceTest extends SpringTest {
+public abstract class ServiceTest extends SpringTest {
 }
