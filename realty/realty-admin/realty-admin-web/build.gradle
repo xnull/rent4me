@@ -1,4 +1,5 @@
 buildscript {
+
     dependencies {
         classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
     }
@@ -9,8 +10,10 @@ apply from: ext.pathToJavaProjectScript
 apply plugin: 'war'
 apply plugin: 'jetty'
 apply plugin: 'ssh'
+//apply plugin: 'scala'
+//apply plugin: 'scalate'
 
-task deployBackendDev(dependsOn: war, type: SshTask) {
+task deployAdminDev(dependsOn: war, type: SshTask) {
     group = 'Deployment'
 
     def passphrase = "k124hfeoifs9";
@@ -28,13 +31,13 @@ task deployBackendDev(dependsOn: war, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7-dev ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
+        execute 'cd /home/tomcat/tc7-dev ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
         put war.archivePath, '/home/tomcat/tc7-dev/webapps/'
-        execute 'cd /home/tomcat/tc7-dev ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
+        execute 'cd /home/tomcat/tc7-dev ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
     }
 }
 
-task deployBackendRelease(dependsOn: war, type: SshTask) {
+task deployAdminRelease(dependsOn: war, type: SshTask) {
     group = 'Deployment'
 
     def passphrase = "k124hfeoifs9";
@@ -52,9 +55,9 @@ task deployBackendRelease(dependsOn: war, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7-prod ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
+        execute 'cd /home/tomcat/tc7-prod ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
         put war.archivePath, '/home/tomcat/tc7-prod/webapps/'
-        execute 'cd /home/tomcat/tc7-prod ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
+        execute 'cd /home/tomcat/tc7-prod ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
     }
 }
 
@@ -72,12 +75,15 @@ dependencies {
     compile libraries."org.springframework.security:spring-security-config"
     compile libraries."org.springframework.security:spring-security-core"
 
-    //rest
-    compile libraries.'javax.ws.rs:javax.ws.rs-api'
-    compile libraries."org.glassfish.jersey.containers:jersey-container-servlet"
-    compile libraries."org.glassfish.jersey.media:jersey-media-json-jackson"
-    compile libraries."org.glassfish.jersey.ext:jersey-spring3"
-    compile libraries."org.glassfish.jersey.media:jersey-media-multipart"
+    compile 'org.fusesource.scalate:scalate-core_2.10:1.6.1'
+    compile 'org.fusesource.scalate:scalate-spring-mvc_2.10:1.6.1'
+
+//    //rest
+//    compile libraries.'javax.ws.rs:javax.ws.rs-api'
+//    compile libraries."org.glassfish.jersey.containers:jersey-container-servlet"
+//    compile libraries."org.glassfish.jersey.media:jersey-media-json-jackson"
+//    compile libraries."org.glassfish.jersey.ext:jersey-spring3"
+//    compile libraries."org.glassfish.jersey.media:jersey-media-multipart"
 
     providedCompile libraries."javax.servlet:javax.servlet-api"
 

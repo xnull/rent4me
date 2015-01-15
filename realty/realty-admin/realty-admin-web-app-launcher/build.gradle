@@ -1,0 +1,17 @@
+apply from: ext.pathToJavaProjectScript
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":realty-admin:realty-admin-web")
+
+    compile libraries."org.eclipse.jetty:jetty-start"
+    compile libraries."org.eclipse.jetty:jetty-webapp"
+    compile libraries."org.eclipse.jetty:jetty-jndi"
+    compile libraries."org.eclipse.jetty:jetty-plus"
+
+    compile libraries."commons-io:commons-io"
+}

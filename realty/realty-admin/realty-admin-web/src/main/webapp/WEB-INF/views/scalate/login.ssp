@@ -1,0 +1,29 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dionis
+  Date: 10/4/13
+  Time: 11:17 AM
+  To change this template use File | Settings | File Templates.
+--%>
+<div align="center">
+<form name='f' action="<%=uri("/j_spring_security_check")%>" method='POST'>
+
+    <fieldset>
+        <legend>Sign in</legend>
+
+        <div class="control-group ">
+        <label>Username
+            <input type="text" name='j_username' value='' />
+        </label>
+
+
+        <label>Password
+            <input type="password" name='j_password' />
+        </label>
+
+
+        <button type="submit" class="btn btn-primary">Sign in</button>
+    </fieldset>
+
+</form>
+</div>
