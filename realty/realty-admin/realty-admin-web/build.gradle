@@ -75,8 +75,9 @@ dependencies {
     compile libraries."org.springframework.security:spring-security-config"
     compile libraries."org.springframework.security:spring-security-core"
 
-    compile 'org.fusesource.scalate:scalate-core_2.10:1.6.1'
-    compile 'org.fusesource.scalate:scalate-spring-mvc_2.10:1.6.1'
+    compile 'org.scalatra.scalate:scalate-core_2.11:1.7.0'
+    compile 'org.scalatra.scalate:scalate-spring-mvc_2.11:1.7.0'
+
 
 //    //rest
 //    compile libraries.'javax.ws.rs:javax.ws.rs-api'
