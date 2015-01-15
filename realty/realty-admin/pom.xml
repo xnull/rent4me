@@ -9,10 +9,8 @@
     <description>Parent project</description>
 
     <modules>
-        <module>common</module>
-        <module>data</module>
-        <module>web</module>
-        <module>web-app-launcher</module>
+        <module>realty-admin-web</module>
+        <module>realty-admin-web-app-launcher</module>
     </modules>
 
     <properties>

@@ -42,12 +42,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>name.dargiri</groupId>
-            <artifactId>data</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <!--DB pooling-->
         <dependency>
             <groupId>com.jolbox</groupId>
