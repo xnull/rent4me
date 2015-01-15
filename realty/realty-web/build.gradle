@@ -1,6 +1,7 @@
 buildscript {
     dependencies {
         classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE'
     }
 }
 
@@ -9,6 +10,45 @@ apply from: ext.pathToJavaProjectScript
 apply plugin: 'war'
 apply plugin: 'jetty'
 apply plugin: 'ssh'
+apply plugin: 'spring-boot'
+
+/**
+ * The War plugin adds two dependency configurations: providedCompile and providedRuntime. See http://www.gradle.org/docs/current/userguide/war_plugin.html
+ */
+
+dependencies {
+    compile project(':realty-services')
+
+    compile 'org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-tomcat:1.2.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.2.1.RELEASE'
+    testCompile 'org.springframework.boot:spring-boot-starter-test:1.2.1.RELEASE'
+
+    //spring
+    compile libraries."org.springframework:spring-webmvc"
+    compile libraries."org.springframework:spring-web"
+    compile libraries."org.springframework.security:spring-security-web"
+    compile libraries."org.springframework.security:spring-security-config"
+    compile libraries."org.springframework.security:spring-security-core"
+
+    //rest
+    compile libraries.'javax.ws.rs:javax.ws.rs-api'
+    compile libraries."org.glassfish.jersey.containers:jersey-container-servlet"
+    compile libraries."org.glassfish.jersey.media:jersey-media-json-jackson"
+    compile libraries."org.glassfish.jersey.ext:jersey-spring3"
+    compile libraries."org.glassfish.jersey.media:jersey-media-multipart"
+
+    providedCompile libraries."javax.servlet:javax.servlet-api"
+
+    //db pool
+    compile libraries."c3p0:c3p0"
+}
+
+war {
+    baseName = 'rent4me'
+    version = '1.0.0'
+}
+
 
 task deployBackendDev(dependsOn: war, type: SshTask) {
     group = 'Deployment'
@@ -57,32 +97,3 @@ task deployBackendRelease(dependsOn: war, type: SshTask) {
         execute 'cd /home/tomcat/tc7-prod ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
     }
 }
-
-/**
- * The War plugin adds two dependency configurations: providedCompile and providedRuntime. See http://www.gradle.org/docs/current/userguide/war_plugin.html
- */
-
-dependencies {
-    compile project(':realty-services')
-
-    //spring
-    compile libraries."org.springframework:spring-webmvc"
-    compile libraries."org.springframework:spring-web"
-    compile libraries."org.springframework.security:spring-security-web"
-    compile libraries."org.springframework.security:spring-security-config"
-    compile libraries."org.springframework.security:spring-security-core"
-
-    //rest
-    compile libraries.'javax.ws.rs:javax.ws.rs-api'
-    compile libraries."org.glassfish.jersey.containers:jersey-container-servlet"
-    compile libraries."org.glassfish.jersey.media:jersey-media-json-jackson"
-    compile libraries."org.glassfish.jersey.ext:jersey-spring3"
-    compile libraries."org.glassfish.jersey.media:jersey-media-multipart"
-
-    providedCompile libraries."javax.servlet:javax.servlet-api"
-
-    //db pool
-    compile libraries."c3p0:c3p0"
-}
-
-//war.dependsOn project(':realty-client').jsBuild

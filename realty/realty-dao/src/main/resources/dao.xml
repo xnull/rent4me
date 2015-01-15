@@ -4,7 +4,8 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
-    <context:annotation-config/>
+
+<context:annotation-config/>
     <context:component-scan base-package="bynull.realty.dao"/>
     <jpa:repositories base-package="bynull.realty.dao" transaction-manager-ref="txManager"
                       entity-manager-factory-ref="em"/>
