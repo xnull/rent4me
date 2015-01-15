@@ -18,18 +18,18 @@ public class MainController {
 
     @RequestMapping("/login")
     public ModelAndView login(ModelMap modelMap) {
-        return new LayoutModelAndView("login");
+        return new ModelAndView("login");
     }
 
     @RequestMapping("/loginfailed")
     public ModelAndView loginerror(ModelMap model) {
         model.addAttribute("error", "true");
-        return new LayoutModelAndView("login");
+        return new ModelAndView("login");
 
     }
 
     @RequestMapping("/logout")
     public ModelAndView logout(ModelMap model) {
-        return new LayoutModelAndView("login");
+        return new ModelAndView("login");
     }
 }

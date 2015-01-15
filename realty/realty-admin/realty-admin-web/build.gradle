@@ -74,9 +74,16 @@ dependencies {
     compile libraries."org.springframework.security:spring-security-web"
     compile libraries."org.springframework.security:spring-security-config"
     compile libraries."org.springframework.security:spring-security-core"
+    compile libraries."org.springframework.security:spring-security-taglibs"
 
-    compile 'org.scalatra.scalate:scalate-core_2.11:1.7.0'
-    compile 'org.scalatra.scalate:scalate-spring-mvc_2.11:1.7.0'
+//JSP & JSTL
+    compile 'javax.servlet:jstl:1.2'
+    compile 'org.mortbay.jetty:jsp-api-2.1-glassfish:9.1.1.B60.25.p2'
+    compile 'org.mortbay.jetty:jsp-2.1-glassfish:9.1.1.B60.25.p2'
+
+    //JSP compiler
+    compile 'eclipse:jdtcore:3.1.0'
+    compile 'org.sitemesh:sitemesh:3.0.0'
 
 
 //    //rest

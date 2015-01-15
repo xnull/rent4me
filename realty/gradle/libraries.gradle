@@ -14,6 +14,7 @@ project.ext.libraries = [
         //spring security
         'org.springframework.security:spring-security-core'       : ["org.springframework.security:spring-security-core:${springSecurityVersion}"],
         'org.springframework.security:spring-security-config'     : ["org.springframework.security:spring-security-config:${springSecurityVersion}"],
+        'org.springframework.security:spring-security-taglibs'     : ["org.springframework.security:spring-security-taglibs:${springSecurityVersion}"],
 
         //srping db
         'org.springframework:spring-jdbc'                         : ["org.springframework:spring-jdbc:${springVersion}"],

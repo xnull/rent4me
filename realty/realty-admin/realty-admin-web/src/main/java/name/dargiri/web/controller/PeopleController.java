@@ -55,7 +55,7 @@ public class PeopleController {
 
     @RequestMapping(value = {"", "/all"})
     public ModelAndView all() {
-        ModelAndView mav = new LayoutModelAndView("main/people");
+        ModelAndView mav = new ModelAndView("main/people");
 //        List<PersonForm> all = personService.findAll().stream().map(PersonForm::from).collect(Collectors.<PersonForm>toList());
         List<PersonForm> all = Collections.emptyList();
         mav.addObject("people", all);
@@ -66,7 +66,7 @@ public class PeopleController {
     public ModelAndView createForm()
 
     {
-        ModelAndView mav = new LayoutModelAndView("main/person");
+        ModelAndView mav = new ModelAndView("main/person");
         mav.addObject("person", new PersonForm());
         return mav;
     }
@@ -106,7 +106,7 @@ public class PeopleController {
 //        if (updated != null) {
 //            return new ModelAndView("redirect:/secure/people/all");
 //        } else {
-            ModelAndView mav = new LayoutModelAndView("main/person");
+            ModelAndView mav = new ModelAndView("main/person");
             mav.addObject("person", personForm);
             return mav;
 //        }
