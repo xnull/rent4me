@@ -1,6 +1,5 @@
 package bynull.realty.services.impl;
 
-import bynull.realty.components.FacebookHelperComponent;
 import bynull.realty.components.VKHelperComponent;
 import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.Authority;
@@ -9,6 +8,7 @@ import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.AuthorityService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
+import bynull.realty.services.impl.socialnet.fb.FacebookHelperComponent;
 import bynull.realty.utils.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

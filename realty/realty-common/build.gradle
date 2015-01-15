@@ -1,0 +1,6 @@
+apply from: ext.pathToJavaProjectScript
+
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-core:2.4.1.1'
+    compile 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.4.2'
+}

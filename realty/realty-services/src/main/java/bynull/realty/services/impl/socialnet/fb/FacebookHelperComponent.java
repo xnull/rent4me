@@ -1,33 +1,30 @@
-package bynull.realty.components;
+package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.data.business.external.facebook.FacebookPostType;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
+import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -35,11 +32,9 @@ import static bynull.realty.util.CommonUtils.copy;
  * @author dionis on 09/07/14.
  */
 @Component
-public class
-        FacebookHelperComponent {
+@Slf4j
+public class FacebookHelperComponent {
     public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
-    private static final Logger LOGGER = LoggerFactory.getLogger(FacebookHelperComponent.class);
-    private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
 
     private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
 
@@ -61,12 +56,7 @@ public class
 
         FacebookVerificationInfoDTO result;
         try {
-            result = new RetryRunner<FacebookVerificationInfoDTO>(2).doWithRetry(new Callable<FacebookVerificationInfoDTO>() {
-                @Override
-                public FacebookVerificationInfoDTO call() throws Exception {
-                    return performVerification(person);
-                }
-            });
+            result = new RetryRunner<FacebookVerificationInfoDTO>(2).doWithRetry(() -> performVerification(person));
         } catch (Exception e) {
             throw new FacebookAuthorizationException(e);
         }
@@ -85,9 +75,9 @@ public class
                 throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
             }
             String body = httpGet.getResponseBodyAsString();
-            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
+            log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
 
-            FacebookVerificationInfoDTO response = jacksonObjectMapper.readValue(body, FacebookVerificationInfoDTO.class);
+            FacebookVerificationInfoDTO response = JsonUtils.fromJson(body, FacebookVerificationInfoDTO.class);
             Assert.notNull(response);
             Assert.notNull(response.facebookId, "Facebook id should not be empty");
             Assert.notNull(response.email, "Email should not be empty");
@@ -105,10 +95,10 @@ public class
 
             // returned string example {"id":"100000169700800"}
 
-            LOGGER.info("Status line: {}", httpGet.getStatusLine());
+            log.info("Status line: {}", httpGet.getStatusLine());
 
             return response;
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             httpGet.releaseConnection();
@@ -132,7 +122,7 @@ public class
                 ? _url + (_url.contains("?") ? "&" : "?") + "access_token=" + accessToken
                 : _url;
 
-        LOGGER.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
+        log.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
 
         long requestStartTime = System.currentTimeMillis();
 
@@ -144,28 +134,29 @@ public class
                 throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
             }
             String body = httpGet.getResponseBodyAsString();
-            LOGGER.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
-            LOGGER.info("Status line: {}", httpGet.getStatusLine());
-            LOGGER.info("Body: {}", body);
+            log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
+            log.info("Status line: {}", httpGet.getStatusLine());
+            log.info("Body: {}", body);
 
-            FacebookFeedItems response = jacksonObjectMapper.readValue(body, FacebookFeedItems.class);
+            FacebookFeedItems response = JsonUtils.fromJson(body, FacebookFeedItems.class);
             if (response.getItems().isEmpty()) {
                 return accu;
-            } else {
-                accu.addAll(response.getItems());
-                if (response.getPaging().hasNextPage()) {
-                    FacebookPostItemDTO last = Iterables.getLast(response.getItems(), null);
-                    if (last != null && last.getCreatedDtime().after(maxAge)) {
-                        return doLoadPostsFromPage0(maxAge, response.getPaging().getNext(), accessToken, accu, 0);
-                    } else {
-                        return accu;
-                    }
-                } else {
-                    return accu;
-                }
             }
-        } catch (IOException e) {
-            LOGGER.warn("Exception occurred while trying to load posts from page", e);
+
+            accu.addAll(response.getItems());
+            if (!response.getPaging().hasNextPage()) {
+                return accu;
+            }
+
+            FacebookPostItemDTO last = Iterables.getLast(response.getItems(), null);
+            if (last == null || !last.getCreatedDtime().after(maxAge)) {
+                return accu;
+            }
+
+            return doLoadPostsFromPage0(maxAge, response.getPaging().getNext(), accessToken, accu, 0);
+
+        } catch (Exception e) {
+            log.warn("Exception occurred while trying to load posts from page", e);
             if (retryNumber < 3) {
                 return doLoadPostsFromPage0(maxAge, _url, accessToken, accu, retryNumber + 1);
             } else {

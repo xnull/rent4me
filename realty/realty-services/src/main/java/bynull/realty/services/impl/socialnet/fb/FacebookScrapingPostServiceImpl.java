@@ -1,6 +1,5 @@
-package bynull.realty.services.impl;
+package bynull.realty.services.impl.socialnet.fb;
 
-import bynull.realty.components.FacebookHelperComponent;
 import bynull.realty.config.Config;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.dao.external.FacebookScrapedPostRepository;
@@ -18,6 +17,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -26,8 +26,6 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,9 +41,8 @@ import java.util.stream.Collectors;
  * Created by dionis on 02/01/15.
  */
 @Service
+@Slf4j
 public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FacebookScrapingPostServiceImpl.class);
-
     @Resource
     Config config;
 
@@ -102,7 +99,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
                 }
                 em.flush();
             } catch (Exception e) {
-                LOGGER.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
+                log.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
             }
         }
     }
@@ -157,7 +154,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
     @Override
     public void syncElasticSearchWithDB() {
-        PutMethod method = new PutMethod(config.getEsConfig().getEsConnectionUrl()+"/_river/" + config.getEsConfig().getRiver() + "/_meta");
+        PutMethod method = new PutMethod(config.getEsConfig().getEsConnectionUrl() + "/_river/" + config.getEsConfig().getRiver() + "/_meta");
 
         try {
             DbConfig dbConfig = new DbConfig();
@@ -183,14 +180,14 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
             String value = jacksonObjectMapper.writeValueAsString(dbConfig);
 
-            LOGGER.info("DB config for ES sync: [{}]", value);
+            log.info("DB config for ES sync: [{}]", value);
 
             method.setRequestEntity(new StringRequestEntity(value, null, "UTF-8"));
             int responseCode = httpManager.executeMethod(method);
             String body = method.getResponseBodyAsString();
 
-            LOGGER.info("Response code for ES sync: [{}]", responseCode);
-            LOGGER.info("Response body for ES sync: [{}]", body);
+            log.info("Response code for ES sync: [{}]", responseCode);
+            log.info("Response body for ES sync: [{}]", body);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -428,7 +425,7 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         String index = config.getEsConfig().getIndex();
 //        index = "prod_fb_posts";
 
-        PostMethod method = new PostMethod(config.getEsConfig().getEsConnectionUrl()+"/" + index + "/_search");
+        PostMethod method = new PostMethod(config.getEsConfig().getEsConnectionUrl() + "/" + index + "/_search");
         ;
 //        PostMethod method = new PostMethod("http://rent4.me:9200/"+ index +"/_search");;
         List<FindQuery.Query> searchQueries = Arrays.asList(StringUtils.split(text))
@@ -469,14 +466,14 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
 
             String value = jacksonObjectMapper.writeValueAsString(query);
 
-            LOGGER.info("DB config for ES sync: [{}]", value);
+            log.info("DB config for ES sync: [{}]", value);
 
             method.setRequestEntity(new StringRequestEntity(value, null, "UTF-8"));
             int responseCode = httpManager.executeMethod(method);
             String body = method.getResponseBodyAsString();
 
-            LOGGER.info("Response code for ES sync: [{}]", responseCode);
-            LOGGER.info("Response body for ES sync: [{}]", body);
+            log.info("Response code for ES sync: [{}]", responseCode);
+            log.info("Response body for ES sync: [{}]", body);
 
             ESResponse response = jacksonObjectMapper.readValue(body, ESResponse.class);
 

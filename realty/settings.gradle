@@ -1,3 +1,4 @@
+include 'realty-common'
 include 'realty-sql'
 include 'realty-dao'
 include 'realty-services'
