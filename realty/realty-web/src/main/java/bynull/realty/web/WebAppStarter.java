@@ -1,19 +1,10 @@
 package bynull.realty.web;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.context.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author Vyacheslav Petc
  * @since 1/13/15.
  */
-@Configuration
+/*@Configuration
 @EnableAutoConfiguration
 @ComponentScan("bynull.realty")
 @Profile("local")
@@ -21,10 +12,10 @@ import java.util.concurrent.TimeUnit;
         "file:src/main/webapp/WEB-INF/applicationContext.xml",
         "file:src/main/webapp/WEB-INF/spring-dispatcher-servlet.xml",
         "file:src/main/webapp/WEB-INF/spring-security-config.xml"
-})
+})*/
 public class WebAppStarter {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         new SpringApplicationBuilder(Cfg.class)
                 .addCommandLineProperties(false)
                 .showBanner(false)
@@ -43,5 +34,5 @@ public class WebAppStarter {
             factory.setSessionTimeout(10, TimeUnit.MINUTES);
             return factory;
         }
-    }
+    }*/
 }
