@@ -18,7 +18,7 @@ dependencies {
     //hibernate
     compile libraries."org.hibernate:hibernate-core"
     compile libraries."org.hibernate:hibernate-entitymanager"
-    compile libraries."org.hibernate.javax.persistence:hibernate-jpa-2.0-api"
+//    compile libraries."org.hibernate.javax.persistence:hibernate-jpa-2.0-api"
     compile libraries.'org.hibernate:hibernate-validator'
 
     compile project(":realty-sql")
