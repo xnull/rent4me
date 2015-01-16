@@ -4,7 +4,6 @@ import bynull.realty.DbTest;
 import bynull.realty.dao.vk.VkRepository;
 import bynull.realty.data.business.vk.Item;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class VkRepositoryTest extends DbTest {
     VkRepository vkRepository;
 
     @Test
-    @Rollback(false)
     public void insert() {
 
         Item item1 = new Item();
@@ -40,7 +38,6 @@ public class VkRepositoryTest extends DbTest {
     }
 
     @Test
-    @Rollback(false)
     public void insertList() {
         List<Item> items = new ArrayList<>();
 

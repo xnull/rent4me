@@ -62,7 +62,7 @@ task jsTest(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/karma/bin/karma')
     args = ['start', 'test/karma.conf.js']
 }
-test.dependsOn jsTest
+//test.dependsOn jsTest
 
 task jsPreBuild(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
