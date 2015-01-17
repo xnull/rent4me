@@ -1,6 +1,8 @@
 package bynull.realty.services.vk.impl;
 
-import bynull.realty.dao.vk.VkRepository;
+import bynull.realty.dao.vk.VkAttachmentRepository;
+import bynull.realty.dao.vk.VkItemRepository;
+import bynull.realty.data.business.vk.Item;
 import bynull.realty.dto.vk.ItemDTO;
 import bynull.realty.services.vk.VkDataStoreService;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,10 @@ import java.util.stream.Collectors;
 public class VkDataStoreServiceImpl implements VkDataStoreService {
 
     @Resource
-    private VkRepository vkRepository;
+    private VkItemRepository vkItemRepository;
+
+    @Resource
+    private VkAttachmentRepository vkAttachmentRepository;
 
     public VkDataStoreServiceImpl() {
     }
@@ -24,12 +29,16 @@ public class VkDataStoreServiceImpl implements VkDataStoreService {
     @Override
     public void savePost(ItemDTO post) {
 
-        vkRepository.save(post.toInternal());
+        vkItemRepository.save(post.toInternal());
     }
 
     @Override
     public void savePosts(List<ItemDTO> post) {
-        vkRepository.save(post.stream().map(ItemDTO::toInternal).collect(Collectors.toList()));
+        List<Item> dtoList = post.stream().map(ItemDTO::toInternal).collect(Collectors.toList());
+        for (Item item : dtoList) {
+            vkAttachmentRepository.save(item.getAttachments());
+            vkItemRepository.save(item);
+        }
     }
 
     @Override

@@ -6,7 +6,6 @@ import bynull.realty.grabber.json.ItemJSON;
 import bynull.realty.grabber.json.WallPostJSON;
 import bynull.realty.grabber.services.VkPostsService;
 import bynull.realty.services.vk.VkDataStoreService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -29,7 +28,7 @@ public class VkLauncher {
     @Resource
     private VkDataStoreService vkDataStoreService;
 
-    @Autowired
+    @Resource
     private VkAuth vkAuth;
 
     private String accessToken;
@@ -43,7 +42,6 @@ public class VkLauncher {
     }
 
     public List<ItemDTO> getWallPosts(String groupId) throws EmptyHiddenVkValue, IOException, URISyntaxException {
-
         return vkPostsService.getWallPostsList(groupId, accessToken).stream().map(ItemJSON::toDto).collect(Collectors.toList());
     }
 

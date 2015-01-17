@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class AttachmentJSON {
 
-    private Long id;
+    private Long entityId;
     private String type;
     private PhotoJSON photo;
     private LinkJSON link;
@@ -28,16 +28,16 @@ public class AttachmentJSON {
         json.setType(dto.getType());
         json.setLink(dto.getLinkDTO() != null ? LinkJSON.from(dto.getLinkDTO()) : null);
         json.setPhoto(dto.getPhotoDTO() != null ? PhotoJSON.from(dto.getPhotoDTO()) : null);
-        json.setId(dto.getId());
+        json.setEntityId(dto.getId());
         return json;
     }
 
     public AttachmentDTO toDto() {
         AttachmentDTO dto = new AttachmentDTO();
         dto.setType(getType());
-        dto.setLinkDTO(getLink().toDto());
-        dto.setPhotoDTO(getPhoto().toDto());
-        dto.setId(getId());
+        dto.setLinkDTO(getLink() != null ? getLink().toDto() : null);
+        dto.setPhotoDTO(getPhoto() != null ? getPhoto().toDto() : null);
+        dto.setId(getEntityId());
         return dto;
     }
 
@@ -48,13 +48,13 @@ public class AttachmentJSON {
 
         AttachmentJSON json = (AttachmentJSON) o;
 
-        if (id != null ? !id.equals(json.id) : json.id != null) return false;
+        if (entityId != null ? !entityId.equals(json.entityId) : json.entityId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return entityId != null ? entityId.hashCode() : 0;
     }
 }
