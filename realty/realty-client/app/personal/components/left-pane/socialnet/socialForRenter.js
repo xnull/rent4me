@@ -18,7 +18,7 @@ var Posts = require('./posts');
 var RentType = React.createClass({
     render: function () {
         return (
-            <div className='col-md-3 center-block'>
+            <div className='col-md-3'>
                 <div className="btn-group" role="group" aria-label="...">
                     <button type="button" className="btn btn-default">Сниму</button>
                     <button type="button" className="btn btn-default">Сдам</button>
@@ -31,13 +31,9 @@ var RentType = React.createClass({
 var RentTypee = React.createClass({
     render: function () {
         return (
-            <div className="input-group">
-                <div className='col-md-6'>
-                    <input type="text" className="form-control center-block" placeholder="Username" aria-describedby="basic-addon1"/>
-                </div>
-                <div className='col-md-6 center-block'>
-                    <input type="text" className="form-control center-block" placeholder="Username" aria-describedby="basic-addon1"/>
-                </div>
+            <div class="btn-group input-group btn-group-justified">
+                <input type="text" className="form-control" placeholder="От"/>
+                <input type="text" className="form-control" placeholder="Отnnnn"/>
             </div>
         )
     }
@@ -138,7 +134,7 @@ module.exports = React.createClass({
                 <div className="panel">
 
                     <div className="panel-body">
-                        <h4>Объявления о сдаче</h4>
+                        <h4>Поиск по социальным сетям</h4>
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
@@ -151,7 +147,7 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className="col-md-10 col-md-offset-1">
+                                <div className="col-md-9 col-md-offset-1">
                                     <div className="col-md-12">
                                         <input type="text" className="form-control" value={text}
                                             placeholder="Поиск по адресу, метро, улице, району"
@@ -159,19 +155,11 @@ module.exports = React.createClass({
                                         </input>
                                     </div>
                                 </div>
-
-                            </div>
-
-                            <br/>
-
-                            <div className='row'>
-                                <div className="col-md-offset-6 col-md-3">
-                                    <a className="btn btn-danger center-block" onClick={this.onClear}>Очистить</a>
-                                </div>
-                                <div className="col-md-3">
-                                    <a className="btn btn-primary center-block" onClick={this.onClick}>Поиск</a>
+                                <div className="col-md-1">
+                                    <a className="btn btn-primary" onClick={this.onClick}>Найти</a>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
