@@ -11,3 +11,5 @@ include 'realty-im:realty-im-common'
 include 'realty-vk-parser'
 include 'realty-admin:realty-admin-web'
 include 'realty-admin:realty-admin-web-app-launcher'
+include 'realty-profiles'
+

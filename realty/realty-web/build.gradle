@@ -19,6 +19,7 @@ apply plugin: 'spring-boot'
 dependencies {
     compile project(':realty-services')
     compile project(':realty-vk-parser')
+    compile project(':realty-profiles')
 
     compile 'org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-tomcat:1.2.1.RELEASE'

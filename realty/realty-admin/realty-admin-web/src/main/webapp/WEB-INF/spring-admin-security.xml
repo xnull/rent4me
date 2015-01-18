@@ -43,7 +43,8 @@
     <security:authentication-manager>
         <security:authentication-provider>
             <security:user-service>
-                <security:user name="administrator@rent4.me" authorities="ROLE_ADMIN" password="123"/>
+                <security:user name="dionis@rent4.me" authorities="ROLE_ADMIN" password="p1s3ia03doa93"/>
+                <security:user name="bynull@rent4.me" authorities="ROLE_ADMIN" password="323k30askp031a037"/>
 
             </security:user-service>
         </security:authentication-provider>

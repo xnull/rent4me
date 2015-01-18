@@ -33,7 +33,7 @@ public class VkLauncher {
 
     private String accessToken;
 
-    @PostConstruct
+//    @PostConstruct
     public void launch() throws EmptyHiddenVkValue, IOException, URISyntaxException {
         accessToken = vkAuth.receiveToken();
         vkDataStoreService.savePosts(getWallPosts("club22062158"));

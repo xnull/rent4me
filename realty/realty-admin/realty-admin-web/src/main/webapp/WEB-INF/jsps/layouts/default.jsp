@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <%--<link rel="shortcut icon" href="../../assets/ico/favicon.ico">--%>
-    <title>People management</title>
+    <title>Rent4.me Admin</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
     <!-- Custom styles for this template -->

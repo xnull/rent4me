@@ -69,6 +69,7 @@ task deployAdminRelease(dependsOn: war, type: SshTask) {
 
 dependencies {
     compile project(':realty-services')
+    compile project(':realty-profiles')
 
     //spring
     compile libraries."org.springframework:spring-webmvc"
