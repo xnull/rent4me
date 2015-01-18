@@ -1,12 +1,14 @@
 package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.config.Config;
+import bynull.realty.converters.FacebookPageModelDTOConverter;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.dao.external.FacebookScrapedPostRepository;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
-import bynull.realty.dto.FacebookPostDTO;
-import bynull.realty.services.api.FacebookScrapingPostService;
+import bynull.realty.dto.fb.FacebookPageDTO;
+import bynull.realty.dto.fb.FacebookPostDTO;
+import bynull.realty.services.api.FacebookService;
 import bynull.realty.util.LimitAndOffset;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -42,19 +44,28 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostService {
+public class FacebookServiceImpl implements FacebookService {
+    private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
+
+        final HttpClientParams params = new HttpClientParams();
+        params.setIntParameter(HttpClientParams.MAX_REDIRECTS, 5);
+        //wait for 3 seconds max to obtain connection
+        params.setConnectionManagerTimeout(3 * 1000);
+        params.setSoTimeout(10 * 1000);
+
+        this.setParams(params);
+    }};
+    private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
     @Resource
     Config config;
-
     @Resource
     FacebookPageToScrapRepository facebookPageToScrapRepository;
-
     @Resource
     FacebookScrapedPostRepository facebookScrapedPostRepository;
-
     @Resource
     FacebookHelperComponent facebookHelperComponent;
-
+    @Resource
+    FacebookPageModelDTOConverter facebookPageConverter;
     @PersistenceContext
     EntityManager em;
 
@@ -108,50 +119,6 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         return new PageRequest(0, 1);
     }
 
-    private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
-
-        final HttpClientParams params = new HttpClientParams();
-        params.setIntParameter(HttpClientParams.MAX_REDIRECTS, 5);
-        //wait for 3 seconds max to obtain connection
-        params.setConnectionManagerTimeout(3 * 1000);
-        params.setSoTimeout(10 * 1000);
-
-        this.setParams(params);
-    }};
-
-    private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
-
-    public static class DbConfig {
-        public String type;
-        public Jdbc jdbc = new Jdbc();
-
-        public static class Jdbc {
-            public String url;
-            public String user;
-            public String password;
-            public List<Sql> sql = new ArrayList<>();
-            public String index;
-            public String type;
-            public long interval;
-
-            public static class Sql {
-                public String statement;
-                public List<String> parameter;
-                public boolean write;
-
-                public Sql(String statement, List<String> parameter) {
-                    this(statement, parameter, false);
-                }
-
-                public Sql(String statement, List<String> parameter, boolean write) {
-                    this.statement = statement;
-                    this.parameter = parameter;
-                    this.write = write;
-                }
-            }
-        }
-    }
-
     @Override
     public void syncElasticSearchWithDB() {
         PutMethod method = new PutMethod(config.getEsConfig().getEsConnectionUrl() + "/_river/" + config.getEsConfig().getRiver() + "/_meta");
@@ -193,188 +160,6 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         } finally {
             method.releaseConnection();
         }
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    public static class ESResponse {
-        @JsonProperty("hits")
-        HitSuperEntry hits;
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-        @Getter
-        public static class HitSuperEntry {
-            @JsonProperty("total")
-            private long total;
-            @JsonProperty("hits")
-            private List<HitEntry> hits;
-
-            @JsonIgnoreProperties(ignoreUnknown = true)
-            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-            public static class HitEntry {
-                @JsonProperty("_source")
-                FacebookPostESJson source;
-            }
-        }
-    }
-
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    @Getter
-    @Setter
-    public static class FindQuery {
-        @JsonProperty("query")
-        private Query query;
-        @JsonProperty("from")
-        private int from;
-        @JsonProperty("size")
-        private int size;
-
-        @JsonProperty("sort")
-        private List<Sort> sort;
-
-        public static interface Query {
-
-        }
-
-        public static interface Sort {
-
-        }
-
-        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-        @Getter
-        public static class SortParams {
-            @JsonProperty("order")
-            private final Order order;
-            @JsonProperty("mode")
-            private final Mode mode;
-
-            public SortParams(Order order, Mode mode) {
-                this.order = order;
-                this.mode = mode;
-            }
-
-            public static enum Mode {
-                min, max, sum, avg
-            }
-
-            public static enum Order {
-                asc, desc
-            }
-        }
-
-        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-        @Getter
-        public static class SortByExternalCreatedDt implements Sort {
-            @JsonProperty("ext_created_dt")
-            private final SortParams extCreatedDt;
-
-            public SortByExternalCreatedDt(SortParams extCreatedDt) {
-                this.extCreatedDt = extCreatedDt;
-            }
-        }
-
-        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-        @Getter
-        public static class BoolQuery implements Query {
-            @JsonProperty("bool")
-            private final BoolWrapper bool;
-
-            public BoolQuery(List<Query> must, List<Query> mustNot, List<Query> should) {
-                this.bool = new BoolWrapper(must, mustNot, should);
-            }
-
-
-            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-            @Getter
-            public static class BoolWrapper {
-                @JsonProperty("must")
-                private final List<Query> must;
-                @JsonProperty("must_not")
-                private final List<Query> mustNot;
-                @JsonProperty("should")
-                private final List<Query> should;
-
-                public BoolWrapper(List<Query> must, List<Query> mustNot, List<Query> should) {
-                    this.must = must;
-                    this.mustNot = mustNot;
-                    this.should = should;
-                }
-            }
-        }
-
-        public static interface BoolSubQuery extends Query {
-
-        }
-
-        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-        @Getter
-        public static class FuzzyLikeThisQueryByMessage implements Query {
-            @JsonProperty("fuzzy_like_this")
-            private final Message fuzzy;
-
-            public FuzzyLikeThisQueryByMessage(Message fuzzy) {
-                this.fuzzy = fuzzy;
-            }
-
-            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-            @Getter
-            public static class Message {
-                @JsonProperty("fields")
-                private final List<String> fields = ImmutableList.of("message");
-                @JsonProperty("like_text")
-                private final String likeText;
-
-                public Message(String likeText) {
-                    this.likeText = likeText;
-                }
-            }
-        }
-
-        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-        @Getter
-        public static class MatchQueryByMessage implements Query {
-            @JsonProperty("match")
-            private final MessageMatch match;
-
-            public MatchQueryByMessage(MessageMatch match) {
-                this.match = match;
-            }
-
-
-        }
-
-    }
-
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    @Getter
-    public static class MessageMatch {
-        @JsonProperty("message")
-        private final String message;
-
-        public MessageMatch(String message) {
-            this.message = message;
-        }
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @Getter
-    @Setter
-    public static class FacebookPostESJson {
-        @JsonProperty("external_id")
-        private String id;
-        @JsonProperty("message")
-        private String message;
-        @JsonProperty("link")
-        private String link;
-        @JsonProperty("picture")
-        private String picture;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-        @JsonProperty("ext_created_dt")
-        private Date createdDt;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-        @JsonProperty("ext_updated_dt")
-        private Date updatedDt;
     }
 
     @Override
@@ -499,5 +284,259 @@ public class FacebookScrapingPostServiceImpl implements FacebookScrapingPostServ
         } finally {
             method.releaseConnection();
         }
+    }
+
+    @Transactional
+    @Override
+    public void save(FacebookPageDTO pageDTO) {
+        FacebookPageToScrap entity = facebookPageConverter.toSourceType(pageDTO);
+        if (entity.getId() != null) {
+            FacebookPageToScrap found = facebookPageToScrapRepository.findOne(entity.getId());
+            found.setLink(entity.getLink());
+            found.setExternalId(entity.getExternalId());
+            facebookPageToScrapRepository.saveAndFlush(found);
+        } else {
+            facebookPageToScrapRepository.saveAndFlush(entity);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id) {
+        facebookPageToScrapRepository.delete(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<FacebookPageDTO> listAllPages() {
+        return facebookPageToScrapRepository.findAll()
+                .stream()
+                .sorted(new Comparator<FacebookPageToScrap>() {
+                    @Override
+                    public int compare(FacebookPageToScrap o1, FacebookPageToScrap o2) {
+                        return o2.getUpdated().compareTo(o1.getUpdated());
+                    }
+                })
+                .map(facebookPageConverter::toTargetType)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public FacebookPageDTO findPageById(long fbPageId) {
+        return facebookPageConverter.toTargetType(facebookPageToScrapRepository.findOne(fbPageId));
+    }
+
+    public static class DbConfig {
+        public String type;
+        public Jdbc jdbc = new Jdbc();
+
+        public static class Jdbc {
+            public String url;
+            public String user;
+            public String password;
+            public List<Sql> sql = new ArrayList<>();
+            public String index;
+            public String type;
+            public long interval;
+
+            public static class Sql {
+                public String statement;
+                public List<String> parameter;
+                public boolean write;
+
+                public Sql(String statement, List<String> parameter) {
+                    this(statement, parameter, false);
+                }
+
+                public Sql(String statement, List<String> parameter, boolean write) {
+                    this.statement = statement;
+                    this.parameter = parameter;
+                    this.write = write;
+                }
+            }
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    public static class ESResponse {
+        @JsonProperty("hits")
+        HitSuperEntry hits;
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class HitSuperEntry {
+            @JsonProperty("total")
+            private long total;
+            @JsonProperty("hits")
+            private List<HitEntry> hits;
+
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            public static class HitEntry {
+                @JsonProperty("_source")
+                FacebookPostESJson source;
+            }
+        }
+    }
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @Getter
+    @Setter
+    public static class FindQuery {
+        @JsonProperty("query")
+        private Query query;
+        @JsonProperty("from")
+        private int from;
+        @JsonProperty("size")
+        private int size;
+
+        @JsonProperty("sort")
+        private List<Sort> sort;
+
+        public static interface Query {
+
+        }
+
+        public static interface Sort {
+
+        }
+
+        public static interface BoolSubQuery extends Query {
+
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class SortParams {
+            @JsonProperty("order")
+            private final Order order;
+            @JsonProperty("mode")
+            private final Mode mode;
+
+            public SortParams(Order order, Mode mode) {
+                this.order = order;
+                this.mode = mode;
+            }
+
+            public static enum Mode {
+                min, max, sum, avg
+            }
+
+            public static enum Order {
+                asc, desc
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class SortByExternalCreatedDt implements Sort {
+            @JsonProperty("ext_created_dt")
+            private final SortParams extCreatedDt;
+
+            public SortByExternalCreatedDt(SortParams extCreatedDt) {
+                this.extCreatedDt = extCreatedDt;
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class BoolQuery implements Query {
+            @JsonProperty("bool")
+            private final BoolWrapper bool;
+
+            public BoolQuery(List<Query> must, List<Query> mustNot, List<Query> should) {
+                this.bool = new BoolWrapper(must, mustNot, should);
+            }
+
+
+            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            @Getter
+            public static class BoolWrapper {
+                @JsonProperty("must")
+                private final List<Query> must;
+                @JsonProperty("must_not")
+                private final List<Query> mustNot;
+                @JsonProperty("should")
+                private final List<Query> should;
+
+                public BoolWrapper(List<Query> must, List<Query> mustNot, List<Query> should) {
+                    this.must = must;
+                    this.mustNot = mustNot;
+                    this.should = should;
+                }
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class FuzzyLikeThisQueryByMessage implements Query {
+            @JsonProperty("fuzzy_like_this")
+            private final Message fuzzy;
+
+            public FuzzyLikeThisQueryByMessage(Message fuzzy) {
+                this.fuzzy = fuzzy;
+            }
+
+            @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+            @Getter
+            public static class Message {
+                @JsonProperty("fields")
+                private final List<String> fields = ImmutableList.of("message");
+                @JsonProperty("like_text")
+                private final String likeText;
+
+                public Message(String likeText) {
+                    this.likeText = likeText;
+                }
+            }
+        }
+
+        @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+        @Getter
+        public static class MatchQueryByMessage implements Query {
+            @JsonProperty("match")
+            private final MessageMatch match;
+
+            public MatchQueryByMessage(MessageMatch match) {
+                this.match = match;
+            }
+
+
+        }
+
+    }
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @Getter
+    public static class MessageMatch {
+        @JsonProperty("message")
+        private final String message;
+
+        public MessageMatch(String message) {
+            this.message = message;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Getter
+    @Setter
+    public static class FacebookPostESJson {
+        @JsonProperty("external_id")
+        private String id;
+        @JsonProperty("message")
+        private String message;
+        @JsonProperty("link")
+        private String link;
+        @JsonProperty("picture")
+        private String picture;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        @JsonProperty("ext_created_dt")
+        private Date createdDt;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        @JsonProperty("ext_updated_dt")
+        private Date updatedDt;
     }
 }

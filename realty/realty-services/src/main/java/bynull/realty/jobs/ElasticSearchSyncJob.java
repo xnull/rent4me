@@ -1,6 +1,6 @@
 package bynull.realty.jobs;
 
-import bynull.realty.services.api.FacebookScrapingPostService;
+import bynull.realty.services.api.FacebookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +16,7 @@ public class ElasticSearchSyncJob implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchSyncJob.class);
 
     @Resource
-    FacebookScrapingPostService facebookScrapingPostService;
+    FacebookService facebookService;
 
     @Scheduled(
             cron = "0 */5 * * * *" //start each five minutes
@@ -26,7 +26,7 @@ public class ElasticSearchSyncJob implements Runnable {
     @Override
     public void run() {
         LOGGER.info("Starting to sync ES");
-        facebookScrapingPostService.syncElasticSearchWithDB();
+        facebookService.syncElasticSearchWithDB();
         LOGGER.info("Ended sync of ES");
     }
 }

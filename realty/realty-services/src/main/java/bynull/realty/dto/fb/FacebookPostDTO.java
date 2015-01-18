@@ -1,4 +1,4 @@
-package bynull.realty.dto;
+package bynull.realty.dto.fb;
 
 import lombok.Getter;
 import lombok.Setter;

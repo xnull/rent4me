@@ -1,7 +1,7 @@
 package bynull.realty.web.rest;
 
-import bynull.realty.dto.FacebookPostDTO;
-import bynull.realty.services.api.FacebookScrapingPostService;
+import bynull.realty.dto.fb.FacebookPostDTO;
+import bynull.realty.services.api.FacebookService;
 import bynull.realty.util.LimitAndOffset;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class SocialRestResource {
     @Resource
-    FacebookScrapingPostService facebookScrapingPostService;
+    FacebookService facebookService;
 
     @Path("/renter/search")
     @GET
@@ -36,7 +36,7 @@ public class SocialRestResource {
                 .withOffset(offset)
                 .create();
 
-        List<FacebookPostDTO> found = facebookScrapingPostService.findRenterPosts(text, withSubway, limitAndOffset);
+        List<FacebookPostDTO> found = facebookService.findRenterPosts(text, withSubway, limitAndOffset);
 
 //        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
         return Response
@@ -58,7 +58,7 @@ public class SocialRestResource {
                 .withOffset(offset)
                 .create();
 
-        List<FacebookPostDTO> found = facebookScrapingPostService.findLessorPosts(text, withSubway, limitAndOffset);
+        List<FacebookPostDTO> found = facebookService.findLessorPosts(text, withSubway, limitAndOffset);
 
 //        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
         return Response

@@ -1,6 +1,6 @@
 package bynull.realty.jobs;
 
-import bynull.realty.services.api.FacebookScrapingPostService;
+import bynull.realty.services.api.FacebookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +16,7 @@ public class FacebookScrappingJob implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FacebookScrappingJob.class);
 
     @Resource
-    FacebookScrapingPostService facebookScrapingPostService;
+    FacebookService facebookService;
 
     @Scheduled(
             cron = "0 */30 * * * *" //start each 30 minutes
@@ -25,7 +25,7 @@ public class FacebookScrappingJob implements Runnable {
     @Override
     public void run() {
         LOGGER.info("Starting to scrap new FB posts");
-        facebookScrapingPostService.scrapNewPosts();
+        facebookService.scrapNewPosts();
         LOGGER.info("Ended scraping new FB posts");
     }
 }

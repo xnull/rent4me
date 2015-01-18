@@ -2,6 +2,7 @@ apply from: ext.pathToJavaProjectScript
 
 dependencies {
     compile project(':realty-dao')
+    compile project(':realty-common')
 //    compile project(':realty-vk-parser')
 
     /**

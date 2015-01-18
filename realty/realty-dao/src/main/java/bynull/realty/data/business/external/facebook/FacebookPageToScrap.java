@@ -19,6 +19,9 @@ public class FacebookPageToScrap {
     @Column(name = "external_id")
     private String externalId;
 
+    @Column(name = "link")
+    private String link;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_dt")
     private Date created;
@@ -48,6 +51,14 @@ public class FacebookPageToScrap {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public Date getCreated() {
