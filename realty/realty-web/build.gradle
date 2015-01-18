@@ -21,10 +21,10 @@ dependencies {
     compile project(':realty-vk-parser')
     compile project(':realty-profiles')
 
-    compile 'org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-tomcat:1.2.1.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.2.1.RELEASE'
-    testCompile 'org.springframework.boot:spring-boot-starter-test:1.2.1.RELEASE'
+//    compile 'org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE'
+//    compile 'org.springframework.boot:spring-boot-starter-tomcat:1.2.1.RELEASE'
+//    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.2.1.RELEASE'
+//    testCompile 'org.springframework.boot:spring-boot-starter-test:1.2.1.RELEASE'
 
     //spring
     compile libraries."org.springframework:spring-webmvc"
@@ -71,8 +71,9 @@ task deployBackendDev(dependsOn: war, type: SshTask) {
 
     session(remotes.webServer) {
         execute 'cd /home/tomcat/tc7-dev ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
+        println('Deploying war:' + war.archivePath);
         put war.archivePath, '/home/tomcat/tc7-dev/webapps/'
-        execute 'cd /home/tomcat/tc7-dev ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
+        execute 'cd /home/tomcat/tc7-dev ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
     }
 }
 
@@ -95,7 +96,8 @@ task deployBackendRelease(dependsOn: war, type: SshTask) {
 
     session(remotes.webServer) {
         execute 'cd /home/tomcat/tc7-prod ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
+        println('Deploying war:' + war.archivePath);
         put war.archivePath, '/home/tomcat/tc7-prod/webapps/'
-        execute 'cd /home/tomcat/tc7-prod ; mv webapps/realty-web-1.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
+        execute 'cd /home/tomcat/tc7-prod ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
     }
 }
