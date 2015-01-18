@@ -32,6 +32,7 @@ task deployAdminDev(dependsOn: war, type: SshTask) {
 
     session(remotes.webServer) {
         execute 'cd /home/tomcat/tc7-dev ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
+        println('Deploying war:' + war.archivePath);
         put war.archivePath, '/home/tomcat/tc7-dev/webapps/'
         execute 'cd /home/tomcat/tc7-dev ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
     }
@@ -56,6 +57,7 @@ task deployAdminRelease(dependsOn: war, type: SshTask) {
 
     session(remotes.webServer) {
         execute 'cd /home/tomcat/tc7-prod ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
+        println('Deploying war:' + war.archivePath);
         put war.archivePath, '/home/tomcat/tc7-prod/webapps/'
         execute 'cd /home/tomcat/tc7-prod ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
     }
@@ -78,11 +80,7 @@ dependencies {
 
 //JSP & JSTL
     compile 'javax.servlet:jstl:1.2'
-    compile 'org.mortbay.jetty:jsp-api-2.1-glassfish:9.1.1.B60.25.p2'
-    compile 'org.mortbay.jetty:jsp-2.1-glassfish:9.1.1.B60.25.p2'
 
-    //JSP compiler
-    compile 'eclipse:jdtcore:3.1.0'
     compile 'org.sitemesh:sitemesh:3.0.0'
 
 
