@@ -15,6 +15,30 @@ var _ = require('underscore');
 var moment = require('moment');
 var Posts = require('./posts');
 
+var RentType = React.createClass({
+    render: function () {
+        return (
+            <div className='col-md-3'>
+                <div className="btn-group" role="group" aria-label="...">
+                    <button type="button" className="btn btn-default">Сниму</button>
+                    <button type="button" className="btn btn-default">Сдам</button>
+                </div>
+            </div>
+        )
+    }
+});
+
+var RentTypee = React.createClass({
+    render: function () {
+        return (
+            <div class="btn-group input-group btn-group-justified">
+                <input type="text" className="form-control" placeholder="От"/>
+                <input type="text" className="form-control" placeholder="Отnnnn"/>
+            </div>
+        )
+    }
+});
+
 module.exports = React.createClass({
     getInitialState: function () {
         return {
@@ -110,76 +134,32 @@ module.exports = React.createClass({
                 <div className="panel">
 
                     <div className="panel-body">
-                        <h4>Объявления о сдаче</h4>
+                        <h4>Поиск по социальным сетям</h4>
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <RoomsCount />
-
-                                <div className='col-md-6'>
-                                    <div className="control-group">
-                                        <div className="dropdown">
-                                            <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                                                Тип аренды
-                                                <span className="caret"></span>
-                                            </button>
-                                            <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                <li role="presentation">
-                                                    <a role="menuitem" tabindex="-1" href="#">Сниму</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a role="menuitem" tabindex="-1" href="#">Сдам</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                <div className="col-md-10 col-md-offset-1">
+                                    <RentType />
+                                    <RoomsCount />
+                                    <PriceRange />
                                 </div>
                             </div>
                             <br/>
 
                             <div className='row'>
-                                <PriceRange />
-                            </div>
-
-
-                            <hr/>
-
-                            <div className='row'>
-                                <div className='col-md-12'>
-                                    <div className="form-group">
-                                        <label className="col-md-2 control-label">Поиск</label>
-                                        <div className="col-md-10">
-                                            <input type="text" className="form-control"
-                                                value={text}
-                                                placeholder="Адрес, улица, район, метро"
-                                                onChange={this.onSearchChange} ></input>
-                                        </div>
+                                <div className="col-md-9 col-md-offset-1">
+                                    <div className="col-md-12">
+                                        <input type="text" className="form-control" value={text}
+                                            placeholder="Поиск по адресу, метро, улице, району"
+                                            onChange={this.onSearchChange} >
+                                        </input>
                                     </div>
                                 </div>
-
-                                <div className='col-md-6'>
-                                    <div className="form-group">
-                                        <label className="col-md-2 control-label">
-                                            С метро
-                                        </label>
-                                        <div className="col-md-10">
-                                            <input
-                                                type="checkbox"
-                                                onChange={this.onSubwayChange}
-                                                checked={withSubWay}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div className="col-md-offset-6 col-md-3">
-                                    <a className="btn btn-danger center-block" onClick={this.onClear}>Очистить</a>
-                                </div>
-                                <div className="col-md-3">
-                                    <a className="btn btn-primary center-block" onClick={this.onClick}>Поиск</a>
+                                <div className="col-md-1">
+                                    <a className="btn btn-primary" onClick={this.onClick}>Найти</a>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>

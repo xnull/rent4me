@@ -28,7 +28,7 @@ public class ItemJSON {
 
     private Date date;
 
-    private List<AttachmentJSON> attachmentJSONs;
+    private List<AttachmentJSON> attachments;
 
     public ItemJSON() {
     }
@@ -40,7 +40,7 @@ public class ItemJSON {
         json.setDate(model.getDate());
         json.setFormId(model.getFormId());
         json.setOwnerId(model.getOwnerId());
-        json.setAttachmentJSONs(model.getAttachmentDTOs() != null ? model.getAttachmentDTOs().stream().map(AttachmentJSON::from).collect(Collectors.toList()) : null);
+        json.setAttachments(model.getAttachmentDTOs() != null ? model.getAttachmentDTOs().stream().map(AttachmentJSON::from).collect(Collectors.toList()) : null);
         json.setEntityId(model.getId());
 
         return json;
@@ -50,7 +50,7 @@ public class ItemJSON {
         ItemDTO dto = new ItemDTO();
         dto.setFormId(getFormId());
         dto.setOwnerId(getOwnerId());
-        dto.setAttachmentDTOs(getAttachmentJSONs() != null ? getAttachmentJSONs().stream().map(AttachmentJSON::toDto).collect(Collectors.toList()) : null);
+        dto.setAttachmentDTOs(this.getAttachments() != null ? this.getAttachments().stream().map(AttachmentJSON::toDto).collect(Collectors.toList()) : null);
         dto.setDate(getDate());
         dto.setId(getEntityId());
         return dto;
@@ -63,7 +63,7 @@ public class ItemJSON {
 
         ItemJSON json = (ItemJSON) o;
 
-        if (attachmentJSONs != null ? !attachmentJSONs.equals(json.attachmentJSONs) : json.attachmentJSONs != null)
+        if (attachments != null ? !attachments.equals(json.attachments) : json.attachments != null)
             return false;
         if (date != null ? !date.equals(json.date) : json.date != null) return false;
         if (formId != null ? !formId.equals(json.formId) : json.formId != null) return false;
@@ -77,7 +77,7 @@ public class ItemJSON {
         int result = formId != null ? formId.hashCode() : 0;
         result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (attachmentJSONs != null ? attachmentJSONs.hashCode() : 0);
+        result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
         return result;
     }
 }

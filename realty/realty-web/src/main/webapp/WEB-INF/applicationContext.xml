@@ -9,6 +9,7 @@
        http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <import resource="classpath:dao.xml"/>
+    <import resource="classpath:vk.xml"/>
     <import resource="classpath:service.xml"/>
     <context:component-scan base-package="bynull.realty"/>
     <tx:annotation-driven transaction-manager="txManager"/>

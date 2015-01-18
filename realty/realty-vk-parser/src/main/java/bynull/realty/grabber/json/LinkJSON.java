@@ -12,7 +12,6 @@ import lombok.Setter;
 @Setter
 public class LinkJSON {
     private Long entityId;
-
     private String description;
 
     @JsonProperty("image_src")

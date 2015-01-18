@@ -28,7 +28,6 @@ public class VkPostsServiceImpl implements VkPostsService {
     private Map<String, String> groupConversationParams = new HashMap<>();
 
     public VkPostsServiceImpl() {
-        init();
     }
 
     @PostConstruct
