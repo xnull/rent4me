@@ -72,7 +72,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">People manager</a>
+                <a class="navbar-brand" href="#">Rent4.Me admin</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
