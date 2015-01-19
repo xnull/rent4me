@@ -7,10 +7,20 @@
     <h1>FB Pages</h1>
 </div>
 <div>
-    <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB
-    id.<br/>
-    <a href="<c:url value="/secure/socialnet/fb/new"/>" class="btn btn-primary">Add Page</a><br/>
-    <a href="<c:url value="/secure/socialnet/fb/posts"/>" class="btn btn-default">FB Posts</a><br/>
+    <p>
+        <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB
+        id.
+    </p>
+
+    <p>
+        <a href="<c:url value="/secure/socialnet/fb/new"/>" class="btn btn-primary"><i
+                class="glyphicon glyphicon-plus"></i> Add Page</a><br/>
+    </p>
+
+    <p>
+        <a href="<c:url value="/secure/socialnet/fb/posts"/>" class="btn btn-default"><i
+                class="glyphicon glyphicon-th-list"></i> FB Posts</a><br/>
+    </p>
 </div>
 <table class="table table-striped">
     <thead>
@@ -33,9 +43,10 @@
                 <a href="${page.link}" target="_blank">${page.link}</a>
             </td>
             <td>
-                <a href="<c:url value="/secure/socialnet/fb/${page.id}/edit"/>">Edit</a> |
-                <a href="<c:url value="/secure/socialnet/fb/${page.id}/delete" />"
-                   onclick="return confirm('Are you sure?')">Delete</a>
+                <a class="btn btn-default" href="<c:url value="/secure/socialnet/fb/${page.id}/edit"/>"><i
+                        class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;
+                <a class="btn btn-danger" href="<c:url value="/secure/socialnet/fb/${page.id}/delete" />"
+                   onclick="return confirm('Are you sure?')"><i class="glyphicon glyphicon-trash"></i> Delete</a>
             </td>
         </tr>
     </c:forEach>

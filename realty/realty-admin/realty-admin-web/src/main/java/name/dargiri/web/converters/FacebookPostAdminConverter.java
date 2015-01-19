@@ -5,11 +5,16 @@ import bynull.realty.dto.fb.FacebookPostDTO;
 import name.dargiri.web.form.FacebookPostForm;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * Created by dionis on 18/01/15.
  */
 @Component
 public class FacebookPostAdminConverter implements Converter<FacebookPostForm, FacebookPostDTO> {
+
+    @Resource
+    private FacebookPageAdminConverter facebookPageAdminConverter;
 
     @Override
     public FacebookPostForm toTargetType(FacebookPostDTO in) {
@@ -22,6 +27,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         form.setImageUrls(in.getImageUrls());
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
+        form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()));
         return form;
     }
 
@@ -35,6 +41,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         dto.setImageUrls(in.getImageUrls());
         dto.setCreated(in.getCreated());
         dto.setUpdated(in.getUpdated());
+        dto.setPage(facebookPageAdminConverter.toSourceType(in.getPage()));
         return dto;
     }
 }

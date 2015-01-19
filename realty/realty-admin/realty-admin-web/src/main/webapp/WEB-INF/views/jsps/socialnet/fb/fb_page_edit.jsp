@@ -4,8 +4,11 @@
 <%--@elvariable id="person" type="name.dargiri.data.dto.PersonDTO"--%>
 <div class="page-header">
     <h1>FB Page</h1>
-    <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB id.
-    <br/>
+
+    <div>
+        <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB
+        id.
+    </div>
 </div>
 <form role="form" method="post" id="userEditForm">
     <div class="form-group">
@@ -23,8 +26,13 @@
         <input type="text" class="form-control" name="link" id="link" placeholder="Link to fb page"
                value="${page.link}">
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="<c:url value="/secure/socialnet/fb"/>" class="btn btn-danger">Cancel</a>
+    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
+    &nbsp;
+    <c:if test="${page.id != null}">
+        <a class="btn btn-danger" href="<c:url value="/secure/socialnet/fb/${page.id}/delete" />"
+           onclick="return confirm('Are you sure?')"><i class="glyphicon glyphicon-trash"></i> Delete</a>&nbsp;
+    </c:if>
+    <a href="<c:url value="/secure/socialnet/fb"/>" class="btn btn-default">Cancel</a>
 </form>
 <%--<p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added within <code>#wrap</code> with <code>padding-top: 60px;</code> on the <code>.container</code>.</p>--%>
 <%--<p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>--%>

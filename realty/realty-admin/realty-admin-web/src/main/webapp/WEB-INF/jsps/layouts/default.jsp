@@ -77,10 +77,11 @@
                 <a class="navbar-brand" href="#">Rent4.Me admin</a>
             </div>
             <div class="collapse navbar-collapse">
+                <sec:authorize ifAnyGranted="ROLE_ADMIN">
                 <ul class="nav navbar-nav">
                     <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
                     <%--<li><a href="<c:url value="/secure/people/new"/>">New</a></li>--%>
-                        <sec:authorize ifAnyGranted="ROLE_ADMIN">
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
@@ -94,10 +95,17 @@
                                         <%--<li><a href="#">One more separated link</a></li>--%>
                                 </ul>
                             </li>
-                            <li><a href="<c:url value="/j_spring_security_logout"/>">Logout</a></li>
-                        </sec:authorize>
-
                 </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                            <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
+                            <%--<li><a href="<c:url value="/secure/people/new"/>">New</a></li>--%>
+
+                        <li class="dropdown-menu-right"><a href="<c:url value="/j_spring_security_logout"/>">Logout</a>
+                        </li>
+
+                    </ul>
+                </sec:authorize>
             </div><!--/.nav-collapse -->
         </div>
     </div>

@@ -19,6 +19,7 @@ public class FacebookPostDTO {
     private String link;
     private Date created;
     private Date updated;
+    private FacebookPageDTO page;
 
     public Date getCreated() {
         return copy(created);

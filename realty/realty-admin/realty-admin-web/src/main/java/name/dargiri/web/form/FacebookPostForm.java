@@ -19,6 +19,7 @@ public class FacebookPostForm {
     private String link;
     private Date created;
     private Date updated;
+    private FacebookPageForm page;
 
     public Date getCreated() {
         return copy(created);
