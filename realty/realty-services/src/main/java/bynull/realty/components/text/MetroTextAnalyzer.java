@@ -6,7 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by dionis on 19/01/15.
@@ -22,14 +22,15 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         porter = Porter.getInstance();
-        synonymRegistry = RussianSynonymRegistry.getInstance();
+        synonymRegistry = RussianStemSynonymRegistry.getInstance();
     }
 
     @Override
     public boolean matches(String text, String metroName) {
         if (StringUtils.trimToEmpty(text).isEmpty() || StringUtils.trimToEmpty(metroName).isEmpty()) return false;
-        String lowerCasedText = "метро " + text.toLowerCase();
-        String metroNameLowerCased = metroName.toLowerCase();
+        String lowerCasedText = text.toLowerCase();
+
+        String metroNameLowerCased = "метро " + metroName.toLowerCase();
 
         if (lowerCasedText.contains(metroNameLowerCased)) {
             log.info("100% match for metro [{}]", metroName);
@@ -38,31 +39,57 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
             log.info("Trying to use stamming [{}]", metroName);
             //попытаться заюзать стеммер портера.
             // 1. разбиваем название метрячки по словам.
-            String[] split = StringUtils.split(metroNameLowerCased);
-            int len = split.length;
-            if (len == 0) {
+            LinkedList<String> words = new LinkedList<>(Arrays.asList(StringUtils.split(metroNameLowerCased)));
+            int wordsCount = words.size();
+            if (wordsCount == 0) {
                 return false;
             }
             int succMatchCount = 0;
-            for (String s : split) {
-                String stem = porter.stem(s);
-                // 2. TODO: пытаемся найти на основе стемма для каждого слова входящие слова так что бы они находились рядом друг с другом(на расстоянии скажем не более ем одно-два слово)
-                if (lowerCasedText.contains(stem)) {
-                    succMatchCount++;
-                } else {
-                    log.info("Exact match by stem not found, attempt to find by synonyms of stem [{}]", stem);
-                    Set<String> stemSynonyms = synonymRegistry.getSynonyms(stem);
-                    for (String stemSynonym : stemSynonyms) {
-                        if (lowerCasedText.contains(stemSynonym)) {
-                            log.info("Matched by stem synonym [{}]", stemSynonym);
-                            succMatchCount++;
-                            break;
+
+
+            Integer previousIndex = null;
+            String previousMatchedStem = null;
+
+            int currIndex = -1;
+
+            List<String> candidateSubStrings = new ArrayList<>();
+            for (int i = 0; i < words.size(); i++) {
+                String word = words.get(i);
+                List<String> wordsLeft = words.subList(i + 1, wordsCount);
+                if (previousIndex != null && previousIndex < 0) {
+                    log.info("Previous index not found. Skipping");
+                    break;
+                }
+                String stem = porter.stem(word);
+
+                // 2. пытаемся найти на основе стемма(а так же его синонимов) для каждого слова входящие слова
+                // так что бы они находились рядом друг с другом(на расстоянии скажем не более чем одно-два слово)
+                //TODO: для каждого заматченного стемма генерить подстроки(кейс когда несколько вхождений подстроки могут присутствовать)
+                Set<String> stemSynonyms = synonymRegistry.getSynonyms(stem);
+
+                for (String stemSynonym : stemSynonyms) {
+                    int idx = lowerCasedText.indexOf(stemSynonym);
+                    if (idx != -1) {
+                        if (previousIndex == null || idx > previousIndex) {
+                            int startIdx = (previousIndex != null ? previousIndex : 0) + (previousMatchedStem != null ? previousMatchedStem.length() : 0);
+                            int endIdx = idx + 1;
+                            String wordsBetweenMatching = lowerCasedText.substring(startIdx, endIdx);
+                            if (previousIndex == null || StringUtils.split(wordsBetweenMatching).length <= 2) {
+                                //it's ok case - there's less or equal distance be
+                                succMatchCount++;
+                                previousMatchedStem = stemSynonym;
+                                currIndex = idx;
+                                break;
+                            }
                         }
                     }
                 }
+
+                previousIndex = currIndex;
+
             }
 
-            return succMatchCount == len;
+            return succMatchCount == wordsCount;
         }
     }
 }

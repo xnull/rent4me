@@ -32,4 +32,11 @@ public class SynonymRegistryTest {
         assertThat(synonyms.contains("ул"), is(true));
         assertThat(synonyms.contains("у."), is(true));
     }
+
+    @Test
+    public void getSynonymThatIsAbsent() {
+        Set<String> wtf = registry.getSynonyms("wtf");
+        assertThat(wtf.size(), is(1));
+        assertThat(wtf.contains("wtf"), is(true));
+    }
 }

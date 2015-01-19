@@ -25,18 +25,14 @@ public class Porter {
     private static final Pattern I = Pattern.compile("и$");
     private static final Pattern P = Pattern.compile("ь$");
     private static final Pattern NN = Pattern.compile("нн$");
-    private static Porter INSTANCE;
 
-    public Porter() {
+    private static final Porter INSTANCE = new Porter();
+
+    private Porter() {
     }
 
     public static Porter getInstance() {
-        synchronized (Porter.class) {
-            if (INSTANCE == null) {
-                INSTANCE = new Porter();
-            }
-            return INSTANCE;
-        }
+        return INSTANCE;
     }
 
     public String stem(String word) {

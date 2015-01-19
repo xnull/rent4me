@@ -49,7 +49,7 @@ public abstract class SynonymRegistry {
         }
     }
 
-    public Set<String> getSynonyms(String s) {
-        return Collections.unmodifiableSet(map.getOrDefault(s, Collections.emptySet()));
+    public Set<String> getSynonyms(String it) {
+        return Collections.unmodifiableSet(map.getOrDefault(it, Collections.singleton(it)));
     }
 }
