@@ -27,7 +27,7 @@
                     ${page.externalId}
             </td>
             <td>
-                    ${page.link}
+                <a href="${page.link}" target="_blank">${page.link}</a>
             </td>
             <td>
                 <a href="<c:url value="/secure/socialnet/fb/${page.id}/edit"/>">Edit</a> |
