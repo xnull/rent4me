@@ -17,7 +17,7 @@
                     <c:choose>
                         <c:when test="${paginationHelper.hasPrev}">
                             <li><a aria-label="Previous"
-                                   href="<c:url value="${paginationHelper.location}?page=${paginationHelper.prevPage}&limit=${paginationHelper.size}"/>">&laquo;</a>
+                                   href="<c:url value="${paginationHelper.location}?page=${paginationHelper.prevPage}&limit=${paginationHelper.resultsOnPage}"/>">&laquo;</a>
                             </li>
                         </c:when>
                         <c:otherwise>
@@ -46,7 +46,7 @@
                     <c:choose>
                         <c:when test="${paginationHelper.hasNext}">
                             <li><a aria-label="Next"
-                                   href="<c:url value="${paginationHelper.location}?page=${paginationHelper.nextPage}&limit=${paginationHelper.size}"/>">&raquo;</a>
+                                   href="<c:url value="${paginationHelper.location}?page=${paginationHelper.nextPage}&limit=${paginationHelper.resultsOnPage}"/>">&raquo;</a>
                             </li>
                         </c:when>
                         <c:otherwise>
