@@ -4,6 +4,8 @@
 <%--@elvariable id="person" type="name.dargiri.data.dto.PersonDTO"--%>
 <div class="page-header">
     <h1>FB Page</h1>
+    <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB id.
+    <br/>
 </div>
 <form role="form" method="post" id="userEditForm">
     <div class="form-group">
