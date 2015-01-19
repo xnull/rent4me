@@ -28,7 +28,7 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
     @Override
     public boolean matches(String text, String metroName) {
         if (StringUtils.trimToEmpty(text).isEmpty() || StringUtils.trimToEmpty(metroName).isEmpty()) return false;
-        String lowerCasedText = text.toLowerCase();
+        String lowerCasedText = "метро " + text.toLowerCase();
         String metroNameLowerCased = metroName.toLowerCase();
 
         if (lowerCasedText.contains(metroNameLowerCased)) {

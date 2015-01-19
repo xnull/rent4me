@@ -34,9 +34,11 @@
                 <a href="<c:url value="/secure/socialnet/fb/${post.page.id}/edit"/>">${post.page.externalId}</a>
             </td>
             <td>
-                <c:if test="${post.metro != null}">
-                    ${post.metro.stationName}
-                </c:if>
+                <ul>
+                    <c:forEach items="${post.metro}" var="metro">
+                        <li>${metro.stationName}</li>
+                    </c:forEach>
+                </ul>
             </td>
             <td>
                     ${post.created}

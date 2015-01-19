@@ -31,7 +31,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
         form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()));
-        form.setMetro(metroAdminConverter.toTargetType(in.getMetro()));
+        form.setMetro(metroAdminConverter.toTargetSet(in.getMetro()));
         return form;
     }
 

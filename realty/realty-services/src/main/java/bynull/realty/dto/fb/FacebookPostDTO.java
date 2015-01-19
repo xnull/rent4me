@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -15,13 +16,14 @@ import static bynull.realty.util.CommonUtils.copy;
 @Getter
 @Setter
 public class FacebookPostDTO {
+    private Long id;
     private String message;
     private List<String> imageUrls;
     private String link;
     private Date created;
     private Date updated;
     private FacebookPageDTO page;
-    private MetroDTO metro;
+    private Set<MetroDTO> metro;
 
     public Date getCreated() {
         return copy(created);

@@ -11,6 +11,8 @@ public class RussianSynonymRegistry extends SynonymRegistry {
         registerSynonyms("ул.", "улиц");
         registerSynonyms("у.", "улиц");
         registerSynonyms("у.", "улиц");
+        registerSynonyms("м.", "метро");
+        registerSynonyms("м", "метро");
 
         registerSynonyms("бульв.", "бульвар");
         registerSynonyms("блв.", "бульвар");

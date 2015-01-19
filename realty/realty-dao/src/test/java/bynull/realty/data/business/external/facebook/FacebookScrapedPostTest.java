@@ -10,13 +10,15 @@ import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.CountryEntity;
 import bynull.realty.data.common.GeoPoint;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -44,11 +46,11 @@ public class FacebookScrapedPostTest extends DbTest {
         post.setFacebookPageToScrap(page);
         post.setExternalId(UUID.randomUUID().toString());
         post.setFacebookPageToScrap(page);
-        post.setMetro(metro);
+        post.setMetros(ImmutableSet.of(metro));
 
         post = repository.saveAndFlush(post);
         assertThat(post, is(notNullValue()));
-        assertThat(post.getMetro(), is(notNullValue()));
+        assertThat(Iterables.getFirst(post.getMetros(), null), is(notNullValue()));
     }
 
     @Test
@@ -61,18 +63,18 @@ public class FacebookScrapedPostTest extends DbTest {
         post.setFacebookPageToScrap(page);
         post.setExternalId(UUID.randomUUID().toString());
         post.setFacebookPageToScrap(page);
-        post.setMetro(metro);
+        post.setMetros(ImmutableSet.of(metro));
 
         post = repository.saveAndFlush(post);
         assertThat(post, is(notNullValue()));
-        assertThat(post.getMetro(), is(notNullValue()));
+        assertThat(Iterables.getFirst(post.getMetros(), null), is(notNullValue()));
 
         metroRepository.delete(metro);
         flushAndClear();
 
         FacebookScrapedPost found = repository.findOne(post.getId());
         assertThat(found, is(notNullValue()));
-        assertThat(found.getMetro(), is(nullValue()));
+        assertThat(found.getMetros(), empty());
     }
 
     private MetroEntity createMetro() {

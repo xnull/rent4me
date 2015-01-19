@@ -5,6 +5,7 @@ import bynull.realty.data.business.metro.MetroEntity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -49,9 +50,13 @@ public class FacebookScrapedPost {
     @ManyToOne(fetch = FetchType.LAZY)
     private FacebookPageToScrap facebookPageToScrap;
 
-    @JoinColumn(name = "metro_station_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private MetroEntity metro;
+    @JoinTable(
+            name = "fb_posts_to_metros",
+            joinColumns = @JoinColumn(name = "fb_post_id"),
+            inverseJoinColumns = @JoinColumn(name = "metro_station_id")
+    )
+    @OneToMany
+    private Set<MetroEntity> metros;
 
     public Long getId() {
         return id;
@@ -133,12 +138,12 @@ public class FacebookScrapedPost {
         this.facebookPageToScrap = facebookPageToScrap;
     }
 
-    public MetroEntity getMetro() {
-        return metro;
+    public Set<MetroEntity> getMetros() {
+        return metros;
     }
 
-    public void setMetro(MetroEntity metro) {
-        this.metro = metro;
+    public void setMetros(Set<MetroEntity> metros) {
+        this.metros = metros;
     }
 
     @PrePersist

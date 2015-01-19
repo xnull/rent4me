@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -20,7 +21,7 @@ public class FacebookPostForm {
     private Date created;
     private Date updated;
     private FacebookPageForm page;
-    private MetroForm metro;
+    private Set<MetroForm> metro;
 
     public Date getCreated() {
         return copy(created);

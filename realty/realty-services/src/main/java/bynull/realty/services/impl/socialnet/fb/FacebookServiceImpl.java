@@ -3,6 +3,7 @@ package bynull.realty.services.impl.socialnet.fb;
 import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.config.Config;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
+import bynull.realty.converters.FacebookPostModelDTOConverter;
 import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
@@ -71,6 +72,9 @@ public class FacebookServiceImpl implements FacebookService {
 
     //converters
     @Resource
+    FacebookPostModelDTOConverter facebookPostConverter;
+
+    @Resource
     FacebookPageModelDTOConverter facebookPageConverter;
 
     @Resource
@@ -87,6 +91,8 @@ public class FacebookServiceImpl implements FacebookService {
     @Override
     public void scrapNewPosts() {
         List<FacebookPageToScrap> fbPages = facebookPageToScrapRepository.findAll();
+        List<MetroEntity> metros = metroRepository.findAll();
+
         em.clear();//detach all instances
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
         for (FacebookPageToScrap fbPage : fbPages) {
@@ -117,6 +123,8 @@ public class FacebookServiceImpl implements FacebookService {
                     for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : partition) {
                         FacebookScrapedPost post = postItemDTO.toInternal();
                         post.setFacebookPageToScrap(page);
+                        Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
+                        post.setMetros(matchedMetros);
                         facebookScrapedPostRepository.save(post);
                     }
                     em.flush();
@@ -344,20 +352,7 @@ public class FacebookServiceImpl implements FacebookService {
     @Transactional(readOnly = true)
     @Override
     public List<FacebookPostDTO> findPosts(PageRequest pageRequest) {
-        return facebookScrapedPostRepository.findAll(pageRequest).getContent()
-                .stream()
-                .map(post -> {
-                    FacebookPostDTO dto = new FacebookPostDTO();
-                    dto.setLink(post.getLink());
-                    dto.setMessage(post.getMessage());
-                    dto.setCreated(post.getCreated());
-                    dto.setUpdated(post.getUpdated());
-                    dto.setMetro(metroConverter.toTargetType(post.getMetro()));
-                    dto.setPage(facebookPageConverter.toTargetType(post.getFacebookPageToScrap()));
-                    dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        return facebookPostConverter.toTargetList(facebookScrapedPostRepository.findAll(pageRequest).getContent());
     }
 
     @Transactional(readOnly = true)
@@ -374,17 +369,27 @@ public class FacebookServiceImpl implements FacebookService {
         List<FacebookScrapedPost> all = facebookScrapedPostRepository.findAll();
         int total = all.size();
         for (FacebookScrapedPost post : all) {
-            for (MetroEntity metro : metros) {
-                if (metroTextAnalyzer.matches(post.getMessage(), metro.getStationName())) {
-                    log.info("Post #[{}] matched to metro #[] ({})", post.getId(), metro.getId(), metro.getStationName());
-                    post.setMetro(metro);
-                    post = facebookScrapedPostRepository.saveAndFlush(post);
-                    countOfMatchedPosts++;
-                    break;
-                }
+            Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
+            post.setMetros(matchedMetros);
+            if (!matchedMetros.isEmpty()) {
+                countOfMatchedPosts++;
             }
+            post = facebookScrapedPostRepository.saveAndFlush(post);
         }
         log.info("Total count of matched posts to metro stations: [{}]. Total posts: [{}]", countOfMatchedPosts, total);
+    }
+
+    private Set<MetroEntity> matchMetros(List<MetroEntity> metros, String message) {
+        Set<MetroEntity> matchedMetros = new HashSet<>();
+        for (MetroEntity metro : metros) {
+            if (metroTextAnalyzer.matches(message, metro.getStationName())) {
+//                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
+
+                matchedMetros.add(metro);
+
+            }
+        }
+        return matchedMetros;
     }
 
     public static class DbConfig {
