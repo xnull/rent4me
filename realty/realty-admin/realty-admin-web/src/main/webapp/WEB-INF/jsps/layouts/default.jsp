@@ -1,6 +1,8 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,19 +80,23 @@
                 <ul class="nav navbar-nav">
                     <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
                     <%--<li><a href="<c:url value="/secure/people/new"/>">New</a></li>--%>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="<c:url value="/secure/socialnet/fb"/>">FB pages</a></li>
-                            <li><a href="<c:url value="/secure/socialnet/fb/posts"/>">FB posts</a></li>
-                            <%--<li><a href="#">Another action</a></li>--%>
-                            <%--<li><a href="#">Something else here</a></li>--%>
-                            <%--<li class="divider"></li>--%>
-                            <%--<li class="dropdown-header">Nav header</li>--%>
-                            <%--<li><a href="#">Separated link</a></li>--%>
-                            <%--<li><a href="#">One more separated link</a></li>--%>
-                        </ul>
-                    </li>
+                        <sec:authorize ifAnyGranted="ROLE_ADMIN">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<c:url value="/secure/socialnet/fb"/>">FB pages</a></li>
+                                    <li><a href="<c:url value="/secure/socialnet/fb/posts"/>">FB posts</a></li>
+                                        <%--<li><a href="#">Another action</a></li>--%>
+                                        <%--<li><a href="#">Something else here</a></li>--%>
+                                        <%--<li class="divider"></li>--%>
+                                        <%--<li class="dropdown-header">Nav header</li>--%>
+                                        <%--<li><a href="#">Separated link</a></li>--%>
+                                        <%--<li><a href="#">One more separated link</a></li>--%>
+                                </ul>
+                            </li>
+                            <li><a href="<c:url value="/j_spring_security_logout"/>">Logout</a></li>
+                        </sec:authorize>
+
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
