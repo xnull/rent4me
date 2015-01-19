@@ -3,6 +3,7 @@ package bynull.realty.services.api;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.util.LimitAndOffset;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -25,4 +26,8 @@ public interface FacebookService {
     List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
 
     FacebookPageDTO findPageById(long fbPageId);
+
+    List<FacebookPostDTO> findPosts(PageRequest pageRequest);
+
+    long countOfPages();
 }

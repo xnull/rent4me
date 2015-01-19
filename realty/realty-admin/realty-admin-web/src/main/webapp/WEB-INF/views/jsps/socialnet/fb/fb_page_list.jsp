@@ -7,9 +7,10 @@
     <h1>FB Pages</h1>
 </div>
 <div>
-    <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB id.
-    <br/>
-    <a href="<c:url value="/secure/socialnet/fb/new"/>" class="btn btn-primary">Add Page</a>
+    <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB
+    id.<br/>
+    <a href="<c:url value="/secure/socialnet/fb/new"/>" class="btn btn-primary">Add Page</a><br/>
+    <a href="<c:url value="/secure/socialnet/fb/posts"/>" class="btn btn-default">FB Posts</a><br/>
 </div>
 <table class="table table-striped">
     <thead>

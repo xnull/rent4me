@@ -81,7 +81,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="<c:url value="/secure/socialnet/fb"/>">FB</a></li>
+                            <li><a href="<c:url value="/secure/socialnet/fb"/>">FB pages</a></li>
+                            <li><a href="<c:url value="/secure/socialnet/fb/posts"/>">FB posts</a></li>
                             <%--<li><a href="#">Another action</a></li>--%>
                             <%--<li><a href="#">Something else here</a></li>--%>
                             <%--<li class="divider"></li>--%>

@@ -4,14 +4,21 @@ package name.dargiri.web.controller;
 //import name.dargiri.data.service.PersonService;
 
 import bynull.realty.dto.fb.FacebookPageDTO;
+import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
 import name.dargiri.web.Constants;
 import name.dargiri.web.converters.FacebookPageAdminConverter;
+import name.dargiri.web.converters.FacebookPostAdminConverter;
 import name.dargiri.web.form.FacebookPageForm;
+import name.dargiri.web.form.FacebookPostForm;
+import name.dargiri.web.utils.PaginationHelper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,6 +35,9 @@ public class SocialNetController {
 
     @Resource
     FacebookPageAdminConverter fbPageConverter;
+
+    @Resource
+    FacebookPostAdminConverter fbPostConverter;
 
     @Resource
     FacebookService facebookService;
@@ -88,5 +98,19 @@ public class SocialNetController {
         redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Facebook page deleted");
 
         return new ModelAndView("redirect:/secure/socialnet/fb");
+    }
+
+    @RequestMapping(value = "fb/posts")
+    public ModelAndView listFbPosts(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        ModelAndView mav = new ModelAndView("socialnet/fb/fb_posts_list");
+        long totalElements = facebookService.countOfPages();
+        PaginationHelper paginationHelper = new PaginationHelper(totalElements, page, limit, "/secure/socialnet/fb/posts");
+        List<FacebookPostDTO> posts = facebookService.findPosts(new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "imported"));
+        List<FacebookPostForm> forms = fbPostConverter.toTargetList(posts);
+        mav.addObject("paginationHelper", paginationHelper);
+        mav.addObject("totalPages", totalElements);
+        mav.addObject("page", page);
+        mav.addObject("posts", forms);
+        return mav;
     }
 }

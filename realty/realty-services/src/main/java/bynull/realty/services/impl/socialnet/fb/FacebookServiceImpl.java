@@ -327,6 +327,27 @@ public class FacebookServiceImpl implements FacebookService {
         return facebookPageConverter.toTargetType(facebookPageToScrapRepository.findOne(fbPageId));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<FacebookPostDTO> findPosts(PageRequest pageRequest) {
+        return facebookScrapedPostRepository.findAll(pageRequest).getContent().stream().map(post -> {
+            FacebookPostDTO dto = new FacebookPostDTO();
+            dto.setLink(post.getLink());
+            dto.setMessage(post.getMessage());
+            dto.setCreated(post.getCreated());
+            dto.setUpdated(post.getUpdated());
+            dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
+            return dto;
+        })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long countOfPages() {
+        return facebookScrapedPostRepository.count();
+    }
+
     public static class DbConfig {
         public String type;
         public Jdbc jdbc = new Jdbc();
