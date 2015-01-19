@@ -1,4 +1,4 @@
-package bynull.realty.utils;
+package bynull.realty.util;
 
 import bynull.realty.data.common.GeoPoint;
 

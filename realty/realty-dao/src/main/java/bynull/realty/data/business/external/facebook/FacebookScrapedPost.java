@@ -1,5 +1,7 @@
 package bynull.realty.data.business.external.facebook;
 
+import bynull.realty.data.business.metro.MetroEntity;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -46,6 +48,10 @@ public class FacebookScrapedPost {
     @JoinColumn(name = "fb_pg2_scrap_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private FacebookPageToScrap facebookPageToScrap;
+
+    @JoinColumn(name = "metro_station_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MetroEntity metro;
 
     public Long getId() {
         return id;
@@ -125,6 +131,14 @@ public class FacebookScrapedPost {
 
     public void setFacebookPageToScrap(FacebookPageToScrap facebookPageToScrap) {
         this.facebookPageToScrap = facebookPageToScrap;
+    }
+
+    public MetroEntity getMetro() {
+        return metro;
+    }
+
+    public void setMetro(MetroEntity metro) {
+        this.metro = metro;
     }
 
     @PrePersist

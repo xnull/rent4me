@@ -4,7 +4,6 @@ import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.util.LimitAndOffset;
-import bynull.realty.utils.CoordinateUtils;
 import bynull.realty.web.json.ApartmentJSON;
 import org.springframework.stereotype.Component;
 

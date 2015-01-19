@@ -1,6 +1,7 @@
 package bynull.realty.data.common;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
  */
 @ToString
 @Getter
+@Setter
 @Entity
 @Table(name = CountryEntity.TABLE)
 public class CountryEntity {
