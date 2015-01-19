@@ -1,7 +1,6 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +23,7 @@
             height: 100%;
             /* The html and body elements cannot have any padding or margin. */
         }
+
         /* Wrapper for page content to push down footer */
         #wrap {
             min-height: 100%;
@@ -33,24 +33,29 @@
             /* Pad bottom by footer height */
             padding: 0 0 60px;
         }
+
         /* Set the fixed height of the footer here */
         #footer {
             height: 60px;
             background-color: #f5f5f5;
         }
+
         /* Custom page CSS
         -------------------------------------------------- */
         /* Not required for template or sticky footer method. */
         #wrap > .container {
             padding: 60px 15px 0;
         }
+
         .container .text-muted {
             margin: 20px 0;
         }
+
         #footer > .container {
             padding-left: 15px;
             padding-right: 15px;
         }
+
         code {
             font-size: 80%;
         }
@@ -78,24 +83,26 @@
             </div>
             <div class="collapse navbar-collapse">
                 <sec:authorize ifAnyGranted="ROLE_ADMIN">
-                <ul class="nav navbar-nav">
-                    <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
-                    <%--<li><a href="<c:url value="/secure/people/new"/>">New</a></li>--%>
+                    <ul class="nav navbar-nav">
+                            <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
+                        <li><a href="<c:url value="/secure/people/new"/>">Users</a></li>
 
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<c:url value="/secure/socialnet/fb"/>">FB pages</a></li>
-                                    <li><a href="<c:url value="/secure/socialnet/fb/posts"/>">FB posts</a></li>
-                                        <%--<li><a href="#">Another action</a></li>--%>
-                                        <%--<li><a href="#">Something else here</a></li>--%>
-                                        <%--<li class="divider"></li>--%>
-                                        <%--<li class="dropdown-header">Nav header</li>--%>
-                                        <%--<li><a href="#">Separated link</a></li>--%>
-                                        <%--<li><a href="#">One more separated link</a></li>--%>
-                                </ul>
-                            </li>
-                </ul>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<c:url value="/secure/socialnet/fb"/>">FB pages</a></li>
+                                <li><a href="<c:url value="/secure/socialnet/fb/posts"/>">FB posts</a></li>
+                                    <%--<li><a href="#">Another action</a></li>--%>
+                                    <%--<li><a href="#">Something else here</a></li>--%>
+                                    <%--<li class="divider"></li>--%>
+                                    <%--<li class="dropdown-header">Nav header</li>--%>
+                                    <%--<li><a href="#">Separated link</a></li>--%>
+                                    <%--<li><a href="#">One more separated link</a></li>--%>
+                            </ul>
+                        </li>
+
+                        <li><a href="<c:url value="/secure/maintenance/"/>">Maintenance</a></li>
+                    </ul>
 
                     <ul class="nav navbar-nav navbar-right">
                             <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
@@ -106,7 +113,8 @@
 
                     </ul>
                 </sec:authorize>
-            </div><!--/.nav-collapse -->
+            </div>
+            <!--/.nav-collapse -->
         </div>
     </div>
     <!-- Begin page content -->
@@ -134,7 +142,8 @@
 </div>
 <div id="footer">
     <div class="container">
-        <p class="text-muted">&copy; Company <%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)+""%></p>
+        <p class="text-muted">&copy; Company <%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) + ""%>
+        </p>
     </div>
 </div>
 <!-- Bootstrap core JavaScript

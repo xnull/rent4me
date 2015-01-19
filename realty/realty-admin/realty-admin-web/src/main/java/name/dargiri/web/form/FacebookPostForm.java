@@ -20,6 +20,7 @@ public class FacebookPostForm {
     private Date created;
     private Date updated;
     private FacebookPageForm page;
+    private MetroForm metro;
 
     public Date getCreated() {
         return copy(created);

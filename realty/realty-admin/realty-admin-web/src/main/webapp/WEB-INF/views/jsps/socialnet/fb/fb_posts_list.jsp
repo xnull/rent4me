@@ -13,6 +13,7 @@
         <th>Message</th>
         <th>Link</th>
         <th>FB Page</th>
+        <th>Метро</th>
         <th>Created</th>
         <th>Updated</th>
     </tr>
@@ -31,6 +32,11 @@
             </td>
             <td>
                 <a href="<c:url value="/secure/socialnet/fb/${post.page.id}/edit"/>">${post.page.externalId}</a>
+            </td>
+            <td>
+                <c:if test="${post.metro != null}">
+                    ${post.metro.stationName}
+                </c:if>
             </td>
             <td>
                     ${post.created}

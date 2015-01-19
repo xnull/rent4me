@@ -1,11 +1,15 @@
 package bynull.realty.services.impl.socialnet.fb;
 
+import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.config.Config;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
+import bynull.realty.converters.MetroModelDTOConverter;
+import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.dao.external.FacebookScrapedPostRepository;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
+import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
@@ -64,10 +68,20 @@ public class FacebookServiceImpl implements FacebookService {
     FacebookScrapedPostRepository facebookScrapedPostRepository;
     @Resource
     FacebookHelperComponent facebookHelperComponent;
+
+    //converters
     @Resource
     FacebookPageModelDTOConverter facebookPageConverter;
+
+    @Resource
+    MetroModelDTOConverter metroConverter;
+
     @PersistenceContext
     EntityManager em;
+    @Resource
+    MetroRepository metroRepository;
+    @Resource
+    MetroTextAnalyzer metroTextAnalyzer;
 
     @Transactional
     @Override
@@ -338,6 +352,7 @@ public class FacebookServiceImpl implements FacebookService {
                     dto.setMessage(post.getMessage());
                     dto.setCreated(post.getCreated());
                     dto.setUpdated(post.getUpdated());
+                    dto.setMetro(metroConverter.toTargetType(post.getMetro()));
                     dto.setPage(facebookPageConverter.toTargetType(post.getFacebookPageToScrap()));
                     dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
                     return dto;
@@ -349,6 +364,27 @@ public class FacebookServiceImpl implements FacebookService {
     @Override
     public long countOfPages() {
         return facebookScrapedPostRepository.count();
+    }
+
+    @Transactional
+    @Override
+    public void reparseExistingFBPosts() {
+        List<MetroEntity> metros = metroRepository.findAll();
+        int countOfMatchedPosts = 0;
+        List<FacebookScrapedPost> all = facebookScrapedPostRepository.findAll();
+        int total = all.size();
+        for (FacebookScrapedPost post : all) {
+            for (MetroEntity metro : metros) {
+                if (metroTextAnalyzer.matches(post.getMessage(), metro.getStationName())) {
+                    log.info("Post #[{}] matched to metro #[] ({})", post.getId(), metro.getId(), metro.getStationName());
+                    post.setMetro(metro);
+                    post = facebookScrapedPostRepository.saveAndFlush(post);
+                    countOfMatchedPosts++;
+                    break;
+                }
+            }
+        }
+        log.info("Total count of matched posts to metro stations: [{}]. Total posts: [{}]", countOfMatchedPosts, total);
     }
 
     public static class DbConfig {

@@ -30,4 +30,6 @@ public interface FacebookService {
     List<FacebookPostDTO> findPosts(PageRequest pageRequest);
 
     long countOfPages();
+
+    void reparseExistingFBPosts();
 }

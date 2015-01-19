@@ -16,6 +16,9 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
     @Resource
     private FacebookPageAdminConverter facebookPageAdminConverter;
 
+    @Resource
+    private MetroAdminConverter metroAdminConverter;
+
     @Override
     public FacebookPostForm toTargetType(FacebookPostDTO in) {
         if (in == null) {
@@ -28,6 +31,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
         form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()));
+        form.setMetro(metroAdminConverter.toTargetType(in.getMetro()));
         return form;
     }
 
