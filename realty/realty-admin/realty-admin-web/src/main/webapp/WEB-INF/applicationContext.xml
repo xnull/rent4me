@@ -8,7 +8,8 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <import resource="classpath:dao.xml"/>
-    <!--<import resource="classpath:service.xml"/>-->
+    <!--NB! scheduler excluded from here so it won't run jobs-->
+    <import resource="classpath:service.xml"/>
     <import resource="classpath:profiles.xml"/>
     <context:component-scan base-package="bynull.realty"/>
     <tx:annotation-driven transaction-manager="txManager"/>
