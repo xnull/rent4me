@@ -105,7 +105,7 @@ public class SocialNetController {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_posts_list");
         long totalElements = facebookService.countOfPages();
         PaginationHelper paginationHelper = new PaginationHelper(totalElements, page, limit, "/secure/socialnet/fb/posts");
-        List<FacebookPostDTO> posts = facebookService.findPosts(new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "imported"));
+        List<FacebookPostDTO> posts = facebookService.findPosts(new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
         List<FacebookPostForm> forms = fbPostConverter.toTargetList(posts);
         mav.addObject("paginationHelper", paginationHelper);
         mav.addObject("totalPages", totalElements);
