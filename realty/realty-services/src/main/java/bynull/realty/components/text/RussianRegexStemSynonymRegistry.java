@@ -25,6 +25,7 @@ public class RussianRegexStemSynonymRegistry extends SynonymRegistry {
         registerSynonyms("у\\b", ulicaStem);
 //        registerSynonyms(ulicaStem, ulicaStem+"\\S*");
         registerSynonyms("м\\.", metroStem);
+        registerSynonyms("Ⓜ", metroStem);
         registerSynonyms("м\\b", metroStem);
 
         registerSynonyms("бульв\\.", bulvarStem);

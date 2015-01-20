@@ -1,6 +1,7 @@
 package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.components.text.MetroTextAnalyzer;
+import bynull.realty.components.text.Porter;
 import bynull.realty.config.Config;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
 import bynull.realty.converters.FacebookPostModelDTOConverter;
@@ -34,6 +35,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +55,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class FacebookServiceImpl implements FacebookService {
+public class FacebookServiceImpl implements FacebookService, InitializingBean {
     private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
 
         final HttpClientParams params = new HttpClientParams();
@@ -74,6 +76,8 @@ public class FacebookServiceImpl implements FacebookService {
     @Resource
     FacebookHelperComponent facebookHelperComponent;
 
+    Porter porter;
+
     //converters
     @Resource
     FacebookPostModelDTOConverter facebookPostConverter;
@@ -90,6 +94,11 @@ public class FacebookServiceImpl implements FacebookService {
     MetroRepository metroRepository;
     @Resource
     MetroTextAnalyzer metroTextAnalyzer;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        porter = Porter.getInstance();
+    }
 
     @Transactional
     @Override
@@ -188,6 +197,7 @@ public class FacebookServiceImpl implements FacebookService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
@@ -206,9 +216,11 @@ public class FacebookServiceImpl implements FacebookService {
                 )
         );
 
-        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+//        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+        return findPosts(text, withSubway, limitAndOffset, FindMode.RENTER);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
@@ -229,7 +241,44 @@ public class FacebookServiceImpl implements FacebookService {
                 )
         );
 
-        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+//        return findPosts(text, withSubway, limitAndOffset, typeQuery);
+        return findPosts(text, withSubway, limitAndOffset, FindMode.LESSOR);
+    }
+
+    private List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindMode findMode) {
+        final List<String> keyWords;
+
+        switch (findMode) {
+            case LESSOR:
+                keyWords = Arrays.asList("сниму", "снимаю", "снять", "снял", "возьму", "взял", "взять");
+                break;
+            case RENTER:
+                keyWords = Arrays.asList("сдаю", "сдам", "отдам", "отдаю", "отдается");
+                break;
+            default:
+                throw new UnsupportedOperationException("Find mode " + findMode + " not supported");
+        }
+
+
+        String findModeJPQL = keyWords
+                .stream()
+                .map(word -> " ( lower(p.message) like '" + ilike(word) + "' ) ")
+                .collect(Collectors.joining(" OR "));
+
+        String stem = porter.stem(text);
+
+        String qlString = "select p from FacebookScrapedPost p where (" + findModeJPQL + ") AND lower(p.message) like :msg";
+        List<FacebookScrapedPost> resultList = em.createQuery(qlString, FacebookScrapedPost.class)
+                .setParameter("msg", ilike(stem))
+                .setFirstResult(limitAndOffset.offset)
+                .setMaxResults(limitAndOffset.limit)
+                .getResultList();
+
+        return facebookPostConverter.toTargetList(resultList);
+    }
+
+    private String ilike(String text) {
+        return !text.isEmpty() ? "%" + text.toLowerCase() + "%" : "%";
     }
 
     private List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindQuery.BoolQuery typeQuery) {
@@ -407,6 +456,10 @@ public class FacebookServiceImpl implements FacebookService {
             }
         }
         return matchedMetros;
+    }
+
+    private static enum FindMode {
+        RENTER, LESSOR
     }
 
     public static class DbConfig {
