@@ -130,11 +130,17 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
                 em.clear();
 
+                final Date threeMonthsAgo = new DateTime().minusMonths(3).toDate();
+
                 Iterable<List<FacebookHelperComponent.FacebookPostItemDTO>> partitions = Iterables.partition(facebookPostItemDTOsToPersist, 20);
                 for (List<FacebookHelperComponent.FacebookPostItemDTO> partition : partitions) {
                     FacebookPageToScrap page = new FacebookPageToScrap(fbPage.getId());
                     for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : partition) {
                         FacebookScrapedPost post = postItemDTO.toInternal();
+                        if (post.getCreated().before(threeMonthsAgo)) {
+                            log.info("Skipping post that's older than 3 months old: [{}]");
+                            continue;
+                        }
                         post.setFacebookPageToScrap(page);
                         Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
                         post.setMetros(matchedMetros);
