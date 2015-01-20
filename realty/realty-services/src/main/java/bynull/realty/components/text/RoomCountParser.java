@@ -1,5 +1,6 @@
 package bynull.realty.components.text;
 
+import bynull.realty.utils.TextUtils;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,6 +52,7 @@ public class RoomCountParser {
                 Pattern.compile("((.*)(2(\\-)?\\S{1,5})(.{0,5})(комнатн\\S*)(.*))", FLAGS),
                 Pattern.compile("((.*)(2(\\-)?\\S{1,5})(.{0,5})(ушк\\S*)(.*))", FLAGS),
                 Pattern.compile("((.*)(2((\\-)?)((.){0,5})к\\S{0,5})(.{0,10})(кв\\S*)(.*))", FLAGS),
+                Pattern.compile("((.*)(2((\\-)?)((.){0,5})к(а|у)\\S{0,5})(.*))", FLAGS),
                 Pattern.compile("((.*)(2((\\-)?)((.){0,5})комн\\S{0,5})(.{0,10})(кв\\S*)(.*))", FLAGS)
         );
 
@@ -86,6 +88,8 @@ public class RoomCountParser {
 //                .replace('ё', 'e').replace('й', 'и')
         ;
         if (text.isEmpty()) return null;
+
+        text = TextUtils.normalizeTextForParsing(text);
 
 
         // кейсы однокомнатной квартиры

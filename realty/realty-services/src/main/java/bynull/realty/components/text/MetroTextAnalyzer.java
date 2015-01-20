@@ -1,5 +1,6 @@
 package bynull.realty.components.text;
 
+import bynull.realty.utils.TextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -64,11 +65,9 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
     public boolean matches(String text, String metroName) {
         if (StringUtils.trimToEmpty(text).isEmpty() || StringUtils.trimToEmpty(metroName).isEmpty()) return false;
 
-        text = StringUtils.replace(text, ".", ". ");
-        text = StringUtils.replace(text, ",", ", ");
-        text = StringUtils.replace(text, "\n", " ");
-        text = StringUtils.replace(text, "\r", " ");
-        text = StringUtils.replace(text, "  ", " ");
+
+        //normalize text
+        text = TextUtils.normalizeTextForParsing(text);
 
         return getPatternFromCacheOrSaveNew(metroName).matcher(text).matches();
     }

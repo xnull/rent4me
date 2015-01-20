@@ -17,64 +17,95 @@ public class RoomCountParserTest {
 
     @Test
     public void parseOneRoom() {
-        assertThat(parser.findRoomCount("отличная однокомнатная квартира"), is(1));
-        assertThat(parser.findRoomCount("отличную однокомнатную квартиру"), is(1));
-        assertThat(parser.findRoomCount("однушка"), is(1));
-        assertThat(parser.findRoomCount("однокомнатная"), is(1));
-        assertThat(parser.findRoomCount("одно-комнатная"), is(1));
-        assertThat(parser.findRoomCount("1-комнатная"), is(1));
-        assertThat(parser.findRoomCount("1-ушка"), is(1));
-        assertThat(parser.findRoomCount("1-к бла квартира"), is(1));
-        assertThat(parser.findRoomCount("1к бла кв"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла отличная однокомнатная квартира бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла отличную однокомнатную квартиру бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла однушка бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла однокомнатная бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла одно-комнатная бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла 1-комнатная бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла 1-ушка бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла 1-к бла квартира бла бла бла бла"), is(1));
+        assertThat(parser.findRoomCount("бла бла бла бла 1к бла кв бла бла бла бла"), is(1));
     }
 
     @Test
     public void parseTwoRoom() {
-        assertThat(parser.findRoomCount("отличная двухкомнатная квартира"), is(2));
-        assertThat(parser.findRoomCount("отличная двукомнатная квартира"), is(2));
-        assertThat(parser.findRoomCount("отличную двухкомнатную квартиру"), is(2));
-        assertThat(parser.findRoomCount("отличную двукомнатную квартиру"), is(2));
-        assertThat(parser.findRoomCount("двушка"), is(2));
-        assertThat(parser.findRoomCount("двукомнатная"), is(2));
-        assertThat(parser.findRoomCount("двухкомнатная"), is(2));
-        assertThat(parser.findRoomCount("двух комнатная"), is(2));
-        assertThat(parser.findRoomCount("дву комнатная"), is(2));
-        assertThat(parser.findRoomCount("две комнатная"), is(2));
-        assertThat(parser.findRoomCount("две комнаты"), is(2));
-        assertThat(parser.findRoomCount("дву-комнатная"), is(2));
-        assertThat(parser.findRoomCount("2-комнатная"), is(2));
-        assertThat(parser.findRoomCount("2-ушка"), is(2));
-        assertThat(parser.findRoomCount("2-к бла квартира"), is(2));
-        assertThat(parser.findRoomCount("2к бла кв"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла отличная двухкомнатная квартира бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла отличная двукомнатная квартира бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла отличную двухкомнатную квартиру бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла отличную двукомнатную квартиру бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла двушка бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла двукомнатная бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла двухкомнатная бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла двух комнатная бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла дву комнатная бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла две комнатная бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла две комнаты бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла дву-комнатная бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла 2-комнатная бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла 2-ушка бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла 2-к бла квартира бла бла бла бла"), is(2));
+        assertThat(parser.findRoomCount("бла бла бла бла 2к бла кв бла бла бла бла"), is(2));
     }
 
     @Test
     public void parseThreeRoom() {
-        assertThat(parser.findRoomCount("отличная трехкомнатная квартира"), is(3));
-        assertThat(parser.findRoomCount("отличная трекомнатная квартира"), is(3));
-        assertThat(parser.findRoomCount("отличную трехкомнатную квартиру"), is(3));
-        assertThat(parser.findRoomCount("отличную трёхкомнатную квартиру"), is(3));
-        assertThat(parser.findRoomCount("отличную трикомнатную квартиру"), is(3));
-        assertThat(parser.findRoomCount("трешка"), is(3));
-        assertThat(parser.findRoomCount("трёшка"), is(3));
-        assertThat(parser.findRoomCount("трехкомнатная"), is(3));
-        assertThat(parser.findRoomCount("трёхкомнатная"), is(3));
-        assertThat(parser.findRoomCount("трех комнатная"), is(3));
-        assertThat(parser.findRoomCount("три комнатная"), is(3));
-        assertThat(parser.findRoomCount("трех комнатная"), is(3));
-        assertThat(parser.findRoomCount("трёх комнатная"), is(3));
-        assertThat(parser.findRoomCount("три комнаты"), is(3));
-        assertThat(parser.findRoomCount("трех-комнатная"), is(3));
-        assertThat(parser.findRoomCount("трёх-комнатная"), is(3));
-        assertThat(parser.findRoomCount("три-комнатная"), is(3));
-        assertThat(parser.findRoomCount("3-комнатная"), is(3));
-        assertThat(parser.findRoomCount("3-ушка"), is(3));
-        assertThat(parser.findRoomCount("3-ешка"), is(3));
-        assertThat(parser.findRoomCount("3-ёшка"), is(3));
-        assertThat(parser.findRoomCount("3ёшка"), is(3));
-        assertThat(parser.findRoomCount("3-шка"), is(3));
-        assertThat(parser.findRoomCount("3шка"), is(3));
-        assertThat(parser.findRoomCount("3-к бла квартира"), is(3));
-        assertThat(parser.findRoomCount("3к бла кв"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла отличная трехкомнатная квартира бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла отличная трекомнатная квартира бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла отличную трехкомнатную квартиру бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла отличную трёхкомнатную квартиру бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла отличную трикомнатную квартиру бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трешка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трёшка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трехкомнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трёхкомнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трех комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла три комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трех комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трёх комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла три комнаты бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трех-комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла трёх-комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла три-комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3-комнатная бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3-ушка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3-ешка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3-ёшка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3ёшка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3-шка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3шка бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3-к бла квартира бла бла бла бла"), is(3));
+        assertThat(parser.findRoomCount("бла бла бла бла 3к бла кв бла бла бла бла"), is(3));
+    }
+
+    @Test
+    public void fix3k_1() {
+        String text = "Метро Ленинский проспект. Уникальное месторасположение: ЦПКиО им. Горького, «АШАН» и т.д.. \n" +
+                "Предлагается койко-место в изолированной, уютной, чистой комнате (22 кв.м)., в 3-х комнатной квартире в 3 минутах пешком от м. Ленинский проспект. В комнате до 3-х человек. Рассматриваются ТОЛЬКО ДЕВУШКИ гражданства РФ, Украины, Белоруссии. В квартире имеется: мебель, односпальные кровати, микроволновка, холодильник, ТВ, утюг и бесплатный Wi-Fi.\n" +
+                "В стоимость входит: коммунальные платежи, интернет, моющее средство, уборка.\n" +
+                "Квартира сдается без посредников, агентов. Без комиссии и залогов!\n" +
+                "Возврат остатка в случае съезда.\n" +
+                "10500 р./мес.\n" +
+                "89637898649";
+
+        assertThat(parser.findRoomCount(text), is(3));
+    }
+
+    @Test
+    public void fix2k_1() {
+        String text = "СНИМУ 2КУ,Без посредников,в г.Щелково";
+
+        assertThat(parser.findRoomCount(text), is(2));
+    }
+
+    @Test
+    public void fix1k_1() {
+        String text = "[СДАМ]\n" +
+                "\n" +
+                "Сдам 1к/кв. после ЕВРО РЕМОНТА метро\"Преображенская пл.\" в кв.ВСЁ НОВОЕ с/уз.раздельный-кафель до потолка ВСЯ НОВАЯ сантехника-краны,мойка,унитаз,раковины,ванна и ВСЯ НОВАЯ техника-двухкамерный холодильник,эл.плита,св-печь,стиральная машина...есть вся необходимая мебель,новый кухонный гарнитур+посуда,прихожая+шкаф купе,застеклённая лоджия,окна во двор,укреплённая мет.дверь,тёплая квартира,чистый подъезд.Семейной паре славян без животных.Депозит разделяется.Без комиссии.На очень длительный срок по договору аренды. (968)0138403 = Возможны варианты = Михаил\n" +
+                "\n" +
+                "https://www.facebook.com/profile.php?id=100005310012239";
+
+        assertThat(parser.findRoomCount(text), is(1));
     }
 }
