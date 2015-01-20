@@ -11,6 +11,7 @@ import bynull.realty.dao.external.FacebookScrapedPostRepository;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.data.business.metro.MetroEntity;
+import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
@@ -33,7 +34,10 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -91,7 +95,7 @@ public class FacebookServiceImpl implements FacebookService {
     @Override
     public void scrapNewPosts() {
         List<FacebookPageToScrap> fbPages = facebookPageToScrapRepository.findAll();
-        List<MetroEntity> metros = metroRepository.findAll();
+        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
@@ -364,28 +368,41 @@ public class FacebookServiceImpl implements FacebookService {
     @Transactional
     @Override
     public void reparseExistingFBPosts() {
-        List<MetroEntity> metros = metroRepository.findAll();
+        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
         int countOfMatchedPosts = 0;
-        List<FacebookScrapedPost> all = facebookScrapedPostRepository.findAll();
-        int total = all.size();
-        for (FacebookScrapedPost post : all) {
-            Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
-            post.setMetros(matchedMetros);
-            if (!matchedMetros.isEmpty()) {
-                countOfMatchedPosts++;
+        Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "id");
+        Page<FacebookScrapedPost> postsPage = facebookScrapedPostRepository.findAll(pageable);
+        long total = facebookScrapedPostRepository.count();
+        boolean hasNext = false;
+        do {
+            List<FacebookScrapedPost> posts = postsPage.getContent();
+            for (FacebookScrapedPost post : posts) {
+                Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
+                post.setMetros(matchedMetros);
+                if (!matchedMetros.isEmpty()) {
+                    countOfMatchedPosts++;
+                }
+                post = facebookScrapedPostRepository.save(post);
             }
-            post = facebookScrapedPostRepository.saveAndFlush(post);
-        }
+            log.info("Processed page #[{}]", pageable);
+            hasNext = postsPage.hasNext();
+            if (hasNext) {
+                pageable = postsPage.nextPageable();
+                em.flush();
+                em.clear();
+                postsPage = facebookScrapedPostRepository.findAll(pageable);
+            }
+        } while (hasNext);
         log.info("Total count of matched posts to metro stations: [{}]. Total posts: [{}]", countOfMatchedPosts, total);
     }
 
-    private Set<MetroEntity> matchMetros(List<MetroEntity> metros, String message) {
+    private Set<MetroEntity> matchMetros(List<MetroDTO> metros, String message) {
         Set<MetroEntity> matchedMetros = new HashSet<>();
-        for (MetroEntity metro : metros) {
+        for (MetroDTO metro : metros) {
             if (metroTextAnalyzer.matches(message, metro.getStationName())) {
 //                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
 
-                matchedMetros.add(metro);
+                matchedMetros.add(metroRepository.findOne(metro.getId()));
 
             }
         }
