@@ -4,6 +4,7 @@ import bynull.realty.dto.MetroDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,8 @@ public class FacebookPostDTO {
     private String message;
     private List<String> imageUrls;
     private String link;
+    private BigDecimal rentalFee;
+    private Integer roomCount;
     private Date created;
     private Date updated;
     private FacebookPageDTO page;

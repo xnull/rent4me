@@ -11,7 +11,7 @@ import javax.annotation.Resource;
  * Created by dionis on 18/01/15.
  */
 @Component
-public class FacebookPostAdminConverter implements Converter<FacebookPostForm, FacebookPostDTO> {
+public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, FacebookPostForm> {
 
     @Resource
     private FacebookPageAdminConverter facebookPageAdminConverter;
@@ -27,6 +27,8 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         FacebookPostForm form = new FacebookPostForm();
         form.setLink(in.getLink());
         form.setMessage(in.getMessage());
+        form.setRoomCount(in.getRoomCount());
+        form.setRentalFee(in.getRentalFee());
         form.setImageUrls(in.getImageUrls());
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
@@ -42,6 +44,8 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         FacebookPostDTO dto = new FacebookPostDTO();
         dto.setLink(in.getLink());
         dto.setMessage(in.getMessage());
+        dto.setRoomCount(in.getRoomCount());
+        dto.setRentalFee(in.getRentalFee());
         dto.setImageUrls(in.getImageUrls());
         dto.setCreated(in.getCreated());
         dto.setUpdated(in.getUpdated());

@@ -4,6 +4,7 @@ import bynull.realty.data.business.metro.MetroEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -57,6 +58,12 @@ public class FacebookScrapedPost {
     )
     @OneToMany
     private Set<MetroEntity> metros;
+
+    @Column(name = "rental_fee")
+    private BigDecimal rentalFee;
+
+    @Column(name = "room_count")
+    private Integer roomCount;
 
     public Long getId() {
         return id;
@@ -144,6 +151,22 @@ public class FacebookScrapedPost {
 
     public void setMetros(Set<MetroEntity> metros) {
         this.metros = metros;
+    }
+
+    public BigDecimal getRentalFee() {
+        return rentalFee;
+    }
+
+    public void setRentalFee(BigDecimal rentalFee) {
+        this.rentalFee = rentalFee;
+    }
+
+    public Integer getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(Integer roomCount) {
+        this.roomCount = roomCount;
     }
 
     @PrePersist

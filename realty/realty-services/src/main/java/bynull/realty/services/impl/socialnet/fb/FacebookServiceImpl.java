@@ -2,6 +2,7 @@ package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.components.text.Porter;
+import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.config.Config;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
 import bynull.realty.converters.FacebookPostModelDTOConverter;
@@ -96,9 +97,12 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
     @Resource
     MetroTextAnalyzer metroTextAnalyzer;
 
+    RoomCountParser roomCountParser;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         porter = Porter.getInstance();
+        roomCountParser = RoomCountParser.getInstance();
     }
 
     @Transactional
@@ -138,13 +142,15 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                     FacebookPageToScrap page = new FacebookPageToScrap(fbPage.getId());
                     for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : partition) {
                         FacebookScrapedPost post = postItemDTO.toInternal();
-                        if (post.getCreated().before(threeMonthsAgo)) {
+                        if (post.getCreated() != null && post.getCreated().before(threeMonthsAgo)) {
                             log.info("Skipping post that's older than 3 months old: [{}]");
                             continue;
                         }
                         post.setFacebookPageToScrap(page);
                         Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
                         post.setMetros(matchedMetros);
+                        Integer roomCount = roomCountParser.findRoomCount(post.getMessage());
+                        post.setRoomCount(roomCount);
                         facebookScrapedPostRepository.save(post);
                     }
                     em.flush();
@@ -452,6 +458,8 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
             for (FacebookScrapedPost post : posts) {
                 Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
                 post.setMetros(matchedMetros);
+                Integer roomCount = roomCountParser.findRoomCount(post.getMessage());
+                post.setRoomCount(roomCount);
                 if (!matchedMetros.isEmpty()) {
                     countOfMatchedPosts++;
                 }

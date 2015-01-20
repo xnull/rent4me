@@ -3,6 +3,7 @@ package name.dargiri.web.form;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,8 @@ import static bynull.realty.util.CommonUtils.copy;
 @Setter
 public class FacebookPostForm {
     private String message;
+    private Integer roomCount;
+    private BigDecimal rentalFee;
     private List<String> imageUrls;
     private String link;
     private Date created;

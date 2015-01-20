@@ -11,13 +11,13 @@ import javax.annotation.Resource;
  * Created by dionis on 20/01/15.
  */
 @Component
-public class FacebookPostJsonDtoConverter implements Converter<FacebookPostJSON, FacebookPostDTO> {
+public class FacebookPostDtoJsonConverter implements Converter<FacebookPostDTO, FacebookPostJSON> {
 
     @Resource
-    MetroJsonDtoConverter metroConverter;
+    MetroDtoJsonConverter metroConverter;
 
     @Resource
-    FacebookPageJsonDtoConverter facebookPageConverter;
+    FacebookPageDtoJsonConverter facebookPageConverter;
 
     @Override
     public FacebookPostJSON toTargetType(FacebookPostDTO in) {
@@ -28,6 +28,8 @@ public class FacebookPostJsonDtoConverter implements Converter<FacebookPostJSON,
         json.setId(in.getId());
         json.setLink(in.getLink());
         json.setMessage(in.getMessage());
+        json.setRoomCount(in.getRoomCount());
+        json.setRentalFee(in.getRentalFee());
         json.setPage(facebookPageConverter.toTargetType(in.getPage()));
         json.setImageUrls(in.getImageUrls());
         json.setCreated(in.getCreated());

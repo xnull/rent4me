@@ -81,7 +81,7 @@ public class RoomCountParser {
         return INSTANCE;
     }
 
-    public Integer getRoomNumber(String text) {
+    public Integer findRoomCount(String text) {
         text = StringUtils.trimToEmpty(text).toLowerCase()
 //                .replace('ё', 'e').replace('й', 'и')
         ;

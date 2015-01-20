@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,10 @@ public class FacebookPostJSON {
     private Long id;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("room_count")
+    private Integer roomCount;
+    @JsonProperty("rental_fee")
+    private BigDecimal rentalFee;
     @JsonProperty("img_urls")
     private List<String> imageUrls;
     @JsonProperty("link")

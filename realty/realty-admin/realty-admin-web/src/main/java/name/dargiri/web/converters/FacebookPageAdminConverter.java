@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by dionis on 18/01/15.
  */
 @Component
-public class FacebookPageAdminConverter implements Converter<FacebookPageForm, FacebookPageDTO> {
+public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, FacebookPageForm> {
 
     @Override
     public FacebookPageForm toTargetType(FacebookPageDTO in) {

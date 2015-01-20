@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by dionis on 20/01/15.
  */
 @Component
-public class FacebookPageJsonDtoConverter implements Converter<FacebookPageJSON, FacebookPageDTO> {
+public class FacebookPageDtoJsonConverter implements Converter<FacebookPageDTO, FacebookPageJSON> {
     @Override
     public FacebookPageJSON toTargetType(FacebookPageDTO in) {
         if (in == null) {

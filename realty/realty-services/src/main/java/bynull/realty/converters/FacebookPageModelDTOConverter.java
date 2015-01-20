@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by dionis on 18/01/15.
  */
 @Component
-public class FacebookPageModelDTOConverter implements Converter<FacebookPageDTO, FacebookPageToScrap> {
+public class FacebookPageModelDTOConverter implements Converter<FacebookPageToScrap, FacebookPageDTO> {
 
     @Override
     public FacebookPageDTO toTargetType(FacebookPageToScrap in) {

@@ -12,7 +12,7 @@ import java.util.Collections;
  * Created by dionis on 18/01/15.
  */
 @Component
-public class FacebookPostModelDTOConverter implements Converter<FacebookPostDTO, FacebookScrapedPost> {
+public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedPost, FacebookPostDTO> {
 
     @Resource
     MetroModelDTOConverter metroConverter;
@@ -27,6 +27,8 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookPostDTO,
         dto.setId(post.getId());
         dto.setLink(post.getLink());
         dto.setMessage(post.getMessage());
+        dto.setRentalFee(post.getRentalFee());
+        dto.setRoomCount(post.getRoomCount());
         dto.setCreated(post.getCreated());
         dto.setUpdated(post.getUpdated());
         dto.setMetros(metroConverter.toTargetSet(post.getMetros()));

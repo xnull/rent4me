@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by dionis on 18/01/15.
  */
 @Component
-public class MetroModelDTOConverter implements Converter<MetroDTO, MetroEntity> {
+public class MetroModelDTOConverter implements Converter<MetroEntity, MetroDTO> {
 
     @Override
     public MetroDTO toTargetType(MetroEntity in) {

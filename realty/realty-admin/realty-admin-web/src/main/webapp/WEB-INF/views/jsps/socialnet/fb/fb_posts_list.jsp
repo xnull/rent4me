@@ -11,6 +11,8 @@
     <thead>
     <tr>
         <th>Message</th>
+        <th>Room Count</th>
+        <th>Rental fee</th>
         <th>Link</th>
         <th>FB Page</th>
         <th>Метро</th>
@@ -26,6 +28,12 @@
                     <img src="${img}">
                 </c:forEach><br/>
                     ${post.message}
+            </td>
+            <td>
+                    ${post.roomCount}
+            </td>
+            <td>
+                    ${post.rentalFee}
             </td>
             <td>
                 <a href="${post.link}" target="_blank">${post.link}</a>

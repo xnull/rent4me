@@ -3,7 +3,7 @@ package bynull.realty.web.rest;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.util.LimitAndOffset;
-import bynull.realty.web.converters.FacebookPostJsonDtoConverter;
+import bynull.realty.web.converters.FacebookPostDtoJsonConverter;
 import bynull.realty.web.json.FacebookPostJSON;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class SocialRestResource {
     FacebookService facebookService;
 
     @Resource
-    FacebookPostJsonDtoConverter facebookPostConverter;
+    FacebookPostDtoJsonConverter facebookPostConverter;
 
     @Path("/renter/search")
     @GET

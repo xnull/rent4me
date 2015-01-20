@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by dionis on 20/01/15.
  */
 @Component
-public class MetroJsonDtoConverter implements Converter<MetroJSON, MetroDTO> {
+public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
     @Override
     public MetroJSON toTargetType(MetroDTO in) {
         if (in == null) {
