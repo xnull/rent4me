@@ -283,9 +283,9 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
         String stem = text.isEmpty() ? "" : porter.stem(text);
 
-        String qlString = "select p from FacebookScrapedPost p join fetch p.metros metros where (" + findModeJPQL + ")" +
+        String qlString = "select p from FacebookScrapedPost p where (" + findModeJPQL + ")" +
                 (!stem.isEmpty() ? " AND lower(p.message) like :msg " : "") +
-                (withSubway ? " AND metros IS NOT EMPTY " : "") +
+                (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
                 " ORDER BY p.created DESC";
         TypedQuery<FacebookScrapedPost> query = em.createQuery(qlString, FacebookScrapedPost.class);
 
