@@ -29,9 +29,10 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
     }
 
     String regexPart(Set<String> synonyms) {
-        return synonyms.stream().map(txt ->
+        String result = synonyms.stream().map(txt ->
                         "(\\b" + txt + (txt.endsWith("\\b") ? "" : "((\\S){0,3})") + ")"
         ).collect(Collectors.joining("|"));
+        return "(" + result + ")";
     }
 
     private synchronized Pattern getPatternFromCacheOrSaveNew(String metroName) {
@@ -49,7 +50,7 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
                     .collect(Collectors.joining(".{1,5}"));
 
             //найти по паттернам метряшки, затем нормализованные имена метряшек
-            String regex = "(.*((\\bм\\b)|(\\bм\\.\\b)|(\\bметр\\S*\\b))((.){1,20})(" + collected + ")(.*))";
+            String regex = "((.*)((\\bм\\b)|(\\bм\\.\\b)|(\\bметр\\S{1,3}\\b))((.){1,20})(" + collected + ")(.*))";
             System.out.println(regex);
             Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.UNICODE_CASE);
             patternCache.put(metroNameLowerCased, pattern);
@@ -62,6 +63,10 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
     @Override
     public boolean matches(String text, String metroName) {
         if (StringUtils.trimToEmpty(text).isEmpty() || StringUtils.trimToEmpty(metroName).isEmpty()) return false;
+
+        text = StringUtils.replace(text, ".", ". ");
+        text = StringUtils.replace(text, ",", ", ");
+        text = StringUtils.replace(text, "  ", " ");
 
         return getPatternFromCacheOrSaveNew(metroName).matcher(text).matches();
     }

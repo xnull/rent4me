@@ -20,18 +20,18 @@ public class RussianRegexStemSynonymRegistry extends SynonymRegistry {
         String bulvarStem = porter.stem("бульвар");
         Assert.isTrue(bulvarStem.equals("бульвар"));
 
-        registerSynonyms("ул\\.\\b", ulicaStem);
-        registerSynonyms("у\\.\\b", ulicaStem);
+        registerSynonyms("ул\\.", ulicaStem);
+        registerSynonyms("у\\.", ulicaStem);
         registerSynonyms("у\\b", ulicaStem);
 //        registerSynonyms(ulicaStem, ulicaStem+"\\S*");
-        registerSynonyms("м\\.\\b", metroStem);
+        registerSynonyms("м\\.", metroStem);
         registerSynonyms("м\\b", metroStem);
 
-        registerSynonyms("бульв\\.\\b", bulvarStem);
+        registerSynonyms("бульв\\.", bulvarStem);
         registerSynonyms("бульв\\b", bulvarStem);
-        registerSynonyms("блв\\.\\b", bulvarStem);
+        registerSynonyms("блв\\.", bulvarStem);
         registerSynonyms("блв\\b", bulvarStem);
-        registerSynonyms("б\\.\\b", bulvarStem);
+        registerSynonyms("б\\.", bulvarStem);
         registerSynonyms("б\\b", bulvarStem);
 
         freeze();
