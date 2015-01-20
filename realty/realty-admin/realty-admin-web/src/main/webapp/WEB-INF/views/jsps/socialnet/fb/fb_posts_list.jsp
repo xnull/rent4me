@@ -43,7 +43,7 @@
             </td>
             <td>
                 <ul>
-                    <c:forEach items="${post.metro}" var="metro">
+                    <c:forEach items="${post.metros}" var="metro">
                         <li>${metro.stationName}</li>
                     </c:forEach>
                 </ul>
