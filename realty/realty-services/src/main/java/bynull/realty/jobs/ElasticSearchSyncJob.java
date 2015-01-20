@@ -26,7 +26,8 @@ public class ElasticSearchSyncJob implements Runnable {
     @Override
     public void run() {
         LOGGER.info("Starting to sync ES");
-        facebookService.syncElasticSearchWithDB();
+        LOGGER.info("ES sync job disabled.");
+//        facebookService.syncElasticSearchWithDB();
         LOGGER.info("Ended sync of ES");
     }
 }
