@@ -66,6 +66,8 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
 
         text = StringUtils.replace(text, ".", ". ");
         text = StringUtils.replace(text, ",", ", ");
+        text = StringUtils.replace(text, "\n", " ");
+        text = StringUtils.replace(text, "\r", " ");
         text = StringUtils.replace(text, "  ", " ");
 
         return getPatternFromCacheOrSaveNew(metroName).matcher(text).matches();
