@@ -1,6 +1,7 @@
 ALTER TABLE facebook_scraped_posts
 DROP COLUMN IF EXISTS metro_station_id;
 
+DROP TABLE IF EXISTS fb_posts_to_metros;
 CREATE TABLE fb_posts_to_metros (
   fb_post_id       BIGINT NOT NULL,
   metro_station_id BIGINT NOT NULL,
