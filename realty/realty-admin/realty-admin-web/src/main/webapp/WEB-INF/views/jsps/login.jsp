@@ -17,7 +17,7 @@
 
         <div class="control-group ">
         <label>Username
-            <input type="text" name='j_username' value='' />
+            <input type="text" name='j_username' value='' autofocus="autofocus"/>
         </label>
 
 

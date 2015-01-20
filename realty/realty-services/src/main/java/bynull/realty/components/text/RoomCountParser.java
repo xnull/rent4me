@@ -72,7 +72,7 @@ public class RoomCountParser {
                 Pattern.compile("((.*)(тр(е|ё)шк\\S*)(.*))", FLAGS),
                 Pattern.compile("((.*)(3(\\-)?\\S{0,5})(.{0,5})(комнатн\\S*)(.*))", FLAGS),
                 Pattern.compile("((.*)(3(\\-)?\\S{0,5})(.{0,5})(ушк\\S*)(.*))", FLAGS),
-                Pattern.compile("((.*)(3(\\-)?\\S{0,5})(.{0,5})(((е|ё)?)шк\\S*)(.*))", FLAGS),
+                Pattern.compile("((.*)(3(\\-)?\\S{0,5})((.)?)(((е|ё)?)шк\\S*)(.*))", FLAGS),
                 Pattern.compile("((.*)(3((\\-)?)((.){0,5})к\\S{0,5})(.{0,10})(кв\\S*)(.*))", FLAGS),
                 Pattern.compile("((.*)(3((\\-)?)((.){0,5})комн\\S{0,5})(.{0,10})(кв\\S*)(.*))", FLAGS)
         );
@@ -84,23 +84,20 @@ public class RoomCountParser {
     }
 
     public Integer findRoomCount(String text) {
-        text = StringUtils.trimToEmpty(text).toLowerCase()
-//                .replace('ё', 'e').replace('й', 'и')
-        ;
+        text = StringUtils.trimToEmpty(text).toLowerCase();
         if (text.isEmpty()) return null;
 
         text = TextUtils.normalizeTextForParsing(text);
 
-
-        // кейсы однокомнатной квартиры
-        for (String stem : oneRoomApartmentStems) {
+        // кейсы 3-ех комнатных квартир
+        for (String stem : threeRoomApartmentStems) {
             if (text.contains(stem)) {
-                return 1;
+                return 3;
             }
         }
-        for (Pattern pattern : oneRoomApartmentPatterns) {
+        for (Pattern pattern : threeRoomApartmentPatterns) {
             if (pattern.matcher(text).matches()) {
-                return 1;
+                return 3;
             }
         }
 
@@ -116,15 +113,15 @@ public class RoomCountParser {
             }
         }
 
-        // кейсы 3-ех комнатных квартир
-        for (String stem : threeRoomApartmentStems) {
+        // кейсы однокомнатной квартиры
+        for (String stem : oneRoomApartmentStems) {
             if (text.contains(stem)) {
-                return 3;
+                return 1;
             }
         }
-        for (Pattern pattern : threeRoomApartmentPatterns) {
+        for (Pattern pattern : oneRoomApartmentPatterns) {
             if (pattern.matcher(text).matches()) {
-                return 3;
+                return 1;
             }
         }
 
