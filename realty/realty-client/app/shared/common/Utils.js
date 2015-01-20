@@ -1,6 +1,31 @@
 /**
  * Created by dionis on 02/12/14.
  */
+function nl2br(str) {
+    var is_xhtml = true;
+    //  discuss at: http://phpjs.org/functions/nl2br/
+    // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // improved by: Philip Peterson
+    // improved by: Onno Marsman
+    // improved by: Atli Þór
+    // improved by: Brett Zamir (http://brett-zamir.me)
+    // improved by: Maximusya
+    // bugfixed by: Onno Marsman
+    // bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    //    input by: Brett Zamir (http://brett-zamir.me)
+    //   example 1: nl2br('Kevin\nvan\nZonneveld');
+    //   returns 1: 'Kevin<br />\nvan<br />\nZonneveld'
+    //   example 2: nl2br("\nOne\nTwo\n\nThree\n", false);
+    //   returns 2: '<br>\nOne<br>\nTwo<br>\n<br>\nThree<br>\n'
+    //   example 3: nl2br("\nOne\nTwo\n\nThree\n", true);
+    //   returns 3: '<br />\nOne<br />\nTwo<br />\n<br />\nThree<br />\n'
+
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
+
+    return (str + '')
+        .replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
+
 
 function __base64Encode(data) {
     //  discuss at: http://phpjs.org/functions/base64_encode/
@@ -121,6 +146,7 @@ var R4MEUtils = {
     isLocalhost: isLocalhost,
     isDev: isDev,
     isProduction: isProduction,
+    nl2br: nl2br,
     inactiveUi: {opacity: 0.6, pointerEvents: 'none'}
 };
 

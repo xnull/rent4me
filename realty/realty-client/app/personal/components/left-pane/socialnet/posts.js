@@ -4,6 +4,7 @@
 var React = require('react');
 
 var _ = require('underscore');
+var Utils = require('rent4meUtil');
 var moment = require('moment');
 
 var Post = React.createClass({
@@ -54,8 +55,7 @@ var Post = React.createClass({
                         <h4>Описание</h4>
 
                         <div className="row">
-                            <div className="col-md-12">
-                            {item.message}
+                            <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.message)}}>
                             </div>
                         </div>
 
