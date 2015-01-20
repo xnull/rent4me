@@ -281,16 +281,16 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                 .map(word -> " ( lower(p.message) like '" + ilike(word) + "' ) ")
                 .collect(Collectors.joining(" OR "));
 
-        String stem = text.isEmpty() ? "" : porter.stem(text);
+        String searchText = text.isEmpty() ? "" : text.length() > 5 ? porter.stem(text) : text;
 
         String qlString = "select p from FacebookScrapedPost p where (" + findModeJPQL + ")" +
-                (!stem.isEmpty() ? " AND lower(p.message) like :msg " : "") +
+                (!searchText.isEmpty() ? " AND lower(p.message) like :msg " : "") +
                 (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
                 " ORDER BY p.created DESC";
         TypedQuery<FacebookScrapedPost> query = em.createQuery(qlString, FacebookScrapedPost.class);
 
-        if (!stem.isEmpty()) {
-            query.setParameter("msg", ilike(stem));
+        if (!searchText.isEmpty()) {
+            query.setParameter("msg", ilike(searchText));
         }
 
         List<FacebookScrapedPost> resultList = query
