@@ -28,14 +28,19 @@ var RentType = React.createClass({
             onRentTypeChange('RENTER');
         };
 
+        var isRenter = SocialNetStore.getSearchType() === 'RENTER';
+
+        var renterClasses = "btn btn-default" + (isRenter ? " active" : "");
+        var lessorClasses = "btn btn-default" + (!isRenter ? " active" : "");
+
 
         return (
             <div className='col-md-3'>
                 <div className="btn-group" data-toggle="buttons" >
-                    <label className="btn btn-default" onClick={changeToRenter} >
+                    <label className={renterClasses} onClick={changeToRenter} >
                         <input type="radio" >Сниму</input>
                     </label>
-                    <label className="btn btn-default" onClick={changeToLessor} >
+                    <label className={lessorClasses} onClick={changeToLessor} >
                         <input type="radio" >Сдам</input>
                     </label>
                 </div>
