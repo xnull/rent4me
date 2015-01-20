@@ -93,4 +93,14 @@ public class MetroTextAnalyzerTest {
                 "https://www.facebook.com/levrez";
         assertThat(analyzer.matches(text, "Фрунзенская"), is(true));
     }
+
+    @Test
+    public void fix4() {
+        String text = "[СНИМУ]\n" +
+                "\n" +
+                "Молодая семья снимет 1ком-ю.квартиру. Метро Молодежная. Славянский.бульвар, Парк победы. Россияни, Москвичи.";
+        assertThat(analyzer.matches(text, "Молодёжная"), is(true));
+    }
+
+
 }
