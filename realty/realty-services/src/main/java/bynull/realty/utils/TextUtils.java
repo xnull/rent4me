@@ -11,6 +11,8 @@ public class TextUtils {
 
         text = StringUtils.replace(text, ".", ". ");
         text = StringUtils.replace(text, ",", ", ");
+        text = StringUtils.replace(text, "'", "");
+        text = StringUtils.replace(text, "\"", "");
         text = StringUtils.replace(text, "ё", "е");
         text = StringUtils.replace(text, "й", "и");
         text = StringUtils.replace(text, "\n", " ");
