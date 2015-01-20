@@ -110,6 +110,8 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             text: value
         }));
+
+        this.onClick();
     },
 
     onSubwayChange: function (e) {
@@ -122,6 +124,8 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             withSubway: value
         }));
+
+        this.onClick();
     },
 
     onRentTypeChange: function (value) {
@@ -132,6 +136,8 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             type: value
         }));
+
+        this.onClick();
     },
 
     onClear: function () {
