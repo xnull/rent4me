@@ -10,11 +10,32 @@ var Post = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
-        var firstImage = _.first(item.imageUrls.map(function (photo) {
+        var firstImage = _.first(item.img_urls.map(function (photo) {
             return (
                 <img className="img-responsive" width="128" src={photo}/>
             );
         }));
+
+
+        var metroElements = item.metros.map(function (metro) {
+            return (
+                <li>{metro.station_name}</li>
+            );
+        });
+
+        var hasMetros = _.size(item.metros) > 0;
+
+        var metroPreviews = hasMetros ? (
+            <div>
+                <h3>Метро</h3>
+                <div className="row">
+                    <ul>
+                        {metroElements}
+                    </ul>
+                </div>
+                <hr/>
+            </div>
+        ) : null;
 
         var imagePreviews = firstImage ? (
             <div>
@@ -39,6 +60,8 @@ var Post = React.createClass({
                         </div>
 
                         <hr/>
+
+                        {metroPreviews}
 
                         <div className="row">
                             <div className="col-md-6">

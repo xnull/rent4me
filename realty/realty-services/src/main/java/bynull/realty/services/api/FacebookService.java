@@ -25,6 +25,8 @@ public interface FacebookService {
 
     List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
 
+    List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindMode findMode);
+
     FacebookPageDTO findPageById(long fbPageId);
 
     List<FacebookPostDTO> findPosts(PageRequest pageRequest);
@@ -32,4 +34,8 @@ public interface FacebookService {
     long countOfPages();
 
     void reparseExistingFBPosts();
+
+    static enum FindMode {
+        RENTER, LESSOR
+    }
 }

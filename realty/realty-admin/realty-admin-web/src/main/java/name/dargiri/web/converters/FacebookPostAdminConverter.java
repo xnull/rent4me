@@ -31,7 +31,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
         form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()));
-        form.setMetro(metroAdminConverter.toTargetSet(in.getMetro()));
+        form.setMetros(metroAdminConverter.toTargetSet(in.getMetros()));
         return form;
     }
 
@@ -46,6 +46,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostForm, F
         dto.setCreated(in.getCreated());
         dto.setUpdated(in.getUpdated());
         dto.setPage(facebookPageAdminConverter.toSourceType(in.getPage()));
+        dto.setMetros(metroAdminConverter.toSourceSet(in.getMetros()));
         return dto;
     }
 }

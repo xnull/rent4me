@@ -24,11 +24,12 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookPostDTO,
     public FacebookPostDTO toTargetType(FacebookScrapedPost post) {
         if (post == null) return null;
         FacebookPostDTO dto = new FacebookPostDTO();
+        dto.setId(post.getId());
         dto.setLink(post.getLink());
         dto.setMessage(post.getMessage());
         dto.setCreated(post.getCreated());
         dto.setUpdated(post.getUpdated());
-        dto.setMetro(metroConverter.toTargetSet(post.getMetros()));
+        dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
         dto.setPage(facebookPageConverter.toTargetType(post.getFacebookPageToScrap()));
         dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
         return dto;

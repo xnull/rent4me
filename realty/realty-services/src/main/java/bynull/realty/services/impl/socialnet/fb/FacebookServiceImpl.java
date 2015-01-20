@@ -47,6 +47,7 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -205,10 +206,18 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     @Transactional(readOnly = true)
     @Override
+    public List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindMode findMode) {
+        Assert.notNull(text);
+
+        return findPosts(text, withSubway, limitAndOffset, findMode);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
 
-        if (StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
+//        if (StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
 
         FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
                 null,
@@ -231,7 +240,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
     public List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
 
-        if (StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
+//        if (StringUtils.trimToEmpty(text).isEmpty()) return Collections.emptyList();
 
         FindQuery.BoolQuery typeQuery = new FindQuery.BoolQuery(
                 null,
@@ -252,6 +261,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
     }
 
     private List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindMode findMode) {
+        text = StringUtils.trimToEmpty(text);
         final List<String> keyWords;
 
         switch (findMode) {
@@ -271,11 +281,19 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                 .map(word -> " ( lower(p.message) like '" + ilike(word) + "' ) ")
                 .collect(Collectors.joining(" OR "));
 
-        String stem = porter.stem(text);
+        String stem = text.isEmpty() ? "" : porter.stem(text);
 
-        String qlString = "select p from FacebookScrapedPost p where (" + findModeJPQL + ") AND lower(p.message) like :msg ORDER BY p.created DESC";
-        List<FacebookScrapedPost> resultList = em.createQuery(qlString, FacebookScrapedPost.class)
-                .setParameter("msg", ilike(stem))
+        String qlString = "select p from FacebookScrapedPost p join fetch p.metros metros where (" + findModeJPQL + ")" +
+                (!stem.isEmpty() ? " AND lower(p.message) like :msg " : "") +
+                (withSubway ? " AND metros IS NOT EMPTY " : "") +
+                " ORDER BY p.created DESC";
+        TypedQuery<FacebookScrapedPost> query = em.createQuery(qlString, FacebookScrapedPost.class);
+
+        if (!stem.isEmpty()) {
+            query.setParameter("msg", ilike(stem));
+        }
+
+        List<FacebookScrapedPost> resultList = query
                 .setFirstResult(limitAndOffset.offset)
                 .setMaxResults(limitAndOffset.limit)
                 .getResultList();
@@ -462,10 +480,6 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
             }
         }
         return matchedMetros;
-    }
-
-    private static enum FindMode {
-        RENTER, LESSOR
     }
 
     public static class DbConfig {

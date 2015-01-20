@@ -21,7 +21,7 @@ public class FacebookPostForm {
     private Date created;
     private Date updated;
     private FacebookPageForm page;
-    private Set<MetroForm> metro;
+    private Set<MetroForm> metros;
 
     public Date getCreated() {
         return copy(created);

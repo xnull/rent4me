@@ -3,6 +3,8 @@ package bynull.realty.web.rest;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.util.LimitAndOffset;
+import bynull.realty.web.converters.FacebookPostJsonDtoConverter;
+import bynull.realty.web.json.FacebookPostJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -22,6 +24,9 @@ public class SocialRestResource {
     @Resource
     FacebookService facebookService;
 
+    @Resource
+    FacebookPostJsonDtoConverter facebookPostConverter;
+
     @Path("/renter/search")
     @GET
     public Response findRenterPosts(
@@ -37,10 +42,37 @@ public class SocialRestResource {
                 .create();
 
         List<FacebookPostDTO> found = facebookService.findRenterPosts(text, withSubway, limitAndOffset);
+        List<FacebookPostJSON> result = facebookPostConverter.toTargetList(found);
 
 //        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
         return Response
-                .ok(found)
+                .ok(result)
+                .build();
+    }
+
+    @Path("/fb/search")
+    @GET
+    public Response findFBPosts(
+            @QueryParam("text") String text,
+            @QueryParam("type") String type,
+            @QueryParam("with_subway") boolean withSubway,
+            @QueryParam("limit") int limit,
+            @QueryParam("offset") int offset
+    ) {
+
+        LimitAndOffset limitAndOffset = LimitAndOffset.builder()
+                .withLimit(limit)
+                .withOffset(offset)
+                .create();
+
+        FacebookService.FindMode findMode = FacebookService.FindMode.valueOf(type);
+
+        List<FacebookPostDTO> found = facebookService.findFBPosts(text, withSubway, limitAndOffset, findMode);
+        List<FacebookPostJSON> result = facebookPostConverter.toTargetList(found);
+
+//        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
+        return Response
+                .ok(result)
                 .build();
     }
 
@@ -59,10 +91,11 @@ public class SocialRestResource {
                 .create();
 
         List<FacebookPostDTO> found = facebookService.findLessorPosts(text, withSubway, limitAndOffset);
+        List<FacebookPostJSON> result = facebookPostConverter.toTargetList(found);
 
 //        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
         return Response
-                .ok(found)
+                .ok(result)
                 .build();
     }
 }

@@ -23,7 +23,7 @@ public class FacebookPostDTO {
     private Date created;
     private Date updated;
     private FacebookPageDTO page;
-    private Set<MetroDTO> metro;
+    private Set<MetroDTO> metros;
 
     public Date getCreated() {
         return copy(created);
