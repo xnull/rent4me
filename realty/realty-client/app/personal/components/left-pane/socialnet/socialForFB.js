@@ -67,7 +67,8 @@ module.exports = React.createClass({
             text: SocialNetStore.getSearchText(),
             type: SocialNetStore.getSearchType(),
             posts: SocialNetStore.getSearchResults(),
-            hasMoreSearchResults: SocialNetStore.hasMoreSearchResults()
+            hasMoreSearchResults: SocialNetStore.hasMoreSearchResults(),
+            lastSearchTextChangeMS: 0
         };
     },
 
@@ -111,7 +112,21 @@ module.exports = React.createClass({
             text: value
         }));
 
-        this.onClick();
+        var now = (new Date()).getTime();
+        var that = this;
+
+        this.setState(assign(this.state, {
+            lastSearchTextChangeMS: now
+        }));
+
+        setTimeout(function () {
+            console.log('timed out');
+            console.log('states value: ' + that.state.lastSearchTextChangeMS);
+            console.log('remembered value: ' + now);
+            if (that.state.lastSearchTextChangeMS == now) {
+                that.onClick();
+            }
+        }, 500);
     },
 
     onSubwayChange: function (e) {
