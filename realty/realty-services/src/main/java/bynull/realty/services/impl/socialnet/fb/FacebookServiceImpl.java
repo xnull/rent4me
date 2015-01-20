@@ -273,7 +273,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
         String stem = porter.stem(text);
 
-        String qlString = "select p from FacebookScrapedPost p where (" + findModeJPQL + ") AND lower(p.message) like :msg";
+        String qlString = "select p from FacebookScrapedPost p where (" + findModeJPQL + ") AND lower(p.message) like :msg ORDER BY p.created DESC";
         List<FacebookScrapedPost> resultList = em.createQuery(qlString, FacebookScrapedPost.class)
                 .setParameter("msg", ilike(stem))
                 .setFirstResult(limitAndOffset.offset)
