@@ -38,10 +38,10 @@ var RentType = React.createClass({
             <div className='col-md-3'>
                 <div className="btn-group" data-toggle="buttons" >
                     <label className={renterClasses} onClick={changeToRenter} >
-                        <input type="radio" >Сниму</input>
+                        <input type="radio" >Снять</input>
                     </label>
                     <label className={lessorClasses} onClick={changeToLessor} >
-                        <input type="radio" >Сдам</input>
+                        <input type="radio" >Сдать</input>
                     </label>
                 </div>
             </div>
