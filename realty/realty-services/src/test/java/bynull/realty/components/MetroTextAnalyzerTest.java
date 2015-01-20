@@ -63,4 +63,16 @@ public class MetroTextAnalyzerTest {
 
         assertThat(analyzer.matches("Сдается квартира. Недалеко от метро Васечкина и магазина Петровича. " + metroName + ".", metroName), is(false));
     }
+
+    @Test
+    public void fix() {
+        String text = "РУССКАЯ СЕМЬЯ ИЗ 3х ЧЕЛОВЕК СНИМЕТ 2x КОМНАТНУЮ КВАРТИРУ В РАЙОНЕ М.ДОСТОЕВСКАЯ, Ул.ГИЛЯРОВСКОГО, ОКТЯБРЬСКАЯ +7 926 089 63 01";
+        assertThat(analyzer.matches(text, "Улица Старокачаловская"), is(false));
+        assertThat(analyzer.matches(text, "Достоевская"), is(true));
+        assertThat(analyzer.matches(text, "Улица Скобелевская"), is(false));
+        assertThat(analyzer.matches(text, "Улица Академика Янгеля"), is(false));
+        assertThat(analyzer.matches(text, "Улица Подбельского"), is(false));
+        assertThat(analyzer.matches(text, "Улица Горчакова"), is(false));
+        assertThat(analyzer.matches(text, "Улица 1905 года"), is(false));
+    }
 }

@@ -30,7 +30,7 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
 
     String regexPart(Set<String> synonyms) {
         return synonyms.stream().map(txt ->
-                        "(\\b" + txt + "\\S*)"
+                        "(\\b" + txt + (txt.endsWith("\\b") ? "" : "((\\S){0,3})") + ")"
         ).collect(Collectors.joining("|"));
     }
 
@@ -50,6 +50,7 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
 
             //найти по паттернам метряшки, затем нормализованные имена метряшек
             String regex = "(.*((\\bм\\b)|(\\bм\\.\\b)|(\\bметр\\S*\\b))((.){1,20})(" + collected + ")(.*))";
+            System.out.println(regex);
             Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.UNICODE_CASE);
             patternCache.put(metroNameLowerCased, pattern);
             return pattern;
