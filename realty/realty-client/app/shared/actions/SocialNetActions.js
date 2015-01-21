@@ -38,7 +38,7 @@ var SocialNetActions = {
         });
     },
 
-    _trimString(str) {
+    _trimString: function (str) {
         var what = ['.', ',', ' '];
         var len = what.length;
         var i;
