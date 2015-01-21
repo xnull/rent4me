@@ -73,7 +73,9 @@ module.exports = React.createClass({
             minPrice: SocialNetStore.getSearchMinPrice(),
             maxPrice: SocialNetStore.getSearchMaxPrice(),
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults(),
-            lastSearchTextChangeMS: 0
+            lastSearchTextChangeMS: 0,
+            lastSearchMinPriceChangeMS: 0,
+            lastSearchMaxPriceChangeMS: 0
         };
     },
 
@@ -181,7 +183,21 @@ module.exports = React.createClass({
             minPrice: minPrice
         }));
 
-        this.onClick();
+        var now = (new Date()).getTime();
+        var that = this;
+
+        this.setState(assign(this.state, {
+            lastSearchMinPriceChangeMS: now
+        }));
+
+        setTimeout(function () {
+            console.log('timed out');
+            console.log('states value: ' + that.state.lastSearchMinPriceChangeMS);
+            console.log('remembered value: ' + now);
+            if (that.state.lastSearchMinPriceChangeMS == now) {
+                that.onClick();
+            }
+        }, 500);
     },
 
     onMaxPriceChange: function (e) {
@@ -197,7 +213,21 @@ module.exports = React.createClass({
             maxPrice: maxPrice
         }));
 
-        this.onClick();
+        var now = (new Date()).getTime();
+        var that = this;
+
+        this.setState(assign(this.state, {
+            lastSearchMaxPriceChangeMS: now
+        }));
+
+        setTimeout(function () {
+            console.log('timed out');
+            console.log('states value: ' + that.state.lastSearchMinPriceChangeMS);
+            console.log('remembered value: ' + now);
+            if (that.state.lastSearchMaxPriceChangeMS == now) {
+                that.onClick();
+            }
+        }, 500);
     },
 
     fireAptSelectionStateChange: function () {
