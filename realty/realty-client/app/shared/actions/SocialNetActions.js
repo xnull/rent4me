@@ -11,7 +11,6 @@ var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 var JSON = require('JSON2');
 var Ajax = require('../common/Ajax');
-var _String = require("underscore.string");
 
 var SocialNetActions = {
 
@@ -44,7 +43,7 @@ var SocialNetActions = {
         var len = what.length;
         var i;
 
-        str = _String(str || '').trim().value();
+        str = str || '';
 
         console.log('Trimmed value: "' + str + '"');
 
