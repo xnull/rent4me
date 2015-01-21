@@ -23,5 +23,6 @@ dependencies {
     compile libraries.'org.apache.sanselan:sanselan'
     compile libraries.'com.amazonaws:aws-java-sdk'
     compile libraries.'commons-io:commons-io'
+    compile libraries.'org.joda:joda-money'
     compile libraries.'org.apache.commons:commons-lang3'
 }

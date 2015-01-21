@@ -69,6 +69,7 @@ project.ext.libraries = [
         'commons-io:commons-io'                                   : ["commons-io:commons-io:2.4"],
 
         'joda-time:joda-time'                                     : ['joda-time:joda-time:2.5'],
+        'org.joda:joda-money': ['org.joda:joda-money:0.10.0'],
 
         'org.imgscalr:imgscalr-lib'                               : ['org.imgscalr:imgscalr-lib:4.2'],
         'org.apache.sanselan:sanselan'                            : ['org.apache.sanselan:sanselan:0.97-incubator'],

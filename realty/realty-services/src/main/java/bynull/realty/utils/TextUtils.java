@@ -7,8 +7,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class TextUtils {
     public static String normalizeTextForParsing(String text) {
-        if (text == null) return null;
+        text = StringUtils.trimToEmpty(text);
+        if (text.isEmpty()) return null;
 
+        text = text.toLowerCase();
         text = StringUtils.replace(text, ".", ". ");
         text = StringUtils.replace(text, ",", ", ");
         text = StringUtils.replace(text, "'", "");
