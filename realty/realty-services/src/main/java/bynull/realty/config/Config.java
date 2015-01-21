@@ -1,37 +1,24 @@
 package bynull.realty.config;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.annotation.Resource;
 
 /**
  * @author dionis on 03/12/14.
  */
+@Getter
+@Setter
 public class Config {
     private String vkRedirectURL;
+    private String fbAppId;
+    private String fbSecret;
+    private String vkAppId;
+
     private String s3Folder;
     @Resource
     private ESConfig esConfig;
 
-    public String getVkRedirectURL() {
-        return vkRedirectURL;
-    }
 
-    public void setVkRedirectURL(String vkRedirectURL) {
-        this.vkRedirectURL = vkRedirectURL;
-    }
-
-    public String getS3Folder() {
-        return s3Folder;
-    }
-
-    public void setS3Folder(String s3Folder) {
-        this.s3Folder = s3Folder;
-    }
-
-    public ESConfig getEsConfig() {
-        return esConfig;
-    }
-
-    public void setEsConfig(ESConfig esConfig) {
-        this.esConfig = esConfig;
-    }
 }

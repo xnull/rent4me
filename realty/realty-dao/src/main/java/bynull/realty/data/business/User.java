@@ -38,6 +38,11 @@ public class User implements UserDetails {
     private String facebookId;
     @Column(name = "vkontakte_id")
     private String vkontakteId;
+    @Column(name = "fb_access_token")
+    private String fbAccessToken;
+    @Column(name = "fb_access_token_expiration")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fbAccessTokenExpiration;
 
     @JoinTable(name = "realty_users_authorities", joinColumns = {
             @JoinColumn(name = "user_id")
@@ -70,6 +75,10 @@ public class User implements UserDetails {
     @Override
     public Collection<Authority> getAuthorities() {
         return Collections.unmodifiableSet(authorities);
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     public void addAuthority(Authority authority) {
@@ -122,13 +131,13 @@ public class User implements UserDetails {
         return passwordHash;
     }
 
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
     @Override
     public String getPassword() {
         return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public String getEmail() {
@@ -179,10 +188,6 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
-
     public Set<Apartment> getApartments() {
         return apartments;
     }
@@ -213,6 +218,22 @@ public class User implements UserDetails {
 
     public void setVkontakteId(String vkontakteId) {
         this.vkontakteId = vkontakteId;
+    }
+
+    public String getFbAccessToken() {
+        return fbAccessToken;
+    }
+
+    public void setFbAccessToken(String fbAccessToken) {
+        this.fbAccessToken = fbAccessToken;
+    }
+
+    public Date getFbAccessTokenExpiration() {
+        return fbAccessTokenExpiration;
+    }
+
+    public void setFbAccessTokenExpiration(Date fbAccessTokenExpiration) {
+        this.fbAccessTokenExpiration = fbAccessTokenExpiration;
     }
 
     @Override

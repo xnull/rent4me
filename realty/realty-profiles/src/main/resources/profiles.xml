@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd">
 
        <beans profile="local">
               <context:property-placeholder location="classpath*:local-config.properties"/>
@@ -36,6 +36,9 @@
                      <property name="vkRedirectURL" value="http://localhost:8888/dev"/>
                      <property name="s3Folder" value="dev_local"/>
                      <property name="esConfig" ref="esConfig"/>
+                     <property name="fbAppId" value="271375949714661"/>
+                     <property name="fbSecret" value="474f67c1629ff90a36499c9abc209db7"/>
+                     <property name="vkAppId" value="4463597"/>
               </bean>
        </beans>
 
@@ -67,6 +70,9 @@
                      <property name="vkRedirectURL" value="http://dev.rent4.me"/>
                      <property name="s3Folder" value="dev"/>
                      <property name="esConfig" ref="esConfig"/>
+                     <property name="fbAppId" value="270007246518198"/>
+                     <property name="fbSecret" value="03df82f660db88cf2cb7ee53f55f9656"/>
+                     <property name="vkAppId" value="4463597"/>
               </bean>
        </beans>
 
@@ -98,6 +104,9 @@
                      <property name="vkRedirectURL" value="http://rent4.me"/>
                      <property name="s3Folder" value="dev"/>
                      <property name="esConfig" ref="esConfig"/>
+                     <property name="fbAppId" value="270007246518198"/>
+                     <property name="fbSecret" value="03df82f660db88cf2cb7ee53f55f9656"/>
+                     <property name="vkAppId" value="4463597"/>
               </bean>
        </beans>
 

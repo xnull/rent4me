@@ -1,5 +1,6 @@
 package bynull.realty.services.impl.socialnet.fb;
 
+import bynull.realty.config.Config;
 import bynull.realty.data.business.external.facebook.FacebookPostType;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.utils.JsonUtils;
@@ -15,9 +16,11 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -34,8 +38,8 @@ import static bynull.realty.util.CommonUtils.copy;
 @Component
 @Slf4j
 public class FacebookHelperComponent {
-    public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
 
+    public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
     private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
 
         final HttpClientParams params = new HttpClientParams();
@@ -46,6 +50,8 @@ public class FacebookHelperComponent {
 
         this.setParams(params);
     }};
+    @Resource
+    Config config;
 
     public FacebookVerificationInfoDTO verify(final ClientShortInfo person) throws FacebookAuthorizationException {
         Assert.notNull(person.facebookId, "facebook id should not be empty");
@@ -62,6 +68,52 @@ public class FacebookHelperComponent {
         }
 
         return result;
+    }
+
+    public ExchangedToken exchangeToken(final ClientShortInfo fbInfo) {
+        try {
+            return new RetryRunner<ExchangedToken>(2).doWithRetry(new Callable<ExchangedToken>() {
+                @Override
+                public ExchangedToken call() {
+                    try {
+                        String appId = config.getFbAppId();
+                        String appSecret = config.getFbSecret();
+                        String exchangeURL = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=" + appId + "&client_secret=" + appSecret + "&fb_exchange_token=" + fbInfo.facebookOAuthToken;
+                        GetMethod exchangeMethodGet = new GetMethod(exchangeURL);
+                        try {
+                            int responseCode = httpManager.executeMethod(exchangeMethodGet);
+                            if (200 != responseCode) {
+                                throw new IllegalStateException("Received non-200 response code: " + responseCode);
+                            }
+                            String responseBodyAsString = exchangeMethodGet.getResponseBodyAsString();
+                            log.info("Response of FB: [{}]", responseBodyAsString);
+                            String[] splittedResult = StringUtils.split(responseBodyAsString, '&');
+                            String accessToken = null;
+                            String expires = null;
+                            for (String s : splittedResult) {
+                                String[] keyValuePair = StringUtils.split(s, '=');
+                                String key = keyValuePair[0];
+                                String value = keyValuePair[1];
+                                if ("access_token".equals(key)) {
+                                    accessToken = value;
+                                } else if ("expires".equals(key)) {
+                                    expires = value;
+                                }
+                            }
+                            return new ExchangedToken(accessToken, Integer.valueOf(expires));
+                        } finally {
+                            exchangeMethodGet.releaseConnection();
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+        } catch (RetryRunner.RetryFailedException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private FacebookVerificationInfoDTO performVerification(ClientShortInfo person) {
@@ -164,6 +216,16 @@ public class FacebookHelperComponent {
             }
         } finally {
             httpGet.releaseConnection();
+        }
+    }
+
+    public static class ExchangedToken {
+        public final String accessToken;
+        public final int liveTimeSeconds;
+
+        public ExchangedToken(String accessToken, int liveTimeSeconds) {
+            this.accessToken = accessToken;
+            this.liveTimeSeconds = liveTimeSeconds;
         }
     }
 

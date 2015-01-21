@@ -10,9 +10,8 @@ import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
 import bynull.realty.services.impl.socialnet.fb.FacebookHelperComponent;
 import bynull.realty.utils.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -33,9 +32,8 @@ import java.util.stream.Collectors;
  * @author dionis on 23/06/14.
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Resource
     UserRepository userRepository;
@@ -69,12 +67,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsernameTokenPair authenticateFacebookUser(String facebookId, String accessToken) {
         try {
-            FacebookHelperComponent.FacebookVerificationInfoDTO verify = facebookHelperComponent.verify(new FacebookHelperComponent.ClientShortInfo(facebookId, accessToken));
+            FacebookHelperComponent.ClientShortInfo person = new FacebookHelperComponent.ClientShortInfo(facebookId, accessToken);
+            FacebookHelperComponent.FacebookVerificationInfoDTO verify = facebookHelperComponent.verify(person);
+            FacebookHelperComponent.ExchangedToken exchangedToken = facebookHelperComponent.exchangeToken(person);
+
+            log.info("Updated exchange token: [{}] expiration: [{}]", exchangedToken.accessToken, exchangedToken.liveTimeSeconds);
+            
             User user = userRepository.findByFacebookId(verify.facebookId);
             if (user == null) {
                 user = userRepository.findByEmail(verify.email);
                 if (user == null) {
-                    LOGGER.debug("No user found that matches facebook id or email. Creating new one.");
+                    log.debug("No user found that matches facebook id or email. Creating new one.");
                     Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
 
                     user = new User();
@@ -84,7 +87,7 @@ public class UserServiceImpl implements UserService {
                     user.setEmail(verify.email);
                     user.setUsername("user_" + UUID.randomUUID());
                     String rawPass = "password" + UUID.randomUUID();
-                    LOGGER.info("Generated password for user with fb id [{}]: []", verify.facebookId, rawPass);
+                    log.info("Generated password for user with fb id [{}]: []", verify.facebookId, rawPass);
                     user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
                     user.setDisplayName(verify.name);
                     user.setFirstName(verify.firstName);
@@ -97,12 +100,17 @@ public class UserServiceImpl implements UserService {
                 user.setFacebookId(verify.facebookId);
                 user = userRepository.saveAndFlush(user);
             } else {
-                LOGGER.debug("Found user from facebook");
+                log.debug("Found user from facebook");
             }
+            user.setFbAccessToken(exchangedToken.accessToken);
+            final Date expirationDateTime = new Date(System.currentTimeMillis() + (exchangedToken.liveTimeSeconds * 1000));
+            user.setFbAccessTokenExpiration(expirationDateTime);
+            user = userRepository.saveAndFlush(user);
+
             String token = userTokenService.getTokenForUser(user);
             return new UsernameTokenPair(user.getUsername(), token);
         } catch (FacebookHelperComponent.FacebookAuthorizationException e) {
-            LOGGER.error("Exception occurred while trying to authorize", e);
+            log.error("Exception occurred while trying to authorize", e);
             throw new AuthorizationServiceException("Unable to authorize with facebook", e);
         }
     }
@@ -118,7 +126,7 @@ public class UserServiceImpl implements UserService {
                 user = userRepository.findByEmail(verify.email);
 
                 if (user == null) {
-                    LOGGER.debug("No user found that matches vkontakte id or email. Creating new one.");
+                    log.debug("No user found that matches vkontakte id or email. Creating new one.");
                     Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
 
                     user = new User();
@@ -128,7 +136,7 @@ public class UserServiceImpl implements UserService {
                     user.setEmail(verify.email);
                     user.setUsername("user_" + UUID.randomUUID());
                     String rawPass = "password" + UUID.randomUUID();
-                    LOGGER.info("Generated password for user with vk id [{}]: []", verify.vkUserId, rawPass);
+                    log.info("Generated password for user with vk id [{}]: []", verify.vkUserId, rawPass);
                     user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
 
 
@@ -156,13 +164,13 @@ public class UserServiceImpl implements UserService {
                 user = userRepository.saveAndFlush(user);
 //                userRepository.saveAndFlush(user);
             } else {
-                LOGGER.debug("Found user from vkontakte");
+                log.debug("Found user from vkontakte");
             }
             String token = userTokenService.getTokenForUser(user);
             return new UsernameTokenPair(user.getUsername(), token);
 
         } catch (VKHelperComponent.VKAuthorizationException e) {
-            LOGGER.error("Exception occurred while trying to authorize", e);
+            log.error("Exception occurred while trying to authorize", e);
             throw new AuthorizationServiceException("Unable to authorize with facebook", e);
         }
     }
