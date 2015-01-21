@@ -232,6 +232,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchText(text);
         SocialNetActions.changeFBSearchWithSubway(withSubway);
         SocialNetActions.changeFBSearchType(type);
+        this.fireAptSelectionStateChange();
         SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
     },
 
