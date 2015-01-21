@@ -20,9 +20,13 @@ public class RentalFeeParser {
     private final List<PatternCheck> patterns;
 
     private RentalFeeParser() {
+        PatternCheck simple = new PatternCheck(Pattern.compile(
+                "(.*)((стоимост|бюджет|цен)([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 7);
+        PatternCheck rangeBothComplete = new PatternCheck(Pattern.compile(
+                "(.*)((стоимост|бюджет|цен)([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 7);
         patterns = ImmutableList.of(
-//                Pattern.compile("(.*)(цена)((\\D){1,5})(\\b(([\\d]{3,8})|(([\\d]{0,3})(\\s)?[\\d]{3}))\\b)((\\s){0,2})р((\\S{1,6})|(\\.))?(.*)")
-                new PatternCheck(Pattern.compile("(.*)(цена)((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})р((\\S{1,6})|(\\.))?(.*)", FLAGS), 5)
+                simple,
+                rangeBothComplete
         );
     }
 
@@ -40,6 +44,7 @@ public class RentalFeeParser {
             Pattern pattern = patternCheck.pattern;
             Matcher matcher = pattern.matcher(text);
             if (matcher.matches()) {
+                log.info("Price matched by pattern [{}]", matcher.pattern());
                 String value = StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup));
                 value = StringUtils.replace(value, " ", "");
                 try {
