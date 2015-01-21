@@ -27,12 +27,44 @@ var Post = React.createClass({
         var hasMetros = _.size(item.metros) > 0;
 
         var metroPreviews = hasMetros ? (
-            <div>
+            <div className="col-md-6">
                 <h3>Метро</h3>
-                <div className="row">
+                <div>
                     <ul>
                         {metroElements}
                     </ul>
+                </div>
+            </div>
+        ) : null;
+
+        var priceInfo = item.rental_fee ? (
+            <div>
+                Цена: {item.rental_fee}
+            </div>
+        ) : null;
+
+        var roomCountInfo = item.room_count ? (
+            <div>
+                Комнат: {item.room_count}
+            </div>
+        ) : null;
+
+        var genericInfoAvailable = item.room_count || item.rental_fee || false;
+        var genericInfoBlock = genericInfoAvailable ? (
+            <div className="col-md-6">
+                <h3>Детали</h3>
+                <div>
+                {priceInfo}
+                {roomCountInfo}
+                </div>
+            </div>
+        ) : null;
+
+        var infoBlock = (hasMetros || genericInfoAvailable) ? (
+            <div>
+                <div className="row">
+                    {metroPreviews}
+                    {genericInfoBlock}
                 </div>
                 <hr/>
             </div>
@@ -61,7 +93,7 @@ var Post = React.createClass({
 
                         <hr/>
 
-                        {metroPreviews}
+                        {infoBlock}
 
                         <div className="row">
                             <div className="col-md-6">

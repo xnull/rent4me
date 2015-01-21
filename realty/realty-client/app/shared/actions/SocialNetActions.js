@@ -27,6 +27,17 @@ var SocialNetActions = {
         });
     },
 
+    changeFBSearchRooms: function (oneAptSelected, twoAptSelected, threeAptSelected) {
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_ROOMS,
+            value: {
+                '1': oneAptSelected || false,
+                '2': twoAptSelected || false,
+                '3': threeAptSelected || false
+            }
+        });
+    },
+
     changeFBSearchWithSubway: function (value) {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_WITH_SUBWAY,
@@ -42,13 +53,25 @@ var SocialNetActions = {
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findFBPosts: function (text, type, withSubway) {
+    findFBPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected) {
         BlockUI.blockUI();
 
         var limit = SocialNetFBStore.getLimit();
         var offset = SocialNetFBStore.getOffset();
 
         var url = '/rest/social/fb/search?text=' + (text ? text : '') + "&type=" + type + "&with_subway=" + (withSubway ? true : false) + "&limit=" + limit + "&offset=" + offset;
+
+        if (oneRoomAptSelected) {
+            url += "&rooms=1";
+        }
+
+        if (twoRoomAptSelected) {
+            url += "&rooms=2";
+        }
+
+        if (threeRoomAptSelected) {
+            url += "&rooms=3";
+        }
 
         Ajax
             .GET(url)

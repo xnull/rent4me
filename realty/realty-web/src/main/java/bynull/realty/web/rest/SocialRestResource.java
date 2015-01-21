@@ -11,7 +11,10 @@ import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author dionis on 22/06/14.
@@ -56,6 +59,7 @@ public class SocialRestResource {
             @QueryParam("text") String text,
             @QueryParam("type") String type,
             @QueryParam("with_subway") boolean withSubway,
+            @QueryParam("rooms") List<String> rooms,
             @QueryParam("limit") int limit,
             @QueryParam("offset") int offset
     ) {
@@ -67,7 +71,11 @@ public class SocialRestResource {
 
         FacebookService.FindMode findMode = FacebookService.FindMode.valueOf(type);
 
-        List<FacebookPostDTO> found = facebookService.findFBPosts(text, withSubway, limitAndOffset, findMode);
+        Set<FacebookService.RoomCount> roomsCount = rooms != null
+                ? rooms.stream().map(FacebookService.RoomCount::findByValueOrFail).collect(Collectors.toSet())
+                : Collections.emptySet();
+
+        List<FacebookPostDTO> found = facebookService.findFBPosts(text, withSubway, roomsCount, limitAndOffset, findMode);
         List<FacebookPostJSON> result = facebookPostConverter.toTargetList(found);
 
 //        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());

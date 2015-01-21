@@ -67,6 +67,9 @@ module.exports = React.createClass({
             text: SocialNetStore.getSearchText(),
             type: SocialNetStore.getSearchType(),
             posts: SocialNetStore.getSearchResults(),
+            oneRoomAptSelected: SocialNetStore.getSearchRooms()["1"],
+            twoRoomAptSelected: SocialNetStore.getSearchRooms()["2"],
+            threeRoomAptSelected: SocialNetStore.getSearchRooms()["3"],
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults(),
             lastSearchTextChangeMS: 0
         };
@@ -96,8 +99,13 @@ module.exports = React.createClass({
             var text = this.state.text;
             var withSubway = this.state.withSubway;
             var type = this.state.type;
+
+            var oneRoomAptSelected = this.state.oneRoomAptSelected;
+            var twoRoomAptSelected = this.state.twoRoomAptSelected;
+            var threeRoomAptSelected = this.state.threeRoomAptSelected;
+
             console.log('Searching for text: ' + text);
-            SocialNetActions.findFBPosts(text, type, withSubway);
+            SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
         }
     },
 
@@ -155,16 +163,58 @@ module.exports = React.createClass({
         this.onClick();
     },
 
+    fireAptSelectionStateChange: function () {
+        var oneRoomAptSelected = this.state.oneRoomAptSelected;
+        var twoRoomAptSelected = this.state.twoRoomAptSelected;
+        var threeRoomAptSelected = this.state.threeRoomAptSelected;
+
+        SocialNetActions.changeFBSearchRooms(oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
+    },
+
+    onOneRoomAptValueChanged: function (value) {
+        this.setState(assign(this.state, {
+            oneRoomAptSelected: value
+        }));
+
+        this.fireAptSelectionStateChange();
+
+        this.onClick();
+    },
+
+    onTwoRoomAptValueChanged: function (value) {
+        this.setState(assign(this.state, {
+            twoRoomAptSelected: value
+        }));
+
+        this.fireAptSelectionStateChange();
+
+        this.onClick();
+    },
+
+    onThreeRoomAptValueChanged: function (value) {
+        this.setState(assign(this.state, {
+            threeRoomAptSelected: value
+        }));
+
+        this.fireAptSelectionStateChange();
+
+        this.onClick();
+    },
+
     onClear: function () {
         SocialNetActions.resetFBSearchState();
         SocialNetActions.changeFBSearchText(null);
         SocialNetActions.changeFBSearchType(null);
         SocialNetActions.changeFBSearchWithSubway(false);
+        SocialNetActions.changeFBSearchRooms(false, false, false);
 
         this.setState(assign(this.state, {
             withSubway: SocialNetStore.isSearchWithSubway(),
             type: SocialNetStore.getSearchType(),
-            text: SocialNetStore.getSearchText()
+            text: SocialNetStore.getSearchText(),
+            oneRoomAptSelected: SocialNetStore.getSearchRooms()["1"],
+            twoRoomAptSelected: SocialNetStore.getSearchRooms()["2"],
+            threeRoomAptSelected: SocialNetStore.getSearchRooms()["3"]
         }));
     },
 
@@ -172,13 +222,17 @@ module.exports = React.createClass({
         var text = this.state.text;
         var withSubway = this.state.withSubway;
         var type = this.state.type;
+        var oneRoomAptSelected = this.state.oneRoomAptSelected;
+        var twoRoomAptSelected = this.state.twoRoomAptSelected;
+        var threeRoomAptSelected = this.state.threeRoomAptSelected;
+
         console.log('Searching for text: ' + text);
 
         SocialNetActions.resetFBSearchState();
         SocialNetActions.changeFBSearchText(text);
         SocialNetActions.changeFBSearchWithSubway(withSubway);
         SocialNetActions.changeFBSearchType(type);
-        SocialNetActions.findFBPosts(text, type, withSubway);
+        SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
     },
 
     render: function () {
@@ -186,6 +240,14 @@ module.exports = React.createClass({
         var hasMoreResults = this.state.hasMoreSearchResults || false;
         var text = this.state.text || '';
         var withSubWay = this.state.withSubway || false;
+
+        var oneRoomAptSelected = this.state.oneRoomAptSelected;
+        var twoRoomAptSelected = this.state.twoRoomAptSelected;
+        var threeRoomAptSelected = this.state.threeRoomAptSelected;
+
+        var onOneRoomAptValueChanged = this.onOneRoomAptValueChanged;
+        var onTwoRoomAptValueChanged = this.onTwoRoomAptValueChanged;
+        var onThreeRoomAptValueChanged = this.onThreeRoomAptValueChanged;
 
         console.log('with subway? ' + withSubWay);
 
@@ -200,7 +262,15 @@ module.exports = React.createClass({
                             <div className='row'>
                                 <div className="col-md-10 col-md-offset-1">
                                     <RentType onRentTypeChange={this.onRentTypeChange}/>
-                                    <RoomsCount />
+                                    <RoomsCount
+                                        oneRoomAptSelected={oneRoomAptSelected}
+                                        twoRoomAptSelected={twoRoomAptSelected}
+                                        threeRoomAptSelected={threeRoomAptSelected}
+
+                                        onOneRoomAptValueChanged={onOneRoomAptValueChanged}
+                                        onTwoRoomAptValueChanged={onTwoRoomAptValueChanged}
+                                        onThreeRoomAptValueChanged={onThreeRoomAptValueChanged}
+                                    />
                                     <PriceRange />
                                 </div>
                             </div>

@@ -29,6 +29,11 @@ function emptyPost() {
 
 var _searchText = null;
 var _searchType = 'RENTER'; //'LESSOR' or 'RENTER'
+var _searchRooms = {
+    '1': false,
+    '2': false,
+    '3': false
+};
 var _searchWithSubway = false;
 var _posts = [];
 var _offset = 0;
@@ -53,6 +58,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
     getSearchType: function () {
         return _searchType;
+    },
+
+    getSearchRooms: function () {
+        return _searchRooms;
     },
 
     saveSearchResults: function (posts) {
@@ -135,6 +144,11 @@ AppDispatcher.register(function (payload) {
 
         case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_TYPE:
             _searchType = action.value || 'RENTER';
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_ROOMS:
+            _searchRooms = action.value;
             return true;//don't emit any event
             break;
 

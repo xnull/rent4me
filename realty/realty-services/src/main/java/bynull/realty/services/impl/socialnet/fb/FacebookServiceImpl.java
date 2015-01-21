@@ -212,10 +212,11 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     @Transactional(readOnly = true)
     @Override
-    public List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindMode findMode) {
+    public List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, LimitAndOffset limitAndOffset, FindMode findMode) {
         Assert.notNull(text);
+        Assert.notNull(roomsCount);
 
-        return findPosts(text, withSubway, limitAndOffset, findMode);
+        return findPosts(text, withSubway, roomsCount, limitAndOffset, findMode);
     }
 
     @Transactional(readOnly = true)
@@ -238,7 +239,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         );
 
 //        return findPosts(text, withSubway, limitAndOffset, typeQuery);
-        return findPosts(text, withSubway, limitAndOffset, FindMode.RENTER);
+        return findPosts(text, withSubway, Collections.emptySet(), limitAndOffset, FindMode.RENTER);
     }
 
     @Transactional(readOnly = true)
@@ -263,10 +264,11 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         );
 
 //        return findPosts(text, withSubway, limitAndOffset, typeQuery);
-        return findPosts(text, withSubway, limitAndOffset, FindMode.LESSOR);
+        return findPosts(text, withSubway, Collections.emptySet(), limitAndOffset, FindMode.LESSOR);
     }
 
-    private List<FacebookPostDTO> findPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset, FindMode findMode) {
+    private List<FacebookPostDTO> findPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, LimitAndOffset limitAndOffset, FindMode findMode) {
+        Assert.notNull(roomsCount);
         text = StringUtils.trimToEmpty(text);
         final List<String> keyWords;
 
@@ -292,11 +294,17 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         String qlString = "select p from FacebookScrapedPost p where (" + findModeJPQL + ")" +
                 (!searchText.isEmpty() ? " AND lower(p.message) like :msg " : "") +
                 (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
+                (!roomsCount.isEmpty() ? " AND p.roomCount IN (:roomCounts) " : "") +
                 " ORDER BY p.created DESC";
         TypedQuery<FacebookScrapedPost> query = em.createQuery(qlString, FacebookScrapedPost.class);
 
         if (!searchText.isEmpty()) {
             query.setParameter("msg", ilike(searchText));
+        }
+
+        if (!roomsCount.isEmpty()) {
+            Set<Integer> values = roomsCount.stream().map(rc -> Integer.valueOf(rc.value)).collect(Collectors.toSet());
+            query.setParameter("roomCounts", values);
         }
 
         List<FacebookScrapedPost> resultList = query
