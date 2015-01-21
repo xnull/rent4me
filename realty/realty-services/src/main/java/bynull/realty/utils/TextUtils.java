@@ -23,4 +23,25 @@ public class TextUtils {
 
         return text;
     }
+
+    public static String normalizeTextAggressivelyForParsing(String text) {
+        text = normalizeTextForParsing(text);
+
+        if (text == null) {
+            return null;
+        }
+
+        text = StringUtils.replace(text, ".", "");
+        text = StringUtils.replace(text, ",", "");
+        text = StringUtils.replace(text, "!", "");
+        text = StringUtils.replace(text, "?", "");
+
+        text = normalizeTextForParsing(text);
+
+        if (text == null) {
+            return null;
+        }
+
+        return text;
+    }
 }

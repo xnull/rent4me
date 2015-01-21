@@ -34,7 +34,7 @@ public class RentalFeeParser {
         text = StringUtils.trimToEmpty(text).toLowerCase();
         if (text.isEmpty()) return null;
 
-        text = TextUtils.normalizeTextForParsing(text);
+        text = TextUtils.normalizeTextAggressivelyForParsing(text);
 
         for (PatternCheck patternCheck : patterns) {
             Pattern pattern = patternCheck.pattern;
