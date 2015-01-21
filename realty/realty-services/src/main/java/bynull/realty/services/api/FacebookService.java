@@ -26,7 +26,7 @@ public interface FacebookService {
 
     List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
 
-    List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, LimitAndOffset limitAndOffset, FindMode findMode);
+    List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, FindMode findMode);
 
     FacebookPageDTO findPageById(long fbPageId);
 

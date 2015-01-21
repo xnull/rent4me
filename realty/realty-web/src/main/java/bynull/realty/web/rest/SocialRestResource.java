@@ -60,6 +60,8 @@ public class SocialRestResource {
             @QueryParam("type") String type,
             @QueryParam("with_subway") boolean withSubway,
             @QueryParam("rooms") List<String> rooms,
+            @QueryParam("min_price") Integer minPrice,
+            @QueryParam("max_price") Integer maxPrice,
             @QueryParam("limit") int limit,
             @QueryParam("offset") int offset
     ) {
@@ -75,7 +77,7 @@ public class SocialRestResource {
                 ? rooms.stream().map(FacebookService.RoomCount::findByValueOrFail).collect(Collectors.toSet())
                 : Collections.emptySet();
 
-        List<FacebookPostDTO> found = facebookService.findFBPosts(text, withSubway, roomsCount, limitAndOffset, findMode);
+        List<FacebookPostDTO> found = facebookService.findFBPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
         List<FacebookPostJSON> result = facebookPostConverter.toTargetList(found);
 
 //        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());

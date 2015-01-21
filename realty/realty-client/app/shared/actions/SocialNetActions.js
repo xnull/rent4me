@@ -11,6 +11,7 @@ var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 var JSON = require('JSON2');
 var Ajax = require('../common/Ajax');
+var _String = require("underscore.string");
 
 var SocialNetActions = {
 
@@ -38,6 +39,39 @@ var SocialNetActions = {
         });
     },
 
+    _trimString(str) {
+        var what = ['.', ',', ' '];
+        var len = what.length;
+        var i;
+
+        str = _String(str || '').trim().value();
+
+        console.log('Trimmed value: "' + str + '"');
+
+        for (i = 0; i < len; i++) {
+            var itemToReplace = what[i];
+            console.log('Removing "' + itemToReplace + '" value in: "' + str + '"');
+            str = str.replace(itemToReplace, '');
+            console.log('Replaced value: "' + str + '"');
+        }
+
+        return str;
+    },
+
+    changeFBSearchPrice: function (min, max) {
+
+        min = this._trimString(min);
+        max = this._trimString(max);
+
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_PRICE,
+            value: {
+                min: min ? min : null,
+                max: max ? max : null
+            }
+        });
+    },
+
     changeFBSearchWithSubway: function (value) {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_WITH_SUBWAY,
@@ -53,7 +87,7 @@ var SocialNetActions = {
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findFBPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected) {
+    findFBPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice) {
         BlockUI.blockUI();
 
         var limit = SocialNetFBStore.getLimit();
@@ -72,6 +106,25 @@ var SocialNetActions = {
         if (threeRoomAptSelected) {
             url += "&rooms=3";
         }
+
+        console.log('Min price before trimming' + minPrice);
+        console.log('Max price before trimming' + maxPrice);
+
+        minPrice = this._trimString(minPrice);
+        maxPrice = this._trimString(maxPrice);
+
+        console.log('Min price after trimming' + minPrice);
+        console.log('Max price after trimming' + maxPrice);
+
+
+        if (minPrice) {
+            url += "&min_price=" + minPrice;
+        }
+
+        if (maxPrice) {
+            url += "&max_price=" + maxPrice;
+        }
+
 
         Ajax
             .GET(url)

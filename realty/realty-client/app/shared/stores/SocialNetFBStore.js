@@ -34,6 +34,8 @@ var _searchRooms = {
     '2': false,
     '3': false
 };
+var _searchMinPrice = null;
+var _searchMaxPrice = null;
 var _searchWithSubway = false;
 var _posts = [];
 var _offset = 0;
@@ -62,6 +64,14 @@ var Store = assign({}, EventEmitter.prototype, {
 
     getSearchRooms: function () {
         return _searchRooms;
+    },
+
+    getSearchMinPrice: function () {
+        return _searchMinPrice;
+    },
+
+    getSearchMaxPrice: function () {
+        return _searchMaxPrice;
     },
 
     saveSearchResults: function (posts) {
@@ -149,6 +159,13 @@ AppDispatcher.register(function (payload) {
 
         case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_ROOMS:
             _searchRooms = action.value;
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_PRICE:
+            var val = action.value || {};
+            _searchMinPrice = val.min || null;
+            _searchMaxPrice = val.max || null;
             return true;//don't emit any event
             break;
 

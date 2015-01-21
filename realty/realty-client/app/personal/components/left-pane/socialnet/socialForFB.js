@@ -70,6 +70,8 @@ module.exports = React.createClass({
             oneRoomAptSelected: SocialNetStore.getSearchRooms()["1"],
             twoRoomAptSelected: SocialNetStore.getSearchRooms()["2"],
             threeRoomAptSelected: SocialNetStore.getSearchRooms()["3"],
+            minPrice: SocialNetStore.getSearchMinPrice(),
+            maxPrice: SocialNetStore.getSearchMaxPrice(),
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults(),
             lastSearchTextChangeMS: 0
         };
@@ -104,8 +106,11 @@ module.exports = React.createClass({
             var twoRoomAptSelected = this.state.twoRoomAptSelected;
             var threeRoomAptSelected = this.state.threeRoomAptSelected;
 
+            var minPrice = this.state.minPrice;
+            var maxPrice = this.state.maxPrice;
+
             console.log('Searching for text: ' + text);
-            SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
+            SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
         }
     },
 
@@ -163,6 +168,38 @@ module.exports = React.createClass({
         this.onClick();
     },
 
+    onMinPriceChange: function (e) {
+        var value = e.target.value;
+        console.log("With min price new value: " + value);
+
+        var minPrice = value;
+        var maxPrice = this.state.maxPrice;
+
+        SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
+
+        this.setState(assign(this.state, {
+            minPrice: minPrice
+        }));
+
+        this.onClick();
+    },
+
+    onMaxPriceChange: function (e) {
+        var value = e.target.value;
+        console.log("With max price new value: " + value);
+
+        var minPrice = this.state.minPrice;
+        var maxPrice = value;
+
+        SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
+
+        this.setState(assign(this.state, {
+            maxPrice: maxPrice
+        }));
+
+        this.onClick();
+    },
+
     fireAptSelectionStateChange: function () {
         var oneRoomAptSelected = this.state.oneRoomAptSelected;
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
@@ -207,6 +244,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchType(null);
         SocialNetActions.changeFBSearchWithSubway(false);
         SocialNetActions.changeFBSearchRooms(false, false, false);
+        SocialNetActions.changeFBSearchPrice(null, null);
 
         this.setState(assign(this.state, {
             withSubway: SocialNetStore.isSearchWithSubway(),
@@ -226,14 +264,18 @@ module.exports = React.createClass({
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
         var threeRoomAptSelected = this.state.threeRoomAptSelected;
 
-        console.log('Searching for text: ' + text);
+        var minPrice = this.state.minPrice;
+        var maxPrice = this.state.maxPrice;
+
+        console.log('Searching for text: ' + text + "& min price: " + minPrice + " & max price " + maxPrice);
 
         SocialNetActions.resetFBSearchState();
         SocialNetActions.changeFBSearchText(text);
         SocialNetActions.changeFBSearchWithSubway(withSubway);
         SocialNetActions.changeFBSearchType(type);
         this.fireAptSelectionStateChange();
-        SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
+        SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
+        SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
     },
 
     render: function () {
@@ -246,9 +288,8 @@ module.exports = React.createClass({
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
         var threeRoomAptSelected = this.state.threeRoomAptSelected;
 
-        var onOneRoomAptValueChanged = this.onOneRoomAptValueChanged;
-        var onTwoRoomAptValueChanged = this.onTwoRoomAptValueChanged;
-        var onThreeRoomAptValueChanged = this.onThreeRoomAptValueChanged;
+        var minPrice = this.state.minPrice;
+        var maxPrice = this.state.maxPrice;
 
         console.log('with subway? ' + withSubWay);
 
@@ -268,11 +309,18 @@ module.exports = React.createClass({
                                         twoRoomAptSelected={twoRoomAptSelected}
                                         threeRoomAptSelected={threeRoomAptSelected}
 
-                                        onOneRoomAptValueChanged={onOneRoomAptValueChanged}
-                                        onTwoRoomAptValueChanged={onTwoRoomAptValueChanged}
-                                        onThreeRoomAptValueChanged={onThreeRoomAptValueChanged}
+                                        onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
+                                        onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
+                                        onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
                                     />
-                                    <PriceRange />
+
+                                    <PriceRange
+                                        minPrice={minPrice}
+                                        maxPrice={maxPrice}
+
+                                        onMinPriceChange={this.onMinPriceChange}
+                                        onMaxPriceChange={this.onMaxPriceChange}
+                                    />
                                 </div>
                             </div>
                             <br/>

@@ -220,11 +220,11 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     @Transactional(readOnly = true)
     @Override
-    public List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, LimitAndOffset limitAndOffset, FindMode findMode) {
+    public List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, FindMode findMode) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
 
-        return findPosts(text, withSubway, roomsCount, limitAndOffset, findMode);
+        return findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
     }
 
     @Transactional(readOnly = true)
@@ -247,7 +247,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         );
 
 //        return findPosts(text, withSubway, limitAndOffset, typeQuery);
-        return findPosts(text, withSubway, Collections.emptySet(), limitAndOffset, FindMode.RENTER);
+        return findPosts(text, withSubway, Collections.emptySet(), null, null, limitAndOffset, FindMode.RENTER);
     }
 
     @Transactional(readOnly = true)
@@ -272,10 +272,10 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         );
 
 //        return findPosts(text, withSubway, limitAndOffset, typeQuery);
-        return findPosts(text, withSubway, Collections.emptySet(), limitAndOffset, FindMode.LESSOR);
+        return findPosts(text, withSubway, Collections.emptySet(), null, null, limitAndOffset, FindMode.LESSOR);
     }
 
-    private List<FacebookPostDTO> findPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, LimitAndOffset limitAndOffset, FindMode findMode) {
+    private List<FacebookPostDTO> findPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, FindMode findMode) {
         Assert.notNull(roomsCount);
         text = StringUtils.trimToEmpty(text);
         final List<String> keyWords;
@@ -303,6 +303,8 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                 (!searchText.isEmpty() ? " AND lower(p.message) like :msg " : "") +
                 (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
                 (!roomsCount.isEmpty() ? " AND p.roomCount IN (:roomCounts) " : "") +
+                (minPrice != null ? " AND p.rentalFee >= :minPrice " : "") +
+                (maxPrice != null ? " AND p.rentalFee <= :maxPrice " : "") +
                 " ORDER BY p.created DESC";
         TypedQuery<FacebookScrapedPost> query = em.createQuery(qlString, FacebookScrapedPost.class);
 
@@ -313,6 +315,14 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         if (!roomsCount.isEmpty()) {
             Set<Integer> values = roomsCount.stream().map(rc -> Integer.valueOf(rc.value)).collect(Collectors.toSet());
             query.setParameter("roomCounts", values);
+        }
+
+        if (minPrice != null) {
+            query.setParameter("minPrice", BigDecimal.valueOf(minPrice));
+        }
+
+        if (maxPrice != null) {
+            query.setParameter("maxPrice", BigDecimal.valueOf(maxPrice));
         }
 
         List<FacebookScrapedPost> resultList = query
