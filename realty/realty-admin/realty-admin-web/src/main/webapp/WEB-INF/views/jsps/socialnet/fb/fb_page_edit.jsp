@@ -5,10 +5,7 @@
 <div class="page-header">
     <h1>FB Page</h1>
 
-    <div>
-        <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB
-        id.
-    </div>
+    <jsp:include page="./_info.jsp"/>
 </div>
 <form role="form" method="post" id="userEditForm">
     <div class="form-group">
