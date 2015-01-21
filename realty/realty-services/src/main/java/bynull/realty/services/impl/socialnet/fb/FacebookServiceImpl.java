@@ -2,6 +2,7 @@ package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.components.text.Porter;
+import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.config.Config;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
@@ -49,6 +50,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -99,10 +101,13 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     RoomCountParser roomCountParser;
 
+    RentalFeeParser rentalFeeParser;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         porter = Porter.getInstance();
         roomCountParser = RoomCountParser.getInstance();
+        rentalFeeParser = RentalFeeParser.getInstance();
     }
 
     @Transactional
@@ -147,10 +152,13 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                             continue;
                         }
                         post.setFacebookPageToScrap(page);
-                        Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
+                        String message = post.getMessage();
+                        Set<MetroEntity> matchedMetros = matchMetros(metros, message);
                         post.setMetros(matchedMetros);
-                        Integer roomCount = roomCountParser.findRoomCount(post.getMessage());
+                        Integer roomCount = roomCountParser.findRoomCount(message);
                         post.setRoomCount(roomCount);
+                        BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
+                        post.setRentalFee(rentalFee);
                         facebookScrapedPostRepository.save(post);
                     }
                     em.flush();
@@ -464,10 +472,14 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         do {
             List<FacebookScrapedPost> posts = postsPage.getContent();
             for (FacebookScrapedPost post : posts) {
-                Set<MetroEntity> matchedMetros = matchMetros(metros, post.getMessage());
+                String message = post.getMessage();
+
+                Set<MetroEntity> matchedMetros = matchMetros(metros, message);
                 post.setMetros(matchedMetros);
-                Integer roomCount = roomCountParser.findRoomCount(post.getMessage());
+                Integer roomCount = roomCountParser.findRoomCount(message);
                 post.setRoomCount(roomCount);
+                BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
+                post.setRentalFee(rentalFee);
                 if (!matchedMetros.isEmpty()) {
                     countOfMatchedPosts++;
                 }
