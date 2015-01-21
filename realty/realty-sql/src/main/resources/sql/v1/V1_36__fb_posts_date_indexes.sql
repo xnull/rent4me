@@ -1,0 +1,2 @@
+DROP INDEX IF EXISTS fb_scrapped_posts$fb_post_ext_created_dt__idx;
+CREATE INDEX fb_scrapped_posts$fb_post_ext_created_dt__idx ON facebook_scraped_posts USING BTREE (ext_created_dt);

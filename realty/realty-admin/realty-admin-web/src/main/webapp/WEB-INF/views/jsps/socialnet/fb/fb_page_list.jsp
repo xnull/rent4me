@@ -8,8 +8,10 @@
 </div>
 <div>
     <p>
+        <a href="http://lookup-id.com/" target="_blank">http://lookup-id.com/</a> - Find out FB
+        id (Best choice).
         <a href="http://wallflux.com/facebook_id/" target="_blank">http://wallflux.com/facebook_id/</a> - Find out FB
-        id.
+        id(with captcha).
     </p>
 
     <p>

@@ -112,7 +112,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     @Transactional
     @Override
-    public void scrapNewPosts() {
+    public void syncWithFB() {
         List<FacebookPageToScrap> fbPages = facebookPageToScrapRepository.findAll();
         List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 

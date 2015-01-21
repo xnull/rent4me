@@ -34,4 +34,11 @@ public class MaintenanceController {
         redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All FB posts migrated");
         return new ModelAndView("redirect:/secure/maintenance");
     }
+
+    @RequestMapping(value = "manual_sync")
+    public ModelAndView manualSyncWithFB(RedirectAttributes redirectAttributes) {
+        facebookService.syncWithFB();
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with FB");
+        return new ModelAndView("redirect:/secure/maintenance");
+    }
 }

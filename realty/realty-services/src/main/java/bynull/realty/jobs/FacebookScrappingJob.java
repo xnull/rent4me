@@ -25,7 +25,7 @@ public class FacebookScrappingJob implements Runnable {
     @Override
     public void run() {
         LOGGER.info("Starting to scrap new FB posts");
-        facebookService.scrapNewPosts();
+        facebookService.syncWithFB();
         LOGGER.info("Ended scraping new FB posts");
     }
 }

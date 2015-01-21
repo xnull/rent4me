@@ -12,7 +12,7 @@ import java.util.Set;
  * Created by dionis on 02/01/15.
  */
 public interface FacebookService {
-    void scrapNewPosts();
+    void syncWithFB();
 
     void syncElasticSearchWithDB();
 
