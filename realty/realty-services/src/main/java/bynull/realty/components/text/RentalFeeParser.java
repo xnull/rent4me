@@ -79,7 +79,11 @@ public class RentalFeeParser {
                 value = StringUtils.replace(value, " ", "");
                 try {
                     BigDecimal bigDecimal = new BigDecimal(value);
-                    return bigDecimal;
+                    if (bigDecimal.compareTo(BigDecimal.ZERO) >= 0) {
+                        return bigDecimal;
+                    } else {
+                        log.error("Parsing error. Value parsed: [{}]", bigDecimal);
+                    }
                 } catch (Exception e) {
                     log.error("Exception occurred while parsing result value [" + value + "]", e);
                 }
