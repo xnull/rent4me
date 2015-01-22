@@ -7,6 +7,20 @@
 
 <jsp:include page="../../_pagination.jsp"/>
 
+<p>
+
+<form role="form" method="get" id="searchForm">
+    <div class="form-group">
+        <input type="hidden" id="page" name="page" value="${paginationHelper.currentPage}">
+        <input type="hidden" id="limit" name="limit" value="${paginationHelper.resultsOnPage}">
+        <label for="textAd">Query text</label>
+        <input type="text" class="form-control" id="text" name="text" placeholder="Search query" value="${searchText}">
+    </div>
+    <button type="submit" class="btn btn-default">Save</button>
+</form>
+</p>
+
+
 <table class="table table-striped">
     <thead>
     <tr>

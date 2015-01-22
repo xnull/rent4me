@@ -54,6 +54,12 @@ public class RentalFeeParser {
         //пример: 45 000
         fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
                 "(.*)" + fullPriceBellow_1000_patternTemplate + "([\\D](.*)|$)", FLAGS), 2);
+
+        PatternCheck patternCheck = new PatternCheck(
+                Pattern.compile(""),
+                0
+        );
+
         patterns = ImmutableList.of(
                 simpleInverseAbove1000,
                 simpleInverseBellow1000,

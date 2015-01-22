@@ -460,8 +460,10 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     @Transactional(readOnly = true)
     @Override
-    public List<FacebookPostDTO> findPosts(PageRequest pageRequest) {
-        return facebookPostConverter.toTargetList(facebookScrapedPostRepository.findAll(pageRequest).getContent());
+    public List<FacebookPostDTO> findPosts(String text, PageRequest pageRequest) {
+        String txt = ("%" + text + "%").toLowerCase();
+        List<FacebookScrapedPost> byQuery = text != null ? facebookScrapedPostRepository.findByQuery(txt, pageRequest) : facebookScrapedPostRepository.findAll(pageRequest).getContent();
+        return facebookPostConverter.toTargetList(byQuery);
     }
 
     @Transactional(readOnly = true)
@@ -518,6 +520,12 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
             }
         }
         return matchedMetros;
+    }
+
+    @Override
+    public long countByQuery(String text) {
+        String query = ("%" + text + "%").toLowerCase();
+        return text != null ? facebookScrapedPostRepository.countByQuery(query) : facebookScrapedPostRepository.count();
     }
 
     public static class DbConfig {

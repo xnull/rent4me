@@ -101,14 +101,17 @@ public class SocialNetController {
     }
 
     @RequestMapping(value = "fb/posts")
-    public ModelAndView listFbPosts(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
+    public ModelAndView listFbPosts(@RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "limit", defaultValue = "10") int limit,
+                                    @RequestParam(value = "text", required = false) String text) {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_posts_list");
-        long totalElements = facebookService.countOfPages();
+        long totalElements = facebookService.countByQuery(text);
         PaginationHelper paginationHelper = new PaginationHelper(totalElements, page, limit, "/secure/socialnet/fb/posts");
-        List<FacebookPostDTO> posts = facebookService.findPosts(new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
+        List<FacebookPostDTO> posts = facebookService.findPosts(text, new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
         List<FacebookPostForm> forms = fbPostConverter.toTargetList(posts);
         mav.addObject("paginationHelper", paginationHelper);
         mav.addObject("totalPages", totalElements);
+        mav.addObject("searchText", text);
         mav.addObject("page", page);
         mav.addObject("posts", forms);
         return mav;

@@ -30,11 +30,13 @@ public interface FacebookService {
 
     FacebookPageDTO findPageById(long fbPageId);
 
-    List<FacebookPostDTO> findPosts(PageRequest pageRequest);
+    List<FacebookPostDTO> findPosts(String text, PageRequest pageRequest);
 
     long countOfPages();
 
     void reparseExistingFBPosts();
+
+    long countByQuery(String text);
 
     static enum FindMode {
         RENTER, LESSOR

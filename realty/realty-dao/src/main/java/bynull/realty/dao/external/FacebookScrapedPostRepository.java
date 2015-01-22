@@ -14,6 +14,12 @@ import java.util.List;
 public interface FacebookScrapedPostRepository extends JpaRepository<FacebookScrapedPost, Long> {
     List<FacebookScrapedPost> findByExternalIdIn(List<String> externalIds);
 
+    @Query("select p from FacebookScrapedPost p where lower(p.message) like :text order by created desc")
+    List<FacebookScrapedPost> findByQuery(@Param("text") String text, Pageable pageable);
+
+    @Query("select count(p) from FacebookScrapedPost p where lower(p.message) like :text")
+    long countByQuery(@Param("text") String text);
+
     @Query("select p from FacebookScrapedPost p where p.externalId=:externalId order by created desc")
     List<FacebookScrapedPost> findByExternalIdNewest(@Param("externalId") String externalId, Pageable pageable);
 }
