@@ -1,6 +1,7 @@
 package bynull.realty.components.text;
 
 import bynull.realty.utils.TextUtils;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,10 @@ import java.util.regex.Pattern;
 public class RentalFeeParser {
     public static final int FLAGS = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.UNICODE_CASE;
     private static final RentalFeeParser INSTANCE = new RentalFeeParser();
+    @VisibleForTesting
+    final PatternCheck fullPriceAbove_1000;
+    @VisibleForTesting
+    final PatternCheck fullPriceBellow_1000;
     private final List<PatternCheck> patterns;
 
     private RentalFeeParser() {
@@ -44,11 +49,11 @@ public class RentalFeeParser {
                 "(.*)((стоимост|бюджет|цен)([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 11);
 
         //пример: 45 000
-        PatternCheck fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceAbove_1000_patternTemplate + "(.*)", FLAGS), 2);
+        fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
+                "(.*)" + fullPriceAbove_1000_patternTemplate + "([\\D](.*)|$)", FLAGS), 2);
         //пример: 45 000
-        PatternCheck fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceAbove_1000_patternTemplate + "(.*)", FLAGS), 2);
+        fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
+                "(.*)" + fullPriceBellow_1000_patternTemplate + "([\\D](.*)|$)", FLAGS), 2);
         patterns = ImmutableList.of(
                 simpleInverseAbove1000,
                 simpleInverseBellow1000,
@@ -93,7 +98,8 @@ public class RentalFeeParser {
         return null;
     }
 
-    private static class PatternCheck {
+    @VisibleForTesting
+    static class PatternCheck {
         public final Pattern pattern;
         public final int resultGroup;
 

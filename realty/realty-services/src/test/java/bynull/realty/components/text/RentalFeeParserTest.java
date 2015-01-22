@@ -1,10 +1,14 @@
 package bynull.realty.components.text;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -94,5 +98,47 @@ public class RentalFeeParserTest {
     public void successForInverseIncompleteStartingRange() {
         String text = "Всем привет !!! Я .мой друг и интеллигентный кот ищем двухкомнатную квартиру (комнаты изолированные) в шаговой доступности от метро на длительный срок 12. 40-45 000 Бюджет. ";
         assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("45000")));
+    }
+
+    @Test
+    public void fullPriceAbove_1000() {
+        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. 33000 + залог + свет 89258605273 ";
+        Pattern pattern = parser.fullPriceAbove_1000.pattern;
+        Matcher matcher = pattern.matcher(text);
+        assertThat(matcher.matches(), is(true));
+        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("33000"));
+    }
+
+    @Test
+    public void fullPriceAbove_1000_EndOfLine() {
+        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок 89258605273 . 33000 ";
+        Pattern pattern = parser.fullPriceAbove_1000.pattern;
+        Matcher matcher = pattern.matcher(text);
+        assertThat(matcher.matches(), is(true));
+        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("33000"));
+    }
+
+    @Test
+    public void fullPriceBellow_1000() {
+        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. 330 + залог + свет 89258605273 ";
+        Pattern pattern = parser.fullPriceBellow_1000.pattern;
+        Matcher matcher = pattern.matcher(text);
+        assertThat(matcher.matches(), is(true));
+        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("330"));
+    }
+
+    @Test
+    public void fullPriceBellow_1000_EndOfLine() {
+        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок 89258605273 . 330 ";
+        Pattern pattern = parser.fullPriceBellow_1000.pattern;
+        Matcher matcher = pattern.matcher(text);
+        assertThat(matcher.matches(), is(true));
+        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("330"));
+    }
+
+    @Test
+    public void fixForPhoneNumber() {
+        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. 33000 + залог + свет 89258605273 ";
+        assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("33000")));
     }
 }
