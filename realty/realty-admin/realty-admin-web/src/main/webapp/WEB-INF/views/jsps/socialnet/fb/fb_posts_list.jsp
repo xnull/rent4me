@@ -16,7 +16,7 @@
         <label for="text">Query text</label>
         <input type="text" class="form-control" id="text" name="text" placeholder="Search query" value="${searchText}">
     </div>
-    <button type="submit" class="btn btn-default">Save</button>
+    <button type="submit" class="btn btn-primary">Search</button>
 </form>
 </p>
 
