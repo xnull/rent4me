@@ -38,7 +38,7 @@ var UserPanel = React.createClass({
                     <div className="well well-sm">
                         <div className="media">
                             <a className="thumbnail pull-left" href="#">
-                                <img className="media-object" src="//placehold.it/80"/>
+                                <img className="media-object" width="80" style={{height: 60}}/>
                             </a>
 
                             <div className="media-body">

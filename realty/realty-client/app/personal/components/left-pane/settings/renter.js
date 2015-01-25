@@ -37,11 +37,11 @@ var Renter = React.createClass({
                                 <PriceRange uiSize='10' uiLabelSize='2' uiInputSizes='6'/>
                             </div>
 
-                            <br/>
-
                             <div className='row'>
                                 <SearchAddress uiSize='10' uiLabelSize='2'/>
                             </div>
+
+                            <br/>
 
                             <div className='row'>
                                 <Description uiSize='10' uiLabelSize='2' uiInputSizes='6'/>
