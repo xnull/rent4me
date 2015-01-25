@@ -15,10 +15,9 @@ var Renter = React.createClass({
     render: function () {
         return (
             <div className="col-md-9">
-                <div className="panel">
+                <div className="panel well">
                     <div className="panel-body">
-                        <h4>В поисках жилья</h4>
-
+                        <h4>Разместить объявление</h4>
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
@@ -47,7 +46,7 @@ var Renter = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <PriceRange />
+                                <PriceRange uiSize='5' uiLabelSize='2'/>
                             </div>
 
                             <hr/>
@@ -60,13 +59,15 @@ var Renter = React.createClass({
 
                             <br/>
                             <br/>
-
-                            <div className='row'>
-                                <div className="col-md-6 col-md-offset-3">
-                                    <a className="btn btn-primary center-block">Разместить объявление</a>
-                                </div>
-                            </div>
                         </form>
+                    </div>
+
+                    <div className="panel-footer">
+                        <div className='row'>
+                            <div className="col-md-6 col-md-offset-3">
+                                <a className="btn btn-success center-block">Продолжить</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

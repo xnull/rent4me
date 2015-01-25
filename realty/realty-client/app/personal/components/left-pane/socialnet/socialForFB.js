@@ -49,17 +49,6 @@ var RentType = React.createClass({
     }
 });
 
-var RentTypee = React.createClass({
-    render: function () {
-        return (
-            <div class="btn-group input-group btn-group-justified">
-                <input type="text" className="form-control" placeholder="От"/>
-                <input type="text" className="form-control" placeholder="Отnnnn"/>
-            </div>
-        )
-    }
-});
-
 module.exports = React.createClass({
     getInitialState: function () {
         return {
@@ -345,6 +334,8 @@ module.exports = React.createClass({
                                     />
 
                                     <PriceRange
+                                        uiSize='5' uiLabelSize='2'
+
                                         minPrice={minPrice}
                                         maxPrice={maxPrice}
 

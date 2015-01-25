@@ -5,27 +5,42 @@
 var React = require('react');
 
 var PriceRange = React.createClass({
+    propTypes: {
+        uiSize: React.PropTypes.number.isRequired,
+        uiLabelSize: React.PropTypes.number.isRequired
+    },
+
+    /**
+     * Adjust UI settings
+     * @returns {{size: string, labelSize: string, formSize: string}}
+     */
+    uiProps: function () {
+        var frmSize = 12 - parseInt(this.props.uiLabelSize);
+        return {
+            size: 'col-md-' + this.props.uiSize,
+            labelSize: 'col-md-' + this.props.uiLabelSize,
+            form: 'col-md-' + frmSize + ' form-group'
+        }
+    },
 
     render: function () {
+        var uiProps = this.uiProps();
 
         var minPrice = this.props.minPrice;
         var maxPrice = this.props.maxPrice;
 
-        var onMinPriceChange = this.props.onMinPriceChange;
-        var onMaxPriceChange = this.props.onMaxPriceChange;
-
         return (
-            <div className='col-md-5'>
-                <div className="col-md-2">
-                    <label className="control-label">Цена</label>
+            <div className={uiProps.size}>
+                <div className={uiProps.labelSize}>
+                    <label className='control-label pull-right'>Цена</label>
                 </div>
-                <div className="col-md-10 form-group">
-                    <div className="col-md-6" style={{paddingRight: 0}}>
-                        <input type="text" className="form-control" placeholder="От" value={minPrice} onChange={onMinPriceChange}/>
+                <div className={uiProps.form}>
+                    <div className='col-md-6' style={{paddingRight: 0}}>
+                        <input type='text' className='form-control' placeholder='От' value={minPrice} onChange={this.props.onMinPriceChange}/>
                     </div>
 
-                    <div className="col-md-6" style={{paddingLeft: 0}}>
-                        <input type="text" className="form-control" placeholder="До" value={maxPrice} onChange={onMaxPriceChange}/>
+                    <div className='col-md-6' style={{paddingLeft: 0}}>
+                        <input type='text' className='form-control' placeholder='До' value={maxPrice} onChange={this.props.onMaxPriceChange}/>
                     </div>
                 </div>
             </div>

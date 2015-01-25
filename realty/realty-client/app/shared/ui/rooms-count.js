@@ -5,10 +5,23 @@
 var React = require('react');
 
 var Rooms = React.createClass({
+    propTypes: {
+        uiSize: React.PropTypes.number.isRequired,
+        uiLabelSize: React.PropTypes.number.isRequired
+    },
+
+    getDefaultProps: function () {
+        return {
+            oneRoomAptSelected: false,
+            twoRoomAptSelected: false,
+            threeRoomAptSelected: false
+        };
+    },
+
     render: function () {
-        var firstSelected = this.props.oneRoomAptSelected || false;
-        var secondSelected = this.props.twoRoomAptSelected || false;
-        var thirdSelected = this.props.threeRoomAptSelected || false;
+        var firstSelected = this.props.oneRoomAptSelected;
+        var secondSelected = this.props.twoRoomAptSelected;
+        var thirdSelected = this.props.threeRoomAptSelected;
 
         var that = this;
 
