@@ -14,5 +14,4 @@ React.render(<LeftPaneComponent/>, document.getElementById('leftPane'));
 window.Utils = Utils;
 window.Cookies = require('../shared/common/Cookies');
 
-Analytics.google();
-Analytics.yandex();
+Analytics.initAnalyticsSystem();

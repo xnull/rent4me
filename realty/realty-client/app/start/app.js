@@ -14,6 +14,7 @@ var HeaderComponent = require('./components/header');
 var SkelInit = require('./components/skel-init');
 var Analytics = require('../shared/common/analytics');
 
+Analytics.initAnalyticsSystem();
 SkelInit.init();
 
 function fbAuth() {
@@ -47,6 +48,3 @@ fbAuth();
 React.render(<HeaderComponent/>, document.getElementById('headerComponent'));
 React.render(<FirstDisplayComponent/>, document.getElementById('firstDisplay'));
 React.render(<FooterComponent/>, document.getElementById('footerComponent'));
-
-Analytics.google();
-Analytics.yandex();
