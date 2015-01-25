@@ -324,6 +324,8 @@ module.exports = React.createClass({
                                 <div className="col-md-10 col-md-offset-1">
                                     <RentType onRentTypeChange={this.onRentTypeChange}/>
                                     <RoomsCount
+                                        uiSize='4' uiLabelSize='3'
+
                                         oneRoomAptSelected={oneRoomAptSelected}
                                         twoRoomAptSelected={twoRoomAptSelected}
                                         threeRoomAptSelected={threeRoomAptSelected}

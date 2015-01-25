@@ -18,7 +18,18 @@ var Rooms = React.createClass({
         };
     },
 
+    uiProps: function () {
+        var frmSize = 12 - parseInt(this.props.uiLabelSize);
+        return {
+            size: 'col-md-' + this.props.uiSize,
+            labelSize: 'col-md-' + this.props.uiLabelSize,
+            form: 'col-md-' + frmSize
+        }
+    },
+
     render: function () {
+        var uiProps = this.uiProps();
+
         var firstSelected = this.props.oneRoomAptSelected;
         var secondSelected = this.props.twoRoomAptSelected;
         var thirdSelected = this.props.threeRoomAptSelected;
@@ -48,11 +59,11 @@ var Rooms = React.createClass({
         var thirdClassNames = "btn btn-default" + (thirdSelected ? " active" : "");
 
         return (
-            <div className='col-md-4'>
-                <div className="col-md-3">
-                    <label className="control-label">Комнат</label>
+            <div className={uiProps.size}>
+                <div className={uiProps.labelSize}>
+                    <label className="control-label pull-right">Комнат</label>
                 </div>
-                <div className="col-md-9">
+                <div className={uiProps.form}>
                     <div className="btn-group" data-toggle="buttons">
                         <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>
                             <input type="checkbox"
@@ -60,14 +71,10 @@ var Rooms = React.createClass({
                             >1</input>
                         </label>
                         <label className={secondClassNames} onClick={onTwoRoomAptValueChanged}>
-                            <input type="checkbox"
-                                checked={secondSelected}
-                            >2</input>
+                            <input type="checkbox" checked={secondSelected}>2</input>
                         </label>
                         <label className={thirdClassNames} onClick={onThreeRoomAptValueChanged}>
-                            <input type="checkbox"
-                                checked={thirdSelected}
-                            >3</input>
+                            <input type="checkbox" checked={thirdSelected}>3</input>
                         </label>
                     </div>
                 </div>

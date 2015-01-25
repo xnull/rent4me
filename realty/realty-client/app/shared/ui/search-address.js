@@ -18,17 +18,46 @@ var SearchAddress = React.createClass({
          };*/
         var autocomplete = new google.maps.places.Autocomplete(this.refs.googleSearchBox.getDOMNode());
     },
+    /**
+     * Проверка корректности параметров компонента.
+     */
+    propTypes: {
+        uiSize: React.PropTypes.number.isRequired,
+        uiLabelSize: React.PropTypes.number.isRequired
+    },
+
+    /**
+     * Настроки UI
+     * @returns {{size: string, labelSize: string, form: string}}
+     */
+    uiProps: function () {
+        var frmSize = 12 - parseInt(this.props.uiLabelSize);
+        return {
+            size: 'col-md-' + this.props.uiSize,
+            labelSize: 'col-md-' + this.props.uiLabelSize,
+            form: 'col-md-' + frmSize
+        }
+    },
 
     render: function () {
+        var uiProps = this.uiProps();
         return (
-            <input
-                id="searchbox"
-                className="form-control"
-                type="text"
-                placeholder="Введите "
-                onChange={this.onAddressChange}
-                ref="googleSearchBox"
-            />
+            <div className={uiProps.size}>
+                <div className={uiProps.labelSize}>
+                    <label className="control-label pull-right"></label>
+                </div>
+
+                <div className={uiProps.form}>
+                    <input
+                        id="searchbox"
+                        className="form-control"
+                        type="text"
+                        placeholder="Адрес, улица, метро, район..."
+                        onChange={this.onAddressChange}
+                        ref="googleSearchBox"
+                    />
+                </div>
+            </div>
         )
     },
 

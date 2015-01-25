@@ -15,7 +15,8 @@ var PriceRange = React.createClass({
      * @returns {{size: string, labelSize: string, formSize: string}}
      */
     uiProps: function () {
-        var frmSize = 12 - parseInt(this.props.uiLabelSize);
+        //Если не задан размер полей ввода, то берем всю оставшуюся часть после label
+        var frmSize = this.props.uiInputSizes || 12 - parseInt(this.props.uiLabelSize);
         return {
             size: 'col-md-' + this.props.uiSize,
             labelSize: 'col-md-' + this.props.uiLabelSize,
