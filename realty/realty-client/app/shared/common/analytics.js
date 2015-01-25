@@ -98,8 +98,7 @@ var Analytics = {
     initAnalyticsSystem: initAnalyticsSystem,
     google: googleAnalytics,
     yandex: yandexMetrika,
-    segment: Segment,
-    twitter: twitter
+    segment: Segment
 };
 
 module.exports = Analytics;
