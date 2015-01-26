@@ -11,6 +11,8 @@ var _ = require('underscore');
 
 var Ajax = require('../common/Ajax');
 
+var _myProfileIsLoading = false;
+
 var AuthActions = {
     /**
      * @param {object} obj
@@ -40,7 +42,7 @@ var AuthActions = {
 
     loadMyProfile: function () {
         BlockUI.blockUI();
-
+        _myProfileIsLoading = true;
         Ajax
             .GET('/rest/users/me')
             .authorized()
@@ -50,15 +52,21 @@ var AuthActions = {
                     user: data
                 });
 
+                _myProfileIsLoading = false;
                 BlockUI.unblockUI();
             })
             .onError(function (xhr, status, err) {
+                _myProfileIsLoading = false;
                 BlockUI.unblockUI();
             })
             .execute();
     },
 
     loadMyProfileIfNotLoaded: function () {
+        if (_myProfileIsLoading) {
+            console.log('My profile is loading. Skipping loading.');
+            return;
+        }
         var myProfile = UserStore.getMyProfile();
         if (_.isEmpty(myProfile)) {
             console.log('My profile is empty. Loading.');

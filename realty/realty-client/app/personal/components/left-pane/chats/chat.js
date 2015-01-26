@@ -8,6 +8,7 @@ var Utils = require('rent4meUtil');
 var _ = require('underscore');
 
 var Chats = require('./chats');
+var MessageThread = require('./ui/message-thread');
 var ChatStore = require('../../../../shared/stores/ChatStore');
 var ChatActions = require('../../../../shared/actions/ChatActions');
 
@@ -84,6 +85,16 @@ module.exports = React.createClass({
         var message = this.state.messageText || [];
         var hasMoreResults = (this.state.hasMoreSearchResults || false) && false;//disable for now
 
+        var maxHeight = 300;
+        var maxHeightPX = maxHeight + 'px';
+
+        var paddingTop = (maxHeight);
+        var paddingTopPX = paddingTop + 'px';
+
+        var messageFormStyle = {
+            //paddingTop: paddingTopPX
+        };
+
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -92,13 +103,18 @@ module.exports = React.createClass({
                         <h4>Чат с пользователем {(otherPerson || {}).name}</h4>
 
 
-                        <form className="form-horizontal" role="form">
+                        <MessageThread items={items} shown={items.length > 0} hasMore={hasMoreResults} onHasMoreClicked={this.loadMoreResults} maxHeight={maxHeightPX}/>
+
+
+                        <br/>
+
+                        <form className="form-horizontal" role="form" style={messageFormStyle}>
                             <div className="form-group">
                                 <label className="col-md-2 control-label">Сообщение</label>
                                 <div className="col-md-6">
                                     <textarea rows="7" className="form-control" value={message} placeholder="Введите текст сообщения" onChange={this.onMessageChange}/>
                                 </div>
-                            </div>
+                                </div>
 
                             <div className="col-md-offset-5 col-md-3">
                                 <a className="btn btn-primary center-block" onClick={this.onSendMessage}>Отправить</a>
@@ -110,9 +126,6 @@ module.exports = React.createClass({
 
                         </form>
 
-                        <p>
-                            <Chats items={items} shown={items.length > 0} hasMore={hasMoreResults} onHasMoreClicked={this.loadMoreResults} />
-                        </p>
                     </div>
                 </div>
 
