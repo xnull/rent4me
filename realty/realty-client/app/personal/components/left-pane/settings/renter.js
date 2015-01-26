@@ -10,6 +10,9 @@ var PriceRange = require('../../../../shared/ui/price-range');
 var Description = require('../../../../shared/ui/description-area');
 var SearchAddress = require('../../../../shared/ui/search-address');
 
+/**
+ * Старая форма для добавления объявления. Она станет часть новой формы впоследствии.
+ */
 var Renter = React.createClass({
     componentDidMount: function () {
         NavActions.navigateToRenter();
@@ -64,4 +67,41 @@ var Renter = React.createClass({
     }
 });
 
-module.exports = Renter;
+/**
+ * 1. Суть компонента: при заходе на страницу арендатор видит большую кнопку с плюсиком для добавления своего
+ * объявления,
+ * 2. при нажатии на кнопку ему отображается модальный диалог (см выше компонент Renter) с формой
+ * для заполнения чего он хочет найти.
+ * 3. При нажатии на кнопку сохранить в форме, форма исчезает и под большой кнопкой с плюсиком появляется
+ * узкая панелька содержащая инфо о выставленном объявлении, а справа внутри панельки две кнопки: редактировать и удалить
+ */
+var NewRenter = React.createClass({
+
+    trololo: function () {
+        alert('trololo');
+    },
+
+    render: function () {
+        return (
+            <div className="col-md-9">
+                <div className="panel">
+                    <div className="panel-body">
+                        <div className="col-md-3">
+                            <div className="col-md-3">
+                                <a
+                                    className="thumbnail"
+                                    style={{height: 240, width: 160, display: 'flex', alignItems: 'center'}}
+                                    onClick={this.trololo}
+                                >
+                                    <img alt="..." src="images/blue-plus.png" width="32" height="32"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
+module.exports = NewRenter;
