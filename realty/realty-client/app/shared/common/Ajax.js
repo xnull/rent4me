@@ -5,6 +5,7 @@
 var AuthStore = require('../stores/AuthStore');
 var assign = require('object-assign');
 var JSON = require('JSON2');
+var Utils = require('rent4meUtil');
 
 function AjaxBuilder(httpMethod) {
     //initialize variables
@@ -80,9 +81,20 @@ function AjaxBuilder(httpMethod) {
             resultingSettings['success'] = _succ;
         }
 
-        if (_error) {
-            resultingSettings['error'] = _error;
-        }
+        var errorHandler = function (xhr, status, err) {
+            //default handling of error codes
+            if (xhr.status == 401) {
+                Utils.navigateToStart();
+                return;
+            }
+
+
+            if (_error) {
+                _error(xhr, status, err);
+            }
+        };
+
+        resultingSettings['error'] = errorHandler;
 
         $.ajax(resultingSettings);
     }
