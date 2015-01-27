@@ -4,6 +4,7 @@
 var React = require('react');
 var AuthActions = require('../../shared/actions/AuthActions');
 var Utils = require('rent4meUtil');
+var assign = require('object-assign');
 
 var SocialNetAuth = React.createClass({
     handleFacebookLogin: function () {
@@ -41,11 +42,49 @@ var SocialNetAuth = React.createClass({
 
 var PlainLogin = React.createClass({
 
+    getInitialState: function () {
+        return {
+            email: null,
+            password: null
+        }
+    },
+
+    onEmailChange: function (e) {
+        var value = e.target.value;
+
+        console.log('new email:' + value);
+
+        this.setState(assign(this.state, {
+            email: value
+        }));
+    },
+
+    onPasswordChange: function (e) {
+        var value = e.target.value;
+
+        console.log('new password:' + value);
+
+        this.setState(assign(this.state, {
+            password: value
+        }));
+    },
+
+    onLoginClicked: function () {
+        console.log('Login clicked');
+        AuthActions.loginOnBackendWithEmailAndPassword(this.state.email, this.state.password);
+    },
+
     render: function () {
-        var inputStyle = {border: '1px solid #c0c0c0', color: '#000000', textAlign: 'left'};
+        var inputStyle = {border: '1px solid #c0c0c0', color: '#000000', textAlign: 'left', marginTop: '10px'};
+
+        var loginButtonStyle = {marginTop: '10px'};
+
+        var email = this.state.email;
+        var password = this.state.password;
+
 
         return (
-            <div className="row row-centered" style={Utils.inactiveUi}>
+            <div className="row row-centered">
                 <div className='col-centered'>
                     Аккаунт
                 </div>
@@ -54,15 +93,31 @@ var PlainLogin = React.createClass({
                     <form role="form">
                         <div className="row">
                             <div className="col-md-12">
-                                <input type="email" style={inputStyle} className="form-control button" id="inputEmail" placeholder="E-mail"/>
+                                <input type="email"
+                                    style={inputStyle}
+                                    value={email}
+                                    className="form-control"
+                                    placeholder="E-mail"
+                                    onChange={this.onEmailChange}
+                                />
                             </div>
                             <br/>
                             <div className="col-md-12">
-                                <input type="password" style={inputStyle} className="form-control button" id="inputPassword" placeholder="Пароль"/>
+                                <input type="password"
+                                    style={inputStyle}
+                                    className="form-control"
+                                    value={password}
+                                    placeholder="Пароль"
+                                    onChange={this.onPasswordChange}
+                                />
                             </div>
                             <br/>
                             <div className="col-md-12">
-                                <button type="submit" className="btn btn-success pull-right">Вход</button>
+                                <a type="button"
+                                    className="btn btn-success pull-right clickable"
+                                    style={loginButtonStyle}
+                                    onClick={this.onLoginClicked}
+                                >Вход</a>
                             </div>
                         </div>
                     </form>

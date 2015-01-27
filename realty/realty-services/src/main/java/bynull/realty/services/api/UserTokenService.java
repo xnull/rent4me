@@ -21,13 +21,13 @@ public interface UserTokenService {
     /**
      * Get token if credentials are valid.
      *
-     * @param username username
+     * @param email username
      * @param password password
      * @return newly generated token will be returned
      * @throws BadCredentialsException
      * @throws UsernameNotFoundException
      */
-    String getTokenIfValidCredentials(String username, String password) throws BadCredentialsException, UsernameNotFoundException;
+    UserService.UsernameTokenPair getUsernameAndTokenIfValidCredentials(String email, String password) throws BadCredentialsException, UsernameNotFoundException;
 
     /**
      * Receive a valid authentication token for user

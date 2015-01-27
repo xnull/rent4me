@@ -127,6 +127,12 @@ AppDispatcher.register(function (payload) {
 
             break;
 
+        case AuthConstants.AUTH_AUTHENTICATED_WITH_BACKEND:
+            _username = action.data.username;
+            _token = action.data.token;
+
+            break;
+
         case AuthConstants.AUTH_FB_AUTH_STATE_CHANGED:
             _fbUserId = action.response.authResponse.userID;
             _fbAccessToken = action.response.authResponse.accessToken;

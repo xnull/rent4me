@@ -18,7 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByVkontakteId(String vkontakteId);
 
-    User findByEmail(String email);
+    @Query("select u from User u where lower(email)=lower(:email)")
+    User findByEmail(@Param("email") String email);
 
     @Query("select u from User u where lower(u.displayName) like lower(:name)")
     List<User> findByName(@Param("name") String name, Pageable pageable);

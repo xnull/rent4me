@@ -173,6 +173,48 @@ var AuthActions = {
         });
     },
 
+    loginOnBackendWithEmailAndPassword: function (email, password) {
+        if (!AuthStore.hasCredentials()) {
+            var data = {"email": email, "password": password};
+            console.log('data: ');
+            console.log(data);
+
+            var that = this;
+
+            BlockUI.blockUI();
+
+            Ajax
+                .POST('/rest/auth/login')
+                .withJsonBody(data)
+                .onSuccess(function (data) {
+                    console.log("Success!");
+                    console.log("Data:");
+                    console.log(data);
+
+                    AppDispatcher.handleViewAction({
+                        actionType: AuthConstants.AUTH_AUTHENTICATED_WITH_BACKEND,
+                        data: data
+                    });
+
+                    BlockUI.unblockUI();
+
+                    that.storeUsernameAndTokenInCookies();
+
+                    Utils.navigateToPersonal();
+                })
+                .onError(function (xhr, status, err) {
+                    AppDispatcher.handleViewAction({
+                        actionType: AuthConstants.AUTH_AUTHENTICATION_ERROR
+                    });
+
+//                    console.error('/rest/apartment', status, err.toString());
+                    console.log("Error!");
+                    BlockUI.unblockUI();
+                })
+                .execute();
+        }
+    },
+
     logoutOnBackend: function () {
         if (AuthStore.hasCredentials()) {
             var usernameTokenPair = AuthStore.getUsernameTokenPair();

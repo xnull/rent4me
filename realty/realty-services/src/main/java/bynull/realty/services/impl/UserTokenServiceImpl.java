@@ -1,5 +1,6 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.dao.UserRepository;
 import bynull.realty.dao.UserTokenRepository;
 import bynull.realty.data.business.User;
 import bynull.realty.data.business.UserToken;
@@ -32,6 +33,9 @@ public class UserTokenServiceImpl implements UserTokenService {
     UserService userService;
 
     @Resource
+    UserRepository userRepository;
+
+    @Resource
     PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -54,14 +58,15 @@ public class UserTokenServiceImpl implements UserTokenService {
 
     @Transactional
     @Override
-    public String getTokenIfValidCredentials(String username, String password) throws BadCredentialsException, UsernameNotFoundException {
-        User user = userService.loadUserByUsername(username);
+    public UserService.UsernameTokenPair getUsernameAndTokenIfValidCredentials(String email, String password) throws BadCredentialsException, UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
         boolean matches = passwordEncoder.isPasswordValid(user.getPasswordHash(), password, null);
 
         LOGGER.debug("Password matches? {}", matches);
 
         if (matches) {
-            return getTokenForUser(user);
+            String token = getTokenForUser(user);
+            return new UserService.UsernameTokenPair(user.getUsername(), token);
         } else {
             throw new BadCredentialsException("Bad credentials");
         }

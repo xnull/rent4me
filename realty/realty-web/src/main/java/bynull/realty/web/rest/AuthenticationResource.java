@@ -4,6 +4,8 @@ import bynull.realty.data.business.User;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -33,8 +35,8 @@ public class AuthenticationResource {
     @POST
     @Path("/login")
     public Response login(RequestLoginJSON requestLoginJSON) {
-        String token = userTokenService.getTokenIfValidCredentials(requestLoginJSON.getUsername(), requestLoginJSON.getPassword());
-        return Response.ok(new TokenJSON(token)).build();
+        UserService.UsernameTokenPair pair = userTokenService.getUsernameAndTokenIfValidCredentials(requestLoginJSON.getEmail(), requestLoginJSON.getPassword());
+        return Response.ok(UsernameTokenPairJSON.from(pair)).build();
     }
 
     @POST
@@ -75,16 +77,16 @@ public class AuthenticationResource {
         @JsonProperty("token")
         private String token;
 
+        public UsernameTokenPairJSON(String username, String token) {
+            this.username = username;
+            this.token = token;
+        }
+
         public static UsernameTokenPairJSON from(UserService.UsernameTokenPair pair) {
             if (pair == null) {
                 return null;
             }
             return new UsernameTokenPairJSON(pair.username, pair.token);
-        }
-
-        public UsernameTokenPairJSON(String username, String token) {
-            this.username = username;
-            this.token = token;
         }
 
         public String getUsername() {
@@ -160,26 +162,12 @@ public class AuthenticationResource {
         }
     }
 
+    @Getter
+    @Setter
     public static class RequestLoginJSON {
-        @JsonProperty("username")
-        private String username;
+        @JsonProperty("email")
+        private String email;
         @JsonProperty("password")
         private String password;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
     }
 }

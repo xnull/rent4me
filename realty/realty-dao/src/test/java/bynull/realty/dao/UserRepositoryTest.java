@@ -124,4 +124,27 @@ public class UserRepositoryTest extends DbTest {
         User foundWithAuthorities = userRepository.findOne(savedUser.getId());
         assertThat(foundWithAuthorities.getAuthorities(), is(empty()));
     }
+
+    @Test
+    public void findByEmailIgnoreCase() {
+        User user = new User();
+        user.setUsername("dionis");
+        user.setPasswordHash("hash");
+        user.setEmail("a@b.c");
+        User savedUser = userRepository.saveAndFlush(user);
+        authorityRepository.saveAndFlush(new Authority(Authority.Name.ROLE_USER));
+        flushAndClear();
+
+        {
+            User found = userRepository.findByEmail("a@b.c");
+            assertThat(found, is(notNullValue()));
+            assertThat(found.getId(), is(savedUser.getId()));
+        }
+
+        {
+            User found = userRepository.findByEmail("A@B.C");
+            assertThat(found, is(notNullValue()));
+            assertThat(found.getId(), is(savedUser.getId()));
+        }
+    }
 }
