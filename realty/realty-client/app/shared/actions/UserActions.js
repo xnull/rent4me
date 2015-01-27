@@ -8,12 +8,59 @@ var UserStore = require('../stores/UserStore');
 var BlockUI = require('rent4meBlockUI');
 var assign = require('object-assign');
 var _ = require('underscore');
+var AuthActions = require('./AuthActions');
 
 var Ajax = require('../common/Ajax');
 
 var _myProfileIsLoading = false;
 
-var AuthActions = {
+var UserActions = {
+
+    registerOnBackendWithEmailAndPassword: function (name, email, password, phone) {
+
+        var data = {"name": name, "email": email, "password": password, "phone": phone};
+        console.log('data: ');
+        console.log(data);
+
+        var self = this;
+
+        BlockUI.blockUI();
+
+        Ajax
+            .POST('/rest/users')
+            .withJsonBody(data)
+            .onSuccess(function (data) {
+                console.log("Success!");
+                console.log("Data:");
+                console.log(data);
+
+                //AppDispatcher.handleViewAction({
+                //    actionType: AuthConstants.AUTH_AUTHENTICATED_WITH_BACKEND,
+                //    data: data
+                //});
+
+                BlockUI.unblockUI();
+
+                AuthActions.loginOnBackendWithEmailAndPassword(email, password);
+
+
+                //that.storeUsernameAndTokenInCookies();
+
+                //Utils.navigateToPersonal();
+            })
+            .onError(function (xhr, status, err) {
+                //AppDispatcher.handleViewAction({
+                //    actionType: AuthConstants.AUTH_AUTHENTICATION_ERROR
+                //});
+
+//                    console.error('/rest/apartment', status, err.toString());
+                console.log("Error!");
+                BlockUI.unblockUI();
+            })
+            .execute();
+
+    },
+
     /**
      * @param {object} obj
      */
@@ -76,4 +123,4 @@ var AuthActions = {
     }
 };
 
-module.exports = AuthActions;
+module.exports = UserActions;

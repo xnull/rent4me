@@ -10,6 +10,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDTO {
+    private Long id;
+    private String username;
+    private String displayName;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private String facebookId;
+    private String vkontakteId;
+    private String password;
+
     public static UserDTO from(User user) {
         if (user == null) {
             return null;
@@ -28,14 +39,4 @@ public class UserDTO {
 
         return dto;
     }
-
-    private Long id;
-    private String username;
-    private String displayName;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private String facebookId;
-    private String vkontakteId;
 }

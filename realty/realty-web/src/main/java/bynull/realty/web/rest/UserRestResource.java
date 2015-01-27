@@ -8,20 +8,19 @@ import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.ChatService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.util.LimitAndOffset;
-import bynull.realty.utils.SecurityUtils;
 import bynull.realty.web.annotation.PATCH;
 import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.ChatMessageJSON;
 import bynull.realty.web.json.UserJSON;
 import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.*;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -47,6 +46,16 @@ public class UserRestResource {
 
     @Resource
     ChatService chatService;
+
+
+    @POST
+    public Response createNewProfile(UserJSON userJSON) {
+        UserDTO dto = userJSON.toDTO();
+        UserDTO result = userService.createNewProfile(dto);
+        return Response
+                .ok(UserJSON.from(result))
+                .build();
+    }
 
     @GET
     @Path("/find")

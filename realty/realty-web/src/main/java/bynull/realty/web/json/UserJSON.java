@@ -5,15 +5,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author dionis on 04/12/14.
  */
 @Getter
 @Setter
 public class UserJSON {
+    @JsonProperty("id")
+    private Long id;
+    @JsonProperty("username")
+    private String username;
+    @JsonProperty("name")
+    private String displayName;
+    @JsonProperty("first_name")
+    private String firstName;
+    @JsonProperty("last_name")
+    private String lastName;
+    @JsonProperty("email")
+    private String email;
+    @JsonProperty("phone")
+    private String phoneNumber;
+    @JsonProperty("fb_id")
+    private String facebookId;
+    @JsonProperty("vk_id")
+    private String vkontakteId;
+    @JsonProperty("password")
+    private String password;
+
     public static UserJSON from(UserDTO dto) {
         if (dto == null) {
             return null;
@@ -33,25 +51,6 @@ public class UserJSON {
         return json;
     }
 
-    @JsonProperty("id")
-    private Long id;
-    @JsonProperty("username")
-    private String username;
-    @JsonProperty("name")
-    private String displayName;
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
-    @JsonProperty("email")
-    private String email;
-    @JsonProperty("phone")
-    private String phoneNumber;
-    @JsonProperty("fb_id")
-    private String facebookId;
-    @JsonProperty("vk_id")
-    private String vkontakteId;
-
     public UserDTO toDTO() {
         UserDTO dto = new UserDTO();
 
@@ -63,6 +62,7 @@ public class UserJSON {
         dto.setPhoneNumber(getPhoneNumber());
         dto.setFacebookId(getFacebookId());
         dto.setVkontakteId(getVkontakteId());
+        dto.setPassword(getPassword());
 
         return dto;
     }

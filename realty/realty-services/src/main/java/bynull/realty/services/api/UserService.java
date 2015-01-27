@@ -24,6 +24,8 @@ public interface UserService extends UserDetailsService {
 
     List<UserDTO> findByName(String name);
 
+    UserDTO createNewProfile(UserDTO dto);
+
     class UsernameTokenPair {
         public final String username;
         public final String token;

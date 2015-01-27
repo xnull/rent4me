@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -85,10 +87,10 @@ public class UserServiceImpl implements UserService {
 //                user.setFirstName(verify.name);
 //                user.setLastName(verify.name);
                     user.setEmail(verify.email);
-                    user.setUsername("user_" + UUID.randomUUID());
+                    user.setUsername(generateUsername());
                     String rawPass = "password" + UUID.randomUUID();
                     log.info("Generated password for user with fb id [{}]: []", verify.facebookId, rawPass);
-                    user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
+                    user.setPasswordHash(passwordHash(rawPass));
                     user.setDisplayName(verify.name);
                     user.setFirstName(verify.firstName);
                     user.setLastName(verify.lastName);
@@ -115,6 +117,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    private String generateUsername() {
+        return "user_" + UUID.randomUUID();
+    }
+
     @Transactional
     @Override
     public UsernameTokenPair authenticateVkUser(String authCode) {
@@ -134,10 +140,10 @@ public class UserServiceImpl implements UserService {
 //                user.setFirstName(verify.name);
 //                user.setLastName(verify.name);
                     user.setEmail(verify.email);
-                    user.setUsername("user_" + UUID.randomUUID());
+                    user.setUsername(generateUsername());
                     String rawPass = "password" + UUID.randomUUID();
                     log.info("Generated password for user with vk id [{}]: []", verify.vkUserId, rawPass);
-                    user.setPasswordHash(passwordEncoder.encodePassword(rawPass, null));
+                    user.setPasswordHash(passwordHash(rawPass));
 
 
                     VKHelperComponent.VkUserInfo vkUserInfo = vkHelperComponent.retrieveMoreInfo(verify.vkUserId, verify.accessToken);
@@ -207,5 +213,38 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.findByName("%" + name + "%", pageable).stream().map(UserDTO::from).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public UserDTO createNewProfile(UserDTO dto) {
+        Assert.notNull(dto);
+        Assert.notNull(StringUtils.trimToNull(dto.getEmail()));
+        Assert.notNull(StringUtils.trimToNull(dto.getPassword()));
+
+        User user = userRepository.findByEmail(dto.getEmail());
+        if (user != null) {
+            throw new ClientErrorException("User with same email already exists", Response.Status.CONFLICT);
+        }
+
+        user = new User();
+
+        Authority authority = authorityService.findOrCreateAuthorityByName(Authority.Name.ROLE_USER);
+
+        user.setDisplayName(dto.getDisplayName());
+        user.setEmail(dto.getEmail());
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setPasswordHash(passwordHash(dto.getPassword()));
+        user.setUsername(generateUsername());
+
+        user.addAuthority(authority);
+
+        user = userRepository.saveAndFlush(user);
+
+        return UserDTO.from(user);
+    }
+
+    private String passwordHash(String password) {
+        return passwordEncoder.encodePassword(password, null);
     }
 }

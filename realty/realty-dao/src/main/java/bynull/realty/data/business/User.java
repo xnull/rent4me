@@ -1,9 +1,11 @@
 package bynull.realty.data.business;
 
+import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
@@ -22,6 +24,8 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "password_hash")
     private String passwordHash;
+    @NotNull
+    @Email
     @Column(name = "email")
     private String email;
     @Column(name = "phone_number")
