@@ -197,7 +197,7 @@ var PlainRegistration = React.createClass({
                                     className="btn btn-success pull-right clickable"
                                     style={registrationButtonStyle}
                                     onClick={this.onRegistrationClicked}
-                                >Зарегестрироваться</a>
+                                >Зарегистрироваться</a>
                             </div>
                         </div>
                     </form>
