@@ -82,11 +82,11 @@ public class RentalFeeParser {
                 simple,
                 rangeBothComplete,
                 rangeStartInComplete,
-                fullPriceAbove_1000,
-                fullPriceBellow_1000,
                 patternCheckForThousandsWithWords,
                 patternCheckForThousandsNonStrictAbbreviation,
-                patternCheckForThousandsAggressiveAbbreviation
+                patternCheckForThousandsAggressiveAbbreviation,
+                fullPriceAbove_1000,
+                fullPriceBellow_1000
         );
     }
 
