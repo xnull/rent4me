@@ -55,9 +55,25 @@ public class RentalFeeParser {
         fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
                 "(.*)" + fullPriceBellow_1000_patternTemplate + "([\\D](.*)|$)", FLAGS), 2);
 
-        PatternCheck patternCheck = new PatternCheck(
-                Pattern.compile(""),
-                0
+        PatternCheck patternCheckForThousandsWithWords = new PatternCheck(
+                Pattern.compile(
+                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(тыс)(.*)", FLAGS),
+                4,
+                1000
+        );
+
+        PatternCheck patternCheckForThousandsNonStrictAbbreviation = new PatternCheck(
+                Pattern.compile(
+                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(тыр)(.*)", FLAGS),
+                4,
+                1000
+        );
+
+        PatternCheck patternCheckForThousandsAggressiveAbbreviation = new PatternCheck(
+                Pattern.compile(
+                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(т([\\s]{0,2})р)(.*)", FLAGS),
+                4,
+                1000
         );
 
         patterns = ImmutableList.of(
@@ -67,7 +83,10 @@ public class RentalFeeParser {
                 rangeBothComplete,
                 rangeStartInComplete,
                 fullPriceAbove_1000,
-                fullPriceBellow_1000
+                fullPriceBellow_1000,
+                patternCheckForThousandsWithWords,
+                patternCheckForThousandsNonStrictAbbreviation,
+                patternCheckForThousandsAggressiveAbbreviation
         );
     }
 
@@ -91,7 +110,7 @@ public class RentalFeeParser {
                 try {
                     BigDecimal bigDecimal = new BigDecimal(value);
                     if (bigDecimal.compareTo(BigDecimal.ZERO) >= 0) {
-                        return bigDecimal;
+                        return bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
                     } else {
                         log.error("Parsing error. Value parsed: [{}]", bigDecimal);
                     }
@@ -108,10 +127,16 @@ public class RentalFeeParser {
     static class PatternCheck {
         public final Pattern pattern;
         public final int resultGroup;
+        public final int multiplier;
 
-        public PatternCheck(Pattern pattern, int resultGroup) {
+        public PatternCheck(Pattern pattern, int resultGroup, int multiplier) {
             this.pattern = pattern;
             this.resultGroup = resultGroup;
+            this.multiplier = multiplier;
+        }
+
+        public PatternCheck(Pattern pattern, int resultGroup) {
+            this(pattern, resultGroup, 1);
         }
     }
 }

@@ -141,4 +141,34 @@ public class RentalFeeParserTest {
         String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. 33000 + залог + свет 89258605273 ";
         assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("33000")));
     }
+
+    @Test
+    public void successParseForThousands() {
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 тысячи. "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33тысячи. "), equalTo(new BigDecimal("33000")));
+
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 тыс. "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33тыс. "), equalTo(new BigDecimal("33000")));
+    }
+
+    @Test
+    public void successParseForNonStrictThousandsAbbreviation() {
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 тыр. "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 тыров "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33тыров "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33тыр "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33тыр. "), equalTo(new BigDecimal("33000")));
+    }
+
+
+    @Test
+    public void successParseForAggressiveThousandsAbbreviation() {
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 т. р. "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 т.р. "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33т.р. "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 тр "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33тр "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33т р "), equalTo(new BigDecimal("33000")));
+        assertThat(parser.findRentalFee("Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж. 33 т р "), equalTo(new BigDecimal("33000")));
+    }
 }
