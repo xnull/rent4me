@@ -172,6 +172,9 @@ public class UserServiceImpl implements UserService {
             } else {
                 log.debug("Found user from vkontakte");
             }
+            user.setVkAccessToken(verify.accessToken);
+            final Date expirationDateTime = new Date(System.currentTimeMillis() + (verify.expiresIn * 1000));
+            user.setVkAccessTokenExpiration(expirationDateTime);
             String token = userTokenService.getTokenForUser(user);
             return new UsernameTokenPair(user.getUsername(), token);
 

@@ -47,6 +47,11 @@ public class User implements UserDetails {
     @Column(name = "fb_access_token_expiration")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fbAccessTokenExpiration;
+    @Column(name = "vk_access_token")
+    private String vkAccessToken;
+    @Column(name = "vk_access_token_expiration")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date vkAccessTokenExpiration;
 
     @JoinTable(name = "realty_users_authorities", joinColumns = {
             @JoinColumn(name = "user_id")
@@ -238,6 +243,22 @@ public class User implements UserDetails {
 
     public void setFbAccessTokenExpiration(Date fbAccessTokenExpiration) {
         this.fbAccessTokenExpiration = fbAccessTokenExpiration;
+    }
+
+    public String getVkAccessToken() {
+        return vkAccessToken;
+    }
+
+    public void setVkAccessToken(String vkAccessToken) {
+        this.vkAccessToken = vkAccessToken;
+    }
+
+    public Date getVkAccessTokenExpiration() {
+        return vkAccessTokenExpiration;
+    }
+
+    public void setVkAccessTokenExpiration(Date vkAccessTokenExpiration) {
+        this.vkAccessTokenExpiration = vkAccessTokenExpiration;
     }
 
     @Override
