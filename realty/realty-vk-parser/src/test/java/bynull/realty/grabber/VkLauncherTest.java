@@ -22,23 +22,8 @@ public class VkLauncherTest extends VkTest {
 
     @Test
     public void testLaunch() throws Exception, EmptyHiddenVkValue {
-//        VkLauncher vkLauncher = new VkLauncher();
-//
-//
-//        VkPostsServiceImpl vkApiGroups = new VkPostsServiceImpl();
-//        vkApiGroups.init();
-//        VkDataStoreServiceImpl vkDataStore = new VkDataStoreServiceImpl();
-//        VkAuth vkAuth = new VkAuth();
-//
-//        vkLauncher.setVkPostsService(vkApiGroups);
-//        vkLauncher.setVkDataStore(vkDataStore);
-//        vkLauncher.setVkAuth(vkAuth);
 
         vkLauncher.launch();
 
-
-//        vkLauncher.saveWallPost(vkLauncher.getWallPosts("club22062158"));
-//        vkLauncher.saveWallPost(vkLauncher.getWallPosts("kvarnado"));
-//        vkLauncher.saveWallPost(vkLauncher.getWallPosts("sdalsnyal"));
     }
 }

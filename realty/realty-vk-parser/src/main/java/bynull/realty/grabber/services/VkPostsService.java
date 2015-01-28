@@ -1,7 +1,6 @@
 package bynull.realty.grabber.services;
 
 import bynull.realty.grabber.json.ItemJSON;
-import bynull.realty.grabber.json.WallPostJSON;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -15,9 +14,5 @@ public interface VkPostsService {
 
     void wallSearch();
 
-    void wallGetById();
-
-    void getConversation();
-
-    List<WallPostJSON> getThreadPosts();
+    List<ItemJSON> getThreadPostsList(String topicId, String groupId, String accessToken) throws URISyntaxException;
 }

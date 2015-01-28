@@ -6,6 +6,7 @@ import bynull.realty.data.business.vk.Item;
 import bynull.realty.dto.vk.ItemDTO;
 import bynull.realty.services.vk.VkDataStoreService;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -28,7 +29,6 @@ public class VkDataStoreServiceImpl implements VkDataStoreService {
 
     @Override
     public void savePost(ItemDTO post) {
-
         vkItemRepository.save(post.toInternal());
     }
 
@@ -43,16 +43,16 @@ public class VkDataStoreServiceImpl implements VkDataStoreService {
 
     @Override
     public ItemDTO getPostById(Long id) {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public List<ItemDTO> getPostsList() {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public void removePost() {
-
+        throw new NotImplementedException();
     }
 }

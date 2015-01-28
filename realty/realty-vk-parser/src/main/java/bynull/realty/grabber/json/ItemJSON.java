@@ -21,7 +21,7 @@ public class ItemJSON {
     private Long entityId;
 
     @JsonProperty("id")
-    private String formId;
+    private String fromId;
 
     @JsonProperty("owner_id")
     private String ownerId;
@@ -38,7 +38,7 @@ public class ItemJSON {
 
         ItemJSON json = new ItemJSON();
         json.setDate(model.getDate());
-        json.setFormId(model.getFormId());
+        json.setFromId(model.getFormId());
         json.setOwnerId(model.getOwnerId());
         json.setAttachments(model.getAttachmentDTOs() != null ? model.getAttachmentDTOs().stream().map(AttachmentJSON::from).collect(Collectors.toList()) : null);
         json.setEntityId(model.getId());
@@ -48,7 +48,7 @@ public class ItemJSON {
 
     public ItemDTO toDto() {
         ItemDTO dto = new ItemDTO();
-        dto.setFormId(getFormId());
+        dto.setFormId(this.getFromId());
         dto.setOwnerId(getOwnerId());
         dto.setAttachmentDTOs(this.getAttachments() != null ? this.getAttachments().stream().map(AttachmentJSON::toDto).collect(Collectors.toList()) : null);
         dto.setDate(getDate());
@@ -66,7 +66,7 @@ public class ItemJSON {
         if (attachments != null ? !attachments.equals(json.attachments) : json.attachments != null)
             return false;
         if (date != null ? !date.equals(json.date) : json.date != null) return false;
-        if (formId != null ? !formId.equals(json.formId) : json.formId != null) return false;
+        if (fromId != null ? !fromId.equals(json.fromId) : json.fromId != null) return false;
         if (ownerId != null ? !ownerId.equals(json.ownerId) : json.ownerId != null) return false;
 
         return true;
@@ -74,7 +74,7 @@ public class ItemJSON {
 
     @Override
     public int hashCode() {
-        int result = formId != null ? formId.hashCode() : 0;
+        int result = fromId != null ? fromId.hashCode() : 0;
         result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
