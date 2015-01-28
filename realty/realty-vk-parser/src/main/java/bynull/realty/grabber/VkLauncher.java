@@ -7,7 +7,6 @@ import bynull.realty.grabber.services.VkPostsService;
 import bynull.realty.services.vk.VkDataStoreService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -32,7 +31,6 @@ public class VkLauncher {
 
     private String accessToken;
 
-    @PostConstruct
     public void launch() throws EmptyHiddenVkValue, IOException, URISyntaxException {
         accessToken = vkAuth.receiveToken();
         vkDataStoreService.savePosts(getWallPosts("club22062158"));
