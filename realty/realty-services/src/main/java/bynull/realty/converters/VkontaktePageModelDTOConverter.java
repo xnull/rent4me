@@ -1,7 +1,7 @@
 package bynull.realty.converters;
 
 import bynull.realty.common.Converter;
-import bynull.realty.data.business.external.vkontakte.AVkontaktePage;
+import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
  * Created by dionis on 18/01/15.
  */
 @Component
-public class VkontaktePageModelDTOConverter implements Converter<AVkontaktePage, VkontaktePageDTO> {
+public class VkontaktePageModelDTOConverter implements Converter<VkontaktePage, VkontaktePageDTO> {
 
     @Override
-    public VkontaktePageDTO toTargetType(AVkontaktePage in) {
+    public VkontaktePageDTO toTargetType(VkontaktePage in) {
         if (in == null) return null;
         VkontaktePageDTO dto = new VkontaktePageDTO();
         dto.setId(in.getId());
@@ -22,9 +22,9 @@ public class VkontaktePageModelDTOConverter implements Converter<AVkontaktePage,
     }
 
     @Override
-    public AVkontaktePage toSourceType(VkontaktePageDTO in) {
+    public VkontaktePage toSourceType(VkontaktePageDTO in) {
         if (in == null) return null;
-        AVkontaktePage model = new AVkontaktePage();
+        VkontaktePage model = new VkontaktePage();
         model.setId(in.getId());
         model.setExternalId(in.getExternalId());
         model.setLink(in.getLink());
