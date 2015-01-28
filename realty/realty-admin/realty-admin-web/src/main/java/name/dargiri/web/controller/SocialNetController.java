@@ -5,12 +5,16 @@ package name.dargiri.web.controller;
 
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
+import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.services.api.FacebookService;
+import bynull.realty.services.api.VkontakteService;
 import name.dargiri.web.Constants;
 import name.dargiri.web.converters.FacebookPageAdminConverter;
 import name.dargiri.web.converters.FacebookPostAdminConverter;
+import name.dargiri.web.converters.VkontaktePageAdminConverter;
 import name.dargiri.web.form.FacebookPageForm;
 import name.dargiri.web.form.FacebookPostForm;
+import name.dargiri.web.form.VkontaktePageForm;
 import name.dargiri.web.utils.PaginationHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -37,13 +41,21 @@ public class SocialNetController {
     FacebookPageAdminConverter fbPageConverter;
 
     @Resource
+    VkontaktePageAdminConverter vkPageConverter;
+
+    @Resource
     FacebookPostAdminConverter fbPostConverter;
 
     @Resource
     FacebookService facebookService;
 
-    @RequestMapping(value = {"fb"})
-    public ModelAndView index() {
+    @Resource
+    VkontakteService vkontakteService;
+
+    ///////// FB stuff
+
+    @RequestMapping(value = "fb")
+    public ModelAndView indexFB() {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_page_list");
         List<FacebookPageDTO> pages = facebookService.listAllPages();
         List<FacebookPageForm> forms = fbPageConverter.toTargetList(pages);
@@ -52,7 +64,7 @@ public class SocialNetController {
     }
 
     @RequestMapping(value = "fb/new")
-    public ModelAndView newPage() {
+    public ModelAndView newFBPage() {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_page_edit");
         FacebookPageForm form = new FacebookPageForm();
         mav.addObject("page", form);
@@ -60,9 +72,9 @@ public class SocialNetController {
     }
 
     @RequestMapping(value = "fb/new", method = RequestMethod.POST)
-    public ModelAndView saveNewPage(FacebookPageForm facebookPageForm, RedirectAttributes redirectAttributes) {
+    public ModelAndView saveNewFBPage(FacebookPageForm facebookPageForm, RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Facebook page updated");
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Facebook page created");
 
         facebookService.save(fbPageConverter.toSourceType(facebookPageForm));
 
@@ -70,7 +82,7 @@ public class SocialNetController {
     }
 
     @RequestMapping(value = "fb/{id}/edit")
-    public ModelAndView editPage(@PathVariable("id") long fbPageId) {
+    public ModelAndView editFBPage(@PathVariable("id") long fbPageId) {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_page_edit");
         FacebookPageDTO page = facebookService.findPageById(fbPageId);
         FacebookPageForm form = fbPageConverter.toTargetType(page);
@@ -79,7 +91,7 @@ public class SocialNetController {
     }
 
     @RequestMapping(value = "fb/{id}/edit", method = RequestMethod.POST)
-    public ModelAndView updatePage(@PathVariable("id") long fbPageId, FacebookPageForm form, RedirectAttributes redirectAttributes) {
+    public ModelAndView updateFBPage(@PathVariable("id") long fbPageId, FacebookPageForm form, RedirectAttributes redirectAttributes) {
 //        FacebookPageDTO page = facebookService.findPageById(fbPageId);
 
         facebookService.save(fbPageConverter.toSourceType(form));
@@ -90,7 +102,7 @@ public class SocialNetController {
     }
 
     @RequestMapping(value = "fb/{id}/delete")
-    public ModelAndView editPage(@PathVariable("id") long fbPageId, RedirectAttributes redirectAttributes) {
+    public ModelAndView deleteFBPage(@PathVariable("id") long fbPageId, RedirectAttributes redirectAttributes) {
 
 
         facebookService.delete(fbPageId);
@@ -115,5 +127,68 @@ public class SocialNetController {
         mav.addObject("page", page);
         mav.addObject("posts", forms);
         return mav;
+    }
+
+    /////////// end of FB stuff
+
+
+    ////////// VK stuff
+
+    @RequestMapping(value = "vk")
+    public ModelAndView indexVK() {
+        ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_list");
+        List<VkontaktePageDTO> pages = vkontakteService.listAllPages();
+        List<VkontaktePageForm> forms = vkPageConverter.toTargetList(pages);
+        mav.addObject("pages", forms);
+        return mav;
+    }
+
+    @RequestMapping(value = "vk/new")
+    public ModelAndView newVKPage() {
+        ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_edit");
+        VkontaktePageForm form = new VkontaktePageForm();
+        mav.addObject("page", form);
+        return mav;
+    }
+
+    @RequestMapping(value = "vk/new", method = RequestMethod.POST)
+    public ModelAndView saveNewVKPage(VkontaktePageForm vkontaktePageForm, RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "VK page created");
+
+        vkontakteService.save(vkPageConverter.toSourceType(vkontaktePageForm));
+
+        return new ModelAndView("redirect:/secure/socialnet/vk");
+    }
+
+    @RequestMapping(value = "vk/{id}/edit")
+    public ModelAndView editVKPage(@PathVariable("id") long fbPageId) {
+        ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_edit");
+        VkontaktePageDTO page = vkontakteService.findPageById(fbPageId);
+        VkontaktePageForm form = vkPageConverter.toTargetType(page);
+        mav.addObject("page", form);
+        return mav;
+    }
+
+    @RequestMapping(value = "vk/{id}/edit", method = RequestMethod.POST)
+    public ModelAndView updateVKPage(@PathVariable("id") long vkPageId, VkontaktePageForm form, RedirectAttributes redirectAttributes) {
+//        FacebookPageDTO page = facebookService.findPageById(fbPageId);
+
+        vkontakteService.save(vkPageConverter.toSourceType(form));
+
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "VK page updated");
+
+        return new ModelAndView("redirect:/secure/socialnet/vk");
+    }
+
+    @RequestMapping(value = "vk/{id}/delete")
+    public ModelAndView deleteVKPage(@PathVariable("id") long vkPageId, RedirectAttributes redirectAttributes) {
+
+
+        vkontakteService.delete(vkPageId);
+
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "VK page deleted");
+
+        return new ModelAndView("redirect:/secure/socialnet/vk");
     }
 }

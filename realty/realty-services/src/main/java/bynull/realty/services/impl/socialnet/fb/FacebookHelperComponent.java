@@ -1,5 +1,6 @@
 package bynull.realty.services.impl.socialnet.fb;
 
+import bynull.realty.components.AccessTokenPool;
 import bynull.realty.config.Config;
 import bynull.realty.data.business.external.facebook.FacebookPostType;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
@@ -52,6 +53,9 @@ public class FacebookHelperComponent {
     }};
     @Resource
     Config config;
+
+    @Resource
+    AccessTokenPool accessTokenPool;
 
     public FacebookVerificationInfoDTO verify(final ClientShortInfo person) throws FacebookAuthorizationException {
         Assert.notNull(person.facebookId, "facebook id should not be empty");
@@ -163,7 +167,7 @@ public class FacebookHelperComponent {
 
     @VisibleForTesting
     List<FacebookPostItemDTO> doLoadPostsFromPage(String pageId, Date maxAge) {
-        String accessToken = "CAAE0ncj24EcBAHJZAtcgGNHRWe4kPmRMaGpFDjpRj27mwqBXI2sigVDdptRJUvjDOrMJ8LQZAQj53atfKa8ZCTqEVqWm7g8moivnSoMevEuPVPWYhCaOfkX6KkWDXAe8VvGiNN1VhcLAzV1Lra9imuLZBSkNjZCQOtGgZCeJHJIVadlZCp6Yl7g";
+        String accessToken = accessTokenPool.getValidFbAccessToken();
         String uri = "https://graph.facebook.com/v2.2/" + pageId + "/feed";
 
         return doLoadPostsFromPage0(maxAge, uri, accessToken, new ArrayList<>(), 0);
