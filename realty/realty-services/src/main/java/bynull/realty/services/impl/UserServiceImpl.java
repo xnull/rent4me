@@ -225,6 +225,8 @@ public class UserServiceImpl implements UserService {
         Assert.notNull(StringUtils.trimToNull(dto.getEmail()));
         Assert.notNull(StringUtils.trimToNull(dto.getPassword()));
 
+        Assert.isTrue(dto.getPassword().length() >= 6, "Password is too short");
+
         User user = userRepository.findByEmail(dto.getEmail());
         if (user != null) {
             throw new ClientErrorException("User with same email already exists", Response.Status.CONFLICT);

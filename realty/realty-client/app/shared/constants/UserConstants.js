@@ -6,6 +6,8 @@ module.exports = keyMirror({
     USER_PROFILE_SAVE: null,
     USER_PROFILE_LOADED: null,
 
+    //server errors
+    USER_SERVER_ERROR: null,
 
     USER_COMPLETE: null,
     USER_DESTROY: null,

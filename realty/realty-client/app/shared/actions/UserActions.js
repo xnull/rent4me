@@ -49,9 +49,19 @@ var UserActions = {
                 //Utils.navigateToPersonal();
             })
             .onError(function (xhr, status, err) {
-                //AppDispatcher.handleViewAction({
-                //    actionType: AuthConstants.AUTH_AUTHENTICATION_ERROR
-                //});
+
+                var errors = [];
+
+                if(xhr.status == 409) {
+                    errors.push({key: 'E-mail', value: 'E-mail уже занят'});
+                } else {
+                    errors.push({key: 'Ошибка сервера', value: 'У нас произошла ошибка и мы уже работаем, что бы исправить ее'});
+                }
+
+                AppDispatcher.handleViewAction({
+                    actionType: UserConstants.USER_SERVER_ERROR,
+                    errors: errors
+                });
 
 //                    console.error('/rest/apartment', status, err.toString());
                 console.log("Error!");

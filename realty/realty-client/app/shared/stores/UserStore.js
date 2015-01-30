@@ -11,9 +11,11 @@ var assign = require('object-assign');
 
 var _users = {};
 var _me = {};
+var _serverErrors = {};
 
 
 var CHANGE_EVENT = 'change';
+var SERVER_ERROR = 'error';
 
 var saveMyProfile = function (myProfile) {
     //copy props
@@ -31,8 +33,16 @@ var UserStore = assign({}, EventEmitter.prototype, {
         this.emit(CHANGE_EVENT);
     },
 
+    emitServerError: function () {
+        this.emit(SERVER_ERROR);
+    },
+
     getMyProfile: function () {
         return getMyProfile();
+    },
+
+    getServerErrors: function () {
+        return _serverErrors;
     },
 
     saveMyProfile: function (myProfile) {
@@ -50,6 +60,19 @@ var UserStore = assign({}, EventEmitter.prototype, {
      */
     removeChangeListener: function (callback) {
         this.removeListener(CHANGE_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    addServerErrorListener: function (callback) {
+        this.on(SERVER_ERROR, callback);
+    },
+    /**
+     * @param {function} callback
+     */
+    removeServerErrorListener: function (callback) {
+        this.removeListener(SERVER_ERROR, callback);
     }
 });
 
@@ -71,6 +94,12 @@ AppDispatcher.register(function (payload) {
             console.log('My profile loaded');
             console.log(userObject);
             saveMyProfile(userObject);
+            break;
+
+        case UserConstants.USER_SERVER_ERROR:
+            _serverErrors = action.errors || [];
+            UserStore.emitServerError();
+            return true;
             break;
         default:
             return false;
