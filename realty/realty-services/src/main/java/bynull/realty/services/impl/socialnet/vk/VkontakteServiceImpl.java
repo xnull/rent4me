@@ -2,7 +2,7 @@ package bynull.realty.services.impl.socialnet.vk;
 
 import bynull.realty.converters.VkontaktePageModelDTOConverter;
 import bynull.realty.dao.external.VkontaktePageRepository;
-import bynull.realty.data.business.external.vkontakte.AVkontaktePage;
+import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.services.api.VkontakteService;
 import org.springframework.data.domain.Sort;
@@ -39,7 +39,7 @@ public class VkontakteServiceImpl implements VkontakteService {
     @Transactional
     @Override
     public void save(VkontaktePageDTO vkontaktePageDTO) {
-        AVkontaktePage one = vkontaktePageDTO.getId() != null ? vkontaktePageRepository.findOne(vkontaktePageDTO.getId()) : new AVkontaktePage();
+        VkontaktePage one = vkontaktePageDTO.getId() != null ? vkontaktePageRepository.findOne(vkontaktePageDTO.getId()) : new VkontaktePage();
 
         one.setLink(vkontaktePageDTO.getLink());
         one.setExternalId(vkontaktePageDTO.getExternalId());

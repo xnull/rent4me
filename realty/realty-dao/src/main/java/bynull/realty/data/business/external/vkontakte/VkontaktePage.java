@@ -10,7 +10,7 @@ import static bynull.realty.util.CommonUtils.copy;
  */
 @Entity
 @Table(name = "vk_page")
-public class AVkontaktePage {
+public class VkontaktePage {
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "vk_page_id_generator", strategy = GenerationType.SEQUENCE)
@@ -29,11 +29,11 @@ public class AVkontaktePage {
     @Column(name = "updated_dt")
     private Date updated;
 
-    public AVkontaktePage() {
+    public VkontaktePage() {
 
     }
 
-    public AVkontaktePage(long id) {
+    public VkontaktePage(long id) {
         this.id = id;
     }
 
@@ -93,9 +93,9 @@ public class AVkontaktePage {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AVkontaktePage)) return false;
+        if (!(o instanceof VkontaktePage)) return false;
 
-        AVkontaktePage that = (AVkontaktePage) o;
+        VkontaktePage that = (VkontaktePage) o;
 
         if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
 
