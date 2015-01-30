@@ -415,8 +415,27 @@ var PlainLogin = React.createClass({
     getInitialState: function () {
         return {
             email: null,
-            password: null
+            password: null,
+            errors: []
         }
+    },
+
+
+
+    componentDidMount: function() {
+        UserStore.addServerErrorListener(this.onServerError);
+    },
+
+    componentWillUnmount: function() {
+        UserStore.removeServerErrorListener(this.onServerError);
+    },
+
+    onServerError: function() {
+        var serverErrors = UserStore.getServerErrors();
+
+        var errors = _.union((this.state.errors || []), serverErrors);//perform array concatenation
+
+        this.setState(assign(this.state, {errors: errors}));
     },
 
     onEmailChange: function (e) {
@@ -462,8 +481,30 @@ var PlainLogin = React.createClass({
             style['display'] = 'none';
         }
 
+        var errors = this.state.errors || [];
+
+        var errorsHtml = errors.map(function(e){
+            return <li key={e.key}>{e.key}: {e.value}</li>
+        });
+
+        var errorsHtmlOrNull = _.size(errors) > 0 ?
+            (
+                <div className='col-md-12'>
+                    <div className='alert alert-danger' role='alert' >
+                        <ul>
+                        {errorsHtml}
+                        </ul>
+                    </div>
+                </div>
+            )
+            : null;
+
+
         return (
             <div className="row row-centered" style={style}>
+
+                {errorsHtmlOrNull}
+
                 <div className='col-centered'>
                     Вход
                 </div>

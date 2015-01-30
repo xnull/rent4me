@@ -4,7 +4,9 @@
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var AuthConstants = require('../constants/AuthConstants');
+var UserConstants = require('../constants/UserConstants');
 var AuthStore = require('../stores/AuthStore');
+var UserStore = require('../stores/UserStore');
 var BlockUI = require('../common/BlockUI');
 var Ajax = require('../common/Ajax');
 var Utils = require('../common/Utils');
@@ -205,6 +207,19 @@ var AuthActions = {
                 .onError(function (xhr, status, err) {
                     AppDispatcher.handleViewAction({
                         actionType: AuthConstants.AUTH_AUTHENTICATION_ERROR
+                    });
+
+                    var errors = [];
+
+                    //if(xhr.status == 409) {
+                    //    errors.push({key: 'E-mail', value: 'E-mail уже занят'});
+                    //} else {
+                        errors.push({key: 'Ошибка входа', value: 'Видимо, вы ошиблись при вводе :('});
+                    //}
+
+                    AppDispatcher.handleViewAction({
+                        actionType: UserConstants.USER_SERVER_ERROR,
+                        errors: errors
                     });
 
 //                    console.error('/rest/apartment', status, err.toString());
