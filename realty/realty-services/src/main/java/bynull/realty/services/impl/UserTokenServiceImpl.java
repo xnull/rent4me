@@ -60,7 +60,7 @@ public class UserTokenServiceImpl implements UserTokenService {
     @Override
     public UserService.UsernameTokenPair getUsernameAndTokenIfValidCredentials(String email, String password) throws BadCredentialsException, UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
-        boolean matches = passwordEncoder.isPasswordValid(user.getPasswordHash(), password, null);
+        boolean matches = user != null && passwordEncoder.isPasswordValid(user.getPasswordHash(), password, null);
 
         LOGGER.debug("Password matches? {}", matches);
 
