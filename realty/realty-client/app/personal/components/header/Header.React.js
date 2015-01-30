@@ -65,7 +65,7 @@ var Header = React.createClass({
                             </li>
 
                             <li>
-                                <a href="javascript:none;" onClick={AuthActions.logoutOnBackend}>Выход</a>
+                                <a href="javascript:void(0)" onClick={AuthActions.logoutOnBackend}>Выход</a>
                             </li>
                         </ul>
                     </div>

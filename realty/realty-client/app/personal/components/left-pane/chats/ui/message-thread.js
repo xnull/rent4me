@@ -114,7 +114,7 @@ var MessageThread = React.createClass({
 
         var hasMoreElement = hasMore ?
             (
-                <a href="javascript:none;" onClick={onHasMoreClicked} className="list-group-item">
+                <a href="javascript:void(0)" onClick={onHasMoreClicked} className="list-group-item">
 
                     <p className="list-group-item-text">
                         Загрузить еще
