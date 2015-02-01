@@ -83,10 +83,10 @@ var Adverts = React.createClass({
                         </div>
                         <div className='col-md-4'>
                             <div className='col-md-6'>
-                                <a className="btn btn-default">Редактировать</a>
+                                <a className="btn btn-primary">Редактировать</a>
                             </div>
                             <div className='col-md-6'>
-                                <a className="btn btn-default">Удалить</a>
+                                <a className="btn btn-danger">Удалить</a>
                             </div>
                         </div>
                     </div>
