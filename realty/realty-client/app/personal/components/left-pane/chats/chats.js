@@ -101,7 +101,7 @@ var Chats = React.createClass({
         });
 
         return (
-            <div className="col-md-9" style={style}>
+            <div style={style}>
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <h4>Беседы</h4>
