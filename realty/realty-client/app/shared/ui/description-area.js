@@ -35,7 +35,7 @@ var Description = React.createClass({
                     </div>
 
                     <div className={uiProps.form}>
-                        <textarea className="form-control" rows="3"></textarea>
+                        <textarea className="form-control" rows="5"></textarea>
                     </div>
                 </div>
             </div>

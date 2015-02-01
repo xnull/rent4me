@@ -19,51 +19,80 @@ var Renter = React.createClass({
     },
     render: function () {
         return (
-            <div className="col-md-9">
-                <div className="panel well">
-                    <div className="panel-body">
-                        <h4>Разместить объявление</h4>
 
-                        <form className="form-horizontal" role="form">
-                            <div className='row'>
-                                <RentPeriod uiSize='10' uiLabelSize='2'/>
-                            </div>
+            <div className="panel well">
+                <div className="panel-body">
+                    <h4>Разместить новое объявление</h4>
 
-                            <br/>
-
-                            <div className='row'>
-                                <RoomsCount uiSize='10' uiLabelSize='2'/>
-                            </div>
-                            <br/>
-
-                            <div className='row'>
-                                <PriceRange uiSize='10' uiLabelSize='2' uiInputSizes='6'/>
-                            </div>
-
-                            <div className='row'>
-                                <SearchAddress uiSize='10' uiLabelSize='2'/>
-                            </div>
-
-                            <br/>
-
-                            <div className='row'>
-                                <Description uiSize='10' uiLabelSize='2' uiInputSizes='6'/>
-                            </div>
-
-                            <br/>
-                        </form>
-                    </div>
-
-                    <div className="panel-footer">
+                    <form className="form-horizontal" role="form">
                         <div className='row'>
-                            <div className="col-md-6 col-md-offset-3">
-                                <a className="btn btn-success center-block">Продолжить</a>
+                            <RentPeriod uiSize='12' uiLabelSize='2'/>
+                        </div>
+
+                        <br/>
+
+                        <div className='row'>
+                            <RoomsCount uiSize='12' uiLabelSize='2'/>
+                        </div>
+                        <br/>
+
+                        <div className='row'>
+                            <PriceRange uiSize='12' uiLabelSize='2' uiInputSizes='6'/>
+                        </div>
+
+                        <div className='row'>
+                            <SearchAddress uiSize='12' uiLabelSize='2'/>
+                        </div>
+
+                        <br/>
+
+                        <div className='row'>
+                            <Description uiSize='12' uiLabelSize='2' uiInputSizes='6'/>
+                        </div>
+
+                        <br/>
+
+                        <div className='row'>
+                            <div className="col-md-3 col-md-offset-6">
+                                <a className="btn btn-default center-block">Отмена (скрыть форму)</a>
+                            </div>
+                            <div className="col-md-3">
+                                <a className="btn btn-success center-block">Разместить</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        );
+    }
+});
+
+var Adverts = React.createClass({
+    render: function () {
+        return (
+            <div className="panel well">
+                <div className="panel-body">
+                    <h4>Активное бъявление</h4>
+                    <div className='row'>
+                    {/* example item */}
+                        <div className='col-md-8'>
+                            <p className='text'> однокомнатная квартира </p>
+                            <p className='text'> долгосрочная аренда </p>
+                            <p className='text'> адрес: такой-то </p>
+                        </div>
+                        <div className='col-md-4'>
+                            <div className='col-md-6'>
+                                <a className="btn btn-default">Редактировать</a>
+                            </div>
+                            <div className='col-md-6'>
+                                <a className="btn btn-default">Удалить</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 });
 
@@ -77,8 +106,12 @@ var Renter = React.createClass({
  */
 var NewRenter = React.createClass({
 
-    trololo: function () {
-        alert('trololo');
+    getInitialState: function () {
+        return {showAddAdvert: false};
+    },
+
+    onAddAdvert: function () {
+        this.setState({showAddAdvert: true});
     },
 
     render: function () {
@@ -86,19 +119,26 @@ var NewRenter = React.createClass({
             <div className="col-md-9">
                 <div className="panel">
                     <div className="panel-body">
-                        <div className="col-md-3">
+                        <div className="col-md-2">
                             <div className="col-md-3">
                                 <a
                                     className="thumbnail"
-                                    style={{height: 240, width: 160, display: 'flex', alignItems: 'center'}}
-                                    onClick={this.trololo}
+                                    style={{height: 240, width: 120, display: 'flex', alignItems: 'center'}}
+                                    onClick={this.onAddAdvert}
                                 >
                                     <img alt="..." src="images/blue-plus.png" width="32" height="32"/>
                                 </a>
                             </div>
                         </div>
+
+                        <div className="col-md-10">
+                            { this.state.showAddAdvert ? <Renter /> : null }
+                        </div>
+
                     </div>
                 </div>
+
+                <Adverts />
             </div>
         );
     }
