@@ -28,7 +28,7 @@ public abstract class DbTest extends SpringTest {
         User user = new User();
         user.setUsername("user_" + UUID.randomUUID());
         user.setPasswordHash("hash");
-        user.setEmail(user.getEmail() + "@fakemail.com");
+        user.setEmail(user.getUsername() + "@fakemail.com");
         entityManager.persist(user);
         entityManager.flush();
         return user;

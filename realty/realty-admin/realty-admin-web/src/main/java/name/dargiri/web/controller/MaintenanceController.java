@@ -4,6 +4,7 @@ package name.dargiri.web.controller;
 //import name.dargiri.data.service.PersonService;
 
 import bynull.realty.services.api.FacebookService;
+import bynull.realty.services.api.VkontakteService;
 import name.dargiri.web.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,9 @@ public class MaintenanceController {
     @Resource
     FacebookService facebookService;
 
+    @Resource
+    VkontakteService vkontakteService;
+
     @RequestMapping(value = "")
     public ModelAndView index() {
         return new ModelAndView("maintenance/index");
@@ -35,10 +39,17 @@ public class MaintenanceController {
         return new ModelAndView("redirect:/secure/maintenance");
     }
 
-    @RequestMapping(value = "manual_sync")
+    @RequestMapping(value = "manual_sync_fb")
     public ModelAndView manualSyncWithFB(RedirectAttributes redirectAttributes) {
         facebookService.syncWithFB();
         redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with FB");
+        return new ModelAndView("redirect:/secure/maintenance");
+    }
+
+    @RequestMapping(value = "manual_sync_vk")
+    public ModelAndView manualSyncWithVK(RedirectAttributes redirectAttributes) {
+        vkontakteService.syncWithVK();
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with VK");
         return new ModelAndView("redirect:/secure/maintenance");
     }
 }

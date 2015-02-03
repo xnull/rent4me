@@ -96,7 +96,7 @@
                                 <li class="divider"></li>
                                 <li><strong>ВКонтакте</strong></li>
                                 <li><a href="<c:url value="/secure/socialnet/vk"/>">ВК страницы</a></li>
-                                    <%--<li><a href="<c:url value="/secure/socialnet/vk/posts"/>">ВК посты</a></li>--%>
+                                <li><a href="<c:url value="/secure/socialnet/vk/posts"/>">ВК посты</a></li>
                                     <%--<li><a href="#">Another action</a></li>--%>
                                     <%--<li><a href="#">Something else here</a></li>--%>
                                     <%--<li class="divider"></li>--%>

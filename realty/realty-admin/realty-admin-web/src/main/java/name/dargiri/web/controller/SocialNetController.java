@@ -6,15 +6,18 @@ package name.dargiri.web.controller;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
+import bynull.realty.dto.vk.VkontaktePostDTO;
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.services.api.VkontakteService;
 import name.dargiri.web.Constants;
 import name.dargiri.web.converters.FacebookPageAdminConverter;
 import name.dargiri.web.converters.FacebookPostAdminConverter;
 import name.dargiri.web.converters.VkontaktePageAdminConverter;
+import name.dargiri.web.converters.VkontaktePostAdminConverter;
 import name.dargiri.web.form.FacebookPageForm;
 import name.dargiri.web.form.FacebookPostForm;
 import name.dargiri.web.form.VkontaktePageForm;
+import name.dargiri.web.form.VkontaktePostForm;
 import name.dargiri.web.utils.PaginationHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -45,6 +48,9 @@ public class SocialNetController {
 
     @Resource
     FacebookPostAdminConverter fbPostConverter;
+
+    @Resource
+    VkontaktePostAdminConverter vkPostConverter;
 
     @Resource
     FacebookService facebookService;
@@ -190,5 +196,22 @@ public class SocialNetController {
         redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "VK page deleted");
 
         return new ModelAndView("redirect:/secure/socialnet/vk");
+    }
+
+    @RequestMapping(value = "vk/posts")
+    public ModelAndView listVKPosts(@RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "limit", defaultValue = "10") int limit,
+                                    @RequestParam(value = "text", required = false) String text) {
+        ModelAndView mav = new ModelAndView("socialnet/vk/vk_posts_list");
+        long totalElements = vkontakteService.countByQuery(text);
+        PaginationHelper paginationHelper = new PaginationHelper(totalElements, page, limit, "/secure/socialnet/vk/posts");
+        List<VkontaktePostDTO> posts = vkontakteService.findPosts(text, new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
+        List<VkontaktePostForm> forms = vkPostConverter.toTargetList(posts);
+        mav.addObject("paginationHelper", paginationHelper);
+        mav.addObject("totalPages", totalElements);
+        mav.addObject("searchText", text);
+        mav.addObject("page", page);
+        mav.addObject("posts", forms);
+        return mav;
     }
 }

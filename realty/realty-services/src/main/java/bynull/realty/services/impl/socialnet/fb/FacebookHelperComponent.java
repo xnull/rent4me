@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
+import com.google.common.util.concurrent.Uninterruptibles;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -30,6 +31,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -214,6 +216,7 @@ public class FacebookHelperComponent {
         } catch (Exception e) {
             log.warn("Exception occurred while trying to load posts from page", e);
             if (retryNumber < 3) {
+                Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
                 return doLoadPostsFromPage0(maxAge, _url, accessToken, accu, retryNumber + 1);
             } else {
                 throw new RuntimeException(e);

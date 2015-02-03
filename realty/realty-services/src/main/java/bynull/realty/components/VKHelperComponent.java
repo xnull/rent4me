@@ -1,13 +1,19 @@
 package bynull.realty.components;
 
 import bynull.realty.config.Config;
+import bynull.realty.data.business.external.vkontakte.VkontaktePost;
+import bynull.realty.data.business.external.vkontakte.VkontaktePostType;
+import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
+import com.google.common.util.concurrent.Uninterruptibles;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -20,21 +26,20 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import static bynull.realty.util.CommonUtils.copy;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author dionis on 18/07/14.
  */
+@Slf4j
 @Component
 public class VKHelperComponent {
     private static final String VK_SECRET = "DkAHHjYk8ZvAvAgBQMJd";
@@ -42,6 +47,9 @@ public class VKHelperComponent {
 
     @Resource
     Config config;
+
+    @Resource
+    AccessTokenPool accessTokenPool;
 
     private String getRedirectUri() {
         return config.getVkRedirectURL() + "/vk_auth_return_page";
@@ -62,6 +70,178 @@ public class VKHelperComponent {
 
         this.setParams(params);
     }};
+
+    public List<VkWallPostDTO> loadPostsFromPage(String externalId, Date maxPostsAgeToGrab) {
+        return doLoadPostsFromPage(externalId, maxPostsAgeToGrab);
+    }
+
+    @VisibleForTesting
+    List<VkWallPostDTO> doLoadPostsFromPage(String pageId, Date maxAge) {
+        String accessToken = "01ddfd6fad91244e793d3a4631fa97096b0f06ba33d09be49fc641485f42cfd7b69256ca3c6a25f48a43d";//accessTokenPool.getValidVkAccessToken();
+        accessToken = null;
+
+//        pageId = "22062158";
+
+        return doLoadPostsFromPage0(maxAge, pageId, new ArrayList<>(), 0, 0);
+    }
+
+    @Getter @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class VkWallPostResponse {
+        @JsonProperty("response")
+        private VkWallPostResponseContent content = new VkWallPostResponseContent();
+    }
+
+    @Getter @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class VkWallPostResponseContent {
+        public static final int LIMIT = 100;
+        @JsonProperty("count")
+        private int totalCount;
+        @JsonProperty("items")
+        private List<VkWallPostDTO> posts;
+
+        public boolean hasNextPage() {
+            int size = posts != null ? posts.size() : 0;
+            return size == LIMIT || size == totalCount;
+        }
+
+        public int getNextOffset(int currentOffset) {
+            return currentOffset + LIMIT;
+        }
+    }
+
+    /**
+     * http://vk.com/dev/post_source
+     */
+    @Getter @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class VkPostSource {
+        /**
+         * Может содержать запись на внешний источник
+         */
+        @JsonProperty("url")
+        private String sourceUrl;
+    }
+
+    @Getter @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class VkWallPostDTO {
+        @JsonProperty("id")
+        private String id;
+        @JsonProperty("from_id")
+        private String fromId;
+
+        @JsonProperty("owner_id")
+        private String ownerId;
+
+        @JsonProperty("date")
+        private long unixDateSeconds;
+
+        @JsonProperty("post_type")
+        private PostType postType;
+
+        @JsonProperty("text")
+        private String text;
+
+        @JsonProperty("post_source")
+        private VkPostSource vkPostSource;
+
+        public Date getDate() {
+            return new Date(unixDateSeconds * 1000);
+        }
+
+        public static enum PostType {
+            post {
+                @Override
+                public VkontaktePostType getPostType() {
+                    return VkontaktePostType.POST;
+                }
+            }, copy {
+                @Override
+                public VkontaktePostType getPostType() {
+                    return VkontaktePostType.COPY;
+                }
+            }, reply {
+                @Override
+                public VkontaktePostType getPostType() {
+                    return VkontaktePostType.REPLY;
+                }
+            }, postpone {
+                @Override
+                public VkontaktePostType getPostType() {
+                    return VkontaktePostType.POSTPONE;
+                }
+            }, suggest {
+                @Override
+                public VkontaktePostType getPostType() {
+                    return VkontaktePostType.SUGGEST;
+                }
+            };
+
+            public abstract VkontaktePostType getPostType();
+        }
+
+        public VkontaktePost toInternal() {
+            VkontaktePost post = new VkontaktePost();
+            post.setExternalId(this.getId());
+            post.setMessage(this.getText());
+            post.setCreated(this.getDate());
+            return post;
+        }
+    }
+
+    private List<VkWallPostDTO> doLoadPostsFromPage0(Date maxAge, String pageId, List<VkWallPostDTO> accu, int retryNumber, int offset) {
+//        String url = !_url.contains("access_token")
+//                ? _url + (_url.contains("?") ? "&" : "?") + "access_token=" + accessToken
+//                : _url;
+        String url = "https://api.vk.com/method/wall.get?&owner_id=-" + pageId + "&v=5.27&count=100&filter=all&extended=1&offset=" + offset;
+
+        log.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
+
+        long requestStartTime = System.currentTimeMillis();
+
+        GetMethod httpGet = new GetMethod(url);
+        httpGet.setFollowRedirects(false);
+        try {
+            int responseCode = httpManager.executeMethod(httpGet);
+            if (responseCode != HttpStatus.SC_OK) {
+                throw new BadRequestException("VK request failed. Invalid response code: " + responseCode);
+            }
+            String body = httpGet.getResponseBodyAsString();
+            log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
+            log.info("Status line: {}", httpGet.getStatusLine());
+            log.info("Body: {}", body);
+
+            VkWallPostResponseContent response = JsonUtils.fromJson(body, VkWallPostResponse.class).getContent();
+            if (response.getPosts().isEmpty()) {
+                return accu;
+            }
+
+            accu.addAll(response.getPosts());
+            if (!response.hasNextPage()) {
+                return accu;
+            }
+
+            VkWallPostDTO last = Iterables.getLast(response.getPosts(), null);
+            if (last == null || !last.getDate().after(maxAge)) {
+                return accu;
+            }
+
+            return doLoadPostsFromPage0(maxAge, pageId, accu, 0, offset+VkWallPostResponseContent.LIMIT);
+
+        } catch (Exception e) {
+            log.warn("Exception occurred while trying to load posts from page", e);
+            if (retryNumber < 3) {
+                Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
+                return doLoadPostsFromPage0(maxAge, pageId, accu, retryNumber + 1, offset);
+            } else {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            httpGet.releaseConnection();
+        }
+    }
 
     public static class ClientShortInfo {
         public final String exchangeCode;
