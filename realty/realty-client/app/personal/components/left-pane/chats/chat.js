@@ -110,13 +110,12 @@ module.exports = React.createClass({
 
                         <form className="form-horizontal" role="form" style={messageFormStyle}>
                             <div className="form-group">
-                                <label className="col-md-2 control-label">Сообщение</label>
-                                <div className="col-md-6">
-                                    <textarea rows="7" className="form-control" value={message} placeholder="Введите текст сообщения" onChange={this.onMessageChange}/>
+                                <div className="col-md-12">
+                                    <textarea rows="5" className="form-control" value={message} placeholder="Введите текст сообщения" onChange={this.onMessageChange}/>
                                 </div>
-                                </div>
+                            </div>
 
-                            <div className="col-md-offset-5 col-md-3">
+                            <div className="col-md-offset-9 col-md-3">
                                 <a className="btn btn-primary center-block" onClick={this.onSendMessage}>Отправить</a>
                             </div>
 
