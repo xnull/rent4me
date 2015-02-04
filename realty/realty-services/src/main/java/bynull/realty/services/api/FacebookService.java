@@ -22,10 +22,38 @@ public interface FacebookService {
 
     List<FacebookPageDTO> listAllPages();
 
+    /**
+     * @deprecated Use {@link bynull.realty.services.api.SocialNetService#findPosts(String, boolean, java.util.Set, Integer, Integer, bynull.realty.util.LimitAndOffset, FindMode) instead}
+     * @param text
+     * @param withSubway
+     * @param limitAndOffset
+     * @return
+     */
+    @Deprecated
     List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
 
+    /**
+     * @deprecated Use {@link bynull.realty.services.api.SocialNetService#findPosts(String, boolean, java.util.Set, Integer, Integer, bynull.realty.util.LimitAndOffset, FindMode) instead}
+     * @param text
+     * @param withSubway
+     * @param limitAndOffset
+     * @return
+     */
+    @Deprecated
     List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
 
+    /**
+     * @deprecated Use {@link bynull.realty.services.api.SocialNetService#findPosts(String, boolean, java.util.Set, Integer, Integer, bynull.realty.util.LimitAndOffset, FindMode) instead}
+     * @param text
+     * @param withSubway
+     * @param roomsCount
+     * @param minPrice
+     * @param maxPrice
+     * @param limitAndOffset
+     * @param findMode
+     * @return
+     */
+    @Deprecated
     List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, FindMode findMode);
 
     FacebookPageDTO findPageById(long fbPageId);
@@ -38,27 +66,4 @@ public interface FacebookService {
 
     long countByQuery(String text);
 
-    static enum FindMode {
-        RENTER, LESSOR
-    }
-
-    static enum RoomCount {
-        ONE("1"), TWO("2"), THREE("3"), FOUR_PLUS("4+");
-
-        public final String value;
-
-        RoomCount(String value) {
-            this.value = value;
-        }
-
-        public static RoomCount findByValueOrFail(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-            for (RoomCount roomCount : values()) {
-                if (roomCount.value.equals(value)) return roomCount;
-            }
-            throw new IllegalArgumentException();
-        }
-    }
 }

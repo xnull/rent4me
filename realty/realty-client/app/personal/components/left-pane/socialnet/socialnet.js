@@ -18,9 +18,9 @@ module.exports = React.createClass({
                     <div className="bs-component">
                         <div className="list-group">
 
-                            <a href="#/social/fb" className="list-group-item">
-                                <h4 className="list-group-item-heading">Facebook</h4>
-                                <p className="list-group-item-text">Горячие объявления прямиком из социальной сети FB.</p>
+                            <a href="#/social_networks" className="list-group-item">
+                                <h4 className="list-group-item-heading">Facebook + ВК</h4>
+                                <p className="list-group-item-text">Горячие объявления прямиком из социальной сети FB и ВК.</p>
                             </a>
                         </div>
                     </div>

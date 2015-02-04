@@ -128,13 +128,13 @@ AppDispatcher.register(function (payload) {
 //    console.log(apartmentObject);
 
     switch (action.actionType) {
-        case SocialNetConstants.SOCIAL_NET_FB_POSTS_FOUND:
+        case SocialNetConstants.SOCIAL_NET_POSTS_FOUND:
             console.log('found posts:');
             console.log(action.posts);
             Store.saveSearchResults(action.posts || []);
             break;
 
-        case SocialNetConstants.SOCIAL_NET_FB_POSTS_RESET_SEARCH:
+        case SocialNetConstants.SOCIAL_NET_POSTS_RESET_SEARCH:
             _searchWithSubway = false;
             _searchText = null;
             _posts = [];
@@ -142,27 +142,27 @@ AppDispatcher.register(function (payload) {
             _offset = 0;
             break;
 
-        case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_TEXT:
+        case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_TEXT:
             _searchText = action.text || null;
             return true;//don't emit any event
             break;
 
-        case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_WITH_SUBWAY:
+        case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_WITH_SUBWAY:
             _searchWithSubway = action.value || false;
             return true;//don't emit any event
             break;
 
-        case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_TYPE:
+        case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_TYPE:
             _searchType = action.value || 'RENTER';
             return true;//don't emit any event
             break;
 
-        case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_ROOMS:
+        case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_ROOMS:
             _searchRooms = action.value;
             return true;//don't emit any event
             break;
 
-        case SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_PRICE:
+        case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_PRICE:
             var val = action.value || {};
             _searchMinPrice = val.min || null;
             _searchMaxPrice = val.max || null;

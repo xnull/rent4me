@@ -1,10 +1,16 @@
 package bynull.realty.web.rest;
 
+import bynull.realty.dto.SocialNetPostDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
+import bynull.realty.services.api.FindMode;
+import bynull.realty.services.api.RoomCount;
+import bynull.realty.services.api.SocialNetService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.converters.FacebookPostDtoJsonConverter;
+import bynull.realty.web.converters.SocialNetPostDtoJsonConverter;
 import bynull.realty.web.json.FacebookPostJSON;
+import bynull.realty.web.json.SocialNetPostJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -23,12 +29,18 @@ import java.util.stream.Collectors;
 @Path("social")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class SocialRestResource {
+public class SocialNetRestResource {
     @Resource
     FacebookService facebookService;
 
     @Resource
+    SocialNetService socialNetService;
+
+    @Resource
     FacebookPostDtoJsonConverter facebookPostConverter;
+
+    @Resource
+    SocialNetPostDtoJsonConverter socialNetPostConverter;
 
     @Path("/renter/search")
     @GET
@@ -71,16 +83,47 @@ public class SocialRestResource {
                 .withOffset(offset)
                 .create();
 
-        FacebookService.FindMode findMode = FacebookService.FindMode.valueOf(type);
+        FindMode findMode = FindMode.valueOf(type);
 
-        Set<FacebookService.RoomCount> roomsCount = rooms != null
-                ? rooms.stream().map(FacebookService.RoomCount::findByValueOrFail).collect(Collectors.toSet())
+        Set<RoomCount> roomsCount = rooms != null
+                ? rooms.stream().map(RoomCount::findByValueOrFail).collect(Collectors.toSet())
                 : Collections.emptySet();
 
         List<FacebookPostDTO> found = facebookService.findFBPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
         List<FacebookPostJSON> result = facebookPostConverter.toTargetList(found);
 
-//        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
+        return Response
+                .ok(result)
+                .build();
+    }
+
+    @Path("/search")
+    @GET
+    public Response findPosts(
+            @QueryParam("text") String text,
+            @QueryParam("type") String type,
+            @QueryParam("with_subway") boolean withSubway,
+            @QueryParam("rooms") List<String> rooms,
+            @QueryParam("min_price") Integer minPrice,
+            @QueryParam("max_price") Integer maxPrice,
+            @QueryParam("limit") int limit,
+            @QueryParam("offset") int offset
+    ) {
+
+        LimitAndOffset limitAndOffset = LimitAndOffset.builder()
+                .withLimit(limit)
+                .withOffset(offset)
+                .create();
+
+        FindMode findMode = FindMode.valueOf(type);
+
+        Set<RoomCount> roomsCount = rooms != null
+                ? rooms.stream().map(RoomCount::findByValueOrFail).collect(Collectors.toSet())
+                : Collections.emptySet();
+
+        List<SocialNetPostDTO> found = socialNetService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
+        List<SocialNetPostJSON> result = socialNetPostConverter.toTargetList(found);
+
         return Response
                 .ok(result)
                 .build();

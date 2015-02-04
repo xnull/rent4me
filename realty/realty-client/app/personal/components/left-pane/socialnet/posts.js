@@ -84,7 +84,7 @@ var Post = React.createClass({
                 <a href="#" className="list-group-item">
                     {imagePreviews}
                     <p className="list-group-item-text">
-                        <h4>Описание</h4>
+                        <h4>[{item.social_network=='VK'?'ВКонтакте':item.social_network}] Описание</h4>
 
                         <div className="row">
                             <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.message)}}>

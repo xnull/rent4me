@@ -4,7 +4,7 @@
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var SocialNetConstants = require('../constants/SocialNetConstants');
-var SocialNetFBStore = require('../stores/SocialNetFBStore');
+var SocialNetStore = require('../stores/SocialNetStore');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 var JSON = require('JSON2');
@@ -14,20 +14,20 @@ var SocialNetActions = {
 
     resetFBSearchState: function () {
         AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_RESET_SEARCH
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_RESET_SEARCH
         });
     },
 
     changeFBSearchText: function (text) {
         AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_TEXT,
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_TEXT,
             text: text
         });
     },
 
     changeFBSearchRooms: function (oneAptSelected, twoAptSelected, threeAptSelected) {
         AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_ROOMS,
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_ROOMS,
             value: {
                 '1': oneAptSelected || false,
                 '2': twoAptSelected || false,
@@ -61,7 +61,7 @@ var SocialNetActions = {
         max = this._trimString(max);
 
         AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_PRICE,
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_PRICE,
             value: {
                 min: min ? min : null,
                 max: max ? max : null
@@ -71,26 +71,26 @@ var SocialNetActions = {
 
     changeFBSearchWithSubway: function (value) {
         AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_WITH_SUBWAY,
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_WITH_SUBWAY,
             value: value
         });
     },
 
     changeFBSearchType: function (value) {
         AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_SAVE_SEARCH_TYPE,
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_TYPE,
             value: value
         });
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findFBPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice) {
+    findPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice) {
         BlockUI.blockUI();
 
-        var limit = SocialNetFBStore.getLimit();
-        var offset = SocialNetFBStore.getOffset();
+        var limit = SocialNetStore.getLimit();
+        var offset = SocialNetStore.getOffset();
 
-        var url = '/rest/social/fb/search?text=' + (text ? text : '') + "&type=" + type + "&with_subway=" + (withSubway ? true : false) + "&limit=" + limit + "&offset=" + offset;
+        var url = '/rest/social/search?text=' + (text ? text : '') + "&type=" + type + "&with_subway=" + (withSubway ? true : false) + "&limit=" + limit + "&offset=" + offset;
 
         if (oneRoomAptSelected) {
             url += "&rooms=1";
@@ -128,7 +128,7 @@ var SocialNetActions = {
             .authorized()
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
-                    actionType: SocialNetConstants.SOCIAL_NET_FB_POSTS_FOUND,
+                    actionType: SocialNetConstants.SOCIAL_NET_POSTS_FOUND,
                     posts: data
                 });
 

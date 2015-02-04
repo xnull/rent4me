@@ -5,7 +5,7 @@ var React = require('react');
 var Util = require('rent4meUtil');
 var assign = require('object-assign');
 
-var SocialNetStore = require('../../../../shared/stores/SocialNetFBStore');
+var SocialNetStore = require('../../../../shared/stores/SocialNetStore');
 var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 
 var RoomsCount = require('../../../../shared/ui/rooms-count');
@@ -101,7 +101,7 @@ module.exports = React.createClass({
             var maxPrice = this.state.maxPrice;
 
             console.log('Searching for text: ' + text);
-            SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
+            SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
         }
     },
 
@@ -294,7 +294,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchType(type);
         this.fireAptSelectionStateChange();
         SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
-        SocialNetActions.findFBPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
+        SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
     },
 
     render: function () {

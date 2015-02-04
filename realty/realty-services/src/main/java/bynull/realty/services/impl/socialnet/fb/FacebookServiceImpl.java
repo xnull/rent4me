@@ -18,6 +18,8 @@ import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
+import bynull.realty.services.api.FindMode;
+import bynull.realty.services.api.RoomCount;
 import bynull.realty.util.LimitAndOffset;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
