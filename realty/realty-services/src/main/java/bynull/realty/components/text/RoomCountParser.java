@@ -92,53 +92,58 @@ public class RoomCountParser {
     }
 
     public Integer findRoomCount(String text) {
-        text = StringUtils.trimToEmpty(text).toLowerCase();
-        if (text.isEmpty()) return null;
+        log.info(">> Finding room count started");
+        try {
+            text = StringUtils.trimToEmpty(text).toLowerCase();
+            if (text.isEmpty()) return null;
 
-        text = TextUtils.normalizeTextForParsing(text);
+            text = TextUtils.normalizeTextForParsing(text);
 
-        // кейсы 3-ех комнатных квартир
-        for (String stem : threeRoomApartmentStems) {
-            if (text.contains(stem)) {
-                log.debug("3-room Matched by stem [{}]", stem);
-                return 3;
+            // кейсы 3-ех комнатных квартир
+            for (String stem : threeRoomApartmentStems) {
+                if (text.contains(stem)) {
+                    log.debug("3-room Matched by stem [{}]", stem);
+                    return 3;
+                }
             }
-        }
-        for (Pattern pattern : threeRoomApartmentPatterns) {
-            if (pattern.matcher(text).matches()) {
-                log.debug("3-room Matched by pattern [{}]", pattern.pattern());
-                return 3;
+            for (Pattern pattern : threeRoomApartmentPatterns) {
+                if (pattern.matcher(text).matches()) {
+                    log.debug("3-room Matched by pattern [{}]", pattern.pattern());
+                    return 3;
+                }
             }
-        }
 
-        // кейсы 2-ух комнатной квартиры
-        for (String stem : twoRoomApartmentStems) {
-            if (text.contains(stem)) {
-                log.debug("2-room Matched by stem [{}]", stem);
-                return 2;
+            // кейсы 2-ух комнатной квартиры
+            for (String stem : twoRoomApartmentStems) {
+                if (text.contains(stem)) {
+                    log.debug("2-room Matched by stem [{}]", stem);
+                    return 2;
+                }
             }
-        }
-        for (Pattern pattern : twoRoomApartmentPatterns) {
-            if (pattern.matcher(text).matches()) {
-                log.debug("2-room Matched by pattern [{}]", pattern.pattern());
-                return 2;
+            for (Pattern pattern : twoRoomApartmentPatterns) {
+                if (pattern.matcher(text).matches()) {
+                    log.debug("2-room Matched by pattern [{}]", pattern.pattern());
+                    return 2;
+                }
             }
-        }
 
-        // кейсы однокомнатной квартиры
-        for (String stem : oneRoomApartmentStems) {
-            if (text.contains(stem)) {
-                log.debug("1-room Matched by stem [{}]", stem);
-                return 1;
+            // кейсы однокомнатной квартиры
+            for (String stem : oneRoomApartmentStems) {
+                if (text.contains(stem)) {
+                    log.debug("1-room Matched by stem [{}]", stem);
+                    return 1;
+                }
             }
-        }
-        for (Pattern pattern : oneRoomApartmentPatterns) {
-            if (pattern.matcher(text).matches()) {
-                log.debug("1-room Matched by pattern [{}]", pattern.pattern());
-                return 1;
+            for (Pattern pattern : oneRoomApartmentPatterns) {
+                if (pattern.matcher(text).matches()) {
+                    log.debug("1-room Matched by pattern [{}]", pattern.pattern());
+                    return 1;
+                }
             }
-        }
 
-        return null;
+            return null;
+        } finally {
+            log.info("<< Finding room count process ended");
+        }
     }
 }

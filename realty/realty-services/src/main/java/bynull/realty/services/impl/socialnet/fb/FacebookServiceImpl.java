@@ -145,12 +145,29 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                                 .map(FacebookScrapedPost::getExternalId)
                                 .collect(Collectors.toSet());
 
+                        //although it may seems strange but in same result set could be returned duplicates - so filter them
+                        log.info("Removing duplicates in same requests by id");
+                        Set<String> postItemDtoIds = new HashSet<>();
+                        Iterator<FacebookHelperComponent.FacebookPostItemDTO> iterator = facebookPostItemDTOs.iterator();
+                        while (iterator.hasNext()) {
+                            FacebookHelperComponent.FacebookPostItemDTO next = iterator.next();
+                            if(next.getId() == null || postItemDtoIds.contains(next.getId())){
+                                log.info("Removed duplicate in same requests by id: [{}]", next.getId());
+                                iterator.remove();
+                                continue;
+                            } else {
+                                postItemDtoIds.add(next.getId());
+                            }
+                        }
+                        log.info("Removed duplicates in same requests by id");
+
+                        log.info("Removing duplicates in DB by id");
                         List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
                                 .stream()
                                 .filter(i -> !ids.contains(i.getId()))
                                 .collect(Collectors.toList());
 
-                        em.clear();
+                        log.info("Removed duplicates in DB by id");
 
 
                         for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : facebookPostItemDTOsToPersist) {
@@ -512,20 +529,26 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                 postsPage = facebookScrapedPostRepository.findAll(pageable);
             }
         } while (hasNext);
+        em.flush();
         log.info("Total count of matched posts to metro stations: [{}]. Total posts: [{}]", countOfMatchedPosts, total);
     }
 
     private Set<MetroEntity> matchMetros(List<MetroDTO> metros, String message) {
-        Set<MetroEntity> matchedMetros = new HashSet<>();
-        for (MetroDTO metro : metros) {
-            if (metroTextAnalyzer.matches(message, metro.getStationName())) {
-//                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
+        log.info(">> Matching metros started");
+        try {
+            Set<MetroEntity> matchedMetros = new HashSet<>();
+            for (MetroDTO metro : metros) {
+                if (metroTextAnalyzer.matches(message, metro.getStationName())) {
+    //                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
 
-                matchedMetros.add(metroRepository.findOne(metro.getId()));
+                    matchedMetros.add(metroRepository.findOne(metro.getId()));
 
+                }
             }
+            return matchedMetros;
+        } finally {
+            log.info("<< Matching metros ended");
         }
-        return matchedMetros;
     }
 
     @Override

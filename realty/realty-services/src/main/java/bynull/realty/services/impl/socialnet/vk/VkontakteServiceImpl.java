@@ -116,10 +116,29 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                                 .map(VkontaktePost::getExternalId)
                                 .collect(Collectors.toSet());
 
+                        //although it may seems strange but in same result set could be returned duplicates - so filter them
+                        log.info("Removing duplicates in same requests by id");
+                        Set<String> postItemDtoIds = new HashSet<>();
+                        Iterator<VKHelperComponent.VkWallPostDTO> iterator = postItemDTOs.iterator();
+                        while (iterator.hasNext()) {
+                            VKHelperComponent.VkWallPostDTO next = iterator.next();
+                            if(next.getId() == null || postItemDtoIds.contains(next.getId())){
+                                log.info("Removed duplicate in same requests by id: [{}]", next.getId());
+                                iterator.remove();
+                                continue;
+                            } else {
+                                postItemDtoIds.add(next.getId());
+                            }
+                        }
+                        log.info("Removed duplicates in same requests by id");
+
+                        log.info("Removing duplicates in DB by id");
                         List<VKHelperComponent.VkWallPostDTO> dtosToPersist = postItemDTOs
                                 .stream()
                                 .filter(i -> !ids.contains(i.getId()))
                                 .collect(Collectors.toList());
+
+                        log.info("Removed duplicates in DB by id");
 
                         for (VKHelperComponent.VkWallPostDTO postItemDTO : dtosToPersist) {
                             VkontaktePost post = postItemDTO.toInternal();
@@ -144,16 +163,21 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
     }
 
     private Set<MetroEntity> matchMetros(List<MetroDTO> metros, String message) {
-        Set<MetroEntity> matchedMetros = new HashSet<>();
-        for (MetroDTO metro : metros) {
-            if (metroTextAnalyzer.matches(message, metro.getStationName())) {
-//                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
+        log.info(">> Matching metros started");
+        try {
+            Set<MetroEntity> matchedMetros = new HashSet<>();
+            for (MetroDTO metro : metros) {
+                if (metroTextAnalyzer.matches(message, metro.getStationName())) {
+    //                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
 
-                matchedMetros.add(metroRepository.findOne(metro.getId()));
+                    matchedMetros.add(metroRepository.findOne(metro.getId()));
 
+                }
             }
+            return matchedMetros;
+        } finally {
+            log.info("<< Matching metros ended");
         }
-        return matchedMetros;
     }
 
     private PageRequest getLimit1Offset0() {

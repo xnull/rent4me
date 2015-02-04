@@ -95,32 +95,37 @@ public class RentalFeeParser {
     }
 
     public BigDecimal findRentalFee(String text) {
-        text = StringUtils.trimToEmpty(text).toLowerCase();
-        if (text.isEmpty()) return null;
+        log.info(">> Finding rental fee process started");
+        try {
+            text = StringUtils.trimToEmpty(text).toLowerCase();
+            if (text.isEmpty()) return null;
 
-        text = TextUtils.normalizeTextAggressivelyForParsing(text);
+            text = TextUtils.normalizeTextAggressivelyForParsing(text);
 
-        for (PatternCheck patternCheck : patterns) {
-            Pattern pattern = patternCheck.pattern;
-            Matcher matcher = pattern.matcher(text);
-            if (matcher.matches()) {
-                log.debug("Price matched by pattern [{}]", matcher.pattern());
-                String value = StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup));
-                value = StringUtils.replace(value, " ", "");
-                try {
-                    BigDecimal bigDecimal = new BigDecimal(value);
-                    if (bigDecimal.compareTo(BigDecimal.ZERO) >= 0) {
-                        return bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
-                    } else {
-                        log.error("Parsing error. Value parsed: [{}]", bigDecimal);
+            for (PatternCheck patternCheck : patterns) {
+                Pattern pattern = patternCheck.pattern;
+                Matcher matcher = pattern.matcher(text);
+                if (matcher.matches()) {
+                    log.debug("Price matched by pattern [{}]", matcher.pattern());
+                    String value = StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup));
+                    value = StringUtils.replace(value, " ", "");
+                    try {
+                        BigDecimal bigDecimal = new BigDecimal(value);
+                        if (bigDecimal.compareTo(BigDecimal.ZERO) >= 0) {
+                            return bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
+                        } else {
+                            log.error("Parsing error. Value parsed: [{}]", bigDecimal);
+                        }
+                    } catch (Exception ignore) {
+    //                    log.error("Exception occurred while parsing result value [{}]: {}", value, e.getMessage());
                     }
-                } catch (Exception e) {
-                    log.error("Exception occurred while parsing result value [" + value + "]", e);
                 }
             }
-        }
 
-        return null;
+            return null;
+        } finally {
+            log.info("<< Finding rental fee process ended");
+        }
     }
 
     @VisibleForTesting
