@@ -95,9 +95,9 @@ task deployBackendRelease(dependsOn: war, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7-prod ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
+        execute 'cd /home/tomcat/tc7-prod-rest ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
         println('Deploying war:' + war.archivePath);
-        put war.archivePath, '/home/tomcat/tc7-prod/webapps/'
-        execute 'cd /home/tomcat/tc7-prod ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
+        put war.archivePath, '/home/tomcat/tc7-prod-rest/webapps/'
+        execute 'cd /home/tomcat/tc7-prod-rest ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
     }
 }

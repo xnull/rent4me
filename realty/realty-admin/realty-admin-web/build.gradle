@@ -56,10 +56,10 @@ task deployAdminRelease(dependsOn: war, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7-prod ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
+        execute 'cd /home/tomcat/tc7-prod-admin ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
         println('Deploying war:' + war.archivePath);
-        put war.archivePath, '/home/tomcat/tc7-prod/webapps/'
-        execute 'cd /home/tomcat/tc7-prod ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
+        put war.archivePath, '/home/tomcat/tc7-prod-admin/webapps/'
+        execute 'cd /home/tomcat/tc7-prod-admin ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
     }
 }
 
