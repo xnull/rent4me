@@ -102,11 +102,6 @@ public class VKHelperComponent {
         @JsonProperty("items")
         private List<VkWallPostDTO> posts;
 
-        public boolean hasNextPage() {
-            int size = posts != null ? posts.size() : 0;
-            return size == LIMIT || size == totalCount;
-        }
-
         public int getNextOffset(int currentOffset) {
             return currentOffset + LIMIT;
         }
@@ -212,19 +207,25 @@ public class VKHelperComponent {
             String body = httpGet.getResponseBodyAsString();
             log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
             log.info("Status line: {}", httpGet.getStatusLine());
-            log.info("Body: {}", body);
+//            log.info("Body: {}", body);
 
+            log.info("Converting response");
             VkWallPostResponseContent response = JsonUtils.fromJson(body, VkWallPostResponse.class).getContent();
             if (response.getPosts().isEmpty()) {
                 return accu;
             }
+            log.info("Converted response");
 
-            accu.addAll(response.getPosts()
+            List<VkWallPostDTO> posts = response.getPosts()
                     .stream()
                     .filter(post -> post.getDate().after(maxAge))
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList());
+            accu.addAll(posts);
 
-            if (!response.hasNextPage()) {
+            int size = posts.size();
+            boolean hasNextPage = size == VkWallPostResponseContent.LIMIT || size == response.getTotalCount();
+
+            if (!hasNextPage) {
                 return accu;
             }
 
