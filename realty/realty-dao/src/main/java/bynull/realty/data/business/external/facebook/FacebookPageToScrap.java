@@ -22,6 +22,9 @@ public class FacebookPageToScrap {
     @Column(name = "link")
     private String link;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_dt")
     private Date created;
@@ -59,6 +62,14 @@ public class FacebookPageToScrap {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Date getCreated() {

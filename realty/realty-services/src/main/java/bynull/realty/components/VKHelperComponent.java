@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author dionis on 18/07/14.
@@ -218,7 +219,11 @@ public class VKHelperComponent {
                 return accu;
             }
 
-            accu.addAll(response.getPosts());
+            accu.addAll(response.getPosts()
+                    .stream()
+                    .filter(post -> post.getDate().after(maxAge))
+                    .collect(Collectors.toList()));
+
             if (!response.hasNextPage()) {
                 return accu;
             }

@@ -18,6 +18,7 @@ public class FacebookPageModelDTOConverter implements Converter<FacebookPageToSc
         dto.setId(in.getId());
         dto.setLink(in.getLink());
         dto.setExternalId(in.getExternalId());
+        dto.setEnabled(in.isEnabled());
         return dto;
     }
 
@@ -28,6 +29,7 @@ public class FacebookPageModelDTOConverter implements Converter<FacebookPageToSc
         model.setId(in.getId());
         model.setExternalId(in.getExternalId());
         model.setLink(in.getLink());
+        model.setEnabled(in.isEnabled());
         return model;
     }
 }

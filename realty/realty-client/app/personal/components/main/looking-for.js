@@ -186,10 +186,6 @@ module.exports = React.createClass({
         };
     },
 
-    componentDidMount: function () {
-        ApartmentStore.addChangeListener(this.onSearchResultsChanged);
-    },
-
     componentWillUnmount: function () {
         ApartmentStore.removeChangeListener(this.onSearchResultsChanged);
     },
@@ -244,6 +240,8 @@ module.exports = React.createClass({
             that.setState(assign(that.state, {location: location, countryCode: countryCode, bounds: bounds}));
             that.onSearchStart();
         });
+
+        ApartmentStore.addChangeListener(this.onSearchResultsChanged);
     },
 
     onSearchStart: function () {

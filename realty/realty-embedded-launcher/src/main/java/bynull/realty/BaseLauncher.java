@@ -53,6 +53,7 @@ public class BaseLauncher {
     }
 
     public void doStart(String... args) throws Exception {
+        System.setProperty("hibernate.show_sql", "true");
         if (isLaunchFromIDE(handlerDescs.get(0))) {
             setUpLogDirectory();
 //            if (StringUtils.containsIgnoreCase(System.getProperty("user.home"), "dionis")) {

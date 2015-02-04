@@ -25,6 +25,8 @@
         <th>#</th>
         <th>Ext id</th>
         <th>link</th>
+        <th>enabled</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -38,6 +40,9 @@
             </td>
             <td>
                 <a href="${page.link}" target="_blank">${page.link}</a>
+            </td>
+            <td>
+                ${page.enabled}
             </td>
             <td>
                 <a class="btn btn-default" href="<c:url value="/secure/socialnet/fb/${page.id}/edit"/>"><i

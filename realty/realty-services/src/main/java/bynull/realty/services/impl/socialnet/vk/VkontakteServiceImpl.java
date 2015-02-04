@@ -24,7 +24,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionOperations;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -73,70 +76,70 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
     @PersistenceContext
     EntityManager em;
 
+    @Resource
+    TransactionOperations transactionOperations;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         roomCountParser = RoomCountParser.getInstance();
         rentalFeeParser = RentalFeeParser.getInstance();
     }
 
-    @Transactional
+//    @Transactional
     @Override
     public void syncWithVK() {
-        List<VkontaktePage> fbPages = vkontaktePageRepository.findAll();
+        List<VkontaktePage> vkPages = vkontaktePageRepository.findAll()
+                                                .stream()
+                                                .filter(VkontaktePage::isEnabled)
+                                                .collect(Collectors.toList());
         List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
-        for (VkontaktePage vkPage : fbPages) {
-            List<VkontaktePost> newest = vkontaktePostRepository.findByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
+        for (VkontaktePage _vkPage : vkPages) {
+            transactionOperations.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
+                    List<VkontaktePost> newest = vkontaktePostRepository.findByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
 
-            Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
+                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
 
-            try {
-                List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab);
-                List<VkontaktePost> byExternalIdIn = !postItemDTOs.isEmpty() ? vkontaktePostRepository.findByExternalIdIn(postItemDTOs.stream()
-                                .map(VKHelperComponent.VkWallPostDTO::getId)
-                                .collect(Collectors.toList())
-                ) : Collections.emptyList();
-                Set<String> ids = byExternalIdIn.stream()
-                        .map(VkontaktePost::getExternalId)
-                        .collect(Collectors.toSet());
+                    try {
+                        List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab);
+                        List<VkontaktePost> byExternalIdIn = !postItemDTOs.isEmpty() ? vkontaktePostRepository.findByExternalIdIn(postItemDTOs.stream()
+                                        .map(VKHelperComponent.VkWallPostDTO::getId)
+                                        .collect(Collectors.toList())
+                        ) : Collections.emptyList();
 
-                List<VKHelperComponent.VkWallPostDTO> dtosToPersist = postItemDTOs
-                        .stream()
-                        .filter(i -> !ids.contains(i.getId()))
-                        .collect(Collectors.toList());
+                        Set<String> ids = byExternalIdIn.stream()
+                                .map(VkontaktePost::getExternalId)
+                                .collect(Collectors.toSet());
 
-                em.clear();
+                        List<VKHelperComponent.VkWallPostDTO> dtosToPersist = postItemDTOs
+                                .stream()
+                                .filter(i -> !ids.contains(i.getId()))
+                                .collect(Collectors.toList());
 
-                final Date threeMonthsAgo = new DateTime().minusMonths(3).toDate();
-
-                Iterable<List<VKHelperComponent.VkWallPostDTO>> partitions = Iterables.partition(dtosToPersist, 20);
-                for (List<VKHelperComponent.VkWallPostDTO> partition : partitions) {
-                    VkontaktePage page = new VkontaktePage(vkPage.getId());
-                    for (VKHelperComponent.VkWallPostDTO postItemDTO : partition) {
-                        VkontaktePost post = postItemDTO.toInternal();
-                        if (post.getCreated() != null && post.getCreated().before(threeMonthsAgo)) {
-                            log.info("Skipping post that's older than 3 months old: [{}]");
-                            continue;
+                        for (VKHelperComponent.VkWallPostDTO postItemDTO : dtosToPersist) {
+                            VkontaktePost post = postItemDTO.toInternal();
+                            post.setVkontaktePage(vkPage);
+                            String message = post.getMessage();
+                            Set<MetroEntity> matchedMetros = matchMetros(metros, message);
+                            post.setMetros(matchedMetros);
+                            Integer roomCount = roomCountParser.findRoomCount(message);
+                            post.setRoomCount(roomCount);
+                            BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
+                            post.setRentalFee(rentalFee);
+                            vkontaktePostRepository.save(post);
                         }
-                        post.setVkontaktePage(page);
-                        String message = post.getMessage();
-                        Set<MetroEntity> matchedMetros = matchMetros(metros, message);
-                        post.setMetros(matchedMetros);
-                        Integer roomCount = roomCountParser.findRoomCount(message);
-                        post.setRoomCount(roomCount);
-                        BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
-                        post.setRentalFee(rentalFee);
-                        vkontaktePostRepository.save(post);
+                        em.flush();
+                        log.info("Saved [{}] posts for vk page: [{}]", dtosToPersist.size(), vkPage.getLink());
+                    } catch (Exception e) {
+                        log.error("Failed to parse [" + vkPage.getExternalId() + "]", e);
                     }
-                    em.flush();
-                    em.clear();
                 }
-                em.flush();
-            } catch (Exception e) {
-                log.error("Failed to parse [" + vkPage.getExternalId() + "]", e);
-            }
+            });
         }
     }
 
@@ -176,6 +179,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
         one.setLink(vkontaktePageDTO.getLink());
         one.setExternalId(vkontaktePageDTO.getExternalId());
+        one.setEnabled(vkontaktePageDTO.isEnabled());
         vkontaktePageRepository.saveAndFlush(one);
     }
 

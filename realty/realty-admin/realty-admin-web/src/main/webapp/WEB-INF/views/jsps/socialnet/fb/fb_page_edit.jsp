@@ -23,6 +23,11 @@
         <input type="text" class="form-control" name="link" id="link" placeholder="Link to fb page"
                value="${page.link}">
     </div>
+    <div class="form-group">
+        <label for="enabled">Enabled</label>
+        <input type="checkbox" class="form-control" name="enabled" id="enabled" placeholder="Link to fb page"
+               <c:if test="${page.enabled}">checked</c:if>>
+    </div>
     <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
     &nbsp;
     <c:if test="${page.id != null}">

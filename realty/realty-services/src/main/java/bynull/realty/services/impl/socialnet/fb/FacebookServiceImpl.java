@@ -43,7 +43,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionOperations;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -99,6 +102,9 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
     @Resource
     MetroTextAnalyzer metroTextAnalyzer;
 
+    @Resource
+    TransactionOperations transactionOperations;
+
     RoomCountParser roomCountParser;
 
     RentalFeeParser rentalFeeParser;
@@ -110,64 +116,63 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         rentalFeeParser = RentalFeeParser.getInstance();
     }
 
-    @Transactional
     @Override
     public void syncWithFB() {
-        List<FacebookPageToScrap> fbPages = facebookPageToScrapRepository.findAll();
+        List<FacebookPageToScrap> fbPages = facebookPageToScrapRepository.findAll()
+                                                    .stream()
+                                                    .filter(FacebookPageToScrap::isEnabled)
+                                                    .collect(Collectors.toList());
         List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
-        for (FacebookPageToScrap fbPage : fbPages) {
-            List<FacebookScrapedPost> newest = facebookScrapedPostRepository.findByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
+        for (FacebookPageToScrap _fbPage : fbPages) {
+            transactionOperations.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
+                    List<FacebookScrapedPost> newest = facebookScrapedPostRepository.findByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
 
-            Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
+                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
 
-            try {
-                List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab);
-                List<FacebookScrapedPost> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? facebookScrapedPostRepository.findByExternalIdIn(facebookPostItemDTOs.stream()
-                                .map(FacebookHelperComponent.FacebookPostItemDTO::getId)
-                                .collect(Collectors.toList())
-                ) : Collections.emptyList();
-                Set<String> ids = byExternalIdIn.stream()
-                        .map(FacebookScrapedPost::getExternalId)
-                        .collect(Collectors.toSet());
+                    try {
+                        List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab);
+                        List<FacebookScrapedPost> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? facebookScrapedPostRepository.findByExternalIdIn(facebookPostItemDTOs.stream()
+                                        .map(FacebookHelperComponent.FacebookPostItemDTO::getId)
+                                        .collect(Collectors.toList())
+                        ) : Collections.emptyList();
+                        Set<String> ids = byExternalIdIn.stream()
+                                .map(FacebookScrapedPost::getExternalId)
+                                .collect(Collectors.toSet());
 
-                List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
-                        .stream()
-                        .filter(i -> !ids.contains(i.getId()))
-                        .collect(Collectors.toList());
+                        List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
+                                .stream()
+                                .filter(i -> !ids.contains(i.getId()))
+                                .collect(Collectors.toList());
 
-                em.clear();
+                        em.clear();
 
-                final Date threeMonthsAgo = new DateTime().minusMonths(3).toDate();
 
-                Iterable<List<FacebookHelperComponent.FacebookPostItemDTO>> partitions = Iterables.partition(facebookPostItemDTOsToPersist, 20);
-                for (List<FacebookHelperComponent.FacebookPostItemDTO> partition : partitions) {
-                    FacebookPageToScrap page = new FacebookPageToScrap(fbPage.getId());
-                    for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : partition) {
-                        FacebookScrapedPost post = postItemDTO.toInternal();
-                        if (post.getCreated() != null && post.getCreated().before(threeMonthsAgo)) {
-                            log.info("Skipping post that's older than 3 months old: [{}]");
-                            continue;
+                        for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : facebookPostItemDTOsToPersist) {
+                            FacebookScrapedPost post = postItemDTO.toInternal();
+                            post.setFacebookPageToScrap(fbPage);
+                            String message = post.getMessage();
+                            Set<MetroEntity> matchedMetros = matchMetros(metros, message);
+                            post.setMetros(matchedMetros);
+                            Integer roomCount = roomCountParser.findRoomCount(message);
+                            post.setRoomCount(roomCount);
+                            BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
+                            post.setRentalFee(rentalFee);
+                            facebookScrapedPostRepository.save(post);
                         }
-                        post.setFacebookPageToScrap(page);
-                        String message = post.getMessage();
-                        Set<MetroEntity> matchedMetros = matchMetros(metros, message);
-                        post.setMetros(matchedMetros);
-                        Integer roomCount = roomCountParser.findRoomCount(message);
-                        post.setRoomCount(roomCount);
-                        BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
-                        post.setRentalFee(rentalFee);
-                        facebookScrapedPostRepository.save(post);
+                        em.flush();
+                        log.info("Saved [{}] posts for vk page: [{}]", facebookPostItemDTOsToPersist.size(), fbPage.getLink());
+                    } catch (Exception e) {
+                        log.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
                     }
-                    em.flush();
-                    em.clear();
                 }
-                em.flush();
-            } catch (Exception e) {
-                log.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
-            }
+            });
+
         }
     }
 
@@ -425,6 +430,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
             FacebookPageToScrap found = facebookPageToScrapRepository.findOne(entity.getId());
             found.setLink(entity.getLink());
             found.setExternalId(entity.getExternalId());
+            found.setEnabled(entity.isEnabled());
             facebookPageToScrapRepository.saveAndFlush(found);
         } else {
             facebookPageToScrapRepository.saveAndFlush(entity);

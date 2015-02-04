@@ -1,0 +1,9 @@
+ALTER TABLE facebook_page_to_scrap
+DROP COLUMN IF EXISTS enabled;
+ALTER TABLE facebook_page_to_scrap
+ADD COLUMN enabled BOOL NOT NULL DEFAULT TRUE;
+
+ALTER TABLE vk_page
+DROP COLUMN IF EXISTS enabled;
+ALTER TABLE vk_page
+ADD COLUMN enabled BOOL NOT NULL DEFAULT TRUE;

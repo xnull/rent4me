@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -201,6 +202,10 @@ public class FacebookHelperComponent {
                 return accu;
             }
 
+            accu.addAll(response.getItems()
+                    .stream()
+                    .filter(post->post.getCreatedDtime().after(maxAge))
+                    .collect(Collectors.toList()));
             accu.addAll(response.getItems());
             if (!response.getPaging().hasNextPage()) {
                 return accu;

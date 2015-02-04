@@ -18,6 +18,7 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
         form.setId(in.getId());
         form.setExternalId(in.getExternalId());
         form.setLink(in.getLink());
+        form.setEnabled(in.isEnabled());
         return form;
     }
 
@@ -28,6 +29,7 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
         dto.setId(in.getId());
         dto.setExternalId(in.getExternalId());
         dto.setLink(in.getLink());
+        dto.setEnabled(in.isEnabled());
         return dto;
     }
 }

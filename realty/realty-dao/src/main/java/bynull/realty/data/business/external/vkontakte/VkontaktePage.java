@@ -22,6 +22,9 @@ public class VkontaktePage {
     @Column(name = "link")
     private String link;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_dt")
     private Date created;
@@ -51,6 +54,14 @@ public class VkontaktePage {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getLink() {

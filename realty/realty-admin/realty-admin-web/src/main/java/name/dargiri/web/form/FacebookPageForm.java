@@ -12,4 +12,5 @@ public class FacebookPageForm {
     private Long id;
     private String externalId;
     private String link;
+    private boolean enabled;
 }

@@ -54,8 +54,8 @@
             </td>
             <td>
                     ${post.page.link} (id: ${post.page.externalId})
-                <a href="<c:url value="/secure/socialnet/fb/${post.page.id}/edit"/>"><i class="glyphicon glyphicon-link"></i></a>
-                <a href="${post.page.link}" target="_blank"><i class="glyphicon glyphicon-edit"></i></a>
+                <a href="<c:url value="/secure/socialnet/fb/${post.page.id}/edit"/>"><i class="glyphicon glyphicon-edit"></i></a>
+                <a href="${post.page.link}" target="_blank"><i class="glyphicon glyphicon-link"></i></a>
             </td>
             <td>
                 <ul>
