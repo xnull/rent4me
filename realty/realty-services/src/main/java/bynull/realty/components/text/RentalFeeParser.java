@@ -104,7 +104,7 @@ public class RentalFeeParser {
             Pattern pattern = patternCheck.pattern;
             Matcher matcher = pattern.matcher(text);
             if (matcher.matches()) {
-                log.info("Price matched by pattern [{}]", matcher.pattern());
+                log.debug("Price matched by pattern [{}]", matcher.pattern());
                 String value = StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup));
                 value = StringUtils.replace(value, " ", "");
                 try {

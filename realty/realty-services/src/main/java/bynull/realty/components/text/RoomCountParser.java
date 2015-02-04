@@ -100,13 +100,13 @@ public class RoomCountParser {
         // кейсы 3-ех комнатных квартир
         for (String stem : threeRoomApartmentStems) {
             if (text.contains(stem)) {
-                log.info("3-room Matched by stem [{}]", stem);
+                log.debug("3-room Matched by stem [{}]", stem);
                 return 3;
             }
         }
         for (Pattern pattern : threeRoomApartmentPatterns) {
             if (pattern.matcher(text).matches()) {
-                log.info("3-room Matched by pattern [{}]", pattern.pattern());
+                log.debug("3-room Matched by pattern [{}]", pattern.pattern());
                 return 3;
             }
         }
@@ -114,13 +114,13 @@ public class RoomCountParser {
         // кейсы 2-ух комнатной квартиры
         for (String stem : twoRoomApartmentStems) {
             if (text.contains(stem)) {
-                log.info("2-room Matched by stem [{}]", stem);
+                log.debug("2-room Matched by stem [{}]", stem);
                 return 2;
             }
         }
         for (Pattern pattern : twoRoomApartmentPatterns) {
             if (pattern.matcher(text).matches()) {
-                log.info("2-room Matched by pattern [{}]", pattern.pattern());
+                log.debug("2-room Matched by pattern [{}]", pattern.pattern());
                 return 2;
             }
         }
@@ -128,13 +128,13 @@ public class RoomCountParser {
         // кейсы однокомнатной квартиры
         for (String stem : oneRoomApartmentStems) {
             if (text.contains(stem)) {
-                log.info("1-room Matched by stem [{}]", stem);
+                log.debug("1-room Matched by stem [{}]", stem);
                 return 1;
             }
         }
         for (Pattern pattern : oneRoomApartmentPatterns) {
             if (pattern.matcher(text).matches()) {
-                log.info("1-room Matched by pattern [{}]", pattern.pattern());
+                log.debug("1-room Matched by pattern [{}]", pattern.pattern());
                 return 1;
             }
         }

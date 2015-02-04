@@ -52,7 +52,7 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
 
             //найти по паттернам метряшки, затем нормализованные имена метряшек
             String regex = "((.*)((Ⓜ)|(\\bм\\b)|(\\bм\\.\\b)|(\\bметр\\S{1,3}\\b))((.){1,20})(" + collected + ")(.*))";
-            System.out.println(regex);
+            log.debug("Regex: [{}]", regex);
             Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.UNICODE_CASE);
             patternCache.put(metroNameLowerCased, pattern);
             return pattern;
