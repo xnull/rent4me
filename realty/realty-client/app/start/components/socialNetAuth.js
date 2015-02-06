@@ -4,6 +4,7 @@
 var React = require('react');
 var AuthActions = require('../../shared/actions/AuthActions');
 var UserActions = require('../../shared/actions/UserActions');
+var Entities = require('../../shared/entities/entities');
 var UserStore = require('../../shared/stores/UserStore');
 var Utils = require('rent4meUtil');
 var assign = require('object-assign');
@@ -460,6 +461,10 @@ var PlainLogin = React.createClass({
 
     onLoginClicked: function () {
         console.log('Login clicked');
+
+        //var user = new Entities.User("!!!hello");
+        //alert(user.name);
+
         AuthActions.loginOnBackendWithEmailAndPassword(this.state.email, this.state.password);
     },
 

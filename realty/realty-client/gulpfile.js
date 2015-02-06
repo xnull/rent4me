@@ -15,6 +15,7 @@ function Plugins() {
 
     this.gulpBowerFiles = require('gulp-bower-files');
     this.browserify = require('browserify');
+    this.to5ify = require("6to5ify");
     this.source = require('vinyl-source-stream');
     this.reactify = require('reactify');
 
@@ -227,7 +228,9 @@ function buildStart(moduleInfo) {
 
 function buildBrowserify(moduleInfo) {
     var b = plugins.browserify();
-    b.transform(plugins.reactify); // use the reactify transform
+    b
+        .transform(plugins.to5ify)
+        .transform(plugins.reactify); // use the reactify transform
     b.add(moduleInfo['mainJsFile']);
     b.bundle()
         .pipe(plugins.source('main.js'))
