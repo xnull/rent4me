@@ -42,7 +42,7 @@ project.ext.libraries = [
         'org.glassfish.jersey.ext:jersey-spring3'                 : ["org.glassfish.jersey.ext:jersey-spring3:${jerseyVersion}"],
 
         //drivers
-        'postgresql:postgresql'                                   : ["postgresql:postgresql:9.1-901-1.jdbc4"],
+        'postgresql:postgresql'                                   : ['org.postgresql:postgresql:9.4-1200-jdbc41'],
         'org.postgis:postgis-jdbc'                                : ["org.postgis:postgis-jdbc:1.3.3"],
         'com.googlecode.flyway:flyway-core': ["com.googlecode.flyway:flyway-core:2.3.1"],
 

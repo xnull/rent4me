@@ -1,13 +1,13 @@
 package bynull.realty.jdbc;
 
-import org.hibernate.dialect.PostgreSQL82Dialect;
+import org.hibernate.dialect.PostgreSQL9Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author dionis on 22/06/14.
  */
-public class PostgisDialect extends PostgreSQL82Dialect {
+public class PostgisDialect extends PostgreSQL9Dialect {
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgisDialect.class);
 
     public static final int GEOMETRY_TYPE = -100500;
