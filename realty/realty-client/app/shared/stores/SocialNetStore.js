@@ -39,7 +39,7 @@ var _searchMaxPrice = null;
 var _searchWithSubway = false;
 var _posts = [];
 var _offset = 0;
-var _limit = 5;
+var _limit = 30;
 var _hasMoreResults = false;
 
 
