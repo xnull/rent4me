@@ -81,7 +81,7 @@ var Post = React.createClass({
 
         return (
             <div className='panel'>
-                <a href="#" className="list-group-item">
+                <div className="list-group-item">
                     {imagePreviews}
                     <p className="list-group-item-text">
                         <h4>[{item.social_network=='VK'?'ВКонтакте':item.social_network}] Описание</h4>
@@ -106,7 +106,7 @@ var Post = React.createClass({
 
                     </p>
                     <hr/>
-                </a>
+                </div>
                 <br/>
             </div>
         );
