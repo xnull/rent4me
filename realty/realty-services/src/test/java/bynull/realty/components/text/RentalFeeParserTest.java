@@ -222,7 +222,7 @@ public class RentalFeeParserTest {
     }
 
 
-    @Ignore("to be fixed")k
+    @Ignore("to be fixed")
     @Test
     public void fixBugSimplePatternWithCurrencyAbove1000_2_1() throws Exception {
         final String text = "Субаренда без комиссии! " +
