@@ -20,6 +20,9 @@ public class SocialNetPostModelDTOConverter implements Converter<SocialNetPost, 
     @Resource
     VkontaktePageModelDTOConverter vkPageConverter;
 
+    @Resource
+    PhoneNumberModelDTOConverter phoneNumberDTOConverter;
+
     @Override
     public SocialNetPostDTO toTargetType(SocialNetPost post) {
         if (post == null) return null;
@@ -33,6 +36,7 @@ public class SocialNetPostModelDTOConverter implements Converter<SocialNetPost, 
         dto.setUpdated(post.getUpdated());
         dto.setSocialNetwork(post.getSocialNetwork());
         dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
+        dto.setPhoneNumberDTO(phoneNumberDTOConverter.toTargetType(post.getPhoneNumber()));
 //        dto.setMetros(Collections.emptySet());
 //        dto.setPage(vkPageConverter.toTargetType(post.getVkontaktePage()));
         dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());

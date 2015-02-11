@@ -12,24 +12,37 @@ sudo /etc/init.d/postgresql restart
 
 configuration of users & extensions:
 
-$ psql
-
-> CREATE ROLE gis_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;
-> CREATE ROLE gis LOGIN PASSWORD 'password' NOINHERIT;
-> GRANT gis_group TO gis;
-> \q
+From command line run following commands:
 
 
-$ createdb -O gis test_gisdb
+sudo su - postgres
 
-createdb -O gis gisdb
 
-$ psql --dbname=gisdb
+#create development database
+psql -c "CREATE ROLE realty_test_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;"
+psql -c "CREATE ROLE realty_test_user LOGIN PASSWORD 'password' NOINHERIT;"
+psql -c "GRANT realty_test_group TO realty_dev_user"
 
- > CREATE EXTENSION postgis;
- > CREATE EXTENSION postgis_topology;
- > CREATE EXTENSION btree_gist;
+createdb -O realty_test_user realty_testdb
 
-> create extension "uuid-ossp";
-> create extension pg_trgm;
-> CREATE extension pg_stat_statements;
+ psql --dbname=realty_testdb -c "CREATE EXTENSION postgis;"
+ psql --dbname=realty_testdb -c "CREATE EXTENSION postgis_topology;"
+ psql --dbname=realty_testdb -c "CREATE EXTENSION btree_gist;"
+ psql --dbname=realty_testdb -c "create extension \"uuid-ossp\";"
+ psql --dbname=realty_testdb -c "create extension pg_trgm;"
+ psql --dbname=realty_testdb -c "CREATE extension pg_stat_statements;"
+
+
+#create local dev database
+psql -c "CREATE ROLE realty_dev_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;"
+psql -c "CREATE ROLE realty_dev_user LOGIN PASSWORD 'password' NOINHERIT;"
+psql -c "GRANT realty_dev_group TO realty_dev_user"
+
+createdb -O realty_test_user realty_devdb
+
+ psql --dbname=realty_devdb -c "CREATE EXTENSION postgis;"
+ psql --dbname=realty_devdb -c "CREATE EXTENSION postgis_topology;"
+ psql --dbname=realty_devdb -c "CREATE EXTENSION btree_gist;"
+ psql --dbname=realty_devdb -c "create extension \"uuid-ossp\";"
+ psql --dbname=realty_devdb -c "create extension pg_trgm;"
+ psql --dbname=realty_devdb -c "CREATE extension pg_stat_statements;"

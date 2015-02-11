@@ -1,6 +1,7 @@
 package bynull.realty.dto.vk;
 
 import bynull.realty.dto.MetroDTO;
+import bynull.realty.dto.PhoneNumberDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class VkontaktePostDTO {
     private Date updated;
     private VkontaktePageDTO page;
     private Set<MetroDTO> metros;
+    private PhoneNumberDTO phoneNumber;
 
     public Date getCreated() {
         return copy(created);

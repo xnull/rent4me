@@ -27,6 +27,7 @@
         <th>Message</th>
         <th>Room Count</th>
         <th>Rental fee</th>
+        <th>Phone</th>
         <th>Link</th>
         <th>FB Page</th>
         <th>Метро</th>
@@ -48,6 +49,9 @@
             </td>
             <td>
                     ${post.rentalFee}
+            </td>
+            <td>
+                    ${post.phoneNumber.raw} (${post.phoneNumber.nationalFormattedNumber})
             </td>
             <td>
                 <a href="${post.link}" target="_blank">${post.link}</a>

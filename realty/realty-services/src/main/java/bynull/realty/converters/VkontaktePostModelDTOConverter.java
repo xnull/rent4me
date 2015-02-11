@@ -22,6 +22,9 @@ public class VkontaktePostModelDTOConverter implements Converter<VkontaktePost, 
     @Resource
     VkontaktePageModelDTOConverter vkPageConverter;
 
+    @Resource
+    PhoneNumberModelDTOConverter phoneNumberConverter;
+
     @Override
     public VkontaktePostDTO toTargetType(VkontaktePost post) {
         if (post == null) return null;
@@ -32,6 +35,7 @@ public class VkontaktePostModelDTOConverter implements Converter<VkontaktePost, 
         dto.setRentalFee(post.getRentalFee());
         dto.setRoomCount(post.getRoomCount());
         dto.setCreated(post.getCreated());
+        dto.setPhoneNumber(phoneNumberConverter.toTargetType(post.getPhoneNumber()));
         dto.setUpdated(post.getUpdated());
         dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
         dto.setPage(vkPageConverter.toTargetType(post.getVkontaktePage()));

@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * @author dionis on 06/12/14.
  */
-@Component
+//@Component
 public class FacebookScrappingJob implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FacebookScrappingJob.class);
 

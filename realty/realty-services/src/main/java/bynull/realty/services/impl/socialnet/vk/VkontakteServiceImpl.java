@@ -1,5 +1,6 @@
 package bynull.realty.services.impl.socialnet.vk;
 
+import bynull.realty.common.PhoneUtil;
 import bynull.realty.components.VKHelperComponent;
 import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.components.text.RentalFeeParser;
@@ -10,6 +11,7 @@ import bynull.realty.converters.VkontaktePostModelDTOConverter;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
 import bynull.realty.dao.external.VkontaktePostRepository;
+import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.data.business.external.vkontakte.VkontaktePost;
 import bynull.realty.data.business.metro.MetroEntity;
@@ -152,6 +154,8 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                             post.setRoomCount(roomCount);
                             BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                             post.setRentalFee(rentalFee);
+                            PhoneUtil.Phone phone = PhoneUtil.findFirstPhoneNumber(message, "RU");
+                            post.setPhoneNumber(PhoneNumber.from(phone));
                             vkontaktePostRepository.save(post);
                         }
                         em.flush();
@@ -250,6 +254,10 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                 post.setRoomCount(roomCount);
                 BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                 post.setRentalFee(rentalFee);
+
+                PhoneUtil.Phone phone = PhoneUtil.findFirstPhoneNumber(message, "RU");
+                post.setPhoneNumber(PhoneNumber.from(phone));
+
                 if (!matchedMetros.isEmpty()) {
                     countOfMatchedPosts++;
                 }

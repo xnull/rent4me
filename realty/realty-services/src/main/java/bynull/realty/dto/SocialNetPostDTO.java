@@ -27,6 +27,7 @@ public class SocialNetPostDTO {
     private Integer roomCount;
     private Date created;
     private Date updated;
+    private PhoneNumberDTO phoneNumberDTO;
     private Set<MetroDTO> metros;
 
     public Date getCreated() {

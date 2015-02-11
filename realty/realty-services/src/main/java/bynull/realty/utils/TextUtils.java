@@ -35,6 +35,7 @@ public class TextUtils {
         text = StringUtils.replace(text, ",", "");
         text = StringUtils.replace(text, "!", "");
         text = StringUtils.replace(text, "?", "");
+        text = StringUtils.replace(text, ":", "");
 
         text = normalizeTextForParsing(text);
 

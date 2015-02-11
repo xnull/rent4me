@@ -1,8 +1,10 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.common.PhoneUtil;
 import bynull.realty.components.VKHelperComponent;
 import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.Authority;
+import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.User;
 import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.AuthorityService;
@@ -10,6 +12,7 @@ import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
 import bynull.realty.services.impl.socialnet.fb.FacebookHelperComponent;
 import bynull.realty.utils.SecurityUtils;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
@@ -200,7 +203,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
-        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setPhoneNumber(PhoneNumber.from(PhoneUtil.findFirstPhoneNumber(dto.getPhoneNumber(), "RU")));
 
         user = userRepository.saveAndFlush(user);
         return true;
@@ -238,7 +241,7 @@ public class UserServiceImpl implements UserService {
 
         user.setDisplayName(dto.getDisplayName());
         user.setEmail(dto.getEmail());
-        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setPhoneNumber(PhoneNumber.from(PhoneUtil.findFirstPhoneNumber(dto.getPhoneNumber(), "RU")));
         user.setPasswordHash(passwordHash(dto.getPassword()));
         user.setUsername(generateUsername());
 

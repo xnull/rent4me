@@ -1,5 +1,6 @@
 package bynull.realty.services.impl.socialnet.fb;
 
+import bynull.realty.common.PhoneUtil;
 import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.components.text.Porter;
 import bynull.realty.components.text.RentalFeeParser;
@@ -11,6 +12,7 @@ import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.dao.external.FacebookScrapedPostRepository;
+import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.data.business.metro.MetroEntity;
@@ -182,6 +184,8 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                             post.setRoomCount(roomCount);
                             BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                             post.setRentalFee(rentalFee);
+                            PhoneUtil.Phone phone = PhoneUtil.findFirstPhoneNumber(message, "RU");
+                            post.setPhoneNumber(PhoneNumber.from(phone));
                             facebookScrapedPostRepository.save(post);
                         }
                         em.flush();
@@ -517,6 +521,8 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                 post.setRoomCount(roomCount);
                 BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                 post.setRentalFee(rentalFee);
+                PhoneUtil.Phone phone = PhoneUtil.findFirstPhoneNumber(message, "RU");
+                post.setPhoneNumber(PhoneNumber.from(phone));
                 if (!matchedMetros.isEmpty()) {
                     countOfMatchedPosts++;
                 }

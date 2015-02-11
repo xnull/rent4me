@@ -1,5 +1,6 @@
 package bynull.realty.components.text;
 
+import bynull.realty.common.PhoneUtil;
 import bynull.realty.utils.TextUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
 public class RentalFeeParser {
     public static final int FLAGS = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.UNICODE_CASE;
     private static final RentalFeeParser INSTANCE = new RentalFeeParser();
+    private static final String HOT_WORD_STAMS_FOR_PRICE = "(стоимост|бюджет|цен|оплат)";
     @VisibleForTesting
     final PatternCheck fullPriceAbove_1000;
     @VisibleForTesting
@@ -33,23 +35,23 @@ public class RentalFeeParser {
 
         //пример: цена 40 000
         PatternCheck simple = new PatternCheck(Pattern.compile(
-                "(.*)((стоимост|бюджет|цен)([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 7);
+                "(.*)(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 7);
 
         //пример: 40 000 цена
         PatternCheck simpleInverseAbove1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceAbove_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})((стоимост|бюджет|цен)((\\D){1,5})([^\\s0-9]{0,2}))(.*)", FLAGS), 2);
+                "(.*)" + fullPriceAbove_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})(" + HOT_WORD_STAMS_FOR_PRICE + "((\\D){1,5})([^\\s0-9]{0,2}))(.*)", FLAGS), 2);
 
         //пример: 400 цена
         PatternCheck simpleInverseBellow1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceBellow_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})((стоимост|бюджет|цен)((\\D){1,5})([^\\s0-9]{0,2}))(.*)", FLAGS), 2);
+                "(.*)" + fullPriceBellow_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})(" + HOT_WORD_STAMS_FOR_PRICE + "((\\D){1,5})([^\\s0-9]{0,2}))(.*)", FLAGS), 2);
 
         //пример: цена 40 000 - 45 000
         PatternCheck rangeBothComplete = new PatternCheck(Pattern.compile(
-                "(.*)((стоимост|бюджет|цен)([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 13);
+                "(.*)(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 13);
 
         //пример: цена 40 - 45 000
         PatternCheck rangeStartInComplete = new PatternCheck(Pattern.compile(
-                "(.*)((стоимост|бюджет|цен)([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 11);
+                "(.*)(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 11);
 
         PatternCheck patternCheckForThousandsWithWords = new PatternCheck(
                 Pattern.compile(
@@ -135,14 +137,13 @@ public class RentalFeeParser {
                 Matcher matcher = pattern.matcher(text);
                 if (matcher.matches()) {
                     log.debug("Price matched by pattern [{}]", matcher.pattern());
-                    String value = StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup));
-                    value = StringUtils.replace(value, " ", "");
+                    String value = normalizeMatchedValue(matcher.group(patternCheck.resultGroup));
                     try {
                         BigDecimal bigDecimal = new BigDecimal(value);
                         if (bigDecimal.compareTo(BigDecimal.ZERO) >= 0) {
                             List<PatternCheck.SuccessCallbackChecker> successCheckCallbacks = patternCheck.successCheckCallbacks;
                             for (PatternCheck.SuccessCallbackChecker callback : successCheckCallbacks) {
-                                if(!callback.checkOnSuccess(text)) {
+                                if(!callback.allowed(text, value)) {
                                     log.debug("Specified result was invalidated by callback [{}]. Skipping", callback);
                                     continue pattern_loop;
                                 }
@@ -161,6 +162,10 @@ public class RentalFeeParser {
         } finally {
             log.info("<< Finding rental fee process ended");
         }
+    }
+
+    private String normalizeMatchedValue(String group) {
+        return StringUtils.replace(StringUtils.trimToEmpty(group), " ", "");
     }
 
     @VisibleForTesting
@@ -186,15 +191,23 @@ public class RentalFeeParser {
         }
 
         static interface SuccessCallbackChecker {
-            boolean checkOnSuccess(String text);
+            boolean allowed(String text, String foundValue);
         }
     }
 
     private class PhoneNumberSuccessCallbackChecker implements PatternCheck.SuccessCallbackChecker {
 
         @Override
-        public boolean checkOnSuccess(String text) {
-            return !phoneNumberParser.hasPhoneNumber(text);
+        public boolean allowed(String text, String context) {
+            boolean found = false;
+            List<PhoneUtil.Phone> phoneNumbers = phoneNumberParser.findPhoneNumbers(text);
+            for (PhoneUtil.Phone phoneNumber : phoneNumbers) {
+                if(normalizeMatchedValue(phoneNumber.raw).contains(context)) {
+                    found = true;
+                    break;
+                }
+            }
+            return !found;
         }
     }
 }

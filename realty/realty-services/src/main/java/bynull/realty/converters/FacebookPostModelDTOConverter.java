@@ -20,6 +20,9 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedP
     @Resource
     FacebookPageModelDTOConverter facebookPageConverter;
 
+    @Resource
+    PhoneNumberModelDTOConverter phoneNumberModelConverter;
+
     @Override
     public FacebookPostDTO toTargetType(FacebookScrapedPost post) {
         if (post == null) return null;
@@ -33,6 +36,7 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedP
         dto.setUpdated(post.getUpdated());
         dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
         dto.setPage(facebookPageConverter.toTargetType(post.getFacebookPageToScrap()));
+        dto.setPhoneNumberDTO(phoneNumberModelConverter.toTargetType(post.getPhoneNumber()));
         dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
         return dto;
     }

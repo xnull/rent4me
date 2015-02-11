@@ -33,7 +33,7 @@ public class UserDTO {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setPhoneNumber(user.getPhoneNumber().getRawNumber());
         dto.setFacebookId(user.getFacebookId());
         dto.setVkontakteId(user.getVkontakteId());
 

@@ -1,6 +1,7 @@
 package bynull.realty.dto.fb;
 
 import bynull.realty.dto.MetroDTO;
+import bynull.realty.dto.PhoneNumberDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +28,7 @@ public class FacebookPostDTO {
     private Date updated;
     private FacebookPageDTO page;
     private Set<MetroDTO> metros;
+    private PhoneNumberDTO phoneNumberDTO;
 
     public Date getCreated() {
         return copy(created);

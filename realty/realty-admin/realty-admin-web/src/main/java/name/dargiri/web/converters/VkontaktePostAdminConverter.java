@@ -19,6 +19,9 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
     @Resource
     private MetroAdminConverter metroAdminConverter;
 
+    @Resource
+    private PhoneNumberAdminConverter phoneNumberConverter;
+
     @Override
     public VkontaktePostForm toTargetType(VkontaktePostDTO in) {
         if (in == null) {
@@ -34,6 +37,7 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
         form.setUpdated(in.getUpdated());
         form.setPage(vkPageAdminConverter.toTargetType(in.getPage()));
         form.setMetros(metroAdminConverter.toTargetSet(in.getMetros()));
+        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumber()));
         return form;
     }
 
@@ -51,6 +55,7 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
         dto.setUpdated(in.getUpdated());
         dto.setPage(vkPageAdminConverter.toSourceType(in.getPage()));
         dto.setMetros(metroAdminConverter.toSourceSet(in.getMetros()));
+        dto.setPhoneNumber(phoneNumberConverter.toSourceType(in.getPhoneNumber()));
         return dto;
     }
 }

@@ -49,6 +49,12 @@ var Post = React.createClass({
             </div>
         ) : null;
 
+        var phoneNumber = item.phone_number ? (
+            <div>
+                Номер телефона: {item.phone_number.national_formatted_number || item.phone_number.raw_number }
+            </div>
+        ) : null;
+
         var genericInfoAvailable = item.room_count || item.rental_fee || false;
         var genericInfoBlock = genericInfoAvailable ? (
             <div className="col-md-6">
@@ -56,6 +62,7 @@ var Post = React.createClass({
                 <div>
                 {priceInfo}
                 {roomCountInfo}
+                {phoneNumber}
                 </div>
             </div>
         ) : null;

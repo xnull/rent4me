@@ -22,4 +22,5 @@ dependencies {
     compile libraries.'org.hibernate:hibernate-validator'
 
     compile project(":realty-sql")
+    compile project(':realty-common')
 }

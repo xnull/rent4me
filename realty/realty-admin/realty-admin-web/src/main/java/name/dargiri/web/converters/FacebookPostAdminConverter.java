@@ -19,6 +19,9 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
     @Resource
     private MetroAdminConverter metroAdminConverter;
 
+    @Resource
+    private PhoneNumberAdminConverter phoneNumberConverter;
+
     @Override
     public FacebookPostForm toTargetType(FacebookPostDTO in) {
         if (in == null) {
@@ -32,6 +35,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
         form.setImageUrls(in.getImageUrls());
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
+        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()));
         form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()));
         form.setMetros(metroAdminConverter.toTargetSet(in.getMetros()));
         return form;
@@ -49,6 +53,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
         dto.setImageUrls(in.getImageUrls());
         dto.setCreated(in.getCreated());
         dto.setUpdated(in.getUpdated());
+        dto.setPhoneNumberDTO(phoneNumberConverter.toSourceType(in.getPhoneNumber()));
         dto.setPage(facebookPageAdminConverter.toSourceType(in.getPage()));
         dto.setMetros(metroAdminConverter.toSourceSet(in.getMetros()));
         return dto;

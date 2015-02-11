@@ -1,5 +1,6 @@
 package bynull.realty.data.business.external;
 
+import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.metro.MetroEntity;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
@@ -62,4 +63,7 @@ public class SocialNetPost {
 
     @Column(name = "room_count")
     private Integer roomCount;
+
+    @Embedded
+    private PhoneNumber phoneNumber;
 }

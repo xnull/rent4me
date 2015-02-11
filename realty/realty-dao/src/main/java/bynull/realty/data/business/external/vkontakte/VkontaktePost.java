@@ -1,5 +1,6 @@
 package bynull.realty.data.business.external.vkontakte;
 
+import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.external.facebook.FacebookPostType;
 import bynull.realty.data.business.metro.MetroEntity;
@@ -50,6 +51,9 @@ public class VkontaktePost {
     @JoinColumn(name = "vk_page_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private VkontaktePage vkontaktePage;
+
+    @Embedded
+    private PhoneNumber phoneNumber;
 
     @JoinTable(
             name = "vk_posts_to_metros",
@@ -137,8 +141,16 @@ public class VkontaktePost {
         this.vkontaktePage = vkontaktePage;
     }
 
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public Set<MetroEntity> getMetros() {
         return metros;
+    }
+
+    public PhoneNumber getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setMetros(Set<MetroEntity> metros) {

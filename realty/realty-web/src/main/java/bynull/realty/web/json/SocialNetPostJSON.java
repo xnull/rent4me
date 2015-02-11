@@ -44,6 +44,8 @@ public class SocialNetPostJSON {
     private Set<MetroJSON> metros;
     @JsonProperty("social_network")
     private SocialNetwork socialNetwork;
+    @JsonProperty("phone_number")
+    private PhoneNumberJSON phoneNumber;
 
     public Date getCreated() {
         return copy(created);

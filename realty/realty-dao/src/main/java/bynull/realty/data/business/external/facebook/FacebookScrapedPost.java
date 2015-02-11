@@ -1,5 +1,6 @@
 package bynull.realty.data.business.external.facebook;
 
+import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.metro.MetroEntity;
 
 import javax.persistence.*;
@@ -45,6 +46,8 @@ public class FacebookScrapedPost {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ext_updated_dt")
     private Date updated;
+    @Embedded
+    private PhoneNumber phoneNumber;
 
     @NotNull
     @JoinColumn(name = "fb_pg2_scrap_id")
@@ -135,6 +138,14 @@ public class FacebookScrapedPost {
 
     public void setUpdated(Date updated) {
         this.updated = copy(updated);
+    }
+
+    public PhoneNumber getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public FacebookPageToScrap getFacebookPageToScrap() {

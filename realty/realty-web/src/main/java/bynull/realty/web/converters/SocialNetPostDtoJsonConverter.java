@@ -19,6 +19,9 @@ public class SocialNetPostDtoJsonConverter implements Converter<SocialNetPostDTO
     @Resource
     FacebookPageDtoJsonConverter facebookPageConverter;
 
+    @Resource
+    PhoneNumberDtoJsonConverter phoneNumberConverter;
+
     @Override
     public SocialNetPostJSON toTargetType(SocialNetPostDTO in) {
         if (in == null) {
@@ -35,6 +38,7 @@ public class SocialNetPostDtoJsonConverter implements Converter<SocialNetPostDTO
         json.setCreated(in.getCreated());
         json.setUpdated(in.getUpdated());
         json.setMetros(metroConverter.toTargetSet(in.getMetros()));
+        json.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()));
         json.setSocialNetwork(in.getSocialNetwork());
         return json;
     }
