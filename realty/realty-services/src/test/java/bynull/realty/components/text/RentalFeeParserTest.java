@@ -98,7 +98,8 @@ public class RentalFeeParserTest {
 
     @Test
     public void successForInverseIncompleteStartingRange() {
-        String text = "Всем привет !!! Я .мой друг и интеллигентный кот ищем двухкомнатную квартиру (комнаты изолированные) в шаговой доступности от метро на длительный срок 12. 40-45 000 Бюджет. ";
+        String text = "Всем привет !!! Я .мой друг и интеллигентный кот ищем двухкомнатную квартиру " +
+                "(комнаты изолированные) в шаговой доступности от метро на длительный срок 12. 40-45 000 Бюджет. ";
         assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("45000")));
     }
 
@@ -146,7 +147,9 @@ public class RentalFeeParserTest {
 
     @Test
     public void fixForPhoneNumber() {
-        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. 33000 + залог + свет 89258605273 ";
+        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. " +
+                "1 этаж, состояние хорошее, мебель и бытовая техника есть, " +
+                "сдается на длительный срок. 33000 + залог + свет 89258605273 ";
         assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("33000")));
     }
 
@@ -207,7 +210,6 @@ public class RentalFeeParserTest {
         assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("39000")));
     }
 
-    @Ignore("fix it later")
     @Test
     public void fixBugSimplePatternWithCurrencyAbove1000_2_0() throws Exception {
         final String text = "Субаренда без комиссии! " +
@@ -218,16 +220,9 @@ public class RentalFeeParserTest {
                 "ТВ плазма 32,НТВ+,балкон объединенный с комнатой, сушилка для вещей.Квартира находится в 15 минутах пешком " +
                 "от станции Железнодорожная. тел. 8 964 770 73 86 Звонить с 9.00 до 23.00";
 
-        String normalizedText = parser.normalizeText(text);
-
-        RentalFeeParser.PatternCheck patternCheck = parser.fullPriceAbove_1000;
-        Matcher matcher = patternCheck.pattern.matcher(normalizedText);
-        assertThat(matcher.matches(), is(false));
-
         assertThat(parser.findRentalFee(text), is(nullValue()));
     }
 
-    @Ignore("fix it later")
     @Test
     public void fixBugSimplePatternWithCurrencyAbove1000_2_1() throws Exception {
         final String text = "Субаренда без комиссии! " +
@@ -241,8 +236,6 @@ public class RentalFeeParserTest {
         assertThat(parser.findRentalFee(text), is(nullValue()));
     }
 
-
-    @Ignore("fix it later")
     @Test
     public void fixBugSimplePatternWithCurrencyAbove1000_2_2() throws Exception {
         final String text = "Субаренда без комиссии! " +

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,10 +24,12 @@ public class RentalFeeParser {
     @VisibleForTesting
     final PatternCheck fullPriceBellow_1000;
     private final List<PatternCheck> patterns;
+    private final PhoneNumberParser phoneNumberParser;
 
     private RentalFeeParser() {
         final String fullPriceBellow_1000_patternTemplate = "(\\b([\\d]{3}))";
         final String fullPriceAbove_1000_patternTemplate = "(\\b([\\d]{1,3}(\\D)?[\\d]{3}))";
+        phoneNumberParser = PhoneNumberParser.getInstance();
 
         //пример: цена 40 000
         PatternCheck simple = new PatternCheck(Pattern.compile(
@@ -77,25 +80,19 @@ public class RentalFeeParser {
                 "(.*)" + fullPriceBellow_1000_patternTemplate + "([\\D]{0,2}руб([\\D]{0,4})(.*)|$)", FLAGS), 2);
 
         //пример: 45 000
+        List<PatternCheck.SuccessCallbackChecker> successCallbackCheckers = Collections.singletonList(new PhoneNumberSuccessCallbackChecker());
         fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
 
                 "(.*)" +
-                        //исключить номера телефонов
-                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"
-                        + fullPriceAbove_1000_patternTemplate +
-                        //исключить номера телефонов
-                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"+
-                        "([\\D](.*)|$)", FLAGS), 6);
+                        fullPriceAbove_1000_patternTemplate +
+                        "([\\D](.*)|$)", FLAGS), 2, 1, successCallbackCheckers);
+
         //пример: 45 000
         fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
 
                 "(.*)" +
-                        //исключить номера телефонов
-                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"
-                        + fullPriceBellow_1000_patternTemplate +
-                        //исключить номера телефонов
-                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"+
-                        "([\\D](.*)|$)", FLAGS), 6);
+                        fullPriceBellow_1000_patternTemplate +
+                        "([\\D](.*)|$)", FLAGS), 2, 1, successCallbackCheckers);
 
         patterns = ImmutableList.of(
                 simpleInverseAbove1000,
@@ -121,7 +118,7 @@ public class RentalFeeParser {
     String normalizeText(String text) {
         String result;
         result = StringUtils.trimToEmpty(text).toLowerCase();
-        if (text.isEmpty()) return null;
+        if (result.isEmpty()) return null;
 
         result = TextUtils.normalizeTextAggressivelyForParsing(text);
         return result;
@@ -132,7 +129,7 @@ public class RentalFeeParser {
         try {
             text = normalizeText(text);
 
-            for (PatternCheck patternCheck : patterns) {
+            pattern_loop: for (PatternCheck patternCheck : patterns) {
                 Pattern pattern = patternCheck.pattern;
                 Matcher matcher = pattern.matcher(text);
                 if (matcher.matches()) {
@@ -142,6 +139,13 @@ public class RentalFeeParser {
                     try {
                         BigDecimal bigDecimal = new BigDecimal(value);
                         if (bigDecimal.compareTo(BigDecimal.ZERO) >= 0) {
+                            List<PatternCheck.SuccessCallbackChecker> successCheckCallbacks = patternCheck.successCheckCallbacks;
+                            for (PatternCheck.SuccessCallbackChecker callback : successCheckCallbacks) {
+                                if(!callback.checkOnSuccess(text)) {
+                                    log.debug("Specified result was invalidated by callback [{}]. Skipping", callback);
+                                    continue pattern_loop;
+                                }
+                            }
                             return bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
                         } else {
                             log.error("Parsing error. Value parsed: [{}]", bigDecimal);
@@ -163,15 +167,33 @@ public class RentalFeeParser {
         public final Pattern pattern;
         public final int resultGroup;
         public final int multiplier;
+        public List<SuccessCallbackChecker> successCheckCallbacks;
 
-        public PatternCheck(Pattern pattern, int resultGroup, int multiplier) {
+        public PatternCheck(Pattern pattern, int resultGroup, int multiplier, List<SuccessCallbackChecker> callbacks) {
             this.pattern = pattern;
             this.resultGroup = resultGroup;
             this.multiplier = multiplier;
+            this.successCheckCallbacks = ImmutableList.copyOf(callbacks);
+        }
+
+        public PatternCheck(Pattern pattern, int resultGroup, int multiplier) {
+            this(pattern, resultGroup, multiplier, Collections.emptyList());
         }
 
         public PatternCheck(Pattern pattern, int resultGroup) {
             this(pattern, resultGroup, 1);
+        }
+
+        static interface SuccessCallbackChecker {
+            boolean checkOnSuccess(String text);
+        }
+    }
+
+    private class PhoneNumberSuccessCallbackChecker implements PatternCheck.SuccessCallbackChecker {
+
+        @Override
+        public boolean checkOnSuccess(String text) {
+            return !phoneNumberParser.hasPhoneNumber(text);
         }
     }
 }
