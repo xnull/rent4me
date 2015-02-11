@@ -128,6 +128,7 @@ public class RentalFeeParser {
         log.info(">> Finding rental fee process started");
         try {
             text = normalizeText(text);
+            if(text == null) return null;
 
             pattern_loop: for (PatternCheck patternCheck : patterns) {
                 Pattern pattern = patternCheck.pattern;

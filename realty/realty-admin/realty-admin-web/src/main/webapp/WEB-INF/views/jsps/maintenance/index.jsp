@@ -14,7 +14,7 @@
 
 <p>
     <a class="btn btn-primary" href="<c:url value="/secure/maintenance/reparse_existing_vk_posts"/>"
-       onclick="return confirm('Re-parse ALL Vkontakte post contents & reapply parsing algorithms?');">Re-parse FB
+       onclick="return confirm('Re-parse ALL Vkontakte post contents & reapply parsing algorithms?');">Re-parse VK
         Posts</a>
 </p>
 
