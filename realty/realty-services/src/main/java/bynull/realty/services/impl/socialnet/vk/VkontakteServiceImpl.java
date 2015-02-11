@@ -21,7 +21,9 @@ import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -226,5 +228,43 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
         String txt = ("%" + text + "%").toLowerCase();
         List<VkontaktePost> byQuery = text != null ? vkontaktePostRepository.findByQuery(txt, pageRequest) : vkontaktePostRepository.findAll(pageRequest).getContent();
         return vkPostConverter.toTargetList(byQuery);
+    }
+
+    @Transactional
+    @Override
+    public void reparseExistingVKPosts() {
+        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        int countOfMatchedPosts = 0;
+        Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "id");
+        Page<VkontaktePost> postsPage = vkontaktePostRepository.findAll(pageable);
+        long total = vkontaktePostRepository.count();
+        boolean hasNext = false;
+        do {
+            List<VkontaktePost> posts = postsPage.getContent();
+            for (VkontaktePost post : posts) {
+                String message = post.getMessage();
+
+                Set<MetroEntity> matchedMetros = matchMetros(metros, message);
+                post.setMetros(matchedMetros);
+                Integer roomCount = roomCountParser.findRoomCount(message);
+                post.setRoomCount(roomCount);
+                BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
+                post.setRentalFee(rentalFee);
+                if (!matchedMetros.isEmpty()) {
+                    countOfMatchedPosts++;
+                }
+                post = vkontaktePostRepository.save(post);
+            }
+            log.info("Processed page #[{}]", pageable);
+            hasNext = postsPage.hasNext();
+            if (hasNext) {
+                pageable = postsPage.nextPageable();
+                em.flush();
+                em.clear();
+                postsPage = vkontaktePostRepository.findAll(pageable);
+            }
+        } while (hasNext);
+        em.flush();
+        log.info("Total count of matched posts to metro stations: [{}]. Total posts: [{}]", countOfMatchedPosts, total);
     }
 }

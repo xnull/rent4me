@@ -23,4 +23,6 @@ public interface VkontakteService {
     long countByQuery(String text);
 
     List<VkontaktePostDTO> findPosts(String text, PageRequest created);
+
+    void reparseExistingVKPosts();
 }

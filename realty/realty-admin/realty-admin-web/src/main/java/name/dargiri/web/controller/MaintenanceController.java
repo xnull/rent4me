@@ -39,6 +39,13 @@ public class MaintenanceController {
         return new ModelAndView("redirect:/secure/maintenance");
     }
 
+    @RequestMapping(value = "reparse_existing_vk_posts")
+    public ModelAndView reparseExistingVKPosts(RedirectAttributes redirectAttributes) {
+        vkontakteService.reparseExistingVKPosts();
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All VK posts migrated");
+        return new ModelAndView("redirect:/secure/maintenance");
+    }
+
     @RequestMapping(value = "manual_sync_fb")
     public ModelAndView manualSyncWithFB(RedirectAttributes redirectAttributes) {
         facebookService.syncWithFB();

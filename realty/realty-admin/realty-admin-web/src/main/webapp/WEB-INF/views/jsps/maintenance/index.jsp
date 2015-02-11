@@ -13,6 +13,12 @@
 </p>
 
 <p>
+    <a class="btn btn-primary" href="<c:url value="/secure/maintenance/reparse_existing_vk_posts"/>"
+       onclick="return confirm('Re-parse ALL Vkontakte post contents & reapply parsing algorithms?');">Re-parse FB
+        Posts</a>
+</p>
+
+<p>
     <a class="btn btn-primary" href="<c:url value="/secure/maintenance/manual_sync_fb"/>"
        onclick="return confirm('Are you sure you want to sync manually with FB?');">FB Manual sync</a>
 </p>
