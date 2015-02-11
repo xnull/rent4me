@@ -369,26 +369,6 @@ var UserSuccessOrDangerBlock = React.createClass({
                 </div>
             );
         }
-
-        return (
-            <div>
-                <div className="form-group">
-                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
-                    <div>
-                        <input
-                            id={this.props.data.id}
-                            className="form-control"
-                            type="text"
-                            readOnly={this.props.readOnly}
-                            name={this.props.data.elementName}
-                            onChange={this.props.onChange}
-                            placeholder={this.props.data.placeholder}
-                            value={this.props.data.elementValue}
-                        />
-                    </div>
-                </div>
-            </div>
-        )
     }
 });
 
@@ -843,7 +823,7 @@ module.exports = React.createClass({
         }
 
 
-        (this, newState);
+        changeData(this, newState);
     },
 
     render: function () {
@@ -969,11 +949,40 @@ module.exports = React.createClass({
         var saved = !!data.id;
         var readOnly = saved;
 
+        if(!saved) {
+            //var _oldState = data;
+            //var _newState = assign({}, _oldState);
+            //TODO: FIX IT - it's VERY BAD THING TO CHANGE STATE during rendering.
+            //data.published = true;
+            //changeData(this, _newState);
+
+        }
+
         var onChangeIfNotSaved = saved ? null : this._onChange;
 
 
         var selectedPhoto = this.state.transient.selectedPhoto;
         var photoPreviewOrZero = selectedPhoto ? (<ApartmentPhotoPreview photo={selectedPhoto}/>) : null;
+
+        var successOrDangerBlock = null;
+        console.log('It\'s new apartment: '+!saved);
+        if(saved){
+            var success = data.published;
+
+            if (success) {
+                successOrDangerBlock = (
+                    <div className="alert alert-success" role="alert" >
+                        Ваша квартира отображается в поиске
+                    </div>
+                );
+            } else {
+                successOrDangerBlock = (
+                    <div className="alert alert-danger" role="alert" >
+                        Ваша квартира не участвует в поиске
+                    </div>
+                );
+            }
+        }
 
         return (
             <div className="col-md-9">
@@ -986,11 +995,8 @@ module.exports = React.createClass({
                         <div id="errorMessages" className="alert alert-danger" role="alert" style={errorMessageStyles}>
                         </div>
 
-                        <UserSuccessOrDangerBlock
-                            errorMessage="Ваша квартира не участвует в поиске"
-                            successMessage="Ваша квартира отображается в поиске"
-                            successCondition={data.published}
-                        />
+                        {successOrDangerBlock}
+
                         <form className="form-horizontal" role="form">
                             <div className="row">
                                 <div className="col-md-6" >

@@ -64,6 +64,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (user.getApartments().isEmpty()) {
             Apartment apartment = dto.toInternal();
             apartment.setOwner(user);
+            apartment.setPublished(true);//publish by default
             apartment = apartmentRepository.saveAndFlush(apartment);
 
             handlePhotoDiff(dto, apartment);

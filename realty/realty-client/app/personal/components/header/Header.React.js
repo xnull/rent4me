@@ -52,12 +52,17 @@ var Header = React.createClass({
                                 <a href="#" role="button">Главная</a>
                             </li>
 
-                            <li className={NavStore.isLandLordSelected() ? "active" : ""}>
-                                <a href="#/user/landlord" role="button">Я собственник</a>
-                            </li>
+                            <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? "active dropdown" : "dropdown"}>
+                                <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">Мои объявления <b className="caret"></b></a>
+                                <ul className="dropdown-menu pull-right">
+                                    <li className={NavStore.isLandLordSelected() ? "active" : ""}>
+                                        <a href="#/user/landlord" role="button">Я собственник</a>
+                                    </li>
 
-                            <li className={NavStore.isRenterSelected() ? "active" : ""} style={Utils.inactiveUi}>
-                                <a href="#/user/renter" role="button">Я арендатор</a>
+                                    <li className={NavStore.isRenterSelected() ? "active" : ""} style={Utils.inactiveUi}>
+                                        <a href="#/user/renter" role="button">Я арендатор</a>
+                                    </li>
+                                </ul>
                             </li>
 
                             <li className={NavStore.isSupportSelected() ? "active" : ""} style={Utils.inactiveUi}>

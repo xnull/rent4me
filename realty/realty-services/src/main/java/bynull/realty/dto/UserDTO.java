@@ -1,5 +1,6 @@
 package bynull.realty.dto;
 
+import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +34,8 @@ public class UserDTO {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getPhoneNumber().getRawNumber());
+        PhoneNumber phoneNumber = user.getPhoneNumber();
+        dto.setPhoneNumber(phoneNumber != null ? phoneNumber.getRawNumber() : null);
         dto.setFacebookId(user.getFacebookId());
         dto.setVkontakteId(user.getVkontakteId());
 
