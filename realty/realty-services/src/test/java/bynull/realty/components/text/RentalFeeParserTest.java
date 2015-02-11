@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class RentalFeeParserTest {
@@ -102,38 +103,44 @@ public class RentalFeeParserTest {
 
     @Test
     public void fullPriceAbove_1000() {
-        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. 33000 + залог + свет 89258605273 ";
-        Pattern pattern = parser.fullPriceAbove_1000.pattern;
+        String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. " +
+                "1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. " +
+                "33000 + залог + свет 89258605273 ";
+        RentalFeeParser.PatternCheck patternCheck = parser.fullPriceAbove_1000;
+        Pattern pattern = patternCheck.pattern;
         Matcher matcher = pattern.matcher(text);
         assertThat(matcher.matches(), is(true));
-        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("33000"));
+        assertThat(StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup)), is("33000"));
     }
 
     @Test
     public void fullPriceAbove_1000_EndOfLine() {
         String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок 89258605273 . 33000 ";
-        Pattern pattern = parser.fullPriceAbove_1000.pattern;
+        RentalFeeParser.PatternCheck patternCheck = parser.fullPriceAbove_1000;
+        Pattern pattern = patternCheck.pattern;
         Matcher matcher = pattern.matcher(text);
         assertThat(matcher.matches(), is(true));
-        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("33000"));
+        assertThat(StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup)), is("33000"));
     }
 
     @Test
     public void fullPriceBellow_1000() {
         String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок. 330 + залог + свет 89258605273 ";
-        Pattern pattern = parser.fullPriceBellow_1000.pattern;
+        RentalFeeParser.PatternCheck patternCheck = parser.fullPriceBellow_1000;
+        Pattern pattern = patternCheck.pattern;
         Matcher matcher = pattern.matcher(text);
         assertThat(matcher.matches(), is(true));
-        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("330"));
+        assertThat(StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup)), is("330"));
     }
 
     @Test
     public void fullPriceBellow_1000_EndOfLine() {
         String text = "Сдам 1 ком квартиру м.Аэроморт, проезд Аэропорта 6, пешком. 1 этаж, состояние хорошее, мебель и бытовая техника есть, сдается на длительный срок 89258605273 . 330 ";
-        Pattern pattern = parser.fullPriceBellow_1000.pattern;
+        RentalFeeParser.PatternCheck patternCheck = parser.fullPriceBellow_1000;
+        Pattern pattern = patternCheck.pattern;
         Matcher matcher = pattern.matcher(text);
         assertThat(matcher.matches(), is(true));
-        assertThat(StringUtils.trimToEmpty(matcher.group(2)), is("330"));
+        assertThat(StringUtils.trimToEmpty(matcher.group(patternCheck.resultGroup)), is("330"));
     }
 
     @Test
@@ -181,5 +188,72 @@ public class RentalFeeParserTest {
                 "\tMon Jan 26 07:22:00 EST 2015 \tMon Jan 26 07:22:00 EST 2015 \t\n";
 
         assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("30000")));
+    }
+
+
+    @Test
+    public void fixBugSimplePatternWithCurrencyAbove1000_1() throws Exception {
+        final String text = "Сдам однокомнатную квартиру на неограниченное время. " +
+                "Отличная квартира. Героев панфиловцев 22 корп 2, 38 кв. м. Квартира премиум-класса " +
+                "с качественным ремонтом и евроотделкой. Гостиная обьедененна с кухней. " +
+                "Кухня полностью оборудована техникой, " +
+                "Кухня полностью укомплектована, есть вся необходимая мебель и техника: на кухне гарнитур, " +
+                "обеденный стол, стулья, холодильник, газовая печь, СВЧ, электрический чайник. " +
+                "Хорошая мебель. Имеется лоджия. цифровое TV, удобная транспортная доступность. " +
+                "Арендная плата 39000 руб.! Планерная, улица Героев панфиловцев 22 корп 2, кол. кв. м. 38 " +
+                "Оплата в месяц 39000 руб. 8(967) 212 74 73";
+
+        assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("39000")));
+    }
+
+    @Test
+    public void fixBugSimplePatternWithCurrencyAbove1000_2() throws Exception {
+        final String text = "Субаренда без комиссии! " +
+                "Сдам в аренду комнату в двухкомнатной квартире с качественным ЕВРОРЕМОНТНОМ." +
+                "Вся необходимая мебель и бытовая техника для комфортного проживания.В квартире проживает один мужчина 31г ." +
+                "Рассмотрю СТРОГО ОДНОГО человека! от 25 до 35 лет с гражданством РФ,славянской внешности." +
+                "В комнате двухспальная кровать,прикроватная тумба,шкаф угловой с зеркальными дверями,комод,кондиционер," +
+                "ТВ плазма 32,НТВ+,балкон объединенный с комнатой, сушилка для вещей.Квартира находится в 15 минутах пешком " +
+                "от станции Железнодорожная. тел. 8 964 770 73 86 тел. 8 965 398-52-65 Звонить с 9.00 до 23.00";
+
+        assertThat(parser.findRentalFee(text), is(nullValue()));
+    }
+
+
+    @Test
+    public void fixBugSimplePatternWithCurrencyAbove1000_2_1() throws Exception {
+        final String text = "Субаренда без комиссии! " +
+                "Сдам в аренду комнату в двухкомнатной квартире с качественным ЕВРОРЕМОНТНОМ." +
+                "Вся необходимая мебель и бытовая техника для комфортного проживания.В квартире проживает один мужчина 31г ." +
+                "Рассмотрю СТРОГО ОДНОГО человека! от 25 до 35 лет с гражданством РФ,славянской внешности." +
+                "В комнате двухспальная кровать,прикроватная тумба,шкаф угловой с зеркальными дверями,комод,кондиционер," +
+                "ТВ плазма 32,НТВ+,балкон объединенный с комнатой, сушилка для вещей.Квартира находится в 15 минутах пешком " +
+                "от станции Железнодорожная. тел. 8 964 770 73 86 тел. 8 965 398-52-65 тел. 8 964 770 73 87 тел. 8 965 398-52-66 Звонить с 9.00 до 23.00";
+
+        assertThat(parser.findRentalFee(text), is(nullValue()));
+    }
+
+    @Test
+    public void fixBugSimplePatternWithCurrencyAbove1000_3() throws Exception {
+        final String text = "Сдам однокомнатную квартиру чистоплотным русским без домашних питомцев " +
+                "на не менее чем на 1 месяц! Бунинская аллея, улица Кадырова ул д. 8, корп. 1, кв. м. 31 " +
+                "Оплата в месяц 30000 руб.! 8(967) 212 74 70";
+
+        assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("30000")));
+    }
+
+    @Test
+    public void fixBugSimplePatternWithCurrencyBelow1000() throws Exception {
+        final String text = "Сдам однокомнатную квартиру на неограниченное время. " +
+                "Отличная квартира. Героев панфиловцев 22 корп 2, 38 кв. м. Квартира премиум-класса " +
+                "с качественным ремонтом и евроотделкой. Гостиная обьедененна с кухней. " +
+                "Кухня полностью оборудована техникой, " +
+                "Кухня полностью укомплектована, есть вся необходимая мебель и техника: на кухне гарнитур, " +
+                "обеденный стол, стулья, холодильник, газовая печь, СВЧ, электрический чайник. " +
+                "Хорошая мебель. Имеется лоджия. цифровое TV, удобная транспортная доступность. " +
+                "Арендная плата 390 руб.! Планерная, улица Героев панфиловцев 22 корп 2, кол. кв. м. 38 " +
+                "Оплата в месяц 390 руб. 8(967) 212 74 73";
+
+        assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("390")));
     }
 }

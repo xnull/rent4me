@@ -25,8 +25,8 @@ public class RentalFeeParser {
     private final List<PatternCheck> patterns;
 
     private RentalFeeParser() {
-        String fullPriceBellow_1000_patternTemplate = "(\\b([\\d]{3}))";
-        String fullPriceAbove_1000_patternTemplate = "(\\b([\\d]{1,3}(\\D)?[\\d]{3}))";
+        final String fullPriceBellow_1000_patternTemplate = "(\\b([\\d]{3}))";
+        final String fullPriceAbove_1000_patternTemplate = "(\\b([\\d]{1,3}(\\D)?[\\d]{3}))";
 
         //пример: цена 40 000
         PatternCheck simple = new PatternCheck(Pattern.compile(
@@ -47,13 +47,6 @@ public class RentalFeeParser {
         //пример: цена 40 - 45 000
         PatternCheck rangeStartInComplete = new PatternCheck(Pattern.compile(
                 "(.*)((стоимост|бюджет|цен)([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 11);
-
-        //пример: 45 000
-        fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceAbove_1000_patternTemplate + "([\\D](.*)|$)", FLAGS), 2);
-        //пример: 45 000
-        fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceBellow_1000_patternTemplate + "([\\D](.*)|$)", FLAGS), 2);
 
         PatternCheck patternCheckForThousandsWithWords = new PatternCheck(
                 Pattern.compile(
@@ -76,6 +69,34 @@ public class RentalFeeParser {
                 1000
         );
 
+        //пример: 45 000 руб, 45 000 рублей
+        PatternCheck fullPriceAbove_1000WithCurrency = new PatternCheck(Pattern.compile(
+                "(.*)" + fullPriceAbove_1000_patternTemplate + "([\\D]{0,2}руб([\\D]{0,4})(.*)|$)", FLAGS), 2);
+        //пример: 450 руб, 450 рублей
+        PatternCheck fullPriceBellow_1000WithCurrency = new PatternCheck(Pattern.compile(
+                "(.*)" + fullPriceBellow_1000_patternTemplate + "([\\D]{0,2}руб([\\D]{0,4})(.*)|$)", FLAGS), 2);
+
+        //пример: 45 000
+        fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
+
+                "(.*)" +
+                        //исключить номера телефонов
+                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"
+                        + fullPriceAbove_1000_patternTemplate +
+                        //исключить номера телефонов
+                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"+
+                        "([\\D](.*)|$)", FLAGS), 6);
+        //пример: 45 000
+        fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
+
+                "(.*)" +
+                        //исключить номера телефонов
+                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"
+                        + fullPriceBellow_1000_patternTemplate +
+                        //исключить номера телефонов
+                        "(\\D{0,2}\\b^(тел((\\D){0,5})))?"+
+                        "([\\D](.*)|$)", FLAGS), 6);
+
         patterns = ImmutableList.of(
                 simpleInverseAbove1000,
                 simpleInverseBellow1000,
@@ -85,6 +106,8 @@ public class RentalFeeParser {
                 patternCheckForThousandsWithWords,
                 patternCheckForThousandsNonStrictAbbreviation,
                 patternCheckForThousandsAggressiveAbbreviation,
+                fullPriceAbove_1000WithCurrency,
+                fullPriceBellow_1000WithCurrency,
                 fullPriceAbove_1000,
                 fullPriceBellow_1000
         );
