@@ -117,13 +117,20 @@ public class RentalFeeParser {
         return INSTANCE;
     }
 
+    @VisibleForTesting
+    String normalizeText(String text) {
+        String result;
+        result = StringUtils.trimToEmpty(text).toLowerCase();
+        if (text.isEmpty()) return null;
+
+        result = TextUtils.normalizeTextAggressivelyForParsing(text);
+        return result;
+    }
+
     public BigDecimal findRentalFee(String text) {
         log.info(">> Finding rental fee process started");
         try {
-            text = StringUtils.trimToEmpty(text).toLowerCase();
-            if (text.isEmpty()) return null;
-
-            text = TextUtils.normalizeTextAggressivelyForParsing(text);
+            text = normalizeText(text);
 
             for (PatternCheck patternCheck : patterns) {
                 Pattern pattern = patternCheck.pattern;
