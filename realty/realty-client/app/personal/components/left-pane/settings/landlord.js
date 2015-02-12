@@ -518,6 +518,8 @@ module.exports = React.createClass({
 
         Dropzone.autoDiscover = false;
 
+        this._resetExternalDepState();//refresh state because you might transition to other ui elements and back. so you need to reset it.
+
         //        console.log('component mounted');
         ApartmentStore.addChangeListener(this._onLoad);
 
