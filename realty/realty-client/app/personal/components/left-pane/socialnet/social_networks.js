@@ -227,6 +227,12 @@ module.exports = React.createClass({
         }));
     },
 
+    clickOnEnter: function(e) {
+        if(e.key=='Enter') {
+            this.onClick();
+        }
+    },
+
     onClick: function () {
         var text = this.state.text;
         var withSubway = this.state.withSubway;
@@ -293,6 +299,8 @@ module.exports = React.createClass({
                                         minPrice={minPrice}
                                         maxPrice={maxPrice}
 
+                                        onKeyPress={this.clickOnEnter}
+
                                         onMinPriceChange={this.onMinPriceChange}
                                         onMaxPriceChange={this.onMaxPriceChange}
                                     />
@@ -320,6 +328,7 @@ module.exports = React.createClass({
                                     <div className="col-md-12">
                                         <input type="text" className="form-control" value={text}
                                             placeholder="Поиск по адресу, метро, улице, району"
+                                            onKeyPress={this.clickOnEnter}
                                             onChange={this.onSearchChange} >
                                         </input>
                                     </div>

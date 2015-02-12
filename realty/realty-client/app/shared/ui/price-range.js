@@ -7,7 +7,10 @@ var React = require('react');
 var PriceRange = React.createClass({
     propTypes: {
         uiSize: React.PropTypes.number.isRequired,
-        uiLabelSize: React.PropTypes.number.isRequired
+        uiLabelSize: React.PropTypes.number.isRequired,
+        minPrice: React.PropTypes.number,
+        maxPrice: React.PropTypes.number,
+        onKeyPress: React.PropTypes.func
     },
 
     /**
@@ -29,6 +32,7 @@ var PriceRange = React.createClass({
 
         var minPrice = this.props.minPrice;
         var maxPrice = this.props.maxPrice;
+        var onKeyPress = this.props.onKeyPress;
 
         return (
             <div className={uiProps.size}>
@@ -37,11 +41,11 @@ var PriceRange = React.createClass({
                 </div>
                 <div className={uiProps.form}>
                     <div className='col-md-6' style={{paddingRight: 0}}>
-                        <input type='text' className='form-control' placeholder='От' value={minPrice} onChange={this.props.onMinPriceChange}/>
+                        <input type='text' className='form-control' placeholder='От' value={minPrice} onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}/>
                     </div>
 
                     <div className='col-md-6' style={{paddingLeft: 0}}>
-                        <input type='text' className='form-control' placeholder='До' value={maxPrice} onChange={this.props.onMaxPriceChange}/>
+                        <input type='text' className='form-control' placeholder='До' value={maxPrice} onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}/>
                     </div>
                 </div>
             </div>
