@@ -46,31 +46,6 @@
 
 
     "dependencies": {
-        "bower": "~1.3.8",
-
-        "gulp": "~3.8.5",
-        "gulp-jshint": "~1.6.4",
-        "gulp-print": "~1.1.0",
-        "gulp-concat": "~2.2.0",
-        "gulp-uglify": "~0.3.1",
-        "gulp-clean": "~0.3.1",
-        "gulp-bower-files": "~0.2.6",
-        "gulp-minify-css": "~0.3.10",
-        "gulp-open": "~0.2.8",
-        "gulp-util": "~3.0.1",
-        "vinyl-source-stream": "~1.0.0",
-        "gulp-webserver": "~0.8.1",
-        "gulp-ng-html2js": "~0.1.8",
-        "gulp-watch": "~1.0.7",
-        "gulp-livereload": "~2.1.1",
-        "gulp-replace": "~0.5.0",
-        "gulp-strip-debug": "1.0.2",
-
-        "browserify": "~6.3.2",
-        "browserify-shim": "~3.8.0",
-        "6to5ify": "4.1.0",
-        "watchify": "~1.0.6",
-
         "bootstrap": "~3.2.0",
         "react-bootstrap": "0.13.0",
         "jquery": "~2.1.1",
@@ -93,6 +68,31 @@
         "moment": "2.8.4"
     },
     "devDependencies": {
+        "bower": "~1.3.8",
+
+        "gulp": "~3.8.5",
+        "gulp-jshint": "~1.6.4",
+        "gulp-print": "~1.1.0",
+        "gulp-concat": "~2.2.0",
+        "gulp-uglify": "~0.3.1",
+        "gulp-clean": "~0.3.1",
+        "gulp-bower-files": "~0.2.6",
+        "gulp-minify-css": "~0.3.10",
+        "gulp-open": "~0.2.8",
+        "gulp-util": "~3.0.1",
+        "vinyl-source-stream": "~1.0.0",
+        "gulp-webserver": "~0.8.1",
+        "gulp-ng-html2js": "~0.1.8",
+        "gulp-watch": "~1.0.7",
+        "gulp-livereload": "~2.1.1",
+        "gulp-replace": "~0.5.0",
+        "gulp-strip-debug": "1.0.2",
+        "6to5ify": "4.1.0",
+        "watchify": "~1.0.6",
+
+        "browserify": "~6.3.2",
+        "browserify-shim": "~3.8.0",
+
         "karma": "~0.10",
         "karma-jasmine": "~0.1.5",
         "karma-chrome-launcher": "~0.1.4",
