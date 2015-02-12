@@ -43,7 +43,7 @@ import static bynull.realty.util.CommonUtils.copy;
 @Slf4j
 public class FacebookHelperComponent {
 
-    public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
+    public static final String MY_PROFILE_FACEBOOK_URL = "https://graph.facebook.com/v2.2/me?fields=id,email,name,first_name,last_name,birthday,is_verified,verified&access_token=";
     private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
 
         final HttpClientParams params = new HttpClientParams();
@@ -85,7 +85,7 @@ public class FacebookHelperComponent {
                     try {
                         String appId = config.getFbAppId();
                         String appSecret = config.getFbSecret();
-                        String exchangeURL = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=" + appId + "&client_secret=" + appSecret + "&fb_exchange_token=" + fbInfo.facebookOAuthToken;
+                        String exchangeURL = "https://graph.facebook.com/v2.2/oauth/access_token?grant_type=fb_exchange_token&client_id=" + appId + "&client_secret=" + appSecret + "&fb_exchange_token=" + fbInfo.facebookOAuthToken;
                         GetMethod exchangeMethodGet = new GetMethod(exchangeURL);
                         try {
                             int responseCode = httpManager.executeMethod(exchangeMethodGet);
