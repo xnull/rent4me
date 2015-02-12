@@ -698,8 +698,7 @@ module.exports = React.createClass({
         constraintMap['address'] = [new Assert().NotNull()];
         constraintMap['type_of_rent'] = [new Assert().NotNull(), new Assert().Choice(['LONG_TERM', 'SHORT_TERM'])];
         constraintMap['fee_period'] = [new Assert().NotNull(), new Assert().Choice(
-            ['HOURLY',
-                'DAILY',
+            [   'DAILY',
                 'WEEKLY',
                 'MONTHLY']
         )];
@@ -823,6 +822,29 @@ module.exports = React.createClass({
         console.log(newState.data);
 
         changeData(this, diffObj);
+    },
+
+    _onPublishedChangedCb: function (boolFlag) {
+        var self = this;
+
+        return function() {
+            var diffObj = {};
+            diffObj['published'] = boolFlag;
+
+            console.log('diff obj');
+            console.log(diffObj);
+
+            console.log('old state');
+            console.log(self.state.data);
+
+            var newState = {data: diffObj};
+
+            console.log('new state');
+            console.log(newState.data);
+
+            changeData(self, diffObj);
+            self._onSave();
+        };
     },
 
     _onPhotoSelected: function (photo) {
@@ -954,7 +976,6 @@ module.exports = React.createClass({
             name: 'Интервал оплаты',
             defaultDescription: 'Минимальный период сдачи',
             keyValuePairs: [
-                ['HOURLY', Translations['ru']['HOURLY']],
                 ['DAILY', Translations['ru']['DAILY']],
                 ['WEEKLY', Translations['ru']['WEEKLY']],
                 ['MONTHLY', Translations['ru']['MONTHLY']]
@@ -1046,12 +1067,18 @@ module.exports = React.createClass({
                 successOrDangerBlock = (
                     <div className="alert alert-success" role="alert" >
                         Ваша квартира отображается в поиске
+                        <br/>
+                        <br/>
+                        <a href="javascript:void(0)" className="btn btn-danger" onClick={this._onPublishedChangedCb(false)}>Убрать из поиска</a>
                     </div>
                 );
             } else {
                 successOrDangerBlock = (
                     <div className="alert alert-danger" role="alert" >
                         Ваша квартира не участвует в поиске
+                        <br/>
+                        <br/>
+                        <a href="javascript:void(0)" className="btn btn-success" onClick={this._onPublishedChangedCb(true)}>Добавить в поиск</a>
                     </div>
                 );
             }
@@ -1078,8 +1105,6 @@ module.exports = React.createClass({
                                     <UserSelect data={feePeriodProp} onChange={this._onChange} />
 
                                     <UserText data={descriptionProp} onChange={this._onChange} />
-
-                                    <UserCheckbox data={publishedProp} onChange={this._onChangeCheckbox} />
 
                                 </div>
                                 <div className="col-md-6">
