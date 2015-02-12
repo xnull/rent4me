@@ -30,12 +30,12 @@ function changeData(ctxt, data) {
     ctxt.setState(assign(ctxt.state, target));
 }
 
-function changeTransient(ctxt, transient) {
+function changeTransient(ctxt, transient, cb) {
     var target = {
         transient: assign(ctxt.state.transient, transient),
         data: ctxt.state.data
     };
-    ctxt.setState(assign(ctxt.state, target));
+    ctxt.setState(assign(ctxt.state, target), cb);
 }
 
 var ApartmentPhoto = React.createClass({
@@ -448,6 +448,39 @@ var UserButton = React.createClass({
     }
 });
 
+var ApartmentWelcomeScreen = React.createClass({
+    propTypes: {
+        onNextStepSelected: React.PropTypes.func
+    },
+
+    render: function() {
+        var onNextStepSelected = this.props.onNextStepSelected;
+
+        return (
+            <div className="col-md-9">
+                <div className="panel">
+
+                    <div className="panel-body">
+                        <h4>Собственность</h4>
+                        <br/>
+                        <br/>
+                        <p>
+                            <p className="col-md-offset-1">
+                                У вас пока что нет ни одного объявления о сдаче жилья в аренду.<br/>
+                                Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренды.<br/>
+                            </p>
+                            <br/>
+                            <p className="col-md-offset-1 col-md-3">
+                                <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}><i className="glyphicon glyphicon-plus" style={{color:'white'}}></i> <b>Добавить объявление</b></a>
+                            </p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
 /**
  * Старница настроек собственника.
  * Здесь собственник задает все необходимые параметры своей недвижимости.
@@ -456,96 +489,128 @@ var UserButton = React.createClass({
 
 var _marker = null;
 var _map = null;
+var _mapCenter = null;
 var _uploadFileNameToGuidMap = {};
 var _dropZone = null;
 
 module.exports = React.createClass({
     getInitialState: function () {
 //        console.log('get initial state');
-        return {data: ApartmentStore.getMyProfile(), transient: {}};
+        return {
+            data: ApartmentStore.getMyProfile(),
+            transient: {
+                confirmedToAddApartment: false
+            }
+        };
     },
+
+    _resetExternalDepState: function() {
+        _marker = null;
+        _map = null;
+        _mapCenter = null;
+        _uploadFileNameToGuidMap = {};
+        _dropZone = null;
+    },
+
     componentDidMount: function () {
         NavActions.navigateToLandlord();
         console.log('Navigated to landlord');
 
-        var that = this;
         Dropzone.autoDiscover = false;
-        _dropZone = new Dropzone('#my-awesome-dropzone', {
-            maxFilesize: 5,
-//            maxFiles: 10,
-            addRemoveLinks: true,
-            acceptedFiles: ".png, .jpg, .jpeg, .jpe, .gif, .bmp, .tif, .tiff",
-            dictDefaultMessage: "Перетащите картинки сюда, что бы добавить их",
-            url: '/rest/users/apartment/pictures/temp',
-            headers: {
-                "Authorization": "Basic " + AuthStore.getAuthHeader()
-            },
-            init: function () {
-                this.on("removedfile", function (file) {
-                    var guid = _uploadFileNameToGuidMap[file.name];
-                    if (guid) {
-                        that._onPhotoDelete(guid);
-                    }
-                });
-                this.on("success", function (file, data) {
-                    console.log('Complete file upload');
-                    console.log(file);
-                    console.log('Data');
-                    console.log(data);
-                    if (data && data.guid) {
-                        _uploadFileNameToGuidMap[file.name] = data.guid;
-                        //change state of added photos
-                        var newState = assign({}, that.state.data);
-                        newState.added_photos_guids.push(data.guid);
-                        changeData(that, newState);
-                    }
-                });
-            }
-        });
 
-//        console.log('component mounted');
+        //        console.log('component mounted');
         ApartmentStore.addChangeListener(this._onLoad);
 
-        //initialize google maps
-        var mapOptions = {
-            center: {lat: 55.752129, lng: 37.617531},
-            zoom: 16
-        };
+        ApartmentActions.loadMyApartment();
 
-        _map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        if(!this._formCouldBeDisplayed()) {
+            //perform no initialization
+            return;
+        } else {
+            this.initAll(this);
+        }
+    },
 
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
-            var place = autocomplete.getPlace();
-            var addressComponents = place['address_components'];
+    initAll: function(ctxt) {
+        console.log('Initializing');
+        var that = ctxt;
+        if(!_dropZone) {
+            _dropZone = new Dropzone('#my-awesome-dropzone', {
+                maxFilesize: 5,
+//            maxFiles: 10,
+                addRemoveLinks: true,
+                acceptedFiles: ".png, .jpg, .jpeg, .jpe, .gif, .bmp, .tif, .tiff",
+                dictDefaultMessage: "Перетащите картинки сюда, что бы добавить их",
+                url: '/rest/users/apartment/pictures/temp',
+                headers: {
+                    "Authorization": "Basic " + AuthStore.getAuthHeader()
+                },
+                init: function () {
+                    this.on("removedfile", function (file) {
+                        var guid = _uploadFileNameToGuidMap[file.name];
+                        if (guid) {
+                            that._onPhotoDelete(guid);
+                        }
+                    });
+                    this.on("success", function (file, data) {
+                        console.log('Complete file upload');
+                        console.log(file);
+                        console.log('Data');
+                        console.log(data);
+                        if (data && data.guid) {
+                            _uploadFileNameToGuidMap[file.name] = data.guid;
+                            //change state of added photos
+                            var newState = assign({}, that.state.data);
+                            newState.added_photos_guids.push(data.guid);
+                            changeData(that, newState);
+                        }
+                    });
+                }
+            });
+        }
 
-            var location = {
-                latitude: place['geometry']['location'].lat(),
-                longitude: place['geometry']['location'].lng()
+
+        if(!_map){
+            //initialize google maps
+            var mapOptions = {
+                center: {lat: 55.752129, lng: 37.617531},
+                zoom: 16
             };
+
+            _map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+            var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                var addressComponents = place['address_components'];
+
+                var location = {
+                    latitude: place['geometry']['location'].lat(),
+                    longitude: place['geometry']['location'].lng()
+                };
 
 //            console.log(location);
 
-            var delta = {
-                'location': location,
-                'address': {
-                    city: AddressUtils.getCity(addressComponents),
-                    country: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY_LONG'),
-                    country_code: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY'),
-                    county: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'STATE'),
-                    district: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'DISTRICT'),
-                    street_address: AddressUtils.buildAddress(addressComponents),
-                    zip_code: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'ZIP'),
-                    formatted_address: place['formatted_address']
-                }
-            };
+                var delta = {
+                    'location': location,
+                    'address': {
+                        city: AddressUtils.getCity(addressComponents),
+                        country: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY_LONG'),
+                        country_code: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY'),
+                        county: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'STATE'),
+                        district: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'DISTRICT'),
+                        street_address: AddressUtils.buildAddress(addressComponents),
+                        zip_code: AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'ZIP'),
+                        formatted_address: place['formatted_address']
+                    }
+                };
 
-            changeData(that, delta);
+                changeData(that, delta);
 
-            that.centerMapAndSetMarker(place.geometry.location.lat(), place.geometry.location.lng());
-        });
-
-        ApartmentActions.loadMyApartment();
+                that.centerMapAndSetMarker(place.geometry.location.lat(), place.geometry.location.lng());
+            });
+            that.setCenterOnMapIfPossible(_mapCenter);
+        }
     },
 
     componentWillUnmount: function () {
@@ -561,15 +626,22 @@ module.exports = React.createClass({
             }
         };
         var latLng = new google.maps.LatLng(currentPlace.location.lat, currentPlace.location.lng);
-        _map.setCenter(latLng);
-        if (_marker != null) {
-            _marker.setMap(null);
+        _mapCenter = latLng;
+        this.setCenterOnMapIfPossible(latLng);
+    },
+
+    setCenterOnMapIfPossible: function(latLng) {
+        if(_map && latLng) {
+            _map.setCenter(latLng);
+            if (_marker != null) {
+                _marker.setMap(null);
+            }
+            _marker = new google.maps.Marker({
+                position: latLng,
+                map: _map,
+                title: "Объект для сдачи"
+            });
         }
-        _marker = new google.maps.Marker({
-            position: latLng,
-            map: _map,
-            title: "Объект для сдачи"
-        });
     },
 
     _onLoad: function () {
@@ -583,7 +655,7 @@ module.exports = React.createClass({
             transient: {
                 selectedPhoto: (newState.photos.length > 0 ? newState.photos[0] : null)
             }
-        }));
+        }), this._reInitIfNeededCb(this));
 
         var data = this.state.data;
         if (data && data.location) {
@@ -608,6 +680,7 @@ module.exports = React.createClass({
     },
 
     _onDelete: function () {
+        this._resetExternalDepState();
         ApartmentActions.deleteMyApartment();
     },
 
@@ -803,8 +876,42 @@ module.exports = React.createClass({
         changeData(this, newState);
     },
 
+    _reInitIfNeededCb: function(self){
+        return function(){
+            console.log('UI re-rendered');
+            if(!self._formCouldBeDisplayed())   {
+                console.log('We can not init 3-rd party dependency.');
+                return;
+            }
+
+            self.initAll(self);
+        }
+    },
+
+    _onNextStepSelected: function() {
+        //changeTransient(this, assign(this.state.transient, {confirmedToAddApartment: true}), this.initAll);
+        var self = this;
+        changeTransient(this, assign(this.state.transient, {confirmedToAddApartment: true}), this._reInitIfNeededCb(self));
+    },
+
+    _formCouldBeDisplayed: function() {
+        var data = this.state.data || {};
+        var transient = this.state.transient;
+        var saved = !!data.id;
+
+        return saved || transient.confirmedToAddApartment;
+    },
+
     render: function () {
         var data = this.state.data || {};
+        var transient = this.state.transient;
+        var saved = !!data.id;
+
+        if(!this._formCouldBeDisplayed()) {
+            return <ApartmentWelcomeScreen onNextStepSelected={this._onNextStepSelected}/>;
+        }
+
+        var readOnly = saved;
 
         var addressPreviewProp = {
             id: 'addressPreview',
@@ -921,19 +1028,6 @@ module.exports = React.createClass({
         var errorMessageStyles = {
             display: 'none'
         };
-
-
-        var saved = !!data.id;
-        var readOnly = saved;
-
-        if(!saved) {
-            //var _oldState = data;
-            //var _newState = assign({}, _oldState);
-            //TODO: FIX IT - it's VERY BAD THING TO CHANGE STATE during rendering.
-            //data.published = true;
-            //changeData(this, _newState);
-
-        }
 
         var onChangeIfNotSaved = saved ? null : this._onChange;
 
