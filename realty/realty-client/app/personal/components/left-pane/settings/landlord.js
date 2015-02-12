@@ -349,29 +349,6 @@ var UserProperty = React.createClass({
     }
 });
 
-var UserSuccessOrDangerBlock = React.createClass({
-    render: function () {
-
-        var errorMessage = this.props.errorMessage || '';
-        var successMessage = this.props.successMessage || '';
-        var success = this.props.successCondition || false;
-
-        if (success) {
-            return (
-                <div className="alert alert-success" role="alert" >
-                {successMessage}
-                </div>
-            );
-        } else {
-            return (
-                <div className="alert alert-danger" role="alert" >
-                {errorMessage}
-                </div>
-            );
-        }
-    }
-});
-
 var UserCheckbox = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName || 'col-md-4';

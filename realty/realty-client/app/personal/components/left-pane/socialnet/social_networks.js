@@ -115,22 +115,6 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             text: value
         }));
-
-        var now = (new Date()).getTime();
-        var that = this;
-
-        this.setState(assign(this.state, {
-            lastSearchTextChangeMS: now
-        }));
-
-        setTimeout(function () {
-            console.log('timed out');
-            console.log('states value: ' + that.state.lastSearchTextChangeMS);
-            console.log('remembered value: ' + now);
-            if (that.state.lastSearchTextChangeMS == now) {
-                that.onClick();
-            }
-        }, 500);
     },
 
     onSubwayChange: function (e) {
@@ -171,22 +155,6 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             minPrice: minPrice
         }));
-
-        var now = (new Date()).getTime();
-        var that = this;
-
-        this.setState(assign(this.state, {
-            lastSearchMinPriceChangeMS: now
-        }));
-
-        setTimeout(function () {
-            console.log('timed out');
-            console.log('states value: ' + that.state.lastSearchMinPriceChangeMS);
-            console.log('remembered value: ' + now);
-            if (that.state.lastSearchMinPriceChangeMS == now) {
-                that.onClick();
-            }
-        }, 500);
     },
 
     onMaxPriceChange: function (e) {
@@ -201,22 +169,6 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             maxPrice: maxPrice
         }));
-
-        var now = (new Date()).getTime();
-        var that = this;
-
-        this.setState(assign(this.state, {
-            lastSearchMaxPriceChangeMS: now
-        }));
-
-        setTimeout(function () {
-            console.log('timed out');
-            console.log('states value: ' + that.state.lastSearchMinPriceChangeMS);
-            console.log('remembered value: ' + now);
-            if (that.state.lastSearchMaxPriceChangeMS == now) {
-                that.onClick();
-            }
-        }, 500);
     },
 
     fireAptSelectionStateChange: function () {
