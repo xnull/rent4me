@@ -296,7 +296,7 @@ public class RentalFeeParserTest {
     }
 
     @Test
-    public void fixBug_61_comment_1() throws Exception {
+    public void fixBug_64_comment_1() throws Exception {
         final String text = "Срочно сдам койко-место или комнату по койко-местам (6 коек) " +
                 "в 2-х комн. кв., м.Щукинская, 4 мин. пеш., в квартире косметический ремонт, " +
                 "чисто, вся мебель, стиральная машинка, интернет проведен, в соседней комнате добродушная женщина, " +
@@ -307,7 +307,7 @@ public class RentalFeeParserTest {
     }
 
     @Test
-    public void fixBug_61_comment_2() throws Exception {
+    public void fixBug_64_comment_2() throws Exception {
         final String text = "Срочно сдам уютную комнатку в 2 - х комн. кв. (блочного типа), м. Перово 10 мин. пеш., " +
                 "в соседях две добрые девушки (русские), в квартире чисто, легкий косметический ремонт, " +
                 "В комнате двухспальная кровать, новый огромный вместительный шкаф, телевизор, стол и т. п., " +
@@ -319,7 +319,7 @@ public class RentalFeeParserTest {
 
 
     @Test
-    public void fixBug_61_comment_3() throws Exception {
+    public void fixBug_64_comment_3() throws Exception {
         final String text = "Сдам комнату в 2-х комнатной квартире,желательно девушке," +
                 "можно 2-м девушкам( или семейной паре, главное порядочным) 700 метров до м.Лермонтовский проспект." +
                 "В комнате 2-х спальная кровать,комп. стол,шкаф,wifi,чистая уютная квартира,цена 16т. " +
@@ -328,7 +328,7 @@ public class RentalFeeParserTest {
         assertThat(parser.findRentalFee(text), equalTo(new BigDecimal("16000")));
     }
     @Test
-    public void fixBug_61_comment_3_end_of_string() throws Exception {
+    public void fixBug_64_comment_3_end_of_string() throws Exception {
         final String text = "Сдам комнату в 2-х комнатной квартире,желательно девушке," +
                 "можно 2-м девушкам( или семейной паре, главное порядочным) 700 метров до м.Лермонтовский проспект." +
                 "Все вопросы в л.с.,звоните,пишите,отвечу всем,рассмотрю все пожелания и предложения) " +
@@ -338,7 +338,7 @@ public class RentalFeeParserTest {
     }
 
     @Test
-    public void fixBug_61_comment_4() throws Exception {
+    public void fixBug_64_comment_4() throws Exception {
         final String text = "СДАМ 1-КОМНАТНУЮ КВАРТИРУ. 15000 РУБ В МЕСЯЦ" +
                 " + счетчики г. Москва, пос. Десеновское (Новые Ватутинки) Подробности - в личных сообщениях.\n" +
                 "\n" +
@@ -348,7 +348,7 @@ public class RentalFeeParserTest {
 
 
     @Test
-    public void fixBug_61_comment_5() throws Exception {
+    public void fixBug_64_comment_5() throws Exception {
         final String text = "Сдам комнату с балконом в 2-х комн. кв., м. Жулебино, 6 мин. пеш., в соседях мать и сын, " +
                 "арендаторы, славяне, в квартире чисто, уютно, есть вся мебель, два дивана, шкаф, стиральная машинка, " +
                 "рассмотрим только девушек, можно 2-х. " +
@@ -358,7 +358,7 @@ public class RentalFeeParserTest {
     }
 
     @Test
-    public void fixBug_61_comment_6() throws Exception {
+    public void fixBug_64_comment_6() throws Exception {
         final String text = "Сдаю срочно 1-комн.квартиру. Москва ул.Силигерская 26к1 " +
                 "(12 мин на марш. до метро Петр-Разумовская)." +
                 "Общ.пл.39кв.м. комната 19кв.м,кухня 9кв.м. " +
@@ -368,7 +368,7 @@ public class RentalFeeParserTest {
     }
 
     @Test
-    public void fixBug_61_comment_7() throws Exception {
+    public void fixBug_64_comment_7() throws Exception {
         final String text = "Сдам комнату в 3-х комнатной квартире, ст. м. Кузьминки (в 3-х минутах ходьбы). " +
                 "Проходная светлая комната с балконом, из мебели: шкаф, диван, телевизор, кондиционер. " +
                 "На кухне: вся необходимая техника. Оплата за 1 мес. (+ депозит-100% стоимость) без комиссии. " +
@@ -377,13 +377,13 @@ public class RentalFeeParserTest {
     }
 
     @Test
-    public void fixBug_61_comment_8() throws Exception {
+    public void fixBug_64_comment_8() throws Exception {
         final String text = "СРОЧНО СДАМ КВАРТИРУ! 8 916 392 31 55. ОДНУШКА М. МЕДВЕДКОВО!!!!!! ЗВОНИТЕ!!!";
         assertThat(parser.findRentalFee(text), is(nullValue()));
     }
 
     @Test
-    public void fixBug_61_comment_9() throws Exception {
+    public void fixBug_64_comment_9() throws Exception {
         final String text = "Фото реальные.Сдам большую замечательную квартиру в доме бизнес-класса, в непосредственной близости от МКАД в новом доме." +
                 "Неподалеку метро Новогиреево.Огороженная территория,охрана.\n" +
                 "\n" +
@@ -397,7 +397,7 @@ public class RentalFeeParserTest {
     }
 
     @Test
-    public void fixBug_61_comment_10() throws Exception {
+    public void fixBug_64_comment_10() throws Exception {
         final String text = "Сдам большую замечательную квартиру в доме бизнес-класса, " +
                 "в непосредственной близости от МКАД в новом доме.Неподалеку метро Новогиреево.Огороженная территория,охрана.\n" +
                 "\n" +
@@ -407,6 +407,13 @@ public class RentalFeeParserTest {
                 "Сдается на длительный срок. Рассматриваем всех,кроме кавказа - был неудачный опыт.\n" +
                 "\n" +
                 "Коммунальные уже платежи включены в цену. 89269813288";
+        assertThat(parser.findRentalFee(text), is(nullValue()));
+    }
+
+    @Ignore("add test case later & fix from 'rental_fee_bugs.html'")
+    @Test
+    public void fixBug_64_comment_11() throws Exception {
+        final String text = null;
         assertThat(parser.findRentalFee(text), is(nullValue()));
     }
 
