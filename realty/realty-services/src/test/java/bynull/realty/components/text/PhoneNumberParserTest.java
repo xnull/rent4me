@@ -21,7 +21,7 @@ public class PhoneNumberParserTest {
 
     @Test
     public void hasPhoneNumberTest() throws Exception {
-        assertThat(parser.hasPhoneNumber("бла бла бла телефон 123 456 789 10112 asddad"), is(true));
+        assertThat(parser.hasPhoneNumber("бла бла бла телефон 8 916 995 54 54 asddad"), is(true));
     }
 
     @Test

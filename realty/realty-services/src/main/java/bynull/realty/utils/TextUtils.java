@@ -19,12 +19,25 @@ public class TextUtils {
         text = StringUtils.replace(text, "й", "и");
         text = StringUtils.replace(text, "\n", " ");
         text = StringUtils.replace(text, "\r", " ");
-        text = StringUtils.replace(text, "  ", " ");
+        text = replaceRecursively(text, "  ", " ");
+        //if percent was used with number then this could break it
+        text = replaceRecursively(text, " %", "%");
 
         return text;
     }
 
-    public static String normalizeTextAggressivelyForParsing(String text) {
+    public static String replaceRecursively(String text, String search, String replace) {
+        String prev;
+        while(true) {
+            prev = text;
+            text = StringUtils.replace(text, search, replace);
+            if(text.equals(prev))
+                return text;
+        }
+    }
+
+    public static String normalizeTextAggressivelyForPriceParsing(String text) {
+        String initialText = text;
         text = normalizeTextForParsing(text);
 
         if (text == null) {
@@ -36,6 +49,7 @@ public class TextUtils {
         text = StringUtils.replace(text, "!", "");
         text = StringUtils.replace(text, "?", "");
         text = StringUtils.replace(text, ":", "");
+        text = text.replaceAll("([0-9]+)", " $1 ");
 
         text = normalizeTextForParsing(text);
 
@@ -43,6 +57,7 @@ public class TextUtils {
             return null;
         }
 
-        return text;
+        if(initialText.equals(text)) return text;
+        else return normalizeTextAggressivelyForPriceParsing(text);
     }
 }

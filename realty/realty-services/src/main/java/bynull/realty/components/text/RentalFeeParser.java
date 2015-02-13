@@ -20,7 +20,10 @@ import java.util.regex.Pattern;
 public class RentalFeeParser {
     public static final int FLAGS = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.UNICODE_CASE;
     private static final RentalFeeParser INSTANCE = new RentalFeeParser();
-    private static final String HOT_WORD_STAMS_FOR_PRICE = "(стоимост|бюджет|цен|оплат)";
+    private static final String HOT_WORD_STAMS_FOR_PRICE = "(стоимост|бюджет|цен|оплат|аренда)";
+    //руб/рублей/р./руб./
+    private static final String RUBLES_PATTERN = "(([\\D]{0,2}руб([\\D]{0,4}))|([\\D]{0,2}р([\\D]{0,5})))";
+
     @VisibleForTesting
     final PatternCheck fullPriceAbove_1000;
     @VisibleForTesting
@@ -29,7 +32,9 @@ public class RentalFeeParser {
     private final PhoneNumberParser phoneNumberParser;
 
     private RentalFeeParser() {
-        final String fullPriceBellow_1000_patternTemplate = "(\\b([\\d]{3}))";
+        List<PatternCheck.SuccessCallbackChecker> successCallbackCheckers = Collections.singletonList(new PhoneNumberSuccessCallbackChecker());
+
+        final String fullPriceBellow_1000_patternTemplate = "(\\b([\\d]{3})($|[^%]))";
         final String fullPriceAbove_1000_patternTemplate = "(\\b([\\d]{1,3}(\\D)?[\\d]{3}))";
         phoneNumberParser = PhoneNumberParser.getInstance();
 
@@ -53,36 +58,22 @@ public class RentalFeeParser {
         PatternCheck rangeStartInComplete = new PatternCheck(Pattern.compile(
                 "(.*)(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 11);
 
+        //TODO: support тысяч рублей, тысячей рублей, ттысяч р тысяч рублей
         PatternCheck patternCheckForThousandsWithWords = new PatternCheck(
                 Pattern.compile(
-                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(тыс)(.*)", FLAGS),
-                4,
-                1000
-        );
-
-        PatternCheck patternCheckForThousandsNonStrictAbbreviation = new PatternCheck(
-                Pattern.compile(
-                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(тыр)(.*)", FLAGS),
-                4,
-                1000
-        );
-
-        PatternCheck patternCheckForThousandsAggressiveAbbreviation = new PatternCheck(
-                Pattern.compile(
-                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(т([\\s]{0,2})р)(.*)", FLAGS),
+                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(тыс|тыр|(\\bт\\b)|(т([\\s]{0,2})(\\w)?р))(.*)", FLAGS),
                 4,
                 1000
         );
 
         //пример: 45 000 руб, 45 000 рублей
         PatternCheck fullPriceAbove_1000WithCurrency = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceAbove_1000_patternTemplate + "([\\D]{0,2}руб([\\D]{0,4})(.*)|$)", FLAGS), 2);
+                "(.*)" + fullPriceAbove_1000_patternTemplate + "("+RUBLES_PATTERN+"(.*))", FLAGS), 2);
         //пример: 450 руб, 450 рублей
         PatternCheck fullPriceBellow_1000WithCurrency = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceBellow_1000_patternTemplate + "([\\D]{0,2}руб([\\D]{0,4})(.*)|$)", FLAGS), 2);
+                "(.*)" + fullPriceBellow_1000_patternTemplate + "("+RUBLES_PATTERN+"(.*))", FLAGS), 2);
 
         //пример: 45 000
-        List<PatternCheck.SuccessCallbackChecker> successCallbackCheckers = Collections.singletonList(new PhoneNumberSuccessCallbackChecker());
         fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
 
                 "(.*)" +
@@ -97,14 +88,12 @@ public class RentalFeeParser {
                         "([\\D](.*)|$)", FLAGS), 2, 1, successCallbackCheckers);
 
         patterns = ImmutableList.of(
+                patternCheckForThousandsWithWords,
                 simpleInverseAbove1000,
                 simpleInverseBellow1000,
                 simple,
                 rangeBothComplete,
                 rangeStartInComplete,
-                patternCheckForThousandsWithWords,
-                patternCheckForThousandsNonStrictAbbreviation,
-                patternCheckForThousandsAggressiveAbbreviation,
                 fullPriceAbove_1000WithCurrency,
                 fullPriceBellow_1000WithCurrency,
                 fullPriceAbove_1000,
@@ -122,14 +111,14 @@ public class RentalFeeParser {
         result = StringUtils.trimToEmpty(text).toLowerCase();
         if (result.isEmpty()) return null;
 
-        result = TextUtils.normalizeTextAggressivelyForParsing(text);
+        result = TextUtils.normalizeTextAggressivelyForPriceParsing(text);
         return result;
     }
 
-    public BigDecimal findRentalFee(String text) {
+    public BigDecimal findRentalFee(String inputText) {
         log.info(">> Finding rental fee process started");
         try {
-            text = normalizeText(text);
+            String text = normalizeText(inputText);
             if(text == null) return null;
 
             pattern_loop: for (PatternCheck patternCheck : patterns) {
@@ -148,6 +137,14 @@ public class RentalFeeParser {
                                     continue pattern_loop;
                                 }
                             }
+
+                            long longValBeforeMultiplying = bigDecimal.longValue();
+                            if((longValBeforeMultiplying > 10000 && longValBeforeMultiplying%100 != 0) ||
+                                    (longValBeforeMultiplying > 100000 && longValBeforeMultiplying%1000 != 0)) {
+                                log.warn("Seems that value is a little bit ugly ");
+                                continue ;
+                            }
+
                             return bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
                         } else {
                             log.error("Parsing error. Value parsed: [{}]", bigDecimal);
@@ -165,7 +162,7 @@ public class RentalFeeParser {
     }
 
     private String normalizeMatchedValue(String group) {
-        return StringUtils.replace(StringUtils.trimToEmpty(group), " ", "");
+        return TextUtils.replaceRecursively(StringUtils.trimToEmpty(group), " ", "");
     }
 
     @VisibleForTesting
