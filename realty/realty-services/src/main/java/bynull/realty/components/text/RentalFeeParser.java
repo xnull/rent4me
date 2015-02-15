@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
 public class RentalFeeParser {
     public static final int FLAGS = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.UNICODE_CASE;
     private static final RentalFeeParser INSTANCE = new RentalFeeParser();
-    private static final String HOT_WORD_STAMS_FOR_PRICE = "(стоимост|бюджет|цен|оплат|аренда)";
+    private static final String HOT_WORD_STAMS_FOR_PRICE = "((цена вопроса)|(стоимост|бюджет|цен|оплат|аренда))";
     //руб/рублей/р./руб./
-    private static final String RUBLES_PATTERN = "(([\\D]{0,2}руб([\\D]{0,4}))|([\\D]{0,2}р([\\D]{0,5})))";
+    private static final String RUBLES_PATTERN = "(([\\D]{0,2}\\bруб([\\D]{0,4}))|([\\D]{0,2}\\bр\\b([\\D]{0,5})))";
 
     @VisibleForTesting
     final PatternCheck fullPriceAbove_1000;
@@ -30,74 +30,71 @@ public class RentalFeeParser {
     final PatternCheck fullPriceBellow_1000;
     private final List<PatternCheck> patterns;
     private final PhoneNumberParser phoneNumberParser;
+    private final UrlParser urlParser;
 
     private RentalFeeParser() {
         List<PatternCheck.SuccessCallbackChecker> successCallbackCheckers = Collections.singletonList(new PhoneNumberSuccessCallbackChecker());
 
-        final String fullPriceBellow_1000_patternTemplate = "(\\b([\\d]{3})($|[^%]))";
-        final String fullPriceAbove_1000_patternTemplate = "(\\b([\\d]{1,3}(\\D)?[\\d]{3}))";
+        final String fullPriceBellow_1000_patternTemplate = "((\\b([\\d]{3}))\\b)";
+        final String fullPriceAbove_1000_patternTemplate = "(\\b([\\d]{1,3}(\\D)?[\\d]{3,4})\\b)";
         phoneNumberParser = PhoneNumberParser.getInstance();
+        urlParser = UrlParser.getInstance();
 
         //пример: цена 40 000
         PatternCheck simple = new PatternCheck(Pattern.compile(
-                "(.*)(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 7);
+                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\s){0,2})(р((\\S{1,6})|(\\.)))?", FLAGS), 9);
 
         //пример: 40 000 цена
         PatternCheck simpleInverseAbove1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceAbove_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})(" + HOT_WORD_STAMS_FOR_PRICE + "((\\D){1,5})([^\\s0-9]{0,2}))(.*)", FLAGS), 2);
+                fullPriceAbove_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})(" + HOT_WORD_STAMS_FOR_PRICE + "((\\D){1,5})([^\\s0-9]{0,2}))", FLAGS), 2);
 
         //пример: 400 цена
         PatternCheck simpleInverseBellow1000 = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceBellow_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})(" + HOT_WORD_STAMS_FOR_PRICE + "((\\D){1,5})([^\\s0-9]{0,2}))(.*)", FLAGS), 2);
+                fullPriceBellow_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?((\\D){0,5})(" + HOT_WORD_STAMS_FOR_PRICE + "((\\D){1,5})([^\\s0-9]{0,2}))", FLAGS), 2);
 
         //пример: цена 40 000 - 45 000
         PatternCheck rangeBothComplete = new PatternCheck(Pattern.compile(
-                "(.*)(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 13);
+                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\s){0,2})(р((\\S{1,6})|(\\.)))?", FLAGS), 13);
 
         //пример: цена 40 - 45 000
         PatternCheck rangeStartInComplete = new PatternCheck(Pattern.compile(
-                "(.*)(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})(\\b(([\\d]{0,3})(\\s)?[\\d]{3}))((\\s){0,2})(р((\\S{1,6})|(\\.)))?(.*)", FLAGS), 11);
+                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})"+"+fullPriceAbove_1000_patternTemplate+"+"((\\s){0,2})", FLAGS), 11);
 
         //TODO: support тысяч рублей, тысячей рублей, ттысяч р тысяч рублей
         PatternCheck patternCheckForThousandsWithWords = new PatternCheck(
                 Pattern.compile(
-                        "(.*)((\\D){1,5})(\\b([\\d]{1,3}))(([\\D]){0,3})(тыс|тыр|(\\bт\\b)|(т([\\s]{0,2})(\\w)?р))(.*)", FLAGS),
+                        "((\\D){1,5}|^)(\\b([\\d]{1,3}))(([\\D]){0,3})((\\bтыс)|(\\bтыр)|(\\bт\\b)|(\\bт([\\s]{0,2})(\\w)?р))", FLAGS),
                 4,
                 1000
         );
 
         //пример: 45 000 руб, 45 000 рублей
         PatternCheck fullPriceAbove_1000WithCurrency = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceAbove_1000_patternTemplate + "("+RUBLES_PATTERN+"(.*))", FLAGS), 2);
+                fullPriceAbove_1000_patternTemplate + "("+RUBLES_PATTERN+")", FLAGS), 2);
         //пример: 450 руб, 450 рублей
         PatternCheck fullPriceBellow_1000WithCurrency = new PatternCheck(Pattern.compile(
-                "(.*)" + fullPriceBellow_1000_patternTemplate + "("+RUBLES_PATTERN+"(.*))", FLAGS), 2);
+                fullPriceBellow_1000_patternTemplate + "("+RUBLES_PATTERN+")", FLAGS), 2);
 
         //пример: 45 000
         fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
+                fullPriceAbove_1000_patternTemplate, FLAGS), 2, 1, successCallbackCheckers);
 
-                "(.*)" +
-                        fullPriceAbove_1000_patternTemplate +
-                        "([\\D](.*)|$)", FLAGS), 2, 1, successCallbackCheckers);
-
-        //пример: 45 000
+        //пример: 450
         fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
 
-                "(.*)" +
-                        fullPriceBellow_1000_patternTemplate +
-                        "([\\D](.*)|$)", FLAGS), 2, 1, successCallbackCheckers);
+                        fullPriceBellow_1000_patternTemplate, FLAGS), 2, 1, successCallbackCheckers);
 
         patterns = ImmutableList.of(
                 patternCheckForThousandsWithWords,
+                simple,
                 simpleInverseAbove1000,
                 simpleInverseBellow1000,
-                simple,
                 rangeBothComplete,
                 rangeStartInComplete,
                 fullPriceAbove_1000WithCurrency,
                 fullPriceBellow_1000WithCurrency,
-                fullPriceAbove_1000,
-                fullPriceBellow_1000
+                fullPriceAbove_1000
+//                ,fullPriceBellow_1000
         );
     }
 
@@ -124,7 +121,13 @@ public class RentalFeeParser {
             pattern_loop: for (PatternCheck patternCheck : patterns) {
                 Pattern pattern = patternCheck.pattern;
                 Matcher matcher = pattern.matcher(text);
-                if (matcher.matches()) {
+//                int matchedPos = 0;
+                BigDecimal resultValue = null;
+                matcher_loop:
+//                if (matcher.matches()) {
+                matcher.reset();
+                while (matcher.find()) {
+//                    matchedPos++;
                     log.debug("Price matched by pattern [{}]", matcher.pattern());
                     String value = normalizeMatchedValue(matcher.group(patternCheck.resultGroup));
                     try {
@@ -139,19 +142,30 @@ public class RentalFeeParser {
                             }
 
                             long longValBeforeMultiplying = bigDecimal.longValue();
-                            if((longValBeforeMultiplying > 10000 && longValBeforeMultiplying%100 != 0) ||
-                                    (longValBeforeMultiplying > 100000 && longValBeforeMultiplying%1000 != 0)) {
+                            if((longValBeforeMultiplying > 10_000 && longValBeforeMultiplying%100 != 0) ||
+                                    (longValBeforeMultiplying > 100_000 && longValBeforeMultiplying%1_000 != 0)) {
                                 log.warn("Seems that value is a little bit ugly ");
-                                continue ;
+                                continue pattern_loop;
                             }
 
-                            return bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
+                            BigDecimal tmpResultValue = bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
+                            if(tmpResultValue.longValue() > 1_000_000) {
+                                log.warn("Value [{}] is too big. Skipping", resultValue);
+                                continue pattern_loop;
+                            }
+                            if(resultValue == null || tmpResultValue.compareTo(resultValue) > 0) {
+                                log.info("Setting result value to [{}]", tmpResultValue);
+                                resultValue = tmpResultValue;
+                            }
                         } else {
                             log.error("Parsing error. Value parsed: [{}]", bigDecimal);
                         }
                     } catch (Exception ignore) {
     //                    log.error("Exception occurred while parsing result value [{}]: {}", value, e.getMessage());
                     }
+                }
+                if(resultValue != null) {
+                    return resultValue;
                 }
             }
 

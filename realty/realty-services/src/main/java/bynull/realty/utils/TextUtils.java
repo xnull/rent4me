@@ -13,15 +13,36 @@ public class TextUtils {
         text = text.toLowerCase();
         text = StringUtils.replace(text, ".", ". ");
         text = StringUtils.replace(text, ",", ", ");
+        text = StringUtils.replace(text, "?", "? ");
+        text = StringUtils.replace(text, "!", "! ");
         text = StringUtils.replace(text, "'", "");
         text = StringUtils.replace(text, "\"", "");
         text = StringUtils.replace(text, "ё", "е");
         text = StringUtils.replace(text, "й", "и");
         text = StringUtils.replace(text, "\n", " ");
         text = StringUtils.replace(text, "\r", " ");
+        text = StringUtils.replace(text, "<br", " <br");
         text = replaceRecursively(text, "  ", " ");
         //if percent was used with number then this could break it
         text = replaceRecursively(text, " %", "%");
+
+        return text;
+    }
+
+    public static String normalizeTextForUrlParsing(String text) {
+        text = StringUtils.trimToEmpty(text);
+        if (text.isEmpty()) return null;
+
+        text = text.toLowerCase();
+
+        text = StringUtils.replace(text, ",", ", ");
+        text = StringUtils.replace(text, "!", "! ");
+        text = StringUtils.replace(text, "\"", "\" ");
+        text = StringUtils.replace(text, "'", "' ");
+
+        text = StringUtils.replace(text, "\n", " ");
+        text = StringUtils.replace(text, "\r", " ");
+        text = replaceRecursively(text, "  ", " ");
 
         return text;
     }
