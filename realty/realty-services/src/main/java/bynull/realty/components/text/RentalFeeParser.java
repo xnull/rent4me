@@ -36,7 +36,7 @@ public class RentalFeeParser {
         List<PatternCheck.SuccessCallbackChecker> successCallbackCheckers = Collections.singletonList(new PhoneNumberSuccessCallbackChecker());
 
         final String fullPriceBellow_1000_patternTemplate = "((\\b([\\d]{3}))\\b)";
-        final String fullPriceAbove_1000_patternTemplate = "(\\b([\\d]{1,3}(\\D)?[\\d]{3,4})\\b)";
+        final String fullPriceAbove_1000_patternTemplate = "(\\b(((([\\d]?)((\\D)?))([\\d]{1,3})(\\D)?)[\\d]{3,4})\\b)";
         phoneNumberParser = PhoneNumberParser.getInstance();
         urlParser = UrlParser.getInstance();
 
@@ -149,10 +149,11 @@ public class RentalFeeParser {
                             }
 
                             BigDecimal tmpResultValue = bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
-                            if(tmpResultValue.longValue() > 1_000_000) {
+                            if(tmpResultValue.longValue() > 500_000) {
                                 log.warn("Value [{}] is too big. Skipping", resultValue);
                                 continue pattern_loop;
                             }
+
                             if(resultValue == null || tmpResultValue.compareTo(resultValue) > 0) {
                                 log.info("Setting result value to [{}]", tmpResultValue);
                                 resultValue = tmpResultValue;
