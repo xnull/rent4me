@@ -58,7 +58,7 @@ public class RentalFeeParser {
 
         //пример: цена 40 - 45 000
         PatternCheck rangeStartInComplete = new PatternCheck(Pattern.compile(
-                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})"+"+fullPriceAbove_1000_patternTemplate+"+"((\\s){0,2})", FLAGS), 11);
+                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\s){0,2})", FLAGS), 11);
 
         //TODO: support тысяч рублей, тысячей рублей, ттысяч р тысяч рублей
         PatternCheck patternCheckForThousandsWithWords = new PatternCheck(
