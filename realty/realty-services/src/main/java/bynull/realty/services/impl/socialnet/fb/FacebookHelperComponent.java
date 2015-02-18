@@ -185,17 +185,22 @@ public class FacebookHelperComponent {
 
         long requestStartTime = System.currentTimeMillis();
 
-        GetMethod httpGet = new GetMethod(url);
-        httpGet.setFollowRedirects(false);
         try {
-            int responseCode = httpManager.executeMethod(httpGet);
-            if (responseCode != HttpStatus.SC_OK) {
-                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
+            String body;
+            GetMethod httpGet = new GetMethod(url);
+            try {
+                httpGet.setFollowRedirects(false);
+                int responseCode = httpManager.executeMethod(httpGet);
+                if (responseCode != HttpStatus.SC_OK) {
+                    throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
+                }
+                body = httpGet.getResponseBodyAsString();
+                log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
+                log.info("Status line: {}", httpGet.getStatusLine());
+                log.info("Body: {}", body);
+            } finally {
+                httpGet.releaseConnection();
             }
-            String body = httpGet.getResponseBodyAsString();
-            log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
-            log.info("Status line: {}", httpGet.getStatusLine());
-            log.info("Body: {}", body);
 
             FacebookFeedItems response = JsonUtils.fromJson(body, FacebookFeedItems.class);
             if (response.getItems().isEmpty()) {
@@ -226,8 +231,6 @@ public class FacebookHelperComponent {
             } else {
                 throw new RuntimeException(e);
             }
-        } finally {
-            httpGet.releaseConnection();
         }
     }
 

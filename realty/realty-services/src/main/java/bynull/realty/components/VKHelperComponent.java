@@ -197,14 +197,19 @@ public class VKHelperComponent {
 
         long requestStartTime = System.currentTimeMillis();
 
-        GetMethod httpGet = new GetMethod(url);
-        httpGet.setFollowRedirects(false);
         try {
-            int responseCode = httpManager.executeMethod(httpGet);
-            if (responseCode != HttpStatus.SC_OK) {
-                throw new BadRequestException("VK request failed. Invalid response code: " + responseCode);
+            GetMethod httpGet = new GetMethod(url);
+            String body;
+            try {
+                httpGet.setFollowRedirects(false);
+                int responseCode = httpManager.executeMethod(httpGet);
+                if (responseCode != HttpStatus.SC_OK) {
+                    throw new BadRequestException("VK request failed. Invalid response code: " + responseCode);
+                }
+                body = httpGet.getResponseBodyAsString();
+            } finally {
+                httpGet.releaseConnection();
             }
-            String body = httpGet.getResponseBodyAsString();
             log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
             log.info("Status line: {}", httpGet.getStatusLine());
 //            log.info("Body: {}", body);
@@ -226,14 +231,16 @@ public class VKHelperComponent {
             boolean hasNextPage = size == VkWallPostResponseContent.LIMIT || size == response.getTotalCount();
 
             if (!hasNextPage) {
+                log.info("Has no next page");
                 return accu;
             }
 
             VkWallPostDTO last = Iterables.getLast(response.getPosts(), null);
             if (last == null || !last.getDate().after(maxAge)) {
+                log.info("No sense to goo deeper");
                 return accu;
             }
-
+            Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
             return doLoadPostsFromPage0(maxAge, pageId, accu, 0, offset+VkWallPostResponseContent.LIMIT);
 
         } catch (Exception e) {
@@ -244,8 +251,6 @@ public class VKHelperComponent {
             } else {
                 throw new RuntimeException(e);
             }
-        } finally {
-            httpGet.releaseConnection();
         }
     }
 
