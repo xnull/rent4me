@@ -191,7 +191,7 @@ public class VKHelperComponent {
 //        String url = !_url.contains("access_token")
 //                ? _url + (_url.contains("?") ? "&" : "?") + "access_token=" + accessToken
 //                : _url;
-        String url = "https://api.vk.com/method/wall.get?&owner_id=-" + pageId + "&v=5.27&count=100&filter=all&extended=1&offset=" + offset;
+        String url = "http://api.vk.com/method/wall.get?&owner_id=-" + pageId + "&v=5.27&count=100&filter=all&extended=1&offset=" + offset;
 
         log.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
 
@@ -236,6 +236,9 @@ public class VKHelperComponent {
             }
 
             VkWallPostDTO last = Iterables.getLast(response.getPosts(), null);
+            if (last != null) {
+                log.info("Last date: [{}]", last.getDate());
+            }
             if (last == null || !last.getDate().after(maxAge)) {
                 log.info("No sense to goo deeper");
                 return accu;
