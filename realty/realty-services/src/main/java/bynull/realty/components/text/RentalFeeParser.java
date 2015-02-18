@@ -22,7 +22,7 @@ public class RentalFeeParser {
     private static final RentalFeeParser INSTANCE = new RentalFeeParser();
     private static final String HOT_WORD_STAMS_FOR_PRICE = "((цена вопроса)|(стоимост|бюджет|цен|оплат|аренда))";
     //руб/рублей/р./руб./
-    private static final String RUBLES_PATTERN = "(([\\D]{0,2}\\bруб([\\D]{0,4}))|([\\D]{0,2}\\bр\\b([\\D]{0,5})))";
+    private static final String RUBLES_PATTERN = "(([\\D]{0,2}\\brub([\\D]{0,4}))|([\\D]{0,2}\\bруб([\\D]{0,4}))|([\\D]{0,2}\\bр\\b([\\D]{0,5})))";
 
     @VisibleForTesting
     final PatternCheck fullPriceAbove_1000;
@@ -123,9 +123,7 @@ public class RentalFeeParser {
                 Matcher matcher = pattern.matcher(text);
 //                int matchedPos = 0;
                 BigDecimal resultValue = null;
-                matcher_loop:
-//                if (matcher.matches()) {
-                matcher.reset();
+
                 while (matcher.find()) {
 //                    matchedPos++;
                     log.debug("Price matched by pattern [{}]", matcher.pattern());
@@ -150,9 +148,14 @@ public class RentalFeeParser {
 
                             BigDecimal tmpResultValue = bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
                             if(tmpResultValue.longValue() > 500_000) {
-                                log.warn("Value [{}] is too big. Skipping", resultValue);
+                                log.warn("Value [{}] is too big. Skipping", tmpResultValue);
                                 continue pattern_loop;
                             }
+
+//                            if(tmpResultValue.equals(BigDecimal.ZERO)) {
+//                                log.warn("Value [{}] is zero. Skipping FURTHER analysis. Some weird shit is with this value", tmpResultValue);
+//                                continue pattern_loop;
+//                            }
 
                             if(resultValue == null || tmpResultValue.compareTo(resultValue) > 0) {
                                 log.info("Setting result value to [{}]", tmpResultValue);
@@ -165,8 +168,9 @@ public class RentalFeeParser {
     //                    log.error("Exception occurred while parsing result value [{}]: {}", value, e.getMessage());
                     }
                 }
+
                 if(resultValue != null) {
-                    return resultValue;
+                    return !resultValue.equals(BigDecimal.ZERO) ? resultValue : null;
                 }
             }
 
