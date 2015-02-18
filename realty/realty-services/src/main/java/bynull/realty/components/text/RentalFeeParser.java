@@ -121,11 +121,13 @@ public class RentalFeeParser {
             pattern_loop: for (PatternCheck patternCheck : patterns) {
                 Pattern pattern = patternCheck.pattern;
                 Matcher matcher = pattern.matcher(text);
-//                int matchedPos = 0;
+                int matchNumber = 0;
                 BigDecimal resultValue = null;
-
+                log.info("Evaluating pattern [{}] for text: [{}]", pattern.pattern(), text);
+                log.info("Before first match [{}]");
                 while (matcher.find()) {
-//                    matchedPos++;
+                    matchNumber++;
+                    log.info("Match #[{}]", matchNumber);
                     log.debug("Price matched by pattern [{}]", matcher.pattern());
                     String value = normalizeMatchedValue(matcher.group(patternCheck.resultGroup));
                     try {
