@@ -14,109 +14,142 @@ var Post = React.createClass({
         var firstImage = _.first(item.img_urls.map(function (photo) {
             return (
                 <img className="img-responsive" width="128" src={photo}/>
-            );
+                );
         }));
 
 
         var metroElements = item.metros.map(function (metro) {
             return (
                 <li>{metro.station_name}</li>
-            );
+                );
         });
 
         var hasMetros = _.size(item.metros) > 0;
 
         var metroPreviews = hasMetros ? (
-            <div className="col-md-6">
-                <h3>Метро</h3>
+            <div className="col-xs-6 col-lg-4">
+                <h3 class="media-heading">Метро</h3>
                 <div>
-                    <ul>
+                    <ul className="list-unstyled">
                         {metroElements}
                     </ul>
                 </div>
             </div>
-        ) : null;
+            ) :
+            (
+                <div className="col-xs-6 col-lg-4">
+                    <h3 class="media-heading">Метро</h3>
+                    <div>
+                    Не указано
+                    </div>
+                </div>
+                );
 
         var priceInfo = item.rental_fee ? (
             <div>
-                Цена: {item.rental_fee}
+            Цена: {item.rental_fee}
             </div>
-        ) : null;
+            ) : null;
 
         var roomCountInfo = item.room_count ? (
-            <div>
-                Комнат: {item.room_count}
+            <div className="col-xs-6 col-lg-4">
+                <h3 class="media-heading"> Комнат:</h3>
+                <div>
+                      {item.room_count}
+                </div>
             </div>
-        ) : null;
+            ) : (
+            <div className="col-xs-6 col-lg-4">
+                <h3 class="media-heading"> Комнат:</h3>
+                <div>
+                Не указано
+                </div>
+            </div>
+            );
 
         var phoneNumber = item.phone_number ? (
             <div>
-                Номер телефона: {item.phone_number.national_formatted_number || item.phone_number.raw_number }
+            Тел.: {item.phone_number.national_formatted_number || item.phone_number.raw_number }
             </div>
-        ) : null;
+            ) : null;
 
-        var genericInfoAvailable = item.room_count || item.rental_fee || false;
-        var genericInfoBlock = genericInfoAvailable ? (
-            <div className="col-md-6">
-                <h3>Детали</h3>
+        var contactInfo = (
+            <div className="col-xs-6 col-lg-4">
+                <h3 class="media-heading"> Контакты:</h3>
                 <div>
-                {priceInfo}
-                {roomCountInfo}
-                {phoneNumber}
+                      {phoneNumber}
+                Link FB
+                Link VK
                 </div>
             </div>
-        ) : null;
-
-        var infoBlock = (hasMetros || genericInfoAvailable) ? (
-            <div>
-                <div className="row">
-                    {metroPreviews}
-                    {genericInfoBlock}
-                </div>
-                <hr/>
-            </div>
-        ) : null;
+            );
 
         var imagePreviews = firstImage ? (
             <div>
-                <div className="panel-thumbnail">
-                    {firstImage}
+                <div className="thumbnail pull-left">
+                    <img className="media-object" width="160"  src={firstImage}/>
                 </div>
-                <hr/>
             </div>
-        ) : null;
+            ) : (
+            <div className="thumbnail pull-left">
+                <img className="media-object"  src="http://placehold.it/160"/>
+            </div>
+            );
+
+        var headerBlock = (
+            <div className="row">
+                <div className="col-lg-8">
+                    <div className="panel-heading">
+                        <p>{priceInfo}</p>
+                    </div>
+                </div>
+
+                <div className="col-lg-4 text-right">
+                    <a href="#" className="btn btn-xs btn-default">
+                        <span className="glyphicon glyphicon-heart"></span>
+                    Запомнить</a>
+                </div>
+            </div>
+            );
+
+        var message = (
+            <div className="panel-body">
+                <div className="row">
+                    <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.message)}}>
+                    </div>
+                </div>
+            </div>
+            );
+
+        var footer = (
+            <div>
+            Добавлено: {moment(item.created).format("lll")}
+            </div>
+            );
+
 
         return (
-            <div className='panel'>
-                <div className="list-group-item">
-                    {imagePreviews}
-                    <p className="list-group-item-text">
-                        <h4>[{item.social_network=='VK'?'ВКонтакте':item.social_network}] Описание</h4>
-
-                        <div className="row">
-                            <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.message)}}>
+            <div className='panel panel-default'>
+                    {headerBlock}
+                <div className="panel-body">
+                    <div className="well well-sm">
+                        <div className="media">
+                        {imagePreviews}
+                            <div className="media-body">
+                                <div className="row">
+                                    {metroPreviews}
+                                    {roomCountInfo}
+                                    {contactInfo}
+                                </div>
                             </div>
                         </div>
-
                         <hr/>
-
-                        {infoBlock}
-
-                        <div className="row">
-                            <div className="col-md-6">
-                                Добавлено: {moment(item.created).format("lll")}
-                            </div>
-                            <div className="col-md-6">
-                                Обновлено: {moment(item.updated).format("lll")}
-                            </div>
-                        </div>
-
-                    </p>
-                    <hr/>
+                    {message}
+                    </div>
+                {footer}
                 </div>
-                <br/>
             </div>
-        );
+            );
     }
 });
 
@@ -136,11 +169,11 @@ var Posts = React.createClass({
                 <a href="javascript:void(0)" onClick={onHasMoreClicked} className="list-group-item">
 
                     <p className="list-group-item-text">
-                        Загрузить еще
+                    Загрузить еще
                     </p>
 
                 </a>
-            ) : null;
+                ) : null;
 
         var style = {};
         if (!shown) {
@@ -150,7 +183,7 @@ var Posts = React.createClass({
         var posts = items.map(function (item) {
             return (
                 <Post item={item}/>
-            );
+                );
         });
 
         return (
@@ -165,18 +198,18 @@ var Posts = React.createClass({
                         <div className="bs-component">
                             <div className="list-group">
 
-                            {posts}
+                {posts}
 
                                 <br/>
 
-                            {hasMoreElement}
+                {hasMoreElement}
 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        );
+            );
     }
 });
 
