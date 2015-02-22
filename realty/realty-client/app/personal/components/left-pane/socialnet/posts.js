@@ -28,7 +28,7 @@ var Post = React.createClass({
 
         var metroPreviews = hasMetros ? (
             <div className="col-xs-6 col-lg-4">
-                <h3 class="media-heading">Метро</h3>
+                <h3 className="media-heading">Метро</h3>
                 <div>
                     <ul className="list-unstyled">
                         {metroElements}
@@ -38,7 +38,7 @@ var Post = React.createClass({
             ) :
             (
                 <div className="col-xs-6 col-lg-4">
-                    <h3 class="media-heading">Метро</h3>
+                    <h3 className="media-heading">Метро</h3>
                     <div>
                     Не указано
                     </div>
@@ -53,14 +53,14 @@ var Post = React.createClass({
 
         var roomCountInfo = item.room_count ? (
             <div className="col-xs-6 col-lg-4">
-                <h3 class="media-heading"> Комнат:</h3>
+                <h3 className="media-heading"> Комнат:</h3>
                 <div>
                       {item.room_count}
                 </div>
             </div>
             ) : (
             <div className="col-xs-6 col-lg-4">
-                <h3 class="media-heading"> Комнат:</h3>
+                <h3 className="media-heading"> Комнат:</h3>
                 <div>
                 Не указано
                 </div>
@@ -75,7 +75,7 @@ var Post = React.createClass({
 
         var contactInfo = (
             <div className="col-xs-6 col-lg-4">
-                <h3 class="media-heading"> Контакты:</h3>
+                <h3 className="media-heading"> Контакты:</h3>
                 <div>
                       {phoneNumber}
                 Link FB
