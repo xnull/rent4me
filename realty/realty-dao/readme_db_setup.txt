@@ -18,7 +18,7 @@ From command line run following commands:
 sudo su - postgres
 
 
-#create development database
+#create test database
 psql -c "CREATE ROLE realty_test_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;"
 psql -c "CREATE ROLE realty_test_user LOGIN PASSWORD 'password' NOINHERIT;"
 psql -c "GRANT realty_test_group TO realty_dev_user"
@@ -46,3 +46,19 @@ createdb -O realty_test_user realty_devdb
  psql --dbname=realty_devdb -c "create extension \"uuid-ossp\";"
  psql --dbname=realty_devdb -c "create extension pg_trgm;"
  psql --dbname=realty_devdb -c "CREATE extension pg_stat_statements;"
+
+
+
+--- create production database
+psql -c "CREATE ROLE realty_prod_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;"
+psql -c "CREATE ROLE realty_prod_user LOGIN PASSWORD '<PRODUCTION_PASSWORD>' NOINHERIT;"
+psql -c "GRANT realty_prod_group TO realty_prod_user"
+
+createdb -O realty_prod_user realty_proddb
+
+ psql --dbname=realty_proddb -c "CREATE EXTENSION postgis;"
+ psql --dbname=realty_proddb -c "CREATE EXTENSION postgis_topology;"
+ psql --dbname=realty_proddb -c "CREATE EXTENSION btree_gist;"
+ psql --dbname=realty_proddb -c "create extension \"uuid-ossp\";"
+ psql --dbname=realty_proddb -c "create extension pg_trgm;"
+ psql --dbname=realty_proddb -c "CREATE extension pg_stat_statements;"
