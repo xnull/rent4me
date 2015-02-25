@@ -5,9 +5,9 @@ package realty.db.backup;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        if(args.length == 0) {
-            args = new String[]{"backup", "/home/dionis/Desktop/hello_db_backups/dev_gisdb_201502240001.backup.tar.gz", "hello"};
-        }
+//        if(args.length == 0) {
+//            args = new String[]{"backup", "/home/dionis/Desktop/hello_db_backups/dev_gisdb_201502240001.backup.tar.gz", "hello"};
+//        }
         CommandRegistry commandItem = Command.findCommandItem(args);
         if (commandItem == null) {
             CommandRegistry.showCommands();
@@ -36,7 +36,7 @@ public class Main {
         }
 
         public static void showCommands() {
-            System.out.println("Program should be used as following: java -jar ${Command} ${Params}");
+            System.out.println("Program should be used as following: java -jar realty-db-tool-1.0.jar ${Command} ${Params}");
             System.out.println();
             System.out.println("Following command are available");
             System.out.println();
