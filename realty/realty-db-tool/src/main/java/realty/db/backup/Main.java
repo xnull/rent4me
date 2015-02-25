@@ -21,7 +21,7 @@ public class Main {
     }
 
     public static enum CommandRegistry {
-        BACKUP(new Command("backup", 2, "${fie name}  ${remote file name}", "Copy ${file name} into Dropbox's folder ${remote file name}") {
+        BACKUP(new Command("backup", 2, "${file name}  ${remote file name}", "Copy ${file name} into Dropbox's folder ${remote file name}") {
             @Override
             protected void doPerformAction(String[] args) throws Exception {
                 final DropBoxBackup dropBoxBackup = new DropBoxBackup();
