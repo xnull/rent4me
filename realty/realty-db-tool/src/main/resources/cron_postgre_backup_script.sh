@@ -1,4 +1,10 @@
 #!/bin/sh
+
+#set up it in /etc/crontab
+# add following line
+# m h dom mon dow user  command
+#39 * * * *   root    /home/dionis/cron_backup_postgre.sh
+
 DATE=$(date +"%Y%m%d%H%M%S")
 
 echo "Backup: $DATE"
