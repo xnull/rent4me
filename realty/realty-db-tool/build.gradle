@@ -21,7 +21,7 @@ project.targetCompatibility = javaVersion
 
 project.version = '1.0'
 
-task fatJar(type: Jar) {
+jar {
     manifest {
         attributes("Implementation-Title": project.name,
                 "Implementation-Version": version,
@@ -30,7 +30,6 @@ task fatJar(type: Jar) {
         )
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
 
 /**
