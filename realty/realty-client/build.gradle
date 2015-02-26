@@ -123,7 +123,7 @@ task packAppRelease(dependsOn: ['cleanUpBuildTmp', 'jsBuildRelease', 'prepareRea
 task deployFrontendDev(dependsOn: packApp, type: SshTask) {
     group = 'Deployment'
 
-    def passphrase = "hnzjnjwbfjao";
+    def passphrase = "k124hfeoifs9";
 
     ssh {
         knownHosts = allowAnyHosts
@@ -133,21 +133,21 @@ task deployFrontendDev(dependsOn: packApp, type: SshTask) {
     remotes {
         webServer {
             host = "rent4.me"
-            user = "root"
+            user = "tomcat"
             password = passphrase
         }
     }
 
     session(remotes.webServer) {
-        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/usr/share/nginx/dev/'
-        execute 'cd /usr/share/nginx/dev;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar'
+        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/home/tomcat/nginx/dev/'
+        execute 'cd /home/tomcat/nginx/dev/;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar; chmod -R 755 ./*'
     }
 }
 
 task deployFrontendRelease(dependsOn: packAppRelease, type: SshTask) {
     group = 'Deployment'
 
-    def passphrase = "hnzjnjwbfjao";
+    def passphrase = "k124hfeoifs9";
 
     ssh {
         knownHosts = allowAnyHosts
@@ -157,14 +157,14 @@ task deployFrontendRelease(dependsOn: packAppRelease, type: SshTask) {
     remotes {
         webServer {
             host = "rent4.me"
-            user = "root"
+            user = "tomcat"
             password = passphrase
         }
     }
 
     session(remotes.webServer) {
-        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/usr/share/nginx/prod'
-        execute 'cd /usr/share/nginx/prod;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar; chmod -R 755 ./*'
+        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/home/tomcat/nginx/prod'
+        execute 'cd /home/tomcat/nginx/prod;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar; chmod -R 755 ./*'
     }
 }
 
