@@ -13,7 +13,7 @@ var Post = React.createClass({
 
         var firstImage = _.first(item.img_urls.map(function (photo) {
             return (
-                <img className="img-responsive" width="128" src={photo}/>
+                <img className="media-object" width="160"  src={photo}/>
                 );
         }));
 
@@ -84,10 +84,11 @@ var Post = React.createClass({
             </div>
             );
 
+
         var imagePreviews = firstImage ? (
             <div>
                 <div className="thumbnail pull-left">
-                    <img className="media-object" width="160"  src={firstImage}/>
+                {firstImage}
                 </div>
             </div>
             ) : (
@@ -134,7 +135,7 @@ var Post = React.createClass({
                 <div className="panel-body">
                     <div className="well well-sm">
                         <div className="media">
-                        {imagePreviews}
+                       {imagePreviews}
                             <div className="media-body">
                                 <div className="row">
                                     {metroPreviews}
