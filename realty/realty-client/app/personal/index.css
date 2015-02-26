@@ -229,3 +229,7 @@ h3, h4, h5 {
 .react-autocomplete-Result--active {
     background: #fafafa;
 }
+
+.badge {
+    background-color: #CB4437 !important;
+}
