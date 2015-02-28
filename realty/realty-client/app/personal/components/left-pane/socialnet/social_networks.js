@@ -90,7 +90,7 @@ module.exports = React.createClass({
     loadMoreResults: function () {
         if (this.state.hasMoreSearchResults) {
             var text = this.state.text;
-            var withSubway = this.state.withSubway;
+            var withSubway = true;
             var type = this.state.type;
 
             var oneRoomAptSelected = this.state.oneRoomAptSelected;
@@ -115,20 +115,6 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             text: value
         }));
-    },
-
-    onSubwayChange: function (e) {
-        console.log(e);
-        var value = e.target.checked;
-        console.log("With subway new value: " + value);
-
-        SocialNetActions.changeFBSearchWithSubway(value);
-
-        this.setState(assign(this.state, {
-            withSubway: value
-        }));
-
-        this.onClick();
     },
 
     onRentTypeChange: function (value) {
@@ -213,7 +199,7 @@ module.exports = React.createClass({
         SocialNetActions.resetFBSearchState();
         SocialNetActions.changeFBSearchText(null);
         SocialNetActions.changeFBSearchType(null);
-        SocialNetActions.changeFBSearchWithSubway(false);
+        SocialNetActions.changeFBSearchWithSubway(true);
         SocialNetActions.changeFBSearchRooms(false, false, false);
         SocialNetActions.changeFBSearchPrice(null, null);
 
@@ -235,7 +221,7 @@ module.exports = React.createClass({
 
     onClick: function () {
         var text = this.state.text;
-        var withSubway = this.state.withSubway;
+        var withSubway = true;
         var type = this.state.type;
         var oneRoomAptSelected = this.state.oneRoomAptSelected;
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
@@ -259,7 +245,7 @@ module.exports = React.createClass({
         var items = this.state.posts || [];
         var hasMoreResults = this.state.hasMoreSearchResults || false;
         var text = this.state.text || '';
-        var withSubWay = this.state.withSubway || false;
+        var withSubWay = true;
 
         var oneRoomAptSelected = this.state.oneRoomAptSelected;
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
@@ -306,22 +292,6 @@ module.exports = React.createClass({
                                     />
                                 </div>
                             </div>
-                            <br/>
-
-                            <div className="form-group">
-                                <label className="col-md-2 control-label">
-                                    С метро
-                                </label>
-                                <div className="col-md-10">
-                                    <input
-                                        type="checkbox"
-                                        onChange={this.onSubwayChange}
-                                        checked={withSubWay}
-                                    />
-                                </div>
-                            </div>
-
-                            <br/>
 
                             <div className='row'>
                                 <div className="col-md-9 col-md-offset-1">

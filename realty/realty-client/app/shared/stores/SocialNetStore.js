@@ -36,7 +36,7 @@ var _searchRooms = {
 };
 var _searchMinPrice = null;
 var _searchMaxPrice = null;
-var _searchWithSubway = false;
+var _searchWithSubway = true;
 var _posts = [];
 var _offset = 0;
 var _limit = 30;
