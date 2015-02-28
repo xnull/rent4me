@@ -25,7 +25,9 @@ var HeaderComponent = React.createClass({
                             <AuthComponent />
                         </div>
                         <div className="col-centered">
-                            <a href='#first' className='button scrolly'>Подробности</a>
+                            <input type="submit" className="button" value="Подробности" onClick={ function () {
+                                window.location.href = "#first"
+                            }}/>
                         </div>
                     </div>
                 </footer>

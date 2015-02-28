@@ -637,10 +637,7 @@ var AuthForm2 = React.createClass({
             <div>
                 <div>
                     <ModalTrigger modal={<AuthModalDialog2 />}>
-                        <input type="button" className="button special" value="Вход" style={{
-                            backgroundColor: '#dadada',
-                            color: '#000000'
-                        }} />
+                        <input type="button" className="button special" value="Вход"/>
                     </ModalTrigger>
                 </div>
             </div>
