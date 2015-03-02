@@ -20,8 +20,6 @@ public interface ApartmentService {
 
     void delete(long id);
 
-    List<ApartmentDTO> findAll();
-
     ApartmentDTO findAuthorizedUserApartment();
 
     void deleteApartmentForAuthorizedUser();

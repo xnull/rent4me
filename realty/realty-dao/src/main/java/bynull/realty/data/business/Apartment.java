@@ -19,77 +19,82 @@ import static bynull.realty.util.CommonUtils.copy;
  */
 @Entity
 @Table(name = "apartments")
-@LessThanOrEqual(targetField = "floorNumber", fieldForComparison = "floorsTotal", message = "Количество этажей всего должно быть больше или равно указанному этажу")
-public class Apartment implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "data_source", discriminatorType = DiscriminatorType.STRING)
+public abstract class Apartment implements Serializable {
+
+    public static class DbValue {
+        private DbValue() {
+        }
+
+        public static final String INTERNAL_STRING_DB_VALUE = "INTERNAL";
+        public static final String FACEBOOK_STRING_DB_VALUE = "FB";
+        public static final String VKONTAKTE_STRING_DB_VALUE = "VK";
+    }
+
+    public static enum  DataSource {
+        INTERNAL(DbValue.INTERNAL_STRING_DB_VALUE),
+        FACEBOOK(DbValue.FACEBOOK_STRING_DB_VALUE),
+        VKONTAKTE(DbValue.VKONTAKTE_STRING_DB_VALUE),
+        ;
+        public final String dbValue;
+
+        DataSource(String dbValue) {
+            this.dbValue = dbValue;
+        }
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "apartment_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "apartment_id_generator", sequenceName = "apartment_id_seq", allocationSize = 1)
     private Long id;
+
     @Column(name = "location")
-    @NotNull
     private GeoPoint location;
-    @NotNull
+
     @Embedded
     private AddressComponents addressComponents;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_dt")
     private Date created;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_dt")
     private Date updated;
 
-    @NotNull
-    @JoinColumn(name = "owner_id", nullable = false)
-    @ManyToOne
-    private User owner;
-
-    @NotNull
-    @Column(name = "type_of_rent", nullable = false)
+    @Column(name = "type_of_rent")
     @Enumerated(EnumType.STRING)
     private RentType typeOfRent;
 
-    @Min(1)
-    @NotNull
-    @Column(name = "rental_fee", nullable = false)
+    @Column(name = "rental_fee")
     private BigDecimal rentalFee;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "fee_period")
     private FeePeriod feePeriod;
 
-    @Size(max = 2000)
     @Column(name = "description")
     private String description;
 
-    @NotNull
-    @Min(1)
     @Column(name = "room_count")
     private Integer roomCount;
 
-    @Min(1)
     @Column(name = "floor_number")
     private Integer floorNumber;
 
-    @Min(1)
     @Column(name = "floors_total")
     private Integer floorsTotal;
 
-    @Min(1)
+    /**
+     * Area in root meters
+     */
     @Column(name = "area")
     private BigDecimal area;
 
     @Column(name = "published")
     private boolean published;
-
-    @JoinTable(
-            name = "apartment_apartment_photos",
-            joinColumns = @JoinColumn(name = "apartment_id"),
-            inverseJoinColumns = @JoinColumn(name = "apartment_photo_id")
-    )
-    @OneToMany
-    private Set<ApartmentPhoto> photos;
 
     public Long getId() {
         return id;
@@ -129,14 +134,6 @@ public class Apartment implements Serializable {
 
     public void setUpdated(Date updated) {
         this.updated = copy(updated);
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
     }
 
     public RentType getTypeOfRent() {
@@ -219,39 +216,6 @@ public class Apartment implements Serializable {
         this.published = published;
     }
 
-    public void addApartmentPhoto(ApartmentPhoto photo) {
-        Set<ApartmentPhoto> apartmentPhotos = this.photos;
-        if (apartmentPhotos == null) {
-            apartmentPhotos = new HashSet<>();
-            this.photos = apartmentPhotos;
-        }
-        apartmentPhotos.add(photo);
-    }
-
-    public void deleteApartmentPhoto(ApartmentPhoto photo) {
-        Set<ApartmentPhoto> apartmentPhotos = this.photos;
-        if (apartmentPhotos == null) {
-            return;
-        }
-        apartmentPhotos.remove(photo);
-    }
-
-    public List<ApartmentPhoto> listPhotosNewestFirst() {
-        Set<ApartmentPhoto> photos = this.photos;
-        if (photos == null) {
-            return Collections.emptyList();
-        } else {
-            List<ApartmentPhoto> result = new ArrayList<>(photos);
-            Collections.sort(result, new Comparator<ApartmentPhoto>() {
-                @Override
-                public int compare(ApartmentPhoto o1, ApartmentPhoto o2) {
-                    return o2.getCreationTimestamp().compareTo(o1.getCreationTimestamp());
-                }
-            });
-            return result;
-        }
-    }
-
     @PrePersist
     void prePersist() {
         Date date = new Date();
@@ -263,32 +227,6 @@ public class Apartment implements Serializable {
     void preUpdate() {
         Date date = new Date();
         setUpdated(date);
-    }
-
-    public void mergeWith(Apartment apartment) {
-        mergeWith(apartment, true);
-    }
-
-    public void mergeWithRentInfoOnly(Apartment apartment) {
-        mergeWith(apartment, false);
-    }
-
-    private void mergeWith(Apartment apartment, boolean updateAllInfo) {
-        Assert.notNull(apartment);
-
-        if (updateAllInfo) {
-            setAddressComponents(apartment.getAddressComponents());
-            setLocation(apartment.getLocation());
-            setArea(apartment.getArea());
-            setFloorNumber(apartment.getFloorNumber());
-            setFloorsTotal(apartment.getFloorsTotal());
-            setRoomCount(apartment.getRoomCount());
-        }
-        setDescription(apartment.getDescription());
-        setFeePeriod(apartment.getFeePeriod());
-        setRentalFee(apartment.getRentalFee());
-        setTypeOfRent(apartment.getTypeOfRent());
-        setPublished(apartment.isPublished());
     }
 
     @Override

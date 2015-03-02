@@ -41,7 +41,7 @@ public class ApartmentDTO {
     private List<String> deletePhotoGUIDs = Collections.emptyList();
     private UserDTO owner;
 
-    public static ApartmentDTO from(Apartment apartment) {
+    public static ApartmentDTO from(InternalApartment apartment) {
         if (apartment == null) return null;
         ApartmentDTO dto = new ApartmentDTO();
         dto.setId(apartment.getId());
@@ -121,8 +121,8 @@ public class ApartmentDTO {
         this.published = published;
     }
 
-    public Apartment toInternal() {
-        Apartment apartment = new Apartment();
+    public InternalApartment toInternal() {
+        InternalApartment apartment = new InternalApartment();
         apartment.setId(getId());
         AddressComponentsDTO address = getAddress();
         apartment.setAddressComponents(address != null ? address.toInternal() :  null);

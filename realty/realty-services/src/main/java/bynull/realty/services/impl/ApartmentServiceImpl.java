@@ -48,10 +48,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentDTO create(ApartmentDTO dto) {
 
-        Apartment apartment = new Apartment();
+        InternalApartment apartment = new InternalApartment();
         apartment.mergeWith(dto.toInternal());
 
-        Apartment created = apartmentRepository.saveAndFlush(apartment);
+        InternalApartment created = apartmentRepository.saveAndFlush(apartment);
 
         return ApartmentDTO.from(created);
     }
@@ -62,7 +62,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         User user = getAuthorizedUser();
 
         if (user.getApartments().isEmpty()) {
-            Apartment apartment = dto.toInternal();
+            InternalApartment apartment = dto.toInternal();
             apartment.setOwner(user);
             apartment.setPublished(true);//publish by default
             apartment = apartmentRepository.saveAndFlush(apartment);
@@ -76,7 +76,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
     }
 
-    private void handlePhotoDiff(ApartmentDTO dto, Apartment apartment) {
+    private void handlePhotoDiff(ApartmentDTO dto, InternalApartment apartment) {
         List<String> addedTempPhotoGUIDs = dto.getAddedTempPhotoGUIDs();
 
         //find added photo temps
@@ -101,7 +101,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         Assert.notNull(dto);
         Assert.notNull(dto.getId());
 
-        Apartment apartment = apartmentRepository.findOne(dto.getId());
+        InternalApartment apartment = (InternalApartment) apartmentRepository.findOne(dto.getId());
 
         Assert.notNull(apartment);
 
@@ -109,7 +109,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         GeoPoint currentLocation = apartment.getLocation();
 
-        Apartment updatedApartment = dto.toInternal();
+        InternalApartment updatedApartment = dto.toInternal();
 
 
         apartment.mergeWithRentInfoOnly(updatedApartment);
@@ -136,7 +136,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public ApartmentDTO find(Long id) {
-        return ApartmentDTO.from(apartmentRepository.findOne(id));
+        return ApartmentDTO.from((InternalApartment) apartmentRepository.findOne(id));
     }
 
     @Transactional
@@ -144,17 +144,6 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void delete(long id) {
         apartmentRepository.delete(id);
         apartmentRepository.flush();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<ApartmentDTO> findAll() {
-        List<Apartment> all = apartmentRepository.findAll();
-        List<ApartmentDTO> result = new ArrayList<ApartmentDTO>(all.size());
-        for (Apartment apartment : all) {
-            result.add(ApartmentDTO.from(apartment));
-        }
-        return result;
     }
 
     @Transactional(readOnly = true)
@@ -174,9 +163,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void deleteApartmentForAuthorizedUser() {
         User user = getAuthorizedUser();
-        Set<Apartment> apartments = user.getApartments();
+        Set<InternalApartment> apartments = user.getApartments();
         if (!apartments.isEmpty()) {
-            for (Apartment apartment : apartments) {
+            for (InternalApartment apartment : apartments) {
                 SecurityUtils.verifySameUser(apartment.getOwner());
                 List<ApartmentPhoto> apartmentPhotos = apartment.listPhotosNewestFirst();
 
@@ -220,7 +209,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         Assert.notNull(dto);
         Assert.notNull(dto.getId());
 
-        Apartment apartment = apartmentRepository.findOne(dto.getId());
+        InternalApartment apartment = (InternalApartment) apartmentRepository.findOne(dto.getId());
         SecurityUtils.verifySameUser(apartment.getOwner());
 
         ApartmentInfoDelta delta = dto.toApartmentInfoDelta();
@@ -261,7 +250,10 @@ public class ApartmentServiceImpl implements ApartmentService {
                     limitAndOffset.offset
             );
         }
+        //TODO: change to generic implementation
         return result.stream()
+                .filter(it->it instanceof InternalApartment)
+                .map(it->(InternalApartment)it)
                 .map(ApartmentDTO::from)
                 .collect(Collectors.toList())
                 ;

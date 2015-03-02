@@ -25,8 +25,25 @@ public class LessThanOrEqualValidator implements ConstraintValidator<LessThanOrE
         if (value == null) return false;
         Class<?> aClass = value.getClass();
         try {
-            Field target = aClass.getDeclaredField(targetField);
-            Field forComparison = aClass.getDeclaredField(fieldForComparison);
+            //TODO: ehnance
+            Field target;
+            try {
+                target = aClass.getDeclaredField(targetField);
+            } catch (NoSuchFieldException e) {
+                Class<?> superclass = aClass.getSuperclass();
+                target = superclass.getDeclaredField(targetField);
+            } catch (SecurityException e) {
+                throw e;
+            }
+            Field forComparison;
+            try {
+                forComparison = aClass.getDeclaredField(fieldForComparison);
+            } catch (NoSuchFieldException e) {
+                Class<?> superclass = aClass.getSuperclass();
+                forComparison = superclass.getDeclaredField(fieldForComparison);
+            } catch (SecurityException e) {
+                throw e;
+            }
             Number targetValue;
             Number forComparisonValue;
             {

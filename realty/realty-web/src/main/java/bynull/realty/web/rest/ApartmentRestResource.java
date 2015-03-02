@@ -27,18 +27,6 @@ public class ApartmentRestResource {
     ApartmentService apartmentService;
 
     @GET
-    public Response listAll() {
-        List<ApartmentDTO> all = apartmentService.findAll();
-        List<ApartmentJSON> jsonList = new ArrayList<ApartmentJSON>(all.size());
-        for (ApartmentDTO apartmentDTO : all) {
-            jsonList.add(ApartmentJSON.from(apartmentDTO));
-        }
-        return Response
-                .ok(jsonList)
-                .build();
-    }
-
-    @GET
     @Path("/{id}")
     public Response findOne(@PathParam("id") long id) {
         ApartmentDTO dto = apartmentService.find(id);
