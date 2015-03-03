@@ -15,7 +15,6 @@ import java.util.*;
  */
 @Entity
 @DiscriminatorValue(Apartment.DbValue.FACEBOOK_STRING_DB_VALUE)
-@LessThanOrEqual(targetField = "floorNumber", fieldForComparison = "floorsTotal", message = "Количество этажей всего должно быть больше или равно указанному этажу")
-public class FacebookApartment extends Apartment {
+public class FacebookApartment extends SocialNetApartment {
 
 }

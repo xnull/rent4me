@@ -1,16 +1,13 @@
 package bynull.realty.data.business;
 
+import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
-import bynull.realty.hibernate.validation.annotations.LessThanOrEqual;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -96,6 +93,14 @@ public abstract class Apartment implements Serializable {
     @Column(name = "published")
     private boolean published;
 
+    @JoinTable(
+            name = "apartments_metros",
+            joinColumns = @JoinColumn(name = "apartment_id"),
+            inverseJoinColumns = @JoinColumn(name = "metro_station_id")
+    )
+    @OneToMany
+    private Set<MetroEntity> metros;
+
     public Long getId() {
         return id;
     }
@@ -166,6 +171,14 @@ public abstract class Apartment implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<MetroEntity> getMetros() {
+        return metros;
+    }
+
+    public void setMetros(Set<MetroEntity> metros) {
+        this.metros = metros;
     }
 
     public void updateFrom(Apartment apartment) {
