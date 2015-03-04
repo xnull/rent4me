@@ -1,0 +1,15 @@
+ALTER TABLE apartments
+ADD COLUMN vk_page_id BIGINT;
+
+ALTER TABLE apartments
+ADD COLUMN fb_page_id BIGINT;
+
+ALTER TABLE apartments
+ADD CONSTRAINT fk_vk_page_id FOREIGN KEY (vk_page_id)
+REFERENCES vk_page (id) MATCH SIMPLE
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE apartments
+ADD CONSTRAINT fk_fb_page_id FOREIGN KEY (fb_page_id)
+REFERENCES facebook_page_to_scrap (id) MATCH SIMPLE
+ON UPDATE CASCADE ON DELETE CASCADE;
