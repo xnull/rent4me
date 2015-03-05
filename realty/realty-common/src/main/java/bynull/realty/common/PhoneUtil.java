@@ -45,7 +45,9 @@ public class PhoneUtil {
         for (PhoneNumberMatch phoneNumber : phoneNumbers) {
             Phonenumber.PhoneNumber number = phoneNumber.number();
             String national = PHONE_NUMBER_UTIL.format(number, PhoneNumberUtil.PhoneNumberFormat.NATIONAL);
-            result.add(new Phone(phoneNumber.rawString(), national));
+            String raw = phoneNumber.rawString();
+            if(raw == null || raw.isEmpty()) continue;
+            result.add(new Phone(raw, national));
         }
 
         return result;
