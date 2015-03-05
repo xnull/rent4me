@@ -20,6 +20,7 @@ dependencies {
     compile libraries."org.hibernate:hibernate-entitymanager"
 //    compile libraries."org.hibernate.javax.persistence:hibernate-jpa-2.0-api"
     compile libraries.'org.hibernate:hibernate-validator'
+    compile libraries.'org.apache.commons:commons-lang3'
 
     compile project(":realty-sql")
     compile project(':realty-common')

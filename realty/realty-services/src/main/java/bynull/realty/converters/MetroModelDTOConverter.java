@@ -12,20 +12,29 @@ import org.springframework.stereotype.Component;
 public class MetroModelDTOConverter implements Converter<MetroEntity, MetroDTO> {
 
     @Override
-    public MetroDTO toTargetType(MetroEntity in) {
+    public MetroDTO newTargetType(MetroEntity in) {
+        return new MetroDTO();
+    }
+
+    @Override
+    public MetroEntity newSourceType(MetroDTO in) {
+        return new MetroEntity();
+    }
+
+    @Override
+    public MetroDTO toTargetType(MetroEntity in, MetroDTO dto) {
         if (in == null) return null;
-        MetroDTO dto = new MetroDTO();
         dto.setId(in.getId());
         dto.setStationName(in.getStationName());
         return dto;
     }
 
     @Override
-    public MetroEntity toSourceType(MetroDTO in) {
+    public MetroEntity toSourceType(MetroDTO in, MetroEntity model) {
         if (in == null) return null;
-        MetroEntity model = new MetroEntity();
         model.setId(in.getId());
         model.setStationName(in.getStationName());
         return model;
     }
+
 }

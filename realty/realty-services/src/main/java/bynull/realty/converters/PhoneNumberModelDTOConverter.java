@@ -11,11 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class PhoneNumberModelDTOConverter implements Converter<PhoneNumber, PhoneNumberDTO> {
     @Override
-    public PhoneNumberDTO toTargetType(PhoneNumber in) {
+    public PhoneNumberDTO newTargetType(PhoneNumber in) {
+        return new PhoneNumberDTO();
+    }
+
+    @Override
+    public PhoneNumber newSourceType(PhoneNumberDTO in) {
+        return new PhoneNumber();
+    }
+
+    @Override
+    public PhoneNumberDTO toTargetType(PhoneNumber in, PhoneNumberDTO dto) {
         if (in == null) {
             return null;
         } else {
-            PhoneNumberDTO dto = new PhoneNumberDTO();
             dto.setRawNumber(in.getRawNumber());
             dto.setNationalFormattedNumber(in.getNationalFormattedNumber());
             return dto;
@@ -23,11 +32,10 @@ public class PhoneNumberModelDTOConverter implements Converter<PhoneNumber, Phon
     }
 
     @Override
-    public PhoneNumber toSourceType(PhoneNumberDTO in) {
+    public PhoneNumber toSourceType(PhoneNumberDTO in, PhoneNumber model) {
         if (in == null) {
             return null;
         } else {
-            PhoneNumber model = new PhoneNumber();
             model.setRawNumber(in.getRawNumber());
             model.setNationalFormattedNumber(in.getNationalFormattedNumber());
             return model;

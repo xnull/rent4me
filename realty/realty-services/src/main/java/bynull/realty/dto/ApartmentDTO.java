@@ -40,38 +40,7 @@ public class ApartmentDTO {
     private List<String> addedTempPhotoGUIDs = Collections.emptyList();
     private List<String> deletePhotoGUIDs = Collections.emptyList();
     private UserDTO owner;
-
-    public static ApartmentDTO from(InternalApartment apartment) {
-        if (apartment == null) return null;
-        ApartmentDTO dto = new ApartmentDTO();
-        dto.setId(apartment.getId());
-        dto.setLocation(GeoPointDTO.from(apartment.getLocation()));
-        dto.setAddress(AddressComponentsDTO.from(apartment.getAddressComponents()));
-        dto.setDescription(apartment.getDescription());
-        dto.setRoomCount(apartment.getRoomCount());
-        dto.setFloorNumber(apartment.getFloorNumber());
-        dto.setFloorsTotal(apartment.getFloorsTotal());
-        dto.setArea(apartment.getArea());
-
-        dto.setTypeOfRent(apartment.getTypeOfRent());
-        dto.setRentalFee(apartment.getRentalFee());
-        dto.setFeePeriod(apartment.getFeePeriod());
-
-        dto.setCreated(apartment.getCreated());
-        dto.setUpdated(apartment.getUpdated());
-
-        dto.setPhotos(apartment.listPhotosNewestFirst()
-                                    .stream()
-                                    .map(ApartmentPhotoDTO::from)
-                                    .collect(Collectors.toList())
-        );
-
-        dto.setPublished(apartment.isPublished());
-
-        dto.setOwner(UserDTO.from(apartment.getOwner()));
-
-        return dto;
-    }
+    private Apartment.DataSource dataSource;
 
     public Date getCreated() {
         return copy(created);

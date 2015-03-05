@@ -24,9 +24,19 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedP
     PhoneNumberModelDTOConverter phoneNumberModelConverter;
 
     @Override
-    public FacebookPostDTO toTargetType(FacebookScrapedPost post) {
+    public FacebookPostDTO newTargetType(FacebookScrapedPost in) {
+        return new FacebookPostDTO();
+    }
+
+    @Override
+    public FacebookScrapedPost newSourceType(FacebookPostDTO in) {
+        return new FacebookScrapedPost();
+    }
+
+    @Override
+    public FacebookPostDTO toTargetType(FacebookScrapedPost post, FacebookPostDTO dto) {
         if (post == null) return null;
-        FacebookPostDTO dto = new FacebookPostDTO();
+
         dto.setId(post.getId());
         dto.setLink(post.getLink());
         dto.setMessage(post.getMessage());
@@ -41,8 +51,9 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedP
         return dto;
     }
 
+
     @Override
-    public FacebookScrapedPost toSourceType(FacebookPostDTO in) {
+    public FacebookScrapedPost toSourceType(FacebookPostDTO in, FacebookScrapedPost instance) {
         throw new UnsupportedOperationException();
     }
 }

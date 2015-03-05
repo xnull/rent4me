@@ -11,11 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class FacebookPageDtoJsonConverter implements Converter<FacebookPageDTO, FacebookPageJSON> {
     @Override
-    public FacebookPageJSON toTargetType(FacebookPageDTO in) {
+    public FacebookPageJSON newTargetType(FacebookPageDTO in) {
+        return new FacebookPageJSON();
+    }
+
+    @Override
+    public FacebookPageDTO newSourceType(FacebookPageJSON in) {
+        return new FacebookPageDTO();
+    }
+
+    @Override
+    public FacebookPageJSON toTargetType(FacebookPageDTO in, FacebookPageJSON json) {
         if (in == null) {
             return null;
         }
-        FacebookPageJSON json = new FacebookPageJSON();
         json.setId(in.getId());
         json.setExternalId(in.getExternalId());
         json.setLink(in.getLink());
@@ -23,7 +32,7 @@ public class FacebookPageDtoJsonConverter implements Converter<FacebookPageDTO, 
     }
 
     @Override
-    public FacebookPageDTO toSourceType(FacebookPageJSON in) {
+    public FacebookPageDTO toSourceType(FacebookPageJSON in, FacebookPageDTO instance) {
         throw new UnsupportedOperationException();
     }
 }

@@ -1,19 +1,12 @@
-package bynull.realty.services.impl.socialnet;
+package bynull.realty.dao;
 
 import bynull.realty.common.Porter;
-import bynull.realty.converters.SocialNetPostModelDTOConverter;
-import bynull.realty.dao.ApartmentRepository;
-import bynull.realty.data.business.external.SocialNetPost;
-import bynull.realty.dto.SocialNetPostDTO;
-import bynull.realty.services.api.SocialNetService;
+import bynull.realty.data.business.Apartment;
 import bynull.realty.util.LimitAndOffset;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -24,13 +17,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Created by dionis on 04/02/15.
+ * Created by dionis on 3/5/15.
  */
-@Service
-public class SocialNetServiceImpl implements SocialNetService, InitializingBean {
-
-    @Resource
-    SocialNetPostModelDTOConverter socialNetPostConverter;
+public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, InitializingBean {
+    @PersistenceContext
+    EntityManager entityManager;
 
     @PersistenceContext
     EntityManager em;
@@ -42,9 +33,8 @@ public class SocialNetServiceImpl implements SocialNetService, InitializingBean 
         porter = Porter.getInstance();
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<SocialNetPostDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode) {
+    public List<Apartment> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
 
@@ -66,19 +56,19 @@ public class SocialNetServiceImpl implements SocialNetService, InitializingBean 
 
         String findModeJPQL = keyWords
                 .stream()
-                .map(word -> " ( lower(p.message) like '" + ilike(word) + "' ) ")
+                .map(word -> " ( lower(p.description) like '" + ilike(word) + "' ) ")
                 .collect(Collectors.joining(" OR "));
 
         String searchText = text.isEmpty() ? "" : text.length() > 5 ? porter.stem(text) : text;
 
-        String qlString = "select p from SocialNetPost p where (" + findModeJPQL + ")" +
-                (!searchText.isEmpty() ? " AND lower(p.message) like :msg " : "") +
+        String qlString = "select p from Apartment p where (" + findModeJPQL + ")" +
+                (!searchText.isEmpty() ? " AND lower(p.description) like :msg " : "") +
 //                (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
                 (!roomsCount.isEmpty() ? " AND p.roomCount IN (:roomCounts) " : "") +
                 (minPrice != null ? " AND p.rentalFee >= :minPrice " : "") +
                 (maxPrice != null ? " AND p.rentalFee <= :maxPrice " : "") +
-                " ORDER BY p.created DESC";
-        TypedQuery<SocialNetPost> query = em.createQuery(qlString, SocialNetPost.class);
+                " ORDER BY p.logicalCreated DESC";
+        TypedQuery<Apartment> query = em.createQuery(qlString, Apartment.class);
 
         if (!searchText.isEmpty()) {
             query.setParameter("msg", ilike(searchText));
@@ -97,12 +87,12 @@ public class SocialNetServiceImpl implements SocialNetService, InitializingBean 
             query.setParameter("maxPrice", BigDecimal.valueOf(maxPrice));
         }
 
-        List<SocialNetPost> resultList = query
+        List<Apartment> resultList = query
                 .setFirstResult(limitAndOffset.offset)
                 .setMaxResults(limitAndOffset.limit)
                 .getResultList();
 
-        return socialNetPostConverter.toTargetList(resultList);
+        return resultList;
     }
 
     private String ilike(String text) {

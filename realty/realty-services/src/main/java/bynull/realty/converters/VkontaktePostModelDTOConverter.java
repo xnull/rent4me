@@ -26,9 +26,18 @@ public class VkontaktePostModelDTOConverter implements Converter<VkontaktePost, 
     PhoneNumberModelDTOConverter phoneNumberConverter;
 
     @Override
-    public VkontaktePostDTO toTargetType(VkontaktePost post) {
+    public VkontaktePostDTO newTargetType(VkontaktePost in) {
+        return new VkontaktePostDTO();
+    }
+
+    @Override
+    public VkontaktePost newSourceType(VkontaktePostDTO in) {
+        return new VkontaktePost();
+    }
+
+    @Override
+    public VkontaktePostDTO toTargetType(VkontaktePost post, VkontaktePostDTO dto) {
         if (post == null) return null;
-        VkontaktePostDTO dto = new VkontaktePostDTO();
         dto.setId(post.getId());
         dto.setLink(post.getLink());
         dto.setMessage(post.getMessage());
@@ -44,7 +53,7 @@ public class VkontaktePostModelDTOConverter implements Converter<VkontaktePost, 
     }
 
     @Override
-    public VkontaktePost toSourceType(VkontaktePostDTO in) {
+    public VkontaktePost toSourceType(VkontaktePostDTO in, VkontaktePost instance) {
         throw new UnsupportedOperationException();
     }
 }

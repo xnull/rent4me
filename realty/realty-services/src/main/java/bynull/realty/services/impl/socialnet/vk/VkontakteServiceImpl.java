@@ -11,10 +11,7 @@ import bynull.realty.converters.VkontaktePostModelDTOConverter;
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
-import bynull.realty.data.business.Contact;
-import bynull.realty.data.business.PhoneContact;
-import bynull.realty.data.business.PhoneNumber;
-import bynull.realty.data.business.VkontakteApartment;
+import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.dto.ApartmentDTO;
@@ -158,6 +155,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                             post.setRoomCount(roomCount);
                             BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                             post.setRentalFee(rentalFee);
+                            post.setFeePeriod(FeePeriod.MONTHLY);
                             List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
                             Set<Contact> contacts =  phones.stream().map(phone -> {
                                 PhoneContact contact = new PhoneContact();

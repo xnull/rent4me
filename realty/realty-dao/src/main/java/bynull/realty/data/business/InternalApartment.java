@@ -139,6 +139,11 @@ public class InternalApartment extends Apartment {
         return super.getArea();
     }
 
+    @Override
+    public DataSource getDataSource() {
+        return DataSource.INTERNAL;
+    }
+
     public void mergeWith(Apartment apartment) {
         mergeWith(apartment, true);
     }

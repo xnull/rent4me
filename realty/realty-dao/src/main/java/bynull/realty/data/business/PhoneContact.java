@@ -21,4 +21,9 @@ public class PhoneContact extends Contact {
     public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public Type getType() {
+        return Type.PHONE;
+    }
 }

@@ -12,9 +12,18 @@ import org.springframework.stereotype.Component;
 public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, FacebookPageForm> {
 
     @Override
-    public FacebookPageForm toTargetType(FacebookPageDTO in) {
+    public FacebookPageForm newTargetType(FacebookPageDTO in) {
+        return  new FacebookPageForm();
+    }
+
+    @Override
+    public FacebookPageDTO newSourceType(FacebookPageForm in) {
+        return new FacebookPageDTO();
+    }
+
+    @Override
+    public FacebookPageForm toTargetType(FacebookPageDTO in, FacebookPageForm form) {
         if (in == null) return null;
-        FacebookPageForm form = new FacebookPageForm();
         form.setId(in.getId());
         form.setExternalId(in.getExternalId());
         form.setLink(in.getLink());
@@ -23,13 +32,13 @@ public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, Fa
     }
 
     @Override
-    public FacebookPageDTO toSourceType(FacebookPageForm in) {
+    public FacebookPageDTO toSourceType(FacebookPageForm in, FacebookPageDTO dto) {
         if (in == null) return null;
-        FacebookPageDTO dto = new FacebookPageDTO();
         dto.setId(in.getId());
         dto.setExternalId(in.getExternalId());
         dto.setLink(in.getLink());
         dto.setEnabled(in.isEnabled());
         return dto;
     }
+
 }

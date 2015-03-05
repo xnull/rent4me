@@ -12,9 +12,18 @@ import org.springframework.stereotype.Component;
 public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, VkontaktePageForm> {
 
     @Override
-    public VkontaktePageForm toTargetType(VkontaktePageDTO in) {
+    public VkontaktePageForm newTargetType(VkontaktePageDTO in) {
+        return new VkontaktePageForm();
+    }
+
+    @Override
+    public VkontaktePageDTO newSourceType(VkontaktePageForm in) {
+        return new VkontaktePageDTO();
+    }
+
+    @Override
+    public VkontaktePageForm toTargetType(VkontaktePageDTO in, VkontaktePageForm form) {
         if (in == null) return null;
-        VkontaktePageForm form = new VkontaktePageForm();
         form.setId(in.getId());
         form.setExternalId(in.getExternalId());
         form.setLink(in.getLink());
@@ -23,9 +32,8 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
     }
 
     @Override
-    public VkontaktePageDTO toSourceType(VkontaktePageForm in) {
+    public VkontaktePageDTO toSourceType(VkontaktePageForm in, VkontaktePageDTO dto) {
         if (in == null) return null;
-        VkontaktePageDTO dto = new VkontaktePageDTO();
         dto.setId(in.getId());
         dto.setExternalId(in.getExternalId());
         dto.setLink(in.getLink());

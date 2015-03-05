@@ -23,4 +23,9 @@ public class VkontakteApartment extends SocialNetApartment {
     public void setVkontaktePage(VkontaktePage vkontaktePage) {
         this.vkontaktePage = vkontaktePage;
     }
+
+    @Override
+    public DataSource getDataSource() {
+        return DataSource.VKONTAKTE;
+    }
 }

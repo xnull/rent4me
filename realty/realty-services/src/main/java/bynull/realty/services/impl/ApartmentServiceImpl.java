@@ -1,7 +1,10 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.converters.apartments.ApartmentModelDTOConverter;
+import bynull.realty.converters.apartments.ApartmentModelDTOConverterFactory;
 import bynull.realty.dao.*;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.external.SocialNetPost;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
@@ -10,15 +13,15 @@ import bynull.realty.services.api.ApartmentService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +47,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Resource
     ApartmentInfoDeltaRepository apartmentInfoDeltaRepository;
 
+    @Resource
+    ApartmentModelDTOConverterFactory apartmentModelDTOConverterFactory;
+
     @Transactional
     @Override
     public ApartmentDTO create(ApartmentDTO dto) {
@@ -53,7 +59,8 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         InternalApartment created = apartmentRepository.saveAndFlush(apartment);
 
-        return ApartmentDTO.from(created);
+        ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(created);
+        return targetConverter.toTargetType(created);
     }
 
     @Transactional
@@ -136,7 +143,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public ApartmentDTO find(Long id) {
-        return ApartmentDTO.from((InternalApartment) apartmentRepository.findOne(id));
+        Apartment one = apartmentRepository.findOne(id);
+        ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(one);
+
+        return targetConverter.toTargetType(one);
     }
 
     @Transactional
@@ -150,9 +160,14 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentDTO findAuthorizedUserApartment() {
         User user = getAuthorizedUser();
-        return user != null
-                ? ApartmentDTO.from(Iterables.getFirst(user.getApartments(), null))
-                : null;
+        if (user != null) {
+            Apartment first = Iterables.getFirst(user.getApartments(), null);
+            ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(first);
+            return targetConverter.toTargetType(first);
+        }
+        else {
+            return null;
+        }
     }
 
     private User getAuthorizedUser() {
@@ -252,10 +267,33 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         //TODO: change to generic implementation
         return result.stream()
-                .filter(it->it instanceof InternalApartment)
                 .map(it->(InternalApartment)it)
-                .map(ApartmentDTO::from)
+                .map(apartment->{
+                    ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(apartment);
+                    return targetConverter.toTargetType(apartment);
+                })
                 .collect(Collectors.toList())
                 ;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode) {
+        Assert.notNull(text);
+        Assert.notNull(roomsCount);
+
+        Assert.notNull(roomsCount);
+        text = StringUtils.trimToEmpty(text);
+
+
+
+        List<Apartment> posts = apartmentRepository.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
+
+        return posts.stream().map(e -> {
+            ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(e);
+            return targetConverter.toTargetType(e);
+        }).collect(Collectors.toList());
+
+    }
+
 }

@@ -24,9 +24,18 @@ public class SocialNetPostModelDTOConverter implements Converter<SocialNetPost, 
     PhoneNumberModelDTOConverter phoneNumberDTOConverter;
 
     @Override
-    public SocialNetPostDTO toTargetType(SocialNetPost post) {
+    public SocialNetPostDTO newTargetType(SocialNetPost in) {
+        return new SocialNetPostDTO();
+    }
+
+    @Override
+    public SocialNetPost newSourceType(SocialNetPostDTO in) {
+        return new SocialNetPost();
+    }
+
+    @Override
+    public SocialNetPostDTO toTargetType(SocialNetPost post, SocialNetPostDTO dto) {
         if (post == null) return null;
-        SocialNetPostDTO dto = new SocialNetPostDTO();
         dto.setId(post.getId().toStringRepresentation());
         dto.setLink(post.getLink());
         dto.setMessage(post.getMessage());
@@ -44,7 +53,7 @@ public class SocialNetPostModelDTOConverter implements Converter<SocialNetPost, 
     }
 
     @Override
-    public SocialNetPost toSourceType(SocialNetPostDTO in) {
+    public SocialNetPost toSourceType(SocialNetPostDTO in, SocialNetPost instance) {
         throw new UnsupportedOperationException();
     }
 }

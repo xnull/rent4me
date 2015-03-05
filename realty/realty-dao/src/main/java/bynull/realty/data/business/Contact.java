@@ -62,6 +62,8 @@ public abstract class Contact {
         return copy(updated);
     }
 
+    public abstract Type getType();
+
     @PrePersist
     void prePersist() {
         Date now = new Date();

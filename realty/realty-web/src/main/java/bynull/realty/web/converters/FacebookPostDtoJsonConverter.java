@@ -20,11 +20,20 @@ public class FacebookPostDtoJsonConverter implements Converter<FacebookPostDTO, 
     FacebookPageDtoJsonConverter facebookPageConverter;
 
     @Override
-    public FacebookPostJSON toTargetType(FacebookPostDTO in) {
+    public FacebookPostJSON newTargetType(FacebookPostDTO in) {
+        return new FacebookPostJSON();
+    }
+
+    @Override
+    public FacebookPostDTO newSourceType(FacebookPostJSON in) {
+        return new FacebookPostDTO();
+    }
+
+    @Override
+    public FacebookPostJSON toTargetType(FacebookPostDTO in, FacebookPostJSON json) {
         if (in == null) {
             return null;
         }
-        FacebookPostJSON json = new FacebookPostJSON();
         json.setId(in.getId());
         json.setLink(in.getLink());
         json.setMessage(in.getMessage());
@@ -39,7 +48,7 @@ public class FacebookPostDtoJsonConverter implements Converter<FacebookPostDTO, 
     }
 
     @Override
-    public FacebookPostDTO toSourceType(FacebookPostJSON in) {
+    public FacebookPostDTO toSourceType(FacebookPostJSON in, FacebookPostDTO instance) {
         throw new UnsupportedOperationException();
     }
 }

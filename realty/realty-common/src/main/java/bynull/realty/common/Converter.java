@@ -26,7 +26,18 @@ public interface Converter<ST,
         return in.stream().map(this::toSourceType).collect(Collectors.toSet());
     }
 
-    TT toTargetType(ST in);
+    TT newTargetType(ST in);
+    ST newSourceType(TT in);
 
-    ST toSourceType(TT in);
+    TT toTargetType(ST in, TT instance);
+
+    default TT toTargetType(ST in) {
+        return toTargetType(in, newTargetType(in));
+    }
+
+    ST toSourceType(TT in, ST instance);
+
+    default ST toSourceType(TT in) {
+        return toSourceType(in, newSourceType(in));
+    }
 }

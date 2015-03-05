@@ -1,15 +1,12 @@
 package bynull.realty.web.rest;
 
+import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dto.SocialNetPostDTO;
-import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
-import bynull.realty.services.api.FindMode;
-import bynull.realty.services.api.RoomCount;
 import bynull.realty.services.api.SocialNetService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.converters.FacebookPostDtoJsonConverter;
 import bynull.realty.web.converters.SocialNetPostDtoJsonConverter;
-import bynull.realty.web.json.FacebookPostJSON;
 import bynull.realty.web.json.SocialNetPostJSON;
 import org.springframework.stereotype.Component;
 
@@ -61,10 +58,10 @@ public class SocialNetRestResource {
                 .withOffset(offset)
                 .create();
 
-        FindMode findMode = FindMode.valueOf(type);
+        ApartmentRepository.FindMode findMode = ApartmentRepository.FindMode.valueOf(type);
 
-        Set<RoomCount> roomsCount = rooms != null
-                ? rooms.stream().map(RoomCount::findByValueOrFail).collect(Collectors.toSet())
+        Set<ApartmentRepository.RoomCount> roomsCount = rooms != null
+                ? rooms.stream().map(ApartmentRepository.RoomCount::findByValueOrFail).collect(Collectors.toSet())
                 : Collections.emptySet();
 
         List<SocialNetPostDTO> found = socialNetService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);

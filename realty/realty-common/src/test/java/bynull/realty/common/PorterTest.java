@@ -1,5 +1,6 @@
-package bynull.realty.components.text;
+package bynull.realty.common;
 
+import bynull.realty.common.Porter;
 import org.junit.Before;
 import org.junit.Test;
 

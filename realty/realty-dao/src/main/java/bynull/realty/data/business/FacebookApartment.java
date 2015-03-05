@@ -29,4 +29,9 @@ public class FacebookApartment extends SocialNetApartment {
     public void setFacebookPage(FacebookPageToScrap facebookPage) {
         this.facebookPage = facebookPage;
     }
+
+    @Override
+    public DataSource getDataSource() {
+        return DataSource.FACEBOOK;
+    }
 }

@@ -241,6 +241,8 @@ public abstract class Apartment implements Serializable {
         this.published = published;
     }
 
+    public abstract DataSource getDataSource();
+
     @PrePersist
     void prePersist() {
         Date date = new Date();
