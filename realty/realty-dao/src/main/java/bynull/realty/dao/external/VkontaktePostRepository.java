@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by dionis on 03/02/15.
  */
+@Deprecated
 public interface VkontaktePostRepository extends JpaRepository<VkontaktePost, Long> {
     List<VkontaktePost> findByExternalIdIn(List<String> externalIds);
 

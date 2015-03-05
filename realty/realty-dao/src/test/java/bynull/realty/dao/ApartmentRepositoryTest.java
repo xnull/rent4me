@@ -1,7 +1,9 @@
 package bynull.realty.dao;
 
 import bynull.realty.DbTest;
+import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.common.GeoPoint;
 import com.google.common.collect.Iterables;
 import org.hamcrest.CoreMatchers;
@@ -23,6 +25,9 @@ import static org.junit.Assert.fail;
 public class ApartmentRepositoryTest extends DbTest {
     @Resource
     ApartmentRepository repository;
+
+    @Resource
+    FacebookPageToScrapRepository facebookPageToScrapRepository;
 
     @Test
     public void insert() {
@@ -74,7 +79,11 @@ public class ApartmentRepositoryTest extends DbTest {
 
     @Test
     public void insertFacebookAnyFloorNumberCountShouldBeOk() {
-        User user = createUser();
+        FacebookPageToScrap fbPage = new FacebookPageToScrap();
+        fbPage.setExternalId("abc");
+
+        fbPage = facebookPageToScrapRepository.saveAndFlush(fbPage);
+
         FacebookApartment apartment = new FacebookApartment();
         apartment.setTypeOfRent(RentType.LONG_TERM);
         apartment.setRentalFee(new BigDecimal("1000"));
@@ -84,8 +93,9 @@ public class ApartmentRepositoryTest extends DbTest {
         apartment.setRoomCount(1);
         apartment.setLocation(new GeoPoint());
         apartment.setAddressComponents(new AddressComponents());
+        apartment.setFacebookPage(fbPage);
+        apartment.setExternalId("asd");
         apartment = repository.saveAndFlush(apartment);
-
 
         flushAndClear();
 

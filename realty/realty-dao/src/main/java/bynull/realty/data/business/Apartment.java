@@ -61,6 +61,10 @@ public abstract class Apartment implements Serializable {
     @Column(name = "updated_dt")
     private Date updated;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "logical_created_dt")
+    private Date logicalCreated;
+
     @Column(name = "type_of_rent")
     @Enumerated(EnumType.STRING)
     private RentType typeOfRent;
@@ -139,6 +143,14 @@ public abstract class Apartment implements Serializable {
 
     public void setUpdated(Date updated) {
         this.updated = copy(updated);
+    }
+
+    public Date getLogicalCreated() {
+        return copy(logicalCreated);
+    }
+
+    public void setLogicalCreated(Date logicalCreated) {
+        this.logicalCreated = logicalCreated;
     }
 
     public RentType getTypeOfRent() {
@@ -234,6 +246,9 @@ public abstract class Apartment implements Serializable {
         Date date = new Date();
         setCreated(date);
         setUpdated(date);
+        if(getLogicalCreated() == null) {
+            setLogicalCreated(date);
+        }
     }
 
     @PreUpdate

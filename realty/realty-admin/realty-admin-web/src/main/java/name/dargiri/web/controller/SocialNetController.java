@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -205,7 +206,8 @@ public class SocialNetController {
         ModelAndView mav = new ModelAndView("socialnet/vk/vk_posts_list");
         long totalElements = vkontakteService.countByQuery(text);
         PaginationHelper paginationHelper = new PaginationHelper(totalElements, page, limit, "/secure/socialnet/vk/posts");
-        List<VkontaktePostDTO> posts = vkontakteService.findPosts(text, new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
+        //TODO: fix it later
+        List<VkontaktePostDTO> posts = Collections.emptyList();//vkontakteService.findPosts(text, new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
         List<VkontaktePostForm> forms = vkPostConverter.toTargetList(posts);
         mav.addObject("paginationHelper", paginationHelper);
         mav.addObject("totalPages", totalElements);

@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by dionis on 02/01/15.
  */
+@Deprecated
 public interface FacebookPageToScrapRepository extends JpaRepository<FacebookPageToScrap, Long> {
 }

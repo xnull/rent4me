@@ -1,7 +1,10 @@
 package bynull.realty.dao;
 
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.business.FacebookApartment;
+import bynull.realty.data.business.VkontakteApartment;
 import bynull.realty.data.common.GeoPoint;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,4 +51,38 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
             @Param("countryCode") String countryCode,
             @Param("limit") int limit,
             @Param("offset") int offset);
+
+    // VK specific
+
+    @Query("select a from VkontakteApartment a where a.externalId=:externalId order by created desc")
+    List<VkontakteApartment> findVkAparmentsByExternalIdNewest(@Param("externalId") String externalId, Pageable pageable);
+
+    @Query("select a from VkontakteApartment a where a.externalId in (:extenalIds) order by created desc")
+    List<VkontakteApartment> findVkApartmentsByExternalIdIn(@Param("extenalIds")List<String> externalIds);
+
+    @Query("select a from VkontakteApartment a")
+    Page<VkontakteApartment> findVKAll(Pageable pageable);
+
+    @Query("select count(a) from VkontakteApartment a")
+    long countVK();
+
+    @Query("select a from VkontakteApartment a where lower(a.description) like :text order by created desc")
+    List<VkontakteApartment> findVkByQuery(@Param("text") String text, Pageable pageable);
+
+    @Query("select count(a) from VkontakteApartment a where lower(a.description) like :text")
+    long countVkByQuery(@Param("text") String text);
+
+    // FB specific
+
+    @Query("select a from FacebookApartment a where a.externalId=:externalId order by created desc")
+    List<FacebookApartment> finFBAparmentsByExternalIdNewest(@Param("externalId") String externalId, Pageable pageable);
+
+    @Query("select a from FacebookApartment a where a.externalId in (:extenalIds) order by created desc")
+    List<FacebookApartment> findFBApartmentsByExternalIdIn(@Param("extenalIds")List<String> externalIds);
+
+    @Query("select count(a) from FacebookApartment a")
+    long countFB();
+
+    @Query("select a from FacebookApartment a where lower(a.description) like :text order by created desc")
+    Page<FacebookApartment> findFBAll(Pageable pageable);
 }
