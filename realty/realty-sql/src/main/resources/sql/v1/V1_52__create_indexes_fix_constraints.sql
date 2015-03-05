@@ -1,5 +1,7 @@
+DELETE FROM apartments where data_source<>'INTERNAL';
+
 CREATE UNIQUE INDEX apartments$unique_external_id_idx ON apartments USING BTREE (external_id, data_source)
-  WHERE external_id IS NOT NULL;
+  WHERE external_id IS NOT NULL and external_id <> '';
 
 CREATE INDEX apartments$description__idx ON apartments USING GIN (lower(description) gin_trgm_ops);
 CREATE INDEX apartments$rental_fee__idx ON apartments USING BTREE (rental_fee);
