@@ -170,6 +170,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                             post.setExternalId(postItemDTO.getId());
                             post.setLink(postItemDTO.getLink());
                             post.setDescription(postItemDTO.getMessage());
+                            post.setPublished(true);
 
                             post.setLogicalCreated(postItemDTO.getCreatedDtime());
 

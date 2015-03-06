@@ -51,6 +51,7 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
         json.setRentalFee(apartment.getRentalFee());
         json.setFeePeriod(apartment.getFeePeriod());
         json.setPublished(apartment.isPublished());
+        json.setDataSource(ApartmentJSON.DataSource.from(apartment.getDataSource()));
 
         List<? extends MetroJSON> metros = metroDtoJsonConverter.toTargetList(apartment.getMetros());
         json.setMetros(metros);

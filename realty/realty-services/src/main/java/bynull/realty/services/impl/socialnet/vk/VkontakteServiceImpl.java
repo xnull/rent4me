@@ -148,6 +148,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                         for (VKHelperComponent.VkWallPostDTO postItemDTO : dtosToPersist) {
                             VkontakteApartment post = postItemDTO.toInternal();
                             post.setVkontaktePage(vkPage);
+                            post.setPublished(true);
                             String message = post.getDescription();
                             Set<MetroEntity> matchedMetros = matchMetros(metros, message);
                             post.setMetros(matchedMetros);

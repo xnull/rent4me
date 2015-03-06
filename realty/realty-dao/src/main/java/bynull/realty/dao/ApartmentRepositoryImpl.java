@@ -61,7 +61,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
 
         String searchText = text.isEmpty() ? "" : text.length() > 5 ? porter.stem(text) : text;
 
-        String qlString = "select p from Apartment p where (" + findModeJPQL + ")" +
+        String qlString = "select p from Apartment p where p.published=true AND (" + findModeJPQL + ")" +
                 (!searchText.isEmpty() ? " AND lower(p.description) like :msg " : "") +
 //                (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
                 (!roomsCount.isEmpty() ? " AND p.roomCount IN (:roomCounts) " : "") +

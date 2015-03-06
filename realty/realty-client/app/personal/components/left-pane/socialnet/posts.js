@@ -67,17 +67,23 @@ var Post = React.createClass({
             </div>
             );
 
-        var phoneNumber = item.phone_number ? (
-            <div>
-            Тел.: {item.phone_number.national_formatted_number || item.phone_number.raw_number }
-            </div>
-            ) : null;
+        var hasContacts = !!item.contacts;
+
+        var phoneNumbers = hasContacts ? item.contacts.filter(contact=>contact.type=='PHONE').map(contact=>contact.phone) : [];
+
+        var phoneNumbersDisplay = phoneNumbers.map(phone => {
+            return (
+                <div>
+                    Тел.: {phone.national_formatted_number || phone.raw_number }
+                </div>
+            );
+        });
 
         var contactInfo = (
             <div className="col-xs-6 col-lg-4">
                 <h3 className="media-heading"> Контакты:</h3>
                 <div>
-                      {phoneNumber}
+                      {phoneNumbersDisplay}
                 Link FB
                 Link VK
                 </div>
@@ -116,7 +122,7 @@ var Post = React.createClass({
         var message = (
             <div className="panel-body">
                 <div className="row">
-                    <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.message)}}>
+                    <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.description)}}>
                     </div>
                 </div>
             </div>
