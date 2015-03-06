@@ -28,7 +28,7 @@ public class VkontaktePostDTO {
     private Date created;
     private Date updated;
     private VkontaktePageDTO page;
-    private Set<MetroDTO> metros;
+    private Set<? extends MetroDTO> metros;
     private PhoneNumberDTO phoneNumber;
 
     public Date getCreated() {

@@ -31,16 +31,26 @@ public class ApartmentDTO {
     private RentType typeOfRent;
     private BigDecimal rentalFee;
     private FeePeriod feePeriod;
-    private boolean published;
-
-    private Date created;
-    private Date updated;
-
-    private List<ApartmentPhotoDTO> photos = Collections.emptyList();
-    private List<String> addedTempPhotoGUIDs = Collections.emptyList();
-    private List<String> deletePhotoGUIDs = Collections.emptyList();
-    private UserDTO owner;
     private Apartment.DataSource dataSource;
+
+    private boolean published;
+    private Date created;
+
+    private Date updated;
+    private List<? extends MetroDTO> metros;
+
+    //internal specific
+    private UserDTO owner;
+
+    private List<ApartmentPhotoDTO> photos;
+    private List<String> addedTempPhotoGUIDs;
+    private List<String> deletePhotoGUIDs;
+
+    /**
+     * External specific.
+     */
+    private List<String> imageUrls;
+    private List<? extends ContactDTO> contacts;
 
     public Date getCreated() {
         return copy(created);
@@ -66,30 +76,15 @@ public class ApartmentDTO {
         this.photos = new ArrayList<>(photos);
     }
 
-    public List<String> getAddedTempPhotoGUIDs() {
-        return addedTempPhotoGUIDs;
-    }
-
     public void setAddedTempPhotoGUIDs(List<String> addedTempPhotoGUIDs) {
         this.addedTempPhotoGUIDs = new ArrayList<>(addedTempPhotoGUIDs);
-    }
-
-    public List<String> getDeletePhotoGUIDs() {
-        return deletePhotoGUIDs;
     }
 
     public void setDeletePhotoGUIDs(List<String> deletePhotoGUIDs) {
         this.deletePhotoGUIDs = new ArrayList<>(deletePhotoGUIDs);
     }
 
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean published) {
-        this.published = published;
-    }
-
+    //TODO: think about moving it to converter?
     public InternalApartment toInternal() {
         InternalApartment apartment = new InternalApartment();
         apartment.setId(getId());
@@ -111,6 +106,7 @@ public class ApartmentDTO {
         return apartment;
     }
 
+    //TODO: think about moving it to converter?
     public ApartmentInfoDelta toApartmentInfoDelta() {
         ApartmentInfoDelta apartment = new ApartmentInfoDelta();
 
@@ -124,13 +120,5 @@ public class ApartmentDTO {
         apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
 
         return apartment;
-    }
-
-    public UserDTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserDTO owner) {
-        this.owner = owner;
     }
 }

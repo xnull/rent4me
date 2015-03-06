@@ -114,7 +114,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                                                     .stream()
                                                     .filter(FacebookPageToScrap::isEnabled)
                                                     .collect(Collectors.toList());
-        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
@@ -282,7 +282,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
     @Transactional
     @Override
     public void reparseExistingFBPosts() {
-        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
         int countOfMatchedPosts = 0;
         Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "id");
         Page<FacebookApartment> postsPage = apartmentRepository.findFBAll(pageable);
@@ -324,7 +324,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         log.info("Total count of matched posts to metro stations: [{}]. Total posts: [{}]", countOfMatchedPosts, total);
     }
 
-    private Set<MetroEntity> matchMetros(List<MetroDTO> metros, String message) {
+    private Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message) {
         log.info(">> Matching metros started");
         try {
             Set<MetroEntity> matchedMetros = new HashSet<>();

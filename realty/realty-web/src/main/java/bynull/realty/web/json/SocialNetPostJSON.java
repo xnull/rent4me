@@ -41,7 +41,7 @@ public class SocialNetPostJSON {
     @JsonProperty("page")
     private FacebookPageJSON page;
     @JsonProperty("metros")
-    private Set<MetroJSON> metros;
+    private Set<? extends MetroJSON> metros;
     @JsonProperty("social_network")
     private SocialNetwork socialNetwork;
     @JsonProperty("phone_number")

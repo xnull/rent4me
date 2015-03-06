@@ -13,7 +13,7 @@ import java.util.List;
 public interface VkontakteService {
     void syncWithVK();
 
-    List<VkontaktePageDTO> listAllPages();
+    List<? extends VkontaktePageDTO> listAllPages();
 
     void delete(long vkPageId);
 

@@ -64,8 +64,8 @@ public class SocialNetRestResource {
                 ? rooms.stream().map(ApartmentRepository.RoomCount::findByValueOrFail).collect(Collectors.toSet())
                 : Collections.emptySet();
 
-        List<SocialNetPostDTO> found = socialNetService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
-        List<SocialNetPostJSON> result = socialNetPostConverter.toTargetList(found);
+        List<? extends SocialNetPostDTO> found = socialNetService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
+        List<? extends SocialNetPostJSON> result = socialNetPostConverter.toTargetList(found);
 
         return Response
                 .ok(result)

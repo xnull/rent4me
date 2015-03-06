@@ -38,7 +38,7 @@ psql -c "CREATE ROLE realty_dev_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROL
 psql -c "CREATE ROLE realty_dev_user LOGIN PASSWORD 'password' NOINHERIT;"
 psql -c "GRANT realty_dev_group TO realty_dev_user"
 
-createdb -O realty_test_user realty_devdb
+createdb -O realty_dev_user realty_devdb
 
  psql --dbname=realty_devdb -c "CREATE EXTENSION postgis;"
  psql --dbname=realty_devdb -c "CREATE EXTENSION postgis_topology;"

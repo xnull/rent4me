@@ -24,7 +24,7 @@ public class FacebookPostForm {
     private Date created;
     private Date updated;
     private FacebookPageForm page;
-    private Set<MetroForm> metros;
+    private Set<? extends MetroForm> metros;
     private PhoneNumberForm phoneNumber;
 
     public Date getCreated() {

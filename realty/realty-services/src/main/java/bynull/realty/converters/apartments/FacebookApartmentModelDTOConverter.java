@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by dionis on 3/5/15.
  */
 @Component
-public class FacebookApartmentModelDTOConverter extends BaseApartmentModelDTOConverter<FacebookApartment> {
+public class FacebookApartmentModelDTOConverter extends SocialNetApartmentModelDTOConverter<FacebookApartment> {
     @Override
     public ApartmentDTO toTargetType(FacebookApartment apartment, ApartmentDTO dto) {
         return super.toTargetType(apartment, dto);

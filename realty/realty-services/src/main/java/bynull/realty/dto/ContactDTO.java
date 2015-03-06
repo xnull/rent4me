@@ -14,5 +14,7 @@ import java.util.Set;
 public class ContactDTO {
     private Long id;
     private Contact.Type type;
+
+    //phone specific
     private PhoneNumberDTO phoneNumber;
 }

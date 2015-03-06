@@ -97,7 +97,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                                                 .stream()
                                                 .filter(VkontaktePage::isEnabled)
                                                 .collect(Collectors.toList());
-        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
@@ -175,7 +175,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
         }
     }
 
-    private Set<MetroEntity> matchMetros(List<MetroDTO> metros, String message) {
+    private Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message) {
         log.info(">> Matching metros started");
         try {
             Set<MetroEntity> matchedMetros = new HashSet<>();
@@ -199,7 +199,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
     @Transactional(readOnly = true)
     @Override
-    public List<VkontaktePageDTO> listAllPages() {
+    public List<? extends VkontaktePageDTO> listAllPages() {
         return vkontaktePageConverter.toTargetList(vkontaktePageRepository.findAll(new Sort(Sort.Direction.DESC, "updated")));
     }
 
@@ -245,7 +245,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
     @Transactional
     @Override
     public void reparseExistingVKPosts() {
-        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
         int countOfMatchedPosts = 0;
         Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "id");
         Page<VkontakteApartment> postsPage = apartmentRepository.findVKAll(pageable);

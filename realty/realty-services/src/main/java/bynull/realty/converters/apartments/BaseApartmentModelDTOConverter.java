@@ -1,9 +1,12 @@
 package bynull.realty.converters.apartments;
 
+import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.data.business.*;
 import bynull.realty.dto.*;
 import bynull.realty.utils.HibernateUtil;
 
+import javax.annotation.Resource;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,6 +14,10 @@ import java.util.stream.Collectors;
  * Created by dionis on 3/5/15.
  */
 public abstract class BaseApartmentModelDTOConverter<T extends Apartment> implements ApartmentModelDTOConverter<T> {
+
+    @Resource
+    MetroModelDTOConverter metroModelDTOConverter;
+
     @Override
     public ApartmentDTO toTargetType(T apartment, ApartmentDTO result) {
         if (apartment == null) return null;
@@ -27,10 +34,14 @@ public abstract class BaseApartmentModelDTOConverter<T extends Apartment> implem
         result.setRentalFee(apartment.getRentalFee());
         result.setFeePeriod(apartment.getFeePeriod());
 
-        result.setCreated(apartment.getCreated());
+        result.setCreated(apartment.getLogicalCreated());
         result.setUpdated(apartment.getUpdated());
         result.setDataSource(apartment.getDataSource());
-                result.setPublished(apartment.isPublished());
+        result.setPublished(apartment.isPublished());
+
+        List<? extends MetroDTO> metros = metroModelDTOConverter.toTargetList(apartment.getMetros());
+        result.setMetros(metros);
+
 
         return result;
     }

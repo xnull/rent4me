@@ -10,20 +10,24 @@ import java.util.stream.Collectors;
  */
 public interface Converter<ST,
         TT> {
-    default List<TT> toTargetList(Collection<? extends ST> in) {
-        return in.stream().map(this::toTargetType).collect(Collectors.toList());
+    default List<? extends TT> toTargetList(Collection<? extends ST> in) {
+        if(in==null) return null;
+        return in.stream().filter(it -> it != null).map(this::toTargetType).collect(Collectors.toList());
     }
 
-    default List<ST> toSourceList(Collection<? extends TT> in) {
-        return in.stream().map(this::toSourceType).collect(Collectors.toList());
+    default List<? extends ST> toSourceList(Collection<? extends TT> in) {
+        if(in==null) return null;
+        return in.stream().filter(it -> it != null).map(this::toSourceType).collect(Collectors.toList());
     }
 
-    default Set<TT> toTargetSet(Collection<? extends ST> in) {
-        return in.stream().map(this::toTargetType).collect(Collectors.toSet());
+    default Set<? extends TT> toTargetSet(Collection<? extends ST> in) {
+        if(in==null) return null;
+        return in.stream().filter(it -> it != null).map(this::toTargetType).collect(Collectors.toSet());
     }
 
-    default Set<ST> toSourceSet(Collection<? extends TT> in) {
-        return in.stream().map(this::toSourceType).collect(Collectors.toSet());
+    default Set<? extends ST> toSourceSet(Collection<? extends TT> in) {
+        if(in==null) return null;
+        return in.stream().filter(it -> it != null).map(this::toSourceType).collect(Collectors.toSet());
     }
 
     TT newTargetType(ST in);

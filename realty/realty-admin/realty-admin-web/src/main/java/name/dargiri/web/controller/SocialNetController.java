@@ -65,7 +65,7 @@ public class SocialNetController {
     public ModelAndView indexFB() {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_page_list");
         List<FacebookPageDTO> pages = facebookService.listAllPages();
-        List<FacebookPageForm> forms = fbPageConverter.toTargetList(pages);
+        List<? extends FacebookPageForm> forms = fbPageConverter.toTargetList(pages);
         mav.addObject("pages", forms);
         return mav;
     }
@@ -127,7 +127,7 @@ public class SocialNetController {
         long totalElements = facebookService.countByQuery(text);
         PaginationHelper paginationHelper = new PaginationHelper(totalElements, page, limit, "/secure/socialnet/fb/posts");
         List<FacebookPostDTO> posts = facebookService.findPosts(text, new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
-        List<FacebookPostForm> forms = fbPostConverter.toTargetList(posts);
+        List<? extends FacebookPostForm> forms = fbPostConverter.toTargetList(posts);
         mav.addObject("paginationHelper", paginationHelper);
         mav.addObject("totalPages", totalElements);
         mav.addObject("searchText", text);
@@ -144,8 +144,8 @@ public class SocialNetController {
     @RequestMapping(value = "vk")
     public ModelAndView indexVK() {
         ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_list");
-        List<VkontaktePageDTO> pages = vkontakteService.listAllPages();
-        List<VkontaktePageForm> forms = vkPageConverter.toTargetList(pages);
+        List<? extends VkontaktePageDTO> pages = vkontakteService.listAllPages();
+        List<? extends VkontaktePageForm> forms = vkPageConverter.toTargetList(pages);
         mav.addObject("pages", forms);
         return mav;
     }
@@ -208,7 +208,7 @@ public class SocialNetController {
         PaginationHelper paginationHelper = new PaginationHelper(totalElements, page, limit, "/secure/socialnet/vk/posts");
         //TODO: fix it later
         List<VkontaktePostDTO> posts = Collections.emptyList();//vkontakteService.findPosts(text, new PageRequest(paginationHelper.getCurrentPage() - 1, limit, Sort.Direction.DESC, "created"));
-        List<VkontaktePostForm> forms = vkPostConverter.toTargetList(posts);
+        List<? extends VkontaktePostForm> forms = vkPostConverter.toTargetList(posts);
         mav.addObject("paginationHelper", paginationHelper);
         mav.addObject("totalPages", totalElements);
         mav.addObject("searchText", text);

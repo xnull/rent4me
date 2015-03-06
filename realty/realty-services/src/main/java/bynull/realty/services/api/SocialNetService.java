@@ -11,5 +11,5 @@ import java.util.Set;
  * Created by dionis on 04/02/15.
  */
 public interface SocialNetService {
-    List<SocialNetPostDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode);
+    List<? extends SocialNetPostDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode);
 }

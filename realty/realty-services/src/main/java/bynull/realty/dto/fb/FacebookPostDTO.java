@@ -27,7 +27,7 @@ public class FacebookPostDTO {
     private Date created;
     private Date updated;
     private FacebookPageDTO page;
-    private Set<MetroDTO> metros;
+    private Set<? extends MetroDTO> metros;
     private PhoneNumberDTO phoneNumberDTO;
 
     public Date getCreated() {
