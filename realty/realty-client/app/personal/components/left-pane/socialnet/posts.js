@@ -11,11 +11,22 @@ var Post = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
-        var firstImage = _.first(item.img_urls.map(function (photo) {
-            return (
-                <img className="media-object" width="160"  src={photo}/>
+
+        var firstImage;
+
+        if(item.data_source == 'INTERNAL') {
+            firstImage = item.photos ? _.first(item.photos.map(photo => {
+                return (
+                    <img className="media-object" width="160"  src={photo.small_thumbnail_url}/>
                 );
-        }));
+            })) : null;
+        } else {
+            firstImage = item.img_urls ? _.first(item.img_urls.map(function (photo) {
+                return (
+                    <img className="media-object" width="160"  src={photo}/>
+                );
+            })) : null;
+        }
 
 
         var metroElements = item.metros.map(function (metro) {
