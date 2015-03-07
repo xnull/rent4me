@@ -5,6 +5,11 @@
 var React = require('react');
 var AuthComponent = require('./socialNetAuth');
 
+var RoomsCount = require('../../shared/ui/rooms-count');
+var PriceRange = require('../../shared/ui/price-range');
+var RentType = require('../../shared/ui/rent-type');
+
+
 var HeaderComponent = React.createClass({
     render: function () {
         var sectionStyle = {
@@ -25,11 +30,34 @@ var HeaderComponent = React.createClass({
                     </header>
                     <footer>
                         <div className="row">
+                            <div className='col-centered'>
+                                <div className="panel">
+                                    <div className="panel-body">
+                                        <form className="form" role="form">
+                                            <div className='row'>
+                                                <div className="col-md-12">
+                                                    <RentType/>
+                                                    <RoomsCount uiSize='4' uiLabelSize='3' />
+                                                    <PriceRange uiSize='5' uiLabelSize='2' />
+                                                </div>
+                                            </div>
 
-                            <div className="col-centered">
-                                <input type="submit" className="button" value="Подробности" onClick={ function () {
-                                    window.location.href = "#first"
-                                }}/>
+                                            <div className='row'>
+                                                <div className="col-md-12">
+                                                    <div className="col-md-10">
+                                                        <input type="text" className="form-control" value="you"
+                                                            placeholder="Поиск по адресу, метро, улице, району">
+                                                        </input>
+                                                    </div>
+                                                    <div className="col-md-2">
+                                                        <a className="btn btn-primary">Найти</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </footer>
