@@ -89,8 +89,8 @@ var SocialNetActions = {
 
         var limit = SocialNetStore.getLimit();
         var offset = SocialNetStore.getOffset();
-
-        var url = '/rest/social/search?text=' + (text ? text : '') + "&type=" + type + "&with_subway=" + (withSubway ? true : false) + "&limit=" + limit + "&offset=" + offset;
+        //TODO: refactor & unify.
+        var url = '/rest/apartments/search?text=' + (text ? text : '') + "&type=" + type + "&with_subway=" + (withSubway ? true : false) + "&limit=" + limit + "&offset=" + offset;
 
         if (oneRoomAptSelected) {
             url += "&rooms=1";

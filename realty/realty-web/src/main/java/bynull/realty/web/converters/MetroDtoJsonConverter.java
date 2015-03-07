@@ -11,7 +11,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
     @Override
-    public MetroJSON toTargetType(MetroDTO in) {
+    public MetroJSON newTargetType(MetroDTO in) {
+        return null;
+    }
+
+    @Override
+    public MetroDTO newSourceType(MetroJSON in) {
+        return null;
+    }
+
+    @Override
+    public MetroJSON toTargetType(MetroDTO in, MetroJSON instance) {
         if (in == null) {
             return null;
         }
@@ -22,11 +32,10 @@ public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
     }
 
     @Override
-    public MetroDTO toSourceType(MetroJSON in) {
+    public MetroDTO toSourceType(MetroJSON in, MetroDTO dto) {
         if (in == null) {
             return null;
         }
-        MetroDTO dto = new MetroDTO();
         dto.setId(dto.getId());
         dto.setStationName(dto.getStationName());
         return dto;

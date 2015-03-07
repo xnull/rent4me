@@ -1,11 +1,10 @@
 package bynull.realty.services.impl.socialnet;
 
-import bynull.realty.components.text.Porter;
+import bynull.realty.common.Porter;
 import bynull.realty.converters.SocialNetPostModelDTOConverter;
+import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.data.business.external.SocialNetPost;
 import bynull.realty.dto.SocialNetPostDTO;
-import bynull.realty.services.api.FindMode;
-import bynull.realty.services.api.RoomCount;
 import bynull.realty.services.api.SocialNetService;
 import bynull.realty.util.LimitAndOffset;
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +44,7 @@ public class SocialNetServiceImpl implements SocialNetService, InitializingBean 
 
     @Transactional(readOnly = true)
     @Override
-    public List<SocialNetPostDTO> findPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, FindMode findMode) {
+    public List<? extends SocialNetPostDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
 

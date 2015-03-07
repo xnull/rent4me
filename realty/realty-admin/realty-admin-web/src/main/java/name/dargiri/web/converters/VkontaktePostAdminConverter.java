@@ -23,11 +23,21 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
     private PhoneNumberAdminConverter phoneNumberConverter;
 
     @Override
-    public VkontaktePostForm toTargetType(VkontaktePostDTO in) {
+    public VkontaktePostForm newTargetType(VkontaktePostDTO in) {
+        return new VkontaktePostForm();
+    }
+
+    @Override
+    public VkontaktePostDTO newSourceType(VkontaktePostForm in) {
+        return new VkontaktePostDTO();
+    }
+
+    @Override
+    public VkontaktePostForm toTargetType(VkontaktePostDTO in, VkontaktePostForm form) {
         if (in == null) {
             return null;
         }
-        VkontaktePostForm form = new VkontaktePostForm();
+
         form.setLink(in.getLink());
         form.setMessage(in.getMessage());
         form.setRoomCount(in.getRoomCount());
@@ -42,10 +52,9 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
     }
 
     @Override
-    public VkontaktePostDTO toSourceType(VkontaktePostForm in) {
+    public VkontaktePostDTO toSourceType(VkontaktePostForm in, VkontaktePostDTO dto) {
         if (in == null) return null;
 
-        VkontaktePostDTO dto = new VkontaktePostDTO();
         dto.setLink(in.getLink());
         dto.setMessage(in.getMessage());
         dto.setRoomCount(in.getRoomCount());
@@ -58,4 +67,5 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
         dto.setPhoneNumber(phoneNumberConverter.toSourceType(in.getPhoneNumber()));
         return dto;
     }
+
 }

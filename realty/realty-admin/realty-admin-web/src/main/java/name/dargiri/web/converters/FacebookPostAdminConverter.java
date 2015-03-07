@@ -23,11 +23,20 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
     private PhoneNumberAdminConverter phoneNumberConverter;
 
     @Override
-    public FacebookPostForm toTargetType(FacebookPostDTO in) {
+    public FacebookPostForm newTargetType(FacebookPostDTO in) {
+        return new FacebookPostForm();
+    }
+
+    @Override
+    public FacebookPostDTO newSourceType(FacebookPostForm in) {
+        return new FacebookPostDTO();
+    }
+
+    @Override
+    public FacebookPostForm toTargetType(FacebookPostDTO in, FacebookPostForm form) {
         if (in == null) {
             return null;
         }
-        FacebookPostForm form = new FacebookPostForm();
         form.setLink(in.getLink());
         form.setMessage(in.getMessage());
         form.setRoomCount(in.getRoomCount());
@@ -42,10 +51,9 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
     }
 
     @Override
-    public FacebookPostDTO toSourceType(FacebookPostForm in) {
+    public FacebookPostDTO toSourceType(FacebookPostForm in, FacebookPostDTO dto) {
         if (in == null) return null;
 
-        FacebookPostDTO dto = new FacebookPostDTO();
         dto.setLink(in.getLink());
         dto.setMessage(in.getMessage());
         dto.setRoomCount(in.getRoomCount());

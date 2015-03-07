@@ -1,10 +1,14 @@
 package bynull.realty.web.rest;
 
+import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.SocialNetPostDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.util.LimitAndOffset;
+import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import bynull.realty.web.json.ApartmentJSON;
+import bynull.realty.web.json.SocialNetPostJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -12,7 +16,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -26,17 +32,8 @@ public class ApartmentRestResource {
     @Resource
     ApartmentService apartmentService;
 
-    @GET
-    public Response listAll() {
-        List<ApartmentDTO> all = apartmentService.findAll();
-        List<ApartmentJSON> jsonList = new ArrayList<ApartmentJSON>(all.size());
-        for (ApartmentDTO apartmentDTO : all) {
-            jsonList.add(ApartmentJSON.from(apartmentDTO));
-        }
-        return Response
-                .ok(jsonList)
-                .build();
-    }
+    @Resource
+    ApartmentDtoJsonConverter apartmentDtoJsonConverter;
 
     @GET
     @Path("/{id}")
@@ -47,7 +44,7 @@ public class ApartmentRestResource {
                     .status(Response.Status.NOT_FOUND)
                     .build();
         } else {
-            ApartmentJSON json = ApartmentJSON.from(dto);
+            ApartmentJSON json = apartmentDtoJsonConverter.toTargetType(dto);
 
             return Response
                     .ok(json)
@@ -57,7 +54,7 @@ public class ApartmentRestResource {
 
     @POST
     public Response create(ApartmentJSON apartmentJSON) {
-        ApartmentDTO dto = apartmentJSON.toDTO();
+        ApartmentDTO dto = apartmentDtoJsonConverter.toSourceType(apartmentJSON);
         apartmentService.create(dto);
         return Response
                 .status(Response.Status.CREATED)
@@ -91,7 +88,7 @@ public class ApartmentRestResource {
 
         List<ApartmentDTO> nearest = apartmentService.findNearestForCountry(geoPoint, countryCode, latLow, lngLow, latHigh, lngHigh, limitAndOffset);
 
-        List<ApartmentJSON> json = nearest.stream().map(ApartmentJSON::from).collect(Collectors.toList());
+        List<ApartmentJSON> json = nearest.stream().map(apartmentDtoJsonConverter::toTargetType).collect(Collectors.toList());
         return Response
                 .ok(json)
                 .build();
@@ -100,7 +97,7 @@ public class ApartmentRestResource {
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") long id, ApartmentJSON apartmentJSON) {
-        ApartmentDTO dto = apartmentJSON.toDTO();
+        ApartmentDTO dto = apartmentDtoJsonConverter.toSourceType(apartmentJSON);
         apartmentService.update(dto);
         return Response
                 .ok()
@@ -116,5 +113,37 @@ public class ApartmentRestResource {
                 .ok()
                 .build();
 
+    }
+
+    @Path("/search")
+    @GET
+    public Response findPosts(
+            @QueryParam("text") String text,
+            @QueryParam("type") String type,
+            @QueryParam("with_subway") boolean withSubway,
+            @QueryParam("rooms") List<String> rooms,
+            @QueryParam("min_price") Integer minPrice,
+            @QueryParam("max_price") Integer maxPrice,
+            @QueryParam("limit") int limit,
+            @QueryParam("offset") int offset
+    ) {
+
+        LimitAndOffset limitAndOffset = LimitAndOffset.builder()
+                .withLimit(limit)
+                .withOffset(offset)
+                .create();
+
+        ApartmentRepository.FindMode findMode = ApartmentRepository.FindMode.valueOf(type);
+
+        Set<ApartmentRepository.RoomCount> roomsCount = rooms != null
+                ? rooms.stream().map(ApartmentRepository.RoomCount::findByValueOrFail).collect(Collectors.toSet())
+                : Collections.emptySet();
+
+        List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
+        List<ApartmentJSON> result = found.stream().map(apartmentDtoJsonConverter::toTargetType).collect(Collectors.toList());
+
+        return Response
+                .ok(result)
+                .build();
     }
 }

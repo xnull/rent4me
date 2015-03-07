@@ -40,7 +40,7 @@ public class FacebookPostJSON {
     @JsonProperty("page")
     private FacebookPageJSON page;
     @JsonProperty("metros")
-    private Set<MetroJSON> metros;
+    private Set<? extends MetroJSON> metros;
 
     public Date getCreated() {
         return copy(created);

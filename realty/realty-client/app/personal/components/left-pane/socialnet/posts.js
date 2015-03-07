@@ -11,11 +11,22 @@ var Post = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
-        var firstImage = _.first(item.img_urls.map(function (photo) {
-            return (
-                <img className="media-object" width="160"  src={photo}/>
+
+        var firstImage;
+
+        if(item.data_source == 'INTERNAL') {
+            firstImage = item.photos ? _.first(item.photos.map(photo => {
+                return (
+                    <img className="media-object" width="160"  src={photo.small_thumbnail_url}/>
                 );
-        }));
+            })) : null;
+        } else {
+            firstImage = item.img_urls ? _.first(item.img_urls.map(function (photo) {
+                return (
+                    <img className="media-object" width="160"  src={photo}/>
+                );
+            })) : null;
+        }
 
 
         var metroElements = item.metros.map(function (metro) {
@@ -67,17 +78,23 @@ var Post = React.createClass({
             </div>
             );
 
-        var phoneNumber = item.phone_number ? (
-            <div>
-            Тел.: {item.phone_number.national_formatted_number || item.phone_number.raw_number }
-            </div>
-            ) : null;
+        var hasContacts = !!item.contacts;
+
+        var phoneNumbers = hasContacts ? item.contacts.filter(contact=>contact.type=='PHONE').map(contact=>contact.phone) : [];
+
+        var phoneNumbersDisplay = phoneNumbers.map(phone => {
+            return (
+                <div>
+                    Тел.: {phone.national_formatted_number || phone.raw_number }
+                </div>
+            );
+        });
 
         var contactInfo = (
             <div className="col-xs-6 col-lg-4">
                 <h3 className="media-heading"> Контакты:</h3>
                 <div>
-                      {phoneNumber}
+                      {phoneNumbersDisplay}
                 Link FB
                 Link VK
                 </div>
@@ -116,7 +133,7 @@ var Post = React.createClass({
         var message = (
             <div className="panel-body">
                 <div className="row">
-                    <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.message)}}>
+                    <div className="col-md-12" dangerouslySetInnerHTML={{__html: Utils.nl2br(item.description)}}>
                     </div>
                 </div>
             </div>

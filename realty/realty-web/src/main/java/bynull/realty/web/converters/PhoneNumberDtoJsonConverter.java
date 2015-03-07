@@ -22,18 +22,28 @@ public class PhoneNumberDtoJsonConverter implements Converter<PhoneNumberDTO, Ph
     FacebookPageDtoJsonConverter facebookPageConverter;
 
     @Override
-    public PhoneNumberJSON toTargetType(PhoneNumberDTO in) {
+    public PhoneNumberJSON newTargetType(PhoneNumberDTO in) {
+        return new PhoneNumberJSON();
+    }
+
+    @Override
+    public PhoneNumberDTO newSourceType(PhoneNumberJSON in) {
+        return new PhoneNumberDTO();
+    }
+
+    @Override
+    public PhoneNumberJSON toTargetType(PhoneNumberDTO in, PhoneNumberJSON json) {
         if (in == null) {
             return null;
         }
-        PhoneNumberJSON json = new PhoneNumberJSON();
         json.setRawNumber(in.getRawNumber());
         json.setNationalFormattedNumber(in.getNationalFormattedNumber());
         return json;
     }
 
+
     @Override
-    public PhoneNumberDTO toSourceType(PhoneNumberJSON in) {
+    public PhoneNumberDTO toSourceType(PhoneNumberJSON in, PhoneNumberDTO instance) {
         throw new UnsupportedOperationException();
     }
 }

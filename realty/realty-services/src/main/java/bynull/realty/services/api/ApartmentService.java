@@ -1,10 +1,12 @@
 package bynull.realty.services.api;
 
+import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.util.LimitAndOffset;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author dionis on 22/06/14.
@@ -20,8 +22,6 @@ public interface ApartmentService {
 
     void delete(long id);
 
-    List<ApartmentDTO> findAll();
-
     ApartmentDTO findAuthorizedUserApartment();
 
     void deleteApartmentForAuthorizedUser();
@@ -33,4 +33,6 @@ public interface ApartmentService {
     void requestApartmentInfoChangeForAuthorizedUser(ApartmentDTO dto);
 
     List<ApartmentDTO> findNearestForCountry(GeoPoint geoPoint, String countryCode, Double latLow, Double lngLow, Double latHigh, Double lngHigh, LimitAndOffset limitAndOffset);
+
+    List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode);
 }

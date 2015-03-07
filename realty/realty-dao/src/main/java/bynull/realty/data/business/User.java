@@ -65,7 +65,7 @@ public class User implements UserDetails {
      */
     @JoinColumn(name = "owner_id")
     @OneToMany
-    private Set<Apartment> apartments;
+    private Set<InternalApartment> apartments;
 
     /**
      * Set of rental histories - for users who rented history(not owners).
@@ -197,11 +197,11 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public Set<Apartment> getApartments() {
+    public Set<InternalApartment> getApartments() {
         return apartments;
     }
 
-    public void setApartments(Set<Apartment> apartments) {
+    public void setApartments(Set<InternalApartment> apartments) {
         this.apartments = apartments;
     }
 

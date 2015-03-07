@@ -9,6 +9,7 @@ import bynull.realty.services.api.ChatService;
 import bynull.realty.services.api.UserService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.annotation.PATCH;
+import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.ChatMessageJSON;
 import bynull.realty.web.json.UserJSON;
@@ -46,6 +47,9 @@ public class UserRestResource {
 
     @Resource
     ChatService chatService;
+
+    @Resource
+    ApartmentDtoJsonConverter apartmentDtoJsonConverter;
 
 
     @POST
@@ -97,36 +101,36 @@ public class UserRestResource {
         ApartmentDTO apartment = apartmentService.findAuthorizedUserApartment();
         return Response
                 .status(apartment != null ? Response.Status.OK : Response.Status.NOT_FOUND)
-                .entity(ApartmentJSON.from(apartment))
+                .entity(apartmentDtoJsonConverter.toTargetType(apartment))
                 .build();
     }
 
     @POST
     @Path("/apartment")
     public Response createApartment(ApartmentJSON apartmentJSON) {
-        ApartmentDTO dto = apartmentJSON.toDTO();
+        ApartmentDTO dto = apartmentDtoJsonConverter.toSourceType(apartmentJSON);
         boolean result = apartmentService.createForAuthorizedUser(dto);
         return Response
                 .status(result ? Response.Status.CREATED : Response.Status.CONFLICT)
-                .entity(result ? ApartmentJSON.from(apartmentService.findAuthorizedUserApartment()) : null)
+                .entity(result ? apartmentDtoJsonConverter.toTargetType(apartmentService.findAuthorizedUserApartment()) : null)
                 .build();
     }
 
     @PATCH
     @Path("/apartment")
     public Response updateApartmentRentInfo(ApartmentJSON apartmentJSON) {
-        ApartmentDTO dto = apartmentJSON.toDTO();
+        ApartmentDTO dto = apartmentDtoJsonConverter.toSourceType(apartmentJSON);
         boolean result = apartmentService.updateForAuthorizedUser(dto);
         return Response
                 .status(result ? Response.Status.OK : Response.Status.CONFLICT)
-                .entity(result ? ApartmentJSON.from(apartmentService.findAuthorizedUserApartment()) : null)
+                .entity(result ? apartmentDtoJsonConverter.toTargetType(apartmentService.findAuthorizedUserApartment()) : null)
                 .build();
     }
 
     @POST
     @Path("/apartment/data_change_request")
     public Response createApartmentDataChangeRequest(ApartmentJSON apartmentJSON) {
-        ApartmentDTO dto = apartmentJSON.toDTO();
+        ApartmentDTO dto = apartmentDtoJsonConverter.toSourceType(apartmentJSON);
 
         apartmentService.requestApartmentInfoChangeForAuthorizedUser(dto);
 

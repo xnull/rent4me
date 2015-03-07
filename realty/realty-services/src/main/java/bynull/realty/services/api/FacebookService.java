@@ -14,47 +14,11 @@ import java.util.Set;
 public interface FacebookService {
     void syncWithFB();
 
-    void syncElasticSearchWithDB();
-
     void save(FacebookPageDTO pageDTO);
 
     void delete(long id);
 
     List<FacebookPageDTO> listAllPages();
-
-    /**
-     * @deprecated Use {@link bynull.realty.services.api.SocialNetService#findPosts(String, boolean, java.util.Set, Integer, Integer, bynull.realty.util.LimitAndOffset, FindMode) instead}
-     * @param text
-     * @param withSubway
-     * @param limitAndOffset
-     * @return
-     */
-    @Deprecated
-    List<FacebookPostDTO> findRenterPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
-
-    /**
-     * @deprecated Use {@link bynull.realty.services.api.SocialNetService#findPosts(String, boolean, java.util.Set, Integer, Integer, bynull.realty.util.LimitAndOffset, FindMode) instead}
-     * @param text
-     * @param withSubway
-     * @param limitAndOffset
-     * @return
-     */
-    @Deprecated
-    List<FacebookPostDTO> findLessorPosts(String text, boolean withSubway, LimitAndOffset limitAndOffset);
-
-    /**
-     * @deprecated Use {@link bynull.realty.services.api.SocialNetService#findPosts(String, boolean, java.util.Set, Integer, Integer, bynull.realty.util.LimitAndOffset, FindMode) instead}
-     * @param text
-     * @param withSubway
-     * @param roomsCount
-     * @param minPrice
-     * @param maxPrice
-     * @param limitAndOffset
-     * @param findMode
-     * @return
-     */
-    @Deprecated
-    List<FacebookPostDTO> findFBPosts(String text, boolean withSubway, Set<RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, FindMode findMode);
 
     FacebookPageDTO findPageById(long fbPageId);
 

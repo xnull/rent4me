@@ -1,4 +1,4 @@
-package bynull.realty.components.text;
+package bynull.realty.common;
 
 /**
  * Created by dionis on 19/01/15.

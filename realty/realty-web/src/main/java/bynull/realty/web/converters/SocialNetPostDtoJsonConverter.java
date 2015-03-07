@@ -23,11 +23,20 @@ public class SocialNetPostDtoJsonConverter implements Converter<SocialNetPostDTO
     PhoneNumberDtoJsonConverter phoneNumberConverter;
 
     @Override
-    public SocialNetPostJSON toTargetType(SocialNetPostDTO in) {
+    public SocialNetPostJSON newTargetType(SocialNetPostDTO in) {
+        return new SocialNetPostJSON();
+    }
+
+    @Override
+    public SocialNetPostDTO newSourceType(SocialNetPostJSON in) {
+        return new SocialNetPostDTO();
+    }
+
+    @Override
+    public SocialNetPostJSON toTargetType(SocialNetPostDTO in, SocialNetPostJSON json) {
         if (in == null) {
             return null;
         }
-        SocialNetPostJSON json = new SocialNetPostJSON();
         json.setId(in.getId());
         json.setLink(in.getLink());
         json.setMessage(in.getMessage());
@@ -44,7 +53,7 @@ public class SocialNetPostDtoJsonConverter implements Converter<SocialNetPostDTO
     }
 
     @Override
-    public SocialNetPostDTO toSourceType(SocialNetPostJSON in) {
+    public SocialNetPostDTO toSourceType(SocialNetPostJSON in, SocialNetPostDTO instance) {
         throw new UnsupportedOperationException();
     }
 }

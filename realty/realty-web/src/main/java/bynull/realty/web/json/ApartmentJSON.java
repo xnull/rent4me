@@ -1,22 +1,19 @@
 package bynull.realty.web.json;
 
+import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.FeePeriod;
 import bynull.realty.data.business.RentType;
-import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dao.util.Constants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static bynull.realty.util.CommonUtils.copy;
 
 /**
  * @author dionis on 22/06/14.
@@ -64,71 +61,48 @@ public class ApartmentJSON {
     @JsonProperty("published")
     private boolean published;
 
+    @JsonProperty("metros")
+    private List<? extends MetroJSON> metros;
+
+    @JsonProperty("data_source")
+    private DataSource dataSource;
+
+    //internal specific
+
     @JsonProperty("owner")
     private UserJSON owner;
 
     @JsonProperty("photos")
-    private List<ApartmentPhotoJSON> photos = Collections.emptyList();
+    private List<ApartmentPhotoJSON> photos;
     @JsonProperty("added_photos_guids")
-    private List<String> addedTempPhotoGUIDs = Collections.emptyList();
+    private List<String> addedTempPhotoGUIDs;
     @JsonProperty("deleted_photos_guids")
-    private List<String> deletePhotoGUIDs = Collections.emptyList();
+    private List<String> deletePhotoGUIDs;
 
-    public static ApartmentJSON from(ApartmentDTO apartment) {
-        if (apartment == null) return null;
-        ApartmentJSON json = new ApartmentJSON();
-        json.setId(apartment.getId());
-        json.setLocation(GeoPointJSON.from(apartment.getLocation()));
-        json.setAddress(AddressComponentsJSON.from(apartment.getAddress()));
-        json.setCreated(apartment.getCreated());
-        json.setUpdated(apartment.getUpdated());
+    //socialnet specific
+    @JsonProperty("img_urls")
+    private List<String> imageUrls;
 
-        json.setArea(apartment.getArea());
-        json.setRoomCount(apartment.getRoomCount());
-        json.setFloorNumber(apartment.getFloorNumber());
-        json.setFloorsTotal(apartment.getFloorsTotal());
-        json.setDescription(apartment.getDescription());
+    @JsonProperty("contacts")
+    private List<? extends ContactJSON> contacts;
 
-        json.setTypeOfRent(apartment.getTypeOfRent());
-        json.setRentalFee(apartment.getRentalFee());
-        json.setFeePeriod(apartment.getFeePeriod());
+    public static enum DataSource {
+        INTERNAL, FACEBOOK, VKONTAKTE;
 
-        json.setPhotos(apartment.getPhotos()
-                                    .stream()
-                                    .map(ApartmentPhotoJSON::from)
-                                    .collect(Collectors.toList())
-        );
+        public static DataSource from(Apartment.DataSource dataSource) {
+            Assert.notNull(dataSource);
 
-        json.setPublished(apartment.isPublished());
-
-        json.setOwner(UserJSON.from(apartment.getOwner()));
-
-        return json;
+            switch (dataSource) {
+                case FACEBOOK:
+                    return FACEBOOK;
+                case INTERNAL:
+                    return INTERNAL;
+                case VKONTAKTE:
+                    return VKONTAKTE;
+                default:
+                    throw new UnsupportedOperationException("Datasource " + dataSource);
+            }
+        }
     }
 
-    public ApartmentDTO toDTO() {
-        ApartmentDTO dto = new ApartmentDTO();
-        dto.setId(getId());
-        AddressComponentsJSON address = getAddress();
-        dto.setAddress(address != null ? address.toDTO() : null);
-        dto.setCreated(getCreated());
-        dto.setUpdated(getUpdated());
-        dto.setLocation(getLocation() != null ? getLocation().toDTO(): null);
-        dto.setArea(getArea());
-        dto.setRoomCount(getRoomCount());
-        dto.setFloorNumber(getFloorNumber());
-        dto.setFloorsTotal(getFloorsTotal());
-        dto.setDescription(getDescription());
-
-        dto.setTypeOfRent(getTypeOfRent());
-        dto.setRentalFee(getRentalFee());
-        dto.setFeePeriod(getFeePeriod());
-
-        dto.setAddedTempPhotoGUIDs(getAddedTempPhotoGUIDs());
-        dto.setDeletePhotoGUIDs(getDeletePhotoGUIDs());
-
-        dto.setPublished(isPublished());
-
-        return dto;
-    }
 }

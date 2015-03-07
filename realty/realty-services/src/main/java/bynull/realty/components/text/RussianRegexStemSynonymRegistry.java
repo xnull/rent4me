@@ -1,5 +1,6 @@
 package bynull.realty.components.text;
 
+import bynull.realty.common.Porter;
 import org.springframework.util.Assert;
 
 /**

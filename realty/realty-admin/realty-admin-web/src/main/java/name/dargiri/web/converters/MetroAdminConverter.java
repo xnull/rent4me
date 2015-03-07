@@ -12,18 +12,26 @@ import org.springframework.stereotype.Component;
 public class MetroAdminConverter implements Converter<MetroDTO, MetroForm> {
 
     @Override
-    public MetroForm toTargetType(MetroDTO in) {
+    public MetroForm newTargetType(MetroDTO in) {
+        return new MetroForm();
+    }
+
+    @Override
+    public MetroDTO newSourceType(MetroForm in) {
+        return new MetroDTO();
+    }
+
+    @Override
+    public MetroForm toTargetType(MetroDTO in, MetroForm form) {
         if (in == null) return null;
-        MetroForm form = new MetroForm();
         form.setId(in.getId());
         form.setStationName(in.getStationName());
         return form;
     }
 
     @Override
-    public MetroDTO toSourceType(MetroForm in) {
+    public MetroDTO toSourceType(MetroForm in, MetroDTO dto) {
         if (in == null) return null;
-        MetroDTO dto = new MetroDTO();
         dto.setId(in.getId());
         dto.setStationName(in.getStationName());
         return dto;

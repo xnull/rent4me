@@ -1,28 +1,38 @@
 package bynull.realty.dao;
 
 import bynull.realty.DbTest;
+import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.common.GeoPoint;
 import com.google.common.collect.Iterables;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.fail;
 
 public class ApartmentRepositoryTest extends DbTest {
     @Resource
     ApartmentRepository repository;
 
+    @Resource
+    FacebookPageToScrapRepository facebookPageToScrapRepository;
+
     @Test
     public void insert() {
         User user = createUser();
-        Apartment apartment = new Apartment();
+        InternalApartment apartment = new InternalApartment();
         apartment.setOwner(user);
         apartment.setTypeOfRent(RentType.LONG_TERM);
         apartment.setRentalFee(new BigDecimal("1000"));
@@ -42,10 +52,62 @@ public class ApartmentRepositoryTest extends DbTest {
     }
 
     @Test
+    public void insertInternalApartmentWithWrongFloorNumberCountShouldFail() {
+        User user = createUser();
+        InternalApartment apartment = new InternalApartment();
+        apartment.setOwner(user);
+        apartment.setTypeOfRent(RentType.LONG_TERM);
+        apartment.setRentalFee(new BigDecimal("1000"));
+        apartment.setFeePeriod(FeePeriod.MONTHLY);
+        apartment.setFloorNumber(0);
+        apartment.setFloorsTotal(2);
+        apartment.setRoomCount(1);
+        apartment.setLocation(new GeoPoint());
+        apartment.setAddressComponents(new AddressComponents());
+        try {
+            apartment = repository.saveAndFlush(apartment);
+            fail("Exception expected");
+        } catch (ConstraintViolationException expected) {
+            Set<ConstraintViolation<?>> constraintViolations = expected.getConstraintViolations();
+            assertThat(constraintViolations.size(), is(1));
+            ConstraintViolation<?> first = Iterables.getFirst(constraintViolations, null);
+            assertThat(first.getMessage(), is(notNullValue()));
+            assertThat(first.getMessage(), is("must be greater than or equal to 1"));
+            assertThat(String.valueOf(first.getPropertyPath()), is("floorNumber"));
+        }
+    }
+
+    @Test
+    public void insertFacebookAnyFloorNumberCountShouldBeOk() {
+        FacebookPageToScrap fbPage = new FacebookPageToScrap();
+        fbPage.setExternalId("abc");
+
+        fbPage = facebookPageToScrapRepository.saveAndFlush(fbPage);
+
+        FacebookApartment apartment = new FacebookApartment();
+        apartment.setTypeOfRent(RentType.LONG_TERM);
+        apartment.setRentalFee(new BigDecimal("1000"));
+        apartment.setFeePeriod(FeePeriod.MONTHLY);
+        apartment.setFloorNumber(0);
+        apartment.setFloorsTotal(2);
+        apartment.setRoomCount(1);
+        apartment.setLocation(new GeoPoint());
+        apartment.setAddressComponents(new AddressComponents());
+        apartment.setFacebookPage(fbPage);
+        apartment.setExternalId("asd");
+        apartment = repository.saveAndFlush(apartment);
+
+        flushAndClear();
+
+        Apartment found = repository.getOne(apartment.getId());
+        assertThat(found, is(notNullValue()));
+    }
+
+    @Test
     public void findNearestPoints() {
         final String majakaDescription = "Majaka";
         {
-            Apartment apartment = new Apartment();
+            InternalApartment apartment = new InternalApartment();
             apartment.setDescription(majakaDescription);
             apartment.setOwner(createUser());
             apartment.setTypeOfRent(RentType.LONG_TERM);
@@ -69,7 +131,7 @@ public class ApartmentRepositoryTest extends DbTest {
 
         final String sytiste33Description = "Sütiste tee 33";
         {
-            Apartment apartment = new Apartment();
+            InternalApartment apartment = new InternalApartment();
             apartment.setDescription(sytiste33Description);
             apartment.setOwner(createUser());
             apartment.setTypeOfRent(RentType.LONG_TERM);

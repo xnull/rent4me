@@ -12,9 +12,4 @@ public class FacebookServiceImplTest extends ServiceTest {
 
     @Resource
     FacebookService service;
-
-    @Test
-    public void testSyncElasticSearchWithDB() throws Exception {
-        service.syncElasticSearchWithDB();
-    }
 }

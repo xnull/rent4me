@@ -1,5 +1,6 @@
 package bynull.realty.services.api;
 
+import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.dto.vk.VkontaktePostDTO;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface VkontakteService {
     void syncWithVK();
 
-    List<VkontaktePageDTO> listAllPages();
+    List<? extends VkontaktePageDTO> listAllPages();
 
     void delete(long vkPageId);
 
@@ -22,7 +23,7 @@ public interface VkontakteService {
 
     long countByQuery(String text);
 
-    List<VkontaktePostDTO> findPosts(String text, PageRequest created);
+    List<ApartmentDTO> findPosts(String text, PageRequest created);
 
     void reparseExistingVKPosts();
 }

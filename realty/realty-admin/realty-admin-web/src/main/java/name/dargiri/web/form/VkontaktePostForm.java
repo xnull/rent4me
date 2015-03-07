@@ -24,7 +24,7 @@ public class VkontaktePostForm {
     private Date created;
     private Date updated;
     private VkontaktePageForm page;
-    private Set<MetroForm> metros;
+    private Set<? extends MetroForm> metros;
     private PhoneNumberForm phoneNumber;
 
     public Date getCreated() {

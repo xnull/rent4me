@@ -8,13 +8,13 @@ import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.converters.VkontaktePageModelDTOConverter;
 import bynull.realty.converters.VkontaktePostModelDTOConverter;
+import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
-import bynull.realty.dao.external.VkontaktePostRepository;
-import bynull.realty.data.business.PhoneNumber;
+import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
-import bynull.realty.data.business.external.vkontakte.VkontaktePost;
 import bynull.realty.data.business.metro.MetroEntity;
+import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.dto.vk.VkontaktePostDTO;
@@ -59,8 +59,9 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
     @Resource
     MetroModelDTOConverter metroConverter;
 
+    
     @Resource
-    VkontaktePostRepository vkontaktePostRepository;
+    ApartmentRepository apartmentRepository;
 
     @Resource
     VKHelperComponent vkHelperComponent;
@@ -96,7 +97,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                                                 .stream()
                                                 .filter(VkontaktePage::isEnabled)
                                                 .collect(Collectors.toList());
-        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
@@ -105,19 +106,19 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
-                    List<VkontaktePost> newest = vkontaktePostRepository.findByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
+                    List<VkontakteApartment> newest = apartmentRepository.findVkAparmentsByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
 
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
 
                     try {
                         List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab);
-                        List<VkontaktePost> byExternalIdIn = !postItemDTOs.isEmpty() ? vkontaktePostRepository.findByExternalIdIn(postItemDTOs.stream()
+                        List<VkontakteApartment> byExternalIdIn = !postItemDTOs.isEmpty() ? apartmentRepository.findVkApartmentsByExternalIdIn(postItemDTOs.stream()
                                         .map(VKHelperComponent.VkWallPostDTO::getId)
                                         .collect(Collectors.toList())
                         ) : Collections.emptyList();
 
                         Set<String> ids = byExternalIdIn.stream()
-                                .map(VkontaktePost::getExternalId)
+                                .map(VkontakteApartment::getExternalId)
                                 .collect(Collectors.toSet());
 
                         //although it may seems strange but in same result set could be returned duplicates - so filter them
@@ -145,18 +146,25 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                         log.info("Removed duplicates in DB by id");
 
                         for (VKHelperComponent.VkWallPostDTO postItemDTO : dtosToPersist) {
-                            VkontaktePost post = postItemDTO.toInternal();
+                            VkontakteApartment post = postItemDTO.toInternal();
                             post.setVkontaktePage(vkPage);
-                            String message = post.getMessage();
+                            post.setPublished(true);
+                            String message = post.getDescription();
                             Set<MetroEntity> matchedMetros = matchMetros(metros, message);
                             post.setMetros(matchedMetros);
                             Integer roomCount = roomCountParser.findRoomCount(message);
                             post.setRoomCount(roomCount);
                             BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                             post.setRentalFee(rentalFee);
-                            PhoneUtil.Phone phone = PhoneUtil.findFirstPhoneNumber(message, "RU");
-                            post.setPhoneNumber(PhoneNumber.from(phone));
-                            vkontaktePostRepository.save(post);
+                            post.setFeePeriod(FeePeriod.MONTHLY);
+                            List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
+                            Set<Contact> contacts =  phones.stream().map(phone -> {
+                                PhoneContact contact = new PhoneContact();
+                                contact.setPhoneNumber(PhoneNumber.from(phone));
+                                return contact;
+                            }).collect(Collectors.toCollection(HashSet::new));
+                            post.setContacts(contacts);
+                            apartmentRepository.save(post);
                         }
                         em.flush();
                         log.info("Saved [{}] posts for vk page: [{}]", dtosToPersist.size(), vkPage.getLink());
@@ -168,7 +176,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
         }
     }
 
-    private Set<MetroEntity> matchMetros(List<MetroDTO> metros, String message) {
+    private Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message) {
         log.info(">> Matching metros started");
         try {
             Set<MetroEntity> matchedMetros = new HashSet<>();
@@ -192,7 +200,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
     @Transactional(readOnly = true)
     @Override
-    public List<VkontaktePageDTO> listAllPages() {
+    public List<? extends VkontaktePageDTO> listAllPages() {
         return vkontaktePageConverter.toTargetList(vkontaktePageRepository.findAll(new Sort(Sort.Direction.DESC, "updated")));
     }
 
@@ -223,30 +231,31 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
     @Override
     public long countByQuery(String text) {
         String query = ("%" + text + "%").toLowerCase();
-        return text != null ? vkontaktePostRepository.countByQuery(query) : vkontaktePostRepository.count();
+        return text != null ? apartmentRepository.countVkByQuery(query) : apartmentRepository.countVK();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<VkontaktePostDTO> findPosts(String text, PageRequest pageRequest) {
+    public List<ApartmentDTO> findPosts(String text, PageRequest pageRequest) {
         String txt = ("%" + text + "%").toLowerCase();
-        List<VkontaktePost> byQuery = text != null ? vkontaktePostRepository.findByQuery(txt, pageRequest) : vkontaktePostRepository.findAll(pageRequest).getContent();
-        return vkPostConverter.toTargetList(byQuery);
+        List<VkontakteApartment> byQuery = text != null ? apartmentRepository.findVkByQuery(txt, pageRequest) : apartmentRepository.findVKAll(pageRequest).getContent();
+        //TODO: fix converter later
+        return Collections.emptyList();
     }
 
     @Transactional
     @Override
     public void reparseExistingVKPosts() {
-        List<MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
         int countOfMatchedPosts = 0;
         Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "id");
-        Page<VkontaktePost> postsPage = vkontaktePostRepository.findAll(pageable);
-        long total = vkontaktePostRepository.count();
+        Page<VkontakteApartment> postsPage = apartmentRepository.findVKAll(pageable);
+        long total = apartmentRepository.countVK();
         boolean hasNext = false;
         do {
-            List<VkontaktePost> posts = postsPage.getContent();
-            for (VkontaktePost post : posts) {
-                String message = post.getMessage();
+            List<VkontakteApartment> posts = postsPage.getContent();
+            for (VkontakteApartment post : posts) {
+                String message = post.getDescription();
 
                 Set<MetroEntity> matchedMetros = matchMetros(metros, message);
                 post.setMetros(matchedMetros);
@@ -255,13 +264,18 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                 BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                 post.setRentalFee(rentalFee);
 
-                PhoneUtil.Phone phone = PhoneUtil.findFirstPhoneNumber(message, "RU");
-                post.setPhoneNumber(PhoneNumber.from(phone));
+                List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
+                Set<Contact> contacts =  phones.stream().map(phone -> {
+                    PhoneContact contact = new PhoneContact();
+                    contact.setPhoneNumber(PhoneNumber.from(phone));
+                    return contact;
+                }).collect(Collectors.toCollection(HashSet::new));
+                post.setContacts(contacts);
 
                 if (!matchedMetros.isEmpty()) {
                     countOfMatchedPosts++;
                 }
-                post = vkontaktePostRepository.save(post);
+                post = apartmentRepository.save(post);
             }
             log.info("Processed page #[{}]", pageable);
             hasNext = postsPage.hasNext();
@@ -269,7 +283,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                 pageable = postsPage.nextPageable();
                 em.flush();
                 em.clear();
-                postsPage = vkontaktePostRepository.findAll(pageable);
+                postsPage = apartmentRepository.findVKAll(pageable);
             }
         } while (hasNext);
         em.flush();

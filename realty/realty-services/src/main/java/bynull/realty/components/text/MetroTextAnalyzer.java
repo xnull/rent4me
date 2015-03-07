@@ -1,5 +1,6 @@
 package bynull.realty.components.text;
 
+import bynull.realty.common.Porter;
 import bynull.realty.utils.TextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

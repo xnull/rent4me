@@ -12,9 +12,18 @@ import org.springframework.stereotype.Component;
 public class FacebookPageModelDTOConverter implements Converter<FacebookPageToScrap, FacebookPageDTO> {
 
     @Override
-    public FacebookPageDTO toTargetType(FacebookPageToScrap in) {
+    public FacebookPageDTO newTargetType(FacebookPageToScrap in) {
+        return new FacebookPageDTO();
+    }
+
+    @Override
+    public FacebookPageToScrap newSourceType(FacebookPageDTO in) {
+        return new FacebookPageToScrap();
+    }
+
+    @Override
+    public FacebookPageDTO toTargetType(FacebookPageToScrap in, FacebookPageDTO dto) {
         if (in == null) return null;
-        FacebookPageDTO dto = new FacebookPageDTO();
         dto.setId(in.getId());
         dto.setLink(in.getLink());
         dto.setExternalId(in.getExternalId());
@@ -23,9 +32,8 @@ public class FacebookPageModelDTOConverter implements Converter<FacebookPageToSc
     }
 
     @Override
-    public FacebookPageToScrap toSourceType(FacebookPageDTO in) {
+    public FacebookPageToScrap toSourceType(FacebookPageDTO in, FacebookPageToScrap model) {
         if (in == null) return null;
-        FacebookPageToScrap model = new FacebookPageToScrap();
         model.setId(in.getId());
         model.setExternalId(in.getExternalId());
         model.setLink(in.getLink());

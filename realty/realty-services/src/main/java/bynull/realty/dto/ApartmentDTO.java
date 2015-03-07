@@ -31,47 +31,26 @@ public class ApartmentDTO {
     private RentType typeOfRent;
     private BigDecimal rentalFee;
     private FeePeriod feePeriod;
+    private Apartment.DataSource dataSource;
+
     private boolean published;
-
     private Date created;
-    private Date updated;
 
-    private List<ApartmentPhotoDTO> photos = Collections.emptyList();
-    private List<String> addedTempPhotoGUIDs = Collections.emptyList();
-    private List<String> deletePhotoGUIDs = Collections.emptyList();
+    private Date updated;
+    private List<? extends MetroDTO> metros;
+
+    //internal specific
     private UserDTO owner;
 
-    public static ApartmentDTO from(Apartment apartment) {
-        if (apartment == null) return null;
-        ApartmentDTO dto = new ApartmentDTO();
-        dto.setId(apartment.getId());
-        dto.setLocation(GeoPointDTO.from(apartment.getLocation()));
-        dto.setAddress(AddressComponentsDTO.from(apartment.getAddressComponents()));
-        dto.setDescription(apartment.getDescription());
-        dto.setRoomCount(apartment.getRoomCount());
-        dto.setFloorNumber(apartment.getFloorNumber());
-        dto.setFloorsTotal(apartment.getFloorsTotal());
-        dto.setArea(apartment.getArea());
+    private List<ApartmentPhotoDTO> photos;
+    private List<String> addedTempPhotoGUIDs;
+    private List<String> deletePhotoGUIDs;
 
-        dto.setTypeOfRent(apartment.getTypeOfRent());
-        dto.setRentalFee(apartment.getRentalFee());
-        dto.setFeePeriod(apartment.getFeePeriod());
-
-        dto.setCreated(apartment.getCreated());
-        dto.setUpdated(apartment.getUpdated());
-
-        dto.setPhotos(apartment.listPhotosNewestFirst()
-                                    .stream()
-                                    .map(ApartmentPhotoDTO::from)
-                                    .collect(Collectors.toList())
-        );
-
-        dto.setPublished(apartment.isPublished());
-
-        dto.setOwner(UserDTO.from(apartment.getOwner()));
-
-        return dto;
-    }
+    /**
+     * External specific.
+     */
+    private List<String> imageUrls;
+    private List<? extends ContactDTO> contacts;
 
     public Date getCreated() {
         return copy(created);
@@ -97,32 +76,17 @@ public class ApartmentDTO {
         this.photos = new ArrayList<>(photos);
     }
 
-    public List<String> getAddedTempPhotoGUIDs() {
-        return addedTempPhotoGUIDs;
-    }
-
     public void setAddedTempPhotoGUIDs(List<String> addedTempPhotoGUIDs) {
         this.addedTempPhotoGUIDs = new ArrayList<>(addedTempPhotoGUIDs);
-    }
-
-    public List<String> getDeletePhotoGUIDs() {
-        return deletePhotoGUIDs;
     }
 
     public void setDeletePhotoGUIDs(List<String> deletePhotoGUIDs) {
         this.deletePhotoGUIDs = new ArrayList<>(deletePhotoGUIDs);
     }
 
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean published) {
-        this.published = published;
-    }
-
-    public Apartment toInternal() {
-        Apartment apartment = new Apartment();
+    //TODO: think about moving it to converter?
+    public InternalApartment toInternal() {
+        InternalApartment apartment = new InternalApartment();
         apartment.setId(getId());
         AddressComponentsDTO address = getAddress();
         apartment.setAddressComponents(address != null ? address.toInternal() :  null);
@@ -142,6 +106,7 @@ public class ApartmentDTO {
         return apartment;
     }
 
+    //TODO: think about moving it to converter?
     public ApartmentInfoDelta toApartmentInfoDelta() {
         ApartmentInfoDelta apartment = new ApartmentInfoDelta();
 
@@ -155,13 +120,5 @@ public class ApartmentDTO {
         apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
 
         return apartment;
-    }
-
-    public UserDTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserDTO owner) {
-        this.owner = owner;
     }
 }

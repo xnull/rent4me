@@ -1,6 +1,7 @@
 package bynull.realty.components;
 
 import bynull.realty.config.Config;
+import bynull.realty.data.business.VkontakteApartment;
 import bynull.realty.data.business.external.vkontakte.VkontaktePost;
 import bynull.realty.data.business.external.vkontakte.VkontaktePostType;
 import bynull.realty.utils.JsonUtils;
@@ -178,11 +179,11 @@ public class VKHelperComponent {
             public abstract VkontaktePostType getPostType();
         }
 
-        public VkontaktePost toInternal() {
-            VkontaktePost post = new VkontaktePost();
+        public VkontakteApartment toInternal() {
+            VkontakteApartment post = new VkontakteApartment();
             post.setExternalId(this.getId());
-            post.setMessage(this.getText());
-            post.setCreated(this.getDate());
+            post.setDescription(this.getText());
+            post.setLogicalCreated(this.getDate());
             return post;
         }
     }

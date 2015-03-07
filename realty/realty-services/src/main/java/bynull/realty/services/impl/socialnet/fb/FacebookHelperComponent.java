@@ -376,18 +376,6 @@ public class FacebookHelperComponent {
             return type;
         }
 
-        public FacebookScrapedPost toInternal() {
-            FacebookScrapedPost post = new FacebookScrapedPost();
-            post.setExternalId(getId());
-            post.setLink(getLink());
-            post.setMessage(getMessage());
-            post.setPicture(getPicture());
-            post.setType(getType().toInternal());
-            post.setCreated(getCreatedDtime());
-            post.setUpdated(getUpdatedDtime());
-            return post;
-        }
-
         public static enum Type {
             link {
                 @Override

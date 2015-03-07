@@ -17,23 +17,33 @@ public class PhoneNumberAdminConverter implements Converter<PhoneNumberDTO, Phon
 
 
     @Override
-    public PhoneNumberForm toTargetType(PhoneNumberDTO in) {
+    public PhoneNumberForm newTargetType(PhoneNumberDTO in) {
+        return new PhoneNumberForm();
+    }
+
+    @Override
+    public PhoneNumberDTO newSourceType(PhoneNumberForm in) {
+        return new PhoneNumberDTO();
+    }
+
+    @Override
+    public PhoneNumberForm toTargetType(PhoneNumberDTO in, PhoneNumberForm form) {
         if (in == null) {
             return null;
         }
-        PhoneNumberForm form = new PhoneNumberForm();
         form.setRaw(in.getRawNumber());
         form.setNationalFormattedNumber(in.getNationalFormattedNumber());
         return form;
     }
 
+
     @Override
-    public PhoneNumberDTO toSourceType(PhoneNumberForm in) {
+    public PhoneNumberDTO toSourceType(PhoneNumberForm in, PhoneNumberDTO dto) {
         if (in == null) return null;
 
-        PhoneNumberDTO dto = new PhoneNumberDTO();
         dto.setRawNumber(in.getRaw());
         dto.setNationalFormattedNumber(in.getNationalFormattedNumber());
         return dto;
     }
+
 }

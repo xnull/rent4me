@@ -12,9 +12,18 @@ import org.springframework.stereotype.Component;
 public class VkontaktePageModelDTOConverter implements Converter<VkontaktePage, VkontaktePageDTO> {
 
     @Override
-    public VkontaktePageDTO toTargetType(VkontaktePage in) {
+    public VkontaktePageDTO newTargetType(VkontaktePage in) {
+        return new VkontaktePageDTO();
+    }
+
+    @Override
+    public VkontaktePage newSourceType(VkontaktePageDTO in) {
+        return new VkontaktePage();
+    }
+
+    @Override
+    public VkontaktePageDTO toTargetType(VkontaktePage in, VkontaktePageDTO dto) {
         if (in == null) return null;
-        VkontaktePageDTO dto = new VkontaktePageDTO();
         dto.setId(in.getId());
         dto.setLink(in.getLink());
         dto.setExternalId(in.getExternalId());
@@ -23,9 +32,8 @@ public class VkontaktePageModelDTOConverter implements Converter<VkontaktePage, 
     }
 
     @Override
-    public VkontaktePage toSourceType(VkontaktePageDTO in) {
+    public VkontaktePage toSourceType(VkontaktePageDTO in, VkontaktePage model) {
         if (in == null) return null;
-        VkontaktePage model = new VkontaktePage();
         model.setId(in.getId());
         model.setExternalId(in.getExternalId());
         model.setLink(in.getLink());

@@ -28,7 +28,7 @@ public class SocialNetPostDTO {
     private Date created;
     private Date updated;
     private PhoneNumberDTO phoneNumberDTO;
-    private Set<MetroDTO> metros;
+    private Set<? extends MetroDTO> metros;
 
     public Date getCreated() {
         return copy(created);

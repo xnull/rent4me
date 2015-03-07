@@ -1,5 +1,6 @@
 package bynull.realty.components.text;
 
+import bynull.realty.common.Porter;
 import bynull.realty.utils.TextUtils;
 import com.google.common.collect.ImmutableSet;
 import lombok.extern.slf4j.Slf4j;
