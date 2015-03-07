@@ -14,24 +14,27 @@ var HeaderComponent = React.createClass({
             backgroundRepeat: 'no-repeat'
         };
         return (
-            <section id='header' className='dark' style={sectionStyle}>
-                <header>
-                    <h1 style={{color: '#da5037'}}>Аренда недвижимости</h1>
-                    <p>Прозрачность, отсутствие посредников</p>
-                </header>
-                <footer>
-                    <div className="row">
-                        <div className="col-centered">
-                            <AuthComponent />
+            <div style={sectionStyle}>
+                <div>
+                    <AuthComponent />
+                </div>
+                <section id='header' className='dark'>
+                    <header>
+                        <h1 style={{color: '#da5037'}}>Аренда недвижимости</h1>
+                        <p>Прозрачность, отсутствие посредников</p>
+                    </header>
+                    <footer>
+                        <div className="row">
+
+                            <div className="col-centered">
+                                <input type="submit" className="button" value="Подробности" onClick={ function () {
+                                    window.location.href = "#first"
+                                }}/>
+                            </div>
                         </div>
-                        <div className="col-centered">
-                            <input type="submit" className="button" value="Подробности" onClick={ function () {
-                                window.location.href = "#first"
-                            }}/>
-                        </div>
-                    </div>
-                </footer>
-            </section>
+                    </footer>
+                </section>
+            </div>
         )
     }
 });

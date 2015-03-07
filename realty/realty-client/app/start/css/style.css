@@ -751,15 +751,11 @@ input[type="reset"].alt:hover,
 #header {
     position: relative;
     margin: 0;
-    /*background-image:			url('images/overlay.png'),			url('../app/images/flats/nature.jpg');*/
     background-size: auto, cover;
     background: repeat, no-repeat top left, center center;
-    padding: 14em 0 14em 0;
+    padding: 4em 0 18em 0;
     text-align: center;
     color: #fff;
-}
-
-#header header {
 }
 
 #header header h1 {
@@ -769,7 +765,7 @@ input[type="reset"].alt:hover,
 }
 
 #header header p {
-    margin-top: 1.25em;
+    margin-top: 0.5em;
     font-weight: 100;
     padding: 0;
     font-size: 1.25em;
