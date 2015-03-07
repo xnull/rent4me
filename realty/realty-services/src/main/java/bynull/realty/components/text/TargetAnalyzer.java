@@ -16,7 +16,8 @@ public class TargetAnalyzer {
     private static final List<String> RENTER_TARGETED_KEYWORDS = ImmutableList.of("сдаю", "сдам", "отдам", "отдаю", "отдается");
 
     public Apartment.Target determineTarget(String text) {
-        String lowerCasedText = StringUtils.lowerCase(text);
+        String lowerCasedText = StringUtils.trimToEmpty(StringUtils.lowerCase(text));
+        if(lowerCasedText.isEmpty()) return Apartment.Target.UNKNOWN;
 
         boolean hasLessorTargetedKeywords = false;
 
