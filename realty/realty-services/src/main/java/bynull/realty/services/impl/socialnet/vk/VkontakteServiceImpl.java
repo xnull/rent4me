@@ -22,6 +22,7 @@ import bynull.realty.dto.vk.VkontaktePostDTO;
 import bynull.realty.services.api.VkontakteService;
 import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Page;
@@ -115,7 +116,12 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
 
                     try {
-                        List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab);
+                        List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab)
+                                .stream()
+                                .filter(item -> StringUtils.trimToNull(item.getText()) != null)
+                                //leave only those that have no duplicates in DB
+                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getText()) == 0)
+                                .collect(Collectors.toCollection(ArrayList::new));
                         List<VkontakteApartment> byExternalIdIn = !postItemDTOs.isEmpty() ? apartmentRepository.findVkApartmentsByExternalIdIn(postItemDTOs.stream()
                                         .map(VKHelperComponent.VkWallPostDTO::getId)
                                         .collect(Collectors.toList())
@@ -128,18 +134,20 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                         //although it may seems strange but in same result set could be returned duplicates - so filter them
                         log.info("Removing duplicates in same requests by id");
                         Set<String> postItemDtoIds = new HashSet<>();
+                        Set<String> postItemDtoContents = new HashSet<>();
                         Iterator<VKHelperComponent.VkWallPostDTO> iterator = postItemDTOs.iterator();
                         while (iterator.hasNext()) {
                             VKHelperComponent.VkWallPostDTO next = iterator.next();
-                            if(next.getId() == null || postItemDtoIds.contains(next.getId())){
-                                log.info("Removed duplicate in same requests by id: [{}]", next.getId());
+                            if (next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getText())) {
+                                log.info("Removed duplicate in same requests by id or text: [{}], [{}]", next.getId(), next.getText());
                                 iterator.remove();
                                 continue;
                             } else {
                                 postItemDtoIds.add(next.getId());
+                                postItemDtoContents.add(next.getText());
                             }
                         }
-                        log.info("Removed duplicates in same requests by id");
+                        log.info("Removed duplicates in same requests by id/texts");
 
                         log.info("Removing duplicates in DB by id");
                         List<VKHelperComponent.VkWallPostDTO> dtosToPersist = postItemDTOs

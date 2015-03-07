@@ -132,7 +132,13 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
 
                     try {
-                        List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab);
+                        List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
+                                .stream()
+                                .filter(item -> StringUtils.trimToNull(item.getMessage()) != null)
+                                //leave only those that have no duplicates in DB
+                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getMessage()) == 0)
+                                .collect(Collectors.toCollection(ArrayList::new));
+
                         List<FacebookApartment> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? apartmentRepository.findFBApartmentsByExternalIdIn(facebookPostItemDTOs.stream()
                                         .map(FacebookHelperComponent.FacebookPostItemDTO::getId)
                                         .collect(Collectors.toList())
@@ -144,15 +150,17 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                         //although it may seems strange but in same result set could be returned duplicates - so filter them
                         log.info("Removing duplicates in same requests by id");
                         Set<String> postItemDtoIds = new HashSet<>();
+                        Set<String> postItemDtoContents = new HashSet<>();
                         Iterator<FacebookHelperComponent.FacebookPostItemDTO> iterator = facebookPostItemDTOs.iterator();
                         while (iterator.hasNext()) {
                             FacebookHelperComponent.FacebookPostItemDTO next = iterator.next();
-                            if(next.getId() == null || postItemDtoIds.contains(next.getId())){
+                            if(next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getMessage())){
                                 log.info("Removed duplicate in same requests by id: [{}]", next.getId());
                                 iterator.remove();
                                 continue;
                             } else {
                                 postItemDtoIds.add(next.getId());
+                                postItemDtoContents.add(next.getMessage());
                             }
                         }
                         log.info("Removed duplicates in same requests by id");

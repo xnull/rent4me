@@ -86,6 +86,9 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("select a from FacebookApartment a")
     Page<FacebookApartment> findFBAll(Pageable pageable);
 
+    @Query("select count(a) from Apartment a where lower(a.description)=lower(:text)")
+    long countOfSimilarApartments(@Param("text") String text);
+
     public enum FindMode {
         RENTER {
             @Override
