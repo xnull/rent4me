@@ -5,6 +5,7 @@ import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.common.Porter;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
+import bynull.realty.components.text.TargetAnalyzer;
 import bynull.realty.config.Config;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
 import bynull.realty.converters.FacebookPostModelDTOConverter;
@@ -101,6 +102,9 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     RentalFeeParser rentalFeeParser;
 
+    @Resource
+    TargetAnalyzer targetAnalyzer;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         porter = Porter.getInstance();
@@ -182,6 +186,8 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                             post.setMetros(matchedMetros);
                             Integer roomCount = roomCountParser.findRoomCount(message);
                             post.setRoomCount(roomCount);
+                            Apartment.Target target = targetAnalyzer.determineTarget(message);
+                            post.setTarget(target);
                             BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                             post.setRentalFee(rentalFee);
                             post.setFeePeriod(FeePeriod.MONTHLY);
@@ -300,6 +306,8 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                 post.setRoomCount(roomCount);
                 BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                 post.setRentalFee(rentalFee);
+                Apartment.Target target = targetAnalyzer.determineTarget(message);
+                post.setTarget(target);
                 List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
                 Set<Contact> contacts =  phones.stream().map(phone -> {
                     PhoneContact contact = new PhoneContact();

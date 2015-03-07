@@ -105,6 +105,10 @@ public abstract class Apartment implements Serializable {
     @OneToMany
     private Set<MetroEntity> metros;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "target")
+    private Target target;
+
     public Long getId() {
         return id;
     }
@@ -241,6 +245,14 @@ public abstract class Apartment implements Serializable {
         this.published = published;
     }
 
+    public Target getTarget() {
+        return target;
+    }
+
+    public void setTarget(Target target) {
+        this.target = target;
+    }
+
     public abstract DataSource getDataSource();
 
     @PrePersist
@@ -274,5 +286,18 @@ public abstract class Apartment implements Serializable {
     @Override
     public int hashCode() {
         return getId() != null ? getId().hashCode() : 0;
+    }
+
+    /**
+     * Who is target for this apartment.
+     */
+    public static enum Target {
+        RENTER,
+        LESSOR,
+        /**
+         * Means it's for both - renter and lessor.
+         */
+        BOTH,
+        UNKNOWN
     }
 }

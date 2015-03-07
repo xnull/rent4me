@@ -72,6 +72,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             InternalApartment apartment = dto.toInternal();
             apartment.setOwner(user);
             apartment.setPublished(true);//publish by default
+            apartment.setTarget(Apartment.Target.RENTER);
             apartment = apartmentRepository.saveAndFlush(apartment);
 
             handlePhotoDiff(dto, apartment);

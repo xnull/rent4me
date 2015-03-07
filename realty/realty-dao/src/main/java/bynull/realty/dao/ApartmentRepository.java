@@ -3,12 +3,14 @@ package bynull.realty.dao;
 import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.FacebookApartment;
 import bynull.realty.data.business.VkontakteApartment;
+import com.google.common.collect.ImmutableList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -85,7 +87,19 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     Page<FacebookApartment> findFBAll(Pageable pageable);
 
     public enum FindMode {
-        RENTER, LESSOR
+        RENTER {
+            @Override
+            public Apartment.Target toTarget() {
+                return Apartment.Target.RENTER;
+            }
+        }, LESSOR {
+            @Override
+            public Apartment.Target toTarget() {
+                return Apartment.Target.LESSOR;
+            }
+        };
+
+        public abstract Apartment.Target toTarget();
     }
 
     /**

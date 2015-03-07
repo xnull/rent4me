@@ -5,6 +5,7 @@ import bynull.realty.components.VKHelperComponent;
 import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
+import bynull.realty.components.text.TargetAnalyzer;
 import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.converters.VkontaktePageModelDTOConverter;
 import bynull.realty.converters.VkontaktePostModelDTOConverter;
@@ -74,6 +75,9 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
     @Resource
     MetroTextAnalyzer metroTextAnalyzer;
+
+    @Resource
+    TargetAnalyzer targetAnalyzer;
 
     @Resource
     VkontaktePostModelDTOConverter vkPostConverter;
@@ -156,6 +160,8 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                             post.setRoomCount(roomCount);
                             BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                             post.setRentalFee(rentalFee);
+                            Apartment.Target target = targetAnalyzer.determineTarget(message);
+                            post.setTarget(target);
                             post.setFeePeriod(FeePeriod.MONTHLY);
                             List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
                             Set<Contact> contacts =  phones.stream().map(phone -> {
@@ -263,6 +269,8 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                 post.setRoomCount(roomCount);
                 BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
                 post.setRentalFee(rentalFee);
+                Apartment.Target target = targetAnalyzer.determineTarget(message);
+                post.setTarget(target);
 
                 List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
                 Set<Contact> contacts =  phones.stream().map(phone -> {

@@ -42,6 +42,7 @@ public class ApartmentRepositoryTest extends DbTest {
         apartment.setRoomCount(1);
         apartment.setLocation(new GeoPoint());
         apartment.setAddressComponents(new AddressComponents());
+        apartment.setTarget(Apartment.Target.UNKNOWN);
         apartment = repository.saveAndFlush(apartment);
 
 
@@ -64,6 +65,7 @@ public class ApartmentRepositoryTest extends DbTest {
         apartment.setRoomCount(1);
         apartment.setLocation(new GeoPoint());
         apartment.setAddressComponents(new AddressComponents());
+        apartment.setTarget(Apartment.Target.UNKNOWN);
         try {
             apartment = repository.saveAndFlush(apartment);
             fail("Exception expected");
@@ -95,6 +97,7 @@ public class ApartmentRepositoryTest extends DbTest {
         apartment.setAddressComponents(new AddressComponents());
         apartment.setFacebookPage(fbPage);
         apartment.setExternalId("asd");
+        apartment.setTarget(Apartment.Target.UNKNOWN);
         apartment = repository.saveAndFlush(apartment);
 
         flushAndClear();
@@ -125,6 +128,7 @@ public class ApartmentRepositoryTest extends DbTest {
             AddressComponents addressComponents = new AddressComponents();
             addressComponents.setCountryCode("EE");
             apartment.setAddressComponents(addressComponents);
+            apartment.setTarget(Apartment.Target.UNKNOWN);
             apartment = repository.saveAndFlush(apartment);
 
         }
@@ -151,6 +155,7 @@ public class ApartmentRepositoryTest extends DbTest {
              */
             location.setLongitude(24.6807756000001);
             location.setLatitude(59.3972856);
+            apartment.setTarget(Apartment.Target.UNKNOWN);
             apartment.setLocation(location);
             apartment = repository.saveAndFlush(apartment);
         }

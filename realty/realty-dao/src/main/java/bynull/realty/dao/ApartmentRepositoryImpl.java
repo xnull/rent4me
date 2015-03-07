@@ -3,6 +3,7 @@ package bynull.realty.dao;
 import bynull.realty.common.Porter;
 import bynull.realty.data.business.Apartment;
 import bynull.realty.util.LimitAndOffset;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
@@ -37,31 +38,15 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
     public List<Apartment> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
+        Assert.notNull(findMode);
 
         Assert.notNull(roomsCount);
         text = StringUtils.trimToEmpty(text);
-        final List<String> keyWords;
-
-        switch (findMode) {
-            case LESSOR:
-                keyWords = Arrays.asList("сниму", "снимаю", "снять", "снял", "возьму", "взял", "взять");
-                break;
-            case RENTER:
-                keyWords = Arrays.asList("сдаю", "сдам", "отдам", "отдаю", "отдается");
-                break;
-            default:
-                throw new UnsupportedOperationException("Find mode " + findMode + " not supported");
-        }
-
-
-        String findModeJPQL = keyWords
-                .stream()
-                .map(word -> " ( lower(p.description) like '" + ilike(word) + "' ) ")
-                .collect(Collectors.joining(" OR "));
+        final String targetJPQL;
 
         String searchText = text.isEmpty() ? "" : text.length() > 5 ? porter.stem(text) : text;
 
-        String qlString = "select p from Apartment p where p.published=true AND (" + findModeJPQL + ")" +
+        String qlString = "select p from Apartment p where p.published=true AND p.target IN (:targets) " +
                 (!searchText.isEmpty() ? " AND lower(p.description) like :msg " : "") +
 //                (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
                 (!roomsCount.isEmpty() ? " AND p.roomCount IN (:roomCounts) " : "") +
@@ -69,6 +54,8 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                 (maxPrice != null ? " AND p.rentalFee <= :maxPrice " : "") +
                 " ORDER BY p.logicalCreated DESC";
         TypedQuery<Apartment> query = em.createQuery(qlString, Apartment.class);
+        Apartment.Target value = findMode.toTarget();
+        query.setParameter("targets", ImmutableList.of(value, Apartment.Target.BOTH));
 
         if (!searchText.isEmpty()) {
             query.setParameter("msg", ilike(searchText));
