@@ -83,7 +83,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("select count(a) from FacebookApartment a")
     long countFB();
 
-    @Query("select a from FacebookApartment a where lower(a.description) like :text order by logicalCreated desc")
+    @Query("select a from FacebookApartment a")
     Page<FacebookApartment> findFBAll(Pageable pageable);
 
     public enum FindMode {
