@@ -81,7 +81,7 @@ var PlainRegistration = React.createClass({
         }
     },
 
-    performIfInputWOntChange: function(callback){
+    performIfInputWOntChange: function (callback) {
         var now = (new Date()).getTime();
         var self = this;
 
@@ -99,15 +99,15 @@ var PlainRegistration = React.createClass({
         }, 500);
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         UserStore.addServerErrorListener(this.onServerError);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         UserStore.removeServerErrorListener(this.onServerError);
     },
 
-    onServerError: function() {
+    onServerError: function () {
         var serverErrors = UserStore.getServerErrors();
 
         var errors = _.union((this.state.errors || []), serverErrors);//perform array concatenation
@@ -115,7 +115,7 @@ var PlainRegistration = React.createClass({
         this.setState(assign(this.state, {errors: errors}));
     },
 
-    validateAll: function() {
+    validateAll: function () {
         return this.validateForm(true);
     },
 
@@ -148,25 +148,25 @@ var PlainRegistration = React.createClass({
 
 
         var mergedMap = data;
-        if(!checkAll) {
+        if (!checkAll) {
             var blackListedKeys = _.filter(_.keys(data),
                 function (key) {
                     var hasNoProperty = !_.has(constraintMap, key);
-                    if(hasNoProperty) {
-                        console.log('Property will be blacklisted because it\'s not in constraint map: '+key);
+                    if (hasNoProperty) {
+                        console.log('Property will be blacklisted because it\'s not in constraint map: ' + key);
                         return true;
                     }
 
                     var equalsToDefault = _.contains(defaultValuesMap[key], mergedMap[key]);
-                    if(equalsToDefault) {
-                        console.log('Property will be blacklisted because it\'s equal to default: '+key);
-                        console.log('Data: '+mergedMap[key]);
-                        console.log('Default value: '+defaultValuesMap[key]);
+                    if (equalsToDefault) {
+                        console.log('Property will be blacklisted because it\'s equal to default: ' + key);
+                        console.log('Data: ' + mergedMap[key]);
+                        console.log('Default value: ' + defaultValuesMap[key]);
                         return true;
                     } else {
-                        console.log('Property differs from default: '+key);
-                        console.log('Data: '+mergedMap[key]);
-                        console.log('Default value: '+defaultValuesMap[key]);
+                        console.log('Property differs from default: ' + key);
+                        console.log('Data: ' + mergedMap[key]);
+                        console.log('Default value: ' + defaultValuesMap[key]);
                     }
 
                     return false;
@@ -272,7 +272,7 @@ var PlainRegistration = React.createClass({
     },
 
     onRegistrationClicked: function () {
-        if(!this.validateAll()) return;
+        if (!this.validateAll()) return;
         console.log('Reg clicked.');
 
         var name = this.state.name;
@@ -298,7 +298,7 @@ var PlainRegistration = React.createClass({
 
         var errors = this.state.errors || [];
 
-        var errorsHtml = errors.map(function(e){
+        var errorsHtml = errors.map(function (e) {
             return <li key={e.key}>{e.key}: {e.value}</li>
         });
 
@@ -422,16 +422,15 @@ var PlainLogin = React.createClass({
     },
 
 
-
-    componentDidMount: function() {
+    componentDidMount: function () {
         UserStore.addServerErrorListener(this.onServerError);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         UserStore.removeServerErrorListener(this.onServerError);
     },
 
-    onServerError: function() {
+    onServerError: function () {
         var serverErrors = UserStore.getServerErrors();
 
         var errors = _.union((this.state.errors || []), serverErrors);//perform array concatenation
@@ -488,7 +487,7 @@ var PlainLogin = React.createClass({
 
         var errors = this.state.errors || [];
 
-        var errorsHtml = errors.map(function(e){
+        var errorsHtml = errors.map(function (e) {
             return <li key={e.key}>{e.key}: {e.value}</li>
         });
 
@@ -632,14 +631,16 @@ var AuthModalDialog2 = React.createClass({
 
 var AuthForm2 = React.createClass({
     render: function () {
+        var loginButtonStyle = {
+            margin: 30,
+            background: 'rgba(74, 35, 23, 0.6)'
+        };
 
         return (
-            <div>
-                <div>
-                    <ModalTrigger modal={<AuthModalDialog2 />}>
-                        <input type="button" className="button special" value="Вход"/>
-                    </ModalTrigger>
-                </div>
+            <div style={{textAlign: 'right'}}>
+                <ModalTrigger modal={<AuthModalDialog2 />}>
+                    <input type="button" className="button special" value="Вход / Регистрация" style={loginButtonStyle}/>
+                </ModalTrigger>
             </div>
         );
     }
