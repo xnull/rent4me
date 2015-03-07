@@ -10,44 +10,13 @@ var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 
 var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
+var RentType = require('../../../../shared/ui/rent-type');
 
 var _ = require('underscore');
 var moment = require('moment');
 var Posts = require('./posts');
 
-var RentType = React.createClass({
 
-    render: function () {
-        var onRentTypeChange = this.props.onRentTypeChange;
-
-        var changeToLessor = function () {
-            onRentTypeChange('LESSOR');
-        };
-
-        var changeToRenter = function () {
-            onRentTypeChange('RENTER');
-        };
-
-        var isRenter = SocialNetStore.getSearchType() === 'RENTER';
-
-        var renterClasses = "btn btn-default" + (isRenter ? " active" : "");
-        var lessorClasses = "btn btn-default" + (!isRenter ? " active" : "");
-
-
-        return (
-            <div className='col-md-3'>
-                <div className="btn-group" data-toggle="buttons" >
-                    <label className={renterClasses} onClick={changeToRenter} >
-                        <input type="radio" >Снять</input>
-                    </label>
-                    <label className={lessorClasses} onClick={changeToLessor} >
-                        <input type="radio" >Сдать</input>
-                    </label>
-                </div>
-            </div>
-        )
-    }
-});
 
 module.exports = React.createClass({
     getInitialState: function () {
@@ -241,6 +210,16 @@ module.exports = React.createClass({
         SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
     },
 
+    changeToLessor: function () {
+        console.log('changeToLessor');
+        this.onRentTypeChange('LESSOR');
+    },
+
+    changeToRenter: function () {
+        console.log('changeToRenter');
+        this.onRentTypeChange('RENTER');
+    },
+
     render: function () {
         var items = this.state.posts || [];
         var hasMoreResults = this.state.hasMoreSearchResults || false;
@@ -254,8 +233,6 @@ module.exports = React.createClass({
         var minPrice = this.state.minPrice;
         var maxPrice = this.state.maxPrice;
 
-        console.log('with subway? ' + withSubWay);
-
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -266,7 +243,7 @@ module.exports = React.createClass({
                         <form className="form-horizontal" role="form">
                             <div className='row'>
                                 <div className="col-md-10 col-md-offset-1">
-                                    <RentType onRentTypeChange={this.onRentTypeChange}/>
+                                    <RentType changeToRenter={this.changeToRenter} changeToLessor={this.changeToLessor}/>
                                     <RoomsCount
                                         uiSize='4' uiLabelSize='3'
 

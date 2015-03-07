@@ -633,7 +633,7 @@ var AuthForm2 = React.createClass({
     render: function () {
         var loginButtonStyle = {
             margin: 30,
-            background: 'rgba(74, 35, 23, 0.6)'
+            background: 'rgba(74, 35, 23, 0.4)'
         };
 
         return (
