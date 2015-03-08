@@ -277,9 +277,6 @@ module.exports = React.createClass({
                 <div className="panel">
 
                     <div className="panel-body">
-                        <h4>Мне интересно</h4>
-
-
                         <form className="form-horizontal" role="form">
                             <div className="form-group">
                                 <label className="col-md-2 control-label">Адрес</label>

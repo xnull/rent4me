@@ -47,7 +47,7 @@ body {
     background-color: #ffffff;
 }
 
-.btn, .form-control, .panel, .list-group, .well {
+.btn, .form-control, .list-group, .well {
     border-radius: 1px;
     box-shadow: 0 0 0;
 }
@@ -74,7 +74,7 @@ body {
     text-shadow: 0 0 1px #bbbbbb;
 }
 
-.well, .panel {
+.well {
     border-color: #d2d2d2;
     box-shadow: 0 1px 0 #cfcfcf;
     border-radius: 3px;
@@ -111,34 +111,8 @@ textarea {
     outline: 0;
 }
 
-.panel .btn i, .btn span {
+.btn span {
     color: #666666;
-}
-
-.panel .panel-heading {
-    background-color: #ffffff;
-    font-weight: 700;
-    font-size: 16px;
-    color: #262626;
-    border-color: #ffffff;
-}
-
-.panel .panel-heading a {
-    font-weight: 400;
-    font-size: 11px;
-}
-
-.panel .panel-default {
-    border-color: #cccccc;
-}
-
-.panel .panel-thumbnail {
-    padding: 0;
-}
-
-.panel .img-circle {
-    width: 50px;
-    height: 50px;
 }
 
 .list-group-item:first-child, .list-group-item:last-child {
