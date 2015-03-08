@@ -124,10 +124,10 @@ var Post = React.createClass({
         var headerBlock = (
             <div className="panel-heading" style={{backgroundColor: 'rgba(207, 207, 207, 0.27)', borderBottom: 'none'}}>
                 <div className='row'>
-                    <div className='col-md-9'>
+                    <div className='col-md-8'>
                         <p>{priceInfo}</p>
                     </div>
-                    <div className='col-md-3'>
+                    <div className='col-md-4'>
                         <p>{footer}</p>
                     </div>
                 </div>
