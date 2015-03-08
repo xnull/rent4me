@@ -108,7 +108,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
         em.clear();//detach all instances
         AtomicInteger counter = new AtomicInteger();
-        Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(5).toDate();
+        Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
         for (VkontaktePage _vkPage : vkPages) {
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
                 @Override
