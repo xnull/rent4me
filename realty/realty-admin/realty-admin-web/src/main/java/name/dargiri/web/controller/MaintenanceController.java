@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by dionis on 2/3/14.
@@ -32,31 +33,69 @@ public class MaintenanceController {
         return new ModelAndView("maintenance/index");
     }
 
+    AtomicBoolean syncInProgress = new AtomicBoolean();
+
     @RequestMapping(value = "reparse_existing_fb_posts")
     public ModelAndView reparseExistingFBPosts(RedirectAttributes redirectAttributes) {
-        facebookService.reparseExistingFBPosts();
-        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All FB posts migrated");
+        boolean set = syncInProgress.compareAndSet(false, true);
+        if(set) {
+            try {
+                facebookService.reparseExistingFBPosts();
+                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All FB posts migrated");
+            } finally {
+                syncInProgress.set(false);
+            }
+        } else {
+            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
+        }
         return new ModelAndView("redirect:/secure/maintenance");
     }
 
     @RequestMapping(value = "reparse_existing_vk_posts")
     public ModelAndView reparseExistingVKPosts(RedirectAttributes redirectAttributes) {
-        vkontakteService.reparseExistingVKPosts();
-        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All VK posts migrated");
+        boolean set = syncInProgress.compareAndSet(false, true);
+        if(set) {
+            try {
+                vkontakteService.reparseExistingVKPosts();
+                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All VK posts migrated");
+            } finally {
+                syncInProgress.set(false);
+            }
+        } else {
+            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
+        }
         return new ModelAndView("redirect:/secure/maintenance");
     }
 
     @RequestMapping(value = "manual_sync_fb")
     public ModelAndView manualSyncWithFB(RedirectAttributes redirectAttributes) {
-        facebookService.syncWithFB();
-        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with FB");
+        boolean set = syncInProgress.compareAndSet(false, true);
+        if(set) {
+            try {
+                facebookService.syncWithFB();
+                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with FB");
+            } finally {
+                syncInProgress.set(false);
+            }
+        } else {
+            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
+        }
         return new ModelAndView("redirect:/secure/maintenance");
     }
 
     @RequestMapping(value = "manual_sync_vk")
     public ModelAndView manualSyncWithVK(RedirectAttributes redirectAttributes) {
-        vkontakteService.syncWithVK();
-        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with VK");
+        boolean set = syncInProgress.compareAndSet(false, true);
+        if(set) {
+            try {
+                vkontakteService.syncWithVK();
+                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with VK");
+            } finally {
+                syncInProgress.set(false);
+            }
+        } else {
+            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
+        }
         return new ModelAndView("redirect:/secure/maintenance");
     }
 }
