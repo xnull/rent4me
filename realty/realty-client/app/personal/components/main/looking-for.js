@@ -9,7 +9,7 @@ var _ = require('underscore');
 var JSON2 = require('JSON2');
 
 var moment = require('moment');
-
+var accounting = require('accounting');
 
 var AddressBox = React.createClass({
     render: function () {
@@ -126,7 +126,7 @@ var NewsItem = React.createClass({
 
                         <div className="row">
                             <div className="col-md-6">
-                                Цена: {item.rental_fee}/{Translations['ru'][item.fee_period]}
+                                Цена: {accounting.formatNumber(item.rental_fee, 0, " ")}/{Translations['ru'][item.fee_period]}
                             </div>
                             <div className="col-md-6">
                                 Тип аренды: {Translations['ru'][item.type_of_rent]}
