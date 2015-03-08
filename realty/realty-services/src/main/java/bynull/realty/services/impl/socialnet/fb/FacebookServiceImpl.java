@@ -146,7 +146,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                                         .collect(Collectors.toList())
                         ) : Collections.emptyList();
 
-                        Set<String> collect = facebookPostItemDTOs.stream().map(item -> item.getMessage()).collect(Collectors.toSet());
+                        Set<String> collect = facebookPostItemDTOs.stream().map(item -> Apartment.calcHash(item.getMessage())).collect(Collectors.toSet());
 
                         final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
 

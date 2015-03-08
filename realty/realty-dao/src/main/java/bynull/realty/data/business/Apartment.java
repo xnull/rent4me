@@ -2,6 +2,7 @@ package bynull.realty.data.business;
 
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -108,6 +109,9 @@ public abstract class Apartment implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "target")
     private Target target;
+
+    @Column(name = "description_hash")
+    private String descriptionHash;
 
     public Long getId() {
         return id;
@@ -263,12 +267,22 @@ public abstract class Apartment implements Serializable {
         if(getLogicalCreated() == null) {
             setLogicalCreated(date);
         }
+        String descr = getDescription();
+        descriptionHash = calcHash(descr);
+
+    }
+
+    public static String calcHash(String descr) {
+        return descr != null ? DigestUtils.sha512Hex(descr) : null;
     }
 
     @PreUpdate
     void preUpdate() {
         Date date = new Date();
         setUpdated(date);
+
+        String descr = getDescription();
+        descriptionHash = calcHash(descr);
     }
 
     @Override

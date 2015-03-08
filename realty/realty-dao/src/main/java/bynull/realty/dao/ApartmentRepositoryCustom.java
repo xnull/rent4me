@@ -12,5 +12,5 @@ import java.util.Set;
 public interface ApartmentRepositoryCustom {
     List<Apartment> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode);
 
-    Set<String> similarApartments(Set<String> texts);
+    Set<String> similarApartments(Set<String> hashes);
 }

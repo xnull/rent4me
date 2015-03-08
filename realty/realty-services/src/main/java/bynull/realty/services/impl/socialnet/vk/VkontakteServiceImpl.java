@@ -129,7 +129,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                                         .collect(Collectors.toList())
                         ) : Collections.emptyList();
 
-                        Set<String> collect = postItemDTOs.stream().map(item -> item.getText()).collect(Collectors.toSet());
+                        Set<String> collect = postItemDTOs.stream().map(item -> Apartment.calcHash(item.getText())).collect(Collectors.toSet());
 
                         final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
 

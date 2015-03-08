@@ -87,32 +87,13 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         return !text.isEmpty() ? "%" + text.toLowerCase() + "%" : "%";
     }
 
-    private static class Pair {
-        private final String paramName;
-        private final String value;
-
-        public Pair(String paramName, String value) {
-            this.paramName = paramName;
-            this.value = value;
-        }
-    }
-
     @Override
-    public Set<String> similarApartments(Set<String> texts) {
-        Assert.notNull(texts);
-        if(texts.isEmpty()) return Collections.emptySet();
+    public Set<String> similarApartments(Set<String> hashes) {
+        Assert.notNull(hashes);
+        if(hashes.isEmpty()) return Collections.emptySet();
 
-        AtomicInteger i = new AtomicInteger();
-        List<Pair> expr = texts.stream().map(t->new Pair("p_"+i.incrementAndGet(), StringUtils.replace(t, "%", "_"))).collect(Collectors.toList());
-
-        String sqlPart = expr.stream().map(p->" lower(a.description) like lower(:"+p.paramName+")").collect(Collectors.joining(" OR "));
-
-        Query query = entityManager.createNativeQuery("select a.description from apartments a where " + sqlPart);
-
-        expr.forEach(p -> {
-            query.setParameter(p.paramName, p.value);
-        });
-
+        Query query = entityManager.createNativeQuery("select a.description from apartments a where a.description_hash IN (:hashez)");
+        query.setParameter("hashez", hashes);
 
         Set<String> result = (Set<String>) query.getResultList().stream().collect(Collectors.toSet());
         return result;
