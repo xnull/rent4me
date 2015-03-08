@@ -15,7 +15,7 @@
     </appender>
 
     <logger name="bynull" level="INFO"/>
-    <logger name="org.apache.commons.httpclient" level="TRACE"/>
+    <!--<logger name="org.apache.commons.httpclient" level="TRACE"/>-->
 
     <root level="info">
         <appender-ref ref="console"/>
