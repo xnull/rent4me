@@ -35,7 +35,7 @@ var HeaderComponent = React.createClass({
                                     <div className="panel-body">
                                         <form className="form" role="form">
                                             <div className='row'>
-                                                <div className="col-md-12">
+                                                <div className="col-md-10">
                                                     <RentType/>
                                                     <RoomsCount uiSize='4' uiLabelSize='3' />
                                                     <PriceRange uiSize='5' uiLabelSize='2' />
@@ -50,7 +50,7 @@ var HeaderComponent = React.createClass({
                                                         </input>
                                                     </div>
                                                     <div className="col-md-2">
-                                                        <a className="btn btn-primary">Найти</a>
+                                                        <a className="btn btn-primary center-block">Найти</a>
                                                     </div>
                                                 </div>
                                             </div>

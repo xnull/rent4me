@@ -3,6 +3,7 @@
  */
 
 var React = require('react');
+var accounting = require('accounting');
 
 var PriceRange = React.createClass({
     propTypes: {
@@ -30,8 +31,8 @@ var PriceRange = React.createClass({
     render: function () {
         var uiProps = this.uiProps();
 
-        var minPrice = this.props.minPrice;
-        var maxPrice = this.props.maxPrice;
+        var minPrice = this.props.minPrice ? accounting.formatNumber(this.props.minPrice, 0, " ") : "";
+        var maxPrice = this.props.maxPrice ? accounting.formatNumber(this.props.maxPrice, 0, " ") : "";
         var onKeyPress = this.props.onKeyPress;
 
         return (
