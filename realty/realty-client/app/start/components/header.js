@@ -50,7 +50,7 @@ var HeaderComponent = React.createClass({
                                                         </input>
                                                     </div>
                                                     <div className="col-md-2">
-                                                        <a className="btn btn-primary center-block">Найти</a>
+                                                        <a className="btn btn-success center-block">Найти</a>
                                                     </div>
                                                 </div>
                                             </div>

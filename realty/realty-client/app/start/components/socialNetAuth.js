@@ -38,15 +38,14 @@ var SocialNetAuth = React.createClass({
 
                     <div className='col-md-12'>
                         <div className="row">
-                            <div className="col-md-12" >
-                                <a href="javascript:void(0)" onClick={this.handleFacebookLogin}>
-                                    <img width="192" src="images/signin/fb-long3.png" border="0"/>
-                                </a>
-                            </div>
-
                             <div className="col-md-12" onClick={this.handleVkLogin}>
                                 <a href="javascript:void(0)">
                                     <img width="192" src="images/signin/vk-long.png" border="0"/>
+                                </a>
+                            </div>
+                            <div className="col-md-12" >
+                                <a href="javascript:void(0)" onClick={this.handleFacebookLogin}>
+                                    <img width="192" src="images/signin/fb-long3.png" border="0"/>
                                 </a>
                             </div>
                         </div>
