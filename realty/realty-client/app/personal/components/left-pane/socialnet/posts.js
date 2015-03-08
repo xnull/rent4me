@@ -6,6 +6,7 @@ var React = require('react');
 var _ = require('underscore');
 var Utils = require('rent4meUtil');
 var moment = require('moment');
+var accounting = require('accounting');
 
 var Post = React.createClass({
     render: function () {
@@ -58,7 +59,7 @@ var Post = React.createClass({
 
         var priceInfo = item.rental_fee ? (
             <div>
-            Цена: {item.rental_fee}
+                Цена: {accounting.formatNumber(item.rental_fee, 0, " ")}
             </div>
             ) : null;
 
