@@ -192,7 +192,7 @@ public class VKHelperComponent {
 //        String url = !_url.contains("access_token")
 //                ? _url + (_url.contains("?") ? "&" : "?") + "access_token=" + accessToken
 //                : _url;
-        String url = "http://api.vk.com/method/wall.get?&owner_id=-" + pageId + "&v=5.27&count=100&filter=all&extended=1&offset=" + offset;
+        String url = "http://api.vk.com/method/wall.get?owner_id=-" + pageId + "&v=5.27&count=100&filter=all&extended=1&offset=" + offset;
 
         log.info("Attempt #[{}] for getting url [{}]", retryNumber, url);
 
