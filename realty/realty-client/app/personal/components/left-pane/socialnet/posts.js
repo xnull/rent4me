@@ -52,16 +52,16 @@ var Post = React.createClass({
                 <div className="col-xs-6 col-lg-4">
                     <h3 className="media-heading">Метро</h3>
                     <div>
-                        Не указано
+                        Не распознано
                     </div>
                 </div>
             );
 
-        var priceInfo = item.rental_fee ? (
+        var priceInfo = (
             <div>
-                Цена: {accounting.formatNumber(item.rental_fee, 0, " ")}
+                Цена: {item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'не распознано'}
             </div>
-        ) : "Цена: Не распознано";
+        );
 
         var roomCountInfo = item.room_count ? (
             <div className="col-xs-6 col-lg-4">
@@ -74,7 +74,7 @@ var Post = React.createClass({
             <div className="col-xs-6 col-lg-4">
                 <h3 className="media-heading"> Комнат:</h3>
                 <div>
-                    Не указано
+                    Не распознано
                 </div>
             </div>
         );
