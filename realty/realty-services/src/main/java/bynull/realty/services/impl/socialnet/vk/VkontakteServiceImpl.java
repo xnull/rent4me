@@ -40,6 +40,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -105,6 +106,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
         List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
+        AtomicInteger counter = new AtomicInteger();
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
         for (VkontaktePage _vkPage : vkPages) {
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
@@ -157,7 +159,10 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
                         log.info("Removed duplicates in DB by id");
 
+
                         for (VKHelperComponent.VkWallPostDTO postItemDTO : dtosToPersist) {
+                            int i = counter.incrementAndGet();
+                            log.info(">>> Processing post #[{}]", i);
                             VkontakteApartment post = postItemDTO.toInternal();
                             post.setVkontaktePage(vkPage);
                             post.setPublished(true);
@@ -179,6 +184,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                             }).collect(Collectors.toCollection(HashSet::new));
                             post.setContacts(contacts);
                             apartmentRepository.save(post);
+                            log.info("<<< Processing of post #[{}] done", i);
                         }
                         em.flush();
                         log.info("Saved [{}] posts for vk page: [{}]", dtosToPersist.size(), vkPage.getLink());

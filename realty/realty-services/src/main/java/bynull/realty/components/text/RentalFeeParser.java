@@ -123,11 +123,11 @@ public class RentalFeeParser {
                 Matcher matcher = pattern.matcher(text);
                 int matchNumber = 0;
                 BigDecimal resultValue = null;
-                log.info("Evaluating pattern [{}] for text: [{}]", pattern.pattern(), text);
-                log.info("Before first match [{}]");
+                log.debug("Evaluating pattern [{}] for text: [{}]", pattern.pattern(), text);
+                log.debug("Before first match [{}]");
                 while (matcher.find()) {
                     matchNumber++;
-                    log.info("Match #[{}]", matchNumber);
+                    log.debug("Match #[{}]", matchNumber);
                     log.debug("Price matched by pattern [{}]", matcher.pattern());
                     String value = normalizeMatchedValue(matcher.group(patternCheck.resultGroup));
                     try {
@@ -160,7 +160,7 @@ public class RentalFeeParser {
 //                            }
 
                             if(resultValue == null || tmpResultValue.compareTo(resultValue) > 0) {
-                                log.info("Setting result value to [{}]", tmpResultValue);
+                                log.debug("Setting result value to [{}]", tmpResultValue);
                                 resultValue = tmpResultValue;
                             }
                         } else {

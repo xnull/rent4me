@@ -45,6 +45,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -121,6 +122,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
 
         em.clear();//detach all instances
+        AtomicInteger counter = new AtomicInteger();
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
         for (FacebookPageToScrap _fbPage : fbPages) {
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
@@ -177,7 +179,8 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                         for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : facebookPostItemDTOsToPersist) {
                             FacebookApartment post = new FacebookApartment();
 
-
+                            int i = counter.incrementAndGet();
+                            log.info(">>> Processing post #[{}]", i);
                             //fill
                             post.setExternalId(postItemDTO.getId());
                             post.setLink(postItemDTO.getLink());
@@ -217,6 +220,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                             }
 
                             apartmentRepository.save(post);
+                            log.info("<<< Processing of post #[{}] done", i);
 
 //                                post.setType(getType().toInternal());
                         }
