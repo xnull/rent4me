@@ -90,8 +90,6 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("select count(a) from Apartment a where lower(a.description)=lower(:text)")
     long countOfSimilarApartments(@Param("text") String text);
 
-    @Query(value = "select lower(a.description) from apartments a where lower(a.description) similar to (:texts)", nativeQuery = true)
-    Set<String> similarApartments(@Param("texts") String texts);
 
     public enum FindMode {
         RENTER {

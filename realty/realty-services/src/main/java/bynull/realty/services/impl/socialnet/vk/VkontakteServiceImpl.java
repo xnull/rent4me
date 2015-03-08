@@ -108,7 +108,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
         em.clear();//detach all instances
         AtomicInteger counter = new AtomicInteger();
-        Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
+        Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(5).toDate();
         for (VkontaktePage _vkPage : vkPages) {
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
                 @Override
@@ -129,7 +129,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                                         .collect(Collectors.toList())
                         ) : Collections.emptyList();
 
-                        String collect = postItemDTOs.stream().map(item -> item.getText()).collect(Collectors.joining("|"));
+                        Set<String> collect = postItemDTOs.stream().map(item -> item.getText()).collect(Collectors.toSet());
 
                         final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
 
