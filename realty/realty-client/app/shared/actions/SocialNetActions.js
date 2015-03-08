@@ -69,6 +69,19 @@ var SocialNetActions = {
         });
     },
 
+    changeSearchLocationInfo: function (location, countryCode, bounds, formattedAddress) {
+
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_LOCATION_INFO,
+            value: {
+                location: location,
+                countryCode: countryCode,
+                bounds: bounds,
+                formattedAddress: formattedAddress
+            }
+        });
+    },
+
     changeFBSearchWithSubway: function (value) {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_WITH_SUBWAY,
@@ -84,13 +97,35 @@ var SocialNetActions = {
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice) {
+    findPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, lat, lng, countryCode, bounds) {
         BlockUI.blockUI();
+
+        var geoUrl = null;
+        if (lat && lng && countryCode) {
+
+            geoUrl = 'lng=' + lng + '&lat=' + lat + "&country_code=" + countryCode;
+            if (bounds) {
+                var ne = bounds.getNorthEast();
+                var sw = bounds.getSouthWest();
+
+                var urlValue = "lat_lo=" + sw.lat() + "&lng_lo=" + sw.lng() + "&lat_hi=" + ne.lat() + "&lng_hi=" + ne.lng();
+                geoUrl = geoUrl + "&" + urlValue;
+                console.log("Bounds urlValue: " + urlValue);
+            } else {
+                console.log("Bounds no urlValue ");
+            }
+        }
 
         var limit = SocialNetStore.getLimit();
         var offset = SocialNetStore.getOffset();
         //TODO: refactor & unify.
-        var url = '/rest/apartments/search?text=' + (text ? text : '') + "&type=" + type + "&with_subway=" + (withSubway ? true : false) + "&limit=" + limit + "&offset=" + offset;
+        var url = '/rest/apartments/search?'
+            + 'text=' + (text ? text : '')
+            + "&type=" + type
+            + "&with_subway="
+            + (withSubway ? true : false)
+            + (geoUrl ? ("&" + geoUrl) : '')
+            + "&limit=" + limit + "&offset=" + offset;
 
         if (oneRoomAptSelected) {
             url += "&rooms=1";

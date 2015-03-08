@@ -12,11 +12,31 @@ var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
 var RentType = require('../../../../shared/ui/rent-type');
 
+var AddressUtils = require('../../../../shared/common/AddressUtils');
+var JSON2 = require('JSON2');
+
 var _ = require('underscore');
 var moment = require('moment');
 var Posts = require('./posts');
 
+var AddressBox = React.createClass({
+    render: function () {
+        return (
+            <input
+                id="addressInput"
+                className="form-control"
+                type="text"
+                value={this.props.displayValue}
+                placeholder="Введите местоположение"
+                onChange={this.onAddressChange}
+            />
+        )
+    },
 
+    onAddressChange: function (event) {
+        //this.props.onChange(event.target.value);
+    }
+});
 
 module.exports = React.createClass({
     getInitialState: function () {
@@ -28,6 +48,10 @@ module.exports = React.createClass({
             oneRoomAptSelected: SocialNetStore.getSearchRooms()["1"],
             twoRoomAptSelected: SocialNetStore.getSearchRooms()["2"],
             threeRoomAptSelected: SocialNetStore.getSearchRooms()["3"],
+            location: SocialNetStore.getLocation(),
+            countryCode: SocialNetStore.getCountryCode(),
+            bounds: SocialNetStore.getBounds(),
+            formattedAddress: SocialNetStore.getFormattedAddress(),
             minPrice: SocialNetStore.getSearchMinPrice(),
             maxPrice: SocialNetStore.getSearchMaxPrice(),
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults(),
@@ -38,6 +62,35 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function () {
+        var that = this;
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            var place = autocomplete.getPlace();
+            if (!place) return;
+            var dump = JSON2.stringify(place);
+            console.log('dump:');
+            console.log(dump);
+            var addressComponents = place['address_components'];
+
+            var bounds = place.geometry.viewport;
+
+            var countryCode = AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY');
+
+            var location = {
+                latitude: place['geometry']['location'].lat(),
+                longitude: place['geometry']['location'].lng()
+            };
+
+            var formatted_address = place['formatted_address'];
+
+            console.log('new location:');
+            console.log(location);
+
+            that.setState(assign(that.state, {location: location, countryCode: countryCode, bounds: bounds, formattedAddress: formatted_address}));
+            that.onClick();
+        });
+
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
         this.onClick();//trigger initial load
     },
@@ -69,8 +122,13 @@ module.exports = React.createClass({
             var minPrice = this.state.minPrice;
             var maxPrice = this.state.maxPrice;
 
+            var location = this.state.location;
+            var countryCode = this.state.countryCode;
+            var bounds = this.state.bounds;
+            var formattedAddress = this.state.formattedAddress;
+
             console.log('Searching for text: ' + text);
-            SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
+            SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds, formattedAddress);
         }
     },
 
@@ -171,6 +229,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchWithSubway(true);
         SocialNetActions.changeFBSearchRooms(false, false, false);
         SocialNetActions.changeFBSearchPrice(null, null);
+        SocialNetActions.changeFBSearchPrice(null, null, null, null);
 
         this.setState(assign(this.state, {
             withSubway: SocialNetStore.isSearchWithSubway(),
@@ -178,7 +237,11 @@ module.exports = React.createClass({
             text: SocialNetStore.getSearchText(),
             oneRoomAptSelected: SocialNetStore.getSearchRooms()["1"],
             twoRoomAptSelected: SocialNetStore.getSearchRooms()["2"],
-            threeRoomAptSelected: SocialNetStore.getSearchRooms()["3"]
+            threeRoomAptSelected: SocialNetStore.getSearchRooms()["3"],
+            location: SocialNetStore.getLocation(),
+            countryCode: SocialNetStore.getCountryCode(),
+            bounds: SocialNetStore.getBounds(),
+            formattedAddress: SocialNetStore.getFormattedAddress()
         }));
     },
 
@@ -199,6 +262,11 @@ module.exports = React.createClass({
         var minPrice = this.state.minPrice;
         var maxPrice = this.state.maxPrice;
 
+        var location = this.state.location;
+        var countryCode = this.state.countryCode;
+        var bounds = this.state.bounds;
+        var formattedAddress = this.state.formattedAddress;
+
         console.log('Searching for text: ' + text + "& min price: " + minPrice + " & max price " + maxPrice);
 
         SocialNetActions.resetFBSearchState();
@@ -207,7 +275,8 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchType(type);
         this.fireAptSelectionStateChange();
         SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
-        SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice);
+        SocialNetActions.changeSearchLocationInfo(location, countryCode, bounds, formattedAddress);
+        SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds, formattedAddress);
     },
 
     changeToLessor: function () {
@@ -233,12 +302,14 @@ module.exports = React.createClass({
         var minPrice = this.state.minPrice;
         var maxPrice = this.state.maxPrice;
 
+        var formattedAddress = this.state.formattedAddress;
+
         return (
             <div className="col-md-9">
                 <div className="panel">
 
                     <div className="panel-body">
-                        <h4>Поиск по социальным сетям</h4>
+                        <h4>Мне интересно</h4>
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
@@ -271,16 +342,39 @@ module.exports = React.createClass({
                             </div>
 
                             <div className='row'>
-                                <div className="col-md-9 col-md-offset-1">
+                                <div className="col-md-8 col-md-offset-1">
+                                    <div className="col-md-12">
+                                        <AddressBox displayValue={formattedAddress}/>
+                                    </div>
+                                </div>
+                                <div className="col-md-2 pull-left">
+                                    <select
+                                        className="form-control"
+                                        multiple={false}
+                                        >
+                                        <option key="" value="">Выберите метро</option>
+                                        <option key="metro1" value="metro1">Метро1</option>
+                                        <option key="metro2" value="metro2">Метро2</option>
+                                        <option key="metro3" value="metro3">Метро3</option>
+                                        <option key="metro4" value="metro4">Метро4</option>
+                                        <option key="metro5" value="metro5">Метро5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <br/>
+
+                            <div className='row'>
+                                <div className="col-md-8 col-md-offset-1">
                                     <div className="col-md-12">
                                         <input type="text" className="form-control" value={text}
-                                            placeholder="Поиск по адресу, метро, улице, району"
+                                            placeholder="Поиск по тексту объявления"
                                             onKeyPress={this.clickOnEnter}
                                             onChange={this.onSearchChange} >
                                         </input>
                                     </div>
                                 </div>
-                                <div className="col-md-1">
+                                <div className="col-md-2">
                                     <a className="btn btn-primary" onClick={this.onClick}>Найти</a>
                                 </div>
                             </div>

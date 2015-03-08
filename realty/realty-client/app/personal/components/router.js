@@ -54,12 +54,11 @@ var route = (
         <Route name="renter" path="user/renter" handler={require('./left-pane/settings/renter.js')}/>
 
         <Route name="support" path="support" handler={require('./main/support.js')}/>
-        <Route name="socialNetworks" path="social_networks" handler={require('./left-pane/socialnet/social_networks')}/>
         <Route name="chats" path="user/chats" handler={require('./left-pane/chats/main')}/>
         <Route name="chat" path="user/chat" handler={require('./left-pane/chats/chat')}/>
         <Route name="newMessageInChat" path="user/chats/newMessage" handler={require('./left-pane/chats/newMessage')}/>
 
-        <DefaultRoute handler={require('./main/news-pane.js')}/>
+        <DefaultRoute handler={require('./left-pane/socialnet/social_networks')}/>
     </Route>
 );
 
