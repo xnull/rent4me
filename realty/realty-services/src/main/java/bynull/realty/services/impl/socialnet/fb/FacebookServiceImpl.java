@@ -145,6 +145,11 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                                         .map(FacebookHelperComponent.FacebookPostItemDTO::getId)
                                         .collect(Collectors.toList())
                         ) : Collections.emptyList();
+
+                        String collect = facebookPostItemDTOs.stream().map(item -> item.getMessage()).collect(Collectors.joining("|"));
+
+                        final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
+
                         Set<String> ids = byExternalIdIn.stream()
                                 .map(FacebookApartment::getExternalId)
                                 .collect(Collectors.toSet());
@@ -170,7 +175,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                         log.info("Removing duplicates in DB by id");
                         List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
                                 .stream()
-                                .filter(i -> !ids.contains(i.getId()))
+                                .filter(i -> !ids.contains(i.getId()) && !similarTextsInDB.contains(i.getMessage()))
                                 .collect(Collectors.toList());
 
                         log.info("Removed duplicates in DB by id");

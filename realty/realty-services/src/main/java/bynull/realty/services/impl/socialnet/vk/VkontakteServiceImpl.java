@@ -22,6 +22,7 @@ import bynull.realty.dto.vk.VkontaktePostDTO;
 import bynull.realty.services.api.VkontakteService;
 import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
@@ -122,12 +123,15 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                                 .stream()
                                 .filter(item -> StringUtils.trimToNull(item.getText()) != null)
                                 //leave only those that have no duplicates in DB
-                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getText()) == 0)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         List<VkontakteApartment> byExternalIdIn = !postItemDTOs.isEmpty() ? apartmentRepository.findVkApartmentsByExternalIdIn(postItemDTOs.stream()
                                         .map(VKHelperComponent.VkWallPostDTO::getId)
                                         .collect(Collectors.toList())
                         ) : Collections.emptyList();
+
+                        String collect = postItemDTOs.stream().map(item -> item.getText()).collect(Collectors.joining("|"));
+
+                        final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
 
                         Set<String> ids = byExternalIdIn.stream()
                                 .map(VkontakteApartment::getExternalId)
@@ -154,7 +158,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                         log.info("Removing duplicates in DB by id");
                         List<VKHelperComponent.VkWallPostDTO> dtosToPersist = postItemDTOs
                                 .stream()
-                                .filter(i -> !ids.contains(i.getId()))
+                                .filter(i -> !ids.contains(i.getId()) && !similarTextsInDB.contains(i.getText()))
                                 .collect(Collectors.toList());
 
                         log.info("Removed duplicates in DB by id");
