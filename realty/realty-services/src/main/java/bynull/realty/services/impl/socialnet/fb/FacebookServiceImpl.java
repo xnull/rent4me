@@ -138,7 +138,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                                 .stream()
                                 .filter(item -> StringUtils.trimToNull(item.getMessage()) != null)
                                 //leave only those that have no duplicates in DB
-                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getMessage()) == 0)
+//                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getMessage()) == 0)
                                 .collect(Collectors.toCollection(ArrayList::new));
 
                         List<FacebookApartment> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? apartmentRepository.findFBApartmentsByExternalIdIn(facebookPostItemDTOs.stream()
