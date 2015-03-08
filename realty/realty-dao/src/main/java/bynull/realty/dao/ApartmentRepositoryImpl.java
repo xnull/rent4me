@@ -103,9 +103,9 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         if(texts.isEmpty()) return Collections.emptySet();
 
         AtomicInteger i = new AtomicInteger();
-        List<Pair> expr = texts.stream().map(t->new Pair("p_"+i.incrementAndGet(), t)).collect(Collectors.toList());
+        List<Pair> expr = texts.stream().map(t->new Pair("p_"+i.incrementAndGet(), StringUtils.replace(t, "%", "_"))).collect(Collectors.toList());
 
-        String sqlPart = expr.stream().map(p->" lower(a.description) like :"+p.paramName).collect(Collectors.joining(" OR "));
+        String sqlPart = expr.stream().map(p->" lower(a.description) like lower(:"+p.paramName+")").collect(Collectors.joining(" OR "));
 
         Query query = entityManager.createNativeQuery("select a.description from apartments a where " + sqlPart);
 
