@@ -11,6 +11,115 @@ var assign = require('object-assign');
 var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
 
+var MetroPreviews = React.createClass({
+
+    getMetroElements: function () {
+        return this.props.metros.map(function (metro) {
+            return (
+                <li>{metro.station_name}</li>
+            );
+        });
+    },
+
+    getRecognized: function () {
+        return (
+            <div>
+                <ul className="list-unstyled">
+                        {this.getMetroElements()}
+                </ul>
+            </div>
+        );
+    },
+
+    render: function () {
+        var notRecognized = (<div>Не распознано</div>);
+        var hasMetros = _.size(this.props.metros) > 0;
+
+        return (
+            <div className="col-xs-6 col-lg-4">
+                <h3 className="media-heading">Метро</h3>
+                {hasMetros ? this.getRecognized() : notRecognized}
+            </div>
+        )
+    }
+});
+
+var RoomCountInfo = React.createClass({
+    render: function () {
+        var notRecognized = (<div>Не распознано</div>);
+        var roomCount = (<div>{this.props.roomCount}</div>);
+
+        return (
+            <div className="col-xs-6 col-lg-4">
+                <h3 className="media-heading"> Комнат:</h3>
+                {this.props.roomCount ? roomCount : notRecognized}
+            </div>
+        )
+    }
+});
+
+var ContactInfo = React.createClass({
+
+    getDirectContact: function () {
+        var item = this.props.item;
+        var directContact;
+        if (item.owner) {
+            var me = this.props.me;
+
+            console.log("Me:");
+            console.log(me);
+
+            var targetPerson = item.owner;
+
+            var chatKey = Math.min(me.id, targetPerson.id) + '_' + Math.max(me.id, targetPerson.id);
+
+            var url = "#/user/chat?id=" + chatKey + "&receiver_id=" + targetPerson.id;
+            directContact = (<div>
+                <a href={url} className="btn btn-default">Отправить сообщение</a>
+            </div>);
+        } else {
+            directContact = null;
+        }
+
+        return directContact;
+    },
+
+    getExternalLink: function () {
+        return (
+            <div>
+                <a href="http://vk.com/" target="_blank">Link (FB|VK)</a>
+            </div>
+        );
+    },
+
+    render: function () {
+        var item = this.props.item;
+        var hasContacts = item.contacts;
+
+        var phoneNumbers = hasContacts ? item.contacts.filter(contact=>contact.type == 'PHONE').map(contact=>contact.phone) : [];
+
+        var phoneNumbersDisplay = phoneNumbers.map(phone => {
+            return (
+                <div>
+                    Тел.: {phone.national_formatted_number || phone.raw_number }
+                </div>
+            );
+        });
+
+        return (
+            <div className="col-xs-6 col-lg-4">
+                <h3 className="media-heading"> Контакты:</h3>
+                <div>
+                      {phoneNumbersDisplay}
+                      {this.getDirectContact()}
+                    <br/>
+                      {this.getExternalLink()}
+                </div>
+            </div>
+        )
+    }
+});
+
 var Post = React.createClass({
 
     getInitialState: function () {
@@ -37,7 +146,6 @@ var Post = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
-
         var firstImage;
 
         if (item.data_source == 'INTERNAL') {
@@ -54,34 +162,6 @@ var Post = React.createClass({
             })) : null;
         }
 
-
-        var metroElements = item.metros.map(function (metro) {
-            return (
-                <li>{metro.station_name}</li>
-            );
-        });
-
-        var hasMetros = _.size(item.metros) > 0;
-
-        var metroPreviews = hasMetros ? (
-            <div className="col-xs-6 col-lg-4">
-                <h3 className="media-heading">Метро</h3>
-                <div>
-                    <ul className="list-unstyled">
-                        {metroElements}
-                    </ul>
-                </div>
-            </div>
-        ) :
-            (
-                <div className="col-xs-6 col-lg-4">
-                    <h3 className="media-heading">Метро</h3>
-                    <div>
-                        Не распознано
-                    </div>
-                </div>
-            );
-
         var priceInfo = (
             <div>
                 Цена: {item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'не распознано'}
@@ -93,68 +173,6 @@ var Post = React.createClass({
                 {item.address && item.address.formatted_address ? item.address.formatted_address : ''}
             </div>
         );
-
-        var roomCountInfo = item.room_count ? (
-            <div className="col-xs-6 col-lg-4">
-                <h3 className="media-heading"> Комнат:</h3>
-                <div>
-                      {item.room_count}
-                </div>
-            </div>
-        ) : (
-            <div className="col-xs-6 col-lg-4">
-                <h3 className="media-heading"> Комнат:</h3>
-                <div>
-                    Не распознано
-                </div>
-            </div>
-        );
-
-        var hasContacts = !!item.contacts;
-
-        var phoneNumbers = hasContacts ? item.contacts.filter(contact=>contact.type == 'PHONE').map(contact=>contact.phone) : [];
-
-        var phoneNumbersDisplay = phoneNumbers.map(phone => {
-            return (
-                <div>
-                    Тел.: {phone.national_formatted_number || phone.raw_number }
-                </div>
-            );
-        });
-
-        var directContact;
-        if (item.owner) {
-            var me = this.state.me;
-
-            console.log("Me:");
-            console.log(me);
-
-            var targetPerson = item.owner;
-
-            var chatKey = Math.min(me.id, targetPerson.id)+'_'+Math.max(me.id, targetPerson.id);
-
-            var url = "#/user/chat?id=" + chatKey + "&receiver_id=" + targetPerson.id;
-            directContact = (<div>
-                                <a href={url} className="btn btn-default">Отправить сообщение</a>
-                            </div>);
-        } else {
-            directContact = null;
-        }
-
-        var externalLink = (<div><a href="http://vk.com/" target="_blank">Link (FB|VK)</a></div>);
-
-        var contactInfo = (
-            <div className="col-xs-6 col-lg-4">
-                <h3 className="media-heading"> Контакты:</h3>
-                <div>
-                      {phoneNumbersDisplay}
-                      {directContact}
-                      <br/>
-                      {externalLink}
-                </div>
-            </div>
-        );
-
 
         var imagePreviews = firstImage ? (
             <div>
@@ -201,7 +219,6 @@ var Post = React.createClass({
             </div>
         );
 
-
         return (
             <div className='panel panel-info'>
                     {headerBlock}
@@ -210,9 +227,9 @@ var Post = React.createClass({
                        {imagePreviews}
                         <div className="media-body">
                             <div className="row">
-                                {metroPreviews}
-                                {roomCountInfo}
-                                {contactInfo}
+                                <MetroPreviews metros={item.metros}/>
+                                <RoomCountInfo roomCount={item.room_count}/>
+                                <ContactInfo item={item} me={this.state.me} />
                             </div>
                         </div>
                     </div>
