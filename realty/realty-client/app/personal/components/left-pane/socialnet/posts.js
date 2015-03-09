@@ -138,7 +138,7 @@ var Post = React.createClass({
             <div className="panel-body" style={{padding: '15px 15px 0 15px'}}>
                 <div className="row">
                     <div className="col-md-12 well"
-                        style={{boxShadow: 'none', backgroundColor: 'rgba(250, 250, 250, 1)'}}
+                        style={{boxShadow: 'none', backgroundColor: 'rgba(250, 250, 250, 1)', marginBottom: 0}}
                         dangerouslySetInnerHTML={{__html: Utils.nl2br(item.description)}}>
                     </div>
                 </div>
