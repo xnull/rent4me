@@ -7,8 +7,33 @@ var _ = require('underscore');
 var Utils = require('rent4meUtil');
 var moment = require('moment');
 var accounting = require('accounting');
+var assign = require('object-assign');
+var UserStore = require('../../../../shared/stores/UserStore');
+var UserActions = require('../../../../shared/actions/UserActions');
 
 var Post = React.createClass({
+
+    getInitialState: function () {
+        return {
+            me: UserStore.getMyProfile()
+        };
+    },
+
+    componentDidMount: function () {
+        UserStore.addChangeListener(this.meLoadListener);
+        UserActions.loadMyProfileIfNotLoaded();
+    },
+
+    componentWillUnmount: function () {
+        UserStore.removeChangeListener(this.meLoadListener);
+    },
+
+    meLoadListener: function () {
+        this.setState(assign(this.state, {
+            me: UserStore.getMyProfile()
+        }));
+    },
+
     render: function () {
         var item = this.props.item || {};
 
@@ -97,13 +122,35 @@ var Post = React.createClass({
             );
         });
 
+        var directContact;
+        if (item.owner) {
+            var me = this.state.me;
+
+            console.log("Me:");
+            console.log(me);
+
+            var targetPerson = item.owner;
+
+            var chatKey = Math.min(me.id, targetPerson.id)+'_'+Math.max(me.id, targetPerson.id);
+
+            var url = "#/user/chat?id=" + chatKey + "&receiver_id=" + targetPerson.id;
+            directContact = (<div>
+                                <a href={url} className="btn btn-default">Отправить сообщение</a>
+                            </div>);
+        } else {
+            directContact = null;
+        }
+
+        var externalLink = (<div><a href="http://vk.com/" target="_blank">Link (FB|VK)</a></div>);
+
         var contactInfo = (
             <div className="col-xs-6 col-lg-4">
                 <h3 className="media-heading"> Контакты:</h3>
                 <div>
                       {phoneNumbersDisplay}
-                    Link FB
-                    Link VK
+                      {directContact}
+                      <br/>
+                      {externalLink}
                 </div>
             </div>
         );
