@@ -11,49 +11,61 @@ var assign = require('object-assign');
 var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
 
+var AdsItem = React.createClass({
+    render: function () {
+        return (
+            <div className="row" style={{lineHeight: '32px'}}>
+                <div className='col-sm-3 col-lg-3'>
+                    <strong>{this.props.name}:</strong>
+                </div>
+                <div className='col-sm-9 col-lg-9'>
+                    {this.props.text}
+                </div>
+            </div>
+        )
+    }
+});
+
+var Address = React.createClass({
+    render: function () {
+        var address = this.props.address;
+        var addressIsSet = address && address.formatted_address;
+        return (
+            addressIsSet ? <AdsItem name='Адрес' text={address.formatted_address} /> : null
+        )
+    }
+});
+
 var MetroPreviews = React.createClass({
 
-    getMetroElements: function () {
+    getRecognized: function () {
         return this.props.metros.map(function (metro) {
-            return (
-                <li>{metro.station_name}</li>
-            );
+            return metro.station_name + ";";
         });
     },
 
-    getRecognized: function () {
-        return (
-            <div>
-                <ul className="list-unstyled">
-                        {this.getMetroElements()}
-                </ul>
-            </div>
-        );
-    },
-
     render: function () {
-        var notRecognized = (<div>Не распознано</div>);
         var hasMetros = _.size(this.props.metros) > 0;
 
         return (
-            <div className="col-xs-6 col-lg-4">
-                <h3 className="media-heading">Метро</h3>
-                {hasMetros ? this.getRecognized() : notRecognized}
-            </div>
+            <AdsItem name='Метро' text={hasMetros ? this.getRecognized() : 'Не распознано'} />
         )
     }
 });
 
 var RoomCountInfo = React.createClass({
     render: function () {
-        var notRecognized = (<div>Не распознано</div>);
-        var roomCount = (<div>{this.props.roomCount}</div>);
-
         return (
-            <div className="col-xs-6 col-lg-4">
-                <h3 className="media-heading"> Комнат:</h3>
-                {this.props.roomCount ? roomCount : notRecognized}
-            </div>
+            <AdsItem name='Комнат' text={this.props.roomCount ? this.props.roomCount : 'Не распознано'} />
+        )
+    }
+});
+
+var PriceInfo = React.createClass({
+    render: function () {
+        var item = this.props.item;
+        return (
+            <AdsItem name='Цена' text={item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'не распознано'} />
         )
     }
 });
@@ -87,7 +99,7 @@ var ContactInfo = React.createClass({
     getExternalLink: function () {
         return (
             <div>
-                <a href="http://vk.com/" target="_blank">Link (FB|VK)</a>
+                <a href="http://vk.com/" target="_blank">Связаться через соц. сеть</a>
             </div>
         );
     },
@@ -107,8 +119,7 @@ var ContactInfo = React.createClass({
         });
 
         return (
-            <div className="col-xs-6 col-lg-4">
-                <h3 className="media-heading"> Контакты:</h3>
+            <div className='col-md-12' style={{borderRadius: 2}}>
                 <div>
                       {phoneNumbersDisplay}
                       {this.getDirectContact()}
@@ -145,7 +156,7 @@ var ImagePreviews = React.createClass({
         var firstImage = this.getFirstImage();
         return (
             <div>
-                <div className="thumbnail pull-left" style={{marginBottom: 0}}>
+                <div className="thumbnail pull-left">
                 {firstImage ? firstImage : withoutImage}
                 </div>
             </div>
@@ -156,35 +167,21 @@ var ImagePreviews = React.createClass({
 var HeaderBlock = React.createClass({
     render: function () {
         var item = this.props.item;
-        var priceInfo = (
-            <div>
-                Цена: {item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'не распознано'}
-            </div>
-        );
 
-        var addressInfo = (
+        var creationDate = (
             <div>
-                {item.address && item.address.formatted_address ? item.address.formatted_address : ''}
-            </div>
-        );
-
-        var footer = (
-            <div>
-                Добавлено: {moment(item.created).format("lll")}
+                Дата объявления: {moment(item.created).format("lll")}
             </div>
         );
 
         return (
             <div className="panel-heading" style={{backgroundColor: 'rgba(207, 207, 207, 0.27)', borderBottom: 'none'}}>
                 <div className='row'>
-                    <div className='col-md-2'>
-                        <p>{priceInfo}</p>
-                    </div>
-                    <div className='col-md-6'>
-                        <p>{addressInfo}</p>
+                    <div className='col-md-8'>
+                        <p>{creationDate}</p>
                     </div>
                     <div className='col-md-4'>
-                        <p>{footer}</p>
+
                     </div>
                 </div>
             </div>
@@ -196,12 +193,13 @@ var Message = React.createClass({
     render: function () {
         var item = this.props.item;
         return (
-            <div className="panel-body" style={{padding: '15px 15px 0 15px'}}>
-                <div className="row">
-                    <div className="col-md-12 well"
-                        style={{boxShadow: 'none', backgroundColor: 'rgba(250, 250, 250, 1)', marginBottom: 0}}
-                        dangerouslySetInnerHTML={{__html: Utils.nl2br(item.description)}}>
-                    </div>
+            <div className="col-md-12 ">
+                <div className="col-md-12 "
+                    style={{
+                        boxShadow: 'none', lineHeight: '18px', fontSize: '14px', border: '1px #e4e4e4 solid',
+                        padding: '15px', backgroundColor: 'rgba(244, 242, 242, 0.2)'
+                    }}
+                    dangerouslySetInnerHTML={{__html: Utils.nl2br(item.description)}}>
                 </div>
             </div>
         )
@@ -238,17 +236,27 @@ var Post = React.createClass({
             <div className='panel panel-info'>
                 <HeaderBlock item={item}/>
                 <div className="panel-body">
-                    <div className="media">
-                        <ImagePreviews item={item} />
-                        <div className="media-body">
-                            <div className="row">
+                    <div className="row">
+                        <div className="col-md-2">
+                            <ImagePreviews item={item} />
+                        </div>
+                        <div className="col-md-10">
+                            <div className='col-md-6'>
+                                <Address address={item.address}/>
                                 <MetroPreviews metros={item.metros}/>
                                 <RoomCountInfo roomCount={item.room_count}/>
-                                <ContactInfo item={item} me={this.state.me} />
+                                <PriceInfo item={item} />
+                            </div>
+                            <div className='col-md-6'>
+                                <div className="row bordered-element">
+                                    <ContactInfo item={item} me={this.state.me} />
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <Message item={item}/>
+                    <div className="row">
+                        <Message item={item}/>
+                    </div>
                 </div>
             </div>
         );
@@ -291,9 +299,9 @@ var Posts = React.createClass({
         return (
             <div style={style}>
                 <div className="list-group">
-                    {posts}
+                {posts}
                     <br/>
-                    {hasMoreElement}
+                {hasMoreElement}
                 </div>
             </div>
         );
