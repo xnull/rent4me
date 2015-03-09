@@ -6,6 +6,18 @@
 <div class="page-header">
     <h1>Maintenance</h1>
 </div>
+
+<div class="alert alert-info">
+    <c:choose >
+        <c:when test="${not empty activeJobName}">
+            Jobs active: ${activeJobName}
+        </c:when>
+        <c:otherwise>
+            No active jobs
+        </c:otherwise>
+    </c:choose>
+</div>
+
 <p>
     <a class="btn btn-primary" href="<c:url value="/secure/maintenance/reparse_existing_fb_posts"/>"
        onclick="return confirm('Re-parse ALL FaceBook post contents & reapply parsing algorithms?');">Re-parse FB
@@ -26,6 +38,11 @@
 <p>
     <a class="btn btn-primary" href="<c:url value="/secure/maintenance/manual_sync_vk"/>"
        onclick="return confirm('Are you sure you want to sync manually with VK?');">VK Manual sync</a>
+</p>
+
+<p>
+    <a class="btn btn-primary" href="<c:url value="/secure/maintenance/manual_sync_metros"/>"
+       onclick="return confirm('Are you sure you want to sync manually metros?');">Metros Manual sync</a>
 </p>
 <%--<p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added within <code>#wrap</code> with <code>padding-top: 60px;</code> on the <code>.container</code>.</p>--%>
 <%--<p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>--%>

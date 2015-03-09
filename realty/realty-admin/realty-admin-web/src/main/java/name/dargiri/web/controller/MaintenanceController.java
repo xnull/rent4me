@@ -5,14 +5,21 @@ package name.dargiri.web.controller;
 
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.services.api.VkontakteService;
+import bynull.realty.services.metro.MetroServiceException;
+import bynull.realty.services.metro.MoscowMetroSynchronisationService;
 import name.dargiri.web.Constants;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by dionis on 2/3/14.
@@ -20,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 @RequestMapping("/secure/maintenance")
-public class MaintenanceController {
+public class MaintenanceController implements InitializingBean, DisposableBean{
 
     @Resource
     FacebookService facebookService;
@@ -28,74 +35,124 @@ public class MaintenanceController {
     @Resource
     VkontakteService vkontakteService;
 
-    @RequestMapping(value = "")
-    public ModelAndView index() {
-        return new ModelAndView("maintenance/index");
+    @Resource
+    MoscowMetroSynchronisationService moscowMetroSynchronisationService;
+
+    ExecutorService jobRunner;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        jobRunner = Executors.newSingleThreadExecutor();
     }
 
-    AtomicBoolean syncInProgress = new AtomicBoolean();
+    @Override
+    public void destroy() throws Exception {
+        jobRunner.shutdown();
+        jobRunner = null;
+    }
 
-    @RequestMapping(value = "reparse_existing_fb_posts")
-    public ModelAndView reparseExistingFBPosts(RedirectAttributes redirectAttributes) {
-        boolean set = syncInProgress.compareAndSet(false, true);
-        if(set) {
+    @RequestMapping(value = "")
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView("maintenance/index");
+        modelAndView.addObject("activeJobName", syncJobName.get());
+        return modelAndView;
+    }
+
+    final AtomicBoolean syncInProgress = new AtomicBoolean();
+    final AtomicReference<String> syncJobName = new AtomicReference<>();
+
+    private abstract class Job implements Runnable {
+        private final String name;
+
+        public Job(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public final void run() {
             try {
-                facebookService.reparseExistingFBPosts();
-                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All FB posts migrated");
+                action();
             } finally {
                 syncInProgress.set(false);
+                syncJobName.set(null);
             }
+        }
+
+        protected abstract void action();
+    }
+
+    private ModelAndView startJob(RedirectAttributes redirectAttributes, Job job) {
+        boolean set = syncInProgress.compareAndSet(false, true);
+        if(set) {
+            syncJobName.set(job.getName());
+            jobRunner.submit(job);
+            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Started job: "+job.getName());
         } else {
             redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
         }
         return new ModelAndView("redirect:/secure/maintenance");
+    }
+
+    @RequestMapping(value = "reparse_existing_fb_posts")
+    public ModelAndView reparseExistingFBPosts(RedirectAttributes redirectAttributes) {
+        String jobName = "Re-Parsing of Existing FB Posts";
+        return startJob(redirectAttributes, new Job(jobName) {
+            @Override
+            protected void action() {
+                facebookService.reparseExistingFBPosts();
+            }
+        });
     }
 
     @RequestMapping(value = "reparse_existing_vk_posts")
     public ModelAndView reparseExistingVKPosts(RedirectAttributes redirectAttributes) {
-        boolean set = syncInProgress.compareAndSet(false, true);
-        if(set) {
-            try {
+        String jobName = "Re-Parsing of Existing VK Posts";
+        return startJob(redirectAttributes, new Job(jobName) {
+            @Override
+            protected void action() {
                 vkontakteService.reparseExistingVKPosts();
-                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "All VK posts migrated");
-            } finally {
-                syncInProgress.set(false);
             }
-        } else {
-            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
-        }
-        return new ModelAndView("redirect:/secure/maintenance");
+        });
     }
 
     @RequestMapping(value = "manual_sync_fb")
     public ModelAndView manualSyncWithFB(RedirectAttributes redirectAttributes) {
-        boolean set = syncInProgress.compareAndSet(false, true);
-        if(set) {
-            try {
+        String jobName = "Sync with FB";
+        return startJob(redirectAttributes, new Job(jobName) {
+            @Override
+            protected void action() {
                 facebookService.syncWithFB();
-                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with FB");
-            } finally {
-                syncInProgress.set(false);
             }
-        } else {
-            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
-        }
-        return new ModelAndView("redirect:/secure/maintenance");
+        });
     }
 
     @RequestMapping(value = "manual_sync_vk")
     public ModelAndView manualSyncWithVK(RedirectAttributes redirectAttributes) {
-        boolean set = syncInProgress.compareAndSet(false, true);
-        if(set) {
-            try {
+        String jobName = "Sync with VK";
+        return startJob(redirectAttributes, new Job(jobName) {
+            @Override
+            protected void action() {
                 vkontakteService.syncWithVK();
-                redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Synced manually with VK");
-            } finally {
-                syncInProgress.set(false);
             }
-        } else {
-            redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Sync already in progress");
-        }
-        return new ModelAndView("redirect:/secure/maintenance");
+        });
+    }
+
+    @RequestMapping(value = "manual_sync_metros")
+    public ModelAndView manualSyncMetros(RedirectAttributes redirectAttributes) {
+        String jobName = "Sync metros";
+        return startJob(redirectAttributes, new Job(jobName) {
+            @Override
+            protected void action() {
+                try {
+                    moscowMetroSynchronisationService.syncWithDatabase();
+                } catch (MetroServiceException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

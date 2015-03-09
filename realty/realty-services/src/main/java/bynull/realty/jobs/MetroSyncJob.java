@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * @author dionis on 06/12/14.
  */
-@Component
+
 @Slf4j
 public class MetroSyncJob implements Runnable {
 
