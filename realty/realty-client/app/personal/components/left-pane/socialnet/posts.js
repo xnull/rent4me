@@ -63,6 +63,12 @@ var Post = React.createClass({
             </div>
         );
 
+        var addressInfo = (
+            <div>
+                {item.address && item.address.formatted_address ? item.address.formatted_address : ''}
+            </div>
+        );
+
         var roomCountInfo = item.room_count ? (
             <div className="col-xs-6 col-lg-4">
                 <h3 className="media-heading"> Комнат:</h3>
@@ -124,8 +130,11 @@ var Post = React.createClass({
         var headerBlock = (
             <div className="panel-heading" style={{backgroundColor: 'rgba(207, 207, 207, 0.27)', borderBottom: 'none'}}>
                 <div className='row'>
-                    <div className='col-md-8'>
+                    <div className='col-md-2'>
                         <p>{priceInfo}</p>
+                    </div>
+                    <div className='col-md-6'>
+                        <p>{addressInfo}</p>
                     </div>
                     <div className='col-md-4'>
                         <p>{footer}</p>
