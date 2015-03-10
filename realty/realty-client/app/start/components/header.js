@@ -46,7 +46,8 @@ var HeaderComponent = React.createClass({
                                                 <div className="col-md-12">
                                                     <div className="col-md-10">
                                                         <input type="text" className="form-control" value="you"
-                                                            placeholder="Поиск по адресу, метро, улице, району">
+                                                            placeholder="Поиск по адресу, метро, улице, району"
+                                                            style={{borderRadius: 'inherit'}}>
                                                         </input>
                                                     </div>
                                                     <div className="col-md-2">
