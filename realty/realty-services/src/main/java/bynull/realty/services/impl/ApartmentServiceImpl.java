@@ -4,7 +4,6 @@ import bynull.realty.converters.apartments.ApartmentModelDTOConverter;
 import bynull.realty.converters.apartments.ApartmentModelDTOConverterFactory;
 import bynull.realty.dao.*;
 import bynull.realty.data.business.*;
-import bynull.realty.data.business.external.SocialNetPost;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
@@ -19,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import javax.persistence.TypedQuery;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -279,16 +276,17 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode) {
+    public List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, ApartmentRepository.FindMode findMode, ApartmentRepositoryCustom.GeoParams geoParams, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
+        Assert.notNull(geoParams);
 
         Assert.notNull(roomsCount);
         text = StringUtils.trimToEmpty(text);
 
 
 
-        List<Apartment> posts = apartmentRepository.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, limitAndOffset, findMode);
+        List<Apartment> posts = apartmentRepository.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, limitAndOffset);
 
         return posts.stream().map(e -> {
             ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(e);

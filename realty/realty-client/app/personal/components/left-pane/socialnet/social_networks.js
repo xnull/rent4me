@@ -20,6 +20,7 @@ var moment = require('moment');
 var Posts = require('./posts');
 
 var AddressBox = React.createClass({
+
     render: function () {
         return (
             <input
@@ -28,13 +29,9 @@ var AddressBox = React.createClass({
                 type="text"
                 value={this.props.displayValue}
                 placeholder="Введите местоположение"
-                onChange={this.onAddressChange}
+                onChange={this.props.onAddressChange}
             />
         )
-    },
-
-    onAddressChange: function (event) {
-        //this.props.onChange(event.target.value);
     }
 });
 
@@ -289,6 +286,14 @@ module.exports = React.createClass({
         this.onRentTypeChange('RENTER');
     },
 
+    onAddressChange: function(event) {
+        this.makeFormattedAddressDirty(event.target.value);
+    },
+
+    makeFormattedAddressDirty: function(value) {
+        this.setState(assign(this.state, {location: location, countryCode: null, bounds: null, formattedAddress: value}));
+    },
+
     render: function () {
         var items = this.state.posts || [];
         var hasMoreResults = this.state.hasMoreSearchResults || false;
@@ -342,7 +347,7 @@ module.exports = React.createClass({
                             <div className='row'>
                                 <div className="col-md-8 col-md-offset-1">
                                     <div className="col-md-12">
-                                        <AddressBox displayValue={formattedAddress}/>
+                                        <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
                                     </div>
                                 </div>
                                 <div className="col-md-2 pull-left">

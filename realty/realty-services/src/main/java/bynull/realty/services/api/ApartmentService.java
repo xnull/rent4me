@@ -1,6 +1,7 @@
 package bynull.realty.services.api;
 
 import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.ApartmentRepositoryCustom;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.util.LimitAndOffset;
@@ -34,5 +35,5 @@ public interface ApartmentService {
 
     List<ApartmentDTO> findNearestForCountry(GeoPoint geoPoint, String countryCode, Double latLow, Double lngLow, Double latHigh, Double lngHigh, LimitAndOffset limitAndOffset);
 
-    List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode);
+    List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, ApartmentRepository.FindMode findMode, ApartmentRepositoryCustom.GeoParams geoParams, LimitAndOffset limitAndOffset);
 }

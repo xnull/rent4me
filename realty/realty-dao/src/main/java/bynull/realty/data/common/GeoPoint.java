@@ -2,6 +2,7 @@ package bynull.realty.data.common;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Wither;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@Wither
 public class GeoPoint implements Serializable {
     private double latitude;
     private double longitude;

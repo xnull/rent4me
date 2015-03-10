@@ -2,23 +2,18 @@ package bynull.realty.dao;
 
 import bynull.realty.common.Porter;
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.util.LimitAndOffset;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,27 +31,83 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
     }
 
     @Override
-    public List<Apartment> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, LimitAndOffset limitAndOffset, ApartmentRepository.FindMode findMode) {
+    public List<Apartment> findPosts(String text,
+                                     boolean withSubway,
+                                     Set<ApartmentRepository.RoomCount> roomsCount,
+                                     Integer minPrice,
+                                     Integer maxPrice,
+                                     ApartmentRepository.FindMode findMode,
+                                     GeoParams geoParams,
+                                     LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
         Assert.notNull(findMode);
+        Assert.notNull(geoParams);
 
         Assert.notNull(roomsCount);
         text = StringUtils.trimToEmpty(text);
-        final String targetJPQL;
 
         String searchText = text.isEmpty() ? "" : text.length() > 5 ? porter.stem(text) : text;
 
-        String qlString = "select p from Apartment p where p.published=true AND p.target IN (:targets) " +
-                (!searchText.isEmpty() ? " AND lower(p.description) like :msg " : "") +
+        String qlString = "select a.* from apartments a where a.published=true AND a.target IN (:targets) " +
+                (!searchText.isEmpty() ? " AND lower(a.description) like :msg " : "") +
 //                (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
-                (!roomsCount.isEmpty() ? " AND p.roomCount IN (:roomCounts) " : "") +
-                (minPrice != null ? " AND p.rentalFee >= :minPrice " : "") +
-                (maxPrice != null ? " AND p.rentalFee <= :maxPrice " : "") +
-                " ORDER BY p.logicalCreated DESC";
-        TypedQuery<Apartment> query = entityManager.createQuery(qlString, Apartment.class);
+                (!roomsCount.isEmpty() ? " AND a.room_count IN (:roomCounts) " : "") +
+                (minPrice != null ? " AND a.rental_fee >= :minPrice " : "") +
+                (maxPrice != null ? " AND a.rental_fee <= :maxPrice " : "")
+                ;
+
+        Map<String, Object> params = new HashMap<>();
+
+        final String ordering;
+
+        if(geoParams.getCountryCode().isPresent()) {
+            qlString += " AND upper(a.country_code)=upper(:country_code) ";
+            params.put("country_code", geoParams.getCountryCode().get());
+        }
+
+        if (geoParams.getBoundingBox().isPresent()) {
+
+            qlString += " AND st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
+                    ":lng_low," +
+                    "' '," +
+                    ":lat_low," +
+                    "')')), ST_GeomFromText( concat('SRID=4326;POINT('," +
+                    ":lng_high," +
+                    "' '," +
+                    ":lat_high," +
+                    "')'))), 4326)" +
+                    " ~ a.location" +
+                    " ";
+
+            BoundingBox boundingBox = geoParams.getBoundingBox().get();
+            params.put("lng_low", boundingBox.getLow().getLongitude());
+            params.put("lat_low", boundingBox.getLow().getLatitude());
+            params.put("lng_high", boundingBox.getHigh().getLongitude());
+            params.put("lat_high", boundingBox.getHigh().getLatitude());
+        }
+
+
+        Optional<GeoPoint> point = geoParams.getPoint();
+        if(point.isPresent()) {
+            ordering = " order by a.location <-> ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') ), a.logical_created_dt DESC";
+            params.put("lat", (point).get().getLatitude());
+            params.put("lng", (point).get().getLongitude());
+        } else {
+            ordering = " ORDER BY a.logical_created_dt DESC";
+        }
+
+
+        qlString += ordering;
+
+        Query query = entityManager.createNativeQuery(qlString, Apartment.class);
+
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+
         Apartment.Target value = findMode.toTarget();
-        query.setParameter("targets", ImmutableList.of(value, Apartment.Target.BOTH));
+        query.setParameter("targets", ImmutableList.of(value, Apartment.Target.BOTH).stream().map(Enum::name).collect(Collectors.toList()));
 
         if (!searchText.isEmpty()) {
             query.setParameter("msg", ilike(searchText));
@@ -75,6 +126,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             query.setParameter("maxPrice", BigDecimal.valueOf(maxPrice));
         }
 
+        @SuppressWarnings("unchecked")
         List<Apartment> resultList = query
                 .setFirstResult(limitAndOffset.offset)
                 .setMaxResults(limitAndOffset.limit)
