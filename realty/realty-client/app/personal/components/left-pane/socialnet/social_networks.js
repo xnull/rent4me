@@ -18,6 +18,7 @@ var JSON2 = require('JSON2');
 var _ = require('underscore');
 var moment = require('moment');
 var Posts = require('./posts');
+var NavActions = require('../../../../shared/actions/NavActions');
 
 var AddressBox = React.createClass({
 
@@ -59,6 +60,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function () {
+        NavActions.navigateToHome();
         var that = this;
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
 
