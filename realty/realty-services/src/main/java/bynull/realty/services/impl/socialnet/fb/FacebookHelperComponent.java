@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.Uninterruptibles;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -207,16 +209,17 @@ public class FacebookHelperComponent {
                 return accu;
             }
 
-            accu.addAll(response.getItems()
+            List<FacebookPostItemDTO> items = response.getItems()
                     .stream()
-                    .filter(post->post.getCreatedDtime().after(maxAge))
-                    .collect(Collectors.toList()));
-            accu.addAll(response.getItems());
+                    .filter(post -> post.getCreatedDtime().after(maxAge))
+                    .collect(Collectors.toList());
+            accu.addAll(items);
+
             if (!response.getPaging().hasNextPage()) {
                 return accu;
             }
 
-            FacebookPostItemDTO last = Iterables.getLast(response.getItems(), null);
+            FacebookPostItemDTO last = Iterables.getLast(items, null);
             if (last == null || !last.getCreatedDtime().after(maxAge)) {
                 return accu;
             }
@@ -314,8 +317,10 @@ public class FacebookHelperComponent {
         private final String picture;
         private final String link;
         private final Type type;
+        private final Author author;
         private final Date createdDtime;
         private final Date updatedDtime;
+        private final List<Action> actions;
 
         public FacebookPostItemDTO(
                 @JsonProperty("id")
@@ -337,7 +342,11 @@ public class FacebookHelperComponent {
                 @JsonProperty("link")
                 String link,
                 @JsonProperty("type")
-                Type type
+                Type type,
+                @JsonProperty("from")
+                Author author,
+                @JsonProperty("actions")
+                List<Action> actions
         ) {
             this.id = id;
             this.message = message;
@@ -346,6 +355,50 @@ public class FacebookHelperComponent {
             this.picture = picture;
             this.link = link;
             this.type = type;
+            this.actions = actions;
+            this.author = author;
+        }
+
+        public List<Action> getActions() {
+            return actions == null ? Collections.emptyList() : actions;
+        }
+
+        public String getExternalLink() {
+            String link = getLink();
+            for (Action action : this.getActions()) {
+                if("like".equalsIgnoreCase(action.getName())) {
+                    link = action.getLink();
+                    break;
+                }
+            }
+            return link;
+        }
+
+        public String getExternalAuthorLink() {
+            String link = null;
+            if (author != null) {
+                link = "https://www.facebook.com/"+author.getId();
+            }
+
+            return link;
+        }
+
+        @Getter
+        @Setter
+        public static class Action {
+            @JsonProperty("name")
+            private String name;
+            @JsonProperty("link")
+            private String link;
+        }
+
+        @Getter
+        @Setter
+        public static class Author  {
+            @JsonProperty("name")
+            private String name;
+            @JsonProperty("id")
+            private String id;
         }
 
         public String getId() {

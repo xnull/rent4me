@@ -76,6 +76,9 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
         List<? extends ContactJSON> contacts = contactDtoJsonConverter.toTargetList(apartment.getContacts());
         json.setContacts(contacts);
 
+        json.setExternalLink(apartment.getExternalLink());
+        json.setExternalAuthorLink(apartment.getExternalAuthorLink());
+
         return json;
     }
 

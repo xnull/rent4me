@@ -96,12 +96,20 @@ var ContactInfo = React.createClass({
         return directContact;
     },
 
-    getExternalLink: function () {
-        return (
+    getExternalAuthorLink: function (item) {
+        return item.external_author_link ? (
             <div>
-                <a href="http://vk.com/" target="_blank">Связаться через соц. сеть</a>
+                <a href={item.external_author_link} target="_blank">Связаться через соц. сеть</a>
             </div>
-        );
+        ) : null;
+    },
+
+    getSourceLink: function (item) {
+        return item.external_link ? (
+            <div>
+                <a href={item.external_link} target="_blank">Источник</a>
+            </div>
+        ) : null;
     },
 
     render: function () {
@@ -118,13 +126,16 @@ var ContactInfo = React.createClass({
             );
         });
 
+
         return (
             <div className='col-md-12' style={{borderRadius: 2}}>
                 <div>
                       {phoneNumbersDisplay}
                       {this.getDirectContact()}
-                    <br/>
-                      {this.getExternalLink()}
+                        <br/>
+                      {this.getExternalAuthorLink()}
+                        <br/>
+                    {this.getSourceLink()}
                 </div>
             </div>
         )

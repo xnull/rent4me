@@ -50,6 +50,8 @@ public class ApartmentDTO {
      * External specific.
      */
     private List<String> imageUrls;
+    private String externalLink;
+    private String externalAuthorLink;
     private List<? extends ContactDTO> contacts;
 
     public Date getCreated() {

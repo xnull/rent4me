@@ -148,6 +148,14 @@ public class VKHelperComponent {
             return new Date(unixDateSeconds * 1000);
         }
 
+        public String getExternalLink() {
+            return "https://vk.com/wall" + ownerId + "_" + id;
+        }
+
+        public String getExternalAuthorUrl() {
+            return "https://vk.com/id" + fromId;
+        }
+
         public static enum PostType {
             post {
                 @Override
@@ -184,6 +192,8 @@ public class VKHelperComponent {
             post.setExternalId(this.getId());
             post.setDescription(this.getText());
             post.setLogicalCreated(this.getDate());
+            post.setLink(this.getExternalLink());
+            post.setExtAuthorLink(this.getExternalAuthorUrl());
             return post;
         }
     }

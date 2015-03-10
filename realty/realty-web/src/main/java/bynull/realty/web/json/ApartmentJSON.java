@@ -86,6 +86,12 @@ public class ApartmentJSON {
     @JsonProperty("contacts")
     private List<? extends ContactJSON> contacts;
 
+    @JsonProperty("external_link")
+    private String externalLink;
+
+    @JsonProperty("external_author_link")
+    private String externalAuthorLink;
+
     public static enum DataSource {
         INTERNAL, FACEBOOK, VKONTAKTE;
 

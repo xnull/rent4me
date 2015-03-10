@@ -19,6 +19,9 @@ public abstract class SocialNetApartment extends Apartment {
     @Column(name = "ext_link")
     private String link;
 
+    @Column(name = "ext_author_id_link")
+    private String extAuthorLink;
+
     @OneToMany(mappedBy = "apartment")
     private Set<ApartmentExternalPhoto> externalPhotos;
 
@@ -44,6 +47,14 @@ public abstract class SocialNetApartment extends Apartment {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getExtAuthorLink() {
+        return extAuthorLink;
+    }
+
+    public void setExtAuthorLink(String extAuthorLink) {
+        this.extAuthorLink = extAuthorLink;
     }
 
     public Set<ApartmentExternalPhoto> getExternalPhotos() {
