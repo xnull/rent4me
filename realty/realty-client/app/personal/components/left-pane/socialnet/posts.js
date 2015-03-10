@@ -96,7 +96,8 @@ var ContactInfo = React.createClass({
         return directContact;
     },
 
-    getExternalAuthorLink: function (item) {
+    getExternalAuthorLink: function () {
+        var item = this.props.item;
         return item.external_author_link ? (
             <div>
                 <a href={item.external_author_link} target="_blank">Связаться через соц. сеть</a>
@@ -104,7 +105,8 @@ var ContactInfo = React.createClass({
         ) : null;
     },
 
-    getSourceLink: function (item) {
+    getSourceLink: function () {
+        var item = this.props.item;
         return item.external_link ? (
             <div>
                 <a href={item.external_link} target="_blank">Источник</a>
