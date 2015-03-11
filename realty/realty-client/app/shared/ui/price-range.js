@@ -42,11 +42,15 @@ var PriceRange = React.createClass({
                 </div>
                 <div className={uiProps.form}>
                     <div className='col-md-6' style={{paddingRight: 0}}>
-                        <input type='text' className='form-control' placeholder='От' value={minPrice} onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}/>
+                        <input type='text' className='form-control' placeholder='От' value={minPrice}
+                            onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
+                            style={{borderRadius: 'inherit'}}/>
                     </div>
 
                     <div className='col-md-6' style={{paddingLeft: 0}}>
-                        <input type='text' className='form-control' placeholder='До' value={maxPrice} onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}/>
+                        <input type='text' className='form-control' placeholder='До' value={maxPrice}
+                            onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
+                            style={{borderRadius: 'inherit'}}/>
                     </div>
                 </div>
             </div>
