@@ -53,6 +53,8 @@
     </logger>
     <!--<logger name="org.apache.commons.httpclient" level="TRACE"/>-->
 
+    <root level="INFO"/>
+
     <!--<root level="info">-->
         <!--<appender-ref ref="console"/>-->
         <!--&lt;!&ndash;<appender-ref ref="file"/>&ndash;&gt;-->

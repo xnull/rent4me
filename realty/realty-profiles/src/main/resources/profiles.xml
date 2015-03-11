@@ -102,7 +102,7 @@
 
               <bean id="appConfig" class="bynull.realty.config.Config">
                      <property name="vkRedirectURL" value="http://rent4.me"/>
-                     <property name="s3Folder" value="dev"/>
+                     <property name="s3Folder" value="prod"/>
                      <property name="esConfig" ref="esConfig"/>
                      <property name="fbAppId" value="270007246518198"/>
                      <property name="fbSecret" value="03df82f660db88cf2cb7ee53f55f9656"/>
