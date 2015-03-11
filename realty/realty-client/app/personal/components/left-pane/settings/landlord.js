@@ -135,7 +135,7 @@ var ApartmentInfoChangeRequestForm = React.createClass({
         var addressProp = {
             id: 'addressInputChange',
             name: 'Адрес',
-            placeholder: 'Начните печатать...',
+            placeholder: 'Введите адрес ...',
             customClassName: 'col-md-8'
         };
 
@@ -438,11 +438,12 @@ var UserText = React.createClass({
 
 var UserButton = React.createClass({
     render: function () {
-        var customClassName = this.props.data.customClassName || 'col-md-2 col-md-offset-4';
+        var customClassName = this.props.data.customClassName;
+        var type = 'btn center-block ' + this.props.data.type || 'btn-primary';
 
         return (
             <div className={customClassName}>
-                <a id={this.props.data.id} className="btn btn-primary center-block" href={this.props.data.url} onClick={this.props.onClick}>{this.props.data.value}</a>
+                <a id={this.props.data.id} className={type} href={this.props.data.url} onClick={this.props.onClick}>{this.props.data.value}</a>
             </div>
         )
     }
@@ -453,7 +454,7 @@ var ApartmentWelcomeScreen = React.createClass({
         onNextStepSelected: React.PropTypes.func
     },
 
-    render: function() {
+    render: function () {
         var onNextStepSelected = this.props.onNextStepSelected;
 
         return (
@@ -466,12 +467,17 @@ var ApartmentWelcomeScreen = React.createClass({
                         <br/>
                         <p>
                             <p className="col-md-offset-1">
-                                У вас пока что нет ни одного объявления о сдаче жилья в аренду.<br/>
-                                Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренды.<br/>
+                                У вас пока что нет ни одного объявления о сдаче жилья в аренду.
+                                <br/>
+                                Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренды.
+                                <br/>
                             </p>
                             <br/>
                             <p className="col-md-offset-1 col-md-3">
-                                <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}><i className="glyphicon glyphicon-plus" style={{color:'white'}}></i> <b>Добавить объявление</b></a>
+                                <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}>
+                                    <i className="glyphicon glyphicon-plus" style={{color: 'white'}}></i>
+                                    <b>Добавить объявление</b>
+                                </a>
                             </p>
                         </p>
                     </div>
@@ -504,7 +510,7 @@ module.exports = React.createClass({
         };
     },
 
-    _resetExternalDepState: function() {
+    _resetExternalDepState: function () {
         _marker = null;
         _map = null;
         _mapCenter = null;
@@ -525,7 +531,7 @@ module.exports = React.createClass({
 
         ApartmentActions.loadMyApartment();
 
-        if(!this._formCouldBeDisplayed()) {
+        if (!this._formCouldBeDisplayed()) {
             //perform no initialization
             return;
         } else {
@@ -533,10 +539,10 @@ module.exports = React.createClass({
         }
     },
 
-    initAll: function(ctxt) {
+    initAll: function (ctxt) {
         console.log('Initializing');
         var that = ctxt;
-        if(!_dropZone) {
+        if (!_dropZone) {
             _dropZone = new Dropzone('#my-awesome-dropzone', {
                 maxFilesize: 5,
 //            maxFiles: 10,
@@ -572,7 +578,7 @@ module.exports = React.createClass({
         }
 
 
-        if(!_map){
+        if (!_map) {
             //initialize google maps
             var mapOptions = {
                 center: {lat: 55.752129, lng: 37.617531},
@@ -632,8 +638,8 @@ module.exports = React.createClass({
         this.setCenterOnMapIfPossible(latLng);
     },
 
-    setCenterOnMapIfPossible: function(latLng) {
-        if(_map && latLng) {
+    setCenterOnMapIfPossible: function (latLng) {
+        if (_map && latLng) {
             _map.setCenter(latLng);
             if (_marker != null) {
                 _marker.setMap(null);
@@ -698,7 +704,7 @@ module.exports = React.createClass({
         constraintMap['address'] = [new Assert().NotNull()];
         constraintMap['type_of_rent'] = [new Assert().NotNull(), new Assert().Choice(['LONG_TERM', 'SHORT_TERM'])];
         constraintMap['fee_period'] = [new Assert().NotNull(), new Assert().Choice(
-            [   'DAILY',
+            ['DAILY',
                 'WEEKLY',
                 'MONTHLY']
         )];
@@ -827,7 +833,7 @@ module.exports = React.createClass({
     _onPublishedChangedCb: function (boolFlag) {
         var self = this;
 
-        return function() {
+        return function () {
             var diffObj = {};
             diffObj['published'] = boolFlag;
 
@@ -900,10 +906,10 @@ module.exports = React.createClass({
         changeData(this, newState);
     },
 
-    _reInitIfNeededCb: function(self){
-        return function(){
+    _reInitIfNeededCb: function (self) {
+        return function () {
             console.log('UI re-rendered');
-            if(!self._formCouldBeDisplayed())   {
+            if (!self._formCouldBeDisplayed()) {
                 console.log('We can not init 3-rd party dependency.');
                 return;
             }
@@ -912,13 +918,13 @@ module.exports = React.createClass({
         }
     },
 
-    _onNextStepSelected: function() {
+    _onNextStepSelected: function () {
         //changeTransient(this, assign(this.state.transient, {confirmedToAddApartment: true}), this.initAll);
         var self = this;
         changeTransient(this, assign(this.state.transient, {confirmedToAddApartment: true}), this._reInitIfNeededCb(self));
     },
 
-    _formCouldBeDisplayed: function() {
+    _formCouldBeDisplayed: function () {
         var data = this.state.data || {};
         var transient = this.state.transient;
         var saved = !!data.id;
@@ -931,7 +937,7 @@ module.exports = React.createClass({
         var transient = this.state.transient;
         var saved = !!data.id;
 
-        if(!this._formCouldBeDisplayed()) {
+        if (!this._formCouldBeDisplayed()) {
             return <ApartmentWelcomeScreen onNextStepSelected={this._onNextStepSelected}/>;
         }
 
@@ -947,14 +953,14 @@ module.exports = React.createClass({
         var addressProp = {
             id: 'addressInput',
             name: 'Адрес',
-            placeholder: 'Начните печатать...',
+            placeholder: 'Введите адрес ...',
             customClassName: 'col-md-8'
         };
 
         var rentTypeProp = {
-            name: 'Тип сдачи',
+            name: 'Тип аренды',
             id: 'typeOfRent',
-            defaultDescription: 'Выберите тип сдачи',
+            defaultDescription: 'Выберите тип аренды',
             keyValuePairs: [
                 ['LONG_TERM', Translations['ru']['LONG_TERM']],
                 ['SHORT_TERM', Translations['ru']['SHORT_TERM']]
@@ -966,15 +972,15 @@ module.exports = React.createClass({
 
         var rentalFeeProp = {
             id: 'rentalFee',
-            name: 'Плата',
+            name: 'Цена',
             customClassName: 'col-md-8',
             elementName: 'rental_fee',
             elementValue: data['rental_fee']
         };
         var feePeriodProp = {
             id: 'feePeriod',
-            name: 'Интервал оплаты',
-            defaultDescription: 'Минимальный период сдачи',
+            name: 'Оплата',
+            defaultDescription: 'Выберите период оплаты',
             keyValuePairs: [
                 ['DAILY', Translations['ru']['DAILY']],
                 ['WEEKLY', Translations['ru']['WEEKLY']],
@@ -987,8 +993,8 @@ module.exports = React.createClass({
 
         var roomCount = {
             id: 'roomCount',
-            name: 'Количество комнат',
-            placeholder: '2',
+            name: 'Комнат',
+            placeholder: 'Введите количество комнат',
             customClassName: 'col-md-8',
             elementName: 'room_count',
             elementValue: data['room_count']
@@ -996,15 +1002,15 @@ module.exports = React.createClass({
         var floorNumber = {
             id: 'floorNumber',
             name: 'Этаж',
-            placeholder: '1',
+            placeholder: 'Введите этаж',
             customClassName: 'col-md-8',
             elementName: 'floor_number',
             elementValue: data['floor_number']
         };
         var floorsTotal = {
             id: 'floorsTotal',
-            name: 'Всего этажей',
-            placeholder: '9',
+            name: 'Этажей',
+            placeholder: 'Введите количество этажей в здании',
             customClassName: 'col-md-8',
             elementName: 'floors_total',
             elementValue: data['floors_total']
@@ -1012,7 +1018,7 @@ module.exports = React.createClass({
         var area = {
             id: 'area',
             name: 'Площадь',
-            placeholder: '42 м2',
+            placeholder: 'Введите общую площадь квартиры',
             customClassName: 'col-md-8',
             elementName: 'area',
             elementValue: data['area']
@@ -1034,11 +1040,18 @@ module.exports = React.createClass({
             checked: data['published']
         };
 
-        var submitButton = {id: 'saveApartmentBtn', value: 'Сохранить', customClassName: 'col-md-4 col-md-offset-4'};
         var deleteButton = {
             id: 'deleteApartmentBtn',
-            value: 'Удалить(тест)',
-            customClassName: 'col-md-4 col-md-offset-4'
+            value: 'Удалить',
+            customClassName: 'col-md-2 col-md-offset-8',
+            type: 'btn-danger'
+        };
+
+        var submitButton = {
+            id: 'saveApartmentBtn',
+            value: 'Сохранить',
+            customClassName: 'col-md-2',
+            type: 'btn-primary'
         };
 
         var styles = {
@@ -1059,8 +1072,8 @@ module.exports = React.createClass({
         var photoPreviewOrZero = selectedPhoto ? (<ApartmentPhotoPreview photo={selectedPhoto}/>) : null;
 
         var successOrDangerBlock = null;
-        console.log('It\'s new apartment: '+!saved);
-        if(saved){
+        console.log('It\'s new apartment: ' + !saved);
+        if (saved) {
             var success = data.published;
 
             if (success) {
@@ -1112,8 +1125,10 @@ module.exports = React.createClass({
                                 </div>
                             </div>
 
-                            <div>
-                                <h4>Данные о квартире</h4>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <h4>Данные о квартире</h4>
+                                </div>
                             </div>
 
                             <div className="row">
@@ -1131,26 +1146,21 @@ module.exports = React.createClass({
                                 </div>
                             </div>
 
-                            <div>
-                                <h4>Фотографии</h4>
-                                <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <h4>Фотографии</h4>
+                                    <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
+                                    <p>
+                                        <div className="dropzone" id="my-awesome-dropzone"></div>
+                                    </p>
+                                </div>
                             </div>
 
-                            <p>
-                                <div className="dropzone"
-                                    id="my-awesome-dropzone"></div>
-                            </p>
-                            <p>
-                                <UserButton data={submitButton} onClick={this._onSave}/>
-
-                                <br/>
-                                <br/>
-
+                            <div className='row'>
                                 <UserButton data={deleteButton} onClick={this._onDelete}/>
-                            </p>
+                                <UserButton data={submitButton} onClick={this._onSave}/>
+                            </div>
                         </form>
-
-
                     </div>
                 </div>
             </div>
