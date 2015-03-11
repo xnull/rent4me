@@ -48,7 +48,7 @@
         <appender-ref ref="errorFileLog"/>
     </logger>
 
-    <logger name="org.springframework" additivity="false" value="info">
+    <logger name="org.springframework" additivity="false" value="INFO">
         <appender-ref ref="console"/>
     </logger>
     <!--<logger name="org.apache.commons.httpclient" level="TRACE"/>-->

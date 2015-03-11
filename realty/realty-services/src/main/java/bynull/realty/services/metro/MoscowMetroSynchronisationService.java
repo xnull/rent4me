@@ -22,8 +22,10 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static bynull.realty.services.metro.MetroStationsDto.MetroStationDto;
@@ -56,16 +58,27 @@ public class MoscowMetroSynchronisationService {
         CityEntity moscowEntity = cityRepository.findByNameAndCountry_Name(MOSCOW, RUSSIA);
         List<MetroEntity> dbStations = metroRepository.findAll();
 
-        metroSystem.getStations().stream().forEach(station -> {
-            if (!dbStations.stream().anyMatch(m -> Objects.equals(station.getStation().getName(), m.getStationName()))) {
-                MetroEntity entity = new MetroEntity();
-                entity.setStationName(station.getStation().getName());
-                entity.setCity(moscowEntity);
-                entity.setLocation(new GeoPoint(station.getCoords().getLat(), station.getCoords().getLng()));
+        Set<String> stationNamesSavedInThisSync = new HashSet<>();
 
-                metroRepository.saveAndFlush(entity);
-            }
-        });
+        metroSystem.getStations()
+                .forEach(station -> {
+                    if (!dbStations.stream()
+                            .anyMatch(m -> stationNamesSavedInThisSync.contains(station.getStation().getName())
+                                    || Objects.equals(station.getStation().getName(), m.getStationName()))) {
+                        MetroEntity entity = new MetroEntity();
+                        entity.setStationName(station.getStation().getName());
+                        entity.setCity(moscowEntity);
+                        entity.setLocation(new GeoPoint()
+                                        .withLatitude(station.getCoords().getLat())
+                                        .withLongitude(station.getCoords().getLng())
+                        );
+
+
+                        stationNamesSavedInThisSync.add(station.getStation().getName());
+
+                        metroRepository.saveAndFlush(entity);
+                    }
+                });
     }
 
     /**
