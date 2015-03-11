@@ -316,7 +316,7 @@ public class FacebookHelperComponent {
         private final String message;
         private final String picture;
         private final String link;
-        private final Type type;
+        private final String type;
         private final Author author;
         private final Date createdDtime;
         private final Date updatedDtime;
@@ -342,7 +342,7 @@ public class FacebookHelperComponent {
                 @JsonProperty("link")
                 String link,
                 @JsonProperty("type")
-                Type type,
+                String type,
                 @JsonProperty("from")
                 Author author,
                 @JsonProperty("actions")
@@ -425,34 +425,8 @@ public class FacebookHelperComponent {
             return link;
         }
 
-        public Type getType() {
+        public String getType() {
             return type;
-        }
-
-        public static enum Type {
-            link {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.LINK;
-                }
-            }, status {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.STATUS;
-                }
-            }, photo {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.PHOTO;
-                }
-            }, video {
-                @Override
-                public FacebookPostType toInternal() {
-                    return FacebookPostType.VIDEO;
-                }
-            };
-
-            public abstract FacebookPostType toInternal();
         }
     }
 
