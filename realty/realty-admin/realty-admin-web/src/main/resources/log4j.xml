@@ -27,7 +27,7 @@
     </logger>
 
     <logger name="org.springframework.jdbc.core" additivity="false">
-        <level value="debug"/>
+        <level value="info"/>
         <appender-ref ref="consoleGlobal"/>
     </logger>
 
