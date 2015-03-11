@@ -11,6 +11,7 @@ import bynull.realty.converters.VkontaktePageModelDTOConverter;
 import bynull.realty.converters.VkontaktePostModelDTOConverter;
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dao.MetroRepository;
+import bynull.realty.dao.external.ApartmentExternalPhotoRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
@@ -20,6 +21,7 @@ import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.dto.vk.VkontaktePostDTO;
 import bynull.realty.services.api.VkontakteService;
+import bynull.realty.services.impl.socialnet.AbstractSocialNetServiceImpl;
 import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -49,7 +51,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class VkontakteServiceImpl implements VkontakteService, InitializingBean {
+public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implements VkontakteService, InitializingBean {
 
     @Resource
     VkontaktePageRepository vkontaktePageRepository;
@@ -63,21 +65,15 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
     @Resource
     MetroModelDTOConverter metroConverter;
 
-    
     @Resource
     ApartmentRepository apartmentRepository;
 
     @Resource
     VKHelperComponent vkHelperComponent;
 
-
     RoomCountParser roomCountParser;
 
-
     RentalFeeParser rentalFeeParser;
-
-    @Resource
-    MetroTextAnalyzer metroTextAnalyzer;
 
     @Resource
     TargetAnalyzer targetAnalyzer;
@@ -90,6 +86,9 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
 
     @Resource
     TransactionOperations transactionOperations;
+
+    @Resource
+    private ApartmentExternalPhotoRepository apartmentExternalPhotoRepository;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -116,7 +115,7 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                     VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
                     List<VkontakteApartment> newest = apartmentRepository.findVkAparmentsByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
 
-                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
+                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
 
                     try {
                         List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab)
@@ -187,7 +186,19 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                                 return contact;
                             }).collect(Collectors.toCollection(HashSet::new));
                             post.setContacts(contacts);
-                            apartmentRepository.save(post);
+
+                            post = apartmentRepository.save(post);
+
+                            for (VKHelperComponent.VkWallPostDTO.PreviewFullImageUrlPair previewFullImageUrlPair : postItemDTO.getImageUrlPairs()) {
+                                ApartmentExternalPhoto photo = new ApartmentExternalPhoto();
+                                photo.setImageUrl(previewFullImageUrlPair.getFullUrl());
+                                photo.setPreviewUrl(previewFullImageUrlPair.getPreviewUrl());
+                                photo.setApartment(post);
+                                apartmentExternalPhotoRepository.save(photo);
+                            }
+
+                            post = apartmentRepository.save(post);
+
                             log.info("<<< Processing of post #[{}] done", i);
                         }
                         em.flush();
@@ -197,24 +208,6 @@ public class VkontakteServiceImpl implements VkontakteService, InitializingBean 
                     }
                 }
             });
-        }
-    }
-
-    private Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message) {
-        log.info(">> Matching metros started");
-        try {
-            Set<MetroEntity> matchedMetros = new HashSet<>();
-            for (MetroDTO metro : metros) {
-                if (metroTextAnalyzer.matches(message, metro.getStationName())) {
-    //                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
-
-                    matchedMetros.add(metroRepository.findOne(metro.getId()));
-
-                }
-            }
-            return matchedMetros;
-        } finally {
-            log.info("<< Matching metros ended");
         }
     }
 

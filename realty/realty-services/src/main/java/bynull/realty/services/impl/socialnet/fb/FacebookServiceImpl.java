@@ -21,6 +21,7 @@ import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.FacebookService;
+import bynull.realty.services.impl.socialnet.AbstractSocialNetServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class FacebookServiceImpl implements FacebookService, InitializingBean {
+public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements FacebookService, InitializingBean {
     private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
 
         final HttpClientParams params = new HttpClientParams();
@@ -91,10 +92,9 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
 
     @PersistenceContext
     EntityManager em;
+
     @Resource
     MetroRepository metroRepository;
-    @Resource
-    MetroTextAnalyzer metroTextAnalyzer;
 
     @Resource
     TransactionOperations transactionOperations;
@@ -131,7 +131,7 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                     FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
                     List<FacebookApartment> newest = apartmentRepository.finFBAparmentsByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
 
-                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getCreated();
+                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
 
                     try {
                         List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
@@ -221,11 +221,12 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
                             if (picture != null) {
                                 ApartmentExternalPhoto photo = new ApartmentExternalPhoto();
                                 photo.setImageUrl(picture);
+                                photo.setPreviewUrl(picture);
                                 photo.setApartment(post);
                                 apartmentExternalPhotoRepository.save(photo);
                             }
 
-                            apartmentRepository.save(post);
+                            post = apartmentRepository.save(post);
                             log.info("<<< Processing of post #[{}] done", i);
 
 //                                post.setType(getType().toInternal());
@@ -349,24 +350,6 @@ public class FacebookServiceImpl implements FacebookService, InitializingBean {
         } while (hasNext);
         em.flush();
         log.info("Total count of matched posts to metro stations: [{}]. Total posts: [{}]", countOfMatchedPosts, total);
-    }
-
-    private Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message) {
-        log.info(">> Matching metros started");
-        try {
-            Set<MetroEntity> matchedMetros = new HashSet<>();
-            for (MetroDTO metro : metros) {
-                if (metroTextAnalyzer.matches(message, metro.getStationName())) {
-    //                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
-
-                    matchedMetros.add(metroRepository.findOne(metro.getId()));
-
-                }
-            }
-            return matchedMetros;
-        } finally {
-            log.info("<< Matching metros ended");
-        }
     }
 
     @Override

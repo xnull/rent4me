@@ -80,8 +80,8 @@ public class ApartmentJSON {
     private List<String> deletePhotoGUIDs;
 
     //socialnet specific
-    @JsonProperty("img_urls")
-    private List<String> imageUrls;
+    @JsonProperty("external_images")
+    private List<ApartmentExternalPhotoJSON> imageUrls;
 
     @JsonProperty("contacts")
     private List<? extends ContactJSON> contacts;

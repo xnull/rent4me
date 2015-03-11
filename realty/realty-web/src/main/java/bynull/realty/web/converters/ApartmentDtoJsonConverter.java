@@ -71,7 +71,10 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
 
 
         //social net specific
-        json.setImageUrls(apartment.getImageUrls());
+        List<ApartmentExternalPhotoJSON> imageUrls = apartment.getImageUrls() != null
+                ? apartment.getImageUrls().stream().map(ApartmentExternalPhotoJSON::from).collect(Collectors.toList())
+                : null;
+        json.setImageUrls(imageUrls);
 
         List<? extends ContactJSON> contacts = contactDtoJsonConverter.toTargetList(apartment.getContacts());
         json.setContacts(contacts);

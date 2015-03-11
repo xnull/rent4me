@@ -55,7 +55,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
 
     // VK specific
 
-    @Query("select a from VkontakteApartment a where a.externalId=:externalId order by logicalCreated desc")
+    @Query("select a from VkontakteApartment a inner join a.vkontaktePage p where p.externalId=:externalId order by a.logicalCreated desc")
     List<VkontakteApartment> findVkAparmentsByExternalIdNewest(@Param("externalId") String externalId, Pageable pageable);
 
     @Query("select a from VkontakteApartment a where a.externalId in (:extenalIds) order by logicalCreated desc")
@@ -75,7 +75,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
 
     // FB specific
 
-    @Query("select a from FacebookApartment a where a.externalId=:externalId order by logicalCreated desc")
+    @Query("select a from FacebookApartment a inner join a.facebookPage p where p.externalId=:externalId order by a.logicalCreated desc")
     List<FacebookApartment> finFBAparmentsByExternalIdNewest(@Param("externalId") String externalId, Pageable pageable);
 
     @Query("select a from FacebookApartment a where a.externalId in (:extenalIds) order by logicalCreated desc")

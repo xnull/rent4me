@@ -2,7 +2,6 @@ package bynull.realty.components;
 
 import bynull.realty.config.Config;
 import bynull.realty.data.business.VkontakteApartment;
-import bynull.realty.data.business.external.vkontakte.VkontaktePost;
 import bynull.realty.data.business.external.vkontakte.VkontaktePostType;
 import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
@@ -12,8 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.Uninterruptibles;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Wither;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -30,10 +32,7 @@ import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -144,6 +143,9 @@ public class VKHelperComponent {
         @JsonProperty("post_source")
         private VkPostSource vkPostSource;
 
+        @JsonProperty("attachments")
+        List<Map<String, Object>> attachments;
+
         public Date getDate() {
             return new Date(unixDateSeconds * 1000);
         }
@@ -154,6 +156,108 @@ public class VKHelperComponent {
 
         public String getExternalAuthorUrl() {
             return "https://vk.com/id" + fromId;
+        }
+
+        public List<PreviewFullImageUrlPair> getImageUrlPairs() {
+            List<PreviewFullImageUrlPair> result = new ArrayList<>();
+
+            List<Map<String, Object>> attachments = getAttachmentsList();
+
+            for (Map<String, Object> attachment : attachments) {
+                String type = (String) attachment.get("type");
+                if (type != null) {
+                    switch (type.toLowerCase()) {
+                        case "photo": {
+                            Map<String, Object> photo = (Map<String, Object>) attachment.get("photo");
+                            String previewUrl = (String) photo.get("photo_130");
+                            String fullUrl = (String) photo.get("photo_1280");
+                            if (fullUrl == null) {
+                                fullUrl = (String) photo.get("photo_807");
+                                if (fullUrl == null) {
+                                    fullUrl = (String) photo.get("photo_604");
+                                    if (fullUrl == null) {
+                                        fullUrl = (String) photo.get("photo_130");
+                                    }
+                                }
+                            }
+                            result.add(
+                                new PreviewFullImageUrlPair()
+                                    .withPreviewUrl(previewUrl)
+                                    .withFullUrl(fullUrl)
+                            );
+                        }
+                        break;
+                        case "posted_photo": {
+                            String previewUrl = (String) attachment.get("photo_130");
+                            String fullUrl = (String) attachment.get("photo_604");
+                            result.add(
+                                    new PreviewFullImageUrlPair()
+                                            .withPreviewUrl(previewUrl)
+                                            .withFullUrl(fullUrl)
+                            );
+                        }
+                        break;
+                        case "app": {
+                            String previewUrl = (String) attachment.get("photo_130");
+                            String fullUrl = (String) attachment.get("photo_604");
+                            result.add(
+                                    new PreviewFullImageUrlPair()
+                                            .withPreviewUrl(previewUrl)
+                                            .withFullUrl(fullUrl)
+                            );
+                        }
+                        break;
+                        case "photos_list": {
+                            LOGGER.info("Attachment: [{}]", attachment);
+                            throw new UnsupportedOperationException("Not clear");
+                        }
+//                        break;
+                        default:
+                            //do nothing
+                    }
+                }
+            }
+
+            //attachments
+
+            int sizeBeforeFiltering = result.size();
+
+            ArrayList<PreviewFullImageUrlPair> copy = new ArrayList<>(result);
+
+            result = result
+                    .stream()
+                    .filter(it -> it.getFullUrl() != null && it.getPreviewUrl() != null)
+                    .collect(Collectors.toList());
+
+            int delta = sizeBeforeFiltering - result.size();
+
+            if(delta > 0) {
+                log.warn("Removed [{}] photo entries. Original content was [{}]", delta, copy);
+            }
+
+            return result;
+        }
+
+        private List<Map<String, Object>> getAttachmentsList() {
+            List<Map<String, Object>> list = this.attachments != null ? this.attachments : Collections.emptyList();
+            return list;
+        }
+
+        @Getter
+        @Wither
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class PreviewFullImageUrlPair {
+            private String previewUrl;
+            private String fullUrl;
+
+            @Override
+            public String toString() {
+                return "PreviewFullImageUrlPair{" +
+                        "previewUrl='" + previewUrl + '\'' +
+                        ", fullUrl='" + fullUrl + '\'' +
+                        '}';
+            }
         }
 
         public static enum PostType {

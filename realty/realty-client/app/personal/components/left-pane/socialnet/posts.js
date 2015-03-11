@@ -147,6 +147,7 @@ var ContactInfo = React.createClass({
 var ImagePreviews = React.createClass({
     getFirstImage: function () {
         var item = this.props.item;
+
         var firstImage;
 
         if (item.data_source == 'INTERNAL') {
@@ -156,12 +157,14 @@ var ImagePreviews = React.createClass({
                 );
             })) : null;
         } else {
-            firstImage = item.img_urls ? _.first(item.img_urls.map(function (photo) {
+            firstImage = item.external_images ? _.first(item.external_images.map(image => {
                 return (
-                    <img className="media-object" width="160"  src={photo}/>
+                    <img className="media-object" width="160"  src={image.small_thumbnail_url}/>
                 );
             })) : null;
         }
+
+        return firstImage;
     },
 
     render: function () {

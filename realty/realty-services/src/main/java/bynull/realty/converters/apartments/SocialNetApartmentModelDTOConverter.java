@@ -6,6 +6,7 @@ import bynull.realty.data.business.ApartmentExternalPhoto;
 import bynull.realty.data.business.Contact;
 import bynull.realty.data.business.SocialNetApartment;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.ApartmentExternalPhotoDTO;
 import bynull.realty.dto.ContactDTO;
 import com.google.common.collect.Iterables;
 
@@ -37,7 +38,7 @@ public abstract class SocialNetApartmentModelDTOConverter<T extends SocialNetApa
 
         result.setImageUrls(
                 apartment.getExternalPhotos().stream()
-                        .map(ApartmentExternalPhoto::getImageUrl)
+                        .map(ApartmentExternalPhotoDTO::from)
                         .collect(Collectors.toList()));
 
         return result;

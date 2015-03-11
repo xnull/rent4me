@@ -17,6 +17,9 @@ public class ApartmentExternalPhoto {
     @SequenceGenerator(name = "ext_photos_id_generator", sequenceName = "ext_apt_photo_id_seq", allocationSize = 1)
     private Long id;
 
+    @Column(name = "preview_image_url")
+    private String previewUrl;
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -36,6 +39,13 @@ public class ApartmentExternalPhoto {
         return id;
     }
 
+    public String getPreviewUrl() {
+        return previewUrl;
+    }
+
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
+    }
 
     public String getImageUrl() {
         return imageUrl;

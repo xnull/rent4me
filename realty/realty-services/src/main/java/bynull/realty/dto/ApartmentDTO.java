@@ -49,7 +49,7 @@ public class ApartmentDTO {
     /**
      * External specific.
      */
-    private List<String> imageUrls;
+    private List<ApartmentExternalPhotoDTO> imageUrls;
     private String externalLink;
     private String externalAuthorLink;
     private List<? extends ContactDTO> contacts;
