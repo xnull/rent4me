@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var AuthComponent = require('./socialNetAuth');
+var AuthComponent = require('../../shared/components/socialNetAuth');
 
 var RoomsCount = require('../../shared/ui/rooms-count');
 var PriceRange = require('../../shared/ui/price-range');
@@ -12,6 +12,15 @@ var RentType = require('../../shared/ui/rent-type');
 
 var HeaderComponent = React.createClass({
     render: function () {
+
+        var loginButtonStyle = {
+            margin: 30,
+            background: 'rgba(74, 35, 23, 0.4)'
+        };
+
+
+        var authComponentDisplayItem = (<input type="button" className="button special" value="Вход / Регистрация" style={loginButtonStyle}/>);
+
         var sectionStyle = {
             backgroundImage: "url('images/flats/kitchen1.jpg')",
             backgroundSize: 'cover',
@@ -21,7 +30,9 @@ var HeaderComponent = React.createClass({
         return (
             <div style={sectionStyle}>
                 <div>
-                    <AuthComponent />
+                    <div style={{textAlign: 'right'}}>
+                        <AuthComponent displayItem={authComponentDisplayItem}/>
+                    </div>
                 </div>
                 <section id='header' className='dark'>
                     <header>

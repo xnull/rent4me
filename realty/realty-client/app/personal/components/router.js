@@ -24,8 +24,9 @@ var App = React.createClass({
         //restore username & token from cookies before component mounted
         AuthActions.restoreUsernameAndTokenFromCookies();
         if (!AuthStore.hasCredentials()) {
+            AuthActions.initFbAuth();
 //            alert('wtf? you\'re not logged in!');
-            Utils.navigateToStart();
+//            Utils.navigateToStart();
         }
     },
     componentDidMount: function () {

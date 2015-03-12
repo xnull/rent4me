@@ -84,8 +84,8 @@ function AjaxBuilder(httpMethod) {
         var errorHandler = function (xhr, status, err) {
             //default handling of error codes
             if (xhr.status == 401) {
-                Utils.navigateToStart();
-                return;
+                //Utils.navigateToStart();
+                //return;
             }
 
 

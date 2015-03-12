@@ -40,12 +40,12 @@ var SocialNetAuth = React.createClass({
                         <div className="row">
                             <div className="col-md-12" onClick={this.handleVkLogin}>
                                 <a href="javascript:void(0)">
-                                    <img width="192" src="images/signin/vk-long.png" border="0"/>
+                                    <img width="192" src={Utils.getBaseContext() + "images/signin/vk-long.png"} border="0"/>
                                 </a>
                             </div>
                             <div className="col-md-12" >
                                 <a href="javascript:void(0)" onClick={this.handleFacebookLogin}>
-                                    <img width="192" src="images/signin/fb-long3.png" border="0"/>
+                                    <img width="192" src={Utils.getBaseContext() + "images/signin/fb-long3.png"} border="0"/>
                                 </a>
                             </div>
                         </div>
@@ -629,26 +629,36 @@ var AuthModalDialog2 = React.createClass({
 
 
 var AuthForm2 = React.createClass({
+    propTypes: {
+        displayItem: React.PropTypes.element.isRequired
+    },
+
     render: function () {
-        var loginButtonStyle = {
-            margin: 30,
-            background: 'rgba(74, 35, 23, 0.4)'
-        };
+
+        var displayItem = this.props.displayItem;
 
         return (
-            <div style={{textAlign: 'right'}}>
+
                 <ModalTrigger modal={<AuthModalDialog2 />}>
-                    <input type="button" className="button special" value="Вход / Регистрация" style={loginButtonStyle}/>
+                    {displayItem}
                 </ModalTrigger>
-            </div>
+
         );
     }
 });
 
 
 var AuthComponent = React.createClass({
+
+    propTypes: {
+        displayItem: React.PropTypes.element.isRequired
+    },
+
     render: function () {
-        return <AuthForm2/>
+
+        var displayItem = this.props.displayItem;
+
+        return <AuthForm2 displayItem={displayItem}/>
     }
 });
 

@@ -100,15 +100,20 @@ function isProduction() {
     return window.location.href.indexOf('rent4.me') != -1 && !isDev();
 }
 
+function getBaseContext() {
+    if (isLocalhost()) {
+        return '/dev/';
+    } else {
+        return '/';
+    }
+}
+
 function navigateToStart() {
     if (document.location.href.indexOf('build-js') != -1) {
         return;
     }
-    if (isLocalhost()) {
-        document.location.href = '/dev/';
-    } else {
-        document.location.href = '/';
-    }
+
+    document.location.href = getBaseContext();
 }
 
 function getQueryParams(paramName) {
@@ -146,6 +151,7 @@ var R4MEUtils = {
     isLocalhost: isLocalhost,
     isDev: isDev,
     isProduction: isProduction,
+    getBaseContext: getBaseContext,
     nl2br: nl2br,
     inactiveUi: {opacity: 0.6, pointerEvents: 'none'}
 };

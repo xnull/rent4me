@@ -6,6 +6,7 @@ var SocialNet = require('./socialnet/socialnet');
 
 var Utils = require('../../../shared/common/Utils');
 var UserStore = require('../../../shared/stores/UserStore');
+var AuthStore = require('../../../shared/stores/AuthStore');
 var UserActions = require('../../../shared/actions/UserActions');
 
 var assign = require('object-assign');
@@ -30,8 +31,12 @@ var UserPanel = React.createClass({
     },
 
     render: function () {
+        var authorized = AuthStore.hasCredentials();
+
+        var style = authorized ? {} : {display: 'none'};
+
         return (
-            <div className="panel panel-default">
+            <div className="panel panel-default" style={style}>
                 <div className="panel-body">
                     <h4>Пользователь</h4>
 

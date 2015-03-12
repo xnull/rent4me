@@ -169,6 +169,33 @@ var AuthActions = {
         });
     },
 
+    initFbAuth: function() {
+        var that = this;
+        $(document).ready(function () {
+            that.restoreUsernameAndTokenFromCookies();
+            if (!AuthStore.hasCredentials()) {
+                $.ajaxSetup({cache: true});
+                $.getScript('//connect.facebook.net/en_US/all.js', function () {
+                    FB.init({
+                        appId: AuthStore.getFbId(),
+                        xfbml: true,
+                        cookie: true,
+                        version: 'v2.1'
+                    });
+
+                    //TODO: don't check login state
+                    //AuthActions.checkLoginState();
+                });
+
+
+            } else {
+                //TODO: redirect to personal page
+                //alert("Already authorized. You could proceed");
+                Utils.navigateToPersonal();
+            }
+        });
+    },
+
     storeUsernameAndTokenInCookies: function () {
         AppDispatcher.handleViewAction({
             actionType: AuthConstants.AUTH_STORE_USERNAME_AND_TOKEN_IN_COOKIES

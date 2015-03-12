@@ -7,6 +7,7 @@ var AuthActions = require('../../../shared/actions/AuthActions');
 var AuthStore = require('../../../shared/stores/AuthStore');
 var NavStore = require('../../../shared/stores/NavStore');
 var NavActions = require('../../../shared/actions/NavActions');
+var AuthComponent = require('../../../shared/components/socialNetAuth');
 
 var assign = require('object-assign');
 var Utils = require('rent4meUtil');
@@ -43,6 +44,20 @@ var Header = React.createClass({
     },
 
     render: function () {
+
+        var authorized = AuthStore.hasCredentials();
+
+        var logoutOrLoginButton;
+        if (authorized) {
+            logoutOrLoginButton = <a href="javascript:void(0)" onClick={AuthActions.logoutOnBackend}>Выход</a>;
+        } else {
+            var authorizationDisplayItem = (<a href="javascript:void(0)">Вход / Регистрация</a>);
+            logoutOrLoginButton = <AuthComponent displayItem={authorizationDisplayItem}/>;
+        }
+
+
+        var style = authorized ? {} : {display: 'none'};
+
         return (
             <div className="navbar navbar-default" >
                 <div className="col-md-12">
@@ -52,7 +67,7 @@ var Header = React.createClass({
                                 <a href="#" role="button">Главная</a>
                             </li>
 
-                            <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? "active dropdown" : "dropdown"}>
+                            <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? "active dropdown" : "dropdown"} style={style}>
                                 <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">Мои объявления <b className="caret"></b></a>
                                 <ul className="dropdown-menu pull-right">
                                     <li className={NavStore.isLandLordSelected() ? "active" : ""}>
@@ -70,7 +85,7 @@ var Header = React.createClass({
                             </li>
 
                             <li>
-                                <a href="javascript:void(0)" onClick={AuthActions.logoutOnBackend}>Выход</a>
+                            {logoutOrLoginButton}
                             </li>
                         </ul>
                     </div>
