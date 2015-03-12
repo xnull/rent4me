@@ -4,6 +4,7 @@
 
 var React = require('react');
 var AuthComponent = require('../../shared/components/socialNetAuth');
+var Utils = require('rent4meUtil');
 
 var RoomsCount = require('../../shared/ui/rooms-count');
 var PriceRange = require('../../shared/ui/price-range');
@@ -11,6 +12,11 @@ var RentType = require('../../shared/ui/rent-type');
 
 
 var HeaderComponent = React.createClass({
+
+    performSearch: function() {
+        Utils.navigateToPersonal();
+    },
+
     render: function () {
 
         var loginButtonStyle = {
@@ -62,7 +68,7 @@ var HeaderComponent = React.createClass({
                                                         </input>
                                                     </div>
                                                     <div className="col-md-2">
-                                                        <a className="btn btn-success center-block">Найти</a>
+                                                        <a className="btn btn-success center-block" onClick={this.performSearch()}>Найти</a>
                                                     </div>
                                                 </div>
                                             </div>
