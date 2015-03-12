@@ -1096,7 +1096,6 @@ module.exports = React.createClass({
                 );
             }
         }
-
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -1133,15 +1132,19 @@ module.exports = React.createClass({
 
                             <div className="row">
                                 <div className="col-md-6" >
-                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
                                     <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-
+                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
                                 </div>
                                 <div className="col-md-6">
-                                    <UserPreview data={addressPreviewProp}/>
+                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-12">
                                     <UserProperty data={addressProp} readOnly={saved}/>
+                                    <UserPreview data={addressPreviewProp}/>
                                     <ApartmentInfoChangeRequestButton show={readOnly}/>
                                 </div>
                             </div>
@@ -1165,5 +1168,6 @@ module.exports = React.createClass({
                 </div>
             </div>
         )
+
     }
 });
