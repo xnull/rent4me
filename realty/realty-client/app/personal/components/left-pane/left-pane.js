@@ -56,7 +56,7 @@ var UserPanel = React.createClass({
 
                             <div className="col-md-12">
                                 <a className="btn btn-default center-block" href="#/user/chats">
-                                    <b className="glyphicon glyphicon-envelope"></b> Сообщения <b className="badge">3</b>
+                                    <b className="glyphicon glyphicon-envelope pull-left"></b> Сообщения <b className="badge pull-right">3</b>
                                 </a>
                             </div>
                         </div>
