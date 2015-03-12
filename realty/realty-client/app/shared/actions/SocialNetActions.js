@@ -5,6 +5,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var SocialNetConstants = require('../constants/SocialNetConstants');
 var SocialNetStore = require('../stores/SocialNetStore');
+var AuthStore = require('../stores/AuthStore');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
 var JSON = require('JSON2');
@@ -158,9 +159,14 @@ var SocialNetActions = {
         }
 
 
-        Ajax
-            .GET(url)
-            .authorized()
+        var requestBuilder = Ajax
+            .GET(url);
+
+        if(AuthStore.hasCredentials()) {
+            requestBuilder = requestBuilder.authorized();
+        }
+
+        requestBuilder
             .onSuccess(function (data) {
                 AppDispatcher.handleViewAction({
                     actionType: SocialNetConstants.SOCIAL_NET_POSTS_FOUND,

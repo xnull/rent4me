@@ -9,6 +9,7 @@ var BlockUI = require('rent4meBlockUI');
 var assign = require('object-assign');
 var _ = require('underscore');
 var AuthActions = require('./AuthActions');
+var AuthStore = require('../stores/AuthStore');
 
 var Ajax = require('../common/Ajax');
 
@@ -98,6 +99,7 @@ var UserActions = {
     },
 
     loadMyProfile: function () {
+        if(!AuthStore.hasCredentials()) return;
         BlockUI.blockUI();
         _myProfileIsLoading = true;
         Ajax
