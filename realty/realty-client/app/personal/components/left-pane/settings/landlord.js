@@ -129,64 +129,70 @@ var ApartmentInfoChangeRequestForm = React.createClass({
             id: 'addressPreviewChange',
             name: 'Выбранный адрес',
             previewValue: (data['address'] ? data['address']['formatted_address'] : null) || '',
-            customClassName: 'col-md-8'
+            customClassName: 'col-md-8',
+            labelClass: 'col-md-4'
         };
 
         var addressProp = {
             id: 'addressInputChange',
             name: 'Адрес',
             placeholder: 'Введите адрес ...',
-            customClassName: 'col-md-8'
+            customClassName: 'col-md-8',
+            labelClass: 'col-md-4'
         };
 
         var roomCount = {
             id: 'roomCountChange',
             name: 'Количество комнат',
-            placeholder: '2',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'room_count',
-            elementValue: data['room_count']
+            elementValue: data['room_count'],
+            labelClass: 'col-md-4'
         };
         var floorNumber = {
             id: 'floorNumberChange',
             name: 'Этаж',
-            placeholder: '1',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'floor_number',
-            elementValue: data['floor_number']
+            elementValue: data['floor_number'],
+            labelClass: 'col-md-4'
         };
         var floorsTotal = {
             id: 'floorsTotalChange',
             name: 'Всего этажей',
-            placeholder: '9',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'floors_total',
-            elementValue: data['floors_total']
+            elementValue: data['floors_total'],
+            labelClass: 'col-md-4'
         };
         var area = {
             id: 'areaChange',
             name: 'Площадь',
-            placeholder: '42 м2',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'area',
-            elementValue: data['area']
+            elementValue: data['area'],
+            labelClass: 'col-md-4'
         };
 
         var submitButton = {
             id: 'saveApartmentChangeBtn',
-            value: 'Отправить запрос об изменении',
-            customClassName: 'col-md-8 col-md-offset-2'
+            value: 'Отправить',
+            customClassName: 'col-md-2'
         };
 
         return (
             <div>
-                <p className="alert alert-info" >
+                <p className="alert alert-info">
                     Наша цель - не стать очередным сервисом для риэлторов
                     <br/>
                     Поэтому мы проверяем все изменения данных о квартире.
                     <br/>
                     <br/>
-                    После проверки данных мы опубликуем измененное объявление.
+                    После проверки мы опубликуем измененное объявление.
                     <br/>
                     <br/>
                     До этого времени объявление будет отображаться в неизмененном виде.
@@ -200,8 +206,9 @@ var ApartmentInfoChangeRequestForm = React.createClass({
                             <UserProperty data={floorNumber} onChange={this._onChange} />
                             <UserProperty data={floorsTotal} onChange={this._onChange} />
                             <UserProperty data={area} onChange={this._onChange} />
-                            <UserPreview data={addressPreviewProp}/>
                             <UserProperty data={addressProp} />
+                            <UserPreview data={addressPreviewProp}/>
+
                             <UserButton data={submitButton} onClick={this._onSave}/>
                         </div>
                     </div>
@@ -1172,6 +1179,8 @@ module.exports = React.createClass({
                                 <div className="col-md-8">
                                     <UserProperty data={addressProp} readOnly={saved}/>
                                     <UserPreview data={addressPreviewProp}/>
+                                </div>
+                                <div className="col-md-4">
                                     <ApartmentInfoChangeRequestButton show={readOnly}/>
                                 </div>
                             </div>
