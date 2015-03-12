@@ -6,9 +6,9 @@
   "scripts": {},
   "browser": {
     "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
-    "blockui": "./node_modules/bower/blockui/jquery.blockUI.js",
     "jquery": "./node_modules/jquery/dist/jquery.js",
     "rent4meUtil": "./app/shared/common/Utils.js",
+    "rent4meCookies": "./app/shared/common/Cookies.js",
     "rent4meAjax": "./app/shared/common/Ajax.js",
     "rent4meEmitter": "./app/shared/common/Emitter.js",
     "rent4meBlockUI": "./app/shared/common/BlockUI.js",
@@ -16,12 +16,6 @@
   },
   "jquery": {
     "exports": "$"
-  },
-  "blockui": {
-    "exports": "blockui",
-    "depends": {
-      "jquery": "$"
-    }
   },
   "browserify": {
     "transform": [

@@ -4,16 +4,12 @@
     "main": "index.html",
 
     "dependencies": {
-        "blockui": "v2.65",
         "bootstrap": "3.2.0",
         "respond": "1.4.2",
         "html5shiv": "3.7.2",
         "google-maps-utility-library-v3": "latest"
     },
     "overrides": {
-        "blockui": {
-            "main": "./jquery.blockUI.js"
-        },
         "google-maps-utility-library-v3": {
             "main": "./markerclusterer/src/markerclusterer.js"
         }

@@ -7,8 +7,13 @@ var SocialNetStore = require('../stores/SocialNetStore');
 
 var RentType = React.createClass({
 
+    propTypes: {
+        changeToRenter: React.PropTypes.func.isRequired,
+        changeToLessor: React.PropTypes.func.isRequired
+    },
+
     render: function () {
-        console.log('maza');
+
         var isRenter = SocialNetStore.getSearchType() === 'RENTER';
 
         var renterClasses = "btn btn-default" + (isRenter ? " active" : "");

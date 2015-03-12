@@ -8,7 +8,8 @@ var BlockUI = {
     blockUI: function () {
         var oldInProgressCount = _inProgressCount++;
         if (oldInProgressCount == 0) {
-            $.blockUI({
+            document.body.style.cursor='wait';
+            /*$.blockUI({
                 overlayCSS: {
                     backgroundColor: '#000',
                     opacity: 0.0,
@@ -30,13 +31,13 @@ var BlockUI = {
                     '-moz-border-radius': '10px',
                     'z-index': 1052
                 }
-            });
+            });*/
         }
     },
     unblockUI: function () {
         var currInProgress = --_inProgressCount;
         if (currInProgress == 0) {
-            $.unblockUI();
+            document.body.style.cursor='default';
         }
     }
 };

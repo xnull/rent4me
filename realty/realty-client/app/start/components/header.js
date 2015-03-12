@@ -5,6 +5,7 @@
 var React = require('react');
 var AuthComponent = require('../../shared/components/socialNetAuth');
 var Utils = require('rent4meUtil');
+var Cookies = require('rent4meCookies');
 
 var RoomsCount = require('../../shared/ui/rooms-count');
 var PriceRange = require('../../shared/ui/price-range');
@@ -15,6 +16,16 @@ var HeaderComponent = React.createClass({
 
     performSearch: function() {
         Utils.navigateToPersonal();
+    },
+
+    changeToLessor: function () {
+        console.log('changeToLessor');
+        Cookies.setCookieTemp('SEARCH_TYPE', 'LESSOR');
+    },
+
+    changeToRenter: function () {
+        console.log('changeToRenter');
+        Cookies.setCookieTemp('SEARCH_TYPE', 'LESSOR');
     },
 
     render: function () {
@@ -53,7 +64,7 @@ var HeaderComponent = React.createClass({
                                         <form className="form" role="form">
                                             <div className='row'>
                                                 <div className="col-md-10">
-                                                    <RentType/>
+                                                    <RentType changeToRenter={this.changeToRenter} changeToLessor={this.changeToLessor}/>
                                                     <RoomsCount uiSize='4' uiLabelSize='3' />
                                                     <PriceRange uiSize='5' uiLabelSize='2' />
                                                 </div>
