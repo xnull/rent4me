@@ -181,7 +181,7 @@ var ApartmentInfoChangeRequestForm = React.createClass({
         var submitButton = {
             id: 'saveApartmentChangeBtn',
             value: 'Отправить',
-            customClassName: 'col-md-2'
+            customClassName: 'col-md-4 col-md-offset-4'
         };
 
         return (
@@ -243,7 +243,7 @@ var ApartmentInfoChangeRequestModal = React.createClass({
     render: function () {
         return (
             <div>
-                <Modal {...this.props} title="Запрос на изменение данных о квартире" animation={false}>
+                <Modal {...this.props} title="Запрос на изменение данных о квартире" animation={false} style={{borderBottom: 'none'}}>
                     <div className="modal-body">
                         <ApartmentInfoChangeRequestForm/>
                     </div>
