@@ -68,7 +68,7 @@ var HeaderComponent = React.createClass({
                                                         </input>
                                                     </div>
                                                     <div className="col-md-2">
-                                                        <a className="btn btn-success center-block" onClick={this.performSearch()}>Найти</a>
+                                                        <a className="btn btn-success center-block" onClick={this.performSearch}>Найти</a>
                                                     </div>
                                                 </div>
                                             </div>
