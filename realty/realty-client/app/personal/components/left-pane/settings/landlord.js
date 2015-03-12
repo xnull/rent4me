@@ -175,7 +175,7 @@ var ApartmentInfoChangeRequestForm = React.createClass({
         var submitButton = {
             id: 'saveApartmentChangeBtn',
             value: 'Отправить запрос об изменении',
-            customClassName: 'col-md-6 col-md-offset-2'
+            customClassName: 'col-md-8 col-md-offset-2'
         };
 
         return (
