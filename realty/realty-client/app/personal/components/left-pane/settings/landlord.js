@@ -174,12 +174,20 @@ var ApartmentInfoChangeRequestForm = React.createClass({
 
         var submitButton = {
             id: 'saveApartmentChangeBtn',
-            value: 'Отправить',
+            value: 'Отправить данные на проверку',
             customClassName: 'col-md-4 col-md-offset-4'
         };
 
         return (
             <div>
+                <p>
+                    Наша цель - не стать очередным сервисом для риэлторов <br/>
+                    и поэтому мы проверяем все изменения данных о квартире.<br/>
+
+                    После проверки данных мы опубликуем измененное объявление.<br/>
+                    До этого времени объявление будет отображаться в неизмененном виде.<br/>
+                </p>
+                <br/>
                 <form className="form-horizontal" role="form">
                     <div className="row">
                         <div className="col-md-12" >
@@ -439,7 +447,7 @@ var UserText = React.createClass({
 var UserButton = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName;
-        var type = 'btn center-block ' + this.props.data.type || 'btn-primary';
+        var type = 'btn center-block ' + (this.props.data.type || 'btn-primary');
 
         return (
             <div className={customClassName}>
