@@ -8,12 +8,54 @@ var SocialNetActions = require('../../shared/actions/SocialNetActions');
 var Utils = require('rent4meUtil');
 var Cookies = require('rent4meCookies');
 
+var assign = require('object-assign');
+
 var RoomsCount = require('../../shared/ui/rooms-count');
 var PriceRange = require('../../shared/ui/price-range');
 var RentType = require('../../shared/ui/rent-type');
 
 
 var HeaderComponent = React.createClass({
+
+    getInitialState: function() {
+        return {
+            oneRoomAptSelected: false,
+            twoRoomAptSelected: false,
+            threeRoomAptSelected: false
+        }
+    },
+
+    onOneRoomAptValueChanged: function (value) {
+        this.setState(assign(this.state, {
+            oneRoomAptSelected: value
+        }));
+
+        this.fireAptSelectionStateChange();
+    },
+
+    onTwoRoomAptValueChanged: function (value) {
+        this.setState(assign(this.state, {
+            twoRoomAptSelected: value
+        }));
+
+        this.fireAptSelectionStateChange();
+    },
+
+    onThreeRoomAptValueChanged: function (value) {
+        this.setState(assign(this.state, {
+            threeRoomAptSelected: value
+        }));
+
+        this.fireAptSelectionStateChange();
+    },
+
+    fireAptSelectionStateChange: function () {
+        var oneRoomAptSelected = this.state.oneRoomAptSelected;
+        var twoRoomAptSelected = this.state.twoRoomAptSelected;
+        var threeRoomAptSelected = this.state.threeRoomAptSelected;
+
+        SocialNetActions.changeApartmentCookieSearchRooms(oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
+    },
 
     performSearch: function() {
         Utils.navigateToPersonal();
@@ -66,7 +108,16 @@ var HeaderComponent = React.createClass({
                                             <div className='row'>
                                                 <div className="col-md-10">
                                                     <RentType changeToRenter={this.changeToRenter} changeToLessor={this.changeToLessor}/>
-                                                    <RoomsCount uiSize='4' uiLabelSize='3' />
+                                                    <RoomsCount uiSize='4' uiLabelSize='3'
+                                                        oneRoomAptSelected={this.state.oneRoomAptSelected}
+                                                        twoRoomAptSelected={this.state.twoRoomAptSelected}
+                                                        threeRoomAptSelected={this.state.threeRoomAptSelected}
+
+                                                        onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
+                                                        onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
+                                                        onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
+
+                                                    />
                                                     <PriceRange uiSize='5' uiLabelSize='2' />
                                                 </div>
                                             </div>

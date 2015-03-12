@@ -221,6 +221,15 @@ AppDispatcher.register(function (payload) {
 
         case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_ROOMS:
             _searchRooms = action.value;
+            console.log('received value is');
+            console.log(_searchRooms['1']);
+            console.log(_searchRooms['2']);
+            console.log(_searchRooms['3']);
+
+            Cookies.setCookieTemp('SEARCH_ROOM_1', _searchRooms['1']);
+            Cookies.setCookieTemp('SEARCH_ROOM_2', _searchRooms['2']);
+            Cookies.setCookieTemp('SEARCH_ROOM_3', _searchRooms['3']);
+
             return true;//don't emit any event
             break;
 
@@ -244,6 +253,16 @@ AppDispatcher.register(function (payload) {
         case SocialNetConstants.SOCIAL_NET_POSTS_RESTORE_FROM_COOKIES_AND_CLEAR:
             _searchType = Cookies.getCookie('SEARCH_TYPE') || _searchType;
             Cookies.deleteCookie('SEARCH_TYPE');
+
+            _searchRooms = {};
+            _searchRooms['1'] = (Cookies.getCookie('SEARCH_ROOM_1') == 'true') || false;
+            _searchRooms['2'] = (Cookies.getCookie('SEARCH_ROOM_2') == 'true') || false;
+            _searchRooms['3'] = (Cookies.getCookie('SEARCH_ROOM_3') == 'true') || false;
+
+            Cookies.deleteCookie('SEARCH_ROOM_1');
+            Cookies.deleteCookie('SEARCH_ROOM_2');
+            Cookies.deleteCookie('SEARCH_ROOM_3');
+
             //return true;//don't emit any event
             break;
 

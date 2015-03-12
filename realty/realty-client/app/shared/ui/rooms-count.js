@@ -7,7 +7,15 @@ var React = require('react');
 var Rooms = React.createClass({
     propTypes: {
         uiSize: React.PropTypes.number.isRequired,
-        uiLabelSize: React.PropTypes.number.isRequired
+        uiLabelSize: React.PropTypes.number.isRequired,
+
+        onOneRoomAptValueChanged: React.PropTypes.func.isRequired,
+        onTwoRoomAptValueChanged: React.PropTypes.func.isRequired,
+        onThreeRoomAptValueChanged: React.PropTypes.func.isRequired,
+
+        oneRoomAptSelected: React.PropTypes.bool,
+        twoRoomAptSelected: React.PropTypes.bool,
+        threeRoomAptSelected: React.PropTypes.bool
     },
 
     getDefaultProps: function () {
