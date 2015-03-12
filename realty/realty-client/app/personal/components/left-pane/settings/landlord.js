@@ -181,12 +181,16 @@ var ApartmentInfoChangeRequestForm = React.createClass({
         return (
             <div>
                 <p className="alert alert-info" >
-                    Наша цель - не стать очередным сервисом для риэлторов <br/>
-                    Поэтому мы проверяем все изменения данных о квартире.<br/>
+                    Наша цель - не стать очередным сервисом для риэлторов
                     <br/>
-                    После проверки данных мы опубликуем измененное объявление.<br/>
+                    Поэтому мы проверяем все изменения данных о квартире.
                     <br/>
-                    До этого времени объявление будет отображаться в неизмененном виде.<br/>
+                    <br/>
+                    После проверки данных мы опубликуем измененное объявление.
+                    <br/>
+                    <br/>
+                    До этого времени объявление будет отображаться в неизмененном виде.
+                    <br/>
                 </p>
                 <br/>
                 <form className="form-horizontal" role="form">
@@ -316,11 +320,12 @@ var ApartmentPhotosBlock = React.createClass({
 var UserPreview = React.createClass({
     render: function () {
         var customClassName = this.props.data.customClassName || 'col-md-4';
+        var label = this.props.data.labelClass || "col-md-3 " + " control-label";
 
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
+                    <label className={label}>{this.props.data.name}</label>
                     <div className={customClassName}>
                         <div className="control-label">
                             <strong>{this.props.data.previewValue}</strong>
@@ -334,12 +339,13 @@ var UserPreview = React.createClass({
 
 var UserProperty = React.createClass({
     render: function () {
-        var customClassName = this.props.data.customClassName || 'col-md-4';
+        var customClassName = this.props.data.customClassName;
+        var label = this.props.data.labelClass + " control-label";
 
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
+                    <label className={label}>{this.props.data.name}</label>
                     <div className={customClassName}>
                         <input
                             id={this.props.data.id}
@@ -403,7 +409,7 @@ var UserSelect = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
+                    <label className="col-md-3 control-label">{this.props.data.name}</label>
                     <div className={customClassName}>
                         <select
                             id={this.props.data.id}
@@ -427,7 +433,7 @@ var UserText = React.createClass({
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-3 control-label">{this.props.data.name}:</label>
+                    <label className="col-md-3 control-label">{this.props.data.name}</label>
                     <div className={customClassName}>
                         <textarea
                             id={this.props.data.id}
@@ -473,22 +479,27 @@ var ApartmentWelcomeScreen = React.createClass({
                     <div className="panel-body">
                         <h4>Собственность</h4>
                         <br/>
-                        <br/>
-                        <p>
-                            <p className="col-md-offset-1">
-                                У вас пока что нет ни одного объявления о сдаче жилья в аренду.
+                        <div className="row">
+                            <div className="col-md-offset-1">
+                                <p>
+                                    У вас пока что нет ни одного объявления о сдаче жилья в аренду.
+                                    <br/>
+                                    Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренды.
+                                    <br/>
+                                </p>
                                 <br/>
-                                Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренды.
-                                <br/>
-                            </p>
-                            <br/>
-                            <p className="col-md-offset-1 col-md-3">
-                                <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}>
-                                    <i className="glyphicon glyphicon-plus" style={{color: 'white'}}></i>
-                                    <b>Добавить объявление</b>
-                                </a>
-                            </p>
-                        </p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-offset-1">
+                                <p>
+                                    <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}>
+                                        <i className="glyphicon glyphicon-plus" style={{color: 'white'}}></i>
+                                        <b>Добавить объявление</b>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -956,14 +967,16 @@ module.exports = React.createClass({
             id: 'addressPreview',
             name: 'Выбранный адрес',
             previewValue: (data['address'] ? data['address']['formatted_address'] : null) || '',
-            customClassName: 'col-md-8'
+            customClassName: 'col-md-10',
+            labelClass: 'col-md-2'
         };
 
         var addressProp = {
             id: 'addressInput',
             name: 'Адрес',
             placeholder: 'Введите адрес ...',
-            customClassName: 'col-md-8'
+            customClassName: 'col-md-10',
+            labelClass: 'col-md-2'
         };
 
         var rentTypeProp = {
@@ -984,7 +997,8 @@ module.exports = React.createClass({
             name: 'Цена',
             customClassName: 'col-md-8',
             elementName: 'rental_fee',
-            elementValue: data['rental_fee']
+            elementValue: data['rental_fee'],
+            labelClass: 'col-md-3'
         };
         var feePeriodProp = {
             id: 'feePeriod',
@@ -1003,34 +1017,38 @@ module.exports = React.createClass({
         var roomCount = {
             id: 'roomCount',
             name: 'Комнат',
-            placeholder: 'Введите количество комнат',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'room_count',
-            elementValue: data['room_count']
+            elementValue: data['room_count'],
+            labelClass: 'col-md-4'
         };
         var floorNumber = {
             id: 'floorNumber',
             name: 'Этаж',
-            placeholder: 'Введите этаж',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'floor_number',
-            elementValue: data['floor_number']
+            elementValue: data['floor_number'],
+            labelClass: 'col-md-4'
         };
         var floorsTotal = {
             id: 'floorsTotal',
-            name: 'Этажей',
-            placeholder: 'Введите количество этажей в здании',
+            name: 'Этажность',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'floors_total',
-            elementValue: data['floors_total']
+            elementValue: data['floors_total'],
+            labelClass: 'col-md-4'
         };
         var area = {
             id: 'area',
             name: 'Площадь',
-            placeholder: 'Введите общую площадь квартиры',
+            placeholder: '',
             customClassName: 'col-md-8',
             elementName: 'area',
-            elementValue: data['area']
+            elementValue: data['area'],
+            labelClass: 'col-md-4'
         };
 
         var descriptionProp = {
@@ -1105,7 +1123,6 @@ module.exports = React.createClass({
                 );
             }
         }
-
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -1141,16 +1158,20 @@ module.exports = React.createClass({
                             </div>
 
                             <div className="row">
-                                <div className="col-md-6" >
+                                <div className="col-md-4" >
+                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
                                     <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                </div>
+                                <div className="col-md-4">
                                     <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
                                     <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-
                                 </div>
-                                <div className="col-md-6">
-                                    <UserPreview data={addressPreviewProp}/>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-8">
                                     <UserProperty data={addressProp} readOnly={saved}/>
+                                    <UserPreview data={addressPreviewProp}/>
                                     <ApartmentInfoChangeRequestButton show={readOnly}/>
                                 </div>
                             </div>
@@ -1174,5 +1195,6 @@ module.exports = React.createClass({
                 </div>
             </div>
         )
+
     }
 });
