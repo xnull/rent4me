@@ -6,6 +6,8 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('rent4meEmitter');
 var SocialNetConstants = require('../constants/SocialNetConstants');
 
+var Cookies = require('rent4meCookies');
+
 var assign = require('object-assign');
 
 function emptyPost() {
@@ -199,6 +201,50 @@ AppDispatcher.register(function (payload) {
             _countryCode = _val.countryCode || null;
             _formattedAddress = _val.formattedAddress || null;
             return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_TEXT:
+            _searchText = action.text || null;
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_WITH_SUBWAY:
+            _searchWithSubway = action.value || false;
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_TYPE:
+            _searchType = action.value || 'RENTER';
+            Cookies.setCookieTemp('SEARCH_TYPE', _searchType);
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_ROOMS:
+            _searchRooms = action.value;
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_PRICE:
+            var val = action.value || {};
+            _searchMinPrice = val.min || null;
+            _searchMaxPrice = val.max || null;
+            return true;//don't emit any event
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_LOCATION_INFO:
+            var _val = action.value || {};
+            _bounds = _val.bounds || null;
+            _location = _val.location || null;
+            _countryCode = _val.countryCode || null;
+            _formattedAddress = _val.formattedAddress || null;
+            return true;//don't emit any event
+            break;
+
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_RESTORE_FROM_COOKIES_AND_CLEAR:
+            _searchType = Cookies.getCookie('SEARCH_TYPE') || _searchType;
+            Cookies.deleteCookie('SEARCH_TYPE');
+            //return true;//don't emit any event
             break;
 
         default:

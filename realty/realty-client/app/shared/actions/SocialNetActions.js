@@ -97,6 +97,19 @@ var SocialNetActions = {
         });
     },
 
+    changeApartmentCookieSearchType: function (value) {
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_TYPE,
+            value: value
+        });
+    },
+
+    restoreSearchParamsFromCookies: function() {
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_RESTORE_FROM_COOKIES_AND_CLEAR
+        })
+    },
+
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
     findPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, lng, lat, countryCode, bounds) {
         BlockUI.blockUI();

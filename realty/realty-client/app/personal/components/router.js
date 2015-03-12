@@ -10,6 +10,7 @@ var RouteHandler = Router.RouteHandler;
 var UserActions = require('../../shared/actions/UserActions');
 
 var AuthActions = require('../../shared/actions/AuthActions');
+var SocialNetActions = require('../../shared/actions/SocialNetActions');
 var NavStore = require('../../shared/stores/NavStore');
 var AuthStore = require('../../shared/stores/AuthStore');
 var Utils = require('../../shared/common/Utils');
@@ -28,6 +29,7 @@ var App = React.createClass({
 //            alert('wtf? you\'re not logged in!');
 //            Utils.navigateToStart();
         }
+        SocialNetActions.restoreSearchParamsFromCookies();
     },
     componentDidMount: function () {
         NavStore.addChangeListener(this._navStateChange);

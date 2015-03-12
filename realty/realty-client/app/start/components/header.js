@@ -4,6 +4,7 @@
 
 var React = require('react');
 var AuthComponent = require('../../shared/components/socialNetAuth');
+var SocialNetActions = require('../../shared/actions/SocialNetActions');
 var Utils = require('rent4meUtil');
 var Cookies = require('rent4meCookies');
 
@@ -20,12 +21,12 @@ var HeaderComponent = React.createClass({
 
     changeToLessor: function () {
         console.log('changeToLessor');
-        Cookies.setCookieTemp('SEARCH_TYPE', 'LESSOR');
+        SocialNetActions.changeApartmentCookieSearchType('LESSOR');
     },
 
     changeToRenter: function () {
         console.log('changeToRenter');
-        Cookies.setCookieTemp('SEARCH_TYPE', 'LESSOR');
+        SocialNetActions.changeApartmentCookieSearchType('RENTER');
     },
 
     render: function () {
