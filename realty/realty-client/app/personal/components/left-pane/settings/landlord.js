@@ -180,7 +180,7 @@ var ApartmentInfoChangeRequestForm = React.createClass({
 
         return (
             <div>
-                <p style={{padding: '5px'}}>
+                <p className="alert alert-info" >
                     Наша цель - не стать очередным сервисом для риэлторов <br/>
                     Поэтому мы проверяем все изменения данных о квартире.<br/>
                     <br/>
