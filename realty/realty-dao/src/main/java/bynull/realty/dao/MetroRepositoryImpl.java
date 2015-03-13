@@ -21,13 +21,13 @@ public class MetroRepositoryImpl implements MetroRepositoryCustom {
     @Override
     public List<MetroEntity> findMetros(ApartmentRepositoryCustom.GeoParams geoParams) {
 
-        String qlString = "select m.* from metro_stations m where "
-                ;
+        String createGeoPoint = "ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') )";
+
+        String qlString = "select m.* from metro_stations m where m.city_id IN (select c.id from cities c where c.area ~ "+createGeoPoint+") ";
 
         Map<String, Object> params = new HashMap<>();
 
-        final String ordering;
-
+        final String ordering = " ORDER BY m.name";
         boolean andNeeded = false;
 
         if(geoParams.getCountryCode().isPresent()) {
@@ -37,11 +37,14 @@ public class MetroRepositoryImpl implements MetroRepositoryCustom {
             andNeeded = true;*/
         }
 
+
+
+        final GeoPoint centerPoint;
         if (geoParams.getBoundingBox().isPresent()) {
             if(andNeeded) {
                 qlString += " AND ";
             }
-
+/*
             qlString += " st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
                     ":lng_low," +
                     "' '," +
@@ -53,40 +56,52 @@ public class MetroRepositoryImpl implements MetroRepositoryCustom {
                     "')'))), 4326)" +
                     " ~ m.location" +
                     " ";
-
+*/
             ApartmentRepositoryCustom.BoundingBox boundingBox = geoParams.getBoundingBox().get();
-            params.put("lng_low", boundingBox.getLow().getLongitude());
-            params.put("lat_low", boundingBox.getLow().getLatitude());
-            params.put("lng_high", boundingBox.getHigh().getLongitude());
-            params.put("lat_high", boundingBox.getHigh().getLatitude());
-
-            andNeeded = true;
-        }
+//            params.put("lng_low", boundingBox.getLow().getLongitude());
+//            params.put("lat_low", boundingBox.getLow().getLatitude());
+//            params.put("lng_high", boundingBox.getHigh().getLongitude());
+//            params.put("lat_high", boundingBox.getHigh().getLatitude());
 
 
-        Optional<GeoPoint> point = geoParams.getPoint();
-        if(point.isPresent()) {
+            //calculate center point
 
-            String createGeoPoint = "ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') )";
+            double averageLatitude = (boundingBox.getLow().getLatitude() + boundingBox.getHigh().getLatitude()) / 2.0d;
+            double averageLongitude = (boundingBox.getLow().getLongitude() + boundingBox.getHigh().getLongitude()) / 2.0d;
 
-            if(andNeeded) {
-                qlString += " AND ";
-            }
-            //5000 meters
-            qlString += " ST_Distance_Sphere(m.location, " + createGeoPoint + " ) <= 5000";
-
-//            ordering = " order by m.location <-> "+createGeoPoint+", m.name";
-            ordering = " order by m.name";
-            params.put("lat", (point).get().getLatitude());
-            params.put("lng", (point).get().getLongitude());
+            centerPoint = new GeoPoint().withLatitude(averageLatitude).withLongitude(averageLongitude);
 
             andNeeded = true;
         } else {
-            ordering = " ORDER BY m.name";
+
+
+            Optional<GeoPoint> point = geoParams.getPoint();
+            if (point.isPresent()) {
+
+
+                if (andNeeded) {
+                    qlString += " AND ";
+                }
+                //5000 meters
+//                qlString += " ST_Distance_Sphere(m.location, " + createGeoPoint + " ) <= 5000";
+
+//            ordering = " order by m.location <-> "+createGeoPoint+", m.name";
+//                ordering = " order by m.name";
+//                params.put("lat", (point).get().getLatitude());
+//                params.put("lng", (point).get().getLongitude());
+
+                centerPoint = point.get();
+
+                andNeeded = true;
+            } else {
+                throw new IllegalArgumentException("Boundning area either geopoint needed");
+            }
+
         }
-
-
         qlString += ordering;
+
+        params.put("lat", centerPoint.getLatitude());
+        params.put("lng", centerPoint.getLongitude());
 
         Query query = em.createNativeQuery(qlString, MetroEntity.class);
 
