@@ -338,7 +338,7 @@ module.exports = React.createClass({
                 metrosDisplayItem = null;
             } else {
 
-                var metros = [{id: '', name: 'Метро'}].concat(_metros.map(m=> {
+                var metros = [{id: '', name: 'Метро Москвы'}].concat(_metros.map(m=> {
                     return {id: m.id, name: m.station_name}
                 }));
 
