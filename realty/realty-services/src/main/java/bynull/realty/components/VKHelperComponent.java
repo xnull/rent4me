@@ -331,7 +331,17 @@ public class VKHelperComponent {
 
             log.info("Converting response");
             VkWallPostResponseContent response = JsonUtils.fromJson(body, VkWallPostResponse.class).getContent();
-            if (response.getPosts().isEmpty()) {
+
+            if(response == null) {
+                log.error("Reponse not retrieved");
+                throw new IllegalStateException("Reponse not retrieved");
+            }
+
+            if(response.getPosts() == null) {
+                log.warn("Response posts not retrieved");
+            }
+
+            if (response.getPosts() == null || response.getPosts().isEmpty()) {
                 return accu;
             }
             log.info("Converted response");
