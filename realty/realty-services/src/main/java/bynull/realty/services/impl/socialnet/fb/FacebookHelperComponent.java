@@ -95,7 +95,7 @@ public class FacebookHelperComponent {
                                 throw new IllegalStateException("Received non-200 response code: " + responseCode);
                             }
                             String responseBodyAsString = exchangeMethodGet.getResponseBodyAsString();
-                            log.info("Response of FB: [{}]", responseBodyAsString);
+//                            log.info("Response of FB: [{}]", responseBodyAsString);
                             String[] splittedResult = StringUtils.split(responseBodyAsString, '&');
                             String accessToken = null;
                             String expires = null;
