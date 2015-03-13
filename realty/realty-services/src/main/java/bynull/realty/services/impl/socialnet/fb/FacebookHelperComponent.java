@@ -199,7 +199,7 @@ public class FacebookHelperComponent {
                 body = httpGet.getResponseBodyAsString();
                 log.info("Execution time: {} ms", System.currentTimeMillis() - requestStartTime);
                 log.info("Status line: {}", httpGet.getStatusLine());
-                log.info("Body: {}", body);
+//                log.info("Body: {}", body);
             } finally {
                 httpGet.releaseConnection();
             }
