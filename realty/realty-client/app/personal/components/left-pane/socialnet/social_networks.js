@@ -3,6 +3,7 @@
  */
 var React = require('react');
 var Util = require('rent4meUtil');
+var Ajax = require('rent4meAjax');
 var assign = require('object-assign');
 
 var SocialNetStore = require('../../../../shared/stores/SocialNetStore');
@@ -21,6 +22,8 @@ var Posts = require('./posts');
 var NavActions = require('../../../../shared/actions/NavActions');
 var MetrosActions = require('../../../../shared/actions/MetrosActions');
 var MetrosStore = require('../../../../shared/stores/MetrosStore');
+
+var ReactAutocomplete = require('rent4meAutocomplete');
 
 var AddressBox = React.createClass({
 
@@ -312,6 +315,23 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {location: location, countryCode: null, bounds: null, formattedAddress: value}));
     },
 
+    _searchRemote: function (options, searchTerm, cb) {
+        var metros = this.state.metros;
+
+        var transformedMetros = metros.map(m => { return {id: m.id, title: m.station_name} });
+        console.log('metro_typehead: ');
+
+        cb(null, transformedMetros.filter(m=>{
+            return (m.title || '').toLowerCase().indexOf( (searchTerm || '').toLowerCase() ) === 0;
+        }));
+    },
+
+    onTargetMetroSelected: function (item) {
+        //this.setState(assign(this.state, {
+        //    targetPersonId: item.id
+        //}));
+    },
+
     render: function () {
         var items = this.state.posts || [];
         var hasMoreResults = this.state.hasMoreSearchResults || false;
@@ -338,18 +358,11 @@ module.exports = React.createClass({
                 metrosDisplayItem = null;
             } else {
 
-                var metros = [{id: '', name: 'Метро Москвы'}].concat(_metros.map(m=> {
-                    return {id: m.id, name: m.station_name}
-                }));
-
-                var metroOptions = metros.map(m=> (<option key={"metro_" + m.id} value={m.id}>{m.name}</option>));
-
-                metrosDisplayItem = (<select
-                    className="form-control"
-                    multiple={false}
-                >
-                {metroOptions}
-                </select>);
+                metrosDisplayItem = (<ReactAutocomplete
+                    inputClassName="form-control"
+                    placeholder="Выберите Метро Москвы"
+                    search={this._searchRemote}
+                    onChange={this.onTargetMetroSelected}/>);
             }
         }
 
@@ -389,12 +402,13 @@ module.exports = React.createClass({
                             </div>
 
                             <div className='row'>
-                                <div className="col-md-8 col-md-offset-1">
+                                <div className="col-md-7 col-md-offset-1">
                                     <div className="col-md-12">
                                         <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
                                     </div>
                                 </div>
-                                <div className="col-md-2 pull-left">
+
+                                <div className="col-md-3">
                                     {metrosDisplayItem}
                                 </div>
                             </div>
@@ -402,7 +416,7 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className="col-md-8 col-md-offset-1">
+                                <div className="col-md-7 col-md-offset-1">
                                     <div className="col-md-12">
                                         <input type="text" className="form-control" value={text}
                                             placeholder="Поиск по тексту объявления"
@@ -411,7 +425,7 @@ module.exports = React.createClass({
                                         </input>
                                     </div>
                                 </div>
-                                <div className="col-md-2">
+                                <div className="col-md-3">
                                     <a className="btn btn-primary" onClick={this.onClick}>Найти</a>
                                 </div>
                             </div>

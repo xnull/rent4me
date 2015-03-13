@@ -156,6 +156,18 @@ AppDispatcher.register(function (payload) {
             break;
 
         case SocialNetConstants.SOCIAL_NET_POSTS_RESET_SEARCH:
+
+            Cookies.deleteCookie('SEARCH_TYPE');
+
+            Cookies.deleteCookie('SEARCH_ROOM_1');
+            Cookies.deleteCookie('SEARCH_ROOM_2');
+            Cookies.deleteCookie('SEARCH_ROOM_3');
+
+            Cookies.deleteCookie('SEARCH_MIN_PRICE');
+            Cookies.deleteCookie('SEARCH_MAX_PRICE');
+
+            Cookies.deleteCookie('SEARCH_TEXT');
+
             _searchWithSubway = false;
             _searchText = null;
             _bounds = null;

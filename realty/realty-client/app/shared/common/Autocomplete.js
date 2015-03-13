@@ -29,6 +29,12 @@ var Autocomplete = React.createClass({
                 'react-autocomplete-Autocomplete--resultsShown' :
                 undefined
         );
+
+        var inputClassName = cx(
+            this.props.inputClassName,
+            'react-autocomplete-Autocomplete__search'
+        );
+
         var style = {
             position: 'relative',
             outline: 'none'
@@ -42,7 +48,7 @@ var Autocomplete = React.createClass({
                 style={style}>
                 <input
                     ref="search"
-                    className="react-autocomplete-Autocomplete__search"
+                    className={inputClassName}
                     placeholder={this.props.placeholder}
                     style={{width: '100%'}}
                     onClick={this.showAllResults}

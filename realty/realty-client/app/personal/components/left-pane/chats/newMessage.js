@@ -104,7 +104,7 @@ module.exports = React.createClass({
                         <form className="form-horizontal" role="form">
                             <div className="form-group">
                                 <label className="col-md-2 control-label">ID пользователя</label>
-                                <div className="col-md-10">
+                                <div className="col-md-6">
                                     <ReactAutocomplete search={this._searchRemote} onChange={this.onTargetPersonChanged}/>
                                 </div>
                             </div>

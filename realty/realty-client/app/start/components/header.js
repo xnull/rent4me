@@ -27,6 +27,10 @@ var HeaderComponent = React.createClass({
         }
     },
 
+    componentDidMount: function(){
+        SocialNetActions.resetFBSearchState();
+    },
+
     onOneRoomAptValueChanged: function (value) {
         this.setState(assign(this.state, {
             oneRoomAptSelected: value
