@@ -19,6 +19,8 @@ var _ = require('underscore');
 var moment = require('moment');
 var Posts = require('./posts');
 var NavActions = require('../../../../shared/actions/NavActions');
+var MetrosActions = require('../../../../shared/actions/MetrosActions');
+var MetrosStore = require('../../../../shared/stores/MetrosStore');
 
 var AddressBox = React.createClass({
 
@@ -55,7 +57,8 @@ module.exports = React.createClass({
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults(),
             lastSearchTextChangeMS: 0,
             lastSearchMinPriceChangeMS: 0,
-            lastSearchMaxPriceChangeMS: 0
+            lastSearchMaxPriceChangeMS: 0,
+            metros: MetrosStore.getMetros()
         };
     },
 
@@ -87,19 +90,31 @@ module.exports = React.createClass({
             console.log(location);
 
             that.setState(assign(that.state, {location: location, countryCode: countryCode, bounds: bounds, formattedAddress: formatted_address}));
+            MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
             that.onClick();
         });
 
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
+        MetrosStore.addChangeListener(this.onMetrosChanged);
         this.onClick();//trigger initial load
     },
 
     componentWillUnmount: function () {
         SocialNetStore.removeChangeListener(this.onSearchResultsChanged);
+        MetrosStore.removeChangeListener(this.onMetrosChanged);
+    },
+
+    onMetrosChanged: function () {
+        console.log('on search results changed');
+        var newSearchResults = MetrosStore.getMetros();
+        console.log(newSearchResults);
+        this.setState(assign(this.state, {
+            metros: newSearchResults
+        }));
     },
 
     onSearchResultsChanged: function () {
-        console.log('on search results changed');
+        console.log('on metros changed');
         var newSearchResults = SocialNetStore.getSearchResults();
         console.log(newSearchResults);
         this.setState(assign(this.state, {
@@ -311,6 +326,32 @@ module.exports = React.createClass({
 
         var formattedAddress = this.state.formattedAddress;
 
+        var metrosDisplayItem;
+
+        {
+
+            var _metros = this.state.metros;
+
+            if (_.size(_metros) == 0) {
+                //don't display
+                metrosDisplayItem = null;
+            } else {
+
+                var metros = [{id: '', name: 'Метро'}].concat(_metros.map(m=> {
+                    return {id: m.id, name: m.station_name}
+                }));
+
+                var metroOptions = metros.map(m=> (<option key={"metro_" + m.id} value={m.id}>{m.name}</option>));
+
+                metrosDisplayItem = (<select
+                    className="form-control"
+                    multiple={false}
+                >
+                {metroOptions}
+                </select>);
+            }
+        }
+
         return (
             <div className="col-md-9">
                 <div className="panel">
@@ -353,17 +394,7 @@ module.exports = React.createClass({
                                     </div>
                                 </div>
                                 <div className="col-md-2 pull-left">
-                                    <select
-                                        className="form-control"
-                                        multiple={false}
-                                        >
-                                        <option key="" value="">Выберите метро</option>
-                                        <option key="metro1" value="metro1">Метро1</option>
-                                        <option key="metro2" value="metro2">Метро2</option>
-                                        <option key="metro3" value="metro3">Метро3</option>
-                                        <option key="metro4" value="metro4">Метро4</option>
-                                        <option key="metro5" value="metro5">Метро5</option>
-                                    </select>
+                                    {metrosDisplayItem}
                                 </div>
                             </div>
 

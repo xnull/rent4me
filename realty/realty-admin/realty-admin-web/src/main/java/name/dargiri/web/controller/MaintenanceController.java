@@ -4,9 +4,9 @@ package name.dargiri.web.controller;
 //import name.dargiri.data.service.PersonService;
 
 import bynull.realty.services.api.FacebookService;
+import bynull.realty.services.api.MetroService;
 import bynull.realty.services.api.VkontakteService;
 import bynull.realty.services.metro.MetroServiceException;
-import bynull.realty.services.metro.MoscowMetroSynchronisationService;
 import name.dargiri.web.Constants;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -36,7 +36,7 @@ public class MaintenanceController implements InitializingBean, DisposableBean{
     VkontakteService vkontakteService;
 
     @Resource
-    MoscowMetroSynchronisationService moscowMetroSynchronisationService;
+    MetroService metroService;
 
     ExecutorService jobRunner;
 
@@ -148,7 +148,7 @@ public class MaintenanceController implements InitializingBean, DisposableBean{
             @Override
             protected void action() {
                 try {
-                    moscowMetroSynchronisationService.syncWithDatabase();
+                    metroService.syncMoscowMetrosWithDatabase();
                 } catch (MetroServiceException e) {
                     e.printStackTrace();
                 }

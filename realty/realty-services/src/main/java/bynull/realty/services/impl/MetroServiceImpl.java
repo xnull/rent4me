@@ -1,10 +1,15 @@
-package bynull.realty.services.metro;
+package bynull.realty.services.impl;
 
+import bynull.realty.converters.MetroModelDTOConverter;
+import bynull.realty.dao.ApartmentRepositoryCustom;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
+import bynull.realty.dto.MetroDTO;
+import bynull.realty.services.api.MetroService;
+import bynull.realty.services.metro.*;
 import bynull.realty.services.metro.MetroSystemDto.MetroStationFullInfoDto;
 import bynull.realty.utils.JsonMapperException;
 import bynull.realty.utils.JsonUtils;
@@ -17,6 +22,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -37,7 +43,7 @@ import static bynull.realty.services.metro.MetroStationsDto.MetroStationDto;
 @Service
 @Lazy
 @Slf4j
-public class MoscowMetroSynchronisationService {
+public class MetroServiceImpl implements MetroService {
     private static final String MOSCOW = "Москва";
     private static final String RUSSIA = "Россия";
 
@@ -48,11 +54,22 @@ public class MoscowMetroSynchronisationService {
     @Autowired
     private CityRepository cityRepository;
 
+    @Resource
+    MetroModelDTOConverter metroModelDTOConverter;
+
+    @Transactional
+    @Override
+    public List<? extends MetroDTO> findMetros(ApartmentRepositoryCustom.GeoParams geoParams) {
+        List<? extends MetroDTO> metroDTOs = metroModelDTOConverter.toTargetList(metroRepository.findMetros(geoParams));
+        return metroDTOs;
+    }
+
     /**
      * Синхронизировать список станций метро яндекса с локальной базой данных
      */
     @Transactional
-    public void syncWithDatabase() throws MetroServiceException {
+    @Override
+    public void syncMoscowMetrosWithDatabase() throws MetroServiceException {
         MetroSystemDto metroSystem = loadStations();
 
         CityEntity moscowEntity = cityRepository.findByNameAndCountry_Name(MOSCOW, RUSSIA);

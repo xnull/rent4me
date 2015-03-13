@@ -1,7 +1,7 @@
 package bynull.realty.jobs;
 
+import bynull.realty.services.api.MetroService;
 import bynull.realty.services.metro.MetroServiceException;
-import bynull.realty.services.metro.MoscowMetroSynchronisationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,14 +16,14 @@ import javax.annotation.Resource;
 public class MetroSyncJob implements Runnable {
 
     @Resource
-    private MoscowMetroSynchronisationService moscowMetroSynchronisationService;
+    private MetroService metroService;
 
     @Scheduled(cron = "0 0 0 1 * *")
     @Override
     public void run() {
         log.info("Starting to sync new metro stations");
         try {
-            moscowMetroSynchronisationService.syncWithDatabase();
+            metroService.syncMoscowMetrosWithDatabase();
         } catch (MetroServiceException e) {
             log.error("Metro sync error", e);
         }

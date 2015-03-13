@@ -1,9 +1,9 @@
 package bynull.realty.services.maps.google;
 
+import bynull.realty.services.impl.MetroServiceImpl;
 import bynull.realty.services.metro.MetroServiceException;
 import bynull.realty.services.metro.MetroStationsDto;
 import bynull.realty.services.metro.MetroSystemDto;
-import bynull.realty.services.metro.MoscowMetroSynchronisationService;
 import bynull.realty.utils.JsonMapperException;
 import bynull.realty.utils.JsonUtils;
 import org.junit.Ignore;
@@ -24,7 +24,7 @@ public class TestSubwayStations {
      */
     @Test
     public void testGetStationsFromYandex() throws MetroServiceException {
-        MoscowMetroSynchronisationService moscowMetroSynchronisationService = new MoscowMetroSynchronisationService();
+        MetroServiceImpl moscowMetroSynchronisationService = new MetroServiceImpl();
         MetroStationsDto stationsJson = moscowMetroSynchronisationService.getStationsFromYandex();
 
         assertTrue(stationsJson.getStations().size() > 0);
@@ -39,7 +39,7 @@ public class TestSubwayStations {
     @Ignore("It's working, but we don't need to check it every time, because of download from yandex and google")
     @Test
     public void testGetMetroSystem() throws MetroServiceException, JsonMapperException {
-        MoscowMetroSynchronisationService moscowMetroSynchronisationService = new MoscowMetroSynchronisationService();
+        MetroServiceImpl moscowMetroSynchronisationService = new MetroServiceImpl();
         MetroSystemDto stations = moscowMetroSynchronisationService.loadStations();
 
         //город Москва, Москва, Улица Подбельского
