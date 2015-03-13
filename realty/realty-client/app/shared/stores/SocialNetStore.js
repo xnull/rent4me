@@ -170,7 +170,7 @@ AppDispatcher.register(function (payload) {
         case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_TEXT:
             _searchText = action.text || null;
 
-            Cookies.setCookieTemp('SEARCH_TEXT', _searchText);
+            Cookies.setCookieTemp('SEARCH_TEXT', encodeURIComponent(_searchText));
 
             return true;//don't emit any event
             break;
@@ -234,7 +234,7 @@ AppDispatcher.register(function (payload) {
             _searchMaxPrice = (!maxPriceCookie || 'null' == maxPriceCookie) ? null : parseInt(maxPriceCookie);
 
             var textCookie = Cookies.getCookie('SEARCH_TEXT');
-            _searchText = (!textCookie || 'null' == textCookie) ? null : textCookie;
+            _searchText = (!textCookie || 'null' == textCookie) ? null : decodeURIComponent(textCookie);
         }
             //return true;//don't emit any event
             break;
