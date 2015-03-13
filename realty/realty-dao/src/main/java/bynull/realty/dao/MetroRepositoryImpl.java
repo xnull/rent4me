@@ -75,7 +75,8 @@ public class MetroRepositoryImpl implements MetroRepositoryCustom {
             //5000 meters
             qlString += " ST_Distance_Sphere(m.location, " + createGeoPoint + " ) <= 5000";
 
-            ordering = " order by m.location <-> "+createGeoPoint+", m.name";
+//            ordering = " order by m.location <-> "+createGeoPoint+", m.name";
+            ordering = " order by m.name";
             params.put("lat", (point).get().getLatitude());
             params.put("lng", (point).get().getLongitude());
 

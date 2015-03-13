@@ -52,10 +52,12 @@ public class MetroRestResource {
             @QueryParam("lng_hi") Double lngHigh
     ) {
 
+
+        boolean someDataSpecified = false;
         ApartmentRepositoryCustom.GeoParams geoParams = new ApartmentRepositoryCustom.GeoParams();
 
         if(latLow != null && lngLow != null && latHigh != null && lngHigh != null) {
-
+            someDataSpecified = true;
             geoParams = geoParams.withBoundingBox(Optional.of(
                     new ApartmentRepositoryCustom.BoundingBox()
                             .withLow(
@@ -76,12 +78,13 @@ public class MetroRestResource {
         geoParams = geoParams.withCountryCode(Optional.ofNullable(countryCode));
 
         if (lat != null && lng != null) {
+            someDataSpecified = true;
             geoParams = geoParams.withPoint(Optional.of(new GeoPoint().withLatitude(lat).withLongitude(lng)));
         } else {
             geoParams = geoParams.withPoint(Optional.empty());
         }
 
-        List<? extends MetroDTO> metros = metroService.findMetros(geoParams);
+        List<? extends MetroDTO> metros = someDataSpecified ? metroService.findMetros(geoParams) : metroService.findMoscowMetros();
         List<? extends MetroJSON> json = metroDtoJsonConverter.toTargetList(metros);
 
         return Response

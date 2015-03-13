@@ -97,6 +97,7 @@ module.exports = React.createClass({
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
         MetrosStore.addChangeListener(this.onMetrosChanged);
         this.onClick();//trigger initial load
+        MetrosActions.findMetros(null, null, null, null);
     },
 
     componentWillUnmount: function () {
