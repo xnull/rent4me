@@ -42,7 +42,7 @@ var SocialNetActions = {
         var len = what.length;
         var i;
 
-        str = str || '';
+        str = (str || '')+'';//convert to string
 
         console.log('Trimmed value: "' + str + '"');
 

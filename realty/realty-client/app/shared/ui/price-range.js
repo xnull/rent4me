@@ -11,7 +11,9 @@ var PriceRange = React.createClass({
         uiLabelSize: React.PropTypes.number.isRequired,
         minPrice: React.PropTypes.number,
         maxPrice: React.PropTypes.number,
-        onKeyPress: React.PropTypes.func
+        onKeyPress: React.PropTypes.func,
+        onMaxPriceChange: React.PropTypes.func.isRequired,
+        onMinPriceChange: React.PropTypes.func.isRequired
     },
 
     /**
@@ -44,13 +46,13 @@ var PriceRange = React.createClass({
                     <div className='col-md-6' style={{paddingRight: 0}}>
                         <input type='text' className='form-control' placeholder='От' value={minPrice}
                             onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
-                            style={{borderRadius: 'inherit'}}/>
+                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
                     </div>
 
                     <div className='col-md-6' style={{paddingLeft: 0}}>
                         <input type='text' className='form-control' placeholder='До' value={maxPrice}
                             onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
-                            style={{borderRadius: 'inherit'}}/>
+                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
                     </div>
                 </div>
             </div>

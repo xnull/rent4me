@@ -21,7 +21,9 @@ var HeaderComponent = React.createClass({
         return {
             oneRoomAptSelected: false,
             twoRoomAptSelected: false,
-            threeRoomAptSelected: false
+            threeRoomAptSelected: false,
+            minPrice: null,
+            maxPrice: null
         }
     },
 
@@ -61,6 +63,12 @@ var HeaderComponent = React.createClass({
         Utils.navigateToPersonal();
     },
 
+    performSearchOnEnter: function(e) {
+        if(e.key=='Enter') {
+            this.performSearch();
+        }
+    },
+
     changeToLessor: function () {
         console.log('changeToLessor');
         SocialNetActions.changeFBSearchType('LESSOR');
@@ -78,6 +86,34 @@ var HeaderComponent = React.createClass({
             text: text
         }));
         SocialNetActions.changeFBSearchText(text);
+    },
+
+    onMinPriceChange: function (e) {
+        var value = e.target.value;
+        console.log("With min price new value: " + value);
+
+        var minPrice = value;
+        var maxPrice = this.state.maxPrice;
+
+        SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
+
+        this.setState(assign(this.state, {
+            minPrice: minPrice
+        }));
+    },
+
+    onMaxPriceChange: function (e) {
+        var value = e.target.value;
+        console.log("With max price new value: " + value);
+
+        var minPrice = this.state.minPrice;
+        var maxPrice = value;
+
+        SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
+
+        this.setState(assign(this.state, {
+            maxPrice: maxPrice
+        }));
     },
 
     render: function () {
@@ -117,7 +153,7 @@ var HeaderComponent = React.createClass({
                                             <div className='row'>
                                                 <div className="col-md-10">
                                                     <RentType changeToRenter={this.changeToRenter} changeToLessor={this.changeToLessor}/>
-                                                    <RoomsCount uiSize='4' uiLabelSize='3'
+                                                    <RoomsCount uiSize={4} uiLabelSize={3}
                                                         oneRoomAptSelected={this.state.oneRoomAptSelected}
                                                         twoRoomAptSelected={this.state.twoRoomAptSelected}
                                                         threeRoomAptSelected={this.state.threeRoomAptSelected}
@@ -127,16 +163,26 @@ var HeaderComponent = React.createClass({
                                                         onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
 
                                                     />
-                                                    <PriceRange uiSize='5' uiLabelSize='2' />
+                                                    <PriceRange uiSize={5} uiLabelSize={2}
+                                                        onKeyPress={this.performSearchOnEnter}
+
+                                                        minPrice={this.state.minPrice}
+                                                        maxPrice={this.state.maxPrice}
+
+                                                        onMinPriceChange={this.onMinPriceChange}
+                                                        onMaxPriceChange={this.onMaxPriceChange}
+                                                    />
                                                 </div>
                                             </div>
 
                                             <div className='row'>
                                                 <div className="col-md-12">
                                                     <div className="col-md-10">
-                                                        <input type="text" className="form-control" value={this.state.text} onChange={this.onChangeSearchText}
+                                                        <input type="text" className="form-control" value={this.state.text}
+                                                            onChange={this.onChangeSearchText}
+                                                            onKeyPress={this.performSearchOnEnter}
                                                             placeholder="Поиск по тексту объявления"
-                                                            style={{borderRadius: 'inherit'}}>
+                                                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}>
                                                         </input>
                                                     </div>
                                                     <div className="col-md-2">
