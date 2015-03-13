@@ -169,6 +169,9 @@ AppDispatcher.register(function (payload) {
 
         case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_TEXT:
             _searchText = action.text || null;
+
+            Cookies.setCookieTemp('SEARCH_TEXT', _searchText);
+
             return true;//don't emit any event
             break;
 
@@ -179,11 +182,19 @@ AppDispatcher.register(function (payload) {
 
         case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_TYPE:
             _searchType = action.value || 'RENTER';
+
+            Cookies.setCookieTemp('SEARCH_TYPE', _searchType);
+
             return true;//don't emit any event
             break;
 
         case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_ROOMS:
             _searchRooms = action.value;
+
+            Cookies.setCookieTemp('SEARCH_ROOM_1', _searchRooms['1']);
+            Cookies.setCookieTemp('SEARCH_ROOM_2', _searchRooms['2']);
+            Cookies.setCookieTemp('SEARCH_ROOM_3', _searchRooms['3']);
+
             return true;//don't emit any event
             break;
 
@@ -191,6 +202,10 @@ AppDispatcher.register(function (payload) {
             var val = action.value || {};
             _searchMinPrice = val.min || null;
             _searchMaxPrice = val.max || null;
+
+            Cookies.setCookieTemp('SEARCH_MIN_PRICE', _searchMinPrice);
+            Cookies.setCookieTemp('SEARCH_MAX_PRICE', _searchMaxPrice);
+
             return true;//don't emit any event
             break;
 
@@ -203,66 +218,24 @@ AppDispatcher.register(function (payload) {
             return true;//don't emit any event
             break;
 
-        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_TEXT:
-            _searchText = action.text || null;
-            return true;//don't emit any event
-            break;
 
-        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_WITH_SUBWAY:
-            _searchWithSubway = action.value || false;
-            return true;//don't emit any event
-            break;
-
-        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_TYPE:
-            _searchType = action.value || 'RENTER';
-            Cookies.setCookieTemp('SEARCH_TYPE', _searchType);
-            return true;//don't emit any event
-            break;
-
-        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_ROOMS:
-            _searchRooms = action.value;
-            console.log('received value is');
-            console.log(_searchRooms['1']);
-            console.log(_searchRooms['2']);
-            console.log(_searchRooms['3']);
-
-            Cookies.setCookieTemp('SEARCH_ROOM_1', _searchRooms['1']);
-            Cookies.setCookieTemp('SEARCH_ROOM_2', _searchRooms['2']);
-            Cookies.setCookieTemp('SEARCH_ROOM_3', _searchRooms['3']);
-
-            return true;//don't emit any event
-            break;
-
-        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_PRICE:
-            var val = action.value || {};
-            _searchMinPrice = val.min || null;
-            _searchMaxPrice = val.max || null;
-            return true;//don't emit any event
-            break;
-
-        case SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_LOCATION_INFO:
-            var _val = action.value || {};
-            _bounds = _val.bounds || null;
-            _location = _val.location || null;
-            _countryCode = _val.countryCode || null;
-            _formattedAddress = _val.formattedAddress || null;
-            return true;//don't emit any event
-            break;
-
-
-        case SocialNetConstants.SOCIAL_NET_POSTS_RESTORE_FROM_COOKIES_AND_CLEAR:
+        case SocialNetConstants.SOCIAL_NET_POSTS_RESTORE_FROM_COOKIES_AND_CLEAR: {
             _searchType = Cookies.getCookie('SEARCH_TYPE') || _searchType;
-            Cookies.deleteCookie('SEARCH_TYPE');
 
             _searchRooms = {};
             _searchRooms['1'] = (Cookies.getCookie('SEARCH_ROOM_1') == 'true') || false;
             _searchRooms['2'] = (Cookies.getCookie('SEARCH_ROOM_2') == 'true') || false;
             _searchRooms['3'] = (Cookies.getCookie('SEARCH_ROOM_3') == 'true') || false;
 
-            Cookies.deleteCookie('SEARCH_ROOM_1');
-            Cookies.deleteCookie('SEARCH_ROOM_2');
-            Cookies.deleteCookie('SEARCH_ROOM_3');
+            var minPriceCookie = Cookies.getCookie('SEARCH_MIN_PRICE');
+            var maxPriceCookie = Cookies.getCookie('SEARCH_MAX_PRICE');
 
+            _searchMinPrice = (!minPriceCookie || 'null' == minPriceCookie) ? null : parseInt(minPriceCookie);
+            _searchMaxPrice = (!maxPriceCookie || 'null' == maxPriceCookie) ? null : parseInt(maxPriceCookie);
+
+            var textCookie = Cookies.getCookie('SEARCH_TEXT');
+            _searchText = (!textCookie || 'null' == textCookie) ? null : textCookie;
+        }
             //return true;//don't emit any event
             break;
 

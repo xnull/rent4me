@@ -97,24 +97,6 @@ var SocialNetActions = {
         });
     },
 
-    changeApartmentCookieSearchType: function (value) {
-        AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_TYPE,
-            value: value
-        });
-    },
-
-    changeApartmentCookieSearchRooms: function (oneAptSelected, twoAptSelected, threeAptSelected) {
-        AppDispatcher.handleViewAction({
-            actionType: SocialNetConstants.SOCIAL_NET_POSTS_COOKIES_SAVE_SEARCH_ROOMS,
-            value: {
-                '1': oneAptSelected || false,
-                '2': twoAptSelected || false,
-                '3': threeAptSelected || false
-            }
-        });
-    },
-
     restoreSearchParamsFromCookies: function() {
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_POSTS_RESTORE_FROM_COOKIES_AND_CLEAR

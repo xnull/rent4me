@@ -54,7 +54,7 @@ var HeaderComponent = React.createClass({
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
         var threeRoomAptSelected = this.state.threeRoomAptSelected;
 
-        SocialNetActions.changeApartmentCookieSearchRooms(oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
+        SocialNetActions.changeFBSearchRooms(oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
     },
 
     performSearch: function() {
@@ -63,12 +63,21 @@ var HeaderComponent = React.createClass({
 
     changeToLessor: function () {
         console.log('changeToLessor');
-        SocialNetActions.changeApartmentCookieSearchType('LESSOR');
+        SocialNetActions.changeFBSearchType('LESSOR');
     },
 
     changeToRenter: function () {
         console.log('changeToRenter');
-        SocialNetActions.changeApartmentCookieSearchType('RENTER');
+        SocialNetActions.changeFBSearchType('RENTER');
+    },
+
+    onChangeSearchText: function(event) {
+        var text = event.target.value;
+
+        this.setState(assign(this.state, {
+            text: text
+        }));
+        SocialNetActions.changeFBSearchText(text);
     },
 
     render: function () {
@@ -125,8 +134,8 @@ var HeaderComponent = React.createClass({
                                             <div className='row'>
                                                 <div className="col-md-12">
                                                     <div className="col-md-10">
-                                                        <input type="text" className="form-control" value="you"
-                                                            placeholder="Поиск по адресу, метро, улице, району"
+                                                        <input type="text" className="form-control" value={this.state.text} onChange={this.onChangeSearchText}
+                                                            placeholder="Поиск по тексту объявления"
                                                             style={{borderRadius: 'inherit'}}>
                                                         </input>
                                                     </div>
