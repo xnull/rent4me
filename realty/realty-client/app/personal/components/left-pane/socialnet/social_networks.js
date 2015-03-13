@@ -12,6 +12,7 @@ var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
 var RentType = require('../../../../shared/ui/rent-type');
+var MetroBubble = require('../../../../shared/ui/metro-bubble');
 
 var AddressUtils = require('../../../../shared/common/AddressUtils');
 var JSON2 = require('JSON2');
@@ -332,6 +333,10 @@ module.exports = React.createClass({
         //}));
     },
 
+    onRemoveMetroTag: function(itemId) {
+        alert('Removed item with id '+itemId);
+    },
+
     render: function () {
         var items = this.state.posts || [];
         var hasMoreResults = this.state.hasMoreSearchResults || false;
@@ -427,6 +432,14 @@ module.exports = React.createClass({
                                 </div>
                                 <div className="col-md-3">
                                     <a className="btn btn-primary" onClick={this.onClick}>Найти</a>
+                                </div>
+                            </div>
+
+                            <br/>
+
+                            <div className='row'>
+                                <div className="col-md-11 col-md-offset-1 pull-left">
+                                    <MetroBubble id="1" displayValue="Лобочевское метро" onRemove={this.onRemoveMetroTag}/>
                                 </div>
                             </div>
 

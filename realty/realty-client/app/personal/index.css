@@ -205,8 +205,14 @@ h3, h4, h5 {
     background: #fafafa;
 }
 
-.badge {
+.badge-notification {
     background-color: #CB4437 !important;
+}
+
+.badge-metro {
+    background-color: #D9EDF7;
+    border-bottom-color: #BCE8F1;
+    color: #31708F;
 }
 
 /* Rent4.me settings */
