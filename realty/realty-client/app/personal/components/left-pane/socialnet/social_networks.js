@@ -88,7 +88,7 @@ module.exports = React.createClass({
                 longitude: place['geometry']['location'].lng()
             };
 
-            var formatted_address = place['formatted_address'];
+            var formatted_address = place['name'];
 
             console.log('new location:');
             console.log(location);

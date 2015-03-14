@@ -17,6 +17,7 @@ import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.metro.MetroEntity;
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
@@ -199,8 +200,17 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
 
                             post.setFacebookPage(fbPage);
                             String message = post.getDescription();
+
                             Set<MetroEntity> matchedMetros = matchMetros(metros, message);
                             post.setMetros(matchedMetros);
+
+                            GeoPoint averagePoint = getAveragePoint(matchedMetros);
+                            post.setLocation(averagePoint);
+
+                            AddressComponents addressComponents = new AddressComponents();
+                            addressComponents.setCountryCode("RU");
+                            post.setAddressComponents(addressComponents);
+
                             Integer roomCount = roomCountParser.findRoomCount(message);
                             post.setRoomCount(roomCount);
                             Apartment.Target target = targetAnalyzer.determineTarget(message);
@@ -321,6 +331,14 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
 
                 Set<MetroEntity> matchedMetros = matchMetros(metros, message);
                 post.setMetros(matchedMetros);
+
+                GeoPoint averagePoint = getAveragePoint(matchedMetros);
+                post.setLocation(averagePoint);
+
+                AddressComponents addressComponents = new AddressComponents();
+                addressComponents.setCountryCode("RU");
+                post.setAddressComponents(addressComponents);
+
                 Integer roomCount = roomCountParser.findRoomCount(message);
                 post.setRoomCount(roomCount);
                 BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
