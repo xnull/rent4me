@@ -18,7 +18,7 @@ var MetroBubble = React.createClass({
         var onClickFunc = (id) => {return function(){ return self.props.onRemove(id);}};
 
         return (
-            <span className="badge badge-metro" style={{paddingRight: '3px'}}>
+            <span className="badge badge-metro" style={{marginRight: '5px'}}>
                 {this.props.displayValue} <b className="glyphicon glyphicon-remove-circle clickable" onClick={onClickFunc(this.props.id)}></b>
             </span>
         )
