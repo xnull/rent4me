@@ -72,7 +72,7 @@ var Rooms = React.createClass({
                     <label className="control-label pull-right">Комнат</label>
                 </div>
                 <div className={uiProps.form}>
-                    <div className="btn-group" data-toggle="buttons">
+                    <div className="btn-group btn-group-justified" data-toggle="buttons">
                         <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>
                             <input type="checkbox"
                                 checked={firstSelected}

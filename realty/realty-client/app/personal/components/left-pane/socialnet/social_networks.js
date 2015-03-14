@@ -378,10 +378,15 @@ module.exports = React.createClass({
                     <div className="panel-body">
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <div className="col-md-10 col-md-offset-1">
-                                    <RentType changeToRenter={this.changeToRenter} changeToLessor={this.changeToLessor}/>
+                                <div className="col-md-12">
+                                    <RentType
+                                        size='col-md-2'
+                                        changeToRenter={this.changeToRenter}
+                                        changeToLessor={this.changeToLessor}
+                                    />
+
                                     <RoomsCount
-                                        uiSize='4' uiLabelSize='3'
+                                        uiSize='3' uiLabelSize='4'
 
                                         oneRoomAptSelected={oneRoomAptSelected}
                                         twoRoomAptSelected={twoRoomAptSelected}
@@ -393,7 +398,7 @@ module.exports = React.createClass({
                                     />
 
                                     <PriceRange
-                                        uiSize='5' uiLabelSize='2'
+                                        uiSize='3' uiLabelSize='2'
 
                                         minPrice={minPrice}
                                         maxPrice={maxPrice}
@@ -403,11 +408,19 @@ module.exports = React.createClass({
                                         onMinPriceChange={this.onMinPriceChange}
                                         onMaxPriceChange={this.onMaxPriceChange}
                                     />
+
+                                    <div className="col-md-3">
+                                        <input type="text" className="form-control" value={text}
+                                            placeholder="Поиск по тексту объявления"
+                                            onKeyPress={this.clickOnEnter}
+                                            onChange={this.onSearchChange} >
+                                        </input>
+                                    </div>
                                 </div>
                             </div>
 
                             <div className='row'>
-                                <div className="col-md-7 col-md-offset-1">
+                                <div className="col-md-7">
                                     <div className="col-md-12">
                                         <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
                                     </div>
@@ -421,15 +434,6 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className="col-md-7 col-md-offset-1">
-                                    <div className="col-md-12">
-                                        <input type="text" className="form-control" value={text}
-                                            placeholder="Поиск по тексту объявления"
-                                            onKeyPress={this.clickOnEnter}
-                                            onChange={this.onSearchChange} >
-                                        </input>
-                                    </div>
-                                </div>
                                 <div className="col-md-3">
                                     <a className="btn btn-primary" onClick={this.onClick}>Найти</a>
                                 </div>
@@ -438,7 +442,7 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className="col-md-11 col-md-offset-1 pull-left">
+                                <div className="col-md-11 pull-left">
                                     <MetroBubble id="1" displayValue="Лобочевское метро" onRemove={this.onRemoveMetroTag}/>
                                 </div>
                             </div>

@@ -19,8 +19,10 @@ var RentType = React.createClass({
         var renterClasses = "btn btn-default" + (isRenter ? " active" : "");
         var lessorClasses = "btn btn-default" + (!isRenter ? " active" : "");
 
+        var size = this.props.size || 'col-md-3';
+
         return (
-            <div className='col-md-3'>
+            <div className={size}>
                 <div className="btn-group" data-toggle="buttons" >
                     <label className={renterClasses} onClick={this.props.changeToRenter} >
                         <input type="radio" >Снять</input>

@@ -40,19 +40,21 @@ var PriceRange = React.createClass({
         return (
             <div className={uiProps.size}>
                 <div className={uiProps.labelSize}>
-                    <label className='control-label pull-right'>Цена</label>
+                    <label className='control-label'>Цена</label>
                 </div>
                 <div className={uiProps.form}>
-                    <div className='col-md-6' style={{paddingRight: 0}}>
-                        <input type='text' className='form-control' placeholder='От' value={minPrice}
-                            onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
-                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
-                    </div>
+                    <div className="input-group">
+                        <div className='col-md-6' style={{paddingRight: 0}}>
+                            <input type='text' className='form-control' placeholder='От' value={minPrice}
+                                onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
+                                style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
+                        </div>
 
-                    <div className='col-md-6' style={{paddingLeft: 0}}>
-                        <input type='text' className='form-control' placeholder='До' value={maxPrice}
-                            onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
-                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
+                        <div className='col-md-6' style={{paddingLeft: 0}}>
+                            <input type='text' className='form-control' placeholder='До' value={maxPrice}
+                                onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
+                                style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
+                        </div>
                     </div>
                 </div>
             </div>
