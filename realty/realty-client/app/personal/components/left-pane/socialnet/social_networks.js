@@ -93,7 +93,12 @@ module.exports = React.createClass({
             console.log('new location:');
             console.log(location);
 
-            that.setState(assign(that.state, {location: location, countryCode: countryCode, bounds: bounds, formattedAddress: formatted_address}));
+            that.setState(assign(that.state, {
+                location: location,
+                countryCode: countryCode,
+                bounds: bounds,
+                formattedAddress: formatted_address
+            }));
             MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
             that.onClick();
         });
@@ -264,8 +269,8 @@ module.exports = React.createClass({
         }));
     },
 
-    clickOnEnter: function(e) {
-        if(e.key=='Enter') {
+    clickOnEnter: function (e) {
+        if (e.key == 'Enter') {
             this.onClick();
         }
     },
@@ -308,22 +313,29 @@ module.exports = React.createClass({
         this.onRentTypeChange('RENTER');
     },
 
-    onAddressChange: function(event) {
+    onAddressChange: function (event) {
         this.makeFormattedAddressDirty(event.target.value);
     },
 
-    makeFormattedAddressDirty: function(value) {
-        this.setState(assign(this.state, {location: location, countryCode: null, bounds: null, formattedAddress: value}));
+    makeFormattedAddressDirty: function (value) {
+        this.setState(assign(this.state, {
+            location: location,
+            countryCode: null,
+            bounds: null,
+            formattedAddress: value
+        }));
     },
 
     _searchRemote: function (options, searchTerm, cb) {
         var metros = this.state.metros;
 
-        var transformedMetros = metros.map(m => { return {id: m.id, title: m.station_name} });
+        var transformedMetros = metros.map(m => {
+            return {id: m.id, title: m.station_name}
+        });
         console.log('metro_typehead: ');
 
-        cb(null, transformedMetros.filter(m=>{
-            return (m.title || '').toLowerCase().indexOf( (searchTerm || '').toLowerCase() ) === 0;
+        cb(null, transformedMetros.filter(m=> {
+            return (m.title || '').toLowerCase().indexOf((searchTerm || '').toLowerCase()) === 0;
         }));
     },
 
@@ -333,8 +345,8 @@ module.exports = React.createClass({
         //}));
     },
 
-    onRemoveMetroTag: function(itemId) {
-        alert('Removed item with id '+itemId);
+    onRemoveMetroTag: function (itemId) {
+        alert('Removed item with id ' + itemId);
     },
 
     render: function () {
@@ -378,15 +390,15 @@ module.exports = React.createClass({
                     <div className="panel-body">
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <div className="col-md-12">
+                                <div className="col-md-9">
                                     <RentType
-                                        size='col-md-2'
+                                        size='col-md-3'
                                         changeToRenter={this.changeToRenter}
                                         changeToLessor={this.changeToLessor}
                                     />
 
                                     <RoomsCount
-                                        uiSize='3' uiLabelSize='4'
+                                        uiSize='4' uiLabelSize='5'
 
                                         oneRoomAptSelected={oneRoomAptSelected}
                                         twoRoomAptSelected={twoRoomAptSelected}
@@ -398,7 +410,7 @@ module.exports = React.createClass({
                                     />
 
                                     <PriceRange
-                                        uiSize='3' uiLabelSize='2'
+                                        uiSize='5' uiLabelSize='3'
 
                                         minPrice={minPrice}
                                         maxPrice={maxPrice}
@@ -408,14 +420,14 @@ module.exports = React.createClass({
                                         onMinPriceChange={this.onMinPriceChange}
                                         onMaxPriceChange={this.onMaxPriceChange}
                                     />
+                                </div>
 
-                                    <div className="col-md-3">
-                                        <input type="text" className="form-control" value={text}
-                                            placeholder="Поиск по тексту объявления"
-                                            onKeyPress={this.clickOnEnter}
-                                            onChange={this.onSearchChange} >
-                                        </input>
-                                    </div>
+                                <div className="col-md-3">
+                                    <input type="text" className="form-control" value={text}
+                                        placeholder="Поиск по тексту объявления"
+                                        onKeyPress={this.clickOnEnter}
+                                        onChange={this.onSearchChange} >
+                                    </input>
                                 </div>
                             </div>
 
@@ -426,7 +438,11 @@ module.exports = React.createClass({
                                     </div>
                                 </div>
 
-                                <div className="col-md-3">
+                                <div className="col-md-1">
+                                    <label className='control-label'>или</label>
+                                </div>
+
+                                <div className="col-md-4">
                                     {metrosDisplayItem}
                                 </div>
                             </div>
@@ -434,8 +450,10 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className="col-md-3">
-                                    <a className="btn btn-primary" onClick={this.onClick}>Найти</a>
+                                <div className="col-md-9">
+                                    <div className="col-md-3 col-md-offset-9">
+                                        <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -443,7 +461,9 @@ module.exports = React.createClass({
 
                             <div className='row'>
                                 <div className="col-md-11 pull-left">
-                                    <MetroBubble id="1" displayValue="Лобочевское метро" onRemove={this.onRemoveMetroTag}/>
+                                    <div className="col-md-12">
+                                        <MetroBubble id="1" displayValue="Лобочевское метро" onRemove={this.onRemoveMetroTag}/>
+                                    </div>
                                 </div>
                             </div>
 

@@ -14,10 +14,11 @@ var RoomsCount = require('../../shared/ui/rooms-count');
 var PriceRange = require('../../shared/ui/price-range');
 var RentType = require('../../shared/ui/rent-type');
 
+var Cards = require('./cards');
 
 var HeaderComponent = React.createClass({
 
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             oneRoomAptSelected: false,
             twoRoomAptSelected: false,
@@ -27,7 +28,7 @@ var HeaderComponent = React.createClass({
         }
     },
 
-    componentDidMount: function(){
+    componentDidMount: function () {
         SocialNetActions.resetFBSearchState();
     },
 
@@ -63,12 +64,12 @@ var HeaderComponent = React.createClass({
         SocialNetActions.changeFBSearchRooms(oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
     },
 
-    performSearch: function() {
+    performSearch: function () {
         Utils.navigateToPersonal();
     },
 
-    performSearchOnEnter: function(e) {
-        if(e.key=='Enter') {
+    performSearchOnEnter: function (e) {
+        if (e.key == 'Enter') {
             this.performSearch();
         }
     },
@@ -83,7 +84,7 @@ var HeaderComponent = React.createClass({
         SocialNetActions.changeFBSearchType('RENTER');
     },
 
-    onChangeSearchText: function(event) {
+    onChangeSearchText: function (event) {
         var text = event.target.value;
 
         this.setState(assign(this.state, {
@@ -124,17 +125,20 @@ var HeaderComponent = React.createClass({
 
         var loginButtonStyle = {
             margin: 30,
-            background: 'rgba(74, 35, 23, 0.4)'
+            /*background: 'rgba(74, 35, 23, 0.4)'*/
+            background: 'rgba(3, 3, 3, 0.45)'
         };
 
 
         var authComponentDisplayItem = (<input type="button" className="button special" value="Вход / Регистрация" style={loginButtonStyle}/>);
 
         var sectionStyle = {
-            backgroundImage: "url('images/flats/kitchen1.jpg')",
+            /*backgroundImage: "url('images/flats/kitchen1.jpg')",*/
+            backgroundImage: "url('http://www.veskip.ru/images/property/22592__40P0163-01.jpg')",
             backgroundSize: 'cover',
             backgroundPosition: 'auto',
-            backgroundRepeat: 'no-repeat'
+            /*backgroundRepeat: 'no-repeat'*/
+            backgroundRepeat: 'round'
         };
         return (
             <div style={sectionStyle}>
@@ -146,11 +150,13 @@ var HeaderComponent = React.createClass({
                 <section id='header' className='dark'>
                     <header>
                         <h1 style={{color: '#da5037'}}>Аренда недвижимости</h1>
-                        <p>Прозрачность, отсутствие посредников</p>
+                        <p>
+                            <strong style={{color: 'rgb(168, 129, 66)'}}>Прозрачность, отсутствие посредников</strong>
+                        </p>
                     </header>
                     <footer>
                         <div className="row">
-                            <div className='col-centered'>
+                            <div className='col-md-6 col-centered'>
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
@@ -186,7 +192,11 @@ var HeaderComponent = React.createClass({
                                                             onChange={this.onChangeSearchText}
                                                             onKeyPress={this.performSearchOnEnter}
                                                             placeholder="Поиск по тексту объявления"
-                                                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}>
+                                                            style={{
+                                                                borderRadius: 'inherit',
+                                                                paddingTop: 0,
+                                                                paddingBottom: 0
+                                                            }}>
                                                         </input>
                                                     </div>
                                                     <div className="col-md-2">
@@ -194,12 +204,13 @@ var HeaderComponent = React.createClass({
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <Cards />
                     </footer>
                 </section>
             </div>

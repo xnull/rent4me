@@ -3,6 +3,7 @@
  */
 
 var React = require('react');
+var Cards = require('./cards');
 
 var MailChimpForm = React.createClass({
     render: function () {
@@ -78,7 +79,6 @@ var FirstComponent = React.createClass({
                         </p>
                     </div>
                 </header>
-
                 <MailChimpComponent />
             </section>
         )
