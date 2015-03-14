@@ -49,7 +49,7 @@ public class AbstractSocialNetServiceImpl {
     protected GeoPoint getAveragePoint(Set<MetroEntity> metroEntities) {
         if(metroEntities == null || metroEntities.isEmpty()) return null;
 
-        int counter = 0;
+        int counter = metroEntities.size();
         double latSum = 0.0d;
         double lngSum = 0.0d;
 
