@@ -207,6 +207,10 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             GeoPoint averagePoint = getAveragePoint(matchedMetros);
                             post.setLocation(averagePoint);
 
+                            AddressComponents addressComponents = new AddressComponents();
+                            addressComponents.setCountryCode("RU");
+                            post.setAddressComponents(addressComponents);
+
                             Integer roomCount = roomCountParser.findRoomCount(message);
                             post.setRoomCount(roomCount);
                             Apartment.Target target = targetAnalyzer.determineTarget(message);
@@ -330,6 +334,10 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
 
                 GeoPoint averagePoint = getAveragePoint(matchedMetros);
                 post.setLocation(averagePoint);
+
+                AddressComponents addressComponents = new AddressComponents();
+                addressComponents.setCountryCode("RU");
+                post.setAddressComponents(addressComponents);
 
                 Integer roomCount = roomCountParser.findRoomCount(message);
                 post.setRoomCount(roomCount);

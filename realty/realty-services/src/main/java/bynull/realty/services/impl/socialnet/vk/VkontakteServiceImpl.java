@@ -178,6 +178,10 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                             GeoPoint averagePoint = getAveragePoint(matchedMetros);
                             post.setLocation(averagePoint);
 
+                            AddressComponents addressComponents = new AddressComponents();
+                            addressComponents.setCountryCode("RU");
+                            post.setAddressComponents(addressComponents);
+
                             Integer roomCount = roomCountParser.findRoomCount(message);
                             post.setRoomCount(roomCount);
                             BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
@@ -285,6 +289,10 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 
                 GeoPoint averagePoint = getAveragePoint(matchedMetros);
                 post.setLocation(averagePoint);
+
+                AddressComponents addressComponents = new AddressComponents();
+                addressComponents.setCountryCode("RU");
+                post.setAddressComponents(addressComponents);
 
                 Integer roomCount = roomCountParser.findRoomCount(message);
                 post.setRoomCount(roomCount);
