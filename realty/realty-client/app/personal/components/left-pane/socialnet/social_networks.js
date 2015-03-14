@@ -62,7 +62,8 @@ module.exports = React.createClass({
             lastSearchTextChangeMS: 0,
             lastSearchMinPriceChangeMS: 0,
             lastSearchMaxPriceChangeMS: 0,
-            metros: MetrosStore.getMetros()
+            metros: MetrosStore.getMetros(),
+            metrosSelected: []
         };
     },
 
@@ -253,7 +254,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchWithSubway(true);
         SocialNetActions.changeFBSearchRooms(false, false, false);
         SocialNetActions.changeFBSearchPrice(null, null);
-        SocialNetActions.changeFBSearchPrice(null, null, null, null);
+        SocialNetActions.changeSearchLocationInfo(null, null, null, null);
 
         this.setState(assign(this.state, {
             withSubway: SocialNetStore.isSearchWithSubway(),
@@ -340,13 +341,22 @@ module.exports = React.createClass({
     },
 
     onTargetMetroSelected: function (item) {
-        //this.setState(assign(this.state, {
-        //    targetPersonId: item.id
-        //}));
+        var metrosSelected = []
+            .concat(this.state.metrosSelected)
+            .filter(i=>i.id != item.id);
+        metrosSelected.push(item);
+        this.setState(assign(this.state, {
+            metrosSelected: metrosSelected
+        }));
     },
 
     onRemoveMetroTag: function (itemId) {
-        alert('Removed item with id ' + itemId);
+        var metrosSelected = []
+            .concat(this.state.metrosSelected)
+            .filter(i=>i.id != itemId);
+        this.setState(assign(this.state, {
+            metrosSelected: metrosSelected
+        }));
     },
 
     render: function () {
@@ -381,6 +391,26 @@ module.exports = React.createClass({
                     search={this._searchRemote}
                     onChange={this.onTargetMetroSelected}/>);
             }
+        }
+
+        var metroBubbles = null;
+
+
+        var _metrosSelected = this.state.metrosSelected;
+        if(_.size(_metrosSelected) > 0) {
+            var bubbles = _metrosSelected.map(m => {
+                return (<MetroBubble id={m.id} displayValue={"Метро: "+m.title} onRemove={this.onRemoveMetroTag}/>);
+            });
+
+                metroBubbles = (
+                    <div className='row'>
+                        <div className="col-md-11 pull-left">
+                            <div className="col-md-12">
+                                {bubbles}
+                            </div>
+                        </div>
+                    </div>
+                );
         }
 
         return (
@@ -459,13 +489,7 @@ module.exports = React.createClass({
 
                             <br/>
 
-                            <div className='row'>
-                                <div className="col-md-11 pull-left">
-                                    <div className="col-md-12">
-                                        <MetroBubble id="1" displayValue="Лобочевское метро" onRemove={this.onRemoveMetroTag}/>
-                                    </div>
-                                </div>
-                            </div>
+                            {metroBubbles}
 
                         </form>
                     </div>
