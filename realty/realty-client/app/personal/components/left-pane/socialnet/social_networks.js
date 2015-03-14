@@ -450,11 +450,11 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className="col-md-9">
-                                    <div className="col-md-3 col-md-offset-9">
+
+                                <div className="col-md-2 col-md-offset-10">
                                         <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
                                     </div>
-                                </div>
+
                             </div>
 
                             <br/>

@@ -61,6 +61,9 @@ var Header = React.createClass({
         return (
             <div className="navbar navbar-default" >
                 <div className="col-md-12">
+                    <div className="navbar-header">
+                        <a className="navbar-brand" href="/">Rent for me</a>
+                    </div>
                     <div className="collapse navbar-collapse" id="navbar-collapse2">
                         <ul className="nav navbar-nav navbar-right">
                             <li className={NavStore.isHomeSelected() ? "active" : ""}>
