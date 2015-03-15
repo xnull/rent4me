@@ -60,41 +60,46 @@ var Header = React.createClass({
 
         return (
             <div className='navbar navbar-default header'>
-                <div className='col-xs-12 col-md-12 col-lg-12'>
-                    <div className='navbar-header'>
-                        <a className='navbar-brand' href='/'>Rent for me</a>
-                    </div>
-                    <div className='collapse navbar-collapse' id='navbar-collapse2'>
-                        <ul className='nav navbar-nav navbar-right'>
-                            <li className={NavStore.isHomeSelected() ? 'active' : ''}>
-                                <a href='#' role='button'>Главная</a>
-                            </li>
-
-                            <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? 'active dropdown' : 'dropdown'} style={style}>
-                                <a href='javascript:void(0)' className='dropdown-toggle' data-toggle='dropdown'>Мои объявления
-                                    <b className='caret'></b>
-                                </a>
-                                <ul className='dropdown-menu pull-right'>
-                                    <li className={NavStore.isLandLordSelected() ? 'active' : ''}>
-                                        <a href='#/user/landlord' role='button'>Я собственник</a>
-                                    </li>
-
-                                    <li className={NavStore.isRenterSelected() ? 'active' : ''} style={Utils.inactiveUi}>
-                                        <a href='#/user/renter' role='button'>Я арендатор</a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li className={NavStore.isSupportSelected() ? 'active' : ''} style={Utils.inactiveUi}>
-                                <a href='#/support' role='button'>Поддержка</a>
-                            </li>
-
-                            <li>
-                            {logoutOrLoginButton}
-                            </li>
-                        </ul>
-                    </div>
+                <div className='navbar-header'>
+                    <a className='navbar-brand' href='/'>Rent for me</a>
                 </div>
+                <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
+                    <span className="sr-only">Toggle navigation</span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                </button>
+                <div className='collapse navbar-collapse' id='navbar-collapse2'>
+                    <ul className='nav navbar-nav navbar-right'>
+                        <li className={NavStore.isHomeSelected() ? 'active' : ''}>
+                            <a href='#' role='button'>Главная</a>
+                        </li>
+
+                        <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? 'active dropdown' : 'dropdown'} style={style}>
+                            <a href='javascript:void(0)' className='dropdown-toggle' data-toggle='dropdown'>Мои объявления
+                                <b className='caret'></b>
+                            </a>
+                            <ul className='dropdown-menu pull-right'>
+                                <li className={NavStore.isLandLordSelected() ? 'active' : ''}>
+                                    <a href='#/user/landlord' role='button'>Я собственник</a>
+                                </li>
+
+                                <li className={NavStore.isRenterSelected() ? 'active' : ''} style={Utils.inactiveUi}>
+                                    <a href='#/user/renter' role='button'>Я арендатор</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li className={NavStore.isSupportSelected() ? 'active' : ''} style={Utils.inactiveUi}>
+                            <a href='#/support' role='button'>Поддержка</a>
+                        </li>
+
+                        <li>
+                            {logoutOrLoginButton}
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         )
     }
