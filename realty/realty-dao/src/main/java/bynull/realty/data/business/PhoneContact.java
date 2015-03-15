@@ -1,5 +1,7 @@
 package bynull.realty.data.business;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue(Contact.DbValue.PHONE_DB_VALUE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class PhoneContact extends Contact {
     @Embedded
     private PhoneNumber phoneNumber;

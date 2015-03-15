@@ -4,9 +4,12 @@ import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * @author Vyacheslav Petc (v.pets@oorraa.net)
@@ -16,7 +19,8 @@ import javax.validation.constraints.NotNull;
 @Table(name = MetroEntity.TABLE)
 @Setter
 @Getter
-public class MetroEntity {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class MetroEntity implements Serializable {
     public static final String TABLE = "metro_stations";
     private static final String ID_GEN = TABLE + "_id_generator";
     private static final String ID_SEQ = TABLE + "_id_seq";
@@ -34,7 +38,7 @@ public class MetroEntity {
     @NotNull
     private GeoPoint location;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id")
     private CityEntity city;
 }

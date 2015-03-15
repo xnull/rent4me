@@ -1,5 +1,7 @@
 package bynull.realty.data.business;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -22,9 +24,11 @@ public abstract class SocialNetApartment extends Apartment {
     @Column(name = "ext_author_id_link")
     private String extAuthorLink;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "apartment")
     private Set<ApartmentExternalPhoto> externalPhotos;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(
             name = "apartments_contacts",
             joinColumns = @JoinColumn(name = "apartment_id"),

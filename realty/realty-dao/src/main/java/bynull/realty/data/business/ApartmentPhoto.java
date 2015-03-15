@@ -1,5 +1,7 @@
 package bynull.realty.data.business;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
@@ -9,6 +11,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "apartment_photos")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ApartmentPhoto {
     @Id
     @Column(name = "id")

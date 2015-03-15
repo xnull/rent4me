@@ -6,6 +6,8 @@ dependencies {
     compile libraries."org.springframework:spring-orm"
     compile libraries.'org.springframework.data:spring-data-jpa'
 
+    compile libraries.'org.hibernate:hibernate-ehcache'
+
     //spring security
     compile libraries.'org.springframework.security:spring-security-core'
 

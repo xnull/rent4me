@@ -1,7 +1,10 @@
 package bynull.realty.data.business;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -13,7 +16,8 @@ import static bynull.realty.util.CommonUtils.copy;
 @Table(name = "contacts")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
-public abstract class Contact {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public abstract class Contact implements Serializable {
 
     public static class DbValue {
         private DbValue() {

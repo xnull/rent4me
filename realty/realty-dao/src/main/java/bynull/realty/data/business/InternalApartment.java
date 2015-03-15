@@ -2,6 +2,7 @@ package bynull.realty.data.business;
 
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.hibernate.validation.annotations.LessThanOrEqual;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -24,9 +25,10 @@ public class InternalApartment extends Apartment {
 
     @NotNull
     @JoinColumn(name = "owner_id", nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(
             name = "apartment_apartment_photos",
             joinColumns = @JoinColumn(name = "apartment_id"),

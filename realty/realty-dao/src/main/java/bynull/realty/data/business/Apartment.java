@@ -3,8 +3,11 @@ package bynull.realty.data.business;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -98,6 +101,7 @@ public abstract class Apartment implements Serializable {
     @Column(name = "published")
     private boolean published;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(
             name = "apartments_metros",
             joinColumns = @JoinColumn(name = "apartment_id"),

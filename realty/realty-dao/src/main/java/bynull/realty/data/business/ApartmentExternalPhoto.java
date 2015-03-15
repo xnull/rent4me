@@ -1,6 +1,9 @@
 package bynull.realty.data.business;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -10,7 +13,8 @@ import static bynull.realty.util.CommonUtils.copy;
  */
 @Entity
 @Table(name = "apartment_external_photos")
-public class ApartmentExternalPhoto {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class ApartmentExternalPhoto implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "ext_photos_id_generator", strategy = GenerationType.SEQUENCE)
