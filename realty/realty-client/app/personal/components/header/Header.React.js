@@ -62,13 +62,14 @@ var Header = React.createClass({
             <div className='navbar navbar-default header'>
                 <div className='navbar-header'>
                     <a className='navbar-brand' href='/'>Rent for me</a>
+
+                    <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
+                        <span className="sr-only">Toggle navigation</span>
+                        <span className="icon-bar"></span>
+                        <span className="icon-bar"></span>
+                        <span className="icon-bar"></span>
+                    </button>
                 </div>
-                <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
-                    <span className="sr-only">Toggle navigation</span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                </button>
                 <div className='collapse navbar-collapse' id='navbar-collapse2'>
                     <ul className='nav navbar-nav navbar-right'>
                         <li className={NavStore.isHomeSelected() ? 'active' : ''}>
