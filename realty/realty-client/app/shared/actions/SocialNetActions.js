@@ -70,6 +70,19 @@ var SocialNetActions = {
         });
     },
 
+    changeSearchMetros: function (metros) {
+
+        metros = metros || [];
+
+        console.log('Changing metros: ');
+        console.log(metros);
+
+        AppDispatcher.handleViewAction({
+            actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_METROS,
+            metros: metros
+        });
+    },
+
     changeSearchLocationInfo: function (location, countryCode, bounds, formattedAddress) {
 
         AppDispatcher.handleViewAction({
@@ -104,7 +117,7 @@ var SocialNetActions = {
     },
 
     //bounds is google's: https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds
-    findPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, lng, lat, countryCode, bounds) {
+    findPosts: function (text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, lng, lat, countryCode, bounds, metrosSelected) {
         BlockUI.blockUI();
 
         var geoUrl = null;
@@ -163,6 +176,15 @@ var SocialNetActions = {
         if (maxPrice) {
             url += "&max_price=" + maxPrice;
         }
+
+        console.log("Selected metros for url:");
+        console.log(metrosSelected);
+
+        var metroIds = (metrosSelected || []).map(m=>m.id);
+
+        var metroUrlIds = metroIds.map(id => "&metro_ids="+id);
+
+        url += metroUrlIds;
 
 
         var requestBuilder = Ajax

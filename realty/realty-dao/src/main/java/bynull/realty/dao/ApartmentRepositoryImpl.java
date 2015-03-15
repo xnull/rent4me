@@ -38,7 +38,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                                      Integer maxPrice,
                                      ApartmentRepository.FindMode findMode,
                                      GeoParams geoParams,
-                                     LimitAndOffset limitAndOffset) {
+                                     List<Long> metroIds, LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
         Assert.notNull(findMode);
@@ -58,6 +58,12 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                 ;
 
         Map<String, Object> params = new HashMap<>();
+
+        if(!metroIds.isEmpty()) {
+            qlString += " AND a.id IN (select am.apartment_id from apartments_metros am where am.metro_station_id IN (:metroIds)) ";
+
+            params.put("metroIds", metroIds);
+        }
 
         final String ordering;
 

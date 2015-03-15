@@ -22,7 +22,7 @@ public interface ApartmentRepositoryCustom {
                               Set<ApartmentRepository.RoomCount> roomsCount,
                               Integer minPrice,
                               Integer maxPrice,
-                              ApartmentRepository.FindMode findMode, GeoParams geoParams, LimitAndOffset limitAndOffset);
+                              ApartmentRepository.FindMode findMode, GeoParams geoParams, List<Long> metroIds, LimitAndOffset limitAndOffset);
 
     @Wither
     @AllArgsConstructor

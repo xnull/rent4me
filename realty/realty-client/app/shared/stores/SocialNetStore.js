@@ -47,6 +47,7 @@ var _location = null;
 var _countryCode = null;
 var _bounds = null;
 var _formattedAddress = null;
+var _metros = [];
 
 var CHANGE_EVENT = 'change';
 
@@ -93,6 +94,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
     getFormattedAddress: function(){
         return _formattedAddress;
+    },
+
+    getMetros: function() {
+        return _metros || [];
     },
 
     saveSearchResults: function (posts) {
@@ -167,6 +172,7 @@ AppDispatcher.register(function (payload) {
             Cookies.deleteCookie('SEARCH_MAX_PRICE');
 
             Cookies.deleteCookie('SEARCH_TEXT');
+            Cookies.deleteCookie('SEARCH_METROS');
 
             _searchWithSubway = false;
             _searchText = null;
@@ -174,6 +180,7 @@ AppDispatcher.register(function (payload) {
             _countryCode = null;
             _location = null;
             _formattedAddress = null;
+            _metros = [];
             _posts = [];
             _hasMoreResults = false;
             _offset = 0;
@@ -222,12 +229,25 @@ AppDispatcher.register(function (payload) {
             break;
 
         case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_LOCATION_INFO:
+        {
             var _val = action.value || {};
             _bounds = _val.bounds || null;
             _location = _val.location || null;
             _countryCode = _val.countryCode || null;
             _formattedAddress = _val.formattedAddress || null;
             return true;//don't emit any event
+        }
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_METROS:
+        {
+            var _selectedMetros = action.metros || [];
+
+            console.log('selected metros');
+
+            _metros = _selectedMetros;
+            return true;//don't emit any event
+        }
             break;
 
 

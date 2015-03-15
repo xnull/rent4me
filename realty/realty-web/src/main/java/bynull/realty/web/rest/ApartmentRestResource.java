@@ -132,6 +132,7 @@ public class ApartmentRestResource {
             @QueryParam("lng_lo") Double lngLow,
             @QueryParam("lat_hi") Double latHigh,
             @QueryParam("lng_hi") Double lngHigh,
+            @QueryParam("metro_ids") List<Long> metroIds,
             @QueryParam("limit") int limit,
             @QueryParam("offset") int offset
     ) {
@@ -178,7 +179,7 @@ public class ApartmentRestResource {
 
 
 
-        List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, limitAndOffset);
+        List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
         List<ApartmentJSON> result = found.stream().map(apartmentDtoJsonConverter::toTargetType).collect(Collectors.toList());
 
         return Response

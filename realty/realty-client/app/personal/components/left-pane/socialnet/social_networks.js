@@ -179,9 +179,10 @@ module.exports = React.createClass({
             var countryCode = this.state.countryCode;
             var bounds = this.state.bounds;
             var formattedAddress = this.state.formattedAddress;
+            var metrosSelected = this.state.metrosSelected;
 
             console.log('Searching for text: ' + text);
-            SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds, formattedAddress);
+            SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds, metrosSelected);
         }
     },
 
@@ -245,6 +246,12 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchRooms(oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected);
     },
 
+    fireMetrosSelectedChange: function () {
+        var metrosSelected = this.state.metrosSelected;
+
+        SocialNetActions.changeSearchMetros(metrosSelected);
+    },
+
     onOneRoomAptValueChanged: function (value) {
         this.setState(assign(this.state, {
             oneRoomAptSelected: value
@@ -283,6 +290,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchRooms(false, false, false);
         SocialNetActions.changeFBSearchPrice(null, null);
         SocialNetActions.changeSearchLocationInfo(null, null, null, null);
+        SocialNetActions.changeSearchMetros([]);
 
         this.setState(assign(this.state, {
             withSubway: SocialNetStore.isSearchWithSubway(),
@@ -294,7 +302,8 @@ module.exports = React.createClass({
             location: SocialNetStore.getLocation(),
             countryCode: SocialNetStore.getCountryCode(),
             bounds: SocialNetStore.getBounds(),
-            formattedAddress: SocialNetStore.getFormattedAddress()
+            formattedAddress: SocialNetStore.getFormattedAddress(),
+            metrosSelected: SocialNetStore.getMetros()
         }));
     },
 
@@ -319,6 +328,7 @@ module.exports = React.createClass({
         var countryCode = this.state.countryCode;
         var bounds = this.state.bounds;
         var formattedAddress = this.state.formattedAddress;
+        var metrosSelected = this.state.metrosSelected;
 
         console.log('Searching for text: ' + text + "& min price: " + minPrice + " & max price " + maxPrice);
 
@@ -329,7 +339,8 @@ module.exports = React.createClass({
         this.fireAptSelectionStateChange();
         SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
         SocialNetActions.changeSearchLocationInfo(location, countryCode, bounds, formattedAddress);
-        SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds, formattedAddress);
+        SocialNetActions.changeSearchMetros(metrosSelected);
+        SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds, metrosSelected);
     },
 
     changeToLessor: function () {
@@ -376,6 +387,7 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             metrosSelected: metrosSelected
         }));
+        this.fireMetrosSelectedChange();
     },
 
     onRemoveMetroTag: function (itemId) {
@@ -385,6 +397,7 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             metrosSelected: metrosSelected
         }));
+        this.fireMetrosSelectedChange();
     },
 
     render: function () {
