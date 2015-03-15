@@ -54,9 +54,7 @@ var MetroPopover = React.createClass({
             <ButtonToolbar>
                 <OverlayTrigger trigger="click" placement="bottom" overlay={
                     <Popover title="Поиск по станциям метро">
-                        <div className="form-group">
-                            <input type="text" className="form-control" placeholder="Введите название станции метро"/>
-                        </div>
+                        {this.props.metroInput}
                         <button type="submit" className="btn btn-default btn-block">
                             Добавить
                         </button>
@@ -64,6 +62,27 @@ var MetroPopover = React.createClass({
                     }
                 >
                     <Button bsStyle="default">Метро</Button>
+                </OverlayTrigger>
+            </ButtonToolbar>
+        )
+    }
+});
+
+var SearchWithTextPopover = React.createClass({
+
+    render: function () {
+        return (
+            <ButtonToolbar>
+                <OverlayTrigger trigger="click" placement="bottom" overlay={
+                    <Popover title="Поиск по тексту в объявлениях">
+                        {this.props.textInput}
+                        <button type="submit" className="btn btn-default btn-block">
+                            Добавить
+                        </button>
+                    </Popover>
+                    }
+                >
+                    <Button bsStyle="default">Текст</Button>
                 </OverlayTrigger>
             </ButtonToolbar>
         )
@@ -425,7 +444,6 @@ module.exports = React.createClass({
                 //don't display
                 metrosDisplayItem = null;
             } else {
-
                 metrosDisplayItem = (<ReactAutocomplete
                     inputClassName="form-control"
                     placeholder="Выберите Метро Москвы"
@@ -438,20 +456,20 @@ module.exports = React.createClass({
 
 
         var _metrosSelected = this.state.metrosSelected;
-        if(_.size(_metrosSelected) > 0) {
+        if (_.size(_metrosSelected) > 0) {
             var bubbles = _metrosSelected.map(m => {
-                return (<MetroBubble id={m.id} displayValue={"Метро: "+m.title} onRemove={this.onRemoveMetroTag}/>);
+                return (<MetroBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
             });
 
-                metroBubbles = (
-                    <div className='row'>
-                        <div className="col-md-11 pull-left">
-                            <div className="col-md-12">
+            metroBubbles = (
+                <div className='row'>
+                    <div className="col-md-11 pull-left">
+                        <div className="col-md-12">
                                 {bubbles}
-                            </div>
                         </div>
                     </div>
-                );
+                </div>
+            );
         }
 
         return (
@@ -492,14 +510,6 @@ module.exports = React.createClass({
                                         onMaxPriceChange={this.onMaxPriceChange}
                                     />
                                 </div>
-
-                                <div className="col-md-3">
-                                    <input type="text" className="form-control" value={text}
-                                        placeholder="Поиск по тексту объявления"
-                                        onKeyPress={this.clickOnEnter}
-                                        onChange={this.onSearchChange} >
-                                    </input>
-                                </div>
                             </div>
 
                             <div className='row'>
@@ -509,12 +519,16 @@ module.exports = React.createClass({
                                     </div>
                                 </div>
 
-                                <div className="col-md-1">
-                                    <label className='control-label'>или</label>
+                                <div className="col-md-2">
+                                    <MetroPopover metroInput={metrosDisplayItem}/>
                                 </div>
-
-                                <div className="col-md-4">
-                                    {metrosDisplayItem}
+                                <div className="col-md-2">
+                                    <SearchWithTextPopover textInput={(
+                                        <input type="text" className="form-control" value={text}
+                                            placeholder="Поиск по тексту объявления"
+                                            onKeyPress={this.clickOnEnter}
+                                            onChange={this.onSearchChange} >
+                                        </input>)} />
                                 </div>
                             </div>
 
@@ -522,7 +536,7 @@ module.exports = React.createClass({
 
                             <div className='row'>
                                 <div className='col-md-10'>
-                                    <MetroPopover />
+
                                 </div>
 
                                 <div className="col-md-2">
