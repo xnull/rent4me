@@ -26,6 +26,11 @@ var MetrosStore = require('../../../../shared/stores/MetrosStore');
 
 var ReactAutocomplete = require('rent4meAutocomplete');
 
+var ButtonToolbar = require('react-bootstrap/ButtonToolbar');
+var Popover = require('react-bootstrap/Popover');
+var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
+var Button = require('react-bootstrap/Button');
+
 var AddressBox = React.createClass({
 
     render: function () {
@@ -38,6 +43,29 @@ var AddressBox = React.createClass({
                 placeholder="Введите местоположение"
                 onChange={this.props.onAddressChange}
             />
+        )
+    }
+});
+
+var MetroPopover = React.createClass({
+
+    render: function () {
+        return (
+            <ButtonToolbar>
+                <OverlayTrigger trigger="click" placement="bottom" overlay={
+                    <Popover title="Поиск по станциям метро">
+                        <div className="form-group">
+                            <input type="text" className="form-control" placeholder="Введите название станции метро"/>
+                        </div>
+                        <button type="submit" className="btn btn-default btn-block">
+                            Добавить
+                        </button>
+                    </Popover>
+                    }
+                >
+                    <Button bsStyle="default">Метро</Button>
+                </OverlayTrigger>
+            </ButtonToolbar>
         )
     }
 });
@@ -480,10 +508,13 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
+                                <div className='col-md-10'>
+                                    <MetroPopover />
+                                </div>
 
-                                <div className="col-md-2 col-md-offset-10">
-                                        <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
-                                    </div>
+                                <div className="col-md-2">
+                                    <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
+                                </div>
 
                             </div>
 
