@@ -96,7 +96,7 @@
                      <property name="password" value="${jdbc.password}"/>
                      <property name="initialPoolSize" value="2"/>
                      <property name="minPoolSize" value="2"/>
-                     <property name="maxPoolSize" value="10"/>
+                     <property name="maxPoolSize" value="40"/>
                      <property name="maxIdleTime" value="30"/>
               </bean>
 
