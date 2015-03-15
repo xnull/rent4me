@@ -53,10 +53,10 @@ var Renter = React.createClass({
                         <br/>
 
                         <div className='row'>
-                            <div className="col-md-3 col-md-offset-6">
+                            <div className="col-md-3 col-sm-3 col-lg-3 col-md-offset-6 col-sm-offset-6 col-lg-offset-6">
                                 <a className="btn btn-default center-block">Отмена (скрыть форму)</a>
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-3 col-sm-3 col-lg-3">
                                 <a className="btn btn-success center-block">Разместить</a>
                             </div>
                         </div>
@@ -76,16 +76,16 @@ var Adverts = React.createClass({
                     <h4>Активное бъявление</h4>
                     <div className='row'>
                     {/* example item */}
-                        <div className='col-md-8'>
+                        <div className='col-md-8 col-sm-8 col-lg-8'>
                             <p className='text'> однокомнатная квартира </p>
                             <p className='text'> долгосрочная аренда </p>
                             <p className='text'> адрес: такой-то </p>
                         </div>
-                        <div className='col-md-4'>
-                            <div className='col-md-6'>
+                        <div className='col-md-4 col-sm-4 col-lg-4'>
+                            <div className='col-md-6 col-sm-6 col-lg-6'>
                                 <a className="btn btn-primary">Редактировать</a>
                             </div>
-                            <div className='col-md-6'>
+                            <div className='col-md-6 col-sm-6 col-lg-6'>
                                 <a className="btn btn-danger">Удалить</a>
                             </div>
                         </div>
@@ -116,11 +116,11 @@ var NewRenter = React.createClass({
 
     render: function () {
         return (
-            <div className="col-md-9">
+            <div className="col-md-9 col-sm-9 col-lg-9">
                 <div className="panel">
                     <div className="panel-body">
-                        <div className="col-md-2">
-                            <div className="col-md-3">
+                        <div className="col-md-2 col-sm-2 col-lg-2">
+                            <div className="col-md-3 col-sm-3 col-lg-3">
                                 <a
                                     className="thumbnail"
                                     style={{height: 240, width: 120, display: 'flex', alignItems: 'center'}}
@@ -131,7 +131,7 @@ var NewRenter = React.createClass({
                             </div>
                         </div>
 
-                        <div className="col-md-10">
+                        <div className="col-md-10 col-sm-10 col-lg-10">
                             { this.state.showAddAdvert ? <Renter /> : null }
                         </div>
 

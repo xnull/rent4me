@@ -156,12 +156,12 @@ var HeaderComponent = React.createClass({
                     </header>
                     <footer>
                         <div className="row">
-                            <div className='col-md-6 col-centered'>
+                            <div className='col-sm-6 col-md-6 col-lg-6 col-centered'>
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
                                             <div className='row'>
-                                                <div className="col-md-10">
+                                                <div className="col-sm-10 col-md-10 col-lg-10">
                                                     <RentType changeToRenter={this.changeToRenter} changeToLessor={this.changeToLessor}/>
                                                     <RoomsCount uiSize={4} uiLabelSize={3}
                                                         oneRoomAptSelected={this.state.oneRoomAptSelected}
@@ -186,8 +186,8 @@ var HeaderComponent = React.createClass({
                                             </div>
 
                                             <div className='row'>
-                                                <div className="col-md-12">
-                                                    <div className="col-md-10">
+                                                <div className="col-sm-12 col-md-12 col-lg-12">
+                                                    <div className="col-sm-10 col-md-10 col-lg-10">
                                                         <input type="text" className="form-control" value={this.state.text}
                                                             onChange={this.onChangeSearchText}
                                                             onKeyPress={this.performSearchOnEnter}
@@ -199,7 +199,7 @@ var HeaderComponent = React.createClass({
                                                             }}>
                                                         </input>
                                                     </div>
-                                                    <div className="col-md-2">
+                                                    <div className="col-sm-2 col-md-2 col-lg-2">
                                                         <a className="btn btn-success center-block" onClick={this.performSearch}>Найти</a>
                                                     </div>
                                                 </div>

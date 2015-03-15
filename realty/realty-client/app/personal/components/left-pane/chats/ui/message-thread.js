@@ -47,19 +47,19 @@ var Message = React.createClass({
 
         return (
             <div>
-                <div className="col-md-12" style={style}>
-                    <div className="col-md-10">
+                <div className="col-sm-12 col-md-12 col-lg-12" style={style}>
+                    <div className="col-md-10 col-sm-10 col-lg-10">
                         <strong>
                             {name}
                         </strong>
                         <br/>
                         {item.message}
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-md-2 col-sm-2 col-lg-2">
                         <small>{moment(item.created).format("lll")}</small>
                     </div>
                     <br/>
-                    <div className="col-md-12">
+                    <div className="col-sm-12 col-md-12 col-lg-12">
                         <hr/>
                     </div>
                 </div>
@@ -147,7 +147,7 @@ var MessageThread = React.createClass({
         return (
 
             <div className="panel panel-default" style={newStyle} id="messageContainer">
-                <div className="col-md-12" style={style} >
+                <div className="col-sm-12 col-md-12 col-lg-12" style={style} >
                     <div className="panel-body" >
                         <div className="list-group">
 

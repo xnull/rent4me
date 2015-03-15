@@ -96,7 +96,7 @@ module.exports = React.createClass({
         };
 
         return (
-            <div className="col-md-9">
+            <div className="col-sm-9 col-md-9 col-lg-9">
                 <div className="panel">
 
                     <div className="panel-body">
@@ -110,7 +110,7 @@ module.exports = React.createClass({
 
                         <form className="form-horizontal" role="form" style={messageFormStyle}>
                             <div className="form-group">
-                                <div className="col-md-12">
+                                <div className="col-sm-12 col-md-12 col-lg-12">
                                     <textarea rows="5" className="form-control" value={message} placeholder="Введите текст сообщения" onChange={this.onMessageChange}/>
                                 </div>
                             </div>

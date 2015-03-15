@@ -11,12 +11,12 @@ var assign = require('object-assign');
 
 var UserProperty = React.createClass({
     render: function () {
-        var customClassName = this.props.data.customClassName || 'col-md-4';
+        var customClassName = this.props.data.customClassName || 'col-md-4 col-sm-4 col-lg-4';
 
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-md-2 control-label">{this.props.data.name}:</label>
+                    <label className="col-md-2 col-sm-2 col-lg-2 control-label">{this.props.data.name}:</label>
                     <div className={customClassName}>
                         <input
                             id={this.props.data.id}
@@ -36,7 +36,7 @@ var UserProperty = React.createClass({
 
 var UserButton = React.createClass({
     render: function () {
-        var customClassName = this.props.data.customClassName || 'col-md-2 col-md-offset-4';
+        var customClassName = this.props.data.customClassName || 'col-md-2 col-sm-2 col-lg-2 col-md-offset-4 col-sm-offset-4 col-lg-offset-4';
 
         return (
             <div className={customClassName}>
@@ -119,7 +119,7 @@ module.exports = React.createClass({
 //        console.log('user widget');
 
         return (
-            <div className="col-md-9">
+            <div className="col-md-9 col-sm-9 col-lg-9">
                 <div className="panel">
 
                     <div className="panel-body">

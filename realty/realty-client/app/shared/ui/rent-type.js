@@ -19,7 +19,7 @@ var RentType = React.createClass({
         var renterClasses = "btn btn-default" + (isRenter ? " active" : "");
         var lessorClasses = "btn btn-default" + (!isRenter ? " active" : "");
 
-        var size = this.props.size || 'col-md-3';
+        var size = this.props.size || 'col-sm-3 col-md-3 col-lg-3';
 
         return (
             <div className={size}>

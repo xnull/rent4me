@@ -12,7 +12,7 @@ var Metro = React.createClass({
     render: function () {
         return (
             <div className='row'>
-                <div className='col-md-12'>
+                <div className='col-sm-12 col-md-12 col-lg-12'>
                     <div className="input-group">
                         <input type="text" className="form-control" aria-label="..." placeholder="Станция метро"/>
                         <div className="input-group-btn">

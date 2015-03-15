@@ -94,7 +94,7 @@ module.exports = React.createClass({
         var targetPersonId = this.state.targetPersonId;
 
         return (
-            <div className="col-md-9">
+            <div className="col-sm-9 col-md-9 col-lg-9">
                 <div className="panel">
 
                     <div className="panel-body">
@@ -103,19 +103,19 @@ module.exports = React.createClass({
 
                         <form className="form-horizontal" role="form">
                             <div className="form-group">
-                                <label className="col-md-2 control-label">ID пользователя</label>
-                                <div className="col-md-6">
+                                <label className="col-sm-2 col-md-2 col-lg-2 control-label">ID пользователя</label>
+                                <div className="col-sm-6 col-md-6 col-lg-6">
                                     <ReactAutocomplete search={this._searchRemote} onChange={this.onTargetPersonChanged}/>
                                 </div>
                             </div>
                             <div className="form-group">
-                                <label className="col-md-2 control-label">Сообщение</label>
-                                <div className="col-md-6">
+                                <label className="col-sm-2 col-md-2 col-lg-2 control-label">Сообщение</label>
+                                <div className="col-sm-6 col-md-6 col-lg-6">
                                     <textarea rows="7" className="form-control" value={message} placeholder="Введите текст сообщения" onChange={this.onMessageChange}/>
                                 </div>
                             </div>
 
-                            <div className="col-md-offset-5 col-md-3">
+                            <div className="col-sm-offset-5 col-md-offset-5 col-lg-offset-5 col-sm-3 col-md-3 col-lg-3">
                                 <a className="btn btn-primary center-block" onClick={this.onSendMessage}>Отправить</a>
                             </div>
                         </form>

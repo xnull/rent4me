@@ -39,7 +39,7 @@ module.exports = React.createClass({
         var hasMoreResults = (this.state.hasMoreSearchResults || false) && false;//disable for now
 
         return (
-            <div className="col-md-9">
+            <div className="col-sm-9 col-md-9 col-lg-9">
                 <div className="panel">
 
                     <div className="panel-body">
@@ -47,7 +47,7 @@ module.exports = React.createClass({
 
 
                         <form className="form-horizontal" role="form">
-                            <div className="col-md-offset-9">
+                            <div className="col-sm-offset-9 col-md-offset-9 col-lg-offset-9">
                                 <a className="btn btn-primary center-block" href="#/user/chats/newMessage" >Новое сообщение</a>
                             </div>
                         </form>

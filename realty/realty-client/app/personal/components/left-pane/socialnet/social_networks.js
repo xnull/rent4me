@@ -464,7 +464,7 @@ module.exports = React.createClass({
             metroBubbles = (
                 <div className='row'>
                     <div className="col-md-11 pull-left">
-                        <div className="col-md-12">
+                        <div className="col-sm-12 col-md-12 col-lg-12">
                                 {bubbles}
                         </div>
                     </div>
@@ -514,7 +514,7 @@ module.exports = React.createClass({
 
                             <div className='row'>
                                 <div className="col-md-7">
-                                    <div className="col-md-12">
+                                    <div className="col-sm-12 col-md-12 col-lg-12">
                                         <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
                                     </div>
                                 </div>

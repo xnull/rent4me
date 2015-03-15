@@ -139,7 +139,7 @@ var NewsItem = React.createClass({
                         <h4>Описание</h4>
 
                         <div className="row">
-                            <div className="col-md-12">
+                            <div className="col-sm-12 col-md-12 col-lg-12">
                             {item.description}
                             </div>
 

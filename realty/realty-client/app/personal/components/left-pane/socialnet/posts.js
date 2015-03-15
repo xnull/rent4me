@@ -130,7 +130,7 @@ var ContactInfo = React.createClass({
 
 
         return (
-            <div className='col-md-12' style={{borderRadius: 2}}>
+            <div className='col-sm-12 col-md-12 col-lg-12' style={{borderRadius: 2}}>
                 <div>
                       {phoneNumbersDisplay}
                       {this.getDirectContact()}

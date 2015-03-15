@@ -7,7 +7,7 @@ var Cards = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-md col-md-3"/>
+                <div className="col-sm-3 col-md-3 col-lg-3"/>
                 <div className="2u">
                     <section>
                         <div className="thumbnail" style={{padding: 0}}>
