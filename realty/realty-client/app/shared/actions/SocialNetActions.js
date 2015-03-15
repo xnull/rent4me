@@ -182,7 +182,7 @@ var SocialNetActions = {
 
         var metroIds = (metrosSelected || []).map(m=>m.id);
 
-        var metroUrlIds = metroIds.map(id => "&metro_ids="+id);
+        var metroUrlIds = metroIds.map(id => "&metro_ids="+id).reduce((a,b)=> (a || '') + (b || '' ) );
 
         url += metroUrlIds;
 
