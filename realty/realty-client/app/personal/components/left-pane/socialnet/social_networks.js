@@ -515,7 +515,7 @@ module.exports = React.createClass({
                 return (<SearchTermBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
             });
 
-            if(_bubbles) {
+            if(text) {
                 _bubbles.push(
                     <SearchTermBubble id={-1} displayValue={"текст: " + text} onRemove={this.onRemoveTextTag}/>
                 );
