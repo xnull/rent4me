@@ -133,8 +133,8 @@ var HeaderComponent = React.createClass({
         var authComponentDisplayItem = (<input type="button" className="button special" value="Вход / Регистрация" style={loginButtonStyle}/>);
 
         var sectionStyle = {
-            /*backgroundImage: "url('images/flats/kitchen1.jpg')",*/
-            backgroundImage: "url('http://www.veskip.ru/images/property/22592__40P0163-01.jpg')",
+            backgroundImage: "url('images/signin/22592__40P0163-01.jpg')",
+            /*backgroundImage: "url('http://www.veskip.ru/images/property/22592__40P0163-01.jpg')",*/
             backgroundSize: 'cover',
             backgroundPosition: 'auto',
             /*backgroundRepeat: 'no-repeat'*/
@@ -160,50 +160,32 @@ var HeaderComponent = React.createClass({
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
-                                            <div className='row'>
-                                                <div className="col-sm-10 col-md-10 col-lg-10">
-                                                    <RentType changeToRenter={this.changeToRenter} changeToLessor={this.changeToLessor}/>
-                                                    <RoomsCount uiSize={4} uiLabelSize={3}
-                                                        oneRoomAptSelected={this.state.oneRoomAptSelected}
-                                                        twoRoomAptSelected={this.state.twoRoomAptSelected}
-                                                        threeRoomAptSelected={this.state.threeRoomAptSelected}
 
-                                                        onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
-                                                        onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
-                                                        onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
+                                            <div className="row">
+                                                <div className='col-sm-12 col-md-3 col-lg-4 col-centered'>
+                                                    <div className="btn-group btn-group-justified" role="group" data-toggle="buttons">
+                                                        <label type="radio" className="btn btn-default">Снять</label>
+                                                        <label type="radio" className="btn btn-default">Сдать</label>
+                                                    </div>
+                                                </div>
 
-                                                    />
-                                                    <PriceRange uiSize={5} uiLabelSize={2}
-                                                        onKeyPress={this.performSearchOnEnter}
+                                                <div className='col-sm-12 col-md-3 col-lg-4 col-centered'>
+                                                    <div className="btn-group btn-group-justified" data-toggle="buttons">
+                                                        <label className="btn btn-default">
+                                                            <input type="checkbox"
+                                                            checked="btn btn-default">1</input>
+                                                        </label>
+                                                        <label className="btn btn-default">
+                                                            <input type="checkbox" >2</input>
+                                                        </label>
+                                                        <label className="btn btn-default">
+                                                            <input type="checkbox">3</input>
+                                                        </label>
+                                                    </div>
 
-                                                        minPrice={this.state.minPrice}
-                                                        maxPrice={this.state.maxPrice}
-
-                                                        onMinPriceChange={this.onMinPriceChange}
-                                                        onMaxPriceChange={this.onMaxPriceChange}
-                                                    />
                                                 </div>
                                             </div>
 
-                                            <div className='row'>
-                                                <div className="col-sm-12 col-md-12 col-lg-12">
-                                                    <div className="col-sm-10 col-md-10 col-lg-10">
-                                                        <input type="text" className="form-control" value={this.state.text}
-                                                            onChange={this.onChangeSearchText}
-                                                            onKeyPress={this.performSearchOnEnter}
-                                                            placeholder="Поиск по тексту объявления"
-                                                            style={{
-                                                                borderRadius: 'inherit',
-                                                                paddingTop: 0,
-                                                                paddingBottom: 0
-                                                            }}>
-                                                        </input>
-                                                    </div>
-                                                    <div className="col-sm-2 col-md-2 col-lg-2">
-                                                        <a className="btn btn-success center-block" onClick={this.performSearch}>Найти</a>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -214,7 +196,7 @@ var HeaderComponent = React.createClass({
                     </footer>
                 </section>
             </div>
-        )
+            )
     }
 });
 
