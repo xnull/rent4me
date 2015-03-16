@@ -12,7 +12,7 @@ var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
 var RentType = require('../../../../shared/ui/rent-type');
-var MetroBubble = require('../../../../shared/ui/metro-bubble');
+var SearchTermBubble = require('../../../../shared/ui/search-term-bubble');
 
 var AddressUtils = require('../../../../shared/common/AddressUtils');
 var JSON2 = require('JSON2');
@@ -80,12 +80,22 @@ var MetroPopover = React.createClass({
 var SearchWithTextPopover = React.createClass({
 
     render: function () {
+
+        var addButtonEnabled = this.props.addButtonEnabled;
+        var onAddButtonClicked = this.props.onAddButtonClicked;
+
+        var style = {};
+
+        if(!addButtonEnabled) {
+            style = Util.inactiveUi;
+        }
+
         return (
             <ButtonToolbar>
                 <OverlayTrigger trigger="click" placement="bottom" overlay={
                     <Popover title="Поиск по тексту в объявлениях">
                         {this.props.textInput}
-                        <button type="submit" className="btn btn-default btn-block">
+                        <button type="button" className="btn btn-default btn-block" onClick={onAddButtonClicked} style={style}>
                             Добавить
                         </button>
                     </Popover>
@@ -102,6 +112,7 @@ module.exports = React.createClass({
     getInitialState: function () {
         return {
             withSubway: SocialNetStore.isSearchWithSubway(),
+            tmpText: null,
             text: SocialNetStore.getSearchText(),
             type: SocialNetStore.getSearchType(),
             posts: SocialNetStore.getSearchResults(),
@@ -118,6 +129,7 @@ module.exports = React.createClass({
             lastSearchTextChangeMS: 0,
             lastSearchMinPriceChangeMS: 0,
             lastSearchMaxPriceChangeMS: 0,
+            tmpMetroSelected: null,
             metros: MetrosStore.getMetros(),
             metrosSelected: []
         };
@@ -214,15 +226,34 @@ module.exports = React.createClass({
         }
     },
 
-    onSearchChange: function (e) {
+    onTmpSearchChange: function (e) {
         var value = e.target.value;
+
+        this.setState(assign(this.state, {
+            tmpText: value
+        }));
+    },
+
+    onSearchChange: function () {
+        var tmpText = this.state.tmpText;
+
+        if(!tmpText) return;
 
         console.log('on search change');
 
-        SocialNetActions.changeFBSearchText(value);
+        SocialNetActions.changeFBSearchText(tmpText);
 
         this.setState(assign(this.state, {
-            text: value
+            text: tmpText,
+            tmpText: null
+        }));
+    },
+
+    onRemoveTextTag: function(ignored) {
+        SocialNetActions.changeFBSearchText(null);
+
+        this.setState(assign(this.state, {
+            text: null
         }));
     },
 
@@ -323,6 +354,7 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             withSubway: SocialNetStore.isSearchWithSubway(),
             type: SocialNetStore.getSearchType(),
+            tmpText: null,
             text: SocialNetStore.getSearchText(),
             oneRoomAptSelected: SocialNetStore.getSearchRooms()["1"],
             twoRoomAptSelected: SocialNetStore.getSearchRooms()["2"],
@@ -474,25 +506,33 @@ module.exports = React.createClass({
             }
         }
 
-        var metroBubbles = null;
+        var bubbles = null;
 
 
         var _metrosSelected = this.state.metrosSelected;
-        if (_.size(_metrosSelected) > 0) {
-            var bubbles = _metrosSelected.map(m => {
-                return (<MetroBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
+        if (_.size(_metrosSelected) > 0 || text) {
+            var _bubbles = _metrosSelected.map(m => {
+                return (<SearchTermBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
             });
 
-            metroBubbles = (
+            if(_bubbles) {
+                _bubbles.push(
+                    <SearchTermBubble id={-1} displayValue={"текст: " + text} onRemove={this.onRemoveTextTag}/>
+                );
+            }
+
+            bubbles = (
                 <div className='row'>
                     <div className="col-md-11 pull-left">
                         <div className="col-sm-12 col-md-12 col-lg-12">
-                                {bubbles}
+                                {_bubbles}
                         </div>
                     </div>
                 </div>
             );
         }
+
+        var tmpText = this.state.tmpText;
 
         return (
             <div className="col-md-9">
@@ -550,11 +590,14 @@ module.exports = React.createClass({
                                 </div>
                                 <div className="col-md-2">
                                     <SearchWithTextPopover textInput={(
-                                        <input type="text" className="form-control" value={text}
+                                        <input type="text" className="form-control" value={tmpText}
                                             placeholder="Поиск по тексту объявления"
                                             onKeyPress={this.clickOnEnter}
-                                            onChange={this.onSearchChange} >
-                                        </input>)} />
+                                            onChange={this.onTmpSearchChange} >
+                                        </input>)}
+                                        addButtonEnabled={tmpText != null}
+                                        onAddButtonClicked={this.onSearchChange}
+                                    />
                                 </div>
                             </div>
 
@@ -573,7 +616,7 @@ module.exports = React.createClass({
 
                             <br/>
 
-                            {metroBubbles}
+                            {bubbles}
 
                         </form>
                     </div>
