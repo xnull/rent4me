@@ -55,7 +55,7 @@ var MetroPopover = React.createClass({
 
         var style = {};
 
-        if(!enabled) {
+        if (!enabled) {
             style = Util.inactiveUi;
         }
 
@@ -86,7 +86,7 @@ var SearchWithTextPopover = React.createClass({
 
         var style = {};
 
-        if(!addButtonEnabled) {
+        if (!addButtonEnabled) {
             style = Util.inactiveUi;
         }
 
@@ -237,7 +237,7 @@ module.exports = React.createClass({
     onSearchChange: function () {
         var tmpText = this.state.tmpText;
 
-        if(!tmpText) return;
+        if (!tmpText) return;
 
         console.log('on search change');
 
@@ -249,7 +249,7 @@ module.exports = React.createClass({
         }));
     },
 
-    onRemoveTextTag: function(ignored) {
+    onRemoveTextTag: function (ignored) {
         SocialNetActions.changeFBSearchText(null);
 
         this.setState(assign(this.state, {
@@ -444,7 +444,7 @@ module.exports = React.createClass({
     onTargetMetroSelected: function () {
         var item = this.state.tmpMetroSelected;
 
-        if(!item) return;
+        if (!item) return;
 
         var metrosSelected = []
             .concat(this.state.metrosSelected)
@@ -515,7 +515,7 @@ module.exports = React.createClass({
                 return (<SearchTermBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
             });
 
-            if(text) {
+            if (text) {
                 _bubbles.push(
                     <SearchTermBubble id={-1} displayValue={"текст: " + text} onRemove={this.onRemoveTextTag}/>
                 );
@@ -535,10 +535,10 @@ module.exports = React.createClass({
         var tmpText = this.state.tmpText;
 
         return (
-            <div className="col-md-9 col-sm-9 col-lg-9">
+            <div>
                 <div className="panel">
-
                     <div className="panel-body">
+
                         <form className="form-horizontal" role="form">
                             <div className='row'>
                                 <div className="col-md-9 col-sm-9 col-lg-9">
@@ -548,8 +548,7 @@ module.exports = React.createClass({
                                         changeToLessor={this.changeToLessor}
                                     />
 
-                                    <RoomsCount
-                                        uiSize='4' uiLabelSize='5'
+                                    <RoomsCount uiSize={4} uiLabelSize={5}
 
                                         oneRoomAptSelected={oneRoomAptSelected}
                                         twoRoomAptSelected={twoRoomAptSelected}
@@ -560,8 +559,7 @@ module.exports = React.createClass({
                                         onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
                                     />
 
-                                    <PriceRange
-                                        uiSize='5' uiLabelSize='3'
+                                    <PriceRange uiSize={5} uiLabelSize={3}
 
                                         minPrice={minPrice}
                                         maxPrice={maxPrice}

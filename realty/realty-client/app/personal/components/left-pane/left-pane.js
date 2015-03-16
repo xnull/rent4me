@@ -77,7 +77,7 @@ var UserPanel = React.createClass({
 module.exports = React.createClass({
     render: function () {
         return (
-            <div className="col-sm-3 col-md-3 col-lg-3">
+            <div>
                 <UserPanel/>
                 <LegalComponent/>
             </div>
