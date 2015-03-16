@@ -50,12 +50,21 @@ var AddressBox = React.createClass({
 var MetroPopover = React.createClass({
 
     render: function () {
+
+        var enabled = this.props.addButtonEnabled;
+
+        var style = {};
+
+        if(!enabled) {
+            style = Util.inactiveUi;
+        }
+
         return (
             <ButtonToolbar>
                 <OverlayTrigger trigger="click" placement="bottom" overlay={
                     <Popover title="Поиск по станциям метро">
                         {this.props.metroInput}
-                        <button type="submit" className="btn btn-default btn-block">
+                        <button type="button" className="btn btn-default btn-block" onClick={this.props.onAddButtonClicked} style={style}>
                             Добавить
                         </button>
                     </Popover>
@@ -322,6 +331,8 @@ module.exports = React.createClass({
             countryCode: SocialNetStore.getCountryCode(),
             bounds: SocialNetStore.getBounds(),
             formattedAddress: SocialNetStore.getFormattedAddress(),
+            //metro that's temporarily selected
+            tmpMetroSelected: null,
             metrosSelected: SocialNetStore.getMetros()
         }));
     },
@@ -398,15 +409,26 @@ module.exports = React.createClass({
         }));
     },
 
-    onTargetMetroSelected: function (item) {
+    onTargetMetroSelected: function () {
+        var item = this.state.tmpMetroSelected;
+
+        if(!item) return;
+
         var metrosSelected = []
             .concat(this.state.metrosSelected)
             .filter(i=>i.id != item.id);
         metrosSelected.push(item);
         this.setState(assign(this.state, {
-            metrosSelected: metrosSelected
+            metrosSelected: metrosSelected,
+            tmpMetroSelected: null
         }));
         this.fireMetrosSelectedChange();
+    },
+
+    onTempMetroSelected: function (item) {
+        this.setState(assign(this.state, {
+            tmpMetroSelected: item
+        }));
     },
 
     onRemoveMetroTag: function (itemId) {
@@ -448,7 +470,7 @@ module.exports = React.createClass({
                     inputClassName="form-control"
                     placeholder="Выберите Метро Москвы"
                     search={this._searchRemote}
-                    onChange={this.onTargetMetroSelected}/>);
+                    onChange={this.onTempMetroSelected}/>);
             }
         }
 
@@ -520,7 +542,11 @@ module.exports = React.createClass({
                                 </div>
 
                                 <div className="col-md-2">
-                                    <MetroPopover metroInput={metrosDisplayItem}/>
+                                    <MetroPopover
+                                        metroInput={metrosDisplayItem}
+                                        addButtonEnabled={this.state.tmpMetroSelected != null}
+                                        onAddButtonClicked={this.onTargetMetroSelected}
+                                    />
                                 </div>
                                 <div className="col-md-2">
                                     <SearchWithTextPopover textInput={(
