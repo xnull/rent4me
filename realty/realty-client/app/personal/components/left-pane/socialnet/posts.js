@@ -15,10 +15,10 @@ var AdsItem = React.createClass({
     render: function () {
         return (
             <div className="row" style={{lineHeight: '32px'}}>
-                <div className='col-sm-3 col-lg-3'>
+                <div className='col-sm-3 col-md-3 col-lg-3'>
                     <strong>{this.props.name}:</strong>
                 </div>
-                <div className='col-sm-9 col-lg-9'>
+                <div className='col-sm-9 col-md-9 col-lg-9'>
                     {this.props.text}
                 </div>
             </div>
@@ -193,10 +193,10 @@ var HeaderBlock = React.createClass({
         return (
             <div className="panel-heading" style={{backgroundColor: 'rgba(207, 207, 207, 0.27)', borderBottom: 'none'}}>
                 <div className='row'>
-                    <div className='col-md-8'>
+                    <div className='col-md-8 col-sm-8 col-lg-8'>
                         <p>{creationDate}</p>
                     </div>
-                    <div className='col-md-4'>
+                    <div className='col-md-4 col-sm-4 col-lg-4'>
 
                     </div>
                 </div>
@@ -209,8 +209,8 @@ var Message = React.createClass({
     render: function () {
         var item = this.props.item;
         return (
-            <div className="col-md-12 ">
-                <div className="col-md-12 "
+            <div className="col-md-12 col-sm-12 col-lg-12">
+                <div className="col-md-12 col-sm-12 col-lg-12"
                     style={{
                         boxShadow: 'none', lineHeight: '18px', fontSize: '14px', border: '1px #e4e4e4 solid',
                         padding: '15px', backgroundColor: 'rgba(244, 242, 242, 0.2)'
@@ -253,17 +253,17 @@ var Post = React.createClass({
                 <HeaderBlock item={item}/>
                 <div className="panel-body">
                     <div className="row">
-                        <div className="col-md-2">
+                        <div className="col-md-2 col-sm-2 col-lg-2">
                             <ImagePreviews item={item} />
                         </div>
-                        <div className="col-md-10">
-                            <div className='col-md-6'>
+                        <div className="col-md-10 col-sm-10 col-lg-10">
+                            <div className='col-md-6 col-md-6 col-lg-6'>
                                 <Address address={item.address}/>
                                 <MetroPreviews metros={item.metros}/>
                                 <RoomCountInfo roomCount={item.room_count}/>
                                 <PriceInfo item={item} />
                             </div>
-                            <div className='col-md-6'>
+                            <div className='col-md-6 col-md-6 col-lg-6'>
                                 <div className="row bordered-element">
                                     <ContactInfo item={item} me={this.state.me} />
                                 </div>

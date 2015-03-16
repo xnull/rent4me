@@ -523,7 +523,7 @@ module.exports = React.createClass({
 
             bubbles = (
                 <div className='row'>
-                    <div className="col-md-11 pull-left">
+                    <div className="col-md-11 col-sm-11 col-lg-11 pull-left">
                         <div className="col-sm-12 col-md-12 col-lg-12">
                                 {_bubbles}
                         </div>
@@ -535,15 +535,15 @@ module.exports = React.createClass({
         var tmpText = this.state.tmpText;
 
         return (
-            <div className="col-md-9">
+            <div className="col-md-9 col-sm-9 col-lg-9">
                 <div className="panel">
 
                     <div className="panel-body">
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <div className="col-md-9">
+                                <div className="col-md-9 col-sm-9 col-lg-9">
                                     <RentType
-                                        size='col-md-3'
+                                        size='col-md-3 col-sm-3 col-lg-3'
                                         changeToRenter={this.changeToRenter}
                                         changeToLessor={this.changeToLessor}
                                     />
@@ -575,20 +575,20 @@ module.exports = React.createClass({
                             </div>
 
                             <div className='row'>
-                                <div className="col-md-7">
+                                <div className="col-md-7 col-sm-7 col-lg-7">
                                     <div className="col-sm-12 col-md-12 col-lg-12">
                                         <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
                                     </div>
                                 </div>
 
-                                <div className="col-md-2">
+                                <div className="col-md-2 col-sm-2 col-lg-2">
                                     <MetroPopover
                                         metroInput={metrosDisplayItem}
                                         addButtonEnabled={this.state.tmpMetroSelected != null}
                                         onAddButtonClicked={this.onTargetMetroSelected}
                                     />
                                 </div>
-                                <div className="col-md-2">
+                                <div className="col-md-2 col-sm-2 col-lg-2">
                                     <SearchWithTextPopover textInput={(
                                         <input type="text" className="form-control" value={tmpText}
                                             placeholder="Поиск по тексту объявления"
@@ -604,11 +604,11 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className='col-md-10'>
+                                <div className='col-md-10 col-sm-10 col-lg-10'>
 
                                 </div>
 
-                                <div className="col-md-2">
+                                <div className="col-md-2 col-sm-2 col-lg-2">
                                     <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
                                 </div>
 

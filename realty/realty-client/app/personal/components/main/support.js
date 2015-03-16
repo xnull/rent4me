@@ -11,7 +11,7 @@ var Renter = React.createClass({
 
     render: function () {
         return (
-            <div className="col-md-9">
+            <div className="col-md-9 col-sm-9 col-lg-9">
                 <div className="well">
                     <form className="form-horizontal" role="form">
                         <h4>Задать вопрос</h4>

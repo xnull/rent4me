@@ -63,7 +63,7 @@ var News = React.createClass({
         });
 
         return (
-            <div className="col-md-9" style={style}>
+            <div className="col-md-9 col-sm-9 col-lg-9" style={style}>
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <h4>Нововсти</h4>
@@ -113,10 +113,10 @@ var NewsItem = React.createClass({
 
                     <p className="list-group-item-text">
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-lg-6">
                                 Этаж: {item.floor_number}/{item.floors_total}
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-lg-6">
                                 Площадь: {item.area} м
                                 <sup>2</sup>
                             </div>
@@ -125,10 +125,10 @@ var NewsItem = React.createClass({
                         <br/>
 
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-lg-6">
                                 Цена: {accounting.formatNumber(item.rental_fee, 0, " ")}/{Translations['ru'][item.fee_period]}
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-lg-6">
                                 Тип аренды: {Translations['ru'][item.type_of_rent]}
                             </div>
 
@@ -150,7 +150,7 @@ var NewsItem = React.createClass({
                         <h4>Контакты</h4>
 
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-lg-6">
                                 Телефон: {item.owner.phone}
                             </div>
                         </div>
@@ -158,10 +158,10 @@ var NewsItem = React.createClass({
                         <hr/>
 
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-lg-6">
                                 Добавлено: {moment(item.created).format("lll")}
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-lg-6">
                                 Личное сообщение: {moment(item.updated).format("lll")}
                             </div>
                         </div>
@@ -273,14 +273,14 @@ module.exports = React.createClass({
         var hasMoreResults = this.state.hasMoreSearchResults || false;
 
         return (
-            <div className="col-md-9">
+            <div className="col-md-9 col-sm-9 col-дп-9">
                 <div className="panel">
 
                     <div className="panel-body">
                         <form className="form-horizontal" role="form">
                             <div className="form-group">
-                                <label className="col-md-2 control-label">Адрес</label>
-                                <div className="col-md-10">
+                                <label className="col-md-2 col-sm-2 col-lg-2 control-label">Адрес</label>
+                                <div className="col-md-10 col-sm-10 col-lg-10">
                                     <AddressBox
                                         data=""
                                         onChange={this.handleAddressChange}
@@ -289,7 +289,7 @@ module.exports = React.createClass({
                                 </div>
                             </div>
 
-                            <div className="col-md-offset-9">
+                            <div className="col-md-offset-9 col-sm-offset-9 col-lg-offset-9">
                                 <a className="btn btn-primary center-block" onClick={this.onClick}>Поиск</a>
                             </div>
                         </form>

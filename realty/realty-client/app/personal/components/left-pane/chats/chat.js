@@ -115,7 +115,7 @@ module.exports = React.createClass({
                                 </div>
                             </div>
 
-                            <div className="col-md-offset-9 col-md-3">
+                            <div className="col-md-offset-9 col-sm-offset-9 col-lg-offset-9 col-md-3 col-sm-3 col-lg-3">
                                 <a className="btn btn-primary center-block" onClick={this.onSendMessage}>Отправить</a>
                             </div>
 
