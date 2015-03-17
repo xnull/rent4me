@@ -92,12 +92,25 @@ var HeaderComponent = React.createClass({
                 bounds: bounds,
                 formattedAddress: formatted_address
             }));
+
+            that.rememberLocationInfo();
+
+
             MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
         });
 
         MetrosStore.addChangeListener(this.onMetrosChanged);
         MetrosActions.findMetros(null, null, null, null);
 
+    },
+
+    rememberLocationInfo: function() {
+        var location = this.state.location;
+        var countryCode = this.state.countryCode;
+        var bounds = this.state.bounds;
+        var formattedAddress = this.state.formattedAddress;
+
+        SocialNetActions.changeSearchLocationInfo(location, countryCode, bounds, formattedAddress);
     },
 
     componentWillUnmount: function () {
