@@ -351,7 +351,7 @@ var HeaderComponent = React.createClass({
 
             bubbles = (
                 <div className='row'>
-                    <div className="col-md-12 col-sm-12 col-xs-12 pull-left">
+                    <div className="col-md-12 col-sm-12 col-xs-12 pull-left" style={{paddingTop: 0}}>
                         {_bubbles}
                     </div>
                 </div>
