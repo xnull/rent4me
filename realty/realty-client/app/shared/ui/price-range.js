@@ -42,10 +42,10 @@ var PriceRange = React.createClass({
             <div className={this.props.className}>
                 <div className="input-group">
                     <div className="input-group">
-
-                        <span className="input-group-addon label-success" id="sizing-addon-price-range-desc" style={{
+                        <span className="input-group-addon label-success disabled" id="sizing-addon-price-range-desc" style={{
                             color: 'white',
-                            borderRadius: '0px'
+                            borderRadius: '0px',
+                            backgroundColor: 'rgba(65, 150, 65, 0.4)'
                         }}>Цена</span>
                         <input type="text"
                             className="form-control"
@@ -54,9 +54,10 @@ var PriceRange = React.createClass({
                             onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
 
                         />
-                        <span className="input-group-addon label-success" id="sizing-addon-price-value-desc" style={{
+                        <span className="input-group-addon label-success disabled" id="sizing-addon-price-value-desc" style={{
                             color: 'white',
-                            borderRadius: '0'
+                            borderRadius: '0',
+                            backgroundColor: 'rgba(65, 150, 65, 0.4)'
                         }} >:</span>
                         <input type="text"
                             className="form-control"

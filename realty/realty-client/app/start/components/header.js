@@ -104,7 +104,7 @@ var HeaderComponent = React.createClass({
 
     },
 
-    rememberLocationInfo: function() {
+    rememberLocationInfo: function () {
         var location = this.state.location;
         var countryCode = this.state.countryCode;
         var bounds = this.state.bounds;
@@ -385,13 +385,12 @@ var HeaderComponent = React.createClass({
                     </header>
                     <footer>
                         <div className="row">
-                            <div className='col-xs-6 col-sm-6 col-md-6 col-centered'>
+                            <div className='col-xs-9 col-sm-9 col-md-9 col-lg-6 col-centered'>
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
 
                                             <div className='row'>
-
                                                 <RentType changeToRenter={this.changeToRenter}
                                                     changeToLessor={this.changeToLessor}
                                                     className="col-xs-12 col-sm-12 col-md-4 col-centered"
@@ -425,44 +424,34 @@ var HeaderComponent = React.createClass({
                                             </div>
 
                                             <div className='row'>
-                                                <div className="col-md-7 col-sm-7 col-xs-7">
-                                                    <div className="col-sm-12 col-md-12 col-xs-12">
+                                                <div className="col-md-8 col-sm-12 col-xs-12">
+                                                    <div className="input-group">
                                                         <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
+                                                        <div className="input-group-btn">
+                                                            <MetroPopover
+                                                                metroInput={metrosDisplayItem}
+                                                                addButtonEnabled={this.state.tmpMetroSelected != null}
+                                                                onAddButtonClicked={this.onTargetMetroSelected}
+                                                            />
+                                                        </div>
+                                                        <div className="input-group-btn">
+                                                            <SearchWithTextPopover textInput={(
+                                                                <input type="text" className="form-control" value={tmpText}
+                                                                    placeholder="Поиск по тексту объявления"
+                                                                    onKeyPress={this.clickOnEnter}
+                                                                    onChange={this.onTmpSearchChange} >
+                                                                </input>)}
+                                                                addButtonEnabled={tmpText != null}
+                                                                onAddButtonClicked={this.onSearchChange}
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div className="col-md-2 col-sm-2 col-xs-2">
-                                                    <MetroPopover
-                                                        metroInput={metrosDisplayItem}
-                                                        addButtonEnabled={this.state.tmpMetroSelected != null}
-                                                        onAddButtonClicked={this.onTargetMetroSelected}
-                                                    />
-                                                </div>
-                                                <div className="col-md-2 col-sm-2 col-xs-2">
-                                                    <SearchWithTextPopover textInput={(
-                                                        <input type="text" className="form-control" value={tmpText}
-                                                            placeholder="Поиск по тексту объявления"
-                                                            onKeyPress={this.clickOnEnter}
-                                                            onChange={this.onTmpSearchChange} >
-                                                        </input>)}
-                                                        addButtonEnabled={tmpText != null}
-                                                        onAddButtonClicked={this.onSearchChange}
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <br/>
-
-                                            {bubbles}
-
-                                            <div className='row'>
-                                                <div className='col-xs-0 col-sm-10 col-md-8 col-centered'>
-                                                </div>
-
-                                                <div className="col-xs-12 col-sm-12 col-md-4 col-centered">
+                                                <div className="col-md-4 col-sm-12 col-xs-12">
                                                     <a className="btn btn-success center-block" onClick={this.performSearch}>Найти</a>
                                                 </div>
                                             </div>
+                                            {bubbles}
                                         </form>
                                     </div>
                                 </div>
@@ -473,7 +462,7 @@ var HeaderComponent = React.createClass({
                     </footer>
                 </section>
             </div>
-            )
+        )
     }
 });
 
