@@ -541,9 +541,8 @@ module.exports = React.createClass({
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <div className="col-md-9 col-sm-9 col-xs-9">
-                                    <RentType
-                                        size='col-md-3 col-sm-3 col-xs-3'
+                                <div className="col-md-12 col-sm-12 col-xs-12">
+                                    <RentType size='col-md-3 col-sm-3 col-xs-3'
                                         changeToRenter={this.changeToRenter}
                                         changeToLessor={this.changeToLessor}
                                     />
