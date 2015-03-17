@@ -41,7 +41,7 @@ module.exports = React.createClass({
         var otherId = this.state.targetPersonId;
         var min = Math.min(myId, otherId);
         var max = Math.max(myId, otherId);
-        var chatKey = min+"_"+max;
+        var chatKey = min + "_" + max;
         console.log('New conversation started listener called');
         this.setState(assign(this.state, {
             messageText: null,
@@ -94,34 +94,31 @@ module.exports = React.createClass({
         var targetPersonId = this.state.targetPersonId;
 
         return (
-            <div className="col-sm-9 col-md-9 col-xs-9">
-                <div className="panel">
+            <div className="panel">
 
-                    <div className="panel-body">
-                        <h4>Новое сообщение</h4>
+                <div className="panel-body">
+                    <h4>Новое сообщение</h4>
 
 
-                        <form className="form-horizontal" role="form">
-                            <div className="form-group">
-                                <label className="col-sm-2 col-md-2 col-xs-2 control-label">ID пользователя</label>
-                                <div className="col-sm-6 col-md-6 col-xs-6">
-                                    <ReactAutocomplete search={this._searchRemote} onChange={this.onTargetPersonChanged}/>
-                                </div>
+                    <form className="form-horizontal" role="form">
+                        <div className="form-group">
+                            <label className="col-sm-2 col-md-2 col-xs-2 control-label">ID пользователя</label>
+                            <div className="col-sm-6 col-md-6 col-xs-6">
+                                <ReactAutocomplete search={this._searchRemote} onChange={this.onTargetPersonChanged}/>
                             </div>
-                            <div className="form-group">
-                                <label className="col-sm-2 col-md-2 col-xs-2 control-label">Сообщение</label>
-                                <div className="col-sm-6 col-md-6 col-xs-6">
-                                    <textarea rows="7" className="form-control" value={message} placeholder="Введите текст сообщения" onChange={this.onMessageChange}/>
-                                </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="col-sm-2 col-md-2 col-xs-2 control-label">Сообщение</label>
+                            <div className="col-sm-6 col-md-6 col-xs-6">
+                                <textarea rows="7" className="form-control" value={message} placeholder="Введите текст сообщения" onChange={this.onMessageChange}/>
                             </div>
+                        </div>
 
-                            <div className="col-sm-offset-5 col-md-offset-5 col-xs-offset-5 col-sm-3 col-md-3 col-xs-3">
-                                <a className="btn btn-primary center-block" onClick={this.onSendMessage}>Отправить</a>
-                            </div>
-                        </form>
-                    </div>
+                        <div className="col-sm-offset-5 col-md-offset-5 col-xs-offset-5 col-sm-3 col-md-3 col-xs-3">
+                            <a className="btn btn-primary center-block" onClick={this.onSendMessage}>Отправить</a>
+                        </div>
+                    </form>
                 </div>
-
             </div>
         );
     }

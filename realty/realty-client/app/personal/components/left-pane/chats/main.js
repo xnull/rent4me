@@ -39,7 +39,7 @@ module.exports = React.createClass({
         var hasMoreResults = (this.state.hasMoreSearchResults || false) && false;//disable for now
 
         return (
-            <div className="col-sm-9 col-md-9 col-xs-9">
+            <div>
                 <div className="panel">
 
                     <div className="panel-body">

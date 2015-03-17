@@ -119,23 +119,21 @@ module.exports = React.createClass({
 //        console.log('user widget');
 
         return (
-            <div className="col-md-9 col-sm-9 col-xs-9">
-                <div className="panel">
+            <div className="panel">
 
-                    <div className="panel-body">
-                        <h4>НАСТРОЙКИ</h4>
+                <div className="panel-body">
+                    <h4>НАСТРОЙКИ</h4>
 
-                        <br/>
+                    <br/>
 
-                        <form className="form-horizontal" role="form">
-                            <UserProperty data={nameProp} onChange={this._onChange}/>
-                            <UserProperty data={phoneProp} onChange={this._onChange}/>
-                            <UserProperty data={emailProp} onChange={this._onChange}/>
+                    <form className="form-horizontal" role="form">
+                        <UserProperty data={nameProp} onChange={this._onChange}/>
+                        <UserProperty data={phoneProp} onChange={this._onChange}/>
+                        <UserProperty data={emailProp} onChange={this._onChange}/>
 
-                            <UserButton data={submitButton} onClick={this._onSave}/>
-                        </form>
+                        <UserButton data={submitButton} onClick={this._onSave}/>
+                    </form>
 
-                    </div>
                 </div>
             </div>
         );
