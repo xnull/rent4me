@@ -29,9 +29,9 @@ var Rooms = React.createClass({
     uiProps: function () {
         var frmSize = 12 - parseInt(this.props.uiLabelSize);
         return {
-            size: 'col-md-' + this.props.uiSize + ' col-sm-' + this.props.uiSize + ' col-lg-' + this.props.uiSize,
-            labelSize: 'col-md-' + this.props.uiLabelSize + ' col-sm-' + this.props.uiLabelSize + ' col-lg-' + this.props.uiLabelSize,
-            form: 'col-md-' + frmSize + ' col-sm-' + frmSize + ' col-lg-' + frmSize
+            size: 'col-md-' + this.props.uiSize + ' col-sm-' + this.props.uiSize + ' col-xs-' + this.props.uiSize,
+            labelSize: 'col-md-' + this.props.uiLabelSize + ' col-sm-' + this.props.uiLabelSize + ' col-xs-' + this.props.uiLabelSize,
+            form: 'col-md-' + frmSize + ' col-sm-' + frmSize + ' col-xs-' + frmSize
         }
     },
 

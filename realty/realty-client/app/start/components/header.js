@@ -156,13 +156,13 @@ var HeaderComponent = React.createClass({
                     </header>
                     <footer>
                         <div className="row">
-                            <div className='col-sm-6 col-md-6 col-lg-8 col-centered'>
+                            <div className='col-sm-6 col-md-6 col-xs-8 col-centered'>
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
 
                                             <div className="row">
-                                                <div className='col-sm-12 col-md-4 col-lg-4 col-centered'>
+                                                <div className='col-sm-12 col-md-4 col-xs-4 col-centered'>
                                                     <div className="btn-group btn-group-justified" role="group" data-toggle="buttons">
                                                         <label className="input-group-addon label-success">
                                                         Я хочу
@@ -172,7 +172,7 @@ var HeaderComponent = React.createClass({
                                                     </div>
                                                 </div>
 
-                                                <div className='col-sm-12 col-md-4 col-lg-4 col-centered'>
+                                                <div className='col-sm-12 col-md-4 col-xs-4 col-centered'>
 
                                                     <div className="btn-group btn-group-justified" data-toggle="buttons">
                                                         <label className="input-group-addon label-success">
@@ -192,7 +192,7 @@ var HeaderComponent = React.createClass({
 
                                                 </div>
 
-                                                <div className='col-sm-12 col-md-4 col-lg-4 col-centered'>
+                                                <div className='col-sm-12 col-md-4 col-xs-4 col-centered'>
                                                     <div className="input-group">
                                                         <span className="input-group-addon label-success" id="sizing-addon1">Цена</span>
                                                         <input type="text" className="form-control" placeholder="От:" aria-describedby="basic-addon1"/>
@@ -203,16 +203,16 @@ var HeaderComponent = React.createClass({
                                             </div>
 
                                             <div className='row'>
-                                                <div className='col-md-2 col-lg-2 col-centered'>
+                                                <div className='col-md-2 col-xs-2 col-centered'>
                                                 </div>
 
-                                                <div className='col-sm-12 col-md-4 col-lg-6 col-centered'>
+                                                <div className='col-sm-12 col-md-4 col-xs-6 col-centered'>
                                                     <input type="text" className="form-control"
                                                     placeholder="Поиск по тексту объявления">
                                                     </input>
                                                 </div>
 
-                                                <div className='col-sm-12 col-md-4 col-lg-2 col-centered'>
+                                                <div className='col-sm-12 col-md-4 col-xs-2 col-centered'>
                                                     <a className="btn btn-success center-block">Найти</a>
                                                 </div>
 

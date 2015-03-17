@@ -32,18 +32,18 @@ var SocialNetAuth = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className='col-sm-12 col-md-12 col-lg-12'>
+                    <div className='col-sm-12 col-md-12 col-xs-12'>
                         Социальные сети
                     </div>
 
-                    <div className='col-sm-12 col-md-12 col-lg-12'>
+                    <div className='col-sm-12 col-md-12 col-xs-12'>
                         <div className="row">
-                            <div className="col-sm-12 col-md-12 col-lg-12" onClick={this.handleVkLogin}>
+                            <div className="col-sm-12 col-md-12 col-xs-12" onClick={this.handleVkLogin}>
                                 <a href="javascript:void(0)">
                                     <img width="192" src={Utils.getBaseContext() + "images/signin/vk-long.png"} border="0"/>
                                 </a>
                             </div>
-                            <div className="col-sm-12 col-md-12 col-lg-12" >
+                            <div className="col-sm-12 col-md-12 col-xs-12" >
                                 <a href="javascript:void(0)" onClick={this.handleFacebookLogin}>
                                     <img width="192" src={Utils.getBaseContext() + "images/signin/fb-long3.png"} border="0"/>
                                 </a>
@@ -303,7 +303,7 @@ var PlainRegistration = React.createClass({
 
         var errorsHtmlOrNull = _.size(errors) > 0 ?
             (
-                <div className='col-sm-12 col-md-12 col-lg-12'>
+                <div className='col-sm-12 col-md-12 col-xs-12'>
                     <div className='alert alert-danger' role='alert' >
                         <ul>
                         {errorsHtml}
@@ -326,10 +326,10 @@ var PlainRegistration = React.createClass({
 
                 {errorsHtmlOrNull}
 
-                <div className='col-sm-12 col-md-12 col-lg-12'>
+                <div className='col-sm-12 col-md-12 col-xs-12'>
                     <form role="form" className="form-horizontal">
                         <div className="row">
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
 
                                 <div>
                                     <input type="text"
@@ -342,7 +342,7 @@ var PlainRegistration = React.createClass({
                                 </div>
                             </div>
                             <br/>
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <div>
                                     <input type="email"
                                         style={inputStyle}
@@ -355,7 +355,7 @@ var PlainRegistration = React.createClass({
                                 </div>
                             </div>
                             <br/>
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <div>
                                     <input type="password"
                                         style={inputStyle}
@@ -367,7 +367,7 @@ var PlainRegistration = React.createClass({
                                 </div>
                             </div>
                             <br/>
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <div>
                                     <input type="password"
                                         style={inputStyle}
@@ -379,7 +379,7 @@ var PlainRegistration = React.createClass({
                                 </div>
                             </div>
                             <br/>
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <div>
                                     <input type="text"
                                         style={inputStyle}
@@ -392,7 +392,7 @@ var PlainRegistration = React.createClass({
                                 </div>
                             </div>
                             <br/>
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <a type="button"
                                     className="btn btn-success pull-right clickable"
                                     style={registrationButtonStyle}
@@ -492,7 +492,7 @@ var PlainLogin = React.createClass({
 
         var errorsHtmlOrNull = _.size(errors) > 0 ?
             (
-                <div className='col-sm-12 col-md-12 col-lg-12'>
+                <div className='col-sm-12 col-md-12 col-xs-12'>
                     <div className='alert alert-danger' role='alert' >
                         <ul>
                         {errorsHtml}
@@ -512,10 +512,10 @@ var PlainLogin = React.createClass({
                     Вход
                 </div>
 
-                <div className='col-sm-12 col-md-12 col-lg-12'>
+                <div className='col-sm-12 col-md-12 col-xs-12'>
                     <form role="form">
                         <div className="row">
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <input type="email"
                                     style={inputStyle}
                                     value={email}
@@ -525,7 +525,7 @@ var PlainLogin = React.createClass({
                                 />
                             </div>
                             <br/>
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <input type="password"
                                     style={inputStyle}
                                     className="form-control"
@@ -535,7 +535,7 @@ var PlainLogin = React.createClass({
                                 />
                             </div>
                             <br/>
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <div>
                                     <a href="javascript:void(0)"
                                         className="btn btn-success pull-right"
@@ -589,7 +589,7 @@ var AuthModalDialog2 = React.createClass({
             ?
             (
                 <div className='row'>
-                    <div className='col-sm-12 col-md-12 col-lg-12'>
+                    <div className='col-sm-12 col-md-12 col-xs-12'>
                         <PlainRegistration shown={true}/>
                         <br/>
                         <a className="clickable btn btn-danger" onClick={targetFunc}>{switchLinkValue}</a>
@@ -599,13 +599,13 @@ var AuthModalDialog2 = React.createClass({
             :
             (
                 <div className='row'>
-                    <div className='col-sm-6 col-md-6 col-lg-6' style={{borderRight: '1px solid #333'}}>
+                    <div className='col-sm-6 col-md-6 col-xs-6' style={{borderRight: '1px solid #333'}}>
                         <PlainLogin shown={true}/>
                         <br/>
                         <a className="clickable btn btn-danger" onClick={targetFunc}>{switchLinkValue}</a>
                     </div>
 
-                    <div className='col-sm-6 col-md-6 col-lg-6'>
+                    <div className='col-sm-6 col-md-6 col-xs-6'>
                         <SocialNetAuth />
                     </div>
                 </div>

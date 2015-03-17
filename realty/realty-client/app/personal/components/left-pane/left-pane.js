@@ -51,7 +51,7 @@ var UserPanel = React.createClass({
 
                                 <br/>
 
-                                <div className="col-sm-12 col-md-12 col-lg-12">
+                                <div className="col-sm-12 col-md-12 col-xs-12">
                                     <a className="btn btn-default center-block" href="#/user">Настройки</a>
                                 </div>
 
@@ -59,7 +59,7 @@ var UserPanel = React.createClass({
 
                             <br/>
 
-                            <div className="col-sm-12 col-md-12 col-lg-12">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
                                 <a className="btn btn-default center-block" href="#/user/chats">
                                     <b className="glyphicon glyphicon-envelope pull-left"></b>
                                     Сообщения
