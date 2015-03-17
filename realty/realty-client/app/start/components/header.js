@@ -455,8 +455,6 @@ var HeaderComponent = React.createClass({
                                 </div>
                             </div>
                         </div>
-
-                        <Cards />
                     </footer>
                 </section>
             </div>
