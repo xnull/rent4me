@@ -19,10 +19,10 @@ var ApartmentActions = {
 
             geoUrl = 'lng=' + lng + '&lat=' + lat + "&country_code=" + countryCode;
             if (bounds) {
-                var ne = bounds.getNorthEast();
-                var sw = bounds.getSouthWest();
+                var ne = bounds.northEast;
+                var sw = bounds.southWest;
 
-                var urlValue = "lat_lo=" + sw.lat() + "&lng_lo=" + sw.lng() + "&lat_hi=" + ne.lat() + "&lng_hi=" + ne.lng();
+                var urlValue = "lat_lo=" + sw.lat + "&lng_lo=" + sw.lng + "&lat_hi=" + ne.lat + "&lng_hi=" + ne.lng;
                 geoUrl = geoUrl + "&" + urlValue;
                 console.log("Bounds urlValue: " + urlValue);
             } else {

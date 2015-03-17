@@ -12,6 +12,9 @@ var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
 var RentType = require('../../../../shared/ui/rent-type');
+var AddressBox = require('../../../../shared/ui/search-address2');
+var MetroPopover = require('../../../../shared/ui/metro-popover');
+var SearchWithTextPopover = require('../../../../shared/ui/search-with-text-popover');
 var SearchTermBubble = require('../../../../shared/ui/search-term-bubble');
 
 var AddressUtils = require('../../../../shared/common/AddressUtils');
@@ -30,83 +33,6 @@ var ButtonToolbar = require('react-bootstrap/ButtonToolbar');
 var Popover = require('react-bootstrap/Popover');
 var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
 var Button = require('react-bootstrap/Button');
-
-var AddressBox = React.createClass({
-
-    render: function () {
-        return (
-            <input
-                id="addressInput"
-                className="form-control"
-                type="text"
-                value={this.props.displayValue}
-                placeholder="Введите местоположение"
-                onChange={this.props.onAddressChange}
-            />
-        )
-    }
-});
-
-var MetroPopover = React.createClass({
-
-    render: function () {
-
-        var enabled = this.props.addButtonEnabled;
-
-        var style = {};
-
-        if (!enabled) {
-            style = Util.inactiveUi;
-        }
-
-        return (
-            <ButtonToolbar>
-                <OverlayTrigger trigger="click" placement="bottom" overlay={
-                    <Popover title="Поиск по станциям метро">
-                        {this.props.metroInput}
-                        <button type="button" className="btn btn-default btn-block" onClick={this.props.onAddButtonClicked} style={style}>
-                            Добавить
-                        </button>
-                    </Popover>
-                    }
-                >
-                    <Button bsStyle="default">Метро</Button>
-                </OverlayTrigger>
-            </ButtonToolbar>
-        )
-    }
-});
-
-var SearchWithTextPopover = React.createClass({
-
-    render: function () {
-
-        var addButtonEnabled = this.props.addButtonEnabled;
-        var onAddButtonClicked = this.props.onAddButtonClicked;
-
-        var style = {};
-
-        if (!addButtonEnabled) {
-            style = Util.inactiveUi;
-        }
-
-        return (
-            <ButtonToolbar>
-                <OverlayTrigger trigger="click" placement="bottom" overlay={
-                    <Popover title="Поиск по тексту в объявлениях">
-                        {this.props.textInput}
-                        <button type="button" className="btn btn-default btn-block" onClick={onAddButtonClicked} style={style}>
-                            Добавить
-                        </button>
-                    </Popover>
-                    }
-                >
-                    <Button bsStyle="default">Текст</Button>
-                </OverlayTrigger>
-            </ButtonToolbar>
-        )
-    }
-});
 
 module.exports = React.createClass({
     getInitialState: function () {
@@ -131,7 +57,7 @@ module.exports = React.createClass({
             lastSearchMaxPriceChangeMS: 0,
             tmpMetroSelected: null,
             metros: MetrosStore.getMetros(),
-            metrosSelected: []
+            metrosSelected: SocialNetStore.getMetros()
         };
     },
 
@@ -148,7 +74,19 @@ module.exports = React.createClass({
             console.log(dump);
             var addressComponents = place['address_components'];
 
-            var bounds = place.geometry.viewport;
+            var viewPort = place.geometry.viewport;
+
+            var bounds = viewPort ? {
+                northEast: {
+                    lat: viewPort.getNorthEast().lat(),
+                    lng: viewPort.getNorthEast().lng()
+                },
+
+                southWest: {
+                    lat: viewPort.getSouthWest().lat(),
+                    lng: viewPort.getSouthWest().lng()
+                }
+            } : null;
 
             var countryCode = AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY');
 
@@ -175,7 +113,16 @@ module.exports = React.createClass({
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
         MetrosStore.addChangeListener(this.onMetrosChanged);
         this.onClick();//trigger initial load
-        MetrosActions.findMetros(null, null, null, null);
+        {
+            var bounds = this.state.bounds;
+
+            var countryCode = this.state.countryCode;
+
+            var location = this.state.location;
+
+            var formatted_address = this.state.formattedAddress;
+            MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
+        }
     },
 
     componentWillUnmount: function () {

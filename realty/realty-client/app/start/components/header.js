@@ -7,12 +7,25 @@ var AuthComponent = require('../../shared/components/socialNetAuth');
 var SocialNetActions = require('../../shared/actions/SocialNetActions');
 var Utils = require('rent4meUtil');
 var Cookies = require('rent4meCookies');
-
+var JSON2 = require('JSON2');
 var assign = require('object-assign');
+var ReactAutocomplete = require('rent4meAutocomplete');
 
 var RoomsCount = require('../../shared/ui/rooms-count');
 var PriceRange = require('../../shared/ui/price-range');
 var RentType = require('../../shared/ui/rent-type');
+var AddressBox = require('../../shared/ui/search-address2');
+
+var MetroPopover = require('../../shared/ui/metro-popover');
+var SearchWithTextPopover = require('../../shared/ui/search-with-text-popover');
+var SearchTermBubble = require('../../shared/ui/search-term-bubble');
+
+var MetrosStore = require('../../shared/stores/MetrosStore');
+var MetrosActions = require('../../shared/actions/MetrosActions');
+
+var AddressUtils = require('../../shared/common/AddressUtils');
+
+var _ = require('underscore');
 
 var Cards = require('./cards');
 
@@ -24,12 +37,80 @@ var HeaderComponent = React.createClass({
             twoRoomAptSelected: false,
             threeRoomAptSelected: false,
             minPrice: null,
-            maxPrice: null
+            maxPrice: null,
+            tmpText: null,
+            text: null,
+            tmpMetroSelected: null,
+            metros: MetrosStore.getMetros(),
+            metrosSelected: []
         }
     },
 
     componentDidMount: function () {
         SocialNetActions.resetFBSearchState();
+
+        var that = this;
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            var place = autocomplete.getPlace();
+            if (!place) return;
+            var dump = JSON2.stringify(place);
+            console.log('dump:');
+            console.log(dump);
+            var addressComponents = place['address_components'];
+
+            var viewPort = place.geometry.viewport;
+
+            var bounds = viewPort ? {
+                northEast: {
+                    lat: viewPort.getNorthEast().lat(),
+                    lng: viewPort.getNorthEast().lng()
+                },
+
+                southWest: {
+                    lat: viewPort.getSouthWest().lat(),
+                    lng: viewPort.getSouthWest().lng()
+                }
+            } : null;
+
+            var countryCode = AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY');
+
+            var location = {
+                latitude: place['geometry']['location'].lat(),
+                longitude: place['geometry']['location'].lng()
+            };
+
+            var formatted_address = place['name'];
+
+            console.log('new location:');
+            console.log(location);
+
+            that.setState(assign(that.state, {
+                location: location,
+                countryCode: countryCode,
+                bounds: bounds,
+                formattedAddress: formatted_address
+            }));
+            MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
+        });
+
+        MetrosStore.addChangeListener(this.onMetrosChanged);
+        MetrosActions.findMetros(null, null, null, null);
+
+    },
+
+    componentWillUnmount: function () {
+        MetrosStore.removeChangeListener(this.onMetrosChanged);
+    },
+
+    onMetrosChanged: function () {
+        console.log('on search results changed');
+        var newSearchResults = MetrosStore.getMetros();
+        console.log(newSearchResults);
+        this.setState(assign(this.state, {
+            metros: newSearchResults
+        }));
     },
 
     onOneRoomAptValueChanged: function (value) {
@@ -84,15 +165,6 @@ var HeaderComponent = React.createClass({
         SocialNetActions.changeFBSearchType('RENTER');
     },
 
-    onChangeSearchText: function (event) {
-        var text = event.target.value;
-
-        this.setState(assign(this.state, {
-            text: text
-        }));
-        SocialNetActions.changeFBSearchText(text);
-    },
-
     onMinPriceChange: function (e) {
         var value = e.target.value;
         console.log("With min price new value: " + value);
@@ -121,6 +193,101 @@ var HeaderComponent = React.createClass({
         }));
     },
 
+    onTmpSearchChange: function (e) {
+        var value = e.target.value;
+
+        this.setState(assign(this.state, {
+            tmpText: value
+        }));
+    },
+
+    onSearchChange: function () {
+        var tmpText = this.state.tmpText;
+
+        if (!tmpText) return;
+
+        console.log('on search change');
+
+        SocialNetActions.changeFBSearchText(tmpText);
+
+        this.setState(assign(this.state, {
+            text: tmpText,
+            tmpText: null
+        }));
+    },
+
+    onRemoveTextTag: function (ignored) {
+        SocialNetActions.changeFBSearchText(null);
+
+        this.setState(assign(this.state, {
+            text: null
+        }));
+    },
+
+    onAddressChange: function (event) {
+        this.makeFormattedAddressDirty(event.target.value);
+    },
+
+    makeFormattedAddressDirty: function (value) {
+        this.setState(assign(this.state, {
+            location: location,
+            countryCode: null,
+            bounds: null,
+            formattedAddress: value
+        }));
+    },
+
+    _searchRemote: function (options, searchTerm, cb) {
+        var metros = this.state.metros;
+
+        var transformedMetros = metros.map(m => {
+            return {id: m.id, title: m.station_name}
+        });
+        console.log('metro_typehead: ');
+
+        cb(null, transformedMetros.filter(m=> {
+            return (m.title || '').toLowerCase().indexOf((searchTerm || '').toLowerCase()) === 0;
+        }));
+    },
+
+    onTargetMetroSelected: function () {
+        var item = this.state.tmpMetroSelected;
+
+        if (!item) return;
+
+        var metrosSelected = []
+            .concat(this.state.metrosSelected)
+            .filter(i=>i.id != item.id);
+        metrosSelected.push(item);
+        this.setState(assign(this.state, {
+            metrosSelected: metrosSelected,
+            tmpMetroSelected: null
+        }));
+        this.fireMetrosSelectedChange();
+    },
+
+    onTempMetroSelected: function (item) {
+        this.setState(assign(this.state, {
+            tmpMetroSelected: item
+        }));
+    },
+
+    onRemoveMetroTag: function (itemId) {
+        var metrosSelected = []
+            .concat(this.state.metrosSelected)
+            .filter(i=>i.id != itemId);
+        this.setState(assign(this.state, {
+            metrosSelected: metrosSelected
+        }));
+        this.fireMetrosSelectedChange();
+    },
+
+    fireMetrosSelectedChange: function () {
+        var metrosSelected = this.state.metrosSelected;
+
+        SocialNetActions.changeSearchMetros(metrosSelected);
+    },
+
     render: function () {
 
         var loginButtonStyle = {
@@ -132,8 +299,57 @@ var HeaderComponent = React.createClass({
 
         var authComponentDisplayItem = (<input type="button" className="button special" value="Вход / Регистрация" style={loginButtonStyle}/>);
 
+        var formattedAddress = this.state.formattedAddress;
+        var tmpText = this.state.tmpText;
+        var text = this.state.text;
+
+        var metrosDisplayItem;
+
+        {
+
+            var _metros = this.state.metros;
+
+            if (_.size(_metros) == 0) {
+                //don't display
+                metrosDisplayItem = null;
+            } else {
+                metrosDisplayItem = (<ReactAutocomplete
+                    inputClassName="form-control"
+                    placeholder="Выберите Метро Москвы"
+                    search={this._searchRemote}
+                    onChange={this.onTempMetroSelected}/>);
+            }
+        }
+
+        var bubbles = null;
+
+
+        var _metrosSelected = this.state.metrosSelected;
+        if (_.size(_metrosSelected) > 0 || text) {
+            var _bubbles = _metrosSelected.map(m => {
+                return (<SearchTermBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
+            });
+
+            if (text) {
+                _bubbles.push(
+                    <SearchTermBubble id={-1} displayValue={"текст: " + text} onRemove={this.onRemoveTextTag}/>
+                );
+            }
+
+            bubbles = (
+                <div className='row'>
+                    <div className="col-md-11 col-sm-11 col-xs-11 pull-left">
+                        <div className="col-sm-12 col-md-12 col-xs-12">
+                                {_bubbles}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         var sectionStyle = {
-            backgroundImage: "url('images/signin/22592__40P0163-01.jpg')",
+            //backgroundImage: "url('images/signin/22592__40P0163-01.jpg')",
+            backgroundImage: "url('images/flats/flat2.jpg')",
             /*backgroundImage: "url('http://www.veskip.ru/images/property/22592__40P0163-01.jpg')",*/
             backgroundSize: 'cover',
             backgroundPosition: 'auto',
@@ -196,20 +412,38 @@ var HeaderComponent = React.createClass({
                                             </div>
 
                                             <div className='row'>
-                                                <div className='col-xs-2 col-sm-2 col-md-2 col-centered'>
+                                                <div className="col-md-7 col-sm-7 col-xs-7">
+                                                    <div className="col-sm-12 col-md-12 col-xs-12">
+                                                        <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
+                                                    </div>
                                                 </div>
 
-                                                <div className="col-xs-12 col-sm-12 col-md-6 col-centered">
-                                                    <input type="text" className="form-control" value={this.state.text}
-                                                        onChange={this.onChangeSearchText}
-                                                        onKeyPress={this.performSearchOnEnter}
-                                                        placeholder="Поиск по тексту объявления"
-                                                        style={{
-                                                            borderRadius: 'inherit',
-                                                            paddingTop: 0,
-                                                            paddingBottom: 0
-                                                        }}>
-                                                    </input>
+                                                <div className="col-md-2 col-sm-2 col-xs-2">
+                                                    <MetroPopover
+                                                        metroInput={metrosDisplayItem}
+                                                        addButtonEnabled={this.state.tmpMetroSelected != null}
+                                                        onAddButtonClicked={this.onTargetMetroSelected}
+                                                    />
+                                                </div>
+                                                <div className="col-md-2 col-sm-2 col-xs-2">
+                                                    <SearchWithTextPopover textInput={(
+                                                        <input type="text" className="form-control" value={tmpText}
+                                                            placeholder="Поиск по тексту объявления"
+                                                            onKeyPress={this.clickOnEnter}
+                                                            onChange={this.onTmpSearchChange} >
+                                                        </input>)}
+                                                        addButtonEnabled={tmpText != null}
+                                                        onAddButtonClicked={this.onSearchChange}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <br/>
+
+                                            {bubbles}
+
+                                            <div className='row'>
+                                                <div className='col-xs-0 col-sm-10 col-md-8 col-centered'>
                                                 </div>
 
                                                 <div className="col-xs-12 col-sm-12 col-md-4 col-centered">

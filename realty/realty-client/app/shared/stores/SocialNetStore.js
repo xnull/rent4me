@@ -7,6 +7,7 @@ var EventEmitter = require('rent4meEmitter');
 var SocialNetConstants = require('../constants/SocialNetConstants');
 
 var Cookies = require('rent4meCookies');
+var JSON2 = require('JSON2');
 
 var assign = require('object-assign');
 
@@ -172,7 +173,14 @@ AppDispatcher.register(function (payload) {
             Cookies.deleteCookie('SEARCH_MAX_PRICE');
 
             Cookies.deleteCookie('SEARCH_TEXT');
+            //metros
             Cookies.deleteCookie('SEARCH_METROS');
+
+            //google info
+            Cookies.deleteCookie('SEARCH_BOUNDS');
+            Cookies.deleteCookie('SEARCH_COUNTRY_CODE');
+            Cookies.deleteCookie('SEARCH_LOCATION');
+            Cookies.deleteCookie('SEARCH_FORMATTED_ADDRESS');
 
             _searchWithSubway = false;
             _searchText = null;
@@ -235,6 +243,20 @@ AppDispatcher.register(function (payload) {
             _location = _val.location || null;
             _countryCode = _val.countryCode || null;
             _formattedAddress = _val.formattedAddress || null;
+
+            if(_bounds ) {
+                Cookies.setCookieTemp('SEARCH_BOUNDS', encodeURIComponent(JSON2.stringify(_bounds)));
+            }
+            if(_location ) {
+                Cookies.setCookieTemp('SEARCH_LOCATION', encodeURIComponent(JSON2.stringify(_location)));
+            }
+            if(_countryCode ) {
+                Cookies.setCookieTemp('SEARCH_COUNTRY_CODE', encodeURIComponent(JSON2.stringify(_countryCode)));
+            }
+            if(_formattedAddress ) {
+                Cookies.setCookieTemp('SEARCH_FORMATTED_ADDRESS', encodeURIComponent(JSON2.stringify(_formattedAddress)));
+            }
+
             return true;//don't emit any event
         }
             break;
@@ -244,6 +266,10 @@ AppDispatcher.register(function (payload) {
             var _selectedMetros = action.metros || [];
 
             console.log('selected metros');
+
+            var _serialized_metros = encodeURIComponent(JSON2.stringify(_selectedMetros));
+
+            Cookies.setCookieTemp('SEARCH_METROS', _serialized_metros);
 
             _metros = _selectedMetros;
             return true;//don't emit any event
@@ -267,6 +293,23 @@ AppDispatcher.register(function (payload) {
 
             var textCookie = Cookies.getCookie('SEARCH_TEXT');
             _searchText = (!textCookie || 'null' == textCookie) ? null : decodeURIComponent(textCookie);
+
+            var metrosCookie = Cookies.getCookie('SEARCH_METROS');
+            _metros = (!metrosCookie || 'null' == metrosCookie) ? [] : JSON2.parse(decodeURIComponent(metrosCookie));
+
+            var boundsCookie = Cookies.getCookie('SEARCH_BOUNDS');
+            _bounds = (!boundsCookie || 'null' == boundsCookie) ? [] : JSON2.parse(decodeURIComponent(boundsCookie));
+
+            var locationCookie = Cookies.getCookie('SEARCH_LOCATION');
+            _location = (!locationCookie || 'null' == locationCookie) ? [] : JSON2.parse(decodeURIComponent(locationCookie));
+
+            var countryCodeCookie = Cookies.getCookie('SEARCH_COUNTRY_CODE');
+            _countryCode = (!countryCodeCookie || 'null' == countryCodeCookie) ? [] : JSON2.parse(decodeURIComponent(countryCodeCookie));
+
+
+            var formattedAddressCookie = Cookies.getCookie('SEARCH_FORMATTED_ADDRESS');
+            _formattedAddress = (!formattedAddressCookie || 'null' == formattedAddressCookie) ? [] : JSON2.parse(decodeURIComponent(formattedAddressCookie));
+
         }
             //return true;//don't emit any event
             break;
