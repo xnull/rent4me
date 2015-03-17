@@ -156,7 +156,7 @@ var HeaderComponent = React.createClass({
                     </header>
                     <footer>
                         <div className="row">
-                            <div className='col-sm-8 col-md-8 col-xs-8 col-centered'>
+                            <div className='col-sm-6 col-md-6 col-xs-6 col-centered'>
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
