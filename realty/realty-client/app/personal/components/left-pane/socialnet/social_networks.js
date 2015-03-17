@@ -470,10 +470,8 @@ module.exports = React.createClass({
 
             bubbles = (
                 <div className='row'>
-                    <div className="col-md-11 col-sm-11 col-xs-11 pull-left">
-                        <div className="col-sm-12 col-md-12 col-xs-12">
-                                {_bubbles}
-                        </div>
+                    <div className="col-md-12 col-sm-12 col-xs-12 pull-left">
+                        {_bubbles}
                     </div>
                 </div>
             );
@@ -484,7 +482,7 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="panel">
-                    <div className="panel-body" style={{backgroundColor: 'aliceblue'}}>
+                    <div className="panel-body" style={{backgroundColor: 'rgba(9, 45, 76, 0.2)'}}>
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
