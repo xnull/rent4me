@@ -518,48 +518,40 @@ module.exports = React.createClass({
 
                             </div>
 
-                            <div className='row'>
-                                <div className="col-md-7 col-sm-7 col-xs-7">
-                                    <div className="col-sm-12 col-md-12 col-xs-12">
-                                        <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
-                                    </div>
-                                </div>
-
-                                <div className="col-md-2 col-sm-2 col-xs-2">
-                                    <MetroPopover
-                                        metroInput={metrosDisplayItem}
-                                        addButtonEnabled={this.state.tmpMetroSelected != null}
-                                        onAddButtonClicked={this.onTargetMetroSelected}
-                                    />
-                                </div>
-                                <div className="col-md-2 col-sm-2 col-xs-2">
-                                    <SearchWithTextPopover textInput={(
-                                        <input type="text" className="form-control" value={tmpText}
-                                            placeholder="Поиск по тексту объявления"
-                                            onKeyPress={this.clickOnEnter}
-                                            onChange={this.onTmpSearchChange} >
-                                        </input>)}
-                                        addButtonEnabled={tmpText != null}
-                                        onAddButtonClicked={this.onSearchChange}
-                                    />
-                                </div>
-                            </div>
-
                             <br/>
 
                             <div className='row'>
-                                <div className='col-md-10 col-sm-10 col-xs-10'>
+                                <div className="col-md-8 col-sm-8 col-xs-8">
+                                    <div className="input-group">
+                                        <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
+                                        <div className="input-group-btn">
+                                            <MetroPopover
+                                                metroInput={metrosDisplayItem}
+                                                addButtonEnabled={this.state.tmpMetroSelected != null}
+                                                onAddButtonClicked={this.onTargetMetroSelected}
+                                            />
+                                        </div>
 
+                                        <div className="input-group-btn">
+                                            <SearchWithTextPopover textInput={(
+                                                <input type="text" className="form-control" value={tmpText}
+                                                    placeholder="Поиск по тексту объявления"
+                                                    onKeyPress={this.clickOnEnter}
+                                                    onChange={this.onTmpSearchChange} >
+                                                </input>)}
+                                                addButtonEnabled={tmpText != null}
+                                                onAddButtonClicked={this.onSearchChange}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="col-md-2 col-sm-2 col-xs-2">
                                     <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
                                 </div>
-
                             </div>
 
                             <br/>
-
                             {bubbles}
 
                         </form>
