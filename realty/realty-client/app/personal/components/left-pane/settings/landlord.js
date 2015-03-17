@@ -480,32 +480,30 @@ var ApartmentWelcomeScreen = React.createClass({
         var onNextStepSelected = this.props.onNextStepSelected;
 
         return (
-            <div className="col-md-9 col-sm-9 col-xs-9">
-                <div className="panel">
+            <div className="panel">
 
-                    <div className="panel-body">
-                        <h4>Собственность</h4>
-                        <br/>
-                        <div className="row">
-                            <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-                                <p>
-                                    У вас пока что нет ни одного объявления о сдаче жилья в аренду.
-                                    <br/>
-                                    Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренды.
-                                    <br/>
-                                </p>
+                <div className="panel-body">
+                    <h4>Собственность</h4>
+                    <br/>
+                    <div className="row">
+                        <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                            <p>
+                                У вас пока что нет ни одного объявления о сдаче жилья в аренду.
                                 <br/>
-                            </div>
+                                Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренду.
+                                <br/>
+                            </p>
+                            <br/>
                         </div>
-                        <div className="row">
-                            <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-                                <p>
-                                    <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}>
-                                        <i className="glyphicon glyphicon-plus" style={{color: 'white'}}></i>
-                                        <b>Добавить объявление</b>
-                                    </a>
-                                </p>
-                            </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                            <p>
+                                <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}>
+                                    <i className="glyphicon glyphicon-plus" style={{color: 'white'}}></i>
+                                    <b>Добавить объявление</b>
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1131,76 +1129,74 @@ module.exports = React.createClass({
             }
         }
         return (
-            <div className="col-md-9 col-sm-9 col-xs-9">
-                <div className="panel">
-                    <div className="panel-body">
-                        <h4>Собственность</h4>
+            <div className="panel">
+                <div className="panel-body">
+                    <h4>Собственность</h4>
 
-                        <br/>
+                    <br/>
 
-                        <div id="errorMessages" className="alert alert-danger" role="alert" style={errorMessageStyles}>
-                        </div>
+                    <div id="errorMessages" className="alert alert-danger" role="alert" style={errorMessageStyles}>
+                    </div>
 
                         {successOrDangerBlock}
 
-                        <form className="form-horizontal" role="form">
-                            <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-6" >
-                                    <UserSelect data={rentTypeProp} onChange={this._onChange} />
-                                    <UserProperty data={rentalFeeProp} onChange={this._onChange} />
-                                    <UserSelect data={feePeriodProp} onChange={this._onChange} />
+                    <form className="form-horizontal" role="form">
+                        <div className="row">
+                            <div className="col-md-6 col-sm-6 col-xs-6" >
+                                <UserSelect data={rentTypeProp} onChange={this._onChange} />
+                                <UserProperty data={rentalFeeProp} onChange={this._onChange} />
+                                <UserSelect data={feePeriodProp} onChange={this._onChange} />
 
-                                    <UserText data={descriptionProp} onChange={this._onChange} />
+                                <UserText data={descriptionProp} onChange={this._onChange} />
 
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-xs-6">
-                                    <div id="map-canvas" style={styles}></div>
-                                </div>
                             </div>
-
-                            <div className="row">
-                                <div className="col-sm-12 col-md-12 col-xs-12">
-                                    <h4>Данные о квартире</h4>
-                                </div>
+                            <div className="col-md-6 col-sm-6 col-xs-6">
+                                <div id="map-canvas" style={styles}></div>
                             </div>
+                        </div>
 
-                            <div className="row">
-                                <div className="col-md-4 col-sm-4 col-xs-4" >
-                                    <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                </div>
-                                <div className="col-md-4 col-sm-4 col-xs-4">
-                                    <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                    <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
-                                </div>
+                        <div className="row">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
+                                <h4>Данные о квартире</h4>
                             </div>
+                        </div>
 
-                            <div className="row">
-                                <div className="col-md-8 col-sm-8 col-xs-8">
-                                    <UserProperty data={addressProp} readOnly={saved}/>
-                                    <UserPreview data={addressPreviewProp}/>
-                                </div>
-                                <div className="col-md-4 col-sm-4 col-xs-4">
-                                    <ApartmentInfoChangeRequestButton show={readOnly}/>
-                                </div>
+                        <div className="row">
+                            <div className="col-md-4 col-sm-4 col-xs-4" >
+                                <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
                             </div>
+                            <div className="col-md-4 col-sm-4 col-xs-4">
+                                <UserProperty data={floorNumber} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                                <UserProperty data={floorsTotal} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
+                            </div>
+                        </div>
 
-                            <div className="row">
-                                <div className="col-sm-12 col-md-12 col-xs-12">
-                                    <h4>Фотографии</h4>
-                                    <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
-                                    <p>
-                                        <div className="dropzone" id="my-awesome-dropzone"></div>
-                                    </p>
-                                </div>
+                        <div className="row">
+                            <div className="col-md-8 col-sm-8 col-xs-8">
+                                <UserProperty data={addressProp} readOnly={saved}/>
+                                <UserPreview data={addressPreviewProp}/>
                             </div>
+                            <div className="col-md-4 col-sm-4 col-xs-4">
+                                <ApartmentInfoChangeRequestButton show={readOnly}/>
+                            </div>
+                        </div>
 
-                            <div className='row'>
-                                <UserButton data={deleteButton} onClick={this._onDelete}/>
-                                <UserButton data={submitButton} onClick={this._onSave}/>
+                        <div className="row">
+                            <div className="col-sm-12 col-md-12 col-xs-12">
+                                <h4>Фотографии</h4>
+                                <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
+                                <p>
+                                    <div className="dropzone" id="my-awesome-dropzone"></div>
+                                </p>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div className='row'>
+                            <UserButton data={deleteButton} onClick={this._onDelete}/>
+                            <UserButton data={submitButton} onClick={this._onSave}/>
+                        </div>
+                    </form>
                 </div>
             </div>
         )
