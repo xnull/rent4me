@@ -164,7 +164,7 @@ var HeaderComponent = React.createClass({
                                             <div className="row">
                                                 <div className='col-sm-12 col-md-3 col-lg-4 col-centered'>
                                                     <div className="btn-group btn-group-justified" role="group" data-toggle="buttons">
-                                                        <label className="btn btn-primary">
+                                                        <label className="input-group-addon label-success">
                                                         Я хочу
                                                         </label>
                                                         <label type="radio" className="btn btn-default">Снять</label>
@@ -175,7 +175,7 @@ var HeaderComponent = React.createClass({
                                                 <div className='col-sm-12 col-md-3 col-lg-4 col-centered'>
 
                                                     <div className="btn-group btn-group-justified" data-toggle="buttons">
-                                                        <label className="btn btn-primary">
+                                                        <label className="input-group-addon label-success">
                                                         Комнат
                                                         </label>
                                                         <label className="btn btn-default">
@@ -186,17 +186,17 @@ var HeaderComponent = React.createClass({
                                                             <input type="checkbox" >2</input>
                                                         </label>
                                                         <label className="btn btn-default">
-                                                            <input type="checkbox">3</input>
+                                                            <input type="checkbox">3+</input>
                                                         </label>
                                                     </div>
 
                                                 </div>
 
                                                 <div className='col-sm-12 col-md-3 col-lg-4 col-centered'>
-                                                    <div className="input-group input-group-sm">
-                                                        <span className=" input-group-addon" id="sizing-addon1">Цена</span>
+                                                    <div className="input-group ">
+                                                        <span className="input-group-addon label-success" id="sizing-addon1">Цена</span>
                                                         <input type="text" className="form-control" placeholder="От:" aria-describedby="basic-addon1"/>
-                                                        <span className="input-group-addon" id="sizing-addon1">Цена</span>
+                                                        <span className="input-group-addon label-success" id="sizing-addon1">:</span>
                                                         <input type="text" className="form-control" placeholder="До:" aria-describedby="basic-addon1"/>
                                                     </div>
                                                 </div>
