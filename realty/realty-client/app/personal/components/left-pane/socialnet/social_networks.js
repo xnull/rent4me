@@ -521,7 +521,7 @@ module.exports = React.createClass({
                             <br/>
 
                             <div className='row'>
-                                <div className="col-md-8 col-sm-8 col-xs-8">
+                                <div className="col-md-8 col-sm-12 col-xs-12">
                                     <div className="input-group">
                                         <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
                                         <div className="input-group-btn">
@@ -546,7 +546,7 @@ module.exports = React.createClass({
                                     </div>
                                 </div>
 
-                                <div className="col-md-2 col-sm-2 col-xs-2">
+                                <div className="col-md-4 col-sm-12 col-xs-12">
                                     <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
                                 </div>
                             </div>

@@ -70,13 +70,11 @@ var Rooms = React.createClass({
 
             <div className={this.props.className}>
                 <div className="btn-group btn-group-justified" data-toggle="buttons">
-                    <label className="input-group-addon label-success" style={{color: 'white'}}>
+                    <label className="btn btn-success disabled" style={{color: 'white', width: '2%'}}>
                         Комнат
                     </label>
                     <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>
-                        <input type="checkbox"
-                            checked={firstSelected}
-                        >1</input>
+                        <input type="checkbox" checked={firstSelected}>1</input>
                     </label>
                     <label className={secondClassNames} onClick={onTwoRoomAptValueChanged}>
                         <input type="checkbox" checked={secondSelected}>2</input>
