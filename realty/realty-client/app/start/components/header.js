@@ -156,66 +156,65 @@ var HeaderComponent = React.createClass({
                     </header>
                     <footer>
                         <div className="row">
-                            <div className='col-sm-6 col-md-6 col-xs-8 col-centered'>
+                            <div className='col-sm-8 col-md-8 col-xs-8 col-centered'>
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
 
-                                            <div className="row">
-                                                <div className='col-sm-12 col-md-4 col-xs-4 col-centered'>
-                                                    <div className="btn-group btn-group-justified" role="group" data-toggle="buttons">
-                                                        <label className="input-group-addon label-success">
-                                                        Я хочу
-                                                        </label>
-                                                        <label type="radio" className="btn btn-default">Снять</label>
-                                                        <label type="radio" className="btn btn-default">Сдать</label>
-                                                    </div>
-                                                </div>
+                                            <div className='row'>
 
-                                                <div className='col-sm-12 col-md-4 col-xs-4 col-centered'>
+                                                <RentType changeToRenter={this.changeToRenter}
+                                                    changeToLessor={this.changeToLessor}
+                                                    className="col-xs-12 col-sm-12 col-md-4 col-centered"
+                                                />
 
-                                                    <div className="btn-group btn-group-justified" data-toggle="buttons">
-                                                        <label className="input-group-addon label-success">
-                                                        Комнат
-                                                        </label>
-                                                        <label className="btn btn-default">
-                                                            <input type="checkbox"
-                                                            checked="btn btn-default">1</input>
-                                                        </label>
-                                                        <label className="btn btn-default">
-                                                            <input type="checkbox" >2</input>
-                                                        </label>
-                                                        <label className="btn btn-default">
-                                                            <input type="checkbox">3+</input>
-                                                        </label>
-                                                    </div>
+                                                <RoomsCount
+                                                    className="col-xs-12 col-sm-12 col-md-4 col-centered"
 
-                                                </div>
+                                                    oneRoomAptSelected={this.state.oneRoomAptSelected}
+                                                    twoRoomAptSelected={this.state.twoRoomAptSelected}
+                                                    threeRoomAptSelected={this.state.threeRoomAptSelected}
 
-                                                <div className='col-sm-12 col-md-4 col-xs-4 col-centered'>
-                                                    <div className="input-group">
-                                                        <span className="input-group-addon label-success" id="sizing-addon1">Цена</span>
-                                                        <input type="text" className="form-control" placeholder="От:" aria-describedby="basic-addon1"/>
-                                                        <span className="input-group-addon label-success" id="sizing-addon1">:</span>
-                                                        <input type="text" className="form-control" placeholder="До:" aria-describedby="basic-addon1"/>
-                                                    </div>
-                                                </div>
+                                                    onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
+                                                    onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
+                                                    onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
+
+                                                />
+
+                                                <PriceRange
+                                                    className="col-xs-12 col-sm-12 col-md-4 col-centered"
+
+                                                    onKeyPress={this.performSearchOnEnter}
+
+                                                    minPrice={this.state.minPrice}
+                                                    maxPrice={this.state.maxPrice}
+
+                                                    onMinPriceChange={this.onMinPriceChange}
+                                                    onMaxPriceChange={this.onMaxPriceChange}
+                                                />
+
                                             </div>
 
                                             <div className='row'>
-                                                <div className='col-md-2 col-xs-2 col-centered'>
+                                                <div className='col-xs-2 col-sm-2 col-md-2 col-centered'>
                                                 </div>
 
-                                                <div className='col-sm-12 col-md-4 col-xs-6 col-centered'>
-                                                    <input type="text" className="form-control"
-                                                    placeholder="Поиск по тексту объявления">
+                                                <div className="col-xs-12 col-sm-12 col-md-6 col-centered">
+                                                    <input type="text" className="form-control" value={this.state.text}
+                                                        onChange={this.onChangeSearchText}
+                                                        onKeyPress={this.performSearchOnEnter}
+                                                        placeholder="Поиск по тексту объявления"
+                                                        style={{
+                                                            borderRadius: 'inherit',
+                                                            paddingTop: 0,
+                                                            paddingBottom: 0
+                                                        }}>
                                                     </input>
                                                 </div>
 
-                                                <div className='col-sm-12 col-md-4 col-xs-2 col-centered'>
-                                                    <a className="btn btn-success center-block">Найти</a>
+                                                <div className="col-xs-12 col-sm-12 col-md-4 col-centered">
+                                                    <a className="btn btn-success center-block" onClick={this.performSearch}>Найти</a>
                                                 </div>
-
                                             </div>
                                         </form>
                                     </div>

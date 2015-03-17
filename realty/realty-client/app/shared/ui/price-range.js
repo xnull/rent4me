@@ -7,6 +7,7 @@ var accounting = require('accounting');
 
 var PriceRange = React.createClass({
     propTypes: {
+        className: React.PropTypes.string.isRequired,
         uiSize: React.PropTypes.number.isRequired,
         uiLabelSize: React.PropTypes.number.isRequired,
         minPrice: React.PropTypes.number,
@@ -38,23 +39,28 @@ var PriceRange = React.createClass({
         var onKeyPress = this.props.onKeyPress;
 
         return (
-            <div className={uiProps.size}>
-                <div className={uiProps.labelSize}>
-                    <label className='control-label'>Цена</label>
-                </div>
-                <div className={uiProps.form}>
+            <div className={this.props.className}>
+                <div className="input-group">
                     <div className="input-group">
-                        <div className='col-sm-6 col-md-6 col-xs-6' style={{paddingRight: 0}}>
-                            <input type='text' className='form-control' placeholder='От' value={minPrice}
-                                onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
-                                style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
-                        </div>
 
-                        <div className='col-sm-6 col-md-6 col-xs-6' style={{paddingLeft: 0}}>
-                            <input type='text' className='form-control' placeholder='До' value={maxPrice}
-                                onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
-                                style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}/>
-                        </div>
+                        <span className="input-group-addon label-success" id="sizing-addon-price-range-desc" style={{color: 'white' }}>Цена</span>
+                        <input type="text"
+                            className="form-control"
+                            aria-describedby="sizing-addon-price-range-desc"
+                            placeholder='От' value={minPrice}
+                            onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
+                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}
+
+                        />
+                        <span className="input-group-addon label-success" id="sizing-addon-price-value-desc" style={{color: 'white' }} >:</span>
+                        <input type="text"
+                            className="form-control"
+                            aria-describedby="sizing-addon-price-value-desc"
+                            placeholder='До' value={maxPrice}
+                            onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
+                            style={{borderRadius: 'inherit', paddingTop: 0, paddingBottom: 0}}
+                        />
+
                     </div>
                 </div>
             </div>

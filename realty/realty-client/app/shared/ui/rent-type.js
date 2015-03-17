@@ -9,7 +9,8 @@ var RentType = React.createClass({
 
     propTypes: {
         changeToRenter: React.PropTypes.func.isRequired,
-        changeToLessor: React.PropTypes.func.isRequired
+        changeToLessor: React.PropTypes.func.isRequired,
+        className: React.PropTypes.string
     },
 
     render: function () {
@@ -19,11 +20,14 @@ var RentType = React.createClass({
         var renterClasses = "btn btn-default" + (isRenter ? " active" : "");
         var lessorClasses = "btn btn-default" + (!isRenter ? " active" : "");
 
-        var size = this.props.size || 'col-sm-3 col-md-3 col-xs-3';
+        var className = this.props.className || 'col-sm-3 col-md-3 col-xs-3';
 
         return (
-            <div className={size}>
-                <div className="btn-group" data-toggle="buttons" >
+            <div className={className}>
+                <div className="btn-group btn-group-justified" data-toggle="buttons" >
+                    <label className="input-group-addon label-success" style={{color: 'white'}}>
+                        Я хочу
+                    </label>
                     <label className={renterClasses} onClick={this.props.changeToRenter} >
                         <input type="radio" >Снять</input>
                     </label>

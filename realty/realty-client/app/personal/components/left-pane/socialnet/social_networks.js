@@ -541,34 +541,34 @@ module.exports = React.createClass({
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>
-                                <div className="col-md-12 col-sm-12 col-xs-12">
-                                    <RentType size='col-md-3 col-sm-3 col-xs-3'
-                                        changeToRenter={this.changeToRenter}
-                                        changeToLessor={this.changeToLessor}
-                                    />
 
-                                    <RoomsCount uiSize={4} uiLabelSize={5}
+                                <RentType className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
+                                    changeToRenter={this.changeToRenter}
+                                    changeToLessor={this.changeToLessor}
+                                />
 
-                                        oneRoomAptSelected={oneRoomAptSelected}
-                                        twoRoomAptSelected={twoRoomAptSelected}
-                                        threeRoomAptSelected={threeRoomAptSelected}
+                                <RoomsCount className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
 
-                                        onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
-                                        onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
-                                        onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
-                                    />
+                                    oneRoomAptSelected={oneRoomAptSelected}
+                                    twoRoomAptSelected={twoRoomAptSelected}
+                                    threeRoomAptSelected={threeRoomAptSelected}
 
-                                    <PriceRange uiSize={5} uiLabelSize={3}
+                                    onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
+                                    onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
+                                    onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
+                                />
 
-                                        minPrice={minPrice}
-                                        maxPrice={maxPrice}
+                                <PriceRange className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
 
-                                        onKeyPress={this.clickOnEnter}
+                                    minPrice={minPrice}
+                                    maxPrice={maxPrice}
 
-                                        onMinPriceChange={this.onMinPriceChange}
-                                        onMaxPriceChange={this.onMaxPriceChange}
-                                    />
-                                </div>
+                                    onKeyPress={this.clickOnEnter}
+
+                                    onMinPriceChange={this.onMinPriceChange}
+                                    onMaxPriceChange={this.onMaxPriceChange}
+                                />
+
                             </div>
 
                             <div className='row'>

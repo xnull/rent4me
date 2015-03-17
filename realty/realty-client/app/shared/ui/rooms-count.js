@@ -67,24 +67,23 @@ var Rooms = React.createClass({
         var thirdClassNames = "btn btn-default" + (thirdSelected ? " active" : "");
 
         return (
-            <div className={uiProps.size}>
-                <div className={uiProps.labelSize}>
-                    <label className="control-label pull-right">Комнат</label>
-                </div>
-                <div className={uiProps.form}>
-                    <div className="btn-group btn-group-justified" data-toggle="buttons">
-                        <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>
-                            <input type="checkbox"
-                                checked={firstSelected}
-                            >1</input>
-                        </label>
-                        <label className={secondClassNames} onClick={onTwoRoomAptValueChanged}>
-                            <input type="checkbox" checked={secondSelected}>2</input>
-                        </label>
-                        <label className={thirdClassNames} onClick={onThreeRoomAptValueChanged}>
-                            <input type="checkbox" checked={thirdSelected}>3</input>
-                        </label>
-                    </div>
+
+            <div className={this.props.className}>
+                <div className="btn-group btn-group-justified" data-toggle="buttons">
+                    <label className="input-group-addon label-success" style={{color: 'white'}}>
+                        Комнат
+                    </label>
+                    <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>
+                        <input type="checkbox"
+                            checked={firstSelected}
+                        >1</input>
+                    </label>
+                    <label className={secondClassNames} onClick={onTwoRoomAptValueChanged}>
+                        <input type="checkbox" checked={secondSelected}>2</input>
+                    </label>
+                    <label className={thirdClassNames} onClick={onThreeRoomAptValueChanged}>
+                        <input type="checkbox" checked={thirdSelected}>3</input>
+                    </label>
                 </div>
             </div>
         )
