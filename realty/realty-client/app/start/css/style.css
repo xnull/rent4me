@@ -74,6 +74,18 @@ label {
     font-weight: 300;
 }
 
+.modal {
+    position: absolute;
+}
+
+Modal {
+    position: absolute;
+}
+
+.Modal {
+    position: absolute;
+}
+
 /* --------- End Rent4.me css ---------*/
 
 
