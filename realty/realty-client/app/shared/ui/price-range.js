@@ -52,7 +52,7 @@ var PriceRange = React.createClass({
                             aria-describedby="sizing-addon-price-range-desc"
                             placeholder='От' value={minPrice}
                             onChange={this.props.onMinPriceChange} onKeyPress={onKeyPress}
-
+                            style={{paddingTop: 0, paddingBottom: 0}}
                         />
                         <span className="input-group-addon label-success disabled" id="sizing-addon-price-value-desc" style={{
                             color: 'white',
@@ -64,6 +64,7 @@ var PriceRange = React.createClass({
                             aria-describedby="sizing-addon-price-value-desc"
                             placeholder='До' value={maxPrice}
                             onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
+                            style={{paddingTop: 0, paddingBottom: 0}}
                         />
 
                     </div>
