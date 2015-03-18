@@ -70,7 +70,7 @@ var Rooms = React.createClass({
 
             <div className={this.props.className}>
                 <div className="btn-group btn-group-justified" data-toggle="buttons">
-                    <label className="btn btn-success disabled" style={{color: 'white', width: '2%'}}>
+                    <label className="btn btn-success" style={{color: 'white', width: '2%', pointerEvents: 'none'}}>
                         Комнат
                     </label>
                     <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>

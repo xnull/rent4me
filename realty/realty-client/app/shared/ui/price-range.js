@@ -45,7 +45,7 @@ var PriceRange = React.createClass({
                         <span className="input-group-addon label-success disabled" id="sizing-addon-price-range-desc" style={{
                             color: 'white',
                             borderRadius: '0px',
-                            backgroundColor: 'rgba(65, 150, 65, 0.4)'
+                            backgroundColor: 'rgba(65, 150, 65, 1)'
                         }}>Цена</span>
                         <input type="text"
                             className="form-control"
@@ -57,7 +57,7 @@ var PriceRange = React.createClass({
                         <span className="input-group-addon label-success disabled" id="sizing-addon-price-value-desc" style={{
                             color: 'white',
                             borderRadius: '0',
-                            backgroundColor: 'rgba(65, 150, 65, 0.4)'
+                            backgroundColor: 'rgba(65, 150, 65, 1)'
                         }} >:</span>
                         <input type="text"
                             className="form-control"
