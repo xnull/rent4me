@@ -12,6 +12,4 @@ include 'realty-vk-parser'
 include 'realty-admin:realty-admin-web'
 include 'realty-profiles'
 include 'realty-db-tool'
-include 'realty-hazel-cluster'
-include 'realty-hazel-client'
 

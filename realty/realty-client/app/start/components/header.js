@@ -384,7 +384,7 @@ var HeaderComponent = React.createClass({
                     </header>
                     <footer>
                         <div className="row">
-                            <div className='col-xs-9 col-sm-9 col-md-9 col-lg-7 col-centered'>
+                            <div className='col-xs-12 col-sm-12 col-md-10 col-lg-7 col-centered'>
                                 <div className="panel">
                                     <div className="panel-body">
                                         <form className="form" role="form">
@@ -392,11 +392,11 @@ var HeaderComponent = React.createClass({
                                             <div className='row'>
                                                 <RentType changeToRenter={this.changeToRenter}
                                                     changeToLessor={this.changeToLessor}
-                                                    className="col-xs-12 col-sm-12 col-md-4 col-centered"
+                                                    className="col-xs-6 col-sm-6 col-md-4"
                                                 />
 
                                                 <RoomsCount
-                                                    className="col-xs-12 col-sm-12 col-md-4 col-centered"
+                                                    className="col-xs-6 col-sm-6 col-md-4"
 
                                                     oneRoomAptSelected={this.state.oneRoomAptSelected}
                                                     twoRoomAptSelected={this.state.twoRoomAptSelected}
@@ -409,7 +409,7 @@ var HeaderComponent = React.createClass({
                                                 />
 
                                                 <PriceRange
-                                                    className="col-xs-12 col-sm-12 col-md-4 col-centered"
+                                                    className="col-xs-12 col-sm-12 col-md-4"
 
                                                     onKeyPress={this.performSearchOnEnter}
 
@@ -421,6 +421,8 @@ var HeaderComponent = React.createClass({
                                                 />
 
                                             </div>
+
+                                            <br/>
 
                                             <div className='row'>
                                                 <div className="col-md-8 col-sm-12 col-xs-12">
@@ -446,7 +448,7 @@ var HeaderComponent = React.createClass({
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                                <div className="col-md-4 col-sm-12 col-xs-12 col-centered">
                                                     <a className="btn btn-success center-block" onClick={this.performSearch}>Найти</a>
                                                 </div>
                                             </div>
