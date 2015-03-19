@@ -360,12 +360,12 @@ var HeaderComponent = React.createClass({
 
         var sectionStyle = {
             //backgroundImage: "url('images/signin/22592__40P0163-01.jpg')",
-            backgroundImage: "url('images/flats/flat2.jpg')",
+            backgroundImage: "url('images/flats/flat3.jpg')",
             /*backgroundImage: "url('http://www.veskip.ru/images/property/22592__40P0163-01.jpg')",*/
             backgroundSize: 'cover',
-            backgroundPosition: 'auto',
+            backgroundPosition: 'auto'
             /*backgroundRepeat: 'no-repeat'*/
-            backgroundRepeat: 'round'
+            /*backgroundRepeat: 'round'*/
         };
         return (
             <div style={sectionStyle}>
