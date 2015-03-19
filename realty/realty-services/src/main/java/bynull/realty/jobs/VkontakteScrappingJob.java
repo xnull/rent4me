@@ -18,7 +18,7 @@ public class VkontakteScrappingJob implements Runnable {
     VkontakteService vkontakteService;
 
     @Scheduled(
-            cron = "10 */30 * * * *" //start each 30 minutes
+            cron = "0 20,50 * * * *" //start each 30 minutes
 //            initialDelay = 60*60*1000, fixedDelay = 60*60*1000
     )//start each hour, default delay - one minute
     @Override

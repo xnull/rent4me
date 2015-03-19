@@ -19,7 +19,7 @@ public class FacebookScrappingJob implements Runnable {
     FacebookService facebookService;
 
     @Scheduled(
-            cron = "5 */30 * * * *" //start each 30 minutes
+            cron = "0 10,40 * * * *" //start each 30 minutes
 //            initialDelay = 60*60*1000, fixedDelay = 60*60*1000
     )//start each hour, default delay - one minute
     @Override
