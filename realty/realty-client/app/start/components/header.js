@@ -95,12 +95,13 @@ var HeaderComponent = React.createClass({
 
             that.rememberLocationInfo();
 
-
+            mixpanel.track("Address_selected");
             MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
         });
 
         MetrosStore.addChangeListener(this.onMetrosChanged);
         MetrosActions.findMetros(null, null, null, null);
+        mixpanel.track("main_page_loaded");
 
     },
 

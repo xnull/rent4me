@@ -108,6 +108,7 @@ module.exports = React.createClass({
             }));
             MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
             that.onClick();
+            mixpanel.track("personal_main_page_loaded");
         });
 
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
