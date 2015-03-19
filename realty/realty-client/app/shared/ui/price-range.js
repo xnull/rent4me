@@ -64,7 +64,7 @@ var PriceRange = React.createClass({
                             aria-describedby="sizing-addon-price-value-desc"
                             placeholder='До' value={maxPrice}
                             onChange={this.props.onMaxPriceChange} onKeyPress={onKeyPress}
-                            style={{paddingTop: 0, paddingBottom: 0}}
+                            style={{paddingTop: 0, paddingBottom: 0, borderRadius: 0}}
                         />
 
                     </div>

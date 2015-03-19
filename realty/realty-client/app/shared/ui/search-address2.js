@@ -16,7 +16,8 @@ var AddressBox = React.createClass({
                 value={this.props.displayValue}
                 style={{
                     paddingTop: 0,
-                    paddingBottom: 0
+                    paddingBottom: 0,
+                    borderRadius: 0
                 }}
                 placeholder="Введите местоположение"
                 onChange={this.props.onAddressChange}
