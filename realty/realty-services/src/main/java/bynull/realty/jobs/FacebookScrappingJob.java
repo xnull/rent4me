@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * @author dionis on 06/12/14.
  */
-//@Component
+@Component
 public class FacebookScrappingJob implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FacebookScrappingJob.class);
 
@@ -19,7 +19,7 @@ public class FacebookScrappingJob implements Runnable {
     FacebookService facebookService;
 
     @Scheduled(
-            cron = "0 */30 * * * *" //start each 30 minutes
+            cron = "5 */30 * * * *" //start each 30 minutes
 //            initialDelay = 60*60*1000, fixedDelay = 60*60*1000
     )//start each hour, default delay - one minute
     @Override

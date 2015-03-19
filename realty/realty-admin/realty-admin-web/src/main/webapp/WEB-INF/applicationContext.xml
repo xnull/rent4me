@@ -35,6 +35,10 @@
         <property name="contentType" value="text/html; charset=utf-8"/>
     </bean>
 
+    <beans profile="prod">
+        <import resource="classpath:scheduler.xml"/>
+    </beans>
+
     <!--<bean class="org.fusesource.scalate.spring.view.ScalateViewResolver">-->
         <!--<property name="order" value="1"/>-->
         <!--<property name="prefix" value="/WEB-INF/views/scalate/" />-->
