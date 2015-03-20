@@ -132,7 +132,7 @@ task deployFrontendDev(dependsOn: packAppRelease, type: SshTask) {
 
     remotes {
         webServer {
-            host = "rent4.me"
+            host = "dev.rent4.me"
             user = "tomcat"
             password = passphrase
         }
