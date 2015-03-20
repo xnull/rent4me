@@ -120,7 +120,7 @@ task packAppRelease(dependsOn: ['cleanUpBuildTmp', 'jsBuildRelease', 'prepareRea
     baseName = 'app-1.0'
 }
 
-task deployFrontendDev(dependsOn: packApp, type: SshTask) {
+task deployFrontendDev(dependsOn: packAppRelease, type: SshTask) {
     group = 'Deployment'
 
     def passphrase = "k124hfeoifs9";
@@ -139,8 +139,8 @@ task deployFrontendDev(dependsOn: packApp, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/home/tomcat/nginx/dev/'
-        execute 'cd /home/tomcat/nginx/dev/;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar; chmod -R 755 ./*'
+        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/home/tomcat/nginx/dev'
+        execute 'cd /home/tomcat/nginx/dev;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar; chmod -R 755 ./*'
     }
 }
 

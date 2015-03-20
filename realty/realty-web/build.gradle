@@ -70,10 +70,10 @@ task deployBackendDev(dependsOn: war, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7-dev ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
+        execute 'cd /home/tomcat/tc7-dev-rest ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
         println('Deploying war:' + war.archivePath);
-        put war.archivePath, '/home/tomcat/tc7-dev/webapps/'
-        execute 'cd /home/tomcat/tc7-dev ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=dev\\" ; bin/catalina.sh start'
+        put war.archivePath, '/home/tomcat/tc7-dev-rest/webapps/'
+        execute 'cd /home/tomcat/tc7-dev-rest ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; export CATALINA_OPTS=\'-Dspring.profiles.active=dev -Xmx256m -Xms256m\' ; bin/catalina.sh start'
     }
 }
 

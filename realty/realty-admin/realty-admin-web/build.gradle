@@ -31,10 +31,10 @@ task deployAdminDev(dependsOn: war, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        execute 'cd /home/tomcat/tc7-dev ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
+        execute 'cd /home/tomcat/tc7-dev-admin ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
         println('Deploying war:' + war.archivePath);
-        put war.archivePath, '/home/tomcat/tc7-dev/webapps/'
-        execute 'cd /home/tomcat/tc7-dev ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\'-Dspring.profiles.active=dev -Xmx768m -Xms768m\' ; bin/catalina.sh start'
+        put war.archivePath, '/home/tomcat/tc7-dev-admin/webapps/'
+        execute 'cd /home/tomcat/tc7-dev-admin ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\'-Dspring.profiles.active=dev -Xmx256m -Xms256m\' ; bin/catalina.sh start'
     }
 }
 
