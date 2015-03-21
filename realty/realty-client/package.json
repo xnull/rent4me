@@ -12,7 +12,8 @@
     "rent4meAjax": "./app/shared/common/Ajax.js",
     "rent4meEmitter": "./app/shared/common/Emitter.js",
     "rent4meBlockUI": "./app/shared/common/BlockUI.js",
-    "rent4meAutocomplete": "./app/shared/common/Autocomplete.js"
+    "rent4meAutocomplete": "./app/shared/common/Autocomplete.js",
+    "skel": "./node_modules/bower/skel/src/skel.js"
   },
   "jquery": {
     "exports": "$"
@@ -38,7 +39,7 @@
   "dependencies": {
     "bootstrap": "~3.3.2",
     "react-bootstrap": "0.13.0",
-    "jquery": "~2.1.1",
+    "jquery": "~2.1.3",
     "underscore": "~1.7.0",
     "validator.js": "~1.0.1",
     "JSON2": "0.1.0",

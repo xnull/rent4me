@@ -6,6 +6,7 @@ var AuthStore = require('../stores/AuthStore');
 var assign = require('object-assign');
 var JSON = require('JSON2');
 var Utils = require('rent4meUtil');
+var $ = require('jquery');
 
 function AjaxBuilder(httpMethod) {
     //initialize variables

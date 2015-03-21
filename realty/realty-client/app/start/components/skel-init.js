@@ -2,6 +2,9 @@
  * Created by null on 04.01.15.
  */
 
+var $ = require('jquery');
+var skel = require('skel');
+
 function skelInit() {
 
     skel.init({

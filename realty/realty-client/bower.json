@@ -7,7 +7,8 @@
         "bootstrap": "3.2.0",
         "respond": "1.4.2",
         "html5shiv": "3.7.2",
-        "google-maps-utility-library-v3": "latest"
+      "google-maps-utility-library-v3": "latest",
+      "skel": "2.2.1"
     },
     "overrides": {
         "google-maps-utility-library-v3": {

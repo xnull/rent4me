@@ -2,6 +2,7 @@
  * Created by dionis on 04/12/14.
  */
 
+var $ = require('jquery');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var AuthConstants = require('../constants/AuthConstants');
 var UserConstants = require('../constants/UserConstants');
@@ -169,7 +170,7 @@ var AuthActions = {
         });
     },
 
-    initFbAuth: function() {
+    initFbAuth: function () {
         var that = this;
         $(document).ready(function () {
             that.restoreUsernameAndTokenFromCookies();
@@ -241,7 +242,7 @@ var AuthActions = {
                     //if(xhr.status == 409) {
                     //    errors.push({key: 'E-mail', value: 'E-mail уже занят'});
                     //} else {
-                        errors.push({key: 'Ошибка входа', value: 'Видимо, вы ошиблись при вводе :('});
+                    errors.push({key: 'Ошибка входа', value: 'Видимо, вы ошиблись при вводе :('});
                     //}
 
                     AppDispatcher.handleViewAction({
