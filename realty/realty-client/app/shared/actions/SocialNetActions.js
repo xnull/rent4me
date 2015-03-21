@@ -83,7 +83,7 @@ var SocialNetActions = {
         });
     },
 
-    changeSearchLocationInfo: function (location, countryCode, bounds, formattedAddress) {
+    changeSearchLocationInfo: function (location, countryCode, bounds, formattedAddress, formattedName) {
 
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_LOCATION_INFO,
@@ -91,7 +91,8 @@ var SocialNetActions = {
                 location: location,
                 countryCode: countryCode,
                 bounds: bounds,
-                formattedAddress: formattedAddress
+                formattedAddress: formattedAddress,
+                formattedName: formattedName
             }
         });
     },

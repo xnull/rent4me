@@ -49,69 +49,37 @@ var HeaderComponent = React.createClass({
     componentDidMount: function () {
         SocialNetActions.resetFBSearchState();
 
-        var that = this;
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
-
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
-            var place = autocomplete.getPlace();
-            if (!place) return;
-            var dump = JSON2.stringify(place);
-            console.log('dump:');
-            console.log(dump);
-            var addressComponents = place['address_components'];
-
-            var viewPort = place.geometry.viewport;
-
-            var bounds = viewPort ? {
-                northEast: {
-                    lat: viewPort.getNorthEast().lat(),
-                    lng: viewPort.getNorthEast().lng()
-                },
-
-                southWest: {
-                    lat: viewPort.getSouthWest().lat(),
-                    lng: viewPort.getSouthWest().lng()
-                }
-            } : null;
-
-            var countryCode = AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY');
-
-            var location = {
-                latitude: place['geometry']['location'].lat(),
-                longitude: place['geometry']['location'].lng()
-            };
-
-            var formatted_address = place['name'];
-
-            console.log('new location:');
-            console.log(location);
-
-            that.setState(assign(that.state, {
-                location: location,
-                countryCode: countryCode,
-                bounds: bounds,
-                formattedAddress: formatted_address
-            }));
-
-            that.rememberLocationInfo();
-
-            mixpanel.track("Address_selected");
-            MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
-        });
-
         MetrosStore.addChangeListener(this.onMetrosChanged);
         MetrosActions.findMetros(null, null, null, null);
-        mixpanel.track("main_page_loaded");
+    },
 
+    onAddressSelected: function(value) {
+        console.log("Received value on selection: "+JSON2.stringify(value));
+
+
+        this.setState(assign(this.state, {
+            location: value.location,
+            countryCode: value.countryCode,
+            bounds: value.bounds,
+            formattedAddress: value.formattedAddress,
+            formattedName: value.formattedName
+        }));
+
+        this.rememberLocationInfo();
+        MetrosActions.findMetros(value.location != null ? value.location.longitude : null,
+            value.location != null ? value.location.latitude : null,
+            value.countryCode,
+            value.bounds);
     },
 
     rememberLocationInfo: function () {
         var location = this.state.location;
         var countryCode = this.state.countryCode;
         var bounds = this.state.bounds;
+        var formattedName = this.state.formattedName;
         var formattedAddress = this.state.formattedAddress;
 
-        SocialNetActions.changeSearchLocationInfo(location, countryCode, bounds, formattedAddress);
+        SocialNetActions.changeSearchLocationInfo(location, countryCode, bounds, formattedAddress, formattedName);
     },
 
     componentWillUnmount: function () {
@@ -244,10 +212,11 @@ var HeaderComponent = React.createClass({
 
     makeFormattedAddressDirty: function (value) {
         this.setState(assign(this.state, {
-            location: location,
+            location: null,
             countryCode: null,
             bounds: null,
-            formattedAddress: value
+            formattedName: value,
+            formattedAddress: null
         }));
     },
 
@@ -313,7 +282,6 @@ var HeaderComponent = React.createClass({
 
         var authComponentDisplayItem = (<input type="button" className="button special" value="Вход / Регистрация" style={loginButtonStyle}/>);
 
-        var formattedAddress = this.state.formattedAddress;
         var tmpText = this.state.tmpText;
         var text = this.state.text;
 
@@ -427,7 +395,10 @@ var HeaderComponent = React.createClass({
                                             <div className='row'>
                                                 <div className="col-md-8 col-sm-12 col-xs-12">
                                                     <div className="input-group">
-                                                        <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
+                                                        <AddressBox
+                                                            onAddressChange={this.onAddressChange}
+                                                            onAddressSelected={this.onAddressSelected}
+                                                        />
                                                         <div className="input-group-btn">
                                                             <MetroPopover
                                                                 metroInput={metrosDisplayItem}

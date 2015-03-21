@@ -48,6 +48,7 @@ var _location = null;
 var _countryCode = null;
 var _bounds = null;
 var _formattedAddress = null;
+var _formattedName = null;
 var _metros = [];
 
 var CHANGE_EVENT = 'change';
@@ -95,6 +96,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
     getFormattedAddress: function(){
         return _formattedAddress;
+    },
+
+    getFormattedName: function(){
+        return _formattedName;
     },
 
     getMetros: function() {
@@ -181,6 +186,7 @@ AppDispatcher.register(function (payload) {
             Cookies.deleteCookie('SEARCH_COUNTRY_CODE');
             Cookies.deleteCookie('SEARCH_LOCATION');
             Cookies.deleteCookie('SEARCH_FORMATTED_ADDRESS');
+            Cookies.deleteCookie('SEARCH_FORMATTED_NAME');
 
             _searchWithSubway = false;
             _searchText = null;
@@ -188,6 +194,7 @@ AppDispatcher.register(function (payload) {
             _countryCode = null;
             _location = null;
             _formattedAddress = null;
+            _formattedName = null;
             _metros = [];
             _posts = [];
             _hasMoreResults = false;
@@ -243,6 +250,7 @@ AppDispatcher.register(function (payload) {
             _location = _val.location || null;
             _countryCode = _val.countryCode || null;
             _formattedAddress = _val.formattedAddress || null;
+            _formattedName = _val.formattedName || null;
 
             if(_bounds ) {
                 Cookies.setCookieTemp('SEARCH_BOUNDS', encodeURIComponent(JSON2.stringify(_bounds)));
@@ -255,6 +263,9 @@ AppDispatcher.register(function (payload) {
             }
             if(_formattedAddress ) {
                 Cookies.setCookieTemp('SEARCH_FORMATTED_ADDRESS', encodeURIComponent(JSON2.stringify(_formattedAddress)));
+            }
+            if(_formattedName ) {
+                Cookies.setCookieTemp('SEARCH_FORMATTED_NAME', encodeURIComponent(JSON2.stringify(_formattedName)));
             }
 
             return true;//don't emit any event
@@ -309,6 +320,9 @@ AppDispatcher.register(function (payload) {
 
             var formattedAddressCookie = Cookies.getCookie('SEARCH_FORMATTED_ADDRESS');
             _formattedAddress = (!formattedAddressCookie || 'null' == formattedAddressCookie) ? [] : JSON2.parse(decodeURIComponent(formattedAddressCookie));
+
+            var formattedNameCookie = Cookies.getCookie('SEARCH_FORMATTED_NAME');
+            _formattedName = (!formattedNameCookie || 'null' == formattedNameCookie) ? [] : JSON2.parse(decodeURIComponent(formattedNameCookie));
 
         }
             //return true;//don't emit any event

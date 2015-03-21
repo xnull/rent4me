@@ -49,6 +49,7 @@ module.exports = React.createClass({
             countryCode: SocialNetStore.getCountryCode(),
             bounds: SocialNetStore.getBounds(),
             formattedAddress: SocialNetStore.getFormattedAddress(),
+            formattedName: SocialNetStore.getFormattedName(),
             minPrice: SocialNetStore.getSearchMinPrice(),
             maxPrice: SocialNetStore.getSearchMaxPrice(),
             hasMoreSearchResults: SocialNetStore.hasMoreSearchResults(),
@@ -63,53 +64,6 @@ module.exports = React.createClass({
 
     componentDidMount: function () {
         NavActions.navigateToHome();
-        var that = this;
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('addressInput'));
-
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
-            var place = autocomplete.getPlace();
-            if (!place) return;
-            var dump = JSON2.stringify(place);
-            console.log('dump:');
-            console.log(dump);
-            var addressComponents = place['address_components'];
-
-            var viewPort = place.geometry.viewport;
-
-            var bounds = viewPort ? {
-                northEast: {
-                    lat: viewPort.getNorthEast().lat(),
-                    lng: viewPort.getNorthEast().lng()
-                },
-
-                southWest: {
-                    lat: viewPort.getSouthWest().lat(),
-                    lng: viewPort.getSouthWest().lng()
-                }
-            } : null;
-
-            var countryCode = AddressUtils.getAddressComponentOfTypeOrNull(addressComponents, 'COUNTRY');
-
-            var location = {
-                latitude: place['geometry']['location'].lat(),
-                longitude: place['geometry']['location'].lng()
-            };
-
-            var formatted_address = place['name'];
-
-            console.log('new location:');
-            console.log(location);
-
-            that.setState(assign(that.state, {
-                location: location,
-                countryCode: countryCode,
-                bounds: bounds,
-                formattedAddress: formatted_address
-            }));
-            MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
-            that.onClick();
-            mixpanel.track("personal_main_page_loaded");
-        });
 
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
         MetrosStore.addChangeListener(this.onMetrosChanged);
@@ -166,7 +120,7 @@ module.exports = React.createClass({
             var location = this.state.location;
             var countryCode = this.state.countryCode;
             var bounds = this.state.bounds;
-            var formattedAddress = this.state.formattedAddress;
+
             var metrosSelected = this.state.metrosSelected;
 
             console.log('Searching for text: ' + text);
@@ -296,7 +250,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchWithSubway(true);
         SocialNetActions.changeFBSearchRooms(false, false, false);
         SocialNetActions.changeFBSearchPrice(null, null);
-        SocialNetActions.changeSearchLocationInfo(null, null, null, null);
+        SocialNetActions.changeSearchLocationInfo(null, null, null, null, null);
         SocialNetActions.changeSearchMetros([]);
 
         this.setState(assign(this.state, {
@@ -311,6 +265,7 @@ module.exports = React.createClass({
             countryCode: SocialNetStore.getCountryCode(),
             bounds: SocialNetStore.getBounds(),
             formattedAddress: SocialNetStore.getFormattedAddress(),
+            formattedName: SocialNetStore.getFormattedName(),
             //metro that's temporarily selected
             tmpMetroSelected: null,
             metrosSelected: SocialNetStore.getMetros()
@@ -338,6 +293,7 @@ module.exports = React.createClass({
         var countryCode = this.state.countryCode;
         var bounds = this.state.bounds;
         var formattedAddress = this.state.formattedAddress;
+        var formattedName = this.state.formattedName;
         var metrosSelected = this.state.metrosSelected;
 
         console.log('Searching for text: ' + text + "& min price: " + minPrice + " & max price " + maxPrice);
@@ -348,7 +304,7 @@ module.exports = React.createClass({
         SocialNetActions.changeFBSearchType(type);
         this.fireAptSelectionStateChange();
         SocialNetActions.changeFBSearchPrice(minPrice, maxPrice);
-        SocialNetActions.changeSearchLocationInfo(location, countryCode, bounds, formattedAddress);
+        SocialNetActions.changeSearchLocationInfo(location, countryCode, bounds, formattedAddress, formattedName);
         SocialNetActions.changeSearchMetros(metrosSelected);
         SocialNetActions.findPosts(text, type, withSubway, oneRoomAptSelected, twoRoomAptSelected, threeRoomAptSelected, minPrice, maxPrice, location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds, metrosSelected);
     },
@@ -363,16 +319,38 @@ module.exports = React.createClass({
         this.onRentTypeChange('RENTER');
     },
 
+    onAddressSelected: function(value) {
+        console.log("Received value on selection: "+JSON2.stringify(value));
+
+
+        this.setState(assign(this.state, {
+            location: value.location,
+            countryCode: value.countryCode,
+            bounds: value.bounds,
+            formattedAddress: value.formattedAddress,
+            formattedName: value.formattedName
+        }));
+
+
+        MetrosActions.findMetros(value.location != null ? value.location.longitude : null,
+            value.location != null ? value.location.latitude : null,
+            value.countryCode,
+            value.bounds);
+
+        this.onClick();
+    },
+
     onAddressChange: function (event) {
         this.makeFormattedAddressDirty(event.target.value);
     },
 
     makeFormattedAddressDirty: function (value) {
         this.setState(assign(this.state, {
-            location: location,
+            location: null,
             countryCode: null,
             bounds: null,
-            formattedAddress: value
+            formattedAddress: null,
+            formattedName: value
         }));
     },
 
@@ -434,7 +412,6 @@ module.exports = React.createClass({
         var minPrice = this.state.minPrice;
         var maxPrice = this.state.maxPrice;
 
-        var formattedAddress = this.state.formattedAddress;
 
         var metrosDisplayItem;
 
@@ -477,6 +454,16 @@ module.exports = React.createClass({
                 </div>
             );
         }
+
+        var that = this;
+
+        var addressInitialValue = {
+            location: that.state.location,
+            countryCode: that.state.countryCode,
+            bounds: that.state.bounds,
+            formattedAddress: that.state.formattedAddress,
+            formattedName: that.state.formattedName
+        };
 
         var tmpText = this.state.tmpText;
 
@@ -522,7 +509,11 @@ module.exports = React.createClass({
                             <div className='row'>
                                 <div className="col-md-8 col-sm-12 col-xs-12">
                                     <div className="input-group">
-                                        <AddressBox displayValue={formattedAddress} onAddressChange={this.onAddressChange}/>
+                                        <AddressBox
+                                            onAddressChange={this.onAddressChange}
+                                            onAddressSelected={this.onAddressSelected}
+                                            initialValue={addressInitialValue}
+                                        />
                                         <div className="input-group-btn">
                                             <MetroPopover
                                                 metroInput={metrosDisplayItem}
