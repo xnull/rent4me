@@ -166,12 +166,9 @@ function skelInit() {
         }
 
         // CSS polyfills (IE<9).
-        if (skel.vars.IEVersion < 9)
+        if (skel.vars.IEVersion < 9) {
             $(':last-child').addClass('last-child');
-
-        // Scrolly links.
-        $('.scrolly').scrolly();
-
+        }
     });
 
 }
