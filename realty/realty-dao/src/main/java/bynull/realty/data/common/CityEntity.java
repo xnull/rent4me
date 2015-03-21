@@ -33,4 +33,24 @@ public class CityEntity {
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
     private CountryEntity country;
+
+    @Column(name = "area")
+    private BoundingBox area;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CityEntity)) return false;
+
+        CityEntity that = (CityEntity) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId() != null ? getId().hashCode() : 0;
+    }
 }

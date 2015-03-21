@@ -20,9 +20,7 @@ public final class GeoPointColumnMapper {
     public GeoPoint mapGeoPoint(ResultSet rs, String columnName) throws SQLException {
         PGgeometry lastLocation = (PGgeometry) rs.getObject(columnName);
         if (lastLocation != null) {
-            GeoPoint geoPoint = new GeoPoint();
-            geoPoint.setLongitude(((Point) lastLocation.getGeometry()).getX());
-            geoPoint.setLatitude(((Point) lastLocation.getGeometry()).getY());
+            GeoPoint geoPoint = GeoPoint.from((Point) lastLocation.getGeometry());
             return geoPoint;
         } else {
             return null;

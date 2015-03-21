@@ -13,4 +13,5 @@ public class VkontaktePageForm {
     private String externalId;
     private String link;
     private boolean enabled;
+    private CityForm city;
 }

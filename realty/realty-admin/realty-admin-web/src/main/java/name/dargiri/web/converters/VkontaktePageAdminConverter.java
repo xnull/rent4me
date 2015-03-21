@@ -5,11 +5,16 @@ import bynull.realty.dto.vk.VkontaktePageDTO;
 import name.dargiri.web.form.VkontaktePageForm;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * Created by dionis on 18/01/15.
  */
 @Component
 public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, VkontaktePageForm> {
+
+    @Resource
+    CityAdminConverter cityConverter;
 
     @Override
     public VkontaktePageForm newTargetType(VkontaktePageDTO in) {
@@ -28,6 +33,7 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
         form.setExternalId(in.getExternalId());
         form.setLink(in.getLink());
         form.setEnabled(in.isEnabled());
+        form.setCity(cityConverter.toTargetType(in.getCity()));
         return form;
     }
 
@@ -38,6 +44,7 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
         dto.setExternalId(in.getExternalId());
         dto.setLink(in.getLink());
         dto.setEnabled(in.isEnabled());
+        dto.setCity(cityConverter.toSourceType(in.getCity()));
         return dto;
     }
 }

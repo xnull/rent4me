@@ -1,5 +1,6 @@
 package bynull.realty.dto.vk;
 
+import bynull.realty.dto.CityDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class VkontaktePageDTO {
     private String externalId;
     private String link;
     private boolean enabled;
+    private CityDTO city;
 }

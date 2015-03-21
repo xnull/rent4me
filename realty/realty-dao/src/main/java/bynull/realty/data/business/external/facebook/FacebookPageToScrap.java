@@ -1,5 +1,7 @@
 package bynull.realty.data.business.external.facebook;
 
+import bynull.realty.data.common.CityEntity;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -31,6 +33,10 @@ public class FacebookPageToScrap {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_dt")
     private Date updated;
+
+    @JoinColumn(name = "city_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CityEntity city;
 
     public FacebookPageToScrap() {
 
@@ -86,6 +92,14 @@ public class FacebookPageToScrap {
 
     public void setUpdated(Date updated) {
         this.updated = copy(updated);
+    }
+
+    public CityEntity getCity() {
+        return city;
+    }
+
+    public void setCity(CityEntity city) {
+        this.city = city;
     }
 
     @PrePersist

@@ -1,5 +1,6 @@
 package bynull.realty.dto.fb;
 
+import bynull.realty.dto.CityDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class FacebookPageDTO {
     private String externalId;
     private String link;
     private boolean enabled;
+    private CityDTO city;
 }

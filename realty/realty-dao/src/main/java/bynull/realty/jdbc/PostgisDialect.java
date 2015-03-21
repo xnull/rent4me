@@ -12,11 +12,13 @@ public class PostgisDialect extends PostgreSQL9Dialect {
 
     public static final int GEOMETRY_TYPE = -100500;
     public static final int GEOGRAPHY_TYPE = -100501;
+    public static final int PGOBECT_TYPE = -100502;
 
     public PostgisDialect() {
         LOGGER.info(">>>>> registering hibernate types and functions to support postgis");
         registerColumnType(GEOMETRY_TYPE, "geometry");
         registerColumnType(GEOGRAPHY_TYPE, "geography");
+        registerColumnType(PGOBECT_TYPE, "box2d");
         LOGGER.info("<<<<< registered hibernate types and functions to support postgis");
     }
 }

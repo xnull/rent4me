@@ -3,6 +3,7 @@ package bynull.realty.data.common;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Wither;
+import org.postgis.Point;
 
 import java.io.Serializable;
 
@@ -13,6 +14,26 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Wither
 public class GeoPoint implements Serializable {
+
+    public static GeoPoint from(Point point) {
+        if (point == null) {
+            return null;
+        }
+
+        GeoPoint geoPoint = new GeoPoint();
+        geoPoint.setLongitude(point.getX());
+        geoPoint.setLatitude(point.getY());
+        return geoPoint;
+    }
+
+    public Point toPoint() {
+        Point point = new Point();
+        point.setX(getLongitude());
+        point.setY(getLatitude());
+        point.setSrid(4326);
+        return point;
+    }
+
     private double latitude;
     private double longitude;
 
@@ -62,5 +83,9 @@ public class GeoPoint implements Serializable {
                 "latitude=" + getLatitude() +
                 ", longitude=" + getLongitude() +
                 '}';
+    }
+
+    public GeoPoint copy() {
+        return new GeoPoint().withLatitude(latitude).withLongitude(longitude);
     }
 }

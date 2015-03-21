@@ -5,11 +5,16 @@ import bynull.realty.dto.fb.FacebookPageDTO;
 import name.dargiri.web.form.FacebookPageForm;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * Created by dionis on 18/01/15.
  */
 @Component
 public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, FacebookPageForm> {
+
+    @Resource
+    CityAdminConverter cityConverter;
 
     @Override
     public FacebookPageForm newTargetType(FacebookPageDTO in) {
@@ -28,6 +33,7 @@ public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, Fa
         form.setExternalId(in.getExternalId());
         form.setLink(in.getLink());
         form.setEnabled(in.isEnabled());
+        form.setCity(cityConverter.toTargetType(in.getCity()));
         return form;
     }
 
@@ -38,6 +44,7 @@ public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, Fa
         dto.setExternalId(in.getExternalId());
         dto.setLink(in.getLink());
         dto.setEnabled(in.isEnabled());
+        dto.setCity(cityConverter.toSourceType(in.getCity()));
         return dto;
     }
 
