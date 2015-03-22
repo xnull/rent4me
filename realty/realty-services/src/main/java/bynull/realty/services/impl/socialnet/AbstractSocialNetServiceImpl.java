@@ -4,6 +4,7 @@ import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
+import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.MetroDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by dionis on 3/11/15.
@@ -25,10 +27,15 @@ public class AbstractSocialNetServiceImpl {
     @Resource
     MetroRepository metroRepository;
 
-    protected Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message) {
+    protected Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message, CityDTO city) {
         log.info(">> Matching metros started");
         try {
             Set<MetroEntity> matchedMetros = new HashSet<>();
+            metros = city != null
+                    ? metros.stream()
+                                .filter(m -> m.getCity().getId().equals(city.getId()))
+                                .collect(Collectors.toList())
+                    : metros;
             for (MetroDTO metro : metros) {
                 if (metroTextAnalyzer.matches(message, metro.getStationName())) {
                     //                log.info("Post #matched to metro #[] ({})", metro.getId(), metro.getStationName());
@@ -62,7 +69,15 @@ public class AbstractSocialNetServiceImpl {
         double averageLng = lngSum/counter;
 
         return new GeoPoint().withLatitude(averageLat).withLongitude(averageLng);
+    }
+
+    protected GeoPoint getAveragePoint(CityDTO cityDTO) {
+        if(cityDTO == null) return null;
 
 
+        double averageLat = (cityDTO.getArea().getHigh().getLatitude() + cityDTO.getArea().getLow().getLatitude()) / 2;
+        double averageLng = (cityDTO.getArea().getHigh().getLongitude() + cityDTO.getArea().getLow().getLongitude()) / 2;
+
+        return new GeoPoint().withLatitude(averageLat).withLongitude(averageLng);
     }
 }

@@ -11,4 +11,6 @@ import lombok.Setter;
 public class MetroDTO {
     private Long id;
     private String stationName;
+    private GeoPointDTO location;
+    private CityDTO city;
 }

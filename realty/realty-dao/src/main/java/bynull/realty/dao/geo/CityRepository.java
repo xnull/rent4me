@@ -1,7 +1,12 @@
 package bynull.realty.dao.geo;
 
 import bynull.realty.data.common.CityEntity;
+import bynull.realty.data.common.CountryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * @author Vyacheslav Petc
@@ -10,4 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CityRepository extends JpaRepository<CityEntity, Long> {
 
     CityEntity findByNameAndCountry_Name(String name, String countryName);
+
+    @Query("select c from CityEntity c where c.country=:country order by name desc")
+    List<CityEntity> findByCountry(@Param("country") CountryEntity country);
+
+    @Query("select c from CityEntity c where c.country=:country and lower(c.name)=lower(:name)")
+    CityEntity findByCountryAndNameIgnoreCase(@Param("country")CountryEntity country, @Param("name")String name);
 }

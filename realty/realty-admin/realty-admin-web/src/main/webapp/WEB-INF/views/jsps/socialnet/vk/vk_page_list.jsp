@@ -25,6 +25,7 @@
         <th>#</th>
         <th>Ext id</th>
         <th>link</th>
+        <th>city</th>
         <th>enabled</th>
         <th>Actions</th>
     </tr>
@@ -40,6 +41,11 @@
             </td>
             <td>
                 <a href="${page.link}" target="_blank">${page.link}</a>
+            </td>
+            <td>
+                <c:if test="${page.city != null}">
+                    ${page.city.name}
+                </c:if>
             </td>
             <td>
                     ${page.enabled}

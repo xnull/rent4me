@@ -5,11 +5,16 @@ import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * Created by dionis on 18/01/15.
  */
 @Component
 public class FacebookPageModelDTOConverter implements Converter<FacebookPageToScrap, FacebookPageDTO> {
+
+    @Resource
+    CityModelDTOConverter cityConverter;
 
     @Override
     public FacebookPageDTO newTargetType(FacebookPageToScrap in) {
@@ -28,6 +33,7 @@ public class FacebookPageModelDTOConverter implements Converter<FacebookPageToSc
         dto.setLink(in.getLink());
         dto.setExternalId(in.getExternalId());
         dto.setEnabled(in.isEnabled());
+        dto.setCity(cityConverter.toTargetType(in.getCity()));
         return dto;
     }
 
@@ -38,6 +44,7 @@ public class FacebookPageModelDTOConverter implements Converter<FacebookPageToSc
         model.setExternalId(in.getExternalId());
         model.setLink(in.getLink());
         model.setEnabled(in.isEnabled());
+        model.setCity(cityConverter.toSourceType(in.getCity()));
         return model;
     }
 }

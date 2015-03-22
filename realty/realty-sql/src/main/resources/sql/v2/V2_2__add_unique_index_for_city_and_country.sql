@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX city$name_country_id_uq ON cities USING BTREE (lower(name), country_id);

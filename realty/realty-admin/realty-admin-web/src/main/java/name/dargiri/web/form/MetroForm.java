@@ -11,4 +11,5 @@ import lombok.Setter;
 public class MetroForm {
     private Long id;
     private String stationName;
+    private GeoPointForm location;
 }

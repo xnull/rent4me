@@ -23,6 +23,15 @@
         <input type="text" class="form-control" name="link" id="link" placeholder="Link to fb page"
                value="${page.link}">
     </div>
+    <div class="form-group">
+        <label for="city.id">City</label>
+        <select class="form-control" id="city.id" name="city.id">
+            <option value="">--- Select city ---</option>
+            <c:forEach items="${cities}" var="city">
+                <option value="${city.id}" <c:if test="${page.city != null && city.id == page.city.id}"> selected="selected" </c:if> >${city.name}</option>
+            </c:forEach>
+        </select>
+    </div>
     <div class="form-group checkbox">
         <label for="enabled">Enabled</label>
         <input type="checkbox" class="form-control" name="enabled" id="enabled" placeholder="Link to fb page"

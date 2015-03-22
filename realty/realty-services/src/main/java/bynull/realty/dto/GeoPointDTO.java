@@ -22,10 +22,13 @@ public class GeoPointDTO {
     private double latitude;
     private double longitude;
 
-    public GeoPoint toInternal() {
+    public static GeoPoint toInternal(GeoPointDTO dto) {
+        if (dto == null) {
+            return null;
+        }
         GeoPoint geoPoint = new GeoPoint();
-        geoPoint.setLatitude(getLatitude());
-        geoPoint.setLongitude(getLongitude());
+        geoPoint.setLatitude(dto.getLatitude());
+        geoPoint.setLongitude(dto.getLongitude());
         return geoPoint;
     }
 }

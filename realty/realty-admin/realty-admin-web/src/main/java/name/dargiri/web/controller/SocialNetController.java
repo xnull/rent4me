@@ -3,21 +3,18 @@ package name.dargiri.web.controller;
 //import name.dargiri.data.dto.PersonDTO;
 //import name.dargiri.data.service.PersonService;
 
+import bynull.realty.dao.geo.CityRepository;
+import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.dto.vk.VkontaktePostDTO;
+import bynull.realty.services.api.CityService;
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.services.api.VkontakteService;
 import name.dargiri.web.Constants;
-import name.dargiri.web.converters.FacebookPageAdminConverter;
-import name.dargiri.web.converters.FacebookPostAdminConverter;
-import name.dargiri.web.converters.VkontaktePageAdminConverter;
-import name.dargiri.web.converters.VkontaktePostAdminConverter;
-import name.dargiri.web.form.FacebookPageForm;
-import name.dargiri.web.form.FacebookPostForm;
-import name.dargiri.web.form.VkontaktePageForm;
-import name.dargiri.web.form.VkontaktePostForm;
+import name.dargiri.web.converters.*;
+import name.dargiri.web.form.*;
 import name.dargiri.web.utils.PaginationHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -59,6 +56,12 @@ public class SocialNetController {
     @Resource
     VkontakteService vkontakteService;
 
+    @Resource
+    CityService cityService;
+
+    @Resource
+    CityAdminConverter cityConverter;
+
     ///////// FB stuff
 
     @RequestMapping(value = "fb")
@@ -74,6 +77,11 @@ public class SocialNetController {
     public ModelAndView newFBPage() {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_page_edit");
         FacebookPageForm form = new FacebookPageForm();
+
+
+        List<? extends CityDTO> cities = cityService.findAll();
+        List<? extends CityForm> cityForms = cityConverter.toTargetList(cities);
+        mav.addObject("cities", cityForms);
         mav.addObject("page", form);
         return mav;
     }
@@ -93,6 +101,10 @@ public class SocialNetController {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_page_edit");
         FacebookPageDTO page = facebookService.findPageById(fbPageId);
         FacebookPageForm form = fbPageConverter.toTargetType(page);
+
+        List<? extends CityDTO> cities = cityService.findAll();
+        List<? extends CityForm> cityForms = cityConverter.toTargetList(cities);
+        mav.addObject("cities", cityForms);
         mav.addObject("page", form);
         return mav;
     }
@@ -154,6 +166,10 @@ public class SocialNetController {
     public ModelAndView newVKPage() {
         ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_edit");
         VkontaktePageForm form = new VkontaktePageForm();
+
+        List<? extends CityDTO> cities = cityService.findAll();
+        List<? extends CityForm> cityForms = cityConverter.toTargetList(cities);
+        mav.addObject("cities", cityForms);
         mav.addObject("page", form);
         return mav;
     }
@@ -173,6 +189,9 @@ public class SocialNetController {
         ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_edit");
         VkontaktePageDTO page = vkontakteService.findPageById(fbPageId);
         VkontaktePageForm form = vkPageConverter.toTargetType(page);
+        List<? extends CityDTO> cities = cityService.findAll();
+        List<? extends CityForm> cityForms = cityConverter.toTargetList(cities);
+        mav.addObject("cities", cityForms);
         mav.addObject("page", form);
         return mav;
     }

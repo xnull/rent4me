@@ -8,9 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CityDTO {
+public class CountryDTO {
     private Long id;
     private String name;
-    BoundingBoxDTO area;
-    CountryDTO country;
 }

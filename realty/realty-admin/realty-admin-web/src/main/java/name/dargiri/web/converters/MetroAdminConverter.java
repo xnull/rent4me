@@ -2,6 +2,7 @@ package name.dargiri.web.converters;
 
 import bynull.realty.common.Converter;
 import bynull.realty.dto.MetroDTO;
+import name.dargiri.web.form.GeoPointForm;
 import name.dargiri.web.form.MetroForm;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,7 @@ public class MetroAdminConverter implements Converter<MetroDTO, MetroForm> {
         if (in == null) return null;
         form.setId(in.getId());
         form.setStationName(in.getStationName());
+        form.setLocation(GeoPointForm.from(in.getLocation()));
         return form;
     }
 
@@ -34,6 +36,7 @@ public class MetroAdminConverter implements Converter<MetroDTO, MetroForm> {
         if (in == null) return null;
         dto.setId(in.getId());
         dto.setStationName(in.getStationName());
+        dto.setLocation(GeoPointForm.toDTO(in.getLocation()));
         return dto;
     }
 }

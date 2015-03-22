@@ -6,6 +6,7 @@ import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.components.text.TargetAnalyzer;
+import bynull.realty.converters.CityModelDTOConverter;
 import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.converters.VkontaktePageModelDTOConverter;
 import bynull.realty.converters.VkontaktePostModelDTOConverter;
@@ -13,11 +14,14 @@ import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.ApartmentExternalPhotoRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
+import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.data.business.metro.MetroEntity;
+import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.dto.vk.VkontaktePostDTO;
@@ -91,6 +95,12 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
     @Resource
     private ApartmentExternalPhotoRepository apartmentExternalPhotoRepository;
 
+    @Resource
+    private CityRepository cityRepository;
+
+    @Resource
+    CityModelDTOConverter cityModelDTOConverter;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         roomCountParser = RoomCountParser.getInstance();
@@ -114,6 +124,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
+                    CityDTO cityDTO = cityModelDTOConverter.toTargetType(vkPage.getCity());
                     List<VkontakteApartment> newest = apartmentRepository.findVkAparmentsByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
 
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
@@ -172,11 +183,15 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                             post.setPublished(true);
                             String message = post.getDescription();
 
-                            Set<MetroEntity> matchedMetros = matchMetros(metros, message);
+                            Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
                             post.setMetros(matchedMetros);
 
                             GeoPoint averagePoint = getAveragePoint(matchedMetros);
-                            post.setLocation(averagePoint);
+                            if (averagePoint != null) {
+                                post.setLocation(averagePoint);
+                            } else if(cityDTO != null) {
+                                post.setLocation(getAveragePoint(cityDTO));
+                            }
 
                             AddressComponents addressComponents = new AddressComponents();
                             addressComponents.setCountryCode("RU");
@@ -245,6 +260,8 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
         one.setLink(vkontaktePageDTO.getLink());
         one.setExternalId(vkontaktePageDTO.getExternalId());
         one.setEnabled(vkontaktePageDTO.isEnabled());
+        CityEntity cityEntity = vkontaktePageDTO.getCity() != null && vkontaktePageDTO.getCity().getId() != null ? cityRepository.findOne(vkontaktePageDTO.getCity().getId()) : null;
+        one.setCity(cityEntity);
         vkontaktePageRepository.saveAndFlush(one);
     }
 
@@ -284,11 +301,17 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
             for (VkontakteApartment post : posts) {
                 String message = post.getDescription();
 
-                Set<MetroEntity> matchedMetros = matchMetros(metros, message);
+                CityDTO cityDTO = cityModelDTOConverter.toTargetType(post.getVkontaktePage().getCity());
+
+                Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
                 post.setMetros(matchedMetros);
 
                 GeoPoint averagePoint = getAveragePoint(matchedMetros);
-                post.setLocation(averagePoint);
+                if (averagePoint != null) {
+                    post.setLocation(averagePoint);
+                } else if(cityDTO != null) {
+                    post.setLocation(getAveragePoint(cityDTO));
+                }
 
                 AddressComponents addressComponents = new AddressComponents();
                 addressComponents.setCountryCode("RU");

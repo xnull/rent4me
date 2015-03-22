@@ -97,7 +97,7 @@ public class ApartmentDTO {
         apartment.setFloorNumber(getFloorNumber());
         apartment.setFloorsTotal(getFloorsTotal());
         apartment.setDescription(getDescription());
-        apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
+        apartment.setLocation(GeoPointDTO.toInternal(getLocation()));
         apartment.setCreated(getCreated());
         apartment.setUpdated(getUpdated());
 
@@ -119,7 +119,7 @@ public class ApartmentDTO {
         apartment.setFloorNumber(getFloorNumber());
         apartment.setFloorsTotal(getFloorsTotal());
 
-        apartment.setLocation(getLocation() != null ? getLocation().toInternal() : null);
+        apartment.setLocation(GeoPointDTO.toInternal(getLocation()));
 
         return apartment;
     }

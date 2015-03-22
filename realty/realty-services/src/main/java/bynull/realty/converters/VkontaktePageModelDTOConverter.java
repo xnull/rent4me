@@ -5,11 +5,16 @@ import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * Created by dionis on 18/01/15.
  */
 @Component
 public class VkontaktePageModelDTOConverter implements Converter<VkontaktePage, VkontaktePageDTO> {
+
+    @Resource
+    CityModelDTOConverter cityConverter;
 
     @Override
     public VkontaktePageDTO newTargetType(VkontaktePage in) {
@@ -28,6 +33,7 @@ public class VkontaktePageModelDTOConverter implements Converter<VkontaktePage, 
         dto.setLink(in.getLink());
         dto.setExternalId(in.getExternalId());
         dto.setEnabled(in.isEnabled());
+        dto.setCity(cityConverter.toTargetType(in.getCity()));
         return dto;
     }
 
@@ -38,6 +44,7 @@ public class VkontaktePageModelDTOConverter implements Converter<VkontaktePage, 
         model.setExternalId(in.getExternalId());
         model.setLink(in.getLink());
         model.setEnabled(in.isEnabled());
+        model.setCity(cityConverter.toSourceType(in.getCity()));
         return model;
     }
 }

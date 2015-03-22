@@ -7,6 +7,7 @@ import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.components.text.TargetAnalyzer;
 import bynull.realty.config.Config;
+import bynull.realty.converters.CityModelDTOConverter;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
 import bynull.realty.converters.FacebookPostModelDTOConverter;
 import bynull.realty.converters.MetroModelDTOConverter;
@@ -18,6 +19,7 @@ import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
+import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
@@ -105,6 +107,9 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
     RentalFeeParser rentalFeeParser;
 
     @Resource
+    CityModelDTOConverter cityModelDTOConverter;
+
+    @Resource
     TargetAnalyzer targetAnalyzer;
 
     @Override
@@ -130,6 +135,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
+                    CityDTO cityDTO = cityModelDTOConverter.toTargetType(fbPage.getCity());
                     List<FacebookApartment> newest = apartmentRepository.finFBAparmentsByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
 
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
@@ -201,11 +207,15 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             post.setFacebookPage(fbPage);
                             String message = post.getDescription();
 
-                            Set<MetroEntity> matchedMetros = matchMetros(metros, message);
+                            Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
                             post.setMetros(matchedMetros);
 
                             GeoPoint averagePoint = getAveragePoint(matchedMetros);
-                            post.setLocation(averagePoint);
+                            if (averagePoint != null) {
+                                post.setLocation(averagePoint);
+                            } else if(cityDTO != null) {
+                                post.setLocation(getAveragePoint(cityDTO));
+                            }
 
                             AddressComponents addressComponents = new AddressComponents();
                             addressComponents.setCountryCode("RU");
@@ -266,6 +276,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
             found.setLink(entity.getLink());
             found.setExternalId(entity.getExternalId());
             found.setEnabled(entity.isEnabled());
+            found.setCity(entity.getCity() != null && entity.getCity().getId() != null ? entity.getCity() : null);
             facebookPageToScrapRepository.saveAndFlush(found);
         } else {
             facebookPageToScrapRepository.saveAndFlush(entity);
@@ -329,11 +340,17 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
             for (FacebookApartment post : posts) {
                 String message = post.getDescription();
 
-                Set<MetroEntity> matchedMetros = matchMetros(metros, message);
+                CityDTO cityDTO = cityModelDTOConverter.toTargetType(post.getFacebookPage().getCity());
+
+                Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
                 post.setMetros(matchedMetros);
 
                 GeoPoint averagePoint = getAveragePoint(matchedMetros);
-                post.setLocation(averagePoint);
+                if (averagePoint != null) {
+                    post.setLocation(averagePoint);
+                } else if(cityDTO != null) {
+                    post.setLocation(getAveragePoint(cityDTO));
+                }
 
                 AddressComponents addressComponents = new AddressComponents();
                 addressComponents.setCountryCode("RU");
