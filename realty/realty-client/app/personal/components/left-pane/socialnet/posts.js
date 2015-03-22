@@ -134,9 +134,9 @@ var ContactInfo = React.createClass({
                 <div>
                       {phoneNumbersDisplay}
                       {this.getDirectContact()}
-                        <br/>
+                    <br/>
                       {this.getExternalAuthorLink()}
-                        <br/>
+                    <br/>
                     {this.getSourceLink()}
                 </div>
             </div>
@@ -196,7 +196,8 @@ var HeaderBlock = React.createClass({
                     <div className='col-md-8 col-sm-8 col-xs-8'>
                         <p>{creationDate}</p>
                     </div>
-                    <div className='col-md-4 col-sm-4 col-xs-4'>
+                    <div className='col-md-4 col-sm-4 col-xs-4 text-right'>
+
 
                     </div>
                 </div>
@@ -219,6 +220,21 @@ var Message = React.createClass({
                 </div>
             </div>
         )
+    }
+});
+
+var IsAgent = React.createClass({
+
+    getInitialState: function () {
+        return {
+            isAgent: false
+        }
+    },
+
+    render: function () {
+        //return(
+        //
+        //)
     }
 });
 
@@ -253,11 +269,11 @@ var Post = React.createClass({
                 <HeaderBlock item={item}/>
                 <div className="panel-body">
                     <div className="row">
-                        <div className="col-md-2 col-sm-2 col-xs-2">
+                        <div className="col-md-3 col-sm-3 col-xs-3">
                             <ImagePreviews item={item} />
                         </div>
-                        <div className="col-md-10 col-sm-10 col-xs-10">
-                            <div className='col-md-6 col-md-6 col-xs-6'>
+                        <div className="col-md-9 col-sm-9 col-xs-9">
+                            <div className='col-lg-6 col-sm-6 col-md-6 col-xs-6'>
                                 <Address address={item.address}/>
                                 <MetroPreviews metros={item.metros}/>
                                 <RoomCountInfo roomCount={item.room_count}/>
