@@ -152,12 +152,7 @@ var Store = assign({}, EventEmitter.prototype, {
 // Register to handle all updates
 AppDispatcher.register(function (payload) {
     var action = payload.action;
-//    console.log('Apartment store payload received in dispatcher');
     var apartmentObject = assign({}, action.apartment || {});
-//    console.log("Action:");
-//    console.log(action);
-//    console.log("Apartment:");
-//    console.log(apartmentObject);
 
     switch (action.actionType) {
         case SocialNetConstants.SOCIAL_NET_POSTS_FOUND:

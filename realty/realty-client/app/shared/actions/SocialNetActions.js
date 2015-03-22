@@ -27,6 +27,8 @@ var SocialNetActions = {
     },
 
     changeFBSearchRooms: function (oneAptSelected, twoAptSelected, threeAptSelected) {
+        console.log('changeFBSearchRooms. oneAptSelected: ' + oneAptSelected + ', twoAptSelected: ' + twoAptSelected + ', threeAptSelected: ' + threeAptSelected);
+
         AppDispatcher.handleViewAction({
             actionType: SocialNetConstants.SOCIAL_NET_POSTS_SAVE_SEARCH_ROOMS,
             value: {

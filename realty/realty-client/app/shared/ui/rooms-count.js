@@ -59,14 +59,15 @@ var Rooms = React.createClass({
                     <label className="btn btn-success" style={{color: 'white', width: '2%', pointerEvents: 'none'}}>
                         Комнат
                     </label>
-                    <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>
-                        <input type="checkbox" checked={firstSelected}>1</input>
+                    <label className={firstClassNames}>
+                        <input type="checkbox" checked={firstSelected} onChange={onOneRoomAptValueChanged}>1</input>
+
                     </label>
-                    <label className={secondClassNames} onClick={onTwoRoomAptValueChanged}>
-                        <input type="checkbox" checked={secondSelected}>2</input>
+                    <label className={secondClassNames}>
+                        <input type="checkbox" checked={secondSelected} onChange={onTwoRoomAptValueChanged}>2</input>
                     </label>
-                    <label className={thirdClassNames} onClick={onThreeRoomAptValueChanged}>
-                        <input type="checkbox" checked={thirdSelected}>3</input>
+                    <label className={thirdClassNames}>
+                        <input type="checkbox" checked={thirdSelected} onChange={onThreeRoomAptValueChanged}>3</input>
                     </label>
                 </div>
             </div>

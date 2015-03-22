@@ -96,6 +96,8 @@ var HeaderComponent = React.createClass({
     },
 
     onOneRoomAptValueChanged: function (value) {
+        console.log('onOneRoomAptValueChanged to: ' + value);
+
         this.setState(assign(this.state, {
             oneRoomAptSelected: value
         }));
@@ -120,6 +122,8 @@ var HeaderComponent = React.createClass({
     },
 
     fireAptSelectionStateChange: function () {
+        console.log('fireAptSelectionStateChange');
+
         var oneRoomAptSelected = this.state.oneRoomAptSelected;
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
         var threeRoomAptSelected = this.state.threeRoomAptSelected;
@@ -373,7 +377,6 @@ var HeaderComponent = React.createClass({
                                                     onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
                                                     onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
                                                     onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
-
                                                 />
 
                                                 <PriceRange
