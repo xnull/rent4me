@@ -144,11 +144,17 @@ var HeaderComponent = React.createClass({
     changeToLessor: function () {
         console.log('changeToLessor');
         SocialNetActions.changeFBSearchType('LESSOR');
+        this.setState(assign(this.state, {
+            type: 'LESSOR'
+        }));
     },
 
     changeToRenter: function () {
         console.log('changeToRenter');
         SocialNetActions.changeFBSearchType('RENTER');
+        this.setState(assign(this.state, {
+            type: 'RENTER'
+        }));
     },
 
     onMinPriceChange: function (e) {
@@ -362,7 +368,8 @@ var HeaderComponent = React.createClass({
                                         <form className="form" role="form">
 
                                             <div className='row'>
-                                                <RentType changeToRenter={this.changeToRenter}
+                                                <RentType
+                                                    changeToRenter={this.changeToRenter}
                                                     changeToLessor={this.changeToLessor}
                                                     className="col-xs-6 col-sm-6 col-md-4"
                                                 />
