@@ -6,9 +6,6 @@ var React = require('react');
 
 var Rooms = React.createClass({
     propTypes: {
-        uiSize: React.PropTypes.number.isRequired,
-        uiLabelSize: React.PropTypes.number.isRequired,
-
         onOneRoomAptValueChanged: React.PropTypes.func.isRequired,
         onTwoRoomAptValueChanged: React.PropTypes.func.isRequired,
         onThreeRoomAptValueChanged: React.PropTypes.func.isRequired,
@@ -26,18 +23,7 @@ var Rooms = React.createClass({
         };
     },
 
-    uiProps: function () {
-        var frmSize = 12 - parseInt(this.props.uiLabelSize);
-        return {
-            size: 'col-md-' + this.props.uiSize + ' col-sm-' + this.props.uiSize + ' col-xs-' + this.props.uiSize,
-            labelSize: 'col-md-' + this.props.uiLabelSize + ' col-sm-' + this.props.uiLabelSize + ' col-xs-' + this.props.uiLabelSize,
-            form: 'col-md-' + frmSize + ' col-sm-' + frmSize + ' col-xs-' + frmSize
-        }
-    },
-
     render: function () {
-        var uiProps = this.uiProps();
-
         var firstSelected = this.props.oneRoomAptSelected;
         var secondSelected = this.props.twoRoomAptSelected;
         var thirdSelected = this.props.threeRoomAptSelected;
