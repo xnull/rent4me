@@ -96,6 +96,8 @@ var HeaderComponent = React.createClass({
     },
 
     onOneRoomAptValueChanged: function (value) {
+        console.log('onOneRoomAptValueChanged to: ' + value);
+
         this.setState(assign(this.state, {
             oneRoomAptSelected: value
         }));
@@ -120,6 +122,8 @@ var HeaderComponent = React.createClass({
     },
 
     fireAptSelectionStateChange: function () {
+        console.log('fireAptSelectionStateChange');
+
         var oneRoomAptSelected = this.state.oneRoomAptSelected;
         var twoRoomAptSelected = this.state.twoRoomAptSelected;
         var threeRoomAptSelected = this.state.threeRoomAptSelected;
@@ -140,11 +144,17 @@ var HeaderComponent = React.createClass({
     changeToLessor: function () {
         console.log('changeToLessor');
         SocialNetActions.changeFBSearchType('LESSOR');
+        this.setState(assign(this.state, {
+            type: 'LESSOR'
+        }));
     },
 
     changeToRenter: function () {
         console.log('changeToRenter');
         SocialNetActions.changeFBSearchType('RENTER');
+        this.setState(assign(this.state, {
+            type: 'RENTER'
+        }));
     },
 
     onMinPriceChange: function (e) {
@@ -327,17 +337,8 @@ var HeaderComponent = React.createClass({
             );
         }
 
-        var sectionStyle = {
-            //backgroundImage: "url('images/signin/22592__40P0163-01.jpg')",
-            backgroundImage: "url('images/flats/flat3.jpg')",
-            /*backgroundImage: "url('http://www.veskip.ru/images/property/22592__40P0163-01.jpg')",*/
-            backgroundSize: 'cover',
-            backgroundPosition: 'auto'
-            /*backgroundRepeat: 'no-repeat'*/
-            /*backgroundRepeat: 'round'*/
-        };
         return (
-            <div style={sectionStyle}>
+            <div className='header-cover'>
                 <div>
                     <div style={{textAlign: 'right'}}>
                         <AuthComponent displayItem={authComponentDisplayItem}/>
@@ -358,7 +359,8 @@ var HeaderComponent = React.createClass({
                                         <form className="form" role="form">
 
                                             <div className='row'>
-                                                <RentType changeToRenter={this.changeToRenter}
+                                                <RentType
+                                                    changeToRenter={this.changeToRenter}
                                                     changeToLessor={this.changeToLessor}
                                                     className="col-xs-6 col-sm-6 col-md-4"
                                                 />
@@ -373,7 +375,6 @@ var HeaderComponent = React.createClass({
                                                     onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
                                                     onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
                                                     onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
-
                                                 />
 
                                                 <PriceRange

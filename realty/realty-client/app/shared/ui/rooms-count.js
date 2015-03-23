@@ -6,9 +6,6 @@ var React = require('react');
 
 var Rooms = React.createClass({
     propTypes: {
-        uiSize: React.PropTypes.number.isRequired,
-        uiLabelSize: React.PropTypes.number.isRequired,
-
         onOneRoomAptValueChanged: React.PropTypes.func.isRequired,
         onTwoRoomAptValueChanged: React.PropTypes.func.isRequired,
         onThreeRoomAptValueChanged: React.PropTypes.func.isRequired,
@@ -26,18 +23,7 @@ var Rooms = React.createClass({
         };
     },
 
-    uiProps: function () {
-        var frmSize = 12 - parseInt(this.props.uiLabelSize);
-        return {
-            size: 'col-md-' + this.props.uiSize + ' col-sm-' + this.props.uiSize + ' col-xs-' + this.props.uiSize,
-            labelSize: 'col-md-' + this.props.uiLabelSize + ' col-sm-' + this.props.uiLabelSize + ' col-xs-' + this.props.uiLabelSize,
-            form: 'col-md-' + frmSize + ' col-sm-' + frmSize + ' col-xs-' + frmSize
-        }
-    },
-
     render: function () {
-        var uiProps = this.uiProps();
-
         var firstSelected = this.props.oneRoomAptSelected;
         var secondSelected = this.props.twoRoomAptSelected;
         var thirdSelected = this.props.threeRoomAptSelected;
@@ -73,14 +59,15 @@ var Rooms = React.createClass({
                     <label className="btn btn-success" style={{color: 'white', width: '2%', pointerEvents: 'none'}}>
                         Комнат
                     </label>
-                    <label className={firstClassNames} onClick={onOneRoomAptValueChanged}>
-                        <input type="checkbox" checked={firstSelected}>1</input>
+                    <label className={firstClassNames}>
+                        <input type="checkbox" checked={firstSelected} onChange={onOneRoomAptValueChanged}>1</input>
+
                     </label>
-                    <label className={secondClassNames} onClick={onTwoRoomAptValueChanged}>
-                        <input type="checkbox" checked={secondSelected}>2</input>
+                    <label className={secondClassNames}>
+                        <input type="checkbox" checked={secondSelected} onChange={onTwoRoomAptValueChanged}>2</input>
                     </label>
-                    <label className={thirdClassNames} onClick={onThreeRoomAptValueChanged}>
-                        <input type="checkbox" checked={thirdSelected}>3</input>
+                    <label className={thirdClassNames}>
+                        <input type="checkbox" checked={thirdSelected} onChange={onThreeRoomAptValueChanged}>3</input>
                     </label>
                 </div>
             </div>
