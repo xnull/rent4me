@@ -23,9 +23,9 @@ public interface CityRepository extends JpaRepository<CityEntity, Long> {
     CityEntity findByCountryAndNameIgnoreCase(@Param("country")CountryEntity country, @Param("name")String name);
 
     @Query(value = "select c.* from cities c where c.area ~ ST_GeomFromText( concat('SRID=4326;POINT('," +
-            ":lat," +
+            ":lng," +
                     "' '," +
-                    ":lng," +
+                    ":lat," +
                     "')'))", nativeQuery = true)
-    CityEntity findByPoint(@Param("lat")double lat, @Param("lng")double lng);
+    CityEntity findByPoint(@Param("lng")double lng, @Param("lat")double lat);
 }
