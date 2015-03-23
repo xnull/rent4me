@@ -18,7 +18,7 @@ var ApartmentActions = {
         if (lat && lng && countryCode) {
 
             geoUrl = 'lng=' + lng + '&lat=' + lat + "&country_code=" + countryCode;
-            if (bounds) {
+            if (bounds && bounds.northEast && bounds.southWest) {
                 var ne = bounds.northEast;
                 var sw = bounds.southWest;
 
