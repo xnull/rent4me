@@ -87,7 +87,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             if (paramsBoundingBox.isPresent()) {
                 boundingBox = paramsBoundingBox;
             } else {
-                CityEntity city = cityRepository.findByPoint(point.get().getLatitude(), point.get().getLongitude());
+                CityEntity city = cityRepository.findByPoint(point.get().getLongitude(), point.get().getLatitude());
                 boundingBox = Optional.<BoundingBox>ofNullable(city != null ? city.getArea() : null);
             }
 
