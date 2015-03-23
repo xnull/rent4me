@@ -1,13 +1,19 @@
 package bynull.realty.data.common;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Wither;
 
 import java.io.Serializable;
 
 /**
  * Created by dionis on 3/21/15.
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Wither
 @Getter
 @Setter
 public class BoundingBox implements Serializable {

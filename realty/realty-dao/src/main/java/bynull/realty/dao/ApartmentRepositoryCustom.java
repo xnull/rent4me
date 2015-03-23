@@ -1,6 +1,7 @@
 package bynull.realty.dao;
 
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.util.LimitAndOffset;
 import lombok.AllArgsConstructor;
@@ -24,14 +25,6 @@ public interface ApartmentRepositoryCustom {
                               Integer maxPrice,
                               ApartmentRepository.FindMode findMode, GeoParams geoParams, List<Long> metroIds, LimitAndOffset limitAndOffset);
 
-    @Wither
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    class BoundingBox {
-        private GeoPoint low;
-        private GeoPoint high;
-    }
 
     @Wither
     @AllArgsConstructor
