@@ -2,6 +2,7 @@ package bynull.realty.web.rest;
 
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dao.ApartmentRepositoryCustom;
+import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.services.api.ApartmentService;
@@ -153,7 +154,7 @@ public class ApartmentRestResource {
         if(latLow != null && lngLow != null && latHigh != null && lngHigh != null) {
 
             geoParams = geoParams.withBoundingBox(Optional.of(
-                    new ApartmentRepositoryCustom.BoundingBox()
+                    new BoundingBox()
                             .withLow(
                                     new GeoPoint()
                                             .withLatitude(latLow)

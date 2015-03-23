@@ -1,7 +1,10 @@
 package bynull.realty.dao;
 
 import bynull.realty.common.Porter;
+import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.common.BoundingBox;
+import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.util.LimitAndOffset;
 import com.google.common.collect.ImmutableList;
@@ -9,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -22,6 +26,9 @@ import java.util.stream.Collectors;
 public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, InitializingBean {
     @PersistenceContext
     EntityManager entityManager;
+
+    @Resource
+    CityRepository cityRepository;
 
     Porter porter;
 
@@ -72,8 +79,10 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             params.put("country_code", geoParams.getCountryCode().get());
         }
 
-        if (geoParams.getBoundingBox().isPresent()) {
 
+        Optional<GeoPoint> point = geoParams.getPoint();
+        Optional<BoundingBox> paramsBoundingBox = geoParams.getBoundingBox();
+        if(point.isPresent() || paramsBoundingBox.isPresent()) {
             qlString += " AND st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
                     ":lng_low," +
                     "' '," +
@@ -86,15 +95,22 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                     " ~ a.location" +
                     " ";
 
-            BoundingBox boundingBox = geoParams.getBoundingBox().get();
-            params.put("lng_low", boundingBox.getLow().getLongitude());
-            params.put("lat_low", boundingBox.getLow().getLatitude());
-            params.put("lng_high", boundingBox.getHigh().getLongitude());
-            params.put("lat_high", boundingBox.getHigh().getLatitude());
+            final Optional<BoundingBox> boundingBox;
+            if (paramsBoundingBox.isPresent()) {
+                boundingBox = paramsBoundingBox;
+            } else {
+                CityEntity city = cityRepository.findByPoint(point.get().getLatitude(), point.get().getLongitude());
+                boundingBox = Optional.<BoundingBox>ofNullable(city != null ? city.getArea() : null);
+            }
+            if(boundingBox.isPresent()) {
+                BoundingBox box = boundingBox.get();
+                params.put("lng_low", box.getLow().getLongitude());
+                params.put("lat_low", box.getLow().getLatitude());
+                params.put("lng_high", box.getHigh().getLongitude());
+                params.put("lat_high", box.getHigh().getLatitude());
+            }
         }
 
-
-        Optional<GeoPoint> point = geoParams.getPoint();
         if(point.isPresent()) {
             ordering = " order by a.location <-> ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') ), a.logical_created_dt DESC";
             params.put("lat", (point).get().getLatitude());

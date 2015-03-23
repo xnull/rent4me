@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.*;
 
@@ -45,5 +46,43 @@ public class CityRepositoryTest extends DbTest {
         assertThat(found.getCountry(), is(notNullValue()));
         assertThat(found.getCountry(), is(country));
         assertThat(found.getArea(), is(area));
+    }
+
+    @Test
+    public void findCityByPoint_1_Found() throws Exception {
+        CountryEntity country = new CountryEntity();
+        country.setName("Estonia");
+        em.persist(country);
+
+        CityEntity city = new CityEntity();
+        city.setName("Tallinn");
+        BoundingBox area = new BoundingBox();
+        area.setHigh(new GeoPoint(1,1));
+        area.setLow(new GeoPoint(-1, -1));
+        city.setArea(area);
+        city.setCountry(country);
+        city = cityRepository.saveAndFlush(city);
+
+        CityEntity found = cityRepository.findByPoint(0.0, 0.0);
+        assertThat(found, is(city));
+    }
+
+    @Test
+    public void findCityByPoint_2_Found() throws Exception {
+        CountryEntity country = new CountryEntity();
+        country.setName("Estonia");
+        em.persist(country);
+
+        CityEntity city = new CityEntity();
+        city.setName("Tallinn");
+        BoundingBox area = new BoundingBox();
+        area.setHigh(new GeoPoint(1,1));
+        area.setLow(new GeoPoint(-1, -1));
+        city.setArea(area);
+        city.setCountry(country);
+        city = cityRepository.saveAndFlush(city);
+
+        CityEntity found = cityRepository.findByPoint(2.0, 2.0);
+        assertThat(found, is(nullValue()));
     }
 }

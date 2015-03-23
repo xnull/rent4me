@@ -1,6 +1,7 @@
 package bynull.realty.dao;
 
 import bynull.realty.data.business.metro.MetroEntity;
+import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 
 import javax.persistence.EntityManager;
@@ -57,7 +58,7 @@ public class MetroRepositoryImpl implements MetroRepositoryCustom {
                     " ~ m.location" +
                     " ";
 */
-            ApartmentRepositoryCustom.BoundingBox boundingBox = geoParams.getBoundingBox().get();
+            BoundingBox boundingBox = geoParams.getBoundingBox().get();
 //            params.put("lng_low", boundingBox.getLow().getLongitude());
 //            params.put("lat_low", boundingBox.getLow().getLatitude());
 //            params.put("lng_high", boundingBox.getHigh().getLongitude());
