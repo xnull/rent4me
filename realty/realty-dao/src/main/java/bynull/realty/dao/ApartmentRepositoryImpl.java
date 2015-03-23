@@ -90,24 +90,33 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                 CityEntity city = cityRepository.findByPoint(point.get().getLatitude(), point.get().getLongitude());
                 boundingBox = Optional.<BoundingBox>ofNullable(city != null ? city.getArea() : null);
             }
-            if(boundingBox.isPresent()) {
-                qlString += " AND st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
-                        ":lng_low," +
-                        "' '," +
-                        ":lat_low," +
-                        "')')), ST_GeomFromText( concat('SRID=4326;POINT('," +
-                        ":lng_high," +
-                        "' '," +
-                        ":lat_high," +
-                        "')'))), 4326)" +
-                        " ~ a.location" +
-                        " ";
 
+            qlString += " AND st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
+                    ":lng_low," +
+                    "' '," +
+                    ":lat_low," +
+                    "')')), ST_GeomFromText( concat('SRID=4326;POINT('," +
+                    ":lng_high," +
+                    "' '," +
+                    ":lat_high," +
+                    "')'))), 4326)" +
+                    " ~ a.location" +
+                    " ";
+
+            if(boundingBox.isPresent()) {
                 BoundingBox box = boundingBox.get();
                 params.put("lng_low", box.getLow().getLongitude());
                 params.put("lat_low", box.getLow().getLatitude());
                 params.put("lng_high", box.getHigh().getLongitude());
                 params.put("lat_high", box.getHigh().getLatitude());
+            } else if(point.isPresent()) {
+                GeoPoint geoPoint = point.get();
+                params.put("lng_low", geoPoint.getLongitude());
+                params.put("lat_low", geoPoint.getLatitude());
+                params.put("lng_high", geoPoint.getLongitude());
+                params.put("lat_high", geoPoint.getLatitude());
+            } else {
+                throw new UnsupportedOperationException("Either boundning box or geo point should be present");
             }
         }
 

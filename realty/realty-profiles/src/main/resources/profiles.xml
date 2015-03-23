@@ -43,7 +43,7 @@
        </beans>
 
        <beans profile="dev">
-              <context:property-placeholder location="classpath*:config.properties"/>
+              <context:property-placeholder location="classpath*:dev_config.properties"/>
 
               <bean id="esConfig" class="bynull.realty.config.ESConfig">
                      <property name="dbJdbcUrl" value="${jdbc.url}"/>
