@@ -83,18 +83,6 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         Optional<GeoPoint> point = geoParams.getPoint();
         Optional<BoundingBox> paramsBoundingBox = geoParams.getBoundingBox();
         if(point.isPresent() || paramsBoundingBox.isPresent()) {
-            qlString += " AND st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
-                    ":lng_low," +
-                    "' '," +
-                    ":lat_low," +
-                    "')')), ST_GeomFromText( concat('SRID=4326;POINT('," +
-                    ":lng_high," +
-                    "' '," +
-                    ":lat_high," +
-                    "')'))), 4326)" +
-                    " ~ a.location" +
-                    " ";
-
             final Optional<BoundingBox> boundingBox;
             if (paramsBoundingBox.isPresent()) {
                 boundingBox = paramsBoundingBox;
@@ -103,6 +91,18 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                 boundingBox = Optional.<BoundingBox>ofNullable(city != null ? city.getArea() : null);
             }
             if(boundingBox.isPresent()) {
+                qlString += " AND st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
+                        ":lng_low," +
+                        "' '," +
+                        ":lat_low," +
+                        "')')), ST_GeomFromText( concat('SRID=4326;POINT('," +
+                        ":lng_high," +
+                        "' '," +
+                        ":lat_high," +
+                        "')'))), 4326)" +
+                        " ~ a.location" +
+                        " ";
+
                 BoundingBox box = boundingBox.get();
                 params.put("lng_low", box.getLow().getLongitude());
                 params.put("lat_low", box.getLow().getLatitude());
