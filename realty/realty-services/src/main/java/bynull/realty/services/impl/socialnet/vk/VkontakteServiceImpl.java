@@ -191,6 +191,8 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                                 post.setLocation(averagePoint);
                             } else if(cityDTO != null) {
                                 post.setLocation(getAveragePoint(cityDTO));
+                            } else {
+                                post.setLocation(null);
                             }
 
                             AddressComponents addressComponents = new AddressComponents();
@@ -311,6 +313,8 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                     post.setLocation(averagePoint);
                 } else if(cityDTO != null) {
                     post.setLocation(getAveragePoint(cityDTO));
+                } else {
+                    post.setLocation(null);
                 }
 
                 AddressComponents addressComponents = new AddressComponents();

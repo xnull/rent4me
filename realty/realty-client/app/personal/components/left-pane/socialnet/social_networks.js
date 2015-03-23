@@ -67,7 +67,9 @@ module.exports = React.createClass({
 
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
         MetrosStore.addChangeListener(this.onMetrosChanged);
-        this.onClick();//trigger initial load
+        if(!this.state.posts || this.state.posts.length == 0) {
+            this.onClick();//trigger initial load
+        }
         {
             var bounds = this.state.bounds;
 
@@ -76,7 +78,9 @@ module.exports = React.createClass({
             var location = this.state.location;
 
             var formatted_address = this.state.formattedAddress;
-            MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
+            if (!this.state.metros || this.state.metros.length == 0) {
+                MetrosActions.findMetros(location != null ? location.longitude : null, location != null ? location.latitude : null, countryCode, bounds);
+            }
         }
     },
 
