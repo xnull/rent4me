@@ -338,7 +338,7 @@ var HeaderComponent = React.createClass({
         }
 
         return (
-            <div>
+            <div className='header-cover'>
                 <div>
                     <div style={{textAlign: 'right'}}>
                         <AuthComponent displayItem={authComponentDisplayItem}/>
