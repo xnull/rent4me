@@ -50,6 +50,12 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
 }
 
 /* --------- Rent4.me css ---------*/
+.header-cover {
+    /*background: url('../images/flats/flat3.jpg') no-repeat 50% 50% / cover;*/
+    background-image: url('../images/flats/flat3.jpg');
+    background-size: cover;
+}
+
 .panel {
     margin-bottom: 20px;
     background-color: rgba(12, 13, 14, 0.6);
