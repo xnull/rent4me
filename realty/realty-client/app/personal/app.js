@@ -14,6 +14,7 @@ React.render(<LeftPaneComponent/>, document.getElementById('leftPane'));
 
 //export to the window
 window.$ = require('jquery');
+window.jQuery = require('jquery');
 window.bootstrap = require('bootstrap');
 window.Utils = Utils;
 window.Cookies = require('../shared/common/Cookies');
