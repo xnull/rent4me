@@ -61,7 +61,7 @@ var Header = React.createClass({
         return (
             <div className='navbar navbar-default header'>
                 <div className='navbar-header'>
-                    <a className='navbar-brand' href='/'>Rent for me</a>
+                    <a className='navbar-brand' href='javascript:void(0)'>Rent for me</a>
 
                     <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
                         <span className="sr-only">Toggle navigation</span>

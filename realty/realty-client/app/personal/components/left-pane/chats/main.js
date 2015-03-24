@@ -38,6 +38,15 @@ module.exports = React.createClass({
         console.log(items);
         var hasMoreResults = (this.state.hasMoreSearchResults || false) && false;//disable for now
 
+        var newMessageButtonButton = (<form className="form-horizontal" role="form">
+            <div className="col-sm-offset-9 col-md-offset-9 col-xs-offset-9">
+                <a className="btn btn-primary center-block" href="#/user/chats/newMessage" >Новое сообщение</a>
+            </div>
+        </form>);
+
+        //disable temporarily new message button
+        newMessageButtonButton = null;
+
         return (
             <div>
                 <div className="panel">
@@ -45,12 +54,8 @@ module.exports = React.createClass({
                     <div className="panel-body">
                         <h4>Сообщения</h4>
 
+                        {newMessageButtonButton}
 
-                        <form className="form-horizontal" role="form">
-                            <div className="col-sm-offset-9 col-md-offset-9 col-xs-offset-9">
-                                <a className="btn btn-primary center-block" href="#/user/chats/newMessage" >Новое сообщение</a>
-                            </div>
-                        </form>
                     </div>
                 </div>
 

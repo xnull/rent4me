@@ -13,7 +13,7 @@ React.render(<HeaderComponent/>, document.getElementById('header'));
 React.render(<LeftPaneComponent/>, document.getElementById('leftPane'));
 
 //export to the window
-window.$ = requier('jquery');
+window.$ = require('jquery');
 window.bootstrap = require('bootstrap');
 window.Utils = Utils;
 window.Cookies = require('../shared/common/Cookies');
