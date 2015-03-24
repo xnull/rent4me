@@ -120,7 +120,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
         log.info("Loading metros");
 
 
-        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = transactionOperations.execute(txStatus -> metroConverter.toTargetList(metroRepository.findAll()));
 
         log.info("Clearing EM");
 

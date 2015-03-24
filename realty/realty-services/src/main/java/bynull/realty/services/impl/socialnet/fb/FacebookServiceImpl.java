@@ -125,7 +125,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                                                     .stream()
                                                     .filter(FacebookPageToScrap::isEnabled)
                                                     .collect(Collectors.toList());
-        List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+        List<? extends MetroDTO> metros = transactionOperations.execute(txStatus -> metroConverter.toTargetList(metroRepository.findAll()));
 
         em.clear();//detach all instances
         AtomicInteger counter = new AtomicInteger();
