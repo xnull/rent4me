@@ -36,14 +36,14 @@ var SocialNetAuth = React.createClass({
                         Социальные сети
                     </div>
 
-                    <div className='col-sm-12 col-md-12 col-xs-12'>
+                    <div className='col-sm-12 col-md-12 col-xs-12' style={{paddingRight: 10, paddingTop: 0}}>
                         <div className="row">
                             <div className="col-sm-12 col-md-12 col-xs-12" onClick={this.handleVkLogin}>
                                 <a href="javascript:void(0)">
                                     <img width="192" src={Utils.getBaseContext() + "images/signin/vk-long.png"} border="0"/>
                                 </a>
                             </div>
-                            <div className="col-sm-12 col-md-12 col-xs-12" >
+                            <div className="col-sm-12 col-md-12 col-xs-12" style={{paddingRight: 10, paddingTop: 0}}>
                                 <a href="javascript:void(0)" onClick={this.handleFacebookLogin}>
                                     <img width="192" src={Utils.getBaseContext() + "images/signin/fb-long3.png"} border="0"/>
                                 </a>
@@ -330,68 +330,54 @@ var PlainRegistration = React.createClass({
                     <form role="form" className="form-horizontal">
                         <div className="row">
                             <div className="col-sm-12 col-md-12 col-xs-12">
-
-                                <div>
-                                    <input type="text"
-                                        style={inputStyle}
-                                        className="form-control"
-                                        value={name}
-                                        placeholder="Имя"
-                                        onChange={this.onNameChange}
-                                    />
-                                </div>
+                                <input type="text"
+                                    style={inputStyle}
+                                    className="form-control"
+                                    value={name}
+                                    placeholder="Имя"
+                                    onChange={this.onNameChange}
+                                />
                             </div>
-                            <br/>
+                        </div>
+                        <div className="row">
                             <div className="col-sm-12 col-md-12 col-xs-12">
-                                <div>
-                                    <input type="email"
-                                        style={inputStyle}
-                                        value={email}
-                                        name="email"
-                                        className="form-control"
-                                        placeholder="E-mail"
-                                        onChange={this.onEmailChange}
-                                    />
-                                </div>
+                                <input type="email"
+                                    style={inputStyle}
+                                    value={email}
+                                    name="email"
+                                    className="form-control"
+                                    placeholder="E-mail"
+                                    onChange={this.onEmailChange}
+                                />
                             </div>
-                            <br/>
                             <div className="col-sm-12 col-md-12 col-xs-12">
-                                <div>
-                                    <input type="password"
-                                        style={inputStyle}
-                                        className="form-control"
-                                        value={password}
-                                        placeholder="Пароль"
-                                        onChange={this.onPasswordChange}
-                                    />
-                                </div>
+                                <input type="password"
+                                    style={inputStyle}
+                                    className="form-control"
+                                    value={password}
+                                    placeholder="Пароль"
+                                    onChange={this.onPasswordChange}
+                                />
                             </div>
-                            <br/>
                             <div className="col-sm-12 col-md-12 col-xs-12">
-                                <div>
-                                    <input type="password"
-                                        style={inputStyle}
-                                        className="form-control"
-                                        value={passwordConfirmation}
-                                        placeholder="Подтвердите пароль"
-                                        onChange={this.onPasswordConfirmationChange}
-                                    />
-                                </div>
+                                <input type="password"
+                                    style={inputStyle}
+                                    className="form-control"
+                                    value={passwordConfirmation}
+                                    placeholder="Подтвердите пароль"
+                                    onChange={this.onPasswordConfirmationChange}
+                                />
                             </div>
-                            <br/>
                             <div className="col-sm-12 col-md-12 col-xs-12">
-                                <div>
-                                    <input type="text"
-                                        style={inputStyle}
-                                        value={phone}
-                                        name="name"
-                                        className="form-control"
-                                        placeholder="Номер телефона (+7 915 ххх хх хх)"
-                                        onChange={this.onPhoneChange}
-                                    />
-                                </div>
+                                <input type="text"
+                                    style={inputStyle}
+                                    value={phone}
+                                    name="name"
+                                    className="form-control"
+                                    placeholder="Номер телефона (+7 915 ххх хх хх)"
+                                    onChange={this.onPhoneChange}
+                                />
                             </div>
-                            <br/>
                             <div className="col-sm-12 col-md-12 col-xs-12">
                                 <a type="button"
                                     className="btn btn-success pull-right clickable"
@@ -504,47 +490,65 @@ var PlainLogin = React.createClass({
 
 
         return (
-            <div className="row row-centered" style={style}>
+            <div className="row" style={style}>
+                <div className='col-md-12 col-xs-12 col-sm-12'>
+
+                </div>
 
                 {errorsHtmlOrNull}
 
-                <div className='col-centered'>
-                    Вход
-                </div>
+                <div className="row" style={{
+                    paddingTop: 0,
+                    marginBottom: 0,
+                    borderBottomWidth: 0,
+                    marginTop: 0,
+                    borderRight: '1px solid #333'
+                }}>
+                    <div className='col-md-12 col-xs-12 col-sm-12' style={{paddingRight: 10, paddingTop: 0}}>
+                        Вход
+                    </div>
 
-                <div className='col-sm-12 col-md-12 col-xs-12'>
-                    <form role="form">
-                        <div className="row">
-                            <div className="col-sm-12 col-md-12 col-xs-12">
-                                <input type="email"
-                                    style={inputStyle}
-                                    value={email}
-                                    className="form-control"
-                                    placeholder="E-mail"
-                                    onChange={this.onEmailChange}
-                                />
-                            </div>
-                            <br/>
-                            <div className="col-sm-12 col-md-12 col-xs-12">
-                                <input type="password"
-                                    style={inputStyle}
-                                    className="form-control"
-                                    value={password}
-                                    placeholder="Пароль"
-                                    onChange={this.onPasswordChange}
-                                />
-                            </div>
-                            <br/>
-                            <div className="col-sm-12 col-md-12 col-xs-12">
-                                <div>
-                                    <a href="javascript:void(0)"
-                                        className="btn btn-success pull-right"
-                                        style={loginButtonStyle}
-                                        onClick={this.onLoginClicked}>Вход</a>
+                    <div className='col-sm-12 col-md-12 col-xs-12'>
+                        <form role="form">
+                            <div className="row">
+                                <div className="col-sm-12 col-md-12 col-xs-12" style={{
+                                    paddingRight: 10,
+                                    paddingTop: 0
+                                }}>
+                                    <input type="email"
+                                        style={inputStyle}
+                                        value={email}
+                                        className="form-control"
+                                        placeholder="E-mail"
+                                        onChange={this.onEmailChange}
+                                    />
+                                </div>
+                                <div className="col-sm-12 col-md-12 col-xs-12" style={{
+                                    paddingRight: 10,
+                                    paddingTop: 0
+                                }}>
+                                    <input type="password"
+                                        style={inputStyle}
+                                        className="form-control"
+                                        value={password}
+                                        placeholder="Пароль"
+                                        onChange={this.onPasswordChange}
+                                    />
+                                </div>
+                                <div className="col-sm-12 col-md-12 col-xs-12" style={{
+                                    paddingRight: 10,
+                                    paddingTop: 0
+                                }}>
+                                    <div>
+                                        <a href="javascript:void(0)"
+                                            className="btn btn-success pull-right"
+                                            style={loginButtonStyle}
+                                            onClick={this.onLoginClicked}>Вход</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         )
@@ -591,7 +595,6 @@ var AuthModalDialog2 = React.createClass({
                 <div className='row'>
                     <div className='col-sm-12 col-md-12 col-xs-12'>
                         <PlainRegistration shown={true}/>
-                        <br/>
                         <a className="clickable btn btn-danger" onClick={targetFunc}>{switchLinkValue}</a>
                     </div>
                 </div>
@@ -599,9 +602,8 @@ var AuthModalDialog2 = React.createClass({
             :
             (
                 <div className='row'>
-                    <div className='col-sm-6 col-md-6 col-xs-6' style={{borderRight: '1px solid #333'}}>
+                    <div className='col-sm-6 col-md-6 col-xs-6'>
                         <PlainLogin shown={true}/>
-                        <br/>
                         <a className="clickable btn btn-danger" onClick={targetFunc}>{switchLinkValue}</a>
                     </div>
 
@@ -639,9 +641,9 @@ var AuthForm2 = React.createClass({
 
         return (
 
-                <ModalTrigger modal={<AuthModalDialog2 />}>
+            <ModalTrigger modal={<AuthModalDialog2 />}>
                     {displayItem}
-                </ModalTrigger>
+            </ModalTrigger>
 
         );
     }

@@ -49,51 +49,6 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
     text-decoration: none;
 }
 
-/* --------- Rent4.me css ---------*/
-.header-cover {
-    /*background: url('../images/flats/flat3.jpg') no-repeat 50% 50% / cover;*/
-    background-image: url('../images/flats/flat3.jpg');
-    background-size: cover;
-}
-
-.panel {
-    margin-bottom: 20px;
-    background-color: rgba(12, 13, 14, 0.6);
-    border: 1px solid transparent;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-}
-
-.btn {
-    border-radius: 0;
-    vertical-align: text-bottom;
-}
-
-.row + .row > * {
-    padding: 10px 0 0 50px;
-}
-
-label {
-    display: inline-block;
-    max-width: none;
-    margin-bottom: 5px;
-    font-weight: 300;
-}
-
-.modal {
-    position: absolute;
-}
-
-Modal {
-    position: absolute;
-}
-
-.Modal {
-    position: absolute;
-}
-
-/* --------- End Rent4.me css ---------*/
-
 
 .dark h1,
 .dark h2,
@@ -923,3 +878,53 @@ input[type="reset"].alt:hover,
 #footer ul.icons a {
     box-shadow: inset 0 0 0 1px #d6d6d6;
 }
+
+/* --------- Rent4.me css ---------*/
+.header-cover {
+    /*background: url('../images/flats/flat3.jpg') no-repeat 50% 50% / cover;*/
+    background-image: url('../images/flats/flat3.jpg');
+    background-size: cover;
+}
+
+.panel {
+    margin-bottom: 20px;
+    background-color: rgba(12, 13, 14, 0.6);
+    border: 1px solid transparent;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.btn {
+    border-radius: 0;
+    vertical-align: text-bottom;
+}
+
+.row + .row > * {
+    padding: 10px 0 0 50px;
+}
+
+label {
+    display: inline-block;
+    max-width: none;
+    margin-bottom: 5px;
+    font-weight: 300;
+}
+
+/* Scrolling on mobile devices*/
+.modal {
+    position: absolute;
+}
+
+Modal {
+    position: absolute;
+}
+
+.Modal {
+    position: absolute;
+}
+
+.modal-title {
+    padding-bottom: 0;
+}
+
+/* --------- End Rent4.me css ---------*/
