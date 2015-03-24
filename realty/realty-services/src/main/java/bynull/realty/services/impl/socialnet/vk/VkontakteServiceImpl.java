@@ -110,31 +110,59 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 //    @Transactional
     @Override
     public void syncWithVK() {
+        log.info("Loading pages");
+
         List<VkontaktePage> vkPages = vkontaktePageRepository.findAll()
                                                 .stream()
                                                 .filter(VkontaktePage::isEnabled)
                                                 .collect(Collectors.toList());
+
+        log.info("Loading metros");
+
+
         List<? extends MetroDTO> metros = metroConverter.toTargetList(metroRepository.findAll());
+
+        log.info("Clearing EM");
 
         em.clear();//detach all instances
         AtomicInteger counter = new AtomicInteger();
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
+
+        log.info("Starting new TX");
+
         for (VkontaktePage _vkPage : vkPages) {
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    log.info("Getting page");
                     VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
+
+
+                    log.info("Getting city");
+
                     CityDTO cityDTO = cityModelDTOConverter.toTargetType(vkPage.getCity());
+
+                    log.info("Got city [{}]", cityDTO);
+                    log.info("Finding newest for page");
+
                     List<VkontakteApartment> newest = apartmentRepository.findVkAparmentsByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
+
+                    log.info("Found newest for page: [{}]", newest.size());
 
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
 
+
+
                     try {
+                        log.info("Loading posts from page");
                         List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab)
                                 .stream()
                                 .filter(item -> StringUtils.trimToNull(item.getText()) != null)
                                 //leave only those that have no duplicates in DB
                                 .collect(Collectors.toCollection(ArrayList::new));
+
+                        log.info("Loaded [{}] posts from page", postItemDTOs.size());
+
                         List<VkontakteApartment> byExternalIdIn = !postItemDTOs.isEmpty() ? apartmentRepository.findVkApartmentsByExternalIdIn(postItemDTOs.stream()
                                         .map(VKHelperComponent.VkWallPostDTO::getId)
                                         .collect(Collectors.toList())
