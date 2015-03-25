@@ -1,8 +1,6 @@
 package bynull.realty.jobs;
 
-import bynull.realty.services.api.FacebookService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,12 +9,12 @@ import javax.annotation.Resource;
 /**
  * @author dionis on 06/12/14.
  */
+@Slf4j
 @Component
 public class FacebookScrappingJob implements Runnable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FacebookScrappingJob.class);
 
     @Resource
-    FacebookService facebookService;
+    JobHelperComponent jobHelperComponent;
 
     @Scheduled(
             cron = "0 10,40 * * * *" //start each 30 minutes
@@ -24,8 +22,16 @@ public class FacebookScrappingJob implements Runnable {
     )//start each hour, default delay - one minute
     @Override
     public void run() {
-        LOGGER.info("Starting to scrap new FB posts");
-        facebookService.syncWithFB();
-        LOGGER.info("Ended scraping new FB posts");
+        jobHelperComponent.addJob(new JobHelperComponent.JobAcceptanceCallback() {
+            @Override
+            public void onJobAdded(JobHelperComponent.Job job) {
+                log.info("Automatic job "+FacebookScrappingJob.class+" accepted");
+            }
+
+            @Override
+            public void onJobRejected(JobHelperComponent.Job job) {
+                log.info("Automatic job "+FacebookScrappingJob.class+" rejected");
+            }
+        }, jobHelperComponent.syncWithFB());
     }
 }

@@ -5,6 +5,7 @@ import bynull.realty.dao.ApartmentRepositoryCustom;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.data.business.metro.MetroEntity;
+import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.MetroDTO;
@@ -14,6 +15,8 @@ import bynull.realty.services.metro.MetroSystemDto.MetroStationFullInfoDto;
 import bynull.realty.utils.JsonMapperException;
 import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.XmlUtils;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Uninterruptibles;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.jersey.SslConfigurator;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.net.ssl.SSLContext;
@@ -28,11 +32,9 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static bynull.realty.services.metro.MetroStationsDto.MetroStationDto;
 
@@ -48,8 +50,23 @@ public class MetroServiceImpl implements MetroService {
     private static final String RUSSIA = "Россия";
     private static final String ST_PETERSBURG = "Санкт-Петербург";
 
-    private static final GeoPoint MOSCOW_CENTER_POINT = new GeoPoint();
-    private static final GeoPoint ST_PETERSBURG_CENTER_POINT = new GeoPoint();
+    private static class CityDescription {
+        private final String country;
+        private final String city;
+        private final GeoPoint cityCenterPoint;
+
+        public CityDescription(String country, String city, GeoPoint cityCenterPoint) {
+            this.country = country;
+            this.city = city;
+            this.cityCenterPoint = cityCenterPoint;
+        }
+    }
+
+    @VisibleForTesting
+    //POINT(37.63249495 55.749792)
+    public static final CityDescription MOSCOW_CITY_DESCRIPTION = new CityDescription(RUSSIA, MOSCOW, new GeoPoint().withLongitude(37.63249495).withLatitude(55.749792));
+    //POINT(30.3250575 59.91744545)
+    private static final CityDescription ST_PETERSBURG_CITY_DESCRIPTION = new CityDescription(RUSSIA, ST_PETERSBURG, new GeoPoint().withLongitude(30.3250575).withLatitude(59.91744545));
 
     private static Client REST_CLIENT = ClientBuilder.newBuilder().build();
 
@@ -81,10 +98,33 @@ public class MetroServiceImpl implements MetroService {
     @Transactional
     @Override
     public void syncMoscowMetrosWithDatabase() throws MetroServiceException {
-        MetroSystemDto metroSystem = loadStations();
+        syncMetros(MOSCOW_CITY_DESCRIPTION);
+    }
 
-        CityEntity city = cityRepository.findByNameAndCountry_Name(MOSCOW, RUSSIA);
-        List<MetroEntity> dbStations = metroRepository.findAll();
+    @Transactional
+    @Override
+    public void syncStPetersburgMetrosWithDatabase() throws MetroServiceException {
+        syncMetros(ST_PETERSBURG_CITY_DESCRIPTION);
+    }
+
+    private void syncMetros(CityDescription cityDescription) throws MetroServiceException {
+
+        MetroSystemDto metroSystem = loadStations(cityDescription);
+
+        CityEntity city = cityRepository.findByPoint(cityDescription.cityCenterPoint.getLongitude(), cityDescription.cityCenterPoint.getLatitude());
+        Assert.notNull(city, "City not found by provided geopoint "+cityDescription.cityCenterPoint);
+        List<MetroEntity> dbStations = metroRepository.findAll()
+                .stream()
+                //remove metros from cities other than provided
+                .filter(metro -> {
+                    final boolean allowed;
+
+                    BoundingBox area = metro.getCity().getArea();
+                    allowed = area.contains(cityDescription.cityCenterPoint);
+
+                    return allowed;
+                })
+                .collect(Collectors.toList());
 
         Set<String> stationNamesSavedInThisSync = new HashSet<>();
 
@@ -109,29 +149,23 @@ public class MetroServiceImpl implements MetroService {
                 });
     }
 
-    @Transactional
-    @Override
-    public void syncStPetersburgMetrosWithDatabase() throws MetroServiceException {
-
-    }
-
     /**
      * Загрузить из интернета список станций метро
      *
      * @throws MetroServiceException
      */
-    public MetroSystemDto loadStations() throws MetroServiceException {
+    public MetroSystemDto loadStations(CityDescription cityDescription) throws MetroServiceException {
         log.debug("Get stations of the metro");
 
         try {
-            MetroStationsDto stationsDto = downloadStationsFromYandex();
+            MetroStationsDto stationsDto = downloadStationsFromYandex(cityDescription);
 
             MetroSystemDto metroSystem = new MetroSystemDto();
-            metroSystem.setCity(MOSCOW);
+            metroSystem.setCity(cityDescription.city);
 
             for (String stationId : stationsDto.getStations().keySet()) {
                 MetroStationDto stationDto = stationsDto.getStations().get(stationId);
-                GoogleStationInfo coords = getStationInfo(stationDto.getName());
+                GoogleStationInfo coords = getStationInfo(cityDescription, stationDto.getName());
                 MetroStationFullInfoDto metro = new MetroStationFullInfoDto(coords, stationDto);
 
                 metroSystem.addStation(metro);
@@ -146,17 +180,29 @@ public class MetroServiceImpl implements MetroService {
         }
     }
 
+
+    private static final Map<String, String> COUNTRY_AND_CITY_TO_URL = ImmutableMap.of(
+            generateKeyForCountryAndCityUrl(RUSSIA, MOSCOW), "http://yastatic.net/metro/2.1.9-8/data/1.ru.svg",
+            generateKeyForCountryAndCityUrl(RUSSIA, ST_PETERSBURG), "http://yastatic.net/metro/2.1.9-8/data/2.ru.svg"
+    );
+
+    private static String generateKeyForCountryAndCityUrl(String country, String city) {
+        return country+"_"+city;
+    }
+
     /**
      * Скачать список станций метро с яндекса
      *
      * @throws bynull.realty.utils.XmlParseException
      * @throws JsonMapperException
      */
-    private MetroStationsDto downloadStationsFromYandex() throws bynull.realty.utils.XmlParseException, JsonMapperException {
+    private MetroStationsDto downloadStationsFromYandex(CityDescription cityDescription) throws bynull.realty.utils.XmlParseException, JsonMapperException {
         log.debug("Download the stations from yandex");
 
+        String url = COUNTRY_AND_CITY_TO_URL.get(generateKeyForCountryAndCityUrl(cityDescription.country, cityDescription.city));
+
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://yastatic.net/metro/2.1.9-8/data/").path("1.ru.svg");
+        WebTarget target = client.target(url);
         SvgMetro result = XmlUtils.stringToObject(target.request(MediaType.APPLICATION_SVG_XML_TYPE).get(String.class), SvgMetro.class);
 
         String stationsJsonString = result.getMetaData().getMetadata();
@@ -168,14 +214,14 @@ public class MetroServiceImpl implements MetroService {
      * <p>
      * metro savelovskaya: https://maps.googleapis.com/maps/api/place/textsearch/json?query=метро+савеловская&sensor=true&key=AIzaSyD8FthnabTSsiQh9N6QTKGqePNTOEZOhXU
      */
-    public GoogleStationInfo getStationInfo(String metroStation) throws MetroServiceException {
+    public GoogleStationInfo getStationInfo(CityDescription cityDescription, String metroStation) throws MetroServiceException {
         log.debug("Get station info from google: {}", metroStation);
 
         SslConfigurator sslConfig = SslConfigurator.newInstance();
         SSLContext sslContext = sslConfig.createSSLContext();
         WebTarget target = REST_CLIENT.target("https://maps.google.com/maps/api/geocode/json");
         //target = target.queryParam("query", "метро+" + metroStation.replaceAll(" ", "+"));
-        target = target.queryParam("address", "город+Москва,+Москва,+метро+" + metroStation.replaceAll(" ", "+"));
+        target = target.queryParam("address", "город+"+cityDescription.city+",+"+cityDescription.city+",+метро+" + metroStation.replaceAll(" ", "+"));
         target.queryParam("language", "ru");
         target = target.queryParam("sensor", false);
 
@@ -200,9 +246,9 @@ public class MetroServiceImpl implements MetroService {
         return JsonUtils.fromJson(json, GoogleApiErrorDto.class);
     }
 
-    public MetroStationsDto getStationsFromYandex() throws MetroServiceException {
+    public MetroStationsDto getStationsFromYandex(CityDescription cityDescription) throws MetroServiceException {
         try {
-            return downloadStationsFromYandex();
+            return downloadStationsFromYandex(cityDescription);
         } catch (Exception e) {
             throw new MetroServiceException(e);
         }

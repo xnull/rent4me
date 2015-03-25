@@ -39,4 +39,11 @@ public class BoundingBox implements Serializable {
         result = 31 * result + (high != null ? high.hashCode() : 0);
         return result;
     }
+
+    public boolean contains(GeoPoint geoPoint) {
+        boolean result = true;
+        result &= low.getLongitude() <= geoPoint.getLongitude() && geoPoint.getLongitude() <= high.getLongitude();
+        result &= low.getLatitude() <= geoPoint.getLatitude() && geoPoint.getLatitude() <= high.getLatitude();
+        return result;
+    }
 }

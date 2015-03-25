@@ -25,7 +25,7 @@ public class TestSubwayStations {
     @Test
     public void testGetStationsFromYandex() throws MetroServiceException {
         MetroServiceImpl moscowMetroSynchronisationService = new MetroServiceImpl();
-        MetroStationsDto stationsJson = moscowMetroSynchronisationService.getStationsFromYandex();
+        MetroStationsDto stationsJson = moscowMetroSynchronisationService.getStationsFromYandex(MetroServiceImpl.MOSCOW_CITY_DESCRIPTION);
 
         assertTrue(stationsJson.getStations().size() > 0);
         assertEquals(stationsJson.getStationCount(), stationsJson.getStations().size());
@@ -40,7 +40,7 @@ public class TestSubwayStations {
     @Test
     public void testGetMetroSystem() throws MetroServiceException, JsonMapperException {
         MetroServiceImpl moscowMetroSynchronisationService = new MetroServiceImpl();
-        MetroSystemDto stations = moscowMetroSynchronisationService.loadStations();
+        MetroSystemDto stations = moscowMetroSynchronisationService.loadStations(MetroServiceImpl.MOSCOW_CITY_DESCRIPTION);
 
         //город Москва, Москва, Улица Подбельского
         JsonUtils.saveToFile(new File("metro-system.json"), stations);

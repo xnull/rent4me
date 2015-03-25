@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 public class VkontakteScrappingJob implements Runnable {
 
     @Resource
-    VkontakteService vkontakteService;
+    JobHelperComponent jobHelperComponent;
 
     @Scheduled(
             cron = "0 20,50 * * * *" //start each 30 minutes
@@ -23,8 +23,16 @@ public class VkontakteScrappingJob implements Runnable {
     )//start each hour, default delay - one minute
     @Override
     public void run() {
-        log.info("Starting to scrap new VK posts");
-        vkontakteService.syncWithVK();
-        log.info("Ended scraping new VK posts");
+        jobHelperComponent.addJob(new JobHelperComponent.JobAcceptanceCallback() {
+            @Override
+            public void onJobAdded(JobHelperComponent.Job job) {
+                log.info("Automatic job " + VkontakteScrappingJob.class + " accepted");
+            }
+
+            @Override
+            public void onJobRejected(JobHelperComponent.Job job) {
+                log.info("Automatic job " + VkontakteScrappingJob.class + " rejected");
+            }
+        }, jobHelperComponent.syncWithFB());
     }
 }
