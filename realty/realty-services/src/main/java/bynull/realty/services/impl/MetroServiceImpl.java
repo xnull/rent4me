@@ -46,6 +46,10 @@ import static bynull.realty.services.metro.MetroStationsDto.MetroStationDto;
 public class MetroServiceImpl implements MetroService {
     private static final String MOSCOW = "Москва";
     private static final String RUSSIA = "Россия";
+    private static final String ST_PETERSBURG = "Санкт-Петербург";
+
+    private static final GeoPoint MOSCOW_CENTER_POINT = new GeoPoint();
+    private static final GeoPoint ST_PETERSBURG_CENTER_POINT = new GeoPoint();
 
     private static Client REST_CLIENT = ClientBuilder.newBuilder().build();
 
@@ -79,7 +83,7 @@ public class MetroServiceImpl implements MetroService {
     public void syncMoscowMetrosWithDatabase() throws MetroServiceException {
         MetroSystemDto metroSystem = loadStations();
 
-        CityEntity moscowEntity = cityRepository.findByNameAndCountry_Name(MOSCOW, RUSSIA);
+        CityEntity city = cityRepository.findByNameAndCountry_Name(MOSCOW, RUSSIA);
         List<MetroEntity> dbStations = metroRepository.findAll();
 
         Set<String> stationNamesSavedInThisSync = new HashSet<>();
@@ -91,7 +95,7 @@ public class MetroServiceImpl implements MetroService {
                                     || Objects.equals(station.getStation().getName(), m.getStationName()))) {
                         MetroEntity entity = new MetroEntity();
                         entity.setStationName(station.getStation().getName());
-                        entity.setCity(moscowEntity);
+                        entity.setCity(city);
                         entity.setLocation(new GeoPoint()
                                         .withLatitude(station.getCoords().getLat())
                                         .withLongitude(station.getCoords().getLng())
@@ -103,6 +107,12 @@ public class MetroServiceImpl implements MetroService {
                         metroRepository.saveAndFlush(entity);
                     }
                 });
+    }
+
+    @Transactional
+    @Override
+    public void syncStPetersburgMetrosWithDatabase() throws MetroServiceException {
+
     }
 
     /**

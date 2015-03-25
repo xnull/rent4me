@@ -17,4 +17,6 @@ public interface MetroService {
     List<? extends MetroDTO> findMoscowMetros();
 
     void syncMoscowMetrosWithDatabase() throws MetroServiceException;
+
+    void syncStPetersburgMetrosWithDatabase() throws MetroServiceException;
 }
