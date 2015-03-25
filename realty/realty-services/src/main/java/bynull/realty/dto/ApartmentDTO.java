@@ -6,10 +6,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -91,7 +89,7 @@ public class ApartmentDTO {
         InternalApartment apartment = new InternalApartment();
         apartment.setId(getId());
         AddressComponentsDTO address = getAddress();
-        apartment.setAddressComponents(address != null ? address.toInternal() :  null);
+        apartment.setAddressComponents(AddressComponentsDTO.toInternal(address));
         apartment.setArea(getArea());
         apartment.setRoomCount(getRoomCount());
         apartment.setFloorNumber(getFloorNumber());
@@ -113,7 +111,7 @@ public class ApartmentDTO {
         ApartmentInfoDelta apartment = new ApartmentInfoDelta();
 
         AddressComponentsDTO address = getAddress();
-        apartment.setAddressComponents(address != null ? address.toInternal() :  null);
+        apartment.setAddressComponents(AddressComponentsDTO.toInternal(address));
         apartment.setArea(getArea());
         apartment.setRoomCount(getRoomCount());
         apartment.setFloorNumber(getFloorNumber());

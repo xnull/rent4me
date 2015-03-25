@@ -39,6 +39,9 @@ public class ApartmentInfoDelta {
     @Column(name = "applied")
     private boolean applied;
 
+    @Column(name = "rejected")
+    private boolean rejected;
+
     @NotNull
     @Min(1)
     @Column(name = "room_count")
@@ -57,7 +60,7 @@ public class ApartmentInfoDelta {
     private BigDecimal area;
 
     @JoinColumn(name = "apartment_id")
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     private Apartment apartment;
 
     public Long getId() {
@@ -138,6 +141,14 @@ public class ApartmentInfoDelta {
 
     public void setApplied(boolean applied) {
         this.applied = applied;
+    }
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
     }
 
     public Apartment getApartment() {

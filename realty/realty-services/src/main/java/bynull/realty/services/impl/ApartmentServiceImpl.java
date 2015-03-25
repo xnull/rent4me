@@ -45,7 +45,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     ApartmentInfoDeltaRepository apartmentInfoDeltaRepository;
 
     @Resource
-    ApartmentModelDTOConverterFactory apartmentModelDTOConverterFactory;
+    ApartmentModelDTOConverterFactory<Apartment> apartmentModelDTOConverterFactory;
 
     @Transactional
     @Override

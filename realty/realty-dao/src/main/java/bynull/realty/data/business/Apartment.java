@@ -4,6 +4,7 @@ import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.annotations.*;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -23,6 +24,16 @@ import static bynull.realty.util.CommonUtils.copy;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "data_source", discriminatorType = DiscriminatorType.STRING)
 public abstract class Apartment implements Serializable {
+
+    public void applyDelta(ApartmentInfoDelta delta) {
+        Assert.notNull(delta, "delta required in order to be applied");
+
+        this.setLocation(delta.getLocation());
+        this.setAddressComponents(delta.getAddressComponents());
+        this.setRoomCount(delta.getRoomCount());
+        this.setFloorNumber(delta.getFloorNumber());
+        this.setFloorsTotal(delta.getFloorsTotal());
+    }
 
     public static class DbValue {
         private DbValue() {

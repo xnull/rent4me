@@ -1,0 +1,2 @@
+ALTER TABLE apartment_deltas
+ADD COLUMN rejected BOOLEAN NOT NULL DEFAULT FALSE;

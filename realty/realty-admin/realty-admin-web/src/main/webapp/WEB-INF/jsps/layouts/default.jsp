@@ -87,6 +87,7 @@
                             <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
                         <li><a href="<c:url value="/secure/people/new"/>">Users</a></li>
                         <li><a href="<c:url value="/secure/cities/"/>">Cities</a></li>
+                        <li><a href="<c:url value="/secure/apartment_deltas/"/>">Apartment Deltas</a></li>
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>
