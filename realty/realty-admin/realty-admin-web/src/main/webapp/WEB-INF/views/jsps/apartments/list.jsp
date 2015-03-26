@@ -2,12 +2,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="page-header">
-    <h1>Deltas</h1>
+    <h1>Apartments</h1>
 </div>
-
-<p>
-    <a class="btn btn-primary" href="<c:url value="/secure/cities/new"/>">Add city</a>
-</p>
 
 <table class="table table-striped">
     <thead>

@@ -7,10 +7,6 @@
     <h1>Deltas</h1>
 </div>
 
-<p>
-    <a class="btn btn-primary" href="<c:url value="/secure/cities/new"/>">Add city</a>
-</p>
-
 <table class="table table-striped">
     <thead>
     <tr>
