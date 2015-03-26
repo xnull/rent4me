@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -89,6 +90,9 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
 
     @Query("select count(a) from Apartment a where lower(a.description)=lower(:text)")
     long countOfSimilarApartments(@Param("text") String text);
+
+    @Query("update Apartment a set a.published=false where a.created < :date")
+    void unPublishOldNonInternalApartments(@Param("date") Date date);
 
 
     public enum FindMode {

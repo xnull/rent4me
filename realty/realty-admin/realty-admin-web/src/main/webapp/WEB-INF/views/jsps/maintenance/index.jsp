@@ -49,5 +49,10 @@
     <a class="btn btn-primary" href="<c:url value="/secure/maintenance/manual_sync_st_petersburg_metros"/>"
        onclick="return confirm('Are you sure you want to sync manually metros?');">St Petersburg Metros Manual sync</a>
 </p>
+
+<p>
+    <a class="btn btn-primary" href="<c:url value="/secure/maintenance/trigger_clean_up"/>"
+       onclick="return confirm('Are you sure you want to close old apartments');">Close old stuff</a>
+</p>
 <%--<p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added within <code>#wrap</code> with <code>padding-top: 60px;</code> on the <code>.container</code>.</p>--%>
 <%--<p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>--%>

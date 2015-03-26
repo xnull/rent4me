@@ -1,5 +1,6 @@
 package bynull.realty.jobs;
 
+import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.services.api.MetroService;
 import bynull.realty.services.api.VkontakteService;
@@ -30,6 +31,9 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
 
     @Resource
     MetroService metroService;
+
+    @Resource
+    ApartmentService apartmentService;
 
     ExecutorService jobRunner;
 
@@ -160,6 +164,16 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
                 } catch (MetroServiceException e) {
                     e.printStackTrace();
                 }
+            }
+        };
+    }
+
+    public Job unPublishOldNonInternalApartments() {
+        String jobName = "Un-publish non-internal apartments";
+        return new Job(jobName) {
+            @Override
+            protected void action() {
+                apartmentService.unPublishOldNonInternalApartments();
             }
         };
     }

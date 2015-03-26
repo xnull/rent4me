@@ -43,4 +43,6 @@ public interface ApartmentService {
     void showApartmentInSearch(long id);
 
     void hideApartmentFromSearch(long id);
+
+    void unPublishOldNonInternalApartments();
 }

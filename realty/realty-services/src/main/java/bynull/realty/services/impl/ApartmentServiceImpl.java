@@ -13,6 +13,7 @@ import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -326,5 +327,11 @@ public class ApartmentServiceImpl implements ApartmentService {
         Apartment apartment = apartmentRepository.findOne(id);
         apartment.setPublished(false);
         apartment = apartmentRepository.saveAndFlush(apartment);
+    }
+
+    @Transactional
+    @Override
+    public void unPublishOldNonInternalApartments() {
+        apartmentRepository.unPublishOldNonInternalApartments(new DateTime().minusDays(31).toDate());
     }
 }

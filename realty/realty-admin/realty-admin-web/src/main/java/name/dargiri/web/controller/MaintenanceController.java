@@ -81,6 +81,12 @@ public class MaintenanceController {
         return new ModelAndView("redirect:/secure/maintenance");
     }
 
+    @RequestMapping(value = "trigger_clean_up")
+    public ModelAndView unPublishOldNonInternalApartments(RedirectAttributes redirectAttributes) {
+        jobHelperComponent.addJob(new MaintenanceControllerJobAcceptanceCallback(redirectAttributes), jobHelperComponent.unPublishOldNonInternalApartments());
+        return new ModelAndView("redirect:/secure/maintenance");
+    }
+
     private class MaintenanceControllerJobAcceptanceCallback implements JobHelperComponent.JobAcceptanceCallback{
 
         private final RedirectAttributes redirectAttributes;
