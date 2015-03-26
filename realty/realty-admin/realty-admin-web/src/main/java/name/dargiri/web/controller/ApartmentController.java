@@ -59,14 +59,14 @@ public class ApartmentController {
     @RequestMapping(value = "show/{id}")
     public ModelAndView showApartmentInSearch(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
         apartmentService.showApartmentInSearch(id);
-        redirectAttributes.addAttribute(Constants.INFO_MESSAGE, "Apartment shown in search");
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Apartment shown in search");
         return new ModelAndView("redirect:/secure/apartments/list");
     }
 
     @RequestMapping(value = "hide/{id}")
     public ModelAndView hideApartmentFromSearch(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
         apartmentService.hideApartmentFromSearch(id);
-        redirectAttributes.addAttribute(Constants.INFO_MESSAGE, "Apartment hidden from search");
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Apartment hidden from search");
         return new ModelAndView("redirect:/secure/apartments/list");
     }
 
