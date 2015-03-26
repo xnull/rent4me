@@ -11,8 +11,8 @@
 
 <style type="text/css">
     .map {
-        height: 150px;
-        width: 150px;
+        height: 250px;
+        width: 250px;
     }
 </style>
 
@@ -45,15 +45,7 @@
                         County: ${form.apartment.address.county}<br/>
                         Country: ${form.apartment.address.country}<br/>
                         Country code: ${form.apartment.address.countryCode}<br/>
-                        <div id="map-canvas1"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Distance between addresses
-                    </td>
-                    <td>
-                        ${at:distanceHumanReadable(form.apartment.location, form.location)}
+                        <div id="map-canvas1" class="map"></div>
                     </td>
                 </tr>
                 <tr>
@@ -93,15 +85,7 @@
                         County: ${form.addressComponents.county}<br/>
                         Country: ${form.addressComponents.country}<br/>
                         Country code: ${form.addressComponents.countryCode}<br/>
-                        <div id="map-canvas1"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Distance between addresses
-                    </td>
-                    <td>
-                        ${at:distanceHumanReadable(form.apartment.location, form.location)}
+                        <div id="map-canvas2" class="map"></div>
                     </td>
                 </tr>
                 <tr>
@@ -125,132 +109,52 @@
             </table>
         </td>
     </tr>
+    <tr>
+        <td>
+            Distance between addresses
+        </td>
+        <td>
+            ${at:distanceHumanReadable(form.apartment.location, form.location)}
+        </td>
+    </tr>
 </table>
 
 
 <script type="text/javascript">
-    var domElement = document.getElementById('name');
-    var autocomplete = new google.maps.places.Autocomplete(domElement);
-    var map;
-    var area = null;
-    var marker = null;
-/*
-    google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        var place = autocomplete.getPlace();
-        if (!place) return;
 
-//        console.log('dump:');
-//        console.log(dump);
-        var addressComponents = place['address_components'];
-
-        var viewPort = place.geometry.viewport;
-
-        var bounds = viewPort ? {
-            northEast: {
-                lat: viewPort.getNorthEast().lat(),
-                lng: viewPort.getNorthEast().lng()
-            },
-
-            southWest: {
-                lat: viewPort.getSouthWest().lat(),
-                lng: viewPort.getSouthWest().lng()
-            }
-        } : null;
-
-        var location = {
-            latitude: place['geometry']['location'].lat(),
-            longitude: place['geometry']['location'].lng()
-        };
-
-        var formatted_address = place['formatted_address'];
-        var name = place['name'];
-
-//        console.log('new location:');
-//        console.log(location);
-
-        document.getElementById('area.high.latitude').value = bounds ? bounds.northEast.lat : location.latitude;
-        document.getElementById('area.high.longitude').value = bounds ? bounds.northEast.lng : location.longitude;
-
-        document.getElementById('area.low.latitude').value = bounds ? bounds.southWest.lat : location.latitude;
-        document.getElementById('area.low.longitude').value = bounds ? bounds.southWest.lng : location.longitude;
-//        document.getElementById('name').value = name;
-
-        map.setCenter(new google.maps.LatLng(location.latitude, location.longitude));
-
-        if(area) {
-            area.setMap(null);
-        }
-
-        if(marker) {
-            marker.setMap(null);
-            marker = null;
-        }
-
-        if(!bounds) {
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(location.latitude, location.longitude),
-                map: map
-            });
-        }
-
-        var coords = bounds ? [
-            new google.maps.LatLng(bounds.northEast.lat, bounds.northEast.lng),
-            new google.maps.LatLng(bounds.southWest.lat, bounds.northEast.lng),
-            new google.maps.LatLng(bounds.southWest.lat, bounds.southWest.lng),
-            new google.maps.LatLng(bounds.northEast.lat, bounds.southWest.lng),
-            new google.maps.LatLng(bounds.northEast.lat, bounds.northEast.lng)
-        ] : [
-        ];
-        console.log(coords);
-
-        area = new google.maps.Polygon({
-            paths: coords,
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35
-        });
-        area.setMap(map);
-
-    });
 
 
     function initialize() {
-        var centerLat = (${city.area.high.latitude} + ${city.area.low.latitude})/2.0;
-        var centerLng = (${city.area.high.longitude} + ${city.area.low.longitude})/2.0;
 
-        var mapOptions = {
-            zoom: 8,
-            center: new google.maps.LatLng(centerLat, centerLng)
+        var mapOptions1 = {
+            zoom: 12,
+            center: new google.maps.LatLng(${form.apartment.location.latitude}, ${form.apartment.location.longitude})
         };
-        map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
+        var map1 = new google.maps.Map(document.getElementById('map-canvas1'),
+                mapOptions1);
 
 
-        var coords = [
-            new google.maps.LatLng(${city.area.high.latitude}, ${city.area.high.longitude}),
-            new google.maps.LatLng(${city.area.low.latitude}, ${city.area.high.longitude}),
-            new google.maps.LatLng(${city.area.low.latitude}, ${city.area.low.longitude}),
-            new google.maps.LatLng(${city.area.high.latitude}, ${city.area.low.longitude}),
-            new google.maps.LatLng(${city.area.high.latitude}, ${city.area.high.longitude})
-        ];
-        console.log(coords);
-
-        area = new google.maps.Polygon({
-            paths: coords,
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35
+        var marker1 = new google.maps.Marker({
+            position: new google.maps.LatLng(${form.apartment.location.latitude}, ${form.apartment.location.longitude}),
+            map: map1
         });
-        area.setMap(map);
+
+        var mapOptions2 = {
+            zoom: 12,
+            center: new google.maps.LatLng(${form.location.latitude}, ${form.location.longitude})
+        };
+        var map2 = new google.maps.Map(document.getElementById('map-canvas2'),
+                mapOptions2);
+
+
+        var marker2 = new google.maps.Marker({
+            position: new google.maps.LatLng(${form.location.latitude}, ${form.location.longitude}),
+            map: map2
+        });
+
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
-*/
-
+    google.maps.event.addDomListener(window, 'load', initialize)
 
 </script>
 <%--<p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added within <code>#wrap</code> with <code>padding-top: 60px;</code> on the <code>.container</code>.</p>--%>
