@@ -60,6 +60,7 @@ public class ApartmentAdminConverter implements Converter<ApartmentDTO, Apartmen
         instance.setFeePeriod(in.getFeePeriod());
         instance.setPublished(in.isPublished());
         instance.setDataSource(in.getDataSource());
+        instance.setTarget(in.getTarget());
 
         List<? extends MetroForm> metros = metroAdminConverter.toTargetList(in.getMetros());
         instance.setMetros(metros);
@@ -121,6 +122,7 @@ public class ApartmentAdminConverter implements Converter<ApartmentDTO, Apartmen
         instance.setFeePeriod(in.getFeePeriod());
         instance.setPublished(in.isPublished());
         instance.setDataSource(in.getDataSource());
+        instance.setTarget(in.getTarget());
 
         List<? extends MetroDTO> metros = metroAdminConverter.toSourceList(in.getMetros());
         instance.setMetros(metros);

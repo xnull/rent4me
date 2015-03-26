@@ -46,13 +46,28 @@ public class ApartmentController {
     public ModelAndView list(@RequestParam(value = "page", defaultValue = "0") int page) {
         ModelAndView mav = new ModelAndView("apartments/list");
 
-        List<? extends ApartmentDTO> apartmentDTOs = apartmentService.listAll(new PageRequest(page, 500, Sort.Direction.DESC, "logicalCreated"));
+        List<? extends ApartmentDTO> apartmentDTOs = apartmentService.listAll(new PageRequest(page, 100, Sort.Direction.DESC, "logicalCreated"));
 
         List<? extends ApartmentForm> apartments = apartmentAdminConverter.toTargetList(apartmentDTOs);
 
         mav.addObject("apartments", apartments);
+        mav.addObject("page", page);
 
         return mav;
+    }
+
+    @RequestMapping(value = "show/{id}")
+    public ModelAndView showApartmentInSearch(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+        apartmentService.showApartmentInSearch(id);
+        redirectAttributes.addAttribute(Constants.INFO_MESSAGE, "Apartment shown in search");
+        return new ModelAndView("redirect:/secure/apartments/list");
+    }
+
+    @RequestMapping(value = "hide/{id}")
+    public ModelAndView hideApartmentFromSearch(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+        apartmentService.hideApartmentFromSearch(id);
+        redirectAttributes.addAttribute(Constants.INFO_MESSAGE, "Apartment hidden from search");
+        return new ModelAndView("redirect:/secure/apartments/list");
     }
 
 }

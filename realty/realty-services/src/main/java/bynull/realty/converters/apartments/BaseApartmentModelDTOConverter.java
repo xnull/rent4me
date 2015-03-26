@@ -37,6 +37,7 @@ public abstract class BaseApartmentModelDTOConverter<T extends Apartment> implem
         result.setCreated(apartment.getLogicalCreated());
         result.setUpdated(apartment.getUpdated());
         result.setDataSource(apartment.getDataSource());
+        result.setTarget(apartment.getTarget());
         result.setPublished(apartment.isPublished());
 
         List<? extends MetroDTO> metros = metroModelDTOConverter.toTargetList(apartment.getMetros());

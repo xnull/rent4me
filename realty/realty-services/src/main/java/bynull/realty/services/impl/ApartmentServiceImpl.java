@@ -311,4 +311,20 @@ public class ApartmentServiceImpl implements ApartmentService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    @Override
+    public void showApartmentInSearch(long id) {
+        Apartment apartment = apartmentRepository.findOne(id);
+        apartment.setPublished(true);
+        apartment = apartmentRepository.saveAndFlush(apartment);
+    }
+
+    @Transactional
+    @Override
+    public void hideApartmentFromSearch(long id) {
+        Apartment apartment = apartmentRepository.findOne(id);
+        apartment.setPublished(false);
+        apartment = apartmentRepository.saveAndFlush(apartment);
+    }
 }

@@ -5,11 +5,18 @@
     <h1>Apartments</h1>
 </div>
 
+<p>
+    <a class="btn btn-primary" href="<c:url value="/secure/apartments/list" />?page=${page - 1}">Предыдущая</a>
+    <a class="btn btn-primary" href="javascript:void(0)">Текущая страница: ${page}</a>
+    <a class="btn btn-primary" href="<c:url value="/secure/apartments/list" />?page=${page + 1}">Следующая</a>
+</p>
+
 <table class="table table-striped">
     <thead>
     <tr>
         <th>#</th>
         <th>Data Source</th>
+        <th>Will be shown for</th>
         <th>Address</th>
         <th>Metros</th>
         <th>Rental fee</th>
@@ -20,6 +27,7 @@
         <th>Published</th>
         <th>Text</th>
         <th>Created</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -30,6 +38,9 @@
             </td>
             <td>
                     ${apartment.dataSource}
+            </td>
+            <td>
+                    ${apartment.target}
             </td>
             <td>
                     ${apartment.address.formattedAddress}
@@ -66,6 +77,10 @@
             </td>
             <td>
                     ${apartment.created}
+            </td>
+            <td>
+                <a class="btn btn-danger" href="<c:url value="/secure/apartments/hide/${apartment.id}"/>" onclick="return confirm('Are you sure you want to hide it from search?');">Hide in search</a>
+                <a class="btn btn-success" href="<c:url value="/secure/apartments/show/${apartment.id}"/>" onclick="return confirm('Are you sure you want to show it in search?');">Show in search</a>
             </td>
         </tr>
     </c:forEach>

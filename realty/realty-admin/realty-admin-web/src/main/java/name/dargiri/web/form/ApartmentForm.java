@@ -30,6 +30,7 @@ public class ApartmentForm {
     private Date created;
     private Date updated;
     private boolean published;
+    private Apartment.Target target;
     private List<? extends MetroForm> metros;
     private Apartment.DataSource dataSource;
 

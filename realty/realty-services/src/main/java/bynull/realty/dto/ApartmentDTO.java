@@ -29,6 +29,7 @@ public class ApartmentDTO {
     private RentType typeOfRent;
     private BigDecimal rentalFee;
     private FeePeriod feePeriod;
+    private Apartment.Target target;
     private Apartment.DataSource dataSource;
 
     private boolean published;
