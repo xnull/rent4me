@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by dionis on 3/25/15.
@@ -55,8 +56,8 @@ public class ApartmentInfoDeltaServiceImpl implements ApartmentInfoDeltaService 
 
     @Transactional(readOnly = true)
     @Override
-    public List<? extends ApartmentInfoDeltaDTO> listAllGroupedByApartments() {
-        List<ApartmentInfoDelta> deltas = apartmentInfoDeltaRepository.listAllGroupedByApartments();
+    public List<? extends ApartmentInfoDeltaDTO> listAllGroupedByApartments(Set<ListMode> listModes) {
+        List<ApartmentInfoDelta> deltas = apartmentInfoDeltaRepository.listAllGroupedByApartments(listModes.contains(ListMode.APPLIED), listModes.contains(ListMode.REJECTED));
 
         return converter.toTargetList(deltas);
     }

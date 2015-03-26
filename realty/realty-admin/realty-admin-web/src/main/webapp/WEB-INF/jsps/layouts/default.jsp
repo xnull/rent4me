@@ -87,7 +87,21 @@
                             <%--<li class="active"><a href="<c:url value="/"/>">All</a></li>--%>
                         <li><a href="<c:url value="/secure/people/new"/>">Users</a></li>
                         <li><a href="<c:url value="/secure/cities/"/>">Cities</a></li>
-                        <li><a href="<c:url value="/secure/apartment_deltas/"/>">Apartment Deltas</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Apartment Deltas<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="<c:url value="/secure/apartment_deltas/list/new"/>">New</a>
+                                </li>
+                                <li>
+                                    <a href="<c:url value="/secure/apartment_deltas/list/applied"/>">Applied</a>
+                                </li>
+                                <li>
+                                    <a href="<c:url value="/secure/apartment_deltas/list/rejected"/>">Rejected</a>
+                                </li>
+                            </ul>
+                        </li>
+
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social <b class="caret"></b></a>

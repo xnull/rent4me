@@ -17,13 +17,13 @@ public interface ApartmentInfoDeltaRepository extends JpaRepository<ApartmentInf
     List<ApartmentInfoDelta> findLatestForApartment(@Param("apartment_id") Long id);
 
     @Modifying
-    @Query("update ApartmentInfoDelta d set d.applied=true where d IN (select dl from ApartmentInfoDelta dl where dl.updated <= :dt)")
+    @Query("update ApartmentInfoDelta d set d.applied=true where d IN (select dl from ApartmentInfoDelta dl where dl.updated <= :dt) and d.applied=false and d.rejected=false")
     void applyAllDeltasUntilDateIncludingSpecified(@Param("dt")Date timestamp);
 
     @Modifying
-    @Query("update ApartmentInfoDelta d set d.rejected=true where d IN (select dl from ApartmentInfoDelta dl where dl.updated <= :dt)")
+    @Query("update ApartmentInfoDelta d set d.rejected=true where d IN (select dl from ApartmentInfoDelta dl where dl.updated <= :dt) and d.applied=false and d.rejected=false")
     void rejectAllDeltasUntilDateIncludingSpecified(@Param("dt")Date timestamp);
 
-    @Query(value = "SELECT distinct on (apartment_id) * from apartment_deltas ORDER BY apartment_id, created_dt DESC;", nativeQuery = true)
-    List<ApartmentInfoDelta> listAllGroupedByApartments();
+    @Query(value = "SELECT distinct on (apartment_id) * from apartment_deltas where applied=:applied and rejected=:rejected ORDER BY apartment_id, created_dt DESC;", nativeQuery = true)
+    List<ApartmentInfoDelta> listAllGroupedByApartments(@Param("applied") boolean applied, @Param("rejected") boolean rejected);
 }

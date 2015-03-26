@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +43,31 @@ public class ApartmentDeltaController {
     @Resource
     ApartmentInfoDeltaAdminConverter apartmentInfoDeltaConverter;
 
-    @RequestMapping(value = {"", "list"})
-    public ModelAndView all() {
+    @RequestMapping(value = {"list/new"})
+    public ModelAndView listNew() {
         ModelAndView mav = new ModelAndView("apartment_deltas/list");
 
-        List<? extends ApartmentInfoDeltaDTO> deltaDTOs = apartmentInfoDeltaService.listAllGroupedByApartments();
+        List<? extends ApartmentInfoDeltaDTO> deltaDTOs = apartmentInfoDeltaService.listAllGroupedByApartments(Collections.emptySet());
+        mav.addObject("deltas", deltaDTOs);
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"list/applied"})
+    public ModelAndView listApplied() {
+        ModelAndView mav = new ModelAndView("apartment_deltas/list");
+
+        List<? extends ApartmentInfoDeltaDTO> deltaDTOs = apartmentInfoDeltaService.listAllGroupedByApartments(Collections.singleton(ApartmentInfoDeltaService.ListMode.APPLIED));
+        mav.addObject("deltas", deltaDTOs);
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"list/rejected"})
+    public ModelAndView listRejected() {
+        ModelAndView mav = new ModelAndView("apartment_deltas/list");
+
+        List<? extends ApartmentInfoDeltaDTO> deltaDTOs = apartmentInfoDeltaService.listAllGroupedByApartments(Collections.singleton(ApartmentInfoDeltaService.ListMode.REJECTED));
         mav.addObject("deltas", deltaDTOs);
 
         return mav;
@@ -62,7 +83,7 @@ public class ApartmentDeltaController {
             return mav;
         } else {
             redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE, "Delta not found");
-            return new ModelAndView("redirect:/secure/cities/all");
+            return new ModelAndView("redirect:/secure/apartment_deltas/list/new");
         }
     }
 
@@ -75,7 +96,7 @@ public class ApartmentDeltaController {
         } else {
             redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE, "Delta not found");
         }
-        return new ModelAndView("redirect:/secure/cities/all");
+        return new ModelAndView("redirect:/secure/apartment_deltas/list/new");
     }
 
     @RequestMapping(value = "/reject_delta/{id}")
@@ -87,7 +108,7 @@ public class ApartmentDeltaController {
         } else {
             redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE, "Delta not found");
         }
-        return new ModelAndView("redirect:/secure/cities/all");
+        return new ModelAndView("redirect:/secure/apartment_deltas/list/new");
     }
 
 }

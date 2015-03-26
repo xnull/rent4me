@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+version="2.0">
+
+	<description>Admin Tag Library</description>
+	<display-name>Admin Tag Utils</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>at</short-name>
+
+	<function>
+		<description>
+        	CoordinateUtils
+   		</description>
+		<name>distanceHumanReadable</name>
+		<function-class>name.dargiri.web.tags.CoordinateTag</function-class>
+		<function-signature>java.lang.String distanceHumanReadable(name.dargiri.web.form.GeoPointForm,name.dargiri.web.form.GeoPointForm)</function-signature>
+	</function>
+</taglib>
