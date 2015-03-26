@@ -39,9 +39,14 @@ var Address = React.createClass({
 var MetroPreviews = React.createClass({
 
     getRecognized: function () {
-        return this.props.metros.map(function (metro) {
-            return metro.station_name + ";";
+        var metros = this.props.metros.map(function (metro) {
+            return (<li>{metro.station_name}</li>);
         });
+        return (
+            <ul>
+                {metros}
+            </ul>
+        );
     },
 
     render: function () {
