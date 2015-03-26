@@ -48,7 +48,7 @@ var MetroPreviews = React.createClass({
         var hasMetros = _.size(this.props.metros) > 0;
 
         return (
-            <AdsItem name='Метро' text={hasMetros ? this.getRecognized() : 'Не распознано'} />
+            <AdsItem name='Метро' text={hasMetros ? this.getRecognized() : "См. в описании"} />
         )
     }
 });
@@ -56,7 +56,7 @@ var MetroPreviews = React.createClass({
 var RoomCountInfo = React.createClass({
     render: function () {
         return (
-            <AdsItem name='Комнат' text={this.props.roomCount ? this.props.roomCount : 'Не распознано'} />
+            <AdsItem name='Комнат' text={this.props.roomCount ? this.props.roomCount : 'См. в описании'} />
         )
     }
 });
@@ -65,7 +65,7 @@ var PriceInfo = React.createClass({
     render: function () {
         var item = this.props.item;
         return (
-            <AdsItem name='Цена' text={item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'не распознано'} />
+            <AdsItem name='Цена' text={item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'См. в описании'} />
         )
     }
 });
