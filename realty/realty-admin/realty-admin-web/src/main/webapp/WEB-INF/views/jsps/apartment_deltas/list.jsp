@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="at" uri="/WEB-INF/admintaglib.tld" %>
+
 <div class="page-header">
     <h1>Deltas</h1>
 </div>
@@ -13,7 +15,10 @@
     <thead>
     <tr>
         <th>#</th>
-        <th>Address</th>
+        <th>Delta</th>
+        <th>Distance between addresses</th>
+        <th>Applied?</th>
+        <th>Rejected?</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -24,7 +29,20 @@
                     ${delta.id}
             </td>
             <td>
-                    ${delta.apartment.address.formattedAddress}
+                    Address: ${delta.apartment.address.formattedAddress} -> ${delta.addressComponents.formattedAddress}<br/>
+                    Area: ${delta.apartment.area} -> ${delta.area} м<sup>2</sup><br/>
+                    Rooms: ${delta.apartment.roomCount} -> ${delta.roomCount} м<sup>2</sup><br/>
+                    Floors: ${delta.apartment.floorNumber}/${delta.apartment.floorsTotal} -> ${delta.floorNumber}/${delta.floorsTotal}<br/>
+                    <br/>
+            </td>
+            <td>
+                    ${at:distanceHumanReadable(delta.apartment.location, delta.location)}
+            </td>
+            <td>
+                    ${delta.applied}
+            </td>
+            <td>
+                    ${delta.rejected}
             </td>
             <td>
                 <a href="<c:url value="/secure/apartment_deltas/review_delta/${delta.id}"/>">Review</a>

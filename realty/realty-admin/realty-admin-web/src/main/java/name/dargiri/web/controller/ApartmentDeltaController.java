@@ -48,7 +48,10 @@ public class ApartmentDeltaController {
         ModelAndView mav = new ModelAndView("apartment_deltas/list");
 
         List<? extends ApartmentInfoDeltaDTO> deltaDTOs = apartmentInfoDeltaService.listAllGroupedByApartments(Collections.emptySet());
-        mav.addObject("deltas", deltaDTOs);
+
+        List<? extends ApartmentInfoDeltaForm> deltas = apartmentInfoDeltaConverter.toTargetList(deltaDTOs);
+
+        mav.addObject("deltas", deltas);
 
         return mav;
     }
@@ -58,7 +61,10 @@ public class ApartmentDeltaController {
         ModelAndView mav = new ModelAndView("apartment_deltas/list");
 
         List<? extends ApartmentInfoDeltaDTO> deltaDTOs = apartmentInfoDeltaService.listAllGroupedByApartments(Collections.singleton(ApartmentInfoDeltaService.ListMode.APPLIED));
-        mav.addObject("deltas", deltaDTOs);
+
+        List<? extends ApartmentInfoDeltaForm> deltas = apartmentInfoDeltaConverter.toTargetList(deltaDTOs);
+
+        mav.addObject("deltas", deltas);
 
         return mav;
     }
@@ -68,7 +74,10 @@ public class ApartmentDeltaController {
         ModelAndView mav = new ModelAndView("apartment_deltas/list");
 
         List<? extends ApartmentInfoDeltaDTO> deltaDTOs = apartmentInfoDeltaService.listAllGroupedByApartments(Collections.singleton(ApartmentInfoDeltaService.ListMode.REJECTED));
-        mav.addObject("deltas", deltaDTOs);
+
+        List<? extends ApartmentInfoDeltaForm> deltas = apartmentInfoDeltaConverter.toTargetList(deltaDTOs);
+
+        mav.addObject("deltas", deltas);
 
         return mav;
     }

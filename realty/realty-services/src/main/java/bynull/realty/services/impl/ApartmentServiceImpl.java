@@ -13,6 +13,8 @@ import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -296,4 +298,17 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<? extends ApartmentDTO> listAll(PageRequest pageRequest) {
+        Page<Apartment> apartments = apartmentRepository.findAll(pageRequest);
+
+        return apartments.getContent()
+                .stream()
+                .map(apartment -> {
+                    ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(apartment);
+                    return targetConverter.toTargetType(apartment);
+                })
+                .collect(Collectors.toList());
+    }
 }
