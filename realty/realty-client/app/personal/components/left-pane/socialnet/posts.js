@@ -58,6 +58,34 @@ var MetroPreviews = React.createClass({
     }
 });
 
+var GoogleMapView = React.createClass({
+    componentDidMount: function(){
+        var location = this.props.location;
+
+        if(location.latitude && location.longitude) {
+            var mapOptions = {
+                zoom: 14,
+                center: new google.maps.LatLng(location.latitude, location.longitude)
+            };
+
+            var map = new google.maps.Map(this.refs.mapInsert.getDOMNode(),
+                mapOptions);
+
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(location.latitude, location.longitude),
+                map: map
+            });
+        }
+    },
+
+    render: function() {
+        return (
+            <div ref="mapInsert" style={{width: '300px', height: '300px', marginBottom: '20px'}}></div>
+        );
+    }
+});
+
 var RoomCountInfo = React.createClass({
     render: function () {
         return (
