@@ -25,6 +25,7 @@ function Plugins() {
     this.watch = require('gulp-watch');
     //this.watchify = require('watchify');
     this.livereload = require('gulp-livereload');
+    this.gulpConnect = require('gulp-connect');
 }
 
 //Common variables
@@ -95,6 +96,8 @@ function Tasks() {
     this.files = 'files';
     this.watch = 'watch';
     this.build = 'build';
+    this.reloadServer = 'reload-server';
+    this.connectServer = 'connect-server'
 }
 
 var plugins = new Plugins();
@@ -106,13 +109,26 @@ var tasks = new Tasks();
 /**
  * Наблюдение за исходниками и если они изменились, то производится пересборка проекта
  */
-gulp.task(tasks.watch, function () {
+gulp.task(tasks.watch, [tasks.connectServer], function () {
     gulp.src(settings.watchDirs)
         .pipe(plugins.watch(settings.watchDirs, function (files) {
-            gulp.start(tasks.build);
-        }))
-        .on('error', plugins.gutil.log)
-    ;
+                gulp.start(tasks.build);
+                gulp.start(tasks.reloadServer)
+            }
+        ))
+        .on('error', plugins.gutil.log);
+});
+
+gulp.task(tasks.connectServer, function () {
+    plugins.gulpConnect.server({
+        root: './build-js',
+        port: 8888,
+        livereload: true
+    });
+});
+
+gulp.task(tasks.reloadServer, function () {
+    gulp.src('./build-js').pipe(plugins.gulpConnect.reload());
 });
 
 /**
