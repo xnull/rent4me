@@ -34,6 +34,47 @@ var Popover = require('react-bootstrap/Popover');
 var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
 var Button = require('react-bootstrap/Button');
 
+var MetrosDisplayItem = React.createClass({
+
+    _searchRemote: function (options, searchTerm, cb) {
+        var metros = this.props.metros;
+
+        var transformedMetros = metros.map(m => {
+            return {id: m.id, title: m.station_name}
+        });
+        console.log('metro_typehead: ');
+
+        cb(null, transformedMetros.filter(m=> {
+            return (m.title || '').toLowerCase().indexOf((searchTerm || '').toLowerCase()) === 0;
+        }));
+    },
+
+    onTempMetroSelected: function (item) {
+        this.setState(assign(this.state, {
+            tmpMetroSelected: item
+        }));
+    },
+
+    render: function () {
+        var metrosDisplayItem;
+
+        if (_.size(this.props.metros) == 0) {
+            //don't display
+            metrosDisplayItem = null;
+        } else {
+            metrosDisplayItem = (<ReactAutocomplete
+                inputClassName="form-control"
+                placeholder="Выберите Метро"
+                search={this._searchRemote}
+                onChange={this.onTempMetroSelected}/>);
+        }
+
+        return (
+        {metrosDisplayItem}
+        )
+    }
+});
+
 module.exports = React.createClass({
     getInitialState: function () {
         return {
@@ -67,7 +108,7 @@ module.exports = React.createClass({
 
         SocialNetStore.addChangeListener(this.onSearchResultsChanged);
         MetrosStore.addChangeListener(this.onMetrosChanged);
-        if(!this.state.posts || this.state.posts.length == 0) {
+        if (!this.state.posts || this.state.posts.length == 0) {
             this.onClick();//trigger initial load
         }
         {
@@ -323,8 +364,8 @@ module.exports = React.createClass({
         this.onRentTypeChange('RENTER');
     },
 
-    onAddressSelected: function(value) {
-        console.log("Received value on selection: "+JSON2.stringify(value));
+    onAddressSelected: function (value) {
+        console.log("Received value on selection: " + JSON2.stringify(value));
 
 
         this.setState(assign(this.state, {
@@ -358,19 +399,6 @@ module.exports = React.createClass({
         }));
     },
 
-    _searchRemote: function (options, searchTerm, cb) {
-        var metros = this.state.metros;
-
-        var transformedMetros = metros.map(m => {
-            return {id: m.id, title: m.station_name}
-        });
-        console.log('metro_typehead: ');
-
-        cb(null, transformedMetros.filter(m=> {
-            return (m.title || '').toLowerCase().indexOf((searchTerm || '').toLowerCase()) === 0;
-        }));
-    },
-
     onTargetMetroSelected: function () {
         var item = this.state.tmpMetroSelected;
 
@@ -385,12 +413,6 @@ module.exports = React.createClass({
             tmpMetroSelected: null
         }));
         this.fireMetrosSelectedChange();
-    },
-
-    onTempMetroSelected: function (item) {
-        this.setState(assign(this.state, {
-            tmpMetroSelected: item
-        }));
     },
 
     onRemoveMetroTag: function (itemId) {
@@ -416,32 +438,13 @@ module.exports = React.createClass({
         var minPrice = this.state.minPrice;
         var maxPrice = this.state.maxPrice;
 
-
-        var metrosDisplayItem;
-
-        {
-
-            var _metros = this.state.metros;
-
-            if (_.size(_metros) == 0) {
-                //don't display
-                metrosDisplayItem = null;
-            } else {
-                metrosDisplayItem = (<ReactAutocomplete
-                    inputClassName="form-control"
-                    placeholder="Выберите Метро"
-                    search={this._searchRemote}
-                    onChange={this.onTempMetroSelected}/>);
-            }
-        }
-
         var bubbles = null;
-
 
         var _metrosSelected = this.state.metrosSelected;
         if (_.size(_metrosSelected) > 0 || text) {
             var _bubbles = _metrosSelected.map(m => {
-                return (<SearchTermBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
+                return (
+                    <SearchTermBubble id={m.id} displayValue={"Метро: " + m.title} onRemove={this.onRemoveMetroTag}/>);
             });
 
             if (text) {
@@ -480,31 +483,31 @@ module.exports = React.createClass({
                             <div className='row'>
 
                                 <RentType className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
-                                    changeToRenter={this.changeToRenter}
-                                    changeToLessor={this.changeToLessor}
-                                />
+                                          changeToRenter={this.changeToRenter}
+                                          changeToLessor={this.changeToLessor}
+                                    />
 
                                 <RoomsCount className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
 
-                                    oneRoomAptSelected={oneRoomAptSelected}
-                                    twoRoomAptSelected={twoRoomAptSelected}
-                                    threeRoomAptSelected={threeRoomAptSelected}
+                                            oneRoomAptSelected={oneRoomAptSelected}
+                                            twoRoomAptSelected={twoRoomAptSelected}
+                                            threeRoomAptSelected={threeRoomAptSelected}
 
-                                    onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
-                                    onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
-                                    onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
-                                />
+                                            onOneRoomAptValueChanged={this.onOneRoomAptValueChanged}
+                                            onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
+                                            onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
+                                    />
 
                                 <PriceRange className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
 
-                                    minPrice={minPrice}
-                                    maxPrice={maxPrice}
+                                            minPrice={minPrice}
+                                            maxPrice={maxPrice}
 
-                                    onKeyPress={this.clickOnEnter}
+                                            onKeyPress={this.clickOnEnter}
 
-                                    onMinPriceChange={this.onMinPriceChange}
-                                    onMaxPriceChange={this.onMaxPriceChange}
-                                />
+                                            onMinPriceChange={this.onMinPriceChange}
+                                            onMaxPriceChange={this.onMaxPriceChange}
+                                    />
 
                             </div>
 
@@ -517,13 +520,14 @@ module.exports = React.createClass({
                                             onAddressChange={this.onAddressChange}
                                             onAddressSelected={this.onAddressSelected}
                                             initialValue={addressInitialValue}
-                                        />
+                                            />
+
                                         <div className="input-group-btn">
                                             <MetroPopover
-                                                metroInput={metrosDisplayItem}
+                                                metroInput={<MetrosDisplayItem metros={this.state.metros}/>}
                                                 addButtonEnabled={this.state.tmpMetroSelected != null}
                                                 onAddButtonClicked={this.onTargetMetroSelected}
-                                            />
+                                                />
                                         </div>
 
                                         <div className="input-group-btn">
@@ -533,9 +537,9 @@ module.exports = React.createClass({
                                                     onKeyPress={this.clickOnEnter}
                                                     onChange={this.onTmpSearchChange} >
                                                 </input>)}
-                                                addButtonEnabled={tmpText != null}
-                                                onAddButtonClicked={this.onSearchChange}
-                                            />
+                                                                   addButtonEnabled={tmpText != null}
+                                                                   onAddButtonClicked={this.onSearchChange}
+                                                />
                                         </div>
                                     </div>
                                 </div>
@@ -552,7 +556,8 @@ module.exports = React.createClass({
                     </div>
                 </div>
 
-                <Posts items={items} shown={items.length > 0} hasMore={hasMoreResults} onHasMoreClicked={this.loadMoreResults} />
+                <Posts items={items} shown={items.length > 0} hasMore={hasMoreResults}
+                       onHasMoreClicked={this.loadMoreResults}/>
             </div>
         );
     }
