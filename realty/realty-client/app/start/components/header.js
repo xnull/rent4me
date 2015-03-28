@@ -307,7 +307,7 @@ var HeaderComponent = React.createClass({
             } else {
                 metrosDisplayItem = (<ReactAutocomplete
                     inputClassName="form-control"
-                    placeholder="Выберите Метро Москвы"
+                    placeholder="Выберите Метро"
                     search={this._searchRemote}
                     onChange={this.onTempMetroSelected}/>);
             }
