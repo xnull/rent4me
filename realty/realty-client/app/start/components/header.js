@@ -400,10 +400,6 @@ var HeaderComponent = React.createClass({
             );
         }
 
-        var city = CityStore.getCurrentCity();
-
-        var initialDisplayValue = (city || {}).name;
-
         return (
             <div className='header-cover'>
                 <div>
@@ -466,7 +462,6 @@ var HeaderComponent = React.createClass({
                                                         <AddressBox
                                                             onAddressChange={this.onAddressChange}
                                                             onAddressSelected={this.onAddressSelected}
-                                                            initialValue={initialDisplayValue}
                                                         />
                                                         <div className="input-group-btn">
                                                             <MetroPopover
