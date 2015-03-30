@@ -123,7 +123,7 @@ var AddressBox = React.createClass({
 */
     render: function () {
         console.log('(re-)rendering google component');
-        var displayValue = this.state.formattedName || this.props.initialValue;
+        var displayValue = this.state.formattedName;
 
         var dump = JSON2.stringify(this.state);
 
