@@ -303,9 +303,9 @@ var Results = React.createClass({
         };
 
         return this.transferPropsTo(
-            <ul style={style} className="react-autocomplete-Results">
+            <a href="javascript:void(0)" style={style} className="btn btn-default react-autocomplete-Results">
         {this.props.results.map(this.renderResult)}
-            </ul>
+            </a>
         );
     },
 
