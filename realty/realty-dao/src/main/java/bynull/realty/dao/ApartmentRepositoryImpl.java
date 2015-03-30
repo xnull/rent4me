@@ -74,7 +74,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
 
         final String ordering;
 
-        if(geoParams.getCountryCode().isPresent()) {
+        if(geoParams.getCountryCode().isPresent() && StringUtils.trimToNull(geoParams.getCountryCode().get()) != null) {
             qlString += " AND upper(a.country_code)=upper(:country_code) ";
             params.put("country_code", geoParams.getCountryCode().get());
         }
