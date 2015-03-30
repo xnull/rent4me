@@ -14,8 +14,6 @@ public interface MetroService {
 
     List<? extends MetroDTO> findMetros(ApartmentRepositoryCustom.GeoParams geoParams);
 
-    List<? extends MetroDTO> findMoscowMetros();
-
     void syncMoscowMetrosWithDatabase() throws MetroServiceException;
 
     void syncStPetersburgMetrosWithDatabase() throws MetroServiceException;

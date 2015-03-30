@@ -122,7 +122,7 @@ gulp.task(tasks.watch, [tasks.connectServer], function () {
 gulp.task(tasks.connectServer, function () {
     plugins.gulpConnect.server({
         root: './build-js',
-        port: 8888,
+        port: 9999,
         livereload: true
     });
 });

@@ -85,7 +85,7 @@ public class MetroRestResource {
             geoParams = geoParams.withPoint(Optional.empty());
         }
 
-        List<? extends MetroDTO> metros = someDataSpecified ? metroService.findMetros(geoParams) : metroService.findMoscowMetros();
+        List<? extends MetroDTO> metros = someDataSpecified ? metroService.findMetros(geoParams) : Collections.emptyList();
         List<? extends MetroJSON> json = metroDtoJsonConverter.toTargetList(metros);
 
         return Response

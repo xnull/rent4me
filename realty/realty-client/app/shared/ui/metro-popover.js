@@ -34,7 +34,7 @@ var MetroPopover = React.createClass({
                     </Popover>
                     }
                 >
-                    <Button bsStyle="default">Метро</Button>
+                    <Button bsStyle="default" style={style}>Метро</Button>
                 </OverlayTrigger>
             </ButtonToolbar>
         )

@@ -11,10 +11,5 @@ import java.util.List;
  * @since 1/9/15.
  */
 public interface MetroRepository extends JpaRepository<MetroEntity, Long>, MetroRepositoryCustom {
-    /**
-     * TODO: change this implementation
-     * @return
-     */
-    @Query("select m from MetroEntity m order by stationName")
-    List<MetroEntity> findMetros();
+
 }

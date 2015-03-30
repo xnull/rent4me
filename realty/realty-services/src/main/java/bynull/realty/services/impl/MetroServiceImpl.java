@@ -85,13 +85,6 @@ public class MetroServiceImpl implements MetroService {
         return metroDTOs;
     }
 
-    @Transactional
-    @Override
-    public List<? extends MetroDTO> findMoscowMetros() {
-        List<? extends MetroDTO> metroDTOs = metroModelDTOConverter.toTargetList(metroRepository.findMetros());
-        return metroDTOs;
-    }
-
     /**
      * Синхронизировать список станций метро яндекса с локальной базой данных
      */
