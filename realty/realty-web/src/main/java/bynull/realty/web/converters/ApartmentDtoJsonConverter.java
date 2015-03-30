@@ -94,7 +94,7 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
         dto.setAddress(address != null ? address.toDTO() : null);
         dto.setCreated(in.getCreated());
         dto.setUpdated(in.getUpdated());
-        dto.setLocation(in.getLocation() != null ? in.getLocation().toDTO(): null);
+        dto.setLocation(GeoPointJSON.toDTO(in.getLocation()));
         dto.setArea(in.getArea());
         dto.setRoomCount(in.getRoomCount());
         dto.setFloorNumber(in.getFloorNumber());

@@ -26,10 +26,13 @@ public class GeoPointJSON {
     @JsonProperty("longitude")
     private double longitude;
 
-    public GeoPointDTO toDTO() {
+    public static GeoPointDTO toDTO(GeoPointJSON it) {
+        if (it == null) {
+            return null;
+        }
         GeoPointDTO dto = new GeoPointDTO();
-        dto.setLatitude(getLatitude());
-        dto.setLongitude(getLongitude());
+        dto.setLatitude(it.getLatitude());
+        dto.setLongitude(it.getLongitude());
         return dto;
     }
 }

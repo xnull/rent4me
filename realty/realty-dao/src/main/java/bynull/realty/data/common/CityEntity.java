@@ -3,6 +3,7 @@ package bynull.realty.data.common;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -15,6 +16,7 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = CityEntity.TABLE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CityEntity {
 
     public static final String TABLE = "cities";

@@ -3,6 +3,7 @@ package bynull.realty.data.common;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -15,6 +16,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = CountryEntity.TABLE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CountryEntity {
     public static final String TABLE = "countries";
     private static final String ID_GEN = TABLE + "_id_generator";

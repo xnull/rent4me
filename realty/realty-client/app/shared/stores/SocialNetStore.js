@@ -52,10 +52,15 @@ var _formattedName = null;
 var _metros = [];
 
 var CHANGE_EVENT = 'change';
+var CHANGE_LOCATION_EVENT = 'CHANGE_LOCATION_EVENT';
 
 var Store = assign({}, EventEmitter.prototype, {
     emitChange: function () {
         this.emit(CHANGE_EVENT);
+    },
+
+    emitLocationChanged: function () {
+        this.emit(CHANGE_LOCATION_EVENT);
     },
 
     getSearchText: function () {
@@ -146,6 +151,19 @@ var Store = assign({}, EventEmitter.prototype, {
      */
     removeChangeListener: function (callback) {
         this.removeListener(CHANGE_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    addChangeLocationListener: function (callback) {
+        this.on(CHANGE_LOCATION_EVENT, callback);
+    },
+    /**
+     * @param {function} callback
+     */
+    removeChangeLocationListener: function (callback) {
+        this.removeListener(CHANGE_LOCATION_EVENT, callback);
     }
 });
 
@@ -246,6 +264,8 @@ AppDispatcher.register(function (payload) {
             _countryCode = _val.countryCode || null;
             _formattedAddress = _val.formattedAddress || null;
             _formattedName = _val.formattedName || null;
+
+            Store.emitLocationChanged();
 
             if(_bounds ) {
                 Cookies.setCookieTemp('SEARCH_BOUNDS', encodeURIComponent(JSON2.stringify(_bounds)));

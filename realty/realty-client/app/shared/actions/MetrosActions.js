@@ -15,9 +15,12 @@ var ApartmentActions = {
         BlockUI.blockUI();
 
         var geoUrl = null;
-        if (lat && lng && countryCode) {
+        if (lat && lng) {
 
-            geoUrl = 'lng=' + lng + '&lat=' + lat + "&country_code=" + countryCode;
+            geoUrl = 'lng=' + lng + '&lat=' + lat;
+            if(countryCode) {
+                geoUrl +=  "&country_code=" + countryCode;
+            }
             if (bounds && bounds.northEast && bounds.southWest) {
                 var ne = bounds.northEast;
                 var sw = bounds.southWest;

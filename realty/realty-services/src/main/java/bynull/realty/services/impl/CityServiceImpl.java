@@ -5,6 +5,7 @@ import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.dao.geo.CountryRepository;
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.CountryEntity;
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.CountryDTO;
 import bynull.realty.services.api.CityService;
@@ -104,5 +105,25 @@ public class CityServiceImpl implements CityService {
     @Override
     public List<? extends CityDTO> findAll() {
         return cityModelDTOConverter.toTargetList(cityRepository.findAll(new Sort("name")));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<CityDTO> findByGeoPoint(Optional<GeoPoint> geoPoint) {
+        if(!geoPoint.isPresent()) {
+            return Optional.empty();
+        } else {
+            CityEntity cityEntity = cityRepository.findByPoint(geoPoint.get().getLongitude(), geoPoint.get().getLatitude());
+            return Optional.ofNullable(cityModelDTOConverter.toTargetType(cityEntity));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public CityDTO getMoscow() {
+        GeoPoint cityCenterPoint = MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCityCenterPoint();
+        CityEntity cityEntity = cityRepository.findByPoint(cityCenterPoint.getLongitude(), cityCenterPoint.getLatitude());
+        Assert.notNull(cityEntity, "Moscow entity should be present");
+        return cityModelDTOConverter.toTargetType(cityEntity);
     }
 }

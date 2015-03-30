@@ -23,11 +23,24 @@ var MetroPopover = React.createClass({
             style = Util.inactiveUi;
         }
 
+        var display = null;
+
+        if(this.props.metroInput) {
+            display = this.props.metroInput;
+        } else {
+            display = (
+                <div className="alert alert-info">
+                    Пожалуйста выберите в строке поиска интересующий вас город и мы сможем отобразить список метро этого города.
+                </div>
+            )
+        }
+
+
         return (
             <ButtonToolbar>
                 <OverlayTrigger trigger="click" placement="bottom" overlay={
                     <Popover title="Поиск по станциям метро">
-                        {this.props.metroInput}
+                        {display}
                         <button type="button" className="btn btn-default btn-block" onClick={this.props.onAddButtonClicked} style={style}>
                             Добавить
                         </button>

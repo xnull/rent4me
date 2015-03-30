@@ -2,6 +2,7 @@ package bynull.realty.web.converters;
 
 import bynull.realty.common.Converter;
 import bynull.realty.dto.MetroDTO;
+import bynull.realty.web.json.GeoPointJSON;
 import bynull.realty.web.json.MetroJSON;
 import org.springframework.stereotype.Component;
 
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Component;
 public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
     @Override
     public MetroJSON newTargetType(MetroDTO in) {
-        return null;
+        return new MetroJSON();
     }
 
     @Override
     public MetroDTO newSourceType(MetroJSON in) {
-        return null;
+        return new MetroDTO();
     }
 
     @Override
@@ -28,6 +29,7 @@ public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
         MetroJSON json = new MetroJSON();
         json.setId(in.getId());
         json.setStationName(in.getStationName());
+        json.setLocation(GeoPointJSON.from(in.getLocation()));
         return json;
     }
 
@@ -36,8 +38,9 @@ public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
         if (in == null) {
             return null;
         }
-        dto.setId(dto.getId());
-        dto.setStationName(dto.getStationName());
+        dto.setId(in.getId());
+        dto.setStationName(in.getStationName());
+        dto.setLocation(GeoPointJSON.toDTO(in.getLocation()));
         return dto;
     }
 }

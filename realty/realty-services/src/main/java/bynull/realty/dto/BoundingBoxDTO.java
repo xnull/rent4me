@@ -12,6 +12,7 @@ import lombok.Setter;
 public class BoundingBoxDTO {
     private GeoPointDTO low;
     private GeoPointDTO high;
+    private GeoPointDTO centerPoint;
 
     public static BoundingBoxDTO from(BoundingBox boundingBox) {
         if (boundingBox == null) {
@@ -20,6 +21,7 @@ public class BoundingBoxDTO {
         BoundingBoxDTO dto = new BoundingBoxDTO();
         dto.setHigh(GeoPointDTO.from(boundingBox.getHigh()));
         dto.setLow(GeoPointDTO.from(boundingBox.getLow()));
+        dto.setCenterPoint(GeoPointDTO.from(boundingBox.getCenterPoint()));
         return dto;
     }
 

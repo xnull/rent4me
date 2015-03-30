@@ -1,5 +1,6 @@
 package bynull.realty.services.api;
 
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.CountryDTO;
 
@@ -21,4 +22,8 @@ public interface CityService {
     boolean delete(long id);
 
     List<? extends CityDTO> findAll();
+
+    Optional<CityDTO> findByGeoPoint(Optional<GeoPoint> geoPoint);
+
+    CityDTO getMoscow();
 }

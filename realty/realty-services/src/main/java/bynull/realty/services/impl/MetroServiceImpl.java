@@ -50,7 +50,7 @@ public class MetroServiceImpl implements MetroService {
     private static final String RUSSIA = "Россия";
     private static final String ST_PETERSBURG = "Санкт-Петербург";
 
-    private static class CityDescription {
+    public static class CityDescription {
         private final String country;
         private final String city;
         private final GeoPoint cityCenterPoint;
@@ -59,6 +59,18 @@ public class MetroServiceImpl implements MetroService {
             this.country = country;
             this.city = city;
             this.cityCenterPoint = cityCenterPoint;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public GeoPoint getCityCenterPoint() {
+            return cityCenterPoint;
         }
     }
 

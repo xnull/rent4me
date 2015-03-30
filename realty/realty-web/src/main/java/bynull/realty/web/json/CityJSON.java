@@ -5,15 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by dionis on 20/01/15.
+ * Created by dionis on 3/30/15.
  */
 @Getter
 @Setter
-public class MetroJSON {
+public class CityJSON {
     @JsonProperty("id")
     private Long id;
-    @JsonProperty("station_name")
-    private String stationName;
-    @JsonProperty("location")
-    private GeoPointJSON location;
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("area")
+    BoundingBoxJSON area;
 }

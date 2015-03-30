@@ -5,6 +5,8 @@
 var React = require('react');
 var AuthComponent = require('../../shared/components/socialNetAuth');
 var SocialNetActions = require('../../shared/actions/SocialNetActions');
+var SocialNetStore = require('../../shared/stores/SocialNetStore');
+var AppDispatcher = require('../../shared/dispatcher/AppDispatcher');
 var Utils = require('rent4meUtil');
 var Cookies = require('rent4meCookies');
 var JSON2 = require('JSON2');
@@ -22,6 +24,12 @@ var SearchTermBubble = require('../../shared/ui/search-term-bubble');
 
 var MetrosStore = require('../../shared/stores/MetrosStore');
 var MetrosActions = require('../../shared/actions/MetrosActions');
+
+var UserLocationStore = require('../../shared/stores/user-location-store');
+var UserLocationActions = require('../../shared/actions/UserLocationActions');
+
+var CityStore = require('../../shared/stores/city-store');
+var CityActions = require('../../shared/actions/city-actions');
 
 var AddressUtils = require('../../shared/common/AddressUtils');
 
@@ -49,8 +57,63 @@ var HeaderComponent = React.createClass({
     componentDidMount: function () {
         SocialNetActions.resetFBSearchState();
 
+        SocialNetStore.addChangeLocationListener(this.onAddressLocationChangedCallback);
+
         MetrosStore.addChangeListener(this.onMetrosChanged);
-        MetrosActions.findMetros(null, null, null, null);
+
+        CityStore.addChangeListener(this.onCityChanged);
+
+        UserLocationStore.addChangeListener(this.onUserLocationChanged);
+        UserLocationActions.retrieveUserLocation();
+
+    },
+
+    onAddressLocationChangedCallback: function() {
+        this.setState(assign(this.state, {
+            location: SocialNetStore.getLocation(),
+            countryCode: SocialNetStore.getCountryCode(),
+            bounds: SocialNetStore.getBounds(),
+            formattedAddress: SocialNetStore.getFormattedAddress(),
+            formattedName: SocialNetStore.getFormattedName()
+        }));
+    },
+
+    onCityChanged: function() {
+        console.log('on city changed');
+
+        var city = CityStore.getCurrentCity();
+
+        console.log(city);
+
+        var self = this;
+
+        if(city != null) {
+            var bounds = {
+                northEast: {
+                    lat: city.area.high.latitude,
+                    lng: city.area.high.longitude
+                },
+
+                southWest: {
+                    lat: city.area.low.latitude,
+                    lng: city.area.low.longitude
+                }
+            };
+
+            var obj = {
+                location: city.center_point,
+                bounds: bounds,
+                formattedAddress: city.name,
+                formattedName: city.name
+            };
+        }
+    },
+
+    onUserLocationChanged: function () {
+        console.log('on location changed');
+        var location = UserLocationStore.getLocation();
+
+        CityActions.retrieveUserCity(location ? location.lng : null, location ? location.lat : null);
     },
 
     onAddressSelected: function(value) {
@@ -295,7 +358,7 @@ var HeaderComponent = React.createClass({
         var tmpText = this.state.tmpText;
         var text = this.state.text;
 
-        var metrosDisplayItem;
+        var metrosDisplayItem = null;
 
         {
 

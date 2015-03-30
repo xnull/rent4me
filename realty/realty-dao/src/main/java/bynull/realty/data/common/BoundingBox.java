@@ -46,4 +46,8 @@ public class BoundingBox implements Serializable {
         result &= low.getLatitude() <= geoPoint.getLatitude() && geoPoint.getLatitude() <= high.getLatitude();
         return result;
     }
+
+    public GeoPoint getCenterPoint() {
+        return new GeoPoint().withLatitude( (low.getLatitude()+high.getLatitude())/2.0 ).withLongitude( (low.getLongitude()+high.getLongitude())/2.0 );
+    }
 }

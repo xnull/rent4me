@@ -17,6 +17,21 @@ var AppDispatcher = assign(new Dispatcher(), {
             source: 'VIEW_ACTION',
             action: action
         });
+    },
+
+    scheduleOrExecute: function(fn) {
+        if(!this.isDispatching()){
+            console.log('Is not dispatching ');
+            console.log('Will execute function');
+            console.log(fn);
+            fn();
+        } else {
+            var self = this;
+            //schedule next attempt
+            setTimeout(function(){
+                return self.scheduleOrExecute(fn);
+            }, 100);
+        }
     }
 
 });
