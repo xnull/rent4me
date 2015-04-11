@@ -41,4 +41,17 @@ public class UserDTO {
 
         return dto;
     }
+
+    public static User toReference(UserDTO dto) {
+        //TODO: add proper implementation later
+        if (dto == null) {
+            return null;
+        }
+
+        User out = new User();
+
+        out.setId(dto.getId());
+
+        return out;
+    }
 }

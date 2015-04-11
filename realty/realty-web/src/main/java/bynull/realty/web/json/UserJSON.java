@@ -66,4 +66,13 @@ public class UserJSON {
 
         return dto;
     }
+
+    public static UserDTO toReference(UserJSON json) {
+        if (json == null) {
+            return null;
+        }
+        UserDTO dto = new UserDTO();
+        dto.setId(json.getId());
+        return dto;
+    }
 }

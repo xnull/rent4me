@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAuthorizedException;
+import java.util.Optional;
 
 /**
  * @author dionis on 23/11/14.
@@ -26,6 +27,17 @@ public class SecurityUtils {
         }
         return new UserIDHolder(authorizedUser.getId());
     }
+
+    public static Optional<UserIDHolder> getAuthorizedUserOptional() {
+        try {
+            UserIDHolder authorizedUser = getAuthorizedUser();
+            return Optional.of(authorizedUser);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+
 
     /**
      * Check that user is the same as authorized user
