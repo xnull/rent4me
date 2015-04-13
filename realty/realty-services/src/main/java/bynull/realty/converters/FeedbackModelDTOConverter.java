@@ -28,6 +28,8 @@ public class FeedbackModelDTOConverter implements Converter<Feedback, FeedbackDT
         }
         FeedbackDTO out = new FeedbackDTO();
         out.setText(in.getText());
+        out.setEmail(in.getEmail());
+        out.setName(in.getName());
         out.setId(in.getId());
         out.setUpdated(in.getUpdated());
         out.setCreated(in.getCreated());
@@ -42,6 +44,8 @@ public class FeedbackModelDTOConverter implements Converter<Feedback, FeedbackDT
         }
         Feedback out = new Feedback();
         out.setText(in.getText());
+        out.setEmail(in.getEmail());
+        out.setName(in.getName());
         out.setCreator(UserDTO.toReference(in.getCreator()));
         return out;
     }

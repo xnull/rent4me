@@ -1,0 +1,5 @@
+ALTER TABLE feedback
+ADD COLUMN email TEXT;
+
+ALTER TABLE feedback
+ADD COLUMN name TEXT;

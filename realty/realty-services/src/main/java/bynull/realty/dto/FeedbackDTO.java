@@ -14,6 +14,8 @@ import java.util.Date;
 public class FeedbackDTO {
     private Long id;
     private String text;
+    private String name;
+    private String email;
     private UserDTO creator;
     private Date created;
     private Date updated;
