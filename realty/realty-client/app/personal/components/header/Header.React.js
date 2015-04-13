@@ -91,7 +91,7 @@ var Header = React.createClass({
                             </ul>
                         </li>
 
-                        <li className={NavStore.isSupportSelected() ? 'active' : ''} style={Utils.inactiveUi}>
+                        <li className={NavStore.isSupportSelected() ? 'active' : ''}>
                             <a href='#/support' role='button'>Поддержка</a>
                         </li>
 

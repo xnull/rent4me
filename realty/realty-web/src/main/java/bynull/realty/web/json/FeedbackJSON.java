@@ -14,6 +14,8 @@ import java.util.Date;
 public class FeedbackJSON {
     private Long id;
     private String text;
+    private String name;
+    private String email;
     private UserJSON creator;
     private Date created;
     private Date updated;

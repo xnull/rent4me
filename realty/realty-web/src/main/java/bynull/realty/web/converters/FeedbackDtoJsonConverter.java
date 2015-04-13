@@ -30,6 +30,8 @@ public class FeedbackDtoJsonConverter implements Converter<FeedbackDTO, Feedback
         }
         FeedbackJSON out = new FeedbackJSON();
         out.setText(in.getText());
+        out.setEmail(in.getEmail());
+        out.setName(in.getName());
         out.setId(in.getId());
         out.setUpdated(in.getUpdated());
         out.setCreated(in.getCreated());
@@ -44,6 +46,8 @@ public class FeedbackDtoJsonConverter implements Converter<FeedbackDTO, Feedback
         }
         FeedbackDTO out = new FeedbackDTO();
         out.setText(in.getText());
+        out.setEmail(in.getEmail());
+        out.setName(in.getName());
         out.setId(in.getId());
         out.setUpdated(in.getUpdated());
         out.setCreated(in.getCreated());
