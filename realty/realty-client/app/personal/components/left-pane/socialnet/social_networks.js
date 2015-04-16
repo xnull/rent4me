@@ -485,6 +485,9 @@ module.exports = React.createClass({
                                           changeToLessor={this.changeToLessor}
                                     />
 
+                                <div className="col-xs-12 col-sm-12 hidden-md hidden-lg"
+                                     style={{marginBottom: 5}}></div>
+
                                 <RoomsCount className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
 
                                             oneRoomAptSelected={oneRoomAptSelected}
@@ -495,6 +498,9 @@ module.exports = React.createClass({
                                             onTwoRoomAptValueChanged={this.onTwoRoomAptValueChanged}
                                             onThreeRoomAptValueChanged={this.onThreeRoomAptValueChanged}
                                     />
+
+                                <div className="col-xs-12 col-sm-12 hidden-md hidden-lg"
+                                     style={{marginBottom: 5}}></div>
 
                                 <PriceRange className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-centered"
 
@@ -519,6 +525,7 @@ module.exports = React.createClass({
                                             onAddressSelected={this.onAddressSelected}
                                             initialValue={addressInitialValue}
                                             />
+
                                         <div className="input-group-btn">
                                             <MetroPopover
                                                 metroInput={metrosDisplayItem}
@@ -540,6 +547,8 @@ module.exports = React.createClass({
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className="col-xs-12 col-sm-12 hidden-md hidden-lg" style={{marginBottom: 5}}></div>
 
                                 <div className="col-md-4 col-sm-12 col-xs-12">
                                     <a className="btn btn-primary center-block" onClick={this.onClick}>Найти</a>
