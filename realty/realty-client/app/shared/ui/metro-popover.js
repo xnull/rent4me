@@ -42,7 +42,7 @@ var MetroPopover = React.createClass({
                     <Popover title="Поиск по станциям метро">
                         {display}
                         <button type="button" className="btn btn-default btn-block" onClick={this.props.onAddButtonClicked} style={style}>
-                            Добавить
+                            Выбрать
                         </button>
                     </Popover>
                     }
