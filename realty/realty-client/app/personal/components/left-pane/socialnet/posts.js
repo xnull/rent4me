@@ -11,6 +11,9 @@ var assign = require('object-assign');
 var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
 
+var Router = require('react-router');
+var Link = Router.Link;
+
 var AdsItem = React.createClass({
     render: function () {
         return (
@@ -129,20 +132,23 @@ var ContactInfo = React.createClass({
         return directContact;
     },
 
-    getExternalAuthorLink: function () {
+    getExternalContactLinks: function () {
         var item = this.props.item;
-        return item.external_author_link ? (
-            <div>
-                <a href={item.external_author_link} target="_blank">Связаться через соц. сеть</a>
-            </div>
-        ) : null;
-    },
 
-    getSourceLink: function () {
-        var item = this.props.item;
-        return item.external_link ? (
+        var externalLinkContent = item.external_link ? (
+            <a href={item.external_link} target="_blank">Источник &nbsp;<i className="glyphicon glyphicon-new-window"></i> </a>
+        ) : null;
+        var externalAuthorContent = item.external_author_link ? (
+            <span>
+                    &nbsp;&nbsp;&nbsp;(<a href={item.external_author_link} target="_blank">
+                    <i title="Связаться через соц. сеть" className="glyphicon glyphicon-user"></i>
+                </a>)
+            </span>
+            )  : null;
+
+        return (item.external_author_link || item.external_link )? (
             <div>
-                <a href={item.external_link} target="_blank">Источник</a>
+            {externalLinkContent}   {externalAuthorContent}
             </div>
         ) : null;
     },
@@ -168,9 +174,7 @@ var ContactInfo = React.createClass({
                       {phoneNumbersDisplay}
                       {this.getDirectContact()}
                     <br/>
-                      {this.getExternalAuthorLink()}
-                    <br/>
-                    {this.getSourceLink()}
+                      {this.getExternalContactLinks()}
                 </div>
             </div>
         )
@@ -242,6 +246,7 @@ var HeaderBlock = React.createClass({
 var Message = React.createClass({
     render: function () {
         var item = this.props.item;
+        var showFull = this.props.showFull;
         return (
             <div className="col-md-12 col-sm-12 col-xs-12">
                 <div className="col-md-12 col-sm-12 col-xs-12"
@@ -249,8 +254,10 @@ var Message = React.createClass({
                         boxShadow: 'none', lineHeight: '18px', fontSize: '14px', border: '1px #e4e4e4 solid',
                         padding: '15px', backgroundColor: 'rgba(244, 242, 242, 0.2)'
                     }}
-                    dangerouslySetInnerHTML={{__html: Utils.nl2br(item.description)}}>
+                    dangerouslySetInnerHTML={{__html: Utils.nl2br(showFull ? item.description: Utils.previewText(item.description, 128))}}>
                 </div>
+                <br/>
+                <Link to="advert" params={{id: item.id}}>Подробнее</Link>
             </div>
         )
     }
@@ -320,7 +327,7 @@ var Post = React.createClass({
                         </div>
                     </div>
                     <div className="row">
-                        <Message item={item}/>
+                        <Message item={item} showFull={this.props.showFull}/>
                     </div>
                 </div>
             </div>
@@ -355,9 +362,11 @@ var Posts = React.createClass({
             style['display'] = 'none';
         }
 
+        var showFull = this.props.showFull;
+
         var posts = items.map(function (item) {
             return (
-                <Post item={item}/>
+                <Post item={item} showFull={showFull}/>
             );
         });
 

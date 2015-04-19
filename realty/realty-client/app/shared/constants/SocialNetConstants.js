@@ -5,6 +5,7 @@ var keyMirror = require('react/lib/keyMirror');
 module.exports = keyMirror({
     SOCIAL_NET_POSTS_RESTORE_FROM_COOKIES_AND_CLEAR: null,
 
+    SOCIAL_NET_POST_FOUND: null,
     SOCIAL_NET_POSTS_FOUND: null,
     SOCIAL_NET_POSTS_RESET_SEARCH: null,
 

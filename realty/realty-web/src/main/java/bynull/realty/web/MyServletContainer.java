@@ -13,6 +13,8 @@ public class MyServletContainer extends ServletContainer {
         super(new ResourceConfig()
                 .packages(false, "bynull.realty.web.rest")
                 .register(ExceptionHandlingFeature.class)
-                .register(MultiPartFeature.class));
+                .register(MultiPartFeature.class)
+        )
+        ;
     }
 }

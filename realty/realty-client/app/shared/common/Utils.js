@@ -153,6 +153,15 @@ var R4MEUtils = {
     isProduction: isProduction,
     getBaseContext: getBaseContext,
     nl2br: nl2br,
+    previewText: function(text, maxSymbols) {
+        if(text) {
+            var nlIdx = text.indexOf('\n');
+            var symbolsToDisplay = nlIdx > 50 ? nlIdx+1 : maxSymbols;
+            return text.substr(0, symbolsToDisplay)+"...";
+        } else {
+            return text;
+        }
+    },
     inactiveUi: {opacity: 0.6, pointerEvents: 'none'}
 };
 

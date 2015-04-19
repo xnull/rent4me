@@ -9,35 +9,45 @@ import bynull.realty.services.api.ApartmentService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import bynull.realty.web.json.ApartmentJSON;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
  * @author dionis on 22/06/14.
  */
+@Slf4j
 @Component
 @Path("apartments")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ApartmentRestResource {
+    private final Map<String, String> templateCache = new HashMap<>();
+
     @Resource
     ApartmentService apartmentService;
 
     @Resource
     ApartmentDtoJsonConverter apartmentDtoJsonConverter;
+    private static boolean isGoogleBot(String userAgent) {
+        return userAgent != null && userAgent.toLowerCase().contains("google");
+    }
 
     @GET
     @Path("/{id}")
-    public Response findOne(@PathParam("id") long id) {
+    public Response findOne(@PathParam("id") long id, @HeaderParam("user-agent") String userAgent) {
+        log.info("User agent provided: [{}]", userAgent);
         ApartmentDTO dto = apartmentService.find(id);
         if (dto == null) {
             return Response
@@ -45,6 +55,32 @@ public class ApartmentRestResource {
                     .build();
         } else {
             ApartmentJSON json = apartmentDtoJsonConverter.toTargetType(dto);
+
+            if(/*true || */isGoogleBot(userAgent)) {
+                log.info("Rendering content for google bot");
+                String template;
+                synchronized (templateCache) {
+                    final String templateName = "apartment.html";
+                    if(!templateCache.containsKey(templateName)) {
+                        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(templateName);
+                        try {
+                            String join = StringUtils.join(IOUtils.readLines(resourceAsStream), "\n");
+                            template = join;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        } finally {
+                            IOUtils.closeQuietly(resourceAsStream);
+                        }
+                    } else {
+                        template = templateCache.get(templateName);
+                    }
+                }
+                template = StringUtils.replace(template, ":title", "Hello");
+                template = StringUtils.replace(template, ":body", "Hello World");
+                return Response.ok(template)
+                        .header("content-type", "text/html")
+                        .build();
+            }
 
             return Response
                     .ok(json)
