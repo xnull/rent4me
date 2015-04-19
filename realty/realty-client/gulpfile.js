@@ -229,6 +229,14 @@ function buildStart(moduleInfo) {
     gulp.src([moduleInfo['projectDir'] + "/**/*.html"])
         .pipe(gulp.dest(moduleInfo['buildDir']));
 
+    //and xml files
+    gulp.src([moduleInfo['projectDir'] + "/**/*.xml"])
+        .pipe(gulp.dest(moduleInfo['buildDir']));
+
+    //and txt files
+    gulp.src([moduleInfo['projectDir'] + "/**/*.txt"])
+        .pipe(gulp.dest(moduleInfo['buildDir']));
+
     //simply copy all images
     gulp.src([moduleInfo['projectDir'] + "/images/**/*.*"])
         .pipe(gulp.dest(moduleInfo['buildDir'] + "/images"));
