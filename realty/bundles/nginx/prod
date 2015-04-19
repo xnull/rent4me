@@ -49,7 +49,7 @@ server {
 
                 if ($prerender = 1) {
                         rewrite .* /rest/pre_render$request_uri break;
-                        proxy_pass http://localhost:28080;
+                        proxy_pass http://localhost:18080;
                 }
         }
 
@@ -67,7 +67,7 @@ server {
 
                 if ($prerender = 1) {
                         rewrite .* /rest/pre_render$request_uri break;
-                        proxy_pass http://localhost:28080;
+                        proxy_pass http://localhost:18080;
                 }
         }
 
