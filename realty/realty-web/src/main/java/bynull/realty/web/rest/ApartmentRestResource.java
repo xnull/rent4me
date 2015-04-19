@@ -40,9 +40,6 @@ public class ApartmentRestResource {
 
     @Resource
     ApartmentDtoJsonConverter apartmentDtoJsonConverter;
-    private static boolean isGoogleBot(String userAgent) {
-        return userAgent != null && userAgent.toLowerCase().contains("google");
-    }
 
     @GET
     @Path("/{id}")
@@ -55,32 +52,6 @@ public class ApartmentRestResource {
                     .build();
         } else {
             ApartmentJSON json = apartmentDtoJsonConverter.toTargetType(dto);
-
-            if(/*true || */isGoogleBot(userAgent)) {
-                log.info("Rendering content for google bot");
-                String template;
-                synchronized (templateCache) {
-                    final String templateName = "apartment.html";
-                    if(!templateCache.containsKey(templateName)) {
-                        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(templateName);
-                        try {
-                            String join = StringUtils.join(IOUtils.readLines(resourceAsStream), "\n");
-                            template = join;
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } finally {
-                            IOUtils.closeQuietly(resourceAsStream);
-                        }
-                    } else {
-                        template = templateCache.get(templateName);
-                    }
-                }
-                template = StringUtils.replace(template, ":title", "Hello");
-                template = StringUtils.replace(template, ":body", "Hello World");
-                return Response.ok(template)
-                        .header("content-type", "text/html")
-                        .build();
-            }
 
             return Response
                     .ok(json)

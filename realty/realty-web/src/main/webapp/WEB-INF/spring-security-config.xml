@@ -21,6 +21,7 @@
         <security:intercept-url pattern="/rest/auth" method="DELETE" access="hasRole('ROLE_USER')"
                                 requires-channel="any"/>
         <security:intercept-url pattern="/rest/auth/**" access="isAnonymous()" requires-channel="any"/>
+        <security:intercept-url pattern="/rest/pre_render/**" access="isAnonymous()" requires-channel="any"/>
         <security:intercept-url pattern="/rest/users" method="POST" access="isAnonymous()" requires-channel="any"/>
         <security:intercept-url pattern="/rest/apartments/search" method="GET" access="isAnonymous() || hasRole('ROLE_USER')" requires-channel="any"/>
         <security:intercept-url pattern="/rest/apartments/{id}" method="GET" access="isAnonymous() || hasRole('ROLE_USER')" requires-channel="any"/>
