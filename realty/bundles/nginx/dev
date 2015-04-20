@@ -59,7 +59,7 @@ server {
                 }
 
                 if ($prerender = 0) {
-#                       rewrite .* /rest/pre_render$request_uri break;
+#                       rewrite .* /rest/pre_render/search/ break;
                         return 301 http://dev.rent4.me/personal/#$request_uri;
 #                       proxy_pass http://localhost:28080;
                 }

@@ -48,7 +48,7 @@ server {
                 }
 
                 if ($prerender = 1) {
-                        rewrite .* /rest/pre_render$request_uri break;
+                        rewrite .* /rest/pre_render/search/ break;
                         proxy_pass http://localhost:18080;
                 }
         }
