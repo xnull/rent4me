@@ -21,6 +21,9 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
     @Resource
     ContactDtoJsonConverter contactDtoJsonConverter;
 
+    @Resource
+    CityDtoJsonConverter cityDtoJsonConverter;
+
     @Override
     public ApartmentJSON newTargetType(ApartmentDTO in) {
         return new ApartmentJSON();
@@ -81,6 +84,7 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
 
         json.setExternalLink(apartment.getExternalLink());
         json.setExternalAuthorLink(apartment.getExternalAuthorLink());
+        json.setCity(apartment.getCity());
 
         return json;
     }

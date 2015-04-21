@@ -92,6 +92,9 @@ public class ApartmentJSON {
     @JsonProperty("external_author_link")
     private String externalAuthorLink;
 
+    @JsonProperty("city")
+    private String city;
+
     public static enum DataSource {
         INTERNAL, FACEBOOK, VKONTAKTE;
 

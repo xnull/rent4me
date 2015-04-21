@@ -4,7 +4,6 @@
  */
 var gulp = require('gulp');
 var substituter = require('gulp-substituter');
-var compressor = require('gulp-compressor');
 
 function __guid() {
     function s4() {
@@ -131,6 +130,7 @@ var tasks = new Tasks();
 gulp.task(tasks.watch, [tasks.connectServer], function () {
     gulp.src(settings.watchDirs)
         .pipe(plugins.watch(settings.watchDirs, function (files) {
+                buildNumber = __guid();
                 gulp.start(tasks.build);
                 gulp.start(tasks.reloadServer)
             }

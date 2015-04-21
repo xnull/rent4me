@@ -31,10 +31,11 @@ var AdsItem = React.createClass({
 
 var Address = React.createClass({
     render: function () {
-        var address = this.props.address;
-        var addressIsSet = address && address.formatted_address;
+        var address = Utils.formatPostItemAddress(this.props.item);
+        //var address = this.props.address;
+        var addressIsSet = !!address;
         return (
-            addressIsSet ? <AdsItem name='Адрес' text={address.formatted_address} /> : null
+            addressIsSet ? <AdsItem name='Адрес' text={address} /> : null
         )
     }
 });
@@ -257,7 +258,7 @@ var Message = React.createClass({
                     dangerouslySetInnerHTML={{__html: Utils.nl2br(showFull ? item.description: Utils.previewText(item.description, 128))}}>
                 </div>
                 <br/>
-                <Link to="advert" params={{id: item.id}}>Подробнее</Link>
+                {showFull?null:<Link to="advert" params={{id: item.id}}>Подробнее</Link>}
             </div>
         )
     }
@@ -314,7 +315,7 @@ var Post = React.createClass({
                         </div>
                         <div className="col-md-9 col-sm-6 col-xs-12">
                             <div className='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
-                                <Address address={item.address}/>
+                                <Address item={item}/>
                                 <MetroPreviews metros={item.metros}/>
                                 <RoomCountInfo roomCount={item.room_count}/>
                                 <PriceInfo item={item} />

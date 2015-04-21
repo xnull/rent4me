@@ -153,6 +153,36 @@ var R4MEUtils = {
     isProduction: isProduction,
     getBaseContext: getBaseContext,
     nl2br: nl2br,
+    formatPostItemAddress: function(item) {
+        var result = "";
+        if(item.city) {
+            result+=item.city;
+        }
+        if(!item.city && item.address) {
+            if(item.address.street_address) {
+                result += item.address.street_address;
+            }
+            if(item.address.district) {
+                if(result) {
+                    result += ", ";
+                }
+                result += item.address.district;
+            }
+            if(item.address.city) {
+                if(result) {
+                    result += ", ";
+                }
+                result += item.address.city;
+            }
+            /*if(item.address.county) {
+                if(result) {
+                    result += " ";
+                }
+                result += item.address.county;
+            }*/
+        }
+        return result;
+    },
     previewText: function(text, maxSymbols) {
         if(text) {
             var nlIdx = text.indexOf('\n');
