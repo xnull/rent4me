@@ -33,6 +33,6 @@ public class VkontakteScrappingJob implements Runnable {
             public void onJobRejected(JobHelperComponent.Job job) {
                 log.info("Automatic job " + VkontakteScrappingJob.class + " rejected");
             }
-        }, jobHelperComponent.syncWithFB());
+        }, jobHelperComponent.manualSyncWithVK());
     }
 }
