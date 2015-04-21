@@ -2,6 +2,7 @@ var React = require('react');
 var PersonalCabinetComponent = require('./personal.js');
 var NewsComponent = require('./news.js');
 var LegalComponent = require('./legal.js');
+var Ads = require('./ads');
 var SocialNet = require('./socialnet/socialnet');
 
 var Utils = require('../../../shared/common/Utils');
@@ -80,6 +81,7 @@ module.exports = React.createClass({
             <div>
                 <UserPanel/>
                 <LegalComponent/>
+                <Ads/>
             </div>
         )
     }

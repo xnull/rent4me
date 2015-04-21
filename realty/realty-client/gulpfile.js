@@ -3,6 +3,20 @@
  * @constructor
  */
 var gulp = require('gulp');
+var substituter = require('gulp-substituter');
+
+function __guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
+
+var buildNumber = __guid();
+
 function Plugins() {
     this.gutil = require('gulp-util');
     this.jshint = require('gulp-jshint');
@@ -153,7 +167,7 @@ gulp.task('compressDev', [], function () {
         var moduleInfo = settings.moduleInfo[moduleName];
         console.log('Compressing js for: ' + moduleName);
         if (moduleName != '/start') {
-            var jsToCompress = moduleInfo['buildDir'] + "/js/main.js";
+            var jsToCompress = moduleInfo['buildDir'] + "js/main-"+buildNumber+".js";
             console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
@@ -161,7 +175,7 @@ gulp.task('compressDev', [], function () {
                 .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         } else {
-            var jsToCompress = moduleInfo['buildDir'] + "js/main.js";
+            var jsToCompress = moduleInfo['buildDir'] + "js/main-"+buildNumber+".js";
             console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
@@ -182,7 +196,7 @@ gulp.task('compressProd', [], function () {
         var moduleInfo = settings.moduleInfo[moduleName];
         console.log('Compressing js for: ' + moduleName);
         if (moduleName != '/start') {
-            var jsToCompress = moduleInfo['buildDir'] + "/js/main.js";
+            var jsToCompress = moduleInfo['buildDir'] + "js/main-"+buildNumber+".js";
             console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
@@ -190,7 +204,7 @@ gulp.task('compressProd', [], function () {
                 .pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         } else {
-            var jsToCompress = moduleInfo['buildDir'] + "js/main.js";
+            var jsToCompress = moduleInfo['buildDir'] + "js/main-"+buildNumber+".js";
             console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
@@ -227,6 +241,9 @@ function buildStart(moduleInfo) {
 
     //simply copy all html files
     gulp.src([moduleInfo['projectDir'] + "/**/*.html"])
+        .pipe(substituter({
+            buildNumber: buildNumber
+        }))
         .pipe(gulp.dest(moduleInfo['buildDir']));
 
     //and xml files
@@ -257,7 +274,7 @@ function buildBrowserify(moduleInfo) {
         .transform(plugins.reactify); // use the reactify transform
     b.add(moduleInfo['mainJsFile']);
     b.bundle()
-        .pipe(plugins.source('main.js'))
+        .pipe(plugins.source('main-'+buildNumber+'.js'))
         .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
 }
 
@@ -276,6 +293,9 @@ function imgBuild(moduleInfo) {
 
 function indexHtmlBuild(moduleInfo) {
     gulp.src(moduleInfo['indexHtml'])
+        .pipe(substituter({
+            buildNumber: buildNumber
+        }))
         .pipe(gulp.dest(moduleInfo['buildDir']))
 }
 
