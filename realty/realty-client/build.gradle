@@ -25,6 +25,8 @@ apply plugin: 'java'
 apply plugin: 'node'
 apply plugin: 'ssh'
 
+final buildNumber = java.util.UUID.randomUUID().toString();
+
 def nodeJsDir = file("${rootProject.projectDir}/.gradle/nodejs")
 
 node {
@@ -52,7 +54,7 @@ task bowerInstallSystem(dependsOn: npmInstall, type: BaseJsTaskRunner) {
 
 task bowerInstall(type: JsTaskRunner) {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['bowerInstall']
+    args = ['bowerInstall', '--buildNumber', buildNumber]
 }
 
 /**
@@ -66,33 +68,33 @@ task jsTest(type: JsTaskRunner, dependsOn: 'bowerInstall') {
 
 task jsPreBuild(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['build']
+    args = ['build', '--buildNumber', buildNumber]
 }
 
 task jsBuild(type: JsTaskRunner, dependsOn: 'jsPreBuild') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['compressDev']
+    args = ['compressDev', '--buildNumber', buildNumber]
 }
 
 task jsBuildRelease(type: JsTaskRunner, dependsOn: 'jsPreBuild') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['compressProd']
+    args = ['compressProd', '--buildNumber', buildNumber]
 }
 
 task jsWatch(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['watch']
+    args = ['watch', '--buildNumber', buildNumber]
 }
 
 task jsHint(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['jsHint']
+    args = ['jsHint', '--buildNumber', buildNumber]
 }
 check.dependsOn jsHint
 
 task jsFiles(type: JsTaskRunner, dependsOn: 'bowerInstall') {
     script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['files']
+    args = ['files', '--buildNumber', buildNumber]
 }
 
 task cleanUpBuildTmp(type: Delete) {

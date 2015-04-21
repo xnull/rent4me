@@ -4,6 +4,7 @@
  */
 var gulp = require('gulp');
 var substituter = require('gulp-substituter');
+var compressor = require('gulp-compressor');
 
 function __guid() {
     function s4() {
@@ -15,7 +16,11 @@ function __guid() {
         s4() + '-' + s4() + s4() + s4();
 }
 
-var buildNumber = __guid();
+var argv = require('yargs').argv;
+
+var buildNumber = argv.buildNumber || __guid();
+
+console.log('Starting:' + buildNumber);
 
 function Plugins() {
     this.gutil = require('gulp-util');

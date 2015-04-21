@@ -1,19 +1,17 @@
 {
-    "name": "realty",
-    "version": "1.0.0",
-    "main": "index.html",
-
-    "dependencies": {
-        "bootstrap": "3.2.0",
-        "respond": "1.4.2",
-        "html5shiv": "3.7.2",
-      "google-maps-utility-library-v3": "latest",
-      "skel": "2.2.1"
-    },
-    "overrides": {
-        "google-maps-utility-library-v3": {
-            "main": "./markerclusterer/src/markerclusterer.js"
-        }
-
+  "name": "realty",
+  "version": "1.0.0",
+  "main": "index.html",
+  "dependencies": {
+    "bootstrap": "3.2.0",
+    "respond": "1.4.2",
+    "html5shiv": "3.7.2",
+    "google-maps-utility-library-v3": "latest",
+    "skel": "2.2.1"
+  },
+  "overrides": {
+    "google-maps-utility-library-v3": {
+      "main": "./markerclusterer/src/markerclusterer.js"
     }
+  }
 }
