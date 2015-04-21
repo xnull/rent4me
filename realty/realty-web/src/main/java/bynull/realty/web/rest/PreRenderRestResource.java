@@ -3,10 +3,9 @@ package bynull.realty.web.rest;
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.common.CityEntity;
-import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.data.common.GeoPoint;
 import bynull.realty.utils.HibernateUtil;
 import bynull.realty.web.converters.ApartmentDtoJsonConverter;
-import bynull.realty.web.json.ApartmentJSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,8 +20,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author dionis on 22/06/14.
@@ -43,6 +42,50 @@ public class PreRenderRestResource {
 
     @Resource
     TransactionOperations transactionOperations;
+    public static final int ITEMS_PER_PAGE = 100;
+
+
+    @GET
+    @Path("/sitemap.xml")
+    public Response sitemapXml(@PathParam("id") long id) {
+        return transactionOperations.execute(tx -> {
+            {
+
+                log.info("Rendering sitemap.xml for google bot");
+                String template = loadTemplate("sitemap.xml");
+
+                String dateFormatted = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+                StringBuilder contentBuilder = new StringBuilder();
+
+                long totalCount = apartmentRepository.countOfActiveApartments();
+
+                long totalCountOfPages = totalCount / ITEMS_PER_PAGE + (totalCount % ITEMS_PER_PAGE > 0 ? 1 : 0);
+
+                for(long page = 1; page <= totalCountOfPages; page++) {
+                    String str = urlBuilder(page, dateFormatted);
+                    contentBuilder.append(str);
+                }
+
+                String content = contentBuilder.toString();
+
+                template = StringUtils.replace(template, ":urls", content);
+                template = StringUtils.replace(template, ":date", dateFormatted);
+                return Response.ok(template)
+                        .header("content-type", "text/xml; charset=utf-8")
+                        .build();
+
+            }
+        });
+    }
+
+    private static String urlBuilder(long page, String dateFormatted){
+        return "<url>\n" +
+                "        <loc>http://rent4.me/search/?page=" + page + "</loc>\n" +
+                "        <lastmod>"+dateFormatted+"</lastmod>\n" +
+                "        <changefreq>daily</changefreq>\n" +
+                "    </url>\n";
+    }
 
     @GET
     @Path("/advert/{id}")
@@ -86,6 +129,26 @@ public class PreRenderRestResource {
 
                 content+="<p>"+apartment.getDescription()+"</p>";
 
+                content+="<h2>Объявления которые могут быть вам интересны</h2>";
+                GeoPoint location = apartment.getLocation();
+                if (location != null) {
+                    List<Apartment> nearest = apartmentRepository.findNearest(location.getLongitude(), location.getLatitude(), 10, 0);
+                    for (Apartment apartment1 : nearest) {
+                        if(apartment1.getId().equals(apartment.getId())) continue;
+
+                        content+=("<p>");
+                        content+=("<div>");
+                        content += ("<a href=\"http://rent4.me/advert/") + (apartment.getId()) + ("\">");
+                        content+=(getDesc(apartment1));
+                        content+=("</a>");
+                        content+=("</div>");
+                        content+=("<br/>");
+
+
+                        content+=("</p>");
+                    }
+                }
+
                 template = StringUtils.replace(template, ":body", content);
                 return Response.ok(template)
                         .header("content-type", "text/html")
@@ -95,9 +158,78 @@ public class PreRenderRestResource {
         });
     }
 
+    private String loadTemplate(String templateName) {
+        String template;
+        synchronized (templateCache) {
+            if(!templateCache.containsKey(templateName)) {
+                InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(templateName);
+                try {
+                    String join = StringUtils.join(IOUtils.readLines(resourceAsStream), "\n");
+                    template = join;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    IOUtils.closeQuietly(resourceAsStream);
+                }
+            } else {
+                template = templateCache.get(templateName);
+            }
+        }
+        return template;
+    }
+
+    @Path("/search")
+    @GET
+    public Response findPosts(
+            @QueryParam("page") Integer _page
+    ) {
+
+        return transactionOperations.execute(tx -> {
+            int page = 1;
+
+            if (_page != null) {
+                page = _page;
+            }
+
+            List<Apartment>
+                    found = apartmentRepository.findActiveApartments(new PageRequest(page - 1, ITEMS_PER_PAGE, Sort.Direction.DESC, "logicalCreated"));
+
+            log.info("Rendering content for google bot");
+            String template = loadTemplate("apartments.html");
+
+            StringBuilder body = new StringBuilder();
+
+            body.append("<p>");
+
+            for (Apartment apartment : found) {
+                body.append("<div>");
+                body.append("<a href=\"http://rent4.me/advert/").append(apartment.getId()).append("\">");
+                body.append(getDesc(apartment));
+                body.append("</a>");
+                body.append("</div>");
+                body.append("<br/>");
+            }
+
+            body.append("</p>");
+
+            if (found.size() == ITEMS_PER_PAGE) {
+                body.append("<p>");
+                body.append("<a href=\"http://rent4.me/search?page=").append(page + 1).append("\">");
+                body.append("Вперед");
+                body.append("</a>");
+                body.append("</p>");
+            }
+
+            template = StringUtils.replace(template, ":body", body.toString());
+            return Response.ok(template)
+                    .header("content-type", "text/html")
+                    .build();
+        });
+    }
+
     private static String getDesc(Apartment apartment) {
         apartment = HibernateUtil.deproxy(apartment);
-        String result = "";
+        String result = "Аренда ";
         switch (apartment.getTarget()) {
             case RENTER:
                 result+="Сдам ";
@@ -155,75 +287,5 @@ public class PreRenderRestResource {
         }
 
         return result.trim();
-    }
-
-    private String loadTemplate(String templateName) {
-        String template;
-        synchronized (templateCache) {
-            if(!templateCache.containsKey(templateName)) {
-                InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(templateName);
-                try {
-                    String join = StringUtils.join(IOUtils.readLines(resourceAsStream), "\n");
-                    template = join;
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    IOUtils.closeQuietly(resourceAsStream);
-                }
-            } else {
-                template = templateCache.get(templateName);
-            }
-        }
-        return template;
-    }
-
-    @Path("/search")
-    @GET
-    public Response findPosts(
-            @QueryParam("page") Integer _page
-    ) {
-
-        return transactionOperations.execute(tx->{
-            int page = 1;
-
-            if (_page != null) {
-                page = _page;
-            }
-
-            int itemsPerPage = 100;
-
-            List<Apartment> found = apartmentRepository.findAll(new PageRequest(page-1, itemsPerPage, Sort.Direction.DESC, "logicalCreated")).getContent();
-
-            log.info("Rendering content for google bot");
-            String template = loadTemplate("apartments.html");
-
-            StringBuilder body = new StringBuilder();
-
-            body.append("<p>");
-
-            for (Apartment apartment : found) {
-                body.append("<div>");
-                body.append("<a href=\"http://rent4.me/advert/").append(apartment.getId()).append("\">");
-                body.append(getDesc(apartment));
-                body.append("</a>");
-                body.append("</div>");
-                body.append("<br/>");
-            }
-
-            body.append("</p>");
-
-            if(found.size() == itemsPerPage) {
-                body.append("<p>");
-                body.append("<a href=\"http://rent4.me/search?page=").append(page+1).append("\">");
-                body.append("Вперед");
-                body.append("</a>");
-                body.append("</p>");
-            }
-
-            template = StringUtils.replace(template, ":body", body.toString());
-            return Response.ok(template)
-                    .header("content-type", "text/html")
-                    .build();
-        });
     }
 }

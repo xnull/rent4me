@@ -55,6 +55,16 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
             @Param("limit") int limit,
             @Param("offset") int offset);
 
+
+    @Query(value = "select a.* from apartments a where a.published=true order by a.location <-> ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') ) limit :limit offset :offset", nativeQuery = true)
+    List<Apartment> findNearest(
+            @Param("lng")double lng,
+            @Param("lat") double lat,
+            @Param("limit") int limit,
+            @Param("offset") int offset);
+
+
+
     // VK specific
 
     @Query("select a from VkontakteApartment a inner join a.vkontaktePage p where p.externalId=:externalId order by a.logicalCreated desc")
@@ -95,6 +105,12 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Modifying
     @Query("update Apartment a set a.published=false where a.logicalCreated < :date")
     void unPublishOldNonInternalApartments(@Param("date") Date date);
+
+    @Query("select count(a) from Apartment a where a.published=true")
+    long countOfActiveApartments();
+
+    @Query("select a from Apartment a where a.published=true")
+    List<Apartment> findActiveApartments(Pageable pageable);
 
 
     public enum FindMode {

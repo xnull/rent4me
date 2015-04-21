@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>http://rent4.me/</loc>
+        <lastmod>:date</lastmod>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://rent4.me/personal/</loc>
+        <lastmod>:date</lastmod>
+        <changefreq>daily</changefreq>
+    </url>
+    :urls
+</urlset>
