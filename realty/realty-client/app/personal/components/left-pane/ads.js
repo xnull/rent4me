@@ -11,6 +11,8 @@ module.exports = React.createClass({
                 <div className="panel panel-default">
                     <div className="panel-body">
                         <div className="bs-component">
+                            <h4>Ссылки</h4>
+
                             <div className="list-group">
                                 <a href="https://play.google.com/store/apps/details?id=rent4.me.rent">
                                     <img alt="Get it on Google Play"
