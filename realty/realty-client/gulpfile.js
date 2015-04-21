@@ -172,7 +172,7 @@ gulp.task('compressDev', [], function () {
         var moduleInfo = settings.moduleInfo[moduleName];
         console.log('Compressing js for: ' + moduleName);
         if (moduleName != '/start') {
-            var jsToCompress = moduleInfo['buildDir'] + "js/main-"+buildNumber+".js";
+            var jsToCompress = moduleInfo['buildDir'] + "/js/main-"+buildNumber+".js";
             console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
@@ -186,7 +186,7 @@ gulp.task('compressDev', [], function () {
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
-                .pipe(gulp.dest(moduleInfo['buildDir'] + "js"));
+                .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         }
     }
 
@@ -201,7 +201,7 @@ gulp.task('compressProd', [], function () {
         var moduleInfo = settings.moduleInfo[moduleName];
         console.log('Compressing js for: ' + moduleName);
         if (moduleName != '/start') {
-            var jsToCompress = moduleInfo['buildDir'] + "js/main-"+buildNumber+".js";
+            var jsToCompress = moduleInfo['buildDir'] + "/js/main-"+buildNumber+".js";
             console.log('Js will be compressed and replaced:' + jsToCompress);
 
             gulp.src(jsToCompress)
@@ -215,7 +215,7 @@ gulp.task('compressProd', [], function () {
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
                 .pipe(plugins.uglify({mangle: false, compress: true}))
-                .pipe(gulp.dest(moduleInfo['buildDir'] + "js"));
+                .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         }
     }
 
