@@ -53,6 +53,15 @@ server {
                 }
         }
 
+        location /sitemap.xml {
+                set $prerender 1;
+
+                if ($prerender = 1) {
+                        rewrite .* /rest/pre_render/sitemap.xml break;
+                        proxy_pass http://localhost:18080;
+                }
+        }
+
         location /advert {
                 set $prerender 0;
                 if ($http_user_agent ~* "googlebot|yahoo|bingbot|baiduspider|yandex|yeti|yodaobot|gigabot|ia_archiver|facebookexternalhit|twitterbot|developers\.google\.com") {

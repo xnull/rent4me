@@ -47,7 +47,16 @@ server {
                 }
 
                 if ($prerender = 1) {
-                        rewrite .* /rest/pre_render$request_uri break;
+                        rewrite .* /rest/pre_render/search/ break;
+                        proxy_pass http://localhost:28080;
+                }
+        }
+
+        location /sitemap.xml {
+                set $prerender 1;
+
+                if ($prerender = 1) {
+                        rewrite .* /rest/pre_render/sitemap.xml break;
                         proxy_pass http://localhost:28080;
                 }
         }
