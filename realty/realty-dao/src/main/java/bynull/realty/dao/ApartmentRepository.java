@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -91,6 +92,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("select count(a) from Apartment a where lower(a.description)=lower(:text)")
     long countOfSimilarApartments(@Param("text") String text);
 
+    @Modifying
     @Query("update Apartment a set a.published=false where a.logicalCreated < :date")
     void unPublishOldNonInternalApartments(@Param("date") Date date);
 
