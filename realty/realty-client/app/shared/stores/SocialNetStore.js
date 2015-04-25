@@ -11,25 +11,6 @@ var JSON2 = require('JSON2');
 
 var assign = require('object-assign');
 
-function emptyPost() {
-    return {
-        'location': null,
-        'address': null,
-        'type_of_rent': '',
-        'rental_fee': null,
-        'fee_period': '',
-        'room_count': null,
-        'floor_number': null,
-        'floors_total': null,
-        'area': null,
-        'description': '',
-        'photos': [],
-        'added_photos_guids': [],
-        'deleted_photos_guids': [],
-        'published': false
-    };
-}
-
 var _searchText = null;
 var _searchType = 'RENTER'; //'LESSOR' or 'RENTER'
 var _searchRooms = {
@@ -41,6 +22,7 @@ var _searchMinPrice = null;
 var _searchMaxPrice = null;
 var _searchWithSubway = true;
 var _posts = [];
+var _postsCache = {};
 var _offset = 0;
 var _limit = 30;
 var _hasMoreResults = false;
@@ -95,6 +77,10 @@ var Store = assign({}, EventEmitter.prototype, {
         return _countryCode;
     },
 
+    getPostById: function(id) {
+        return _postsCache[id];
+    },
+
     getBounds: function(){
         return _bounds;
     },
@@ -119,6 +105,9 @@ var Store = assign({}, EventEmitter.prototype, {
         console.log('Has more results?: ' + _hasMoreResults);
         _offset += len;
         console.log('New offset: ' + _offset);
+        posts.forEach(post=>{
+           _postsCache[post.id] = post;
+        });
         _posts = _posts.concat(posts);
         console.log('Posts in cache: ');
         console.log(_posts);
@@ -177,6 +166,14 @@ AppDispatcher.register(function (payload) {
             console.log('found posts:');
             console.log(action.posts);
             Store.saveSearchResults(action.posts || []);
+            break;
+
+        case SocialNetConstants.SOCIAL_NET_POST_FOUND:
+            console.log('found post:');
+            console.log(action.post);
+            if(action.post) {
+                _postsCache[action.post.id] = action.post;
+            }
             break;
 
         case SocialNetConstants.SOCIAL_NET_POSTS_RESET_SEARCH:

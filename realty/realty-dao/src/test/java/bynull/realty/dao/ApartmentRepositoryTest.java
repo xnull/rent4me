@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -185,5 +186,10 @@ public class ApartmentRepositoryTest extends DbTest {
             assertThat(first.getDescription(), is(sytiste33Description));
             assertThat(second.getDescription(), is(majakaDescription));
         }
+    }
+
+    @Test
+    public void unspublish() throws Exception {
+        repository.unPublishOldNonInternalApartments(new Date(System.currentTimeMillis() - (31*24*60*60*1000)));
     }
 }

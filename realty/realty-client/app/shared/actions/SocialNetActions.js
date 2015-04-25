@@ -214,6 +214,52 @@ var SocialNetActions = {
                 BlockUI.unblockUI();
             })
             .execute();
+    },
+
+    findPost(id) {
+        var post = SocialNetStore.getPostById(id);
+        if(!post) {
+            var promise = new Promise(function(resolve, reject) {
+                //load data from server side
+                var url = '/rest/apartments/'+id;
+
+                var requestBuilder = Ajax
+                    .GET(url);
+
+                if(AuthStore.hasCredentials()) {
+                    requestBuilder = requestBuilder.authorized();
+                }
+
+                requestBuilder
+                    .onSuccess(function (data) {
+                        resolve(data);
+                    })
+                    .onError(function (xhr, status, err) {
+                        reject(Error("No post found"));
+                    })
+                    .execute();
+            });
+            promise
+                .then(function (data) {
+                    AppDispatcher.handleViewAction({
+                        actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
+                        post: data
+                    });
+                    BlockUI.unblockUI();
+                }, function (err) {
+                    console.log(err);
+                    AppDispatcher.handleViewAction({
+                        actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
+                        post: null
+                    });
+                    BlockUI.unblockUI();
+                });
+        } else {
+            AppDispatcher.handleViewAction({
+                actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
+                post: post
+            });
+        }
     }
 };
 

@@ -8,5 +8,5 @@ echo "Using node: ${NODE}"
 
 export PATH="${NODE}/bin:${PATH}"
 
-$CURR_DIR/../node_modules/gulp/bin/gulp.js build
-$CURR_DIR/../node_modules/gulp/bin/gulp.js compressDev
+$CURR_DIR/../node_modules/gulp/bin/gulp.js build --buildNumber 42
+$CURR_DIR/../node_modules/gulp/bin/gulp.js compressDev --buildNumber 42

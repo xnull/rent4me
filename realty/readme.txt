@@ -73,20 +73,6 @@
  Username: tomcat
  Password: k124hfeoifs9
 
- JIRA login:
- host: jira.rent4.me
- root: -[CSqFgs3!UChZv9
- ----
- Username: jira
- Password: k28s01s0357da3j0
-
-
- JIRA email account:
- smtp: smtp.yandex.ru
- smtp port: 587
- email: jira@rent4.me
- password: kj20sj39sk0
-
 ------
 
 ------
@@ -108,14 +94,3 @@ password: s82ks93l09d0a
  username: admin@rent4.me
  password: T210sadml324@asdlk
 
-
- ------
- digitalocean.com
- email: dionis.argiri@gmail.com
- password: asdjlk2332kj320d12
-
-
- -----
- VK fake users:
- 79148742035
- zafeni66

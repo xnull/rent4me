@@ -60,6 +60,7 @@ var route = (
         <Route name="chats" path="user/chats" handler={require('./left-pane/chats/main')}/>
         <Route name="chat" path="user/chat" handler={require('./left-pane/chats/chat')}/>
         <Route name="newMessageInChat" path="user/chats/newMessage" handler={require('./left-pane/chats/newMessage')}/>
+        <Route name="advert" path="advert/:id" handler={require('./left-pane/socialnet/advert')}  />
 
         <DefaultRoute handler={require('./left-pane/socialnet/social_networks')}/>
     </Route>

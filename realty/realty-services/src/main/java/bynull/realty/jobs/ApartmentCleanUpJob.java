@@ -17,7 +17,7 @@ public class ApartmentCleanUpJob implements Runnable {
     JobHelperComponent jobHelperComponent;
 
     @Scheduled(
-            cron = "0 5 0 * * *" //start on each 5-th minute of each hour
+            cron = "0 9 * * * *" //start on each 9-th minute of each hour
 //            initialDelay = 60*60*1000, fixedDelay = 60*60*1000
     )//start each hour, default delay - one minute
     @Override
