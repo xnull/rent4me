@@ -304,6 +304,18 @@ public class PreRenderRestResource {
             result += apartment.getRentalFee()+" рублей в месяц ";
         }
 
+        //perform inverse actions
+        switch (apartment.getTarget()) {
+            case RENTER:
+                result+="[снять квартиру] ";
+                break;
+            case LESSOR:
+                result+="[сдать квартиру] ";
+                break;
+            default:;
+
+        }
+
         return result.trim();
     }
 }
