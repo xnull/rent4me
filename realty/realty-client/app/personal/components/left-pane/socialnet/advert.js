@@ -61,9 +61,7 @@ var Advert = React.createClass({
                         {content}
                     </div>
                     <div className="panel-footer">
-                        <div className="col-md-offset-9 col-sm-offset-9 col-xs-offset-6 col-md-3 col-sm-3 col-xs-6">
-                            <a className="btn btn-primary center-block" href='#'>Вернуться к поиску</a>
-                        </div>
+                        <a className="btn btn-primary center-block" href='#'>Вернуться к поиску</a>
                     </div>
                 </div>
             </div>

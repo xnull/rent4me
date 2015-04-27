@@ -246,11 +246,26 @@ var HeaderBlock = React.createClass({
     }
 });
 
+var MessageDetails = React.createClass({
+    render: function () {
+        var item = this.props.item;
+        var showFull = this.props.showFull;
+        return (
+            showFull ? null :
+                <div className="col-md-offset-9 col-sm-offset-8 col-xs-offset-6 col-md-3 col-sm-4 col-xs-6" style={{marginTop: 5}}>
+                    <Link to="advert" params={{id: item.id}}><a
+                        className="btn btn-default center-block">Подробнее</a></Link>
+                </div>
+        )
+    }
+});
+
 var Message = React.createClass({
     render: function () {
         var item = this.props.item;
         var showFull = this.props.showFull;
         return (
+
             <div className="col-md-12 col-sm-12 col-xs-12">
                 <div className="col-md-12 col-sm-12 col-xs-12"
                      style={{
@@ -259,13 +274,6 @@ var Message = React.createClass({
                     }}
                      dangerouslySetInnerHTML={{__html: Utils.nl2br(showFull ? item.description: Utils.previewText(item.description, 128))}}>
                 </div>
-                <br/>
-                {showFull ? null :
-                    <div className="col-md-offset-10 col-sm-offset-10 col-xs-offset-6 col-md-2 col-sm-2 col-xs-6">
-                        <Link to="advert" params={{id: item.id}}><a
-                            className="btn btn-default center-block">Подробнее</a></Link>
-                    </div>
-                }
             </div>
         )
     }
@@ -335,8 +343,12 @@ var Post = React.createClass({
                             </div>
                         </div>
                     </div>
+
                     <div className="row">
                         <Message item={item} showFull={this.props.showFull}/>
+                    </div>
+                    <div className="row">
+                        <MessageDetails item={item} showFull={this.props.showFull}/>
                     </div>
                 </div>
             </div>
