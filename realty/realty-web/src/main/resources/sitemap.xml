@@ -3,12 +3,10 @@
     <url>
         <loc>http://rent4.me/</loc>
         <lastmod>:date</lastmod>
-        <changefreq>daily</changefreq>
     </url>
     <url>
         <loc>http://rent4.me/personal/</loc>
         <lastmod>:date</lastmod>
-        <changefreq>daily</changefreq>
     </url>
     :urls
 </urlset>

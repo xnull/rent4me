@@ -9,6 +9,7 @@ import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -54,7 +55,10 @@ public class PreRenderRestResource {
                 log.info("Rendering sitemap.xml for google bot");
                 String template = loadTemplate("sitemap.xml");
 
-                String dateFormatted = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                Date date = new DateTime().withYear(2015).withMonthOfYear(4).withDayOfMonth(27).withMillisOfDay(0).toDate();
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String dateFormatted = simpleDateFormat.format(date);
 
                 StringBuilder contentBuilder = new StringBuilder();
 
@@ -63,7 +67,7 @@ public class PreRenderRestResource {
                 long totalCountOfPages = totalCount / ITEMS_PER_PAGE + (totalCount % ITEMS_PER_PAGE > 0 ? 1 : 0);
 
                 for(long page = 1; page <= totalCountOfPages; page++) {
-                    String str = urlBuilder(page, dateFormatted);
+                    String str = urlBuilder(page, simpleDateFormat, date);
                     contentBuilder.append(str);
                 }
 
@@ -79,11 +83,14 @@ public class PreRenderRestResource {
         });
     }
 
-    private static String urlBuilder(long page, String dateFormatted){
+    private String urlBuilder(long page, SimpleDateFormat simpleDateFormat, Date date) {
+        Date maxDateForPage = findMaxDateForPage(page);
+        Date targetDate = maxDateForPage.after(date) ? maxDateForPage : date;
+        String dateFormatted = simpleDateFormat.format(targetDate);
+
         return "<url>\n" +
                 "        <loc>http://rent4.me/search/?page=" + page + "</loc>\n" +
                 "        <lastmod>"+dateFormatted+"</lastmod>\n" +
-                "        <changefreq>daily</changefreq>\n" +
                 "    </url>\n";
     }
 
@@ -191,8 +198,7 @@ public class PreRenderRestResource {
                 page = _page;
             }
 
-            List<Apartment>
-                    found = apartmentRepository.findActiveApartments(new PageRequest(page - 1, ITEMS_PER_PAGE, Sort.Direction.DESC, "logicalCreated"));
+            List<Apartment> found = loadApartmentsForPage(page);
 
             log.info("Rendering content for google bot");
             String template = loadTemplate("apartments.html");
@@ -225,6 +231,18 @@ public class PreRenderRestResource {
                     .header("content-type", "text/html")
                     .build();
         });
+    }
+
+    private List<Apartment> loadApartmentsForPage(long page) {
+        long offset = (page - 1) * ITEMS_PER_PAGE;
+
+        return apartmentRepository.listApartments(ITEMS_PER_PAGE, offset);
+    }
+
+    private Date findMaxDateForPage(long page) {
+        long offset = (page - 1) * ITEMS_PER_PAGE;
+
+        return apartmentRepository.findMaxDateForPage(ITEMS_PER_PAGE, offset);
     }
 
     private static String getDesc(Apartment apartment) {
@@ -284,6 +302,18 @@ public class PreRenderRestResource {
 
         if(apartment.getRentalFee() != null) {
             result += apartment.getRentalFee()+" рублей в месяц ";
+        }
+
+        //perform inverse actions
+        switch (apartment.getTarget()) {
+            case RENTER:
+                result+="[сниму квартиру] ";
+                break;
+            case LESSOR:
+                result+="[сдам квартиру] ";
+                break;
+            default:;
+
         }
 
         return result.trim();

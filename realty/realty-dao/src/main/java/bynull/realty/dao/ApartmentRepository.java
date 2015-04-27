@@ -20,6 +20,9 @@ import java.util.Set;
  * @author dionis on 22/06/14.
  */
 public interface ApartmentRepository extends JpaRepository<Apartment, Long>, ApartmentRepositoryCustom {
+
+    String LIST_APARTMENTS_QUERY = "select a.* from apartments a where a.data_source<>'INTERNAL' OR a.published=true order by a.id limit :limit offset :offset";
+
     @Query(value = "select a.* from apartments a " +
             "where a.published=true " +
             "and upper(a.country_code)=upper(:countryCode) " +
@@ -109,8 +112,11 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("select count(a) from Apartment a where a.published=true")
     long countOfActiveApartments();
 
-    @Query("select a from Apartment a where a.published=true")
-    List<Apartment> findActiveApartments(Pageable pageable);
+    @Query(value = LIST_APARTMENTS_QUERY, nativeQuery = true)
+    List<Apartment> listApartments(@Param("limit") int limit, @Param("offset") long offset);
+
+    @Query(value = "select max(tmp.logical_created_dt) from ("+LIST_APARTMENTS_QUERY+") tmp ", nativeQuery = true)
+    Date findMaxDateForPage(@Param("limit") int limit, @Param("offset") long offset);
 
 
     public enum FindMode {
