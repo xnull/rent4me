@@ -38,9 +38,9 @@ var Advert = React.createClass({
     _smartReturnToSearch: function() {
         var referrer = document.referrer || '';
         console.log('referrer: '+referrer);
-        if(referrer.indexOf('://rent4.me') != -1 || referrer.indexOf('://localhost') != -1 || !referrer) {
+        var historyLength = window.history.length;
+        if((referrer.indexOf('://rent4.me') != -1 || referrer.indexOf('://localhost') != -1 || !referrer) && historyLength > 0) {
             console.log('returning back via history');
-            var historyLength = window.history.length;
             console.log('History length: ' + historyLength);
             window.history.back();
         } else {
