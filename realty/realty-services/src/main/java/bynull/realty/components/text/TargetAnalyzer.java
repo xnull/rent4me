@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Component
 public class TargetAnalyzer {
-    private static final List<String> LESSOR_TARGETED_KEYWORDS = ImmutableList.of("сниму", "снимаю", "снять", "снял", "возьму", "возьмет", "взял", "взять", "снимем", "снимет");
+    private static final List<String> LESSOR_TARGETED_KEYWORDS = ImmutableList.of("сниму", "снимаю", "снять", "снял", "возьму", "возьмет", "взял", "взять", "снимем", "снимет", "снимут");
     private static final List<String> RENTER_TARGETED_KEYWORDS = ImmutableList.of("сдаю", "сдам", "отдам", "отдаю", "отдается", "отдает",
             "сдается", "подселю", "сдаем", "сдает",
             //слова долбоеб стайл
