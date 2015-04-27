@@ -36,10 +36,11 @@ var Advert = React.createClass({
     },
 
     _smartReturnToSearch: function() {
+        //вернуться к поиску с запоминанием позиции в ней
         var referrer = document.referrer || '';
         console.log('referrer: '+referrer);
         var historyLength = window.history.length;
-        if((referrer.indexOf('://rent4.me') != -1 || referrer.indexOf('://localhost') != -1 || !referrer) && historyLength > 0) {
+        if((referrer.indexOf('://rent4.me') != -1 || referrer.indexOf('://localhost') != -1 || !referrer) && historyLength > 1) {
             console.log('returning back via history');
             console.log('History length: ' + historyLength);
             window.history.back();
