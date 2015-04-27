@@ -307,10 +307,10 @@ public class PreRenderRestResource {
         //perform inverse actions
         switch (apartment.getTarget()) {
             case RENTER:
-                result+="[снять квартиру] ";
+                result+="[сниму квартиру] ";
                 break;
             case LESSOR:
-                result+="[сдать квартиру] ";
+                result+="[сдам квартиру] ";
                 break;
             default:;
 
