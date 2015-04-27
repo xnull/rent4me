@@ -12,30 +12,30 @@ var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 var NOT_INITIALIZED_YET = 'NOT_LOADED_YET';
 
 var Advert = React.createClass({
-    mixins: [ Router.State ],
+    mixins: [Router.State],
 
-    getInitialState: function() {
+    getInitialState: function () {
         var that = this;
         return {
             post: NOT_INITIALIZED_YET
         }
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         SocialNetStore.addChangeListener(this._onPostChange);
         SocialNetActions.findPost(this.getParams().id);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         SocialNetStore.removeChangeListener(this._onPostChange);
     },
 
-    _onPostChange: function() {
+    _onPostChange: function () {
         var that = this;
         this.setState({post: SocialNetStore.getPostById(that.getParams().id)});
     },
 
-    render: function() {
+    render: function () {
         var params = this.getParams();
         console.log('Params are');
         console.log(params);
@@ -50,15 +50,20 @@ var Advert = React.createClass({
             content = "Данные загружаются";
         } else if (post && post != NOT_INITIALIZED_YET) {
             content = <Posts items={[post]} shown={true} hasMore={false}
-                showFull={true}
-                onHasMoreClicked={void(0)}/>;
+                             showFull={true}
+                             onHasMoreClicked={void(0)}/>;
         }
 
         return (
             <div>
                 <div className="panel">
                     <div className="panel-body" style={{backgroundColor: 'rgba(9, 45, 76, 0.2)'}}>
-                    {content}
+                        {content}
+                    </div>
+                    <div className="panel-footer">
+                        <div className="col-md-offset-9 col-sm-offset-9 col-xs-offset-6 col-md-3 col-sm-3 col-xs-6">
+                            <a className="btn btn-primary center-block" href='#'>Вернуться к поиску</a>
+                        </div>
                     </div>
                 </div>
             </div>

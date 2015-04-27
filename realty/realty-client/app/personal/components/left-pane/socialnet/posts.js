@@ -35,7 +35,7 @@ var Address = React.createClass({
         //var address = this.props.address;
         var addressIsSet = !!address;
         return (
-            addressIsSet ? <AdsItem name='Адрес' text={address} /> : null
+            addressIsSet ? <AdsItem name='Адрес' text={address}/> : null
         )
     }
 });
@@ -57,16 +57,16 @@ var MetroPreviews = React.createClass({
         var hasMetros = _.size(this.props.metros) > 0;
 
         return (
-            <AdsItem name='Метро' text={hasMetros ? this.getRecognized() : "См. в описании"} />
+            <AdsItem name='Метро' text={hasMetros ? this.getRecognized() : "См. в описании"}/>
         )
     }
 });
 
 var GoogleMapView = React.createClass({
-    componentDidMount: function(){
+    componentDidMount: function () {
         var location = this.props.location;
 
-        if(location.latitude && location.longitude) {
+        if (location.latitude && location.longitude) {
             var mapOptions = {
                 zoom: 14,
                 center: new google.maps.LatLng(location.latitude, location.longitude)
@@ -83,7 +83,7 @@ var GoogleMapView = React.createClass({
         }
     },
 
-    render: function() {
+    render: function () {
         return (
             <div ref="mapInsert" style={{width: '300px', height: '300px', marginBottom: '20px'}}></div>
         );
@@ -93,7 +93,7 @@ var GoogleMapView = React.createClass({
 var RoomCountInfo = React.createClass({
     render: function () {
         return (
-            <AdsItem name='Комнат' text={this.props.roomCount ? this.props.roomCount : 'См. в описании'} />
+            <AdsItem name='Комнат' text={this.props.roomCount ? this.props.roomCount : 'См. в описании'}/>
         )
     }
 });
@@ -102,7 +102,8 @@ var PriceInfo = React.createClass({
     render: function () {
         var item = this.props.item;
         return (
-            <AdsItem name='Цена' text={item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'См. в описании'} />
+            <AdsItem name='Цена'
+                     text={item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'См. в описании'}/>
         )
     }
 });
@@ -137,19 +138,20 @@ var ContactInfo = React.createClass({
         var item = this.props.item;
 
         var externalLinkContent = item.external_link ? (
-            <a href={item.external_link} target="_blank">Источник &nbsp;<i className="glyphicon glyphicon-new-window"></i> </a>
+            <a href={item.external_link} target="_blank">Источник &nbsp;<i
+                className="glyphicon glyphicon-new-window"></i> </a>
         ) : null;
         var externalAuthorContent = item.external_author_link ? (
             <span>
                     &nbsp;&nbsp;&nbsp;(<a href={item.external_author_link} target="_blank">
-                    <i title="Связаться через соц. сеть" className="glyphicon glyphicon-user"></i>
-                </a>)
+                <i title="Связаться через соц. сеть" className="glyphicon glyphicon-user"></i>
+            </a>)
             </span>
-            )  : null;
+        ) : null;
 
-        return (item.external_author_link || item.external_link )? (
+        return (item.external_author_link || item.external_link ) ? (
             <div>
-            {externalLinkContent}   {externalAuthorContent}
+                {externalLinkContent} {externalAuthorContent}
             </div>
         ) : null;
     },
@@ -172,10 +174,10 @@ var ContactInfo = React.createClass({
         return (
             <div className='col-sm-12 col-md-12 col-xs-12' style={{borderRadius: 2}}>
                 <div>
-                      {phoneNumbersDisplay}
-                      {this.getDirectContact()}
+                    {phoneNumbersDisplay}
+                    {this.getDirectContact()}
                     <br/>
-                      {this.getExternalContactLinks()}
+                    {this.getExternalContactLinks()}
                 </div>
             </div>
         )
@@ -191,13 +193,13 @@ var ImagePreviews = React.createClass({
         if (item.data_source == 'INTERNAL') {
             firstImage = item.photos ? _.first(item.photos.map(photo => {
                 return (
-                    <img className="media-object" width="160"  src={photo.small_thumbnail_url}/>
+                    <img className="media-object" width="160" src={photo.small_thumbnail_url}/>
                 );
             })) : null;
         } else {
             firstImage = item.external_images ? _.first(item.external_images.map(image => {
                 return (
-                    <img className="media-object" width="160"  src={image.small_thumbnail_url}/>
+                    <img className="media-object" width="160" src={image.small_thumbnail_url}/>
                 );
             })) : null;
         }
@@ -206,12 +208,12 @@ var ImagePreviews = React.createClass({
     },
 
     render: function () {
-        var withoutImage = (<img className="media-object"  src="http://placehold.it/160"/>);
+        var withoutImage = (<img className="media-object" src="http://placehold.it/160"/>);
         var firstImage = this.getFirstImage();
         return (
             <div>
                 <div className="thumbnail pull-left">
-                {firstImage ? firstImage : withoutImage}
+                    {firstImage ? firstImage : withoutImage}
                 </div>
             </div>
         )
@@ -251,14 +253,19 @@ var Message = React.createClass({
         return (
             <div className="col-md-12 col-sm-12 col-xs-12">
                 <div className="col-md-12 col-sm-12 col-xs-12"
-                    style={{
+                     style={{
                         boxShadow: 'none', lineHeight: '18px', fontSize: '14px', border: '1px #e4e4e4 solid',
                         padding: '15px', backgroundColor: 'rgba(244, 242, 242, 0.2)'
                     }}
-                    dangerouslySetInnerHTML={{__html: Utils.nl2br(showFull ? item.description: Utils.previewText(item.description, 128))}}>
+                     dangerouslySetInnerHTML={{__html: Utils.nl2br(showFull ? item.description: Utils.previewText(item.description, 128))}}>
                 </div>
                 <br/>
-                {showFull?null:<Link to="advert" params={{id: item.id}}>Подробнее</Link>}
+                {showFull ? null :
+                    <div className="col-md-offset-10 col-sm-offset-10 col-xs-offset-6 col-md-2 col-sm-2 col-xs-6">
+                        <Link to="advert" params={{id: item.id}}><a
+                            className="btn btn-default center-block">Подробнее</a></Link>
+                    </div>
+                }
             </div>
         )
     }
@@ -308,21 +315,22 @@ var Post = React.createClass({
         return (
             <div className='panel panel-info'>
                 <HeaderBlock item={item}/>
+
                 <div className="panel-body">
                     <div className="row">
                         <div className="col-md-3 col-sm-6 col-xs-12">
-                            <ImagePreviews item={item} />
+                            <ImagePreviews item={item}/>
                         </div>
                         <div className="col-md-9 col-sm-6 col-xs-12">
                             <div className='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
                                 <Address item={item}/>
                                 <MetroPreviews metros={item.metros}/>
                                 <RoomCountInfo roomCount={item.room_count}/>
-                                <PriceInfo item={item} />
+                                <PriceInfo item={item}/>
                             </div>
                             <div className='col-md-6 col-sm-12 col-xs-12'>
                                 <div className="row bordered-element">
-                                    <ContactInfo item={item} me={this.state.me} />
+                                    <ContactInfo item={item} me={this.state.me}/>
                                 </div>
                             </div>
                         </div>
@@ -374,9 +382,9 @@ var Posts = React.createClass({
         return (
             <div style={style}>
                 <div className="list-group">
-                {posts}
+                    {posts}
                     <br/>
-                {hasMoreElement}
+                    {hasMoreElement}
                 </div>
             </div>
         );
