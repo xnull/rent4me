@@ -21,7 +21,8 @@ import java.util.Set;
  */
 public interface ApartmentRepository extends JpaRepository<Apartment, Long>, ApartmentRepositoryCustom {
 
-    String LIST_APARTMENTS_QUERY = "select a.* from apartments a where a.data_source<>'INTERNAL' OR a.published=true order by a.id limit :limit offset :offset";
+    String LIST_APARTMENTS_QUERY_BASE = "select a.* from apartments a where a.data_source<>'INTERNAL' OR a.published=true ";
+    String LIST_APARTMENTS_QUERY = LIST_APARTMENTS_QUERY_BASE + " order by a.id limit :limit offset :offset";
 
     @Query(value = "select a.* from apartments a " +
             "where a.published=true " +
@@ -109,7 +110,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("update Apartment a set a.published=false where a.logicalCreated < :date")
     void unPublishOldNonInternalApartments(@Param("date") Date date);
 
-    @Query(value = "select count(tmp.*) from ("+LIST_APARTMENTS_QUERY+") tmp ", nativeQuery = true)
+    @Query(value = "select count(tmp.*) from ("+LIST_APARTMENTS_QUERY_BASE+") tmp ", nativeQuery = true)
     long countOfActiveApartments();
 
     @Query(value = LIST_APARTMENTS_QUERY, nativeQuery = true)
