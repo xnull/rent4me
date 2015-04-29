@@ -29,6 +29,8 @@ dependencies {
     //spring
     compile libraries."org.springframework:spring-webmvc"
     compile libraries."org.springframework:spring-web"
+    compile libraries."org.springframework:spring-websocket"
+    compile libraries."org.springframework:spring-messaging"
     compile libraries."org.springframework.security:spring-security-web"
     compile libraries."org.springframework.security:spring-security-config"
     compile libraries."org.springframework.security:spring-security-core"

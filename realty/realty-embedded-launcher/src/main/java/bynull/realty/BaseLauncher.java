@@ -6,7 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
@@ -53,6 +53,7 @@ public class BaseLauncher {
     }
 
     public void doStart(String... args) throws Exception {
+
         System.setProperty("hibernate.show_sql", "true");
         if (isLaunchFromIDE(handlerDescs.get(0))) {
             setUpLogDirectory();
@@ -85,11 +86,11 @@ public class BaseLauncher {
     private void startServer(int port) throws Exception {
         long start = System.currentTimeMillis();
         Server server = new Server();
-        SelectChannelConnector selectChannelConnector = new SelectChannelConnector();
-        selectChannelConnector.setAcceptors(Math.max(Runtime.getRuntime().availableProcessors(), 1));
+        ServerConnector selectChannelConnector = new ServerConnector(server);
+//        selectChannelConnector.setAcceptors(Math.max(Runtime.getRuntime().availableProcessors(), 1));
         selectChannelConnector.setPort(port);
         selectChannelConnector.setAcceptQueueSize(10000);
-        selectChannelConnector.setThreadPool(new QueuedThreadPool());
+//        selectChannelConnector.setThreadPool(new QueuedThreadPool());
         server.setConnectors(new Connector[]{selectChannelConnector});
 
         final ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();

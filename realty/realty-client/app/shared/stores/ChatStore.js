@@ -8,25 +8,6 @@ var Constants = require('../constants/ChatConstants');
 
 var assign = require('object-assign');
 
-function emptyPost() {
-    return {
-        'location': null,
-        'address': null,
-        'type_of_rent': '',
-        'rental_fee': null,
-        'fee_period': '',
-        'room_count': null,
-        'floor_number': null,
-        'floors_total': null,
-        'area': null,
-        'description': '',
-        'photos': [],
-        'added_photos_guids': [],
-        'deleted_photos_guids': [],
-        'published': false
-    };
-}
-
 var _myChats = [];
 var _chatMessages = [];
 
@@ -73,6 +54,16 @@ var Store = assign({}, EventEmitter.prototype, {
 
     saveChatMessages: function (chatKey, messages) {
         _chatMessages[chatKey] = messages || [];
+    },
+
+    addChatMessage: function (chatKey, message) {
+        if(!_chatMessages[chatKey]) {
+            _chatMessages[chatKey] = [];
+        }
+        _chatMessages[chatKey] = [message].concat(_chatMessages[chatKey]);
+        console.log("Added chat message");
+        console.log("new chat view");
+        console.log(_chatMessages[chatKey]);
     },
 
     getChatMessages: function (chatKey) {
@@ -148,6 +139,16 @@ AppDispatcher.register(function (payload) {
             console.log(action.newMessage);
 
             Store.emitNewConversationStarted();
+            return true;
+            break;
+
+        case Constants.CHAT_MESSAGE_ADDED:
+            console.log('chat messages loaded for chat ' + action.message.chat_key + ':');
+            console.log(action.message);
+
+            Store.addChatMessage(action.message.chat_key, action.message);
+
+            Store.emitChatMessagesLoadedEvent();
             return true;
             break;
 

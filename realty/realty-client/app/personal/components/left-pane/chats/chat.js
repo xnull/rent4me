@@ -55,7 +55,7 @@ module.exports = React.createClass({
         this.setState(assign(this.state, {
             messageText: null
         }));
-        ChatActions.loadChatMessages(this.state.chatKey);
+        //ChatActions.loadChatMessages(this.state.chatKey);
     },
 
     myUserListener: function () {
@@ -71,7 +71,12 @@ module.exports = React.createClass({
     },
 
     onSendMessage: function () {
-        ChatActions.sendNewMessage(this.state.targetPersonId, this.state.messageText);
+        //TODO: move chat key generation in some common place
+        var myId = this.state.me.id;
+        var min = Math.min(myId, this.state.targetPersonId);
+        var max = Math.max(myId, this.state.targetPersonId);
+        var chatKey = min + "_" + max;
+        ChatActions.sendNewMessage(this.state.targetPersonId, this.state.messageText, chatKey);
     },
 
     render: function () {

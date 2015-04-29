@@ -7,10 +7,33 @@ var Constants = require('../constants/ChatConstants');
 var Store = require('../stores/ChatStore');
 var BlockUI = require('../common/BlockUI');
 var assign = require('object-assign');
+var JSON = require('JSON2');
 
 var Ajax = require('../common/Ajax');
+var SockJS = require('sockjs-client');
+var socket = new SockJS('/ws/messages');
+socket.onopen = function(){
+    console.log('Connection open!');
+    //setConnected(true);
+};
 
-module.exports = {
+socket.onclose = function(){
+    console.log('Disconnecting connection');
+};
+
+socket.onmessage = function (evt)
+{
+    var received_msg = JSON.parse(evt.data);
+    console.log(received_msg);
+    console.log('message received!');
+    AppDispatcher.handleViewAction({
+        actionType: Constants.CHAT_MESSAGE_ADDED,
+        message: received_msg
+    });
+    //showMessage(received_msg);
+};
+
+var ChatActions = {
 
     loadMyChats: function () {
         BlockUI.blockUI();
@@ -35,14 +58,12 @@ module.exports = {
             .execute();
     },
 
-    sendNewMessage: function (personId, text) {
+    sendNewMessage: function (personId, text, chatKey) {
         BlockUI.blockUI();
 
-        //var limit = Store.getLimit();
-        //var offset = Store.getOffset();
-
         var obj = {
-            message: text
+            message: text,
+            chat_key: chatKey
         };
 
         Ajax
@@ -54,6 +75,7 @@ module.exports = {
                     actionType: Constants.CHAT_NEW_CONVERSATION_STARTED,
                     newMessage: data
                 });
+                socket.send(JSON.stringify(data));
 
                 BlockUI.unblockUI();
             })
@@ -65,9 +87,6 @@ module.exports = {
 
     loadChatMessages: function (chatKey) {
         BlockUI.blockUI();
-
-        //var limit = Store.getLimit();
-        //var offset = Store.getOffset();
 
         Ajax
             .GET('/rest/users/me/chats/' + chatKey)
@@ -85,5 +104,7 @@ module.exports = {
                 BlockUI.unblockUI();
             })
             .execute();
-    },
+    }
 };
+
+module.exports = ChatActions;
