@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 /**
  * @author dionis on 06/12/14.
  */
-@Component
 public class PhotoTempCleanupJob implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(PhotoTempCleanupJob.class);
 

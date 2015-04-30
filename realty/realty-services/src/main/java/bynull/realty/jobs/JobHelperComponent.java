@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by dionis on 3/25/15.
  */
 @Slf4j
-@Component
 public class JobHelperComponent implements InitializingBean, DisposableBean {
     @Resource
     FacebookService facebookService;

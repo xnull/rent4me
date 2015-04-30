@@ -11,7 +11,6 @@ import javax.annotation.Resource;
  * @author dionis on 06/12/14.
  */
 @Slf4j
-@Component
 public class VkontakteScrappingJob implements Runnable {
 
     @Resource

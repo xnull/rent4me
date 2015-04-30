@@ -5,4 +5,10 @@
     <task:annotation-driven executor="myExecutor" scheduler="myScheduler"/>
     <task:scheduler id="myScheduler" pool-size="5"/>
     <task:executor id="myExecutor" pool-size="5"/>
+
+    <bean class="bynull.realty.jobs.ApartmentCleanUpJob"/>
+    <bean class="bynull.realty.jobs.FacebookScrappingJob"/>
+    <bean class="bynull.realty.jobs.JobHelperComponent"/>
+    <bean class="bynull.realty.jobs.PhotoTempCleanupJob"/>
+    <bean class="bynull.realty.jobs.VkontakteScrappingJob"/>
 </beans>
