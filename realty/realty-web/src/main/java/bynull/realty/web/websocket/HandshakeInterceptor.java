@@ -17,13 +17,13 @@ import java.util.Map;
 public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        System.out.println("Before handshake");
+        log.info("Before handshake");
         return super.beforeHandshake(request, response, wsHandler, attributes);
     }
 
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception ex) {
-        System.out.println("After handshake");
+        log.info("After handshake");
         super.afterHandshake(request, response, wsHandler, ex);
     }
 }

@@ -13,15 +13,22 @@ var JSON = require('JSON2');
 var Ajax = require('../common/Ajax');
 var SockJS = require('sockjs-client');
 var _socket = null;
+var _healthCheckInterval = null;
 
 var ChatActions = {
 
     subscribe: function() {
+        var self = this;
         var wsAuthMessage = AuthStore.getWSAuthMessage();
         if(wsAuthMessage) {
             _socket = new SockJS('/ws/messages');
             _socket.onopen = function(){
                 console.log('Connection open!');
+                if(_healthCheckInterval) {
+                    console.log('Clearing interval for recovery');
+                    clearInterval(_healthCheckInterval);
+                    _healthCheckInterval = null;
+                }
                 _socket.send(wsAuthMessage);
                 //setConnected(true);
             };
@@ -29,6 +36,12 @@ var ChatActions = {
             _socket.onclose = function(){
                 console.log('Disconnecting connection');
                 _socket = null;
+                if(!_healthCheckInterval) {
+                    console.log('Scheduling interval for recovery');
+                    _healthCheckInterval = setInterval(function(){
+                        self.subscribe();//try to reconnect
+                    }, 5000);
+                }
             };
 
             _socket.onmessage = function (evt)
@@ -48,10 +61,10 @@ var ChatActions = {
     },
 
     unSubscribe: function() {
-       if(_socket) {
+       /*if(_socket) {
            _socket.close();
            _socket = null;
-       }
+       }*/
     },
 
     loadMyChats: function () {
@@ -94,7 +107,11 @@ var ChatActions = {
                     actionType: Constants.CHAT_NEW_CONVERSATION_STARTED,
                     newMessage: data
                 });
-                _socket.send(JSON.stringify(data));
+                AppDispatcher.handleViewAction({
+                    actionType: Constants.CHAT_MESSAGE_ADDED,
+                    message: data
+                });
+                //_socket.send(JSON.stringify(data));
 
                 BlockUI.unblockUI();
             })

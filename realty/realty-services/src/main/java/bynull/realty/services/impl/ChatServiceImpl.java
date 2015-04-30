@@ -1,10 +1,13 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.components.AfterCommitExecutor;
+import bynull.realty.components.api.ChatMessageUsersOnlineNotifier;
 import bynull.realty.dao.ChatMessageRepository;
 import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.User;
 import bynull.realty.data.business.chat.ChatMessage;
 import bynull.realty.dto.ChatMessageDTO;
+import bynull.realty.services.api.AsyncExecutor;
 import bynull.realty.services.api.ChatService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
@@ -27,6 +30,12 @@ public class ChatServiceImpl implements ChatService {
     @Resource
     private UserRepository userRepository;
 
+    @Resource
+    ChatMessageUsersOnlineNotifier chatMessageUsersOnlineNotifier;
+
+    @Resource
+    AfterCommitExecutor afterCommitExecutor;
+
     @Transactional
     @Override
     public ChatMessageDTO createChatMessage(long receiverId, String text) {
@@ -46,6 +55,16 @@ public class ChatServiceImpl implements ChatService {
         entity.setReceiver(receiver);
         entity.setMessage(text);
         entity = chatMessageRepository.saveAndFlush(entity);
+
+        final long chatMessageId = entity.getId();
+
+        afterCommitExecutor.executeAsynchronouslyInTransaction(()->{
+            ChatMessage one = chatMessageRepository.findOne(chatMessageId);
+            Assert.notNull(one, "Chat message not found by id "+chatMessageId);
+            ChatMessageDTO dto = ChatMessageDTO.from(one);
+            chatMessageUsersOnlineNotifier.sendMessagesToParticipants(dto);
+        });
+
         return ChatMessageDTO.from(entity);
     }
 

@@ -1,5 +1,7 @@
 package bynull.realty.web.websocket;
 
+import bynull.realty.components.api.ChatMessageUsersOnlineNotifier;
+import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -23,22 +26,24 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by dionis on 4/29/15.
  */
 @Component
-public class MessagesWebsocketEndPoint extends TextWebSocketHandler {
+@Slf4j
+public class MessagesWebSocketEndPoint extends TextWebSocketHandler implements ChatMessageUsersOnlineNotifier {
 
-    Map<Long, Set<WebSocketSession>> webSocketSessions = new HashMap<>();
+    private final Map<Long, Set<WebSocketSession>> webSocketSessions = new HashMap<>();
+
+    private final Object lock = new Object();
 
     @Resource
     UserTokenService userTokenService;
 
     @Resource
     UserService userService;
-
-    private final Object lock = new Object();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -66,22 +71,7 @@ public class MessagesWebsocketEndPoint extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-//        SecurityUtils.UserIDHolder userIDHolder = SecurityUtils.getAuthorizedUser();
-//        super.afterConnectionEstablished(session);
-//        webSocketSessions.add(session);
-//        System.out.println("Opened");
-//        TextMessage returnMessage = new TextMessage("User joned. Users online: "+webSocketSessions.size());
-//        sendMessagesToAll(returnMessage);
-    }
-
-    @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-//        super.afterConnectionClosed(session, status);
-//        webSocketSessions.remove(session);
-//        System.out.println("Closed");
-//        TextMessage returnMessage = new TextMessage("User left. Users online: "+webSocketSessions.size());
-//        sendMessagesToAll(returnMessage);
         removeSession(session);
     }
 
@@ -97,11 +87,6 @@ public class MessagesWebsocketEndPoint extends TextWebSocketHandler {
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-//        super.handleTransportError(session, exception);
-//        webSocketSessions.remove(session);
-//        System.out.println("Transport error");
-//        TextMessage returnMessage = new TextMessage("User left. Users online: "+webSocketSessions.size());
-//        sendMessagesToAll(returnMessage);
         removeSession(session);
     }
 
@@ -143,20 +128,45 @@ public class MessagesWebsocketEndPoint extends TextWebSocketHandler {
         try {
             ChatMessageJSON chatMessageJSON = objectMapper.readValue(payload, ChatMessageJSON.class);
 
-            sendMessagesToAll(chatMessageJSON);
+//            sendMessagesToRecipients(chatMessageJSON);
             return;
         } catch (Exception e) {
 //            e.printStackTrace();
         }
+        log.warn("No handler worked");
     }
 
-    private void sendMessagesToAll(ChatMessageJSON chatMessage) throws IOException {
+    @Override
+    public Collection<Long> getUserIdsOnline() {
+        final Set<Long> usersOnline;
+        synchronized (lock) {
+            usersOnline = webSocketSessions.entrySet().stream()
+                    .filter(e -> !e.getValue().isEmpty() && e.getValue().stream().anyMatch(WebSocketSession::isOpen))
+                    .map(Map.Entry::getKey).collect(Collectors.toSet());
+        }
+
+        return usersOnline;
+    }
+
+    @Override
+    public boolean isUserOnline(long userId) {
+        return getUserIdsOnline().contains(userId);
+    }
+
+    @Override
+    public boolean sendToUserIfOnline(long userId, ChatMessageDTO content) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void sendMessagesToParticipants(ChatMessageDTO chatMessage) {
+        ChatMessageJSON chatMessageJSON = ChatMessageJSON.from(chatMessage);
         try {
-            String json = JsonUtils.toJson(chatMessage);
+            String json = JsonUtils.toJson(chatMessageJSON);
             TextMessage message = new TextMessage(json);
             Set<WebSocketSession> sessions = new HashSet<>();
             synchronized (lock) {
-                sessions.addAll(webSocketSessions.getOrDefault(chatMessage.getSender().getId(), Collections.emptySet()));
+//                sessions.addAll(webSocketSessions.getOrDefault(chatMessage.getSender().getId(), Collections.emptySet()));
                 sessions.addAll(webSocketSessions.getOrDefault(chatMessage.getReceiver().getId(), Collections.emptySet()));
             }
             for (WebSocketSession webSocketSession : sessions) {
@@ -167,11 +177,12 @@ public class MessagesWebsocketEndPoint extends TextWebSocketHandler {
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println("closed. skipping");
+                    log.warn("WebSocket session closed. skipping");
                 }
             }
         } catch (JsonMapperException e) {
-            e.printStackTrace();
+            log.error("Exception occurred while trying to serialize JSON", chatMessage);
         }
     }
+
 }

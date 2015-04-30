@@ -1,0 +1,13 @@
+package bynull.realty.components.api;
+
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * Created by dionis on 4/30/15.
+ */
+public interface UsersOnlineNotifier<T> {
+    Collection<Long> getUserIdsOnline();
+    boolean isUserOnline(long userId);
+    boolean sendToUserIfOnline(long userId, T content);
+}

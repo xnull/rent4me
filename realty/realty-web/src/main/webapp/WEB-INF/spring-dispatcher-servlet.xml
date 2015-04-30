@@ -24,7 +24,7 @@
     </bean>
 
     <websocket:handlers>
-        <websocket:mapping path="/ws/messages" handler="messagesWebsocketEndPoint"/>
+        <websocket:mapping path="/ws/messages" handler="messagesWebSocketEndPoint"/>
         <websocket:handshake-interceptors>
             <ref bean="handshakeInterceptor"/>
         </websocket:handshake-interceptors>
@@ -36,7 +36,7 @@
 
     <beans profile="local">
         <websocket:handlers>
-            <websocket:mapping path="/ws/messages" handler="messagesWebsocketEndPoint"/>
+            <websocket:mapping path="/ws/messages" handler="messagesWebSocketEndPoint"/>
             <websocket:handshake-handler ref="handshakeHandler"/>
             <websocket:handshake-interceptors>
                 <ref bean="handshakeInterceptor"/>
