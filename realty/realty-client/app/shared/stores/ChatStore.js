@@ -61,6 +61,9 @@ var Store = assign({}, EventEmitter.prototype, {
             _chatMessages[chatKey] = [];
         }
         _chatMessages[chatKey] = [message].concat(_chatMessages[chatKey]);
+
+        _myChats = [message].concat(_myChats.filter(chat=>chat.chat_key != chatKey));
+
         console.log("Added chat message");
         console.log("new chat view");
         console.log(_chatMessages[chatKey]);
@@ -148,6 +151,7 @@ AppDispatcher.register(function (payload) {
 
             Store.addChatMessage(action.message.chat_key, action.message);
 
+            Store.emitChange();
             Store.emitChatMessagesLoadedEvent();
             return true;
             break;

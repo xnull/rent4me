@@ -6,34 +6,53 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var Constants = require('../constants/ChatConstants');
 var Store = require('../stores/ChatStore');
 var BlockUI = require('../common/BlockUI');
+var AuthStore = require('../stores/AuthStore');
 var assign = require('object-assign');
 var JSON = require('JSON2');
 
 var Ajax = require('../common/Ajax');
 var SockJS = require('sockjs-client');
-var socket = new SockJS('/ws/messages');
-socket.onopen = function(){
-    console.log('Connection open!');
-    //setConnected(true);
-};
-
-socket.onclose = function(){
-    console.log('Disconnecting connection');
-};
-
-socket.onmessage = function (evt)
-{
-    var received_msg = JSON.parse(evt.data);
-    console.log(received_msg);
-    console.log('message received!');
-    AppDispatcher.handleViewAction({
-        actionType: Constants.CHAT_MESSAGE_ADDED,
-        message: received_msg
-    });
-    //showMessage(received_msg);
-};
+var _socket = null;
 
 var ChatActions = {
+
+    subscribe: function() {
+        var wsAuthMessage = AuthStore.getWSAuthMessage();
+        if(wsAuthMessage) {
+            _socket = new SockJS('/ws/messages');
+            _socket.onopen = function(){
+                console.log('Connection open!');
+                _socket.send(wsAuthMessage);
+                //setConnected(true);
+            };
+
+            _socket.onclose = function(){
+                console.log('Disconnecting connection');
+                _socket = null;
+            };
+
+            _socket.onmessage = function (evt)
+            {
+                var received_msg = JSON.parse(evt.data);
+                console.log('message received!');
+                console.log(received_msg);
+                if(!received_msg.status) {
+                    AppDispatcher.handleViewAction({
+                        actionType: Constants.CHAT_MESSAGE_ADDED,
+                        message: received_msg
+                    });
+                }
+                //showMessage(received_msg);
+            };
+        }
+    },
+
+    unSubscribe: function() {
+       if(_socket) {
+           _socket.close();
+           _socket = null;
+       }
+    },
 
     loadMyChats: function () {
         BlockUI.blockUI();
@@ -75,7 +94,7 @@ var ChatActions = {
                     actionType: Constants.CHAT_NEW_CONVERSATION_STARTED,
                     newMessage: data
                 });
-                socket.send(JSON.stringify(data));
+                _socket.send(JSON.stringify(data));
 
                 BlockUI.unblockUI();
             })

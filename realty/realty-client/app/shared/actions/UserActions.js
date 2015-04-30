@@ -98,27 +98,40 @@ var UserActions = {
             .execute();
     },
 
-    loadMyProfile: function () {
-        if(!AuthStore.hasCredentials()) return;
+
+    loadMyProfilePromise: function () {
+        if(!AuthStore.hasCredentials()) return new Promise(function(resolve, reject){
+            reject("Not authorized. Can not load my profile");
+        });
         BlockUI.blockUI();
         _myProfileIsLoading = true;
-        Ajax
-            .GET('/rest/users/me')
-            .authorized()
-            .onSuccess(function (data) {
-                AppDispatcher.handleViewAction({
-                    actionType: UserConstants.USER_PROFILE_LOADED,
-                    user: data
-                });
+        var promise = new Promise(function(resolve, reject){
+            Ajax
+                .GET('/rest/users/me')
+                .authorized()
+                .onSuccess(function (data) {
+                    _myProfileIsLoading = false;
+                    BlockUI.unblockUI();
+                    resolve(data);
+                })
+                .onError(function (xhr, status, err) {
+                    _myProfileIsLoading = false;
+                    BlockUI.unblockUI();
+                    reject("Couldn't load my profile");
+                })
+                .execute();
+        });
+        return promise;
+    },
 
-                _myProfileIsLoading = false;
-                BlockUI.unblockUI();
-            })
-            .onError(function (xhr, status, err) {
-                _myProfileIsLoading = false;
-                BlockUI.unblockUI();
-            })
-            .execute();
+    loadMyProfile: function () {
+        var loadMyProfilePromise = this.loadMyProfilePromise();
+        loadMyProfilePromise.then(function(data){
+            AppDispatcher.handleViewAction({
+                actionType: UserConstants.USER_PROFILE_LOADED,
+                user: data
+            });
+        });
     },
 
     loadMyProfileIfNotLoaded: function () {

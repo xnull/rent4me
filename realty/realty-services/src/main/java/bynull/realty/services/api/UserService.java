@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author dionis on 09/07/14.
@@ -23,6 +24,8 @@ public interface UserService extends UserDetailsService {
     boolean updateMyProfile(UserDTO dto);
 
     List<UserDTO> findByName(String name);
+
+    Optional<UserDTO> findByUsername(String name);
 
     UserDTO createNewProfile(UserDTO dto);
 
