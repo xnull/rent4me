@@ -30,6 +30,13 @@ public interface UserTokenService {
     UserService.UsernameTokenPair getUsernameAndTokenIfValidCredentials(String email, String password) throws BadCredentialsException, UsernameNotFoundException;
 
     /**
+     * Checks whether provided authentications is valid username token pair
+     * @param usernameTokenPair
+     * @return
+     */
+    boolean isValidAuthentication(UserService.UsernameTokenPair usernameTokenPair);
+
+    /**
      * Receive a valid authentication token for user
      *
      * @param user User

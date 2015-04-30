@@ -4,7 +4,7 @@ project.ext {
         springSecurityVersion = '3.2.5.RELEASE'
     logbackVersion = '1.1.2'
     jerseyVersion = '2.9'
-    jettyVersion = '8.1.5.v20120716'
+    jettyVersion = '9.1.5.v20140505'
 }
 
 project.ext.libraries = [
@@ -25,6 +25,9 @@ project.ext.libraries = [
         'org.springframework:spring-webmvc'                       : ["org.springframework:spring-webmvc:${springVersion}"],
         'org.springframework:spring-web'                          : ["org.springframework:spring-web:${springVersion}"],
         'org.springframework.security:spring-security-web'        : ["org.springframework.security:spring-security-web:${springSecurityVersion}"],
+        //web sockets
+        'org.springframework:spring-websocket'                    : ["org.springframework:spring-websocket:${springVersion}"],
+        'org.springframework:spring-messaging'                    : ["org.springframework:spring-messaging:${springVersion}"],
 
         //hibernate
         'org.hibernate:hibernate-core'                            : ["org.hibernate:hibernate-core:${hibernateVersion}"],
@@ -60,6 +63,7 @@ project.ext.libraries = [
         "org.eclipse.jetty:jetty-webapp"                          : ["org.eclipse.jetty:jetty-webapp:${jettyVersion}"],
         "org.eclipse.jetty:jetty-jndi"                            : ["org.eclipse.jetty:jetty-jndi:${jettyVersion}"],
         "org.eclipse.jetty:jetty-plus"                            : ["org.eclipse.jetty:jetty-plus:${jettyVersion}"],
+        "org.eclipse.jetty.websocket:websocket-server"            : ["org.eclipse.jetty.websocket:websocket-server:${jettyVersion}"],
 
         //logger
         'org.slf4j:slf4j-api'                                     : ['org.slf4j:slf4j-api:1.7.7'],

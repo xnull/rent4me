@@ -35,6 +35,21 @@ var Advert = React.createClass({
         this.setState({post: SocialNetStore.getPostById(that.getParams().id)});
     },
 
+    _smartReturnToSearch: function() {
+        //вернуться к поиску с запоминанием позиции в ней
+        var referrer = document.referrer || '';
+        console.log('referrer: '+referrer);
+        var historyLength = window.history.length;
+        if((referrer.indexOf('://rent4.me') != -1 || referrer.indexOf('://localhost') != -1 || !referrer) && historyLength > 1) {
+            console.log('returning back via history');
+            console.log('History length: ' + historyLength);
+            window.history.back();
+        } else {
+            console.log('returning back via link');
+            document.location.href = '#/';
+        }
+    },
+
     render: function () {
         var params = this.getParams();
         console.log('Params are');
@@ -61,7 +76,7 @@ var Advert = React.createClass({
                         {content}
                     </div>
                     <div className="panel-footer">
-                        <a className="btn btn-primary center-block" href='#'>Вернуться к поиску</a>
+                        <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться к поиску</btn>
                     </div>
                 </div>
             </div>

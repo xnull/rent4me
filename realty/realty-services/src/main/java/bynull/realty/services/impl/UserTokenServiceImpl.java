@@ -72,6 +72,20 @@ public class UserTokenServiceImpl implements UserTokenService {
         }
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isValidAuthentication(UserService.UsernameTokenPair usernameTokenPair) {
+        Assert.notNull(usernameTokenPair, "Username token pair required");
+        User user = userRepository.findByUsername(usernameTokenPair.username);
+        if (user != null) {
+            UserToken userToken = userTokenRepository.findByUserAndToken(user, usernameTokenPair.token);
+            if (userToken != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Transactional
     @Override
     public String getTokenForUser(User user) {

@@ -6,11 +6,66 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var Constants = require('../constants/ChatConstants');
 var Store = require('../stores/ChatStore');
 var BlockUI = require('../common/BlockUI');
+var AuthStore = require('../stores/AuthStore');
 var assign = require('object-assign');
+var JSON = require('JSON2');
 
 var Ajax = require('../common/Ajax');
+var SockJS = require('sockjs-client');
+var _socket = null;
+var _healthCheckInterval = null;
 
-module.exports = {
+var ChatActions = {
+
+    subscribe: function() {
+        var self = this;
+        var wsAuthMessage = AuthStore.getWSAuthMessage();
+        if(wsAuthMessage) {
+            _socket = new SockJS('/ws/messages');
+            _socket.onopen = function(){
+                console.log('Connection open!');
+                if(_healthCheckInterval) {
+                    console.log('Clearing interval for recovery');
+                    clearInterval(_healthCheckInterval);
+                    _healthCheckInterval = null;
+                }
+                _socket.send(wsAuthMessage);
+                //setConnected(true);
+            };
+
+            _socket.onclose = function(){
+                console.log('Disconnecting connection');
+                _socket = null;
+                if(!_healthCheckInterval) {
+                    console.log('Scheduling interval for recovery');
+                    _healthCheckInterval = setInterval(function(){
+                        self.subscribe();//try to reconnect
+                    }, 5000);
+                }
+            };
+
+            _socket.onmessage = function (evt)
+            {
+                var received_msg = JSON.parse(evt.data);
+                console.log('message received!');
+                console.log(received_msg);
+                if(!received_msg.status) {
+                    AppDispatcher.handleViewAction({
+                        actionType: Constants.CHAT_MESSAGE_ADDED,
+                        message: received_msg
+                    });
+                }
+                //showMessage(received_msg);
+            };
+        }
+    },
+
+    unSubscribe: function() {
+       /*if(_socket) {
+           _socket.close();
+           _socket = null;
+       }*/
+    },
 
     loadMyChats: function () {
         BlockUI.blockUI();
@@ -35,14 +90,12 @@ module.exports = {
             .execute();
     },
 
-    sendNewMessage: function (personId, text) {
+    sendNewMessage: function (personId, text, chatKey) {
         BlockUI.blockUI();
 
-        //var limit = Store.getLimit();
-        //var offset = Store.getOffset();
-
         var obj = {
-            message: text
+            message: text,
+            chat_key: chatKey
         };
 
         Ajax
@@ -54,6 +107,11 @@ module.exports = {
                     actionType: Constants.CHAT_NEW_CONVERSATION_STARTED,
                     newMessage: data
                 });
+                AppDispatcher.handleViewAction({
+                    actionType: Constants.CHAT_MESSAGE_ADDED,
+                    message: data
+                });
+                //_socket.send(JSON.stringify(data));
 
                 BlockUI.unblockUI();
             })
@@ -65,9 +123,6 @@ module.exports = {
 
     loadChatMessages: function (chatKey) {
         BlockUI.blockUI();
-
-        //var limit = Store.getLimit();
-        //var offset = Store.getOffset();
 
         Ajax
             .GET('/rest/users/me/chats/' + chatKey)
@@ -85,5 +140,7 @@ module.exports = {
                 BlockUI.unblockUI();
             })
             .execute();
-    },
+    }
 };
+
+module.exports = ChatActions;

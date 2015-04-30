@@ -2,11 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
 
 
-       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/"/>
@@ -20,7 +23,44 @@
         <property name="order" value="2"/>
     </bean>
 
+    <websocket:handlers>
+        <websocket:mapping path="/ws/messages" handler="messagesWebSocketEndPoint"/>
+        <websocket:handshake-interceptors>
+            <ref bean="handshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+        <websocket:sockjs/>
+    </websocket:handlers>
+
     <mvc:view-controller path="/" view-name="index"/>
     <mvc:resources mapping="/**" location="/view/"/>
+
+    <beans profile="local">
+        <websocket:handlers>
+            <websocket:mapping path="/ws/messages" handler="messagesWebSocketEndPoint"/>
+            <websocket:handshake-handler ref="handshakeHandler"/>
+            <websocket:handshake-interceptors>
+                <ref bean="handshakeInterceptor"/>
+            </websocket:handshake-interceptors>
+            <websocket:sockjs/>
+        </websocket:handlers>
+
+        <bean id="handshakeHandler" class="org.springframework.web.socket.server.support.DefaultHandshakeHandler">
+            <constructor-arg ref="upgradeStrategy"/>
+        </bean>
+
+        <bean id="upgradeStrategy" class="org.springframework.web.socket.server.jetty.JettyRequestUpgradeStrategy">
+            <constructor-arg ref="serverFactory"/>
+        </bean>
+
+        <bean id="serverFactory" class="org.eclipse.jetty.websocket.server.WebSocketServerFactory">
+            <constructor-arg>
+                <bean class="org.eclipse.jetty.websocket.api.WebSocketPolicy">
+                    <constructor-arg value="SERVER"/>
+                    <property name="inputBufferSize" value="8092"/>
+                    <property name="idleTimeout" value="600000"/>
+                </bean>
+            </constructor-arg>
+        </bean>
+    </beans>
 
 </beans>

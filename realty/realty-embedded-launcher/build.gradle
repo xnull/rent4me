@@ -14,6 +14,7 @@ dependencies {
     compile libraries."org.eclipse.jetty:jetty-webapp"
     compile libraries."org.eclipse.jetty:jetty-jndi"
     compile libraries."org.eclipse.jetty:jetty-plus"
+    compile libraries."org.eclipse.jetty.websocket:websocket-server"
 
     //JSP compiler
     compile 'eclipse:jdtcore:3.1.0'

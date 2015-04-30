@@ -1,11 +1,16 @@
 package bynull.realty.components;
 
+import bynull.realty.services.api.AsyncExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionOperations;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import javax.annotation.Resource;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -18,6 +23,12 @@ public class AfterCommitExecutorImpl extends TransactionSynchronizationAdapter i
     private static final Logger LOGGER = LoggerFactory.getLogger(AfterCommitExecutorImpl.class);
 
     private static final ThreadLocal<Set<Runnable>> RUNNABLES = new ThreadLocal<>();
+
+    @Resource
+    AsyncExecutor asyncExecutor;
+
+    @Resource
+    TransactionOperations transactionOperations;
 
     @Override
     public void execute(Runnable runnable) {
@@ -35,13 +46,18 @@ public class AfterCommitExecutorImpl extends TransactionSynchronizationAdapter i
     }
 
     @Override
-    public void executeMultiple(Runnable... runnables) {
-        if (runnables == null || runnables.length == 0) {
-            return;
-        }
-        for (Runnable runnable : runnables) {
-            execute(runnable);
-        }
+    public void executeAsynchronously(Runnable command) {
+        execute(()->asyncExecutor.execute(command));
+    }
+
+    @Override
+    public void executeAsynchronouslyInTransaction(Runnable command) {
+        executeAsynchronously(()->transactionOperations.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                command.run();
+            }
+        }));
     }
 
     @Override

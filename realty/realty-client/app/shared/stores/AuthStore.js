@@ -9,6 +9,7 @@ var AuthConstants = require('../constants/AuthConstants');
 
 var Cookies = require('../common/Cookies');
 var Utils = require('../common/Utils');
+var JSON = require('JSON2');
 
 var assign = require('object-assign');
 
@@ -47,6 +48,14 @@ function hasCredentials() {
 function getAuthHeader() {
     if (hasCredentials()) {
         return Utils.__base64Encode(_username + ":" + _token);
+    } else {
+        return null;
+    }
+}
+
+function getWSAuthMessage() {
+    if (hasCredentials()) {
+        return JSON.stringify({"type": "ws_auth", "username": _username, "token": _token});
     } else {
         return null;
     }
@@ -91,6 +100,8 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     hasCredentials: hasCredentials,
 
     getAuthHeader: getAuthHeader,
+
+    getWSAuthMessage: getWSAuthMessage,
 
     /**
      * @param {function} callback

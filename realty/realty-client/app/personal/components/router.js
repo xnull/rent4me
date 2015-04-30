@@ -11,6 +11,7 @@ var UserActions = require('../../shared/actions/UserActions');
 
 var AuthActions = require('../../shared/actions/AuthActions');
 var SocialNetActions = require('../../shared/actions/SocialNetActions');
+var ChatActions = require('../../shared/actions/ChatActions');
 var NavStore = require('../../shared/stores/NavStore');
 var AuthStore = require('../../shared/stores/AuthStore');
 var Utils = require('../../shared/common/Utils');
@@ -33,10 +34,12 @@ var App = React.createClass({
     },
     componentDidMount: function () {
         NavStore.addChangeListener(this._navStateChange);
+        ChatActions.subscribe();
     },
 
     componentWillUnmount: function () {
         NavStore.removeChangeListener(this._navStateChange);
+        ChatActions.unSubscribe();
     },
 
     _navStateChange: function () {

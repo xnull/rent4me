@@ -29,6 +29,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -219,6 +220,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.findByName("%" + name + "%", pageable).stream().map(UserDTO::from).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<UserDTO> findByUsername(String name) {
+        return Optional.ofNullable(UserDTO.from(userRepository.findByUsername(name)));
     }
 
     @Transactional
