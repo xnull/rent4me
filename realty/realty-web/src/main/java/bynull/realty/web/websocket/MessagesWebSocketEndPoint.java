@@ -8,7 +8,9 @@ import bynull.realty.services.api.UserTokenService;
 import bynull.realty.utils.JsonMapperException;
 import bynull.realty.utils.JsonUtils;
 import bynull.realty.web.json.ChatMessageJSON;
+import com.amazonaws.util.json.JSONUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +37,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MessagesWebSocketEndPoint extends TextWebSocketHandler implements ChatMessageUsersOnlineNotifier {
 
-    private final Map<Long, Set<WebSocketSession>> webSocketSessions = new HashMap<>();
-
-    private final Object lock = new Object();
+    @Resource
+    GenericWebSocketEndPoint genericWebSocketEndPoint;
 
     @Resource
     UserTokenService userTokenService;
@@ -47,142 +48,59 @@ public class MessagesWebSocketEndPoint extends TextWebSocketHandler implements C
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Getter
-    @Setter
-    public static class WsAuthMessageJSON {
-        @JsonProperty("type")
-        private final String type = "ws_auth";
-        @JsonProperty("username")
-        private String username;
-        @JsonProperty("token")
-        private String token;
-    }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class WsAuthResponseJSON {
-        @JsonProperty("status")
-        private final Status status;
-
-        public static enum Status {
-            OK, NOK
-        }
-    }
-
-    @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        removeSession(session);
-    }
-
-    private void removeSession(WebSocketSession session) {
-        synchronized (lock) {
-            for (Map.Entry<Long, Set<WebSocketSession>> entry : webSocketSessions.entrySet()) {
-                Set<WebSocketSession> value = entry.getValue();
-                value.remove(session);
-            }
-        }
-    }
-
-
-    @Override
-    public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        removeSession(session);
-    }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         super.handleMessage(session, message);
-
-        String payload = (String) message.getPayload();
-
-        try {
-            WsAuthMessageJSON authJson = objectMapper.readValue(payload, WsAuthMessageJSON.class);
-
-            try {
-                if(!userTokenService.isValidAuthentication(new UserService.UsernameTokenPair(authJson.getUsername(), authJson.getToken()))) {
-                    throw new BadCredentialsException("Bad credentials for WS auth: "+payload);
-                }
-
-                Optional<UserDTO> byName = userService.findByUsername(authJson.getUsername());
-                byName.ifPresent(user -> {
-                    synchronized (lock) {
-                        if (!webSocketSessions.containsKey(user.getId())) {
-                            webSocketSessions.put(user.getId(), new HashSet<>());
-                        }
-                        webSocketSessions.get(user.getId()).add(session);
-                    }
-                });
-
-                String responseJson = JsonUtils.toJson(new WsAuthResponseJSON(WsAuthResponseJSON.Status.OK));
-                session.sendMessage(new TextMessage(responseJson));
-            } catch (UsernameNotFoundException | BadCredentialsException e) {
-                String responseJson = JsonUtils.toJson(new WsAuthResponseJSON(WsAuthResponseJSON.Status.NOK));
-                session.sendMessage(new TextMessage(responseJson));
-            }
-            return;
-        } catch (Exception e) {
-//            e.printStackTrace();
-        }
-
-        try {
-            ChatMessageJSON chatMessageJSON = objectMapper.readValue(payload, ChatMessageJSON.class);
-
-//            sendMessagesToRecipients(chatMessageJSON);
-            return;
-        } catch (Exception e) {
-//            e.printStackTrace();
-        }
         log.warn("No handler worked");
     }
 
     @Override
     public Collection<Long> getUserIdsOnline() {
-        final Set<Long> usersOnline;
-        synchronized (lock) {
-            usersOnline = webSocketSessions.entrySet().stream()
-                    .filter(e -> !e.getValue().isEmpty() && e.getValue().stream().anyMatch(WebSocketSession::isOpen))
-                    .map(Map.Entry::getKey).collect(Collectors.toSet());
-        }
-
-        return usersOnline;
+        return genericWebSocketEndPoint.getUserIdsOnline();
     }
 
     @Override
     public boolean isUserOnline(long userId) {
-        return getUserIdsOnline().contains(userId);
+        return genericWebSocketEndPoint.isUserOnline(userId);
     }
 
     @Override
     public boolean sendToUserIfOnline(long userId, ChatMessageDTO content) {
-        throw new UnsupportedOperationException();
+        ChatMessageJSON chatMessageJSON = ChatMessageJSON.from(content);
+        try {
+            return genericWebSocketEndPoint.sendToUserIfOnline(userId, objectMapper.writeValueAsString(chatMessageJSON));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean broadcastToChannel(String channel, ChatMessageDTO content) {
+        ChatMessageJSON chatMessageJSON = ChatMessageJSON.from(content);
+        try {
+            String json = JsonUtils.toJson(chatMessageJSON);
+            return genericWebSocketEndPoint.broadcastToChannel(channel, json);
+        } catch (JsonMapperException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean sendToUserOnChannel(String channel, long userId, ChatMessageDTO content) {
+        ChatMessageJSON chatMessageJSON = ChatMessageJSON.from(content);
+        try {
+            String json = JsonUtils.toJson(chatMessageJSON);
+            return genericWebSocketEndPoint.sendToUserOnChannel(channel, userId, json);
+        } catch (JsonMapperException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void sendMessagesToParticipants(ChatMessageDTO chatMessage) {
-        ChatMessageJSON chatMessageJSON = ChatMessageJSON.from(chatMessage);
-        try {
-            String json = JsonUtils.toJson(chatMessageJSON);
-            TextMessage message = new TextMessage(json);
-            Set<WebSocketSession> sessions = new HashSet<>();
-            synchronized (lock) {
-//                sessions.addAll(webSocketSessions.getOrDefault(chatMessage.getSender().getId(), Collections.emptySet()));
-                sessions.addAll(webSocketSessions.getOrDefault(chatMessage.getReceiver().getId(), Collections.emptySet()));
-            }
-            for (WebSocketSession webSocketSession : sessions) {
-                if(webSocketSession.isOpen()){
-                    try {
-                        webSocketSession.sendMessage(message);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    log.warn("WebSocket session closed. skipping");
-                }
-            }
-        } catch (JsonMapperException e) {
-            log.error("Exception occurred while trying to serialize JSON", chatMessage);
-        }
+        sendToUserOnChannel("messages", chatMessage.getReceiver().getId(), chatMessage);
     }
 
 }
