@@ -5,7 +5,6 @@
 
     <bean class="bynull.realty.jobs.ApartmentCleanUpJob"/>
     <bean class="bynull.realty.jobs.FacebookScrappingJob"/>
-    <bean class="bynull.realty.jobs.JobHelperComponent"/>
     <bean class="bynull.realty.jobs.PhotoTempCleanupJob"/>
     <bean class="bynull.realty.jobs.VkontakteScrappingJob"/>
 </beans>

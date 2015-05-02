@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Created by dionis on 3/25/15.
  */
+@Component
 @Slf4j
 public class JobHelperComponent implements InitializingBean, DisposableBean {
     @Resource
