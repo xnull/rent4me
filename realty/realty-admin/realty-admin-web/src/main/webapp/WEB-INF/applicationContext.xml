@@ -10,6 +10,7 @@
     <import resource="classpath:dao.xml"/>
     <!--NB! scheduler excluded from here so it won't run jobs-->
     <import resource="classpath:service.xml"/>
+    <import resource="classpath:scheduler.xml"/>
     <import resource="classpath:profiles.xml"/>
     <context:component-scan base-package="bynull.realty"/>
     <tx:annotation-driven transaction-manager="txManager"/>
