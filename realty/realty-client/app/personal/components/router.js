@@ -39,7 +39,9 @@ var App = React.createClass({
         WebSocketUtil.init();
         ChatActions.subscribe();
         NotificationActions.subscribe();
-        NotificationActions.loadAllNotifications();
+        if (AuthStore.hasCredentials()) {
+            NotificationActions.loadAllNotifications();
+        }
     },
 
     componentWillUnmount: function () {
