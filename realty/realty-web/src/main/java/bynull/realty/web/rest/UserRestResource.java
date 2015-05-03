@@ -13,6 +13,9 @@ import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.ChatMessageJSON;
 import bynull.realty.web.json.NotificationJSON;
 import bynull.realty.web.json.UserJSON;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -24,8 +27,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -215,6 +220,22 @@ public class UserRestResource {
         return Response
                 .ok()
                 .entity(jsonResult)
+                .build();
+    }
+
+    @Getter
+    @Setter
+    public static class NotificationResolutionRequestJSON {
+        @JsonProperty("notification_ids")
+        private Set<Long> notificationIds = Collections.emptySet();
+    }
+
+    @PUT
+    @Path("/me/notifications/resolve")
+    public Response resolveMyUnreadNotifications(NotificationResolutionRequestJSON notificationResolutionRequestJSON) {
+        notificationService.resolveMyNotifications(notificationResolutionRequestJSON.getNotificationIds());
+        return Response
+                .ok()
                 .build();
     }
 

@@ -16,9 +16,11 @@ import bynull.realty.services.api.NotificationService;
 import bynull.realty.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dionis on 5/2/15.
@@ -72,5 +74,17 @@ public class NotificationServiceImpl implements NotificationService {
         List<? extends NotificationDTO> result = notificationModelDTOConverter.toTargetList(notificationRepository.listMyUnreadNotifications(user));
 
         return result;
+    }
+
+    @Transactional
+    @Override
+    public void resolveMyNotifications(Set<Long> notificationIds) {
+        Assert.notNull(notificationIds);
+        if(notificationIds.isEmpty()) {
+            return;
+        }
+        long id = SecurityUtils.getAuthorizedUser().getId();
+        User user = userRepository.findOne(id);
+        notificationRepository.resolveMyNotifications(user, notificationIds);
     }
 }

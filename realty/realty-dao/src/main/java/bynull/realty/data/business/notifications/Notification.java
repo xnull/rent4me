@@ -17,7 +17,7 @@ import static bynull.realty.util.CommonUtils.copy;
 public abstract class Notification {
 
     public static class Types {
-        public static final String NEW_MESSAGE_STRING_VALUE = "0";
+        public static final String NEW_MESSAGE_STRING_VALUE = "1";
     }
 
     @Id

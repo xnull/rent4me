@@ -9,6 +9,8 @@ var moment = require('moment');
 
 var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
+var NotificationStore = require('../../../../shared/stores/notification-store');
+var NotificationConstants = require('../../../../shared/constants/notification-constants');
 
 var Chat = React.createClass({
     getInitialState: function () {
@@ -35,6 +37,9 @@ var Chat = React.createClass({
     render: function () {
         var item = this.props.item || {};
         var me = this.state.me;
+        var newCount = this.props.newCount || 0;
+
+        var newMessagesCountDisplay = newCount > 0 ? (<span><b className="badge badge-notification">{newCount}</b><br/></span>) : null;
 
         console.log("Me:");
         console.log(me);
@@ -50,6 +55,7 @@ var Chat = React.createClass({
                     <p className="list-group-item-text">
                         <div className="row">
                             <div className="col-sm-2 col-md-2 col-xs-2">
+                                {newMessagesCountDisplay}
                                 <strong>{targetPerson.name}</strong>
                                 <br/>
                                 <small>{moment(item.created).format("lll")}</small>
@@ -69,6 +75,24 @@ var Chat = React.createClass({
 
 var Chats = React.createClass({
 
+    getInitialState: function () {
+        return {
+            unreadMessageNotifications: NotificationStore.listUnreadNotifications(NotificationConstants.NOTIFICATION_TYPE_NEW_MESSAGE)
+        };
+    },
+
+    componentDidMount: function () {
+        NotificationStore.addChangeListener(this._onChangeNotifications);
+    },
+
+    componentWillUnmount: function () {
+        NotificationStore.removeChangeListener(this._onChangeNotifications);
+    },
+
+    _onChangeNotifications: function () {
+        this.setState(assign({}, this.state, {unreadMessageNotifications: NotificationStore.listUnreadNotifications(NotificationConstants.NOTIFICATION_TYPE_NEW_MESSAGE)}));
+    },
+
     render: function () {
         var shown = this.props.shown || false;
         var items = this.props.items || [];
@@ -77,6 +101,16 @@ var Chats = React.createClass({
         console.log("Has more?" + hasMore);
 
         var onHasMoreClicked = this.props.onHasMoreClicked;
+
+
+        var unreadNotificationsByChatCount = {};
+        (this.state.unreadMessageNotifications || {}).forEach(nf=>{
+            if(!unreadNotificationsByChatCount[nf.value.chat_key]) {
+                unreadNotificationsByChatCount[nf.value.chat_key] = 1;
+            } else {
+                unreadNotificationsByChatCount[nf.value.chat_key] = unreadNotificationsByChatCount[nf.value.chat_key] + 1;
+            }
+        });
 
         var hasMoreElement = hasMore ?
             (
@@ -96,7 +130,7 @@ var Chats = React.createClass({
 
         var chats = items.map(function (item) {
             return (
-                <Chat item={item}/>
+                <Chat item={item} newCount={unreadNotificationsByChatCount[item.chat_key]}/>
             );
         });
 

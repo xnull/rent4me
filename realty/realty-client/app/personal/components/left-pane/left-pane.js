@@ -8,6 +8,7 @@ var SocialNet = require('./socialnet/socialnet');
 var Utils = require('../../../shared/common/Utils');
 var UserStore = require('../../../shared/stores/UserStore');
 var NotificationStore = require('../../../shared/stores/notification-store');
+var NotificationConstants = require('../../../shared/constants/notification-constants');
 var AuthStore = require('../../../shared/stores/AuthStore');
 var UserActions = require('../../../shared/actions/UserActions');
 
@@ -17,7 +18,7 @@ var UserPanel = React.createClass({
     getInitialState: function () {
         return {
             me: UserStore.getMyProfile(),
-            countOfNewMessages: NotificationStore.countOfUnreadNotifications()
+            countOfNewMessages: NotificationStore.countOfUnreadNotifications(NotificationConstants.NOTIFICATION_TYPE_NEW_MESSAGE)
         };
     },
 
@@ -38,7 +39,7 @@ var UserPanel = React.createClass({
     },
 
     _onChangeNotifications: function (event) {
-        this.setState(assign({}, this.state, {countOfNewMessages: NotificationStore.countOfUnreadNotifications()}));
+        this.setState(assign({}, this.state, {countOfNewMessages: NotificationStore.countOfUnreadNotifications(NotificationConstants.NOTIFICATION_TYPE_NEW_MESSAGE)}));
     },
 
     render: function () {
@@ -48,7 +49,7 @@ var UserPanel = React.createClass({
 
         var me = this.state.me || {};
 
-        var newMessagesCountDisplay = this.state.countOfNewMessages > 0 ? (<b className="badge pull-right">{this.state.countOfNewMessages}</b>) : null;
+        var newMessagesCountDisplay = this.state.countOfNewMessages > 0 ? (<b className="badge badge-notification pull-right">{this.state.countOfNewMessages}</b>) : null;
 
         return (
             <div className="panel panel-default" style={style}>

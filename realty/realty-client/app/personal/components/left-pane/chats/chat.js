@@ -10,7 +10,9 @@ var _ = require('underscore');
 var Chats = require('./chats');
 var MessageThread = require('./ui/message-thread');
 var ChatStore = require('../../../../shared/stores/ChatStore');
+var NotificationStore = require('../../../../shared/stores/notification-store');
 var ChatActions = require('../../../../shared/actions/ChatActions');
+var NotificationActions = require('../../../../shared/actions/notification-actions');
 
 var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
@@ -26,7 +28,8 @@ module.exports = React.createClass({
             messageText: null,
             messages: ChatStore.getChatMessages(chatKey),
             hasMoreSearchResults: [],
-            me: UserStore.getMyProfile()
+            me: UserStore.getMyProfile(),
+            unreadNotifications: NotificationStore.listUnreadNotificationsForChat(chatKey)
         }
     },
 
@@ -36,19 +39,32 @@ module.exports = React.createClass({
         ChatActions.loadChatMessages(this.state.chatKey);
 
         UserStore.addChangeListener(this.myUserListener);
+        NotificationStore.addChangeListener(this._onChangeNotifications);
+        NotificationActions.autoResolveNotificationsForChat(this.state.chatKey);
+        this.resolveNotifications();
         UserActions.loadMyProfileIfNotLoaded();
+    },
+
+    resolveNotifications: function() {
+        NotificationActions.resolveNotifications(this.state.unreadNotifications);
     },
 
     componentWillUnmount: function () {
         ChatStore.removeChatMessagesLoadedListener(this.myChatsListener);
         ChatStore.removeNewConversationStartedListener(this.newMessageListener);
         UserStore.removeChangeListener(this.myUserListener);
+        NotificationStore.removeChangeListener(this._onChangeNotifications);
+        NotificationActions.autoResolveNotificationsForChat(null);
     },
 
     myChatsListener: function () {
         this.setState(assign(this.state, {
             messages: ChatStore.getChatMessages(this.state.chatKey)
         }));
+    },
+
+    _onChangeNotifications: function () {
+        this.setState(assign({}, this.state, {unreadNotifications: NotificationStore.listUnreadNotificationsForChat(this.state.chatKey)}));
     },
 
     newMessageListener: function () {

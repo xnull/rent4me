@@ -7,10 +7,13 @@ var EventEmitter = require('rent4meEmitter');
 var Constants = require('../constants/notification-constants');
 
 var assign = require('object-assign');
+var JSON = require('JSON2');
 
 var _notificationCache = {};
 
 var CHANGE_EVENT = 'change';
+
+var _autoResolveForChat = null;
 
 var Store = assign({}, EventEmitter.prototype, {
     emitChange: function () {
@@ -28,7 +31,17 @@ var Store = assign({}, EventEmitter.prototype, {
         });
     },
 
-    getNotifications: function () {
+    resolveNotifications: function(notificationIdList) {
+        var self = this;
+        (notificationIdList || []).forEach(notificationId => {
+            var notification = _notificationCache[notificationId];
+            if(notification) {
+                notification.resolved = true;
+            }
+        });
+    },
+
+    getNotifications: function (type) {
         console.log("Notifications map:");
         console.log(_notificationCache);
         var result = [];
@@ -36,19 +49,38 @@ var Store = assign({}, EventEmitter.prototype, {
         for (var key in _notificationCache) {
             if (_notificationCache.hasOwnProperty(key)) {
                 var obj = _notificationCache[key];
-                result.push(obj);
+                if(!type || obj.type === type) {
+                    result.push(obj);
+                }
             }
         }
 
         return result;
     },
 
-    listUnreadNotifications: function () {
-        return this.getNotifications().filter(notification => !notification.resolved);
+    getAutoResolveForChat: function() {
+        return _autoResolveForChat;
     },
 
-    countOfUnreadNotifications: function() {
-        return this.listUnreadNotifications().length;
+    listUnreadNotifications: function (type) {
+        return this.getNotifications(type).filter(notification => !notification.resolved);
+    },
+
+    listUnreadNotificationsForChat: function (chatKey) {
+
+        var listUnreadNotifications = this.listUnreadNotifications(Constants.NOTIFICATION_TYPE_NEW_MESSAGE);
+        //alert('unread notifications: '+listUnreadNotifications.length);
+        var filtered = listUnreadNotifications
+            .filter(notification => {
+                //alert(notification.chat_key);
+                return notification.value.chat_key==chatKey;
+            });
+        //alert('unread notifications filtered: '+filtered.length);
+        return filtered;
+    },
+
+    countOfUnreadNotifications: function(type) {
+        return this.listUnreadNotifications(type).length;
     },
 
     /**
@@ -79,6 +111,17 @@ Store.dispatch = AppDispatcher.register(function (payload) {
             console.log('notifications loaded:');
             console.log(action.notifications);
             Store.addNotifications(action.notifications);
+            break;
+        case Constants.NOTIFICATIONS_RESOLVED:
+            console.log('notifications resolved:');
+            console.log(action.resolvedNotificationIds);
+            Store.resolveNotifications(action.resolvedNotificationIds);
+            break;
+        case Constants.NOTIFICATIONS_AUTORESOLVE_FOR_CHAT:
+            console.log('notifications auto resolve for chat:');
+            console.log(action.chatKey);
+            _autoResolveForChat = action.chatKey;
+            return true;
             break;
 
         default:
