@@ -7,6 +7,7 @@ var SocialNet = require('./socialnet/socialnet');
 
 var Utils = require('../../../shared/common/Utils');
 var UserStore = require('../../../shared/stores/UserStore');
+var NotificationStore = require('../../../shared/stores/notification-store');
 var AuthStore = require('../../../shared/stores/AuthStore');
 var UserActions = require('../../../shared/actions/UserActions');
 
@@ -14,27 +15,40 @@ var assign = require('object-assign');
 
 var UserPanel = React.createClass({
     getInitialState: function () {
-        return UserStore.getMyProfile();
+        return {
+            me: UserStore.getMyProfile(),
+            countOfNewMessages: NotificationStore.countOfUnreadNotifications()
+        };
     },
 
     componentDidMount: function () {
         UserStore.addChangeListener(this._onChange);
+        NotificationStore.addChangeListener(this._onChangeNotifications);
 
         UserActions.loadMyProfileIfNotLoaded();
     },
 
     componentWillUnmount: function () {
         UserStore.removeChangeListener(this._onChange);
+        NotificationStore.removeChangeListener(this._onChangeNotifications);
     },
 
     _onChange: function (event) {
-        this.setState(UserStore.getMyProfile());
+        this.setState(assign({}, this.state, {me: UserStore.getMyProfile()}));
+    },
+
+    _onChangeNotifications: function (event) {
+        this.setState(assign({}, this.state, {countOfNewMessages: NotificationStore.countOfUnreadNotifications()}));
     },
 
     render: function () {
         var authorized = AuthStore.hasCredentials();
 
         var style = authorized ? {} : {display: 'none'};
+
+        var me = this.state.me || {};
+
+        var newMessagesCountDisplay = this.state.countOfNewMessages > 0 ? (<b className="badge pull-right">{this.state.countOfNewMessages}</b>) : null;
 
         return (
             <div className="panel panel-default" style={style}>
@@ -48,7 +62,7 @@ var UserPanel = React.createClass({
                             </a>
 
                             <div className="media-body">
-                                <h4 className="media-heading">{this.state.name}</h4>
+                                <h4 className="media-heading">{me.name}</h4>
 
                                 <br/>
 
@@ -63,7 +77,7 @@ var UserPanel = React.createClass({
                             <div className="col-sm-12 col-md-12 col-xs-12">
                                 <a className="btn btn-default center-block" href="#/user/chats">
                                     <b className="glyphicon glyphicon-envelope pull-left"></b>
-                                    Сообщения
+                                    Сообщения {newMessagesCountDisplay}
                                 </a>
                             </div>
                         </div>

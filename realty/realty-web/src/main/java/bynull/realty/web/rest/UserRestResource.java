@@ -2,16 +2,16 @@ package bynull.realty.web.rest;
 
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ChatMessageDTO;
+import bynull.realty.dto.NotificationDTO;
 import bynull.realty.dto.UserDTO;
-import bynull.realty.services.api.ApartmentPhotoService;
-import bynull.realty.services.api.ApartmentService;
-import bynull.realty.services.api.ChatService;
-import bynull.realty.services.api.UserService;
+import bynull.realty.services.api.*;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.annotation.PATCH;
 import bynull.realty.web.converters.ApartmentDtoJsonConverter;
+import bynull.realty.web.converters.NotificationDtoJsonConverter;
 import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.ChatMessageJSON;
+import bynull.realty.web.json.NotificationJSON;
 import bynull.realty.web.json.UserJSON;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -49,7 +49,13 @@ public class UserRestResource {
     ChatService chatService;
 
     @Resource
+    NotificationService notificationService;
+
+    @Resource
     ApartmentDtoJsonConverter apartmentDtoJsonConverter;
+
+    @Resource
+    NotificationDtoJsonConverter notificationDtoJsonConverter;
 
 
     @POST
@@ -197,6 +203,18 @@ public class UserRestResource {
         return Response
                 .ok()
                 .entity(result.stream().map(ChatMessageJSON::from).collect(Collectors.toList()))
+                .build();
+    }
+
+
+    @GET
+    @Path("/me/notifications/unread")
+    public Response listMyUnreadNotifications() {
+        List<? extends NotificationDTO> result = notificationService.listMyUnreadNotifications();
+        List<? extends NotificationJSON> jsonResult = notificationDtoJsonConverter.toTargetList(result);
+        return Response
+                .ok()
+                .entity(jsonResult)
                 .build();
     }
 

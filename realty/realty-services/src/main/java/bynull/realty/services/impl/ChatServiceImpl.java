@@ -9,6 +9,7 @@ import bynull.realty.data.business.chat.ChatMessage;
 import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.services.api.AsyncExecutor;
 import bynull.realty.services.api.ChatService;
+import bynull.realty.services.api.NotificationService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Resource
     ChatMessageUsersOnlineNotifier chatMessageUsersOnlineNotifier;
+
+    @Resource
+    NotificationService notificationService;
 
     @Resource
     AfterCommitExecutor afterCommitExecutor;
@@ -63,6 +67,8 @@ public class ChatServiceImpl implements ChatService {
             Assert.notNull(one, "Chat message not found by id "+chatMessageId);
             ChatMessageDTO dto = ChatMessageDTO.from(one);
             chatMessageUsersOnlineNotifier.sendMessagesToParticipants(dto);
+
+            notificationService.createNewChatMessageNotification(dto);
         });
 
         return ChatMessageDTO.from(entity);

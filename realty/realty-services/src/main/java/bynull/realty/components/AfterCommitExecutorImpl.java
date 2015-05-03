@@ -63,13 +63,14 @@ public class AfterCommitExecutorImpl extends TransactionSynchronizationAdapter i
     @Override
     public void afterCommit() {
         Set<Runnable> threadRunnables = RUNNABLES.get();
+        RUNNABLES.remove();//clean-up
 
         for (Runnable runnable : threadRunnables) {
             try {
                 runnable.run();
             } catch (RuntimeException e) {
                 LOGGER.error("Failed to execute runnable " + runnable, e);
-                throw e;
+//                throw e;
             }
         }
     }

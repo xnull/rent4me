@@ -10,11 +10,13 @@ var RouteHandler = Router.RouteHandler;
 var UserActions = require('../../shared/actions/UserActions');
 
 var AuthActions = require('../../shared/actions/AuthActions');
+var NotificationActions = require('../../shared/actions/notification-actions');
 var SocialNetActions = require('../../shared/actions/SocialNetActions');
 var ChatActions = require('../../shared/actions/ChatActions');
 var NavStore = require('../../shared/stores/NavStore');
 var AuthStore = require('../../shared/stores/AuthStore');
 var Utils = require('../../shared/common/Utils');
+var WebSocketUtil = require('../../shared/common/WebSocketUtil');
 
 /**
  * Расписано как надо юзать реакт компоненты через browserify:
@@ -34,7 +36,10 @@ var App = React.createClass({
     },
     componentDidMount: function () {
         NavStore.addChangeListener(this._navStateChange);
+        WebSocketUtil.init();
         ChatActions.subscribe();
+        NotificationActions.subscribe();
+        NotificationActions.loadAllNotifications();
     },
 
     componentWillUnmount: function () {
