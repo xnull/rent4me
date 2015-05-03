@@ -9,6 +9,7 @@ var Utils = require('../shared/common/Utils');
 
 var FooterComponent = require('./components/footer');
 var FirstDisplayComponent = require('./components/first-display');
+var SecondDisplayComponent = require('./components/second-display');
 var HeaderComponent = require('./components/header');
 
 var SkelInit = require('./components/skel-init');
@@ -23,4 +24,5 @@ AuthActions.initFbAuth();
 
 React.render(<HeaderComponent/>, document.getElementById('headerComponent'));
 React.render(<FirstDisplayComponent/>, document.getElementById('firstDisplay'));
+React.render(<SecondDisplayComponent/>, document.getElementById('secondDisplay'));
 React.render(<FooterComponent/>, document.getElementById('footerComponent'));
