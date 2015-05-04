@@ -237,7 +237,7 @@ var ImagePreviews = React.createClass({
         var withoutImage = (<img className="media-object" src="http://placehold.it/160"/>);
         var firstImage = this.getFirstImage();
         var images = this.getImageUrls();
-        var i = 0;
+
         var carousel = images ? (
             <div className="row">
                 <div className="col-xs-12">
@@ -256,6 +256,7 @@ var ImagePreviews = React.createClass({
                 </div>
             </div>
         ) : null;
+
         return showFull ? (carousel) : (
             <div>
                 <div className="thumbnail pull-left">
@@ -371,6 +372,8 @@ var Post = React.createClass({
 
         var gallery = <ImagePreviews item={item} showFull={showFull}/>;
 
+        var mapInsert = showFull && item.location ? (<GoogleMapView location={item.location}/>) : null;
+
         return (
             <div className='panel panel-info'>
                 <HeaderBlock item={item}/>
@@ -396,8 +399,16 @@ var Post = React.createClass({
                     </div>
 
                     <div className="row">
+                        <div className='col-md-12 col-sm-12 col-xs-12'>
+                            <br/>
+                            {mapInsert}
+                        </div>
+                    </div>
+
+                    <div className="row">
                         <Message item={item} showFull={showFull}/>
                     </div>
+
                     <div className="row">
                         <MessageDetails item={item} showFull={showFull}/>
                     </div>
