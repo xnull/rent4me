@@ -241,7 +241,7 @@ var ImagePreviews = React.createClass({
         var carousel = images ? (
             <div className="row">
                 <div className="col-xs-12" style={{backgroundColor: 'black'}}>
-            <Carousel slide={false}>
+            <Carousel>
                 {images.map((image) => {
                     return (
                         <CarouselItem>
