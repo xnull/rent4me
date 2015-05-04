@@ -240,20 +240,23 @@ var ImagePreviews = React.createClass({
         var i = 0;
         var carousel = images ? (
             <div className="row">
-                <div className="col-xs-12" style={{backgroundColor: 'black'}}>
-            <Carousel interval={false}>
-                {images.map((image) => {
-                    return (
-                        <CarouselItem>
-                                    <img alt='900x500' src={image} className="center-block" style={{maxHeight: '400px', minHeight: '400px', clip: 'rect(0px, auto, 400px, 0px)'}}/>
-                        </CarouselItem>
-                    );
-                })}
-            </Carousel>
+                <div className="col-xs-12">
+                </div>
+                <div className="col-xs-10 col-xs-offset-1">
+                    <Carousel interval={false}>
+                        {images.map((image) => {
+                            return (
+                                <CarouselItem>
+                                    <img alt='900x500' src={image} className="center-block"
+                                         style={{maxHeight: '400px', minHeight: '400px', clip: 'rect(0px, auto, 400px, 0px)'}}/>
+                                </CarouselItem>
+                            );
+                        })}
+                    </Carousel>
                 </div>
             </div>
         ) : null;
-        return showFull?(carousel):(
+        return showFull ? (carousel) : (
             <div>
                 <div className="thumbnail pull-left">
                     {firstImage ? firstImage : withoutImage}
@@ -295,7 +298,8 @@ var MessageDetails = React.createClass({
         var showFull = this.props.showFull;
         return (
             showFull ? null :
-                <div className="col-md-offset-9 col-sm-offset-8 col-xs-offset-6 col-md-3 col-sm-4 col-xs-6" style={{marginTop: 5}}>
+                <div className="col-md-offset-9 col-sm-offset-8 col-xs-offset-6 col-md-3 col-sm-4 col-xs-6"
+                     style={{marginTop: 5}}>
                     <Link to="advert" params={{id: item.id}}><a
                         className="btn btn-default center-block">Подробнее</a></Link>
                 </div>
