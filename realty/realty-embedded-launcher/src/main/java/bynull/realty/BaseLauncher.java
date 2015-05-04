@@ -89,6 +89,7 @@ public class BaseLauncher {
         ServerConnector selectChannelConnector = new ServerConnector(server);
 //        selectChannelConnector.setAcceptors(Math.max(Runtime.getRuntime().availableProcessors(), 1));
         selectChannelConnector.setPort(port);
+        selectChannelConnector.setHost("0.0.0.0");
         selectChannelConnector.setAcceptQueueSize(10000);
 //        selectChannelConnector.setThreadPool(new QueuedThreadPool());
         server.setConnectors(new Connector[]{selectChannelConnector});
