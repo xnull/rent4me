@@ -240,12 +240,12 @@ var ImagePreviews = React.createClass({
         var i = 0;
         var carousel = images ? (
             <div className="row">
-                <div className="col-xs-12">
-            <Carousel>
+                <div className="col-xs-12" style={{backgroundColor: 'black'}}>
+            <Carousel slide={false}>
                 {images.map((image) => {
                     return (
                         <CarouselItem>
-                                    <img alt='900x500' src={image} className="center-block" style={{maxHeight: '400px', minHeight: '400px'}}/>
+                                    <img alt='900x500' src={image} className="center-block" style={{maxHeight: '400px', minHeight: '400px', clip: 'rect(0px, 400px, 400px, 0px)'}}/>
                         </CarouselItem>
                     );
                 })}
