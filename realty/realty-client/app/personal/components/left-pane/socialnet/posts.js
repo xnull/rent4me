@@ -10,6 +10,9 @@ var accounting = require('accounting');
 var assign = require('object-assign');
 var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');
+var ReactBootstrap = require('react-bootstrap');
+var Carousel = ReactBootstrap.Carousel;
+var CarouselItem = ReactBootstrap.CarouselItem;
 
 var Router = require('react-router');
 var Link = Router.Link;
@@ -207,10 +210,50 @@ var ImagePreviews = React.createClass({
         return firstImage;
     },
 
+    getImageUrls: function () {
+        var item = this.props.item;
+
+        var images;
+
+        if (item.data_source == 'INTERNAL') {
+            images = item.photos ? item.photos.map(photo => {
+                return (
+                    photo.full_picture_url
+                );
+            }) : null;
+        } else {
+            images = item.external_images ? item.external_images.map(image => {
+                return (
+                    image.full_picture_url
+                );
+            }) : null;
+        }
+
+        return images;
+    },
+
     render: function () {
+        var showFull = this.props.showFull;
         var withoutImage = (<img className="media-object" src="http://placehold.it/160"/>);
         var firstImage = this.getFirstImage();
-        return (
+        var images = this.getImageUrls();
+        var i = 0;
+        var carousel = images ? (
+            <div className="row">
+                <div className="col-xs-12">
+            <Carousel>
+                {images.map((image) => {
+                    return (
+                        <CarouselItem>
+                                    <img height={400} alt='900x500' src={image} className="center-block"/>
+                        </CarouselItem>
+                    );
+                })}
+            </Carousel>
+                </div>
+            </div>
+        ) : null;
+        return showFull?(carousel):(
             <div>
                 <div className="thumbnail pull-left">
                     {firstImage ? firstImage : withoutImage}
@@ -320,14 +363,18 @@ var Post = React.createClass({
     render: function () {
         var item = this.props.item || {};
 
+        var showFull = this.props.showFull || false;
+
+        var gallery = <ImagePreviews item={item} showFull={showFull}/>;
+
         return (
             <div className='panel panel-info'>
                 <HeaderBlock item={item}/>
-
+                {gallery}
                 <div className="panel-body">
                     <div className="row">
                         <div className="col-md-3 col-sm-6 col-xs-12">
-                            <ImagePreviews item={item}/>
+
                         </div>
                         <div className="col-md-9 col-sm-6 col-xs-12">
                             <div className='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
@@ -345,10 +392,10 @@ var Post = React.createClass({
                     </div>
 
                     <div className="row">
-                        <Message item={item} showFull={this.props.showFull}/>
+                        <Message item={item} showFull={showFull}/>
                     </div>
                     <div className="row">
-                        <MessageDetails item={item} showFull={this.props.showFull}/>
+                        <MessageDetails item={item} showFull={showFull}/>
                     </div>
                 </div>
             </div>

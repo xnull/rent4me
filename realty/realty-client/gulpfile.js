@@ -177,7 +177,7 @@ gulp.task('compressDev', [], function () {
 
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
-                .pipe(plugins.uglify({mangle: false, compress: true}))
+                //.pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         } else {
             var jsToCompress = moduleInfo['buildDir'] + "js/main-"+buildNumber+".js";
@@ -185,7 +185,7 @@ gulp.task('compressDev', [], function () {
 
             gulp.src(jsToCompress)
                 .pipe(plugins.stripDebug())
-                .pipe(plugins.uglify({mangle: false, compress: true}))
+                //.pipe(plugins.uglify({mangle: false, compress: true}))
                 .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
         }
     }
