@@ -245,7 +245,7 @@ var ImagePreviews = React.createClass({
                 {images.map((image) => {
                     return (
                         <CarouselItem>
-                                    <img alt='900x500' src={image} className="center-block" style={{maxHeight: '400px', minHeight: '400px', clip: 'rect(0px, 400px, 400px, 0px)'}}/>
+                                    <img alt='900x500' src={image} className="center-block" style={{maxHeight: '400px', minHeight: '400px', clip: 'rect(0px, auto, 400px, 0px)'}}/>
                         </CarouselItem>
                     );
                 })}
