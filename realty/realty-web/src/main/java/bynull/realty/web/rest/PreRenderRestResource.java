@@ -46,6 +46,34 @@ public class PreRenderRestResource {
 
 
     @GET
+    @Path("/sitemap-index.xml")
+    public Response sitemapIndexXml() {
+        long totalCount = CUSTOM_URLS_COUNT + apartmentRepository.countOfActiveApartments();
+
+        long totalCountOfPages = totalCount / ITEMS_PER_PAGE + (totalCount % ITEMS_PER_PAGE > 0 ? 1 : 0);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+
+        String result = "";
+
+        for(int page=1; page <= totalCountOfPages; page++) {
+            Date maxDateForPage = findMaxDateForPage(page);
+            String dateFormatted = simpleDateFormat.format(maxDateForPage);
+            result += "<sitemap>\n" +
+                    "        <loc>http://rent4.me/sitemap-"+page+".xml</loc>\n" +
+                    "        <lastmod>"+dateFormatted+"</lastmod>\n" +
+                    "    </sitemap>";
+        }
+
+        String template = loadTemplate("sitemap-index.xml");
+
+        template = StringUtils.replace(template, ":sitemaps", result);
+
+        return Response.ok(template)
+                .header("content-type", "text/xml; charset=utf-8").build();
+    }
+    @GET
     @Path("/sitemap.xml")
     public Response sitemapXml(@PathParam("id") long _pageId) {
         final long pageId = _pageId < 1 ? 1 : _pageId;
@@ -257,19 +285,26 @@ public class PreRenderRestResource {
     private List<Apartment> loadApartmentsForPage(long page) {
         long offset = (page - 1) * ITEMS_PER_PAGE;
 
+        int itemsToLoad = itemsToLaod(page);
+
+        return apartmentRepository.listApartments(itemsToLoad, offset);
+    }
+
+    private int itemsToLaod(long page) {
         int itemsToLoad = ITEMS_PER_PAGE;
 
         if(page == 1) {
             itemsToLoad -= CUSTOM_URLS_COUNT;
         }
-
-        return apartmentRepository.listApartments(itemsToLoad, offset);
+        return itemsToLoad;
     }
 
     private Date findMaxDateForPage(long page) {
         long offset = (page - 1) * ITEMS_PER_PAGE;
 
-        return apartmentRepository.findMaxDateForPage(ITEMS_PER_PAGE, offset);
+        int itemsToLoad = itemsToLaod(page);
+
+        return apartmentRepository.findMaxDateForPage(itemsToLoad, offset);
     }
 
     private static String getDesc(Apartment apartment) {
