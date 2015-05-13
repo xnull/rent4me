@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionOperations;
 
@@ -33,6 +31,7 @@ import java.util.*;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class PreRenderRestResource {
+    public static final int CUSTOM_URLS_COUNT = 2;
     private final Map<String, String> templateCache = new HashMap<>();
 
     @Resource
@@ -43,17 +42,18 @@ public class PreRenderRestResource {
 
     @Resource
     TransactionOperations transactionOperations;
-    public static final int ITEMS_PER_PAGE = 100;
+    public static final int ITEMS_PER_PAGE = 50000;
 
 
     @GET
     @Path("/sitemap.xml")
-    public Response sitemapXml(@PathParam("id") long id) {
+    public Response sitemapXml(@PathParam("id") long _pageId) {
+        final long pageId = _pageId < 1 ? 1 : _pageId;
         return transactionOperations.execute(tx -> {
             {
 
                 log.info("Rendering sitemap.xml for google bot");
-                String template = loadTemplate("sitemap.xml");
+                String template = pageId == 1 ? loadTemplate("sitemap.xml") : loadTemplate("sitemap-nth.xml");
 
                 Date date = new DateTime().withYear(2015).withMonthOfYear(4).withDayOfMonth(27).withMillisOfDay(0).toDate();
 
@@ -62,12 +62,13 @@ public class PreRenderRestResource {
 
                 StringBuilder contentBuilder = new StringBuilder();
 
-                long totalCount = apartmentRepository.countOfActiveApartments();
+                long totalCount = CUSTOM_URLS_COUNT + apartmentRepository.countOfActiveApartments();
 
                 long totalCountOfPages = totalCount / ITEMS_PER_PAGE + (totalCount % ITEMS_PER_PAGE > 0 ? 1 : 0);
 
-                for(long page = 1; page <= totalCountOfPages; page++) {
-                    String str = urlBuilder(page, simpleDateFormat, date);
+                List<Apartment> found = loadApartmentsForPage(pageId);
+                for (Apartment apartment : found) {
+                    String str = urlBuilder(apartment, pageId, simpleDateFormat);
                     contentBuilder.append(str);
                 }
 
@@ -83,7 +84,22 @@ public class PreRenderRestResource {
         });
     }
 
-    private String urlBuilder(long page, SimpleDateFormat simpleDateFormat, Date date) {
+    private String urlBuilder(Apartment apartment, long page, SimpleDateFormat simpleDateFormat) {
+        String dateFormatted = simpleDateFormat.format(apartment.getCreated());
+
+        return "<url>\n" +
+                "        <loc>" + urlForApartment(apartment) + "</loc>\n" +
+                "        <lastmod>"+dateFormatted+"</lastmod>\n" +
+                "    </url>\n";
+    }
+
+    @GET
+    @Path("/sitemap-{id}.xml")
+    public Response sitemapNthXml(@PathParam("id") long id) {
+        return sitemapXml(id);
+    }
+
+    private String searchUrlBuilder(long page, SimpleDateFormat simpleDateFormat, Date date) {
         Date maxDateForPage = findMaxDateForPage(page);
         Date targetDate = maxDateForPage.after(date) ? maxDateForPage : date;
         String dateFormatted = simpleDateFormat.format(targetDate);
@@ -109,6 +125,7 @@ public class PreRenderRestResource {
                 String template = loadTemplate("apartment.html");
                 String desc = getDesc(apartment);
                 template = StringUtils.replace(template, ":title", desc);
+                template = StringUtils.replace(template, ":desc", desc);
 
                 String content = "<h1>"+desc+"</h1>";
 
@@ -140,13 +157,13 @@ public class PreRenderRestResource {
                 GeoPoint location = apartment.getLocation();
                 if (location != null) {
                     List<Apartment> nearest = apartmentRepository.findNearest(location.getLongitude(), location.getLatitude(), 10, 0);
-                    for (Apartment apartment1 : nearest) {
-                        if(apartment1.getId().equals(apartment.getId())) continue;
+                    for (Apartment suggestedApartment : nearest) {
+                        if(suggestedApartment.getId().equals(apartment.getId())) continue;
 
                         content+=("<p>");
                         content+=("<div>");
-                        content += ("<a href=\"http://rent4.me/advert/") + (apartment.getId()) + ("\">");
-                        content+=(getDesc(apartment1));
+                        content += "<a href=\"" + urlForApartment(suggestedApartment) + ("\">");
+                        content+=(getDesc(suggestedApartment));
                         content+=("</a>");
                         content+=("</div>");
                         content+=("<br/>");
@@ -163,6 +180,10 @@ public class PreRenderRestResource {
 
             }
         });
+    }
+
+    private String urlForApartment(Apartment apartment) {
+        return "http://rent4.me/advert/" + (apartment.getId());
     }
 
     private String loadTemplate(String templateName) {
@@ -236,7 +257,13 @@ public class PreRenderRestResource {
     private List<Apartment> loadApartmentsForPage(long page) {
         long offset = (page - 1) * ITEMS_PER_PAGE;
 
-        return apartmentRepository.listApartments(ITEMS_PER_PAGE, offset);
+        int itemsToLoad = ITEMS_PER_PAGE;
+
+        if(page == 1) {
+            itemsToLoad -= CUSTOM_URLS_COUNT;
+        }
+
+        return apartmentRepository.listApartments(itemsToLoad, offset);
     }
 
     private Date findMaxDateForPage(long page) {
@@ -247,36 +274,44 @@ public class PreRenderRestResource {
 
     private static String getDesc(Apartment apartment) {
         apartment = HibernateUtil.deproxy(apartment);
-        String result = "Аренда ";
+        String result = "";
+        final String apartmentSizeSuffix;
+        final String apartmentSuffix;
         switch (apartment.getTarget()) {
             case RENTER:
-                result+="Сдам ";
+                result+="Снять ";
+                apartmentSizeSuffix = "ую";
+                apartmentSuffix = "у";
                 break;
             case LESSOR:
-                result+="Cниму ";
+                result+="Аренда ";
+                apartmentSizeSuffix = "ой";
+                apartmentSuffix = "ы";
                 break;
             default:
-                result+="Сдам/Cниму ";
+                result+="Снять ";
+                apartmentSizeSuffix = "ую";
+                apartmentSuffix = "у";
 
         }
 
         Integer roomCount = apartment.getRoomCount();
         if (roomCount != null) {
             if(roomCount == 1) {
-                result+="1 комнатную ";
+                result+="одно комнатн"+apartmentSizeSuffix+" ";
             } else if(roomCount == 2) {
-                result+="2-ух комнатную ";
+                result+="двух комнатн"+apartmentSizeSuffix+" ";
             } else if(roomCount == 3) {
-                result+="3-ех комнатную ";
+                result+="трех комнатн"+apartmentSizeSuffix+" ";
             } else if(roomCount == 4) {
-                result+="4-ех комнатную ";
+                result+="четырех комнатн"+apartmentSizeSuffix+" ";
             }
         }
 
-        result += "квартиру ";
+        result += "квартир"+apartmentSuffix+" ";
 
         if(apartment.getAddressComponents() != null && apartment.getAddressComponents().getCity() != null) {
-            result += "в "+(apartment.getAddressComponents().getCity().toLowerCase().contains("город")?"":"городе ")+apartment.getAddressComponents().getCity()+" ";
+            result += normalizeName(apartment.getAddressComponents().getCity());
             if (apartment.getAddressComponents().getDistrict() != null) {
                 result += apartment.getAddressComponents().getDistrict()+" ";
             }
@@ -286,14 +321,14 @@ public class PreRenderRestResource {
                     VkontakteApartment apartment1 = (VkontakteApartment) apartment;
                     CityEntity city = apartment1.getVkontaktePage().getCity();
                     if (city != null) {
-                        result += "в "+(city.getName().toLowerCase().contains("город")?"":"городе ")+city.getName()+" ";
+                        result += normalizeName(city.getName());
                     }
                     break;
                 case FACEBOOK:
                     FacebookApartment apartment2 = (FacebookApartment) apartment;
                     CityEntity city2 = apartment2.getFacebookPage().getCity();
                     if (city2 != null) {
-                        result += "в "+(city2.getName().toLowerCase().contains("город")?"":"городе ")+city2.getName()+" ";
+                        result += normalizeName(city2.getName());
                     }
                     break;
             }
@@ -305,7 +340,7 @@ public class PreRenderRestResource {
         }
 
         //perform inverse actions
-        switch (apartment.getTarget()) {
+        /*switch (apartment.getTarget()) {
             case RENTER:
                 result+="[сниму квартиру] ";
                 break;
@@ -314,8 +349,14 @@ public class PreRenderRestResource {
                 break;
             default:;
 
-        }
+        }*/
 
         return result.trim();
+    }
+
+    private static String normalizeName(String name) {
+        String result = StringUtils.trimToEmpty(name);
+        result = result.endsWith("а") ? result.substring(0, result.length() - 1)+"е" : result;
+        return "в "+result+ " ";
     }
 }

@@ -60,6 +60,16 @@ server {
                 }
         }
 
+        location /sitemap- {
+                set $prerender 1;
+
+                if ($prerender = 1) {
+                        rewrite .* /rest/pre_render$request_uri break;
+                        proxy_pass http://localhost:18080;
+                }
+        }
+
+
         location /sitemap.xml {
                 set $prerender 1;
 

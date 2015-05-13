@@ -62,3 +62,10 @@ createdb -O realty_prod_user realty_proddb
  psql --dbname=realty_proddb -c "create extension \"uuid-ossp\";"
  psql --dbname=realty_proddb -c "create extension pg_trgm;"
  psql --dbname=realty_proddb -c "CREATE extension pg_stat_statements;"
+
+
+ -------- restoring production(?) backups-------
+ ---- Full backup restore ----
+psql -U postgres -c "drop database realty_proddb;"
+createdb -E UTF8 realty_proddb
+pg_restore -i -U postgres -d realty_proddb -v $1
