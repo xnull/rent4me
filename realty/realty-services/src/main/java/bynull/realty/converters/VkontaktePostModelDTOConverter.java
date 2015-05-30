@@ -1,9 +1,7 @@
 package bynull.realty.converters;
 
 import bynull.realty.common.Converter;
-import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.data.business.external.vkontakte.VkontaktePost;
-import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.dto.vk.VkontaktePostDTO;
 import org.springframework.stereotype.Component;
 

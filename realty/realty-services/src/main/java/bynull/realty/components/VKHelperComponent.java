@@ -86,14 +86,16 @@ public class VKHelperComponent {
         return doLoadPostsFromPage0(maxAge, pageId, new ArrayList<>(), 0, 0);
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class VkWallPostResponse {
         @JsonProperty("response")
         private VkWallPostResponseContent content = new VkWallPostResponseContent();
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class VkWallPostResponseContent {
         public static final int LIMIT = 100;
@@ -110,7 +112,8 @@ public class VKHelperComponent {
     /**
      * http://vk.com/dev/post_source
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class VkPostSource {
         /**
@@ -120,7 +123,8 @@ public class VKHelperComponent {
         private String sourceUrl;
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class VkWallPostDTO {
         @JsonProperty("id")
@@ -181,9 +185,9 @@ public class VKHelperComponent {
                                 }
                             }
                             result.add(
-                                new PreviewFullImageUrlPair()
-                                    .withPreviewUrl(previewUrl)
-                                    .withFullUrl(fullUrl)
+                                    new PreviewFullImageUrlPair()
+                                            .withPreviewUrl(previewUrl)
+                                            .withFullUrl(fullUrl)
                             );
                         }
                         break;
@@ -231,7 +235,7 @@ public class VKHelperComponent {
 
             int delta = sizeBeforeFiltering - result.size();
 
-            if(delta > 0) {
+            if (delta > 0) {
                 log.warn("Removed [{}] photo entries. Original content was [{}]", delta, copy);
             }
 
@@ -332,12 +336,12 @@ public class VKHelperComponent {
             log.info("Converting response");
             VkWallPostResponseContent response = JsonUtils.fromJson(body, VkWallPostResponse.class).getContent();
 
-            if(response == null) {
+            if (response == null) {
                 log.error("Reponse not retrieved");
                 throw new IllegalStateException("Reponse not retrieved");
             }
 
-            if(response.getPosts() == null) {
+            if (response.getPosts() == null) {
                 log.warn("Response posts not retrieved");
             }
 
@@ -369,7 +373,7 @@ public class VKHelperComponent {
                 return accu;
             }
             Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
-            return doLoadPostsFromPage0(maxAge, pageId, accu, 0, offset+VkWallPostResponseContent.LIMIT);
+            return doLoadPostsFromPage0(maxAge, pageId, accu, 0, offset + VkWallPostResponseContent.LIMIT);
 
         } catch (Exception e) {
             log.warn("Exception occurred while trying to load posts from page", e);
@@ -458,7 +462,7 @@ public class VKHelperComponent {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        String uri =  "https://oauth.vk.com/access_token?client_id="+VK_APP_ID+"&client_secret="+VK_SECRET+"&code="+person.exchangeCode+"&redirect_uri="+ redirectUri;
+        String uri = "https://oauth.vk.com/access_token?client_id=" + VK_APP_ID + "&client_secret=" + VK_SECRET + "&code=" + person.exchangeCode + "&redirect_uri=" + redirectUri;
         GetMethod httpGet = new GetMethod(uri);
         httpGet.setFollowRedirects(false);
         try {
@@ -551,7 +555,7 @@ public class VKHelperComponent {
     private VkUserInfo doRetrieveMoreInfo(String vkId, String accessToken) {
         long requestStartTime = System.currentTimeMillis();
         //https://api.vk.com/method/'''METHOD_NAME'''?'''PARAMETERS'''&access_token='''ACCESS_TOKEN'''
-        String uri = "https://api.vk.com/method/users.get?user_ids="+vkId+"&access_token="+accessToken;
+        String uri = "https://api.vk.com/method/users.get?user_ids=" + vkId + "&access_token=" + accessToken;
 
 
         //https://vk.com/dev/users.get

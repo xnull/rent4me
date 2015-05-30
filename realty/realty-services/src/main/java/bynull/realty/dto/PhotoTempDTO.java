@@ -2,7 +2,6 @@ package bynull.realty.dto;
 
 import bynull.realty.data.business.PhotoTemp;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
@@ -14,7 +13,7 @@ import static bynull.realty.util.CommonUtils.copy;
 @Getter
 public class PhotoTempDTO {
     public static PhotoTempDTO from(PhotoTemp photoTemp) {
-        if(photoTemp == null) return null;
+        if (photoTemp == null) return null;
         PhotoTempDTO dto = new PhotoTempDTO(photoTemp.getId(), photoTemp.getUrl(), photoTemp.getGuid(), photoTemp.getCreated());
         return dto;
     }

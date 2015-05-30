@@ -1,7 +1,6 @@
 package bynull.realty.converters.apartments;
 
 import bynull.realty.data.business.FacebookApartment;
-import bynull.realty.data.business.InternalApartment;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.dto.ApartmentDTO;

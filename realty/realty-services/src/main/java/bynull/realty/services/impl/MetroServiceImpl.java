@@ -117,10 +117,10 @@ public class MetroServiceImpl implements MetroService {
         MetroSystemDto metroSystem = loadStations(cityDescription);
 
         CityEntity city = cityRepository.findByPoint(cityDescription.cityCenterPoint.getLongitude(), cityDescription.cityCenterPoint.getLatitude());
-        Assert.notNull(city, "City not found by provided geopoint "+cityDescription.cityCenterPoint);
+        Assert.notNull(city, "City not found by provided geopoint " + cityDescription.cityCenterPoint);
         List<MetroEntity> dbStations = metroRepository.findAll()
                 .stream()
-                //remove metros from cities other than provided
+                        //remove metros from cities other than provided
                 .filter(metro -> {
                     final boolean allowed;
 
@@ -192,7 +192,7 @@ public class MetroServiceImpl implements MetroService {
     );
 
     private static String generateKeyForCountryAndCityUrl(String country, String city) {
-        return country+"_"+city;
+        return country + "_" + city;
     }
 
     /**
@@ -226,7 +226,7 @@ public class MetroServiceImpl implements MetroService {
         SSLContext sslContext = sslConfig.createSSLContext();
         WebTarget target = REST_CLIENT.target("https://maps.google.com/maps/api/geocode/json");
         //target = target.queryParam("query", "метро+" + metroStation.replaceAll(" ", "+"));
-        target = target.queryParam("address", "город+"+cityDescription.city+",+"+cityDescription.city+",+метро+" + metroStation.replaceAll(" ", "+"));
+        target = target.queryParam("address", "город+" + cityDescription.city + ",+" + cityDescription.city + ",+метро+" + metroStation.replaceAll(" ", "+"));
         target.queryParam("language", "ru");
         target = target.queryParam("sensor", false);
 

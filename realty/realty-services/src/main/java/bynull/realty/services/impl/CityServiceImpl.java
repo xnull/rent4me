@@ -110,7 +110,7 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     @Override
     public Optional<CityDTO> findByGeoPoint(Optional<GeoPoint> geoPoint) {
-        if(!geoPoint.isPresent()) {
+        if (!geoPoint.isPresent()) {
             return Optional.empty();
         } else {
             CityEntity cityEntity = cityRepository.findByPoint(geoPoint.get().getLongitude(), geoPoint.get().getLatitude());

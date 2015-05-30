@@ -32,7 +32,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         Optional<SecurityUtils.UserIDHolder> authorizedUserOptional = SecurityUtils.getAuthorizedUserOptional();
 
-        authorizedUserOptional.ifPresent(it-> {
+        authorizedUserOptional.ifPresent(it -> {
             UserDTO dto = new UserDTO();
             dto.setId(it.getId());
             feedbackDTO.setCreator(dto);

@@ -42,7 +42,7 @@ public class RentalFeeParser {
 
         //пример: цена 40 000
         PatternCheck simple = new PatternCheck(Pattern.compile(
-                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\s){0,2})(р((\\S{1,6})|(\\.)))?", FLAGS), 9);
+                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})" + fullPriceAbove_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?", FLAGS), 9);
 
         //пример: 40 000 цена
         PatternCheck simpleInverseAbove1000 = new PatternCheck(Pattern.compile(
@@ -54,11 +54,11 @@ public class RentalFeeParser {
 
         //пример: цена 40 000 - 45 000
         PatternCheck rangeBothComplete = new PatternCheck(Pattern.compile(
-                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\s){0,2})(р((\\S{1,6})|(\\.)))?", FLAGS), 13);
+                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})" + fullPriceAbove_1000_patternTemplate + "((\\D){1,5})" + fullPriceAbove_1000_patternTemplate + "((\\s){0,2})(р((\\S{1,6})|(\\.)))?", FLAGS), 13);
 
         //пример: цена 40 - 45 000
         PatternCheck rangeStartInComplete = new PatternCheck(Pattern.compile(
-                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})"+fullPriceAbove_1000_patternTemplate+"((\\s){0,2})", FLAGS), 11);
+                "(" + HOT_WORD_STAMS_FOR_PRICE + "([^\\s0-9]{0,2}))((\\D){1,5})(\\b([\\d]{1,3}))((\\D){1,5})" + fullPriceAbove_1000_patternTemplate + "((\\s){0,2})", FLAGS), 11);
 
         //TODO: support тысяч рублей, тысячей рублей, ттысяч р тысяч рублей
         PatternCheck patternCheckForThousandsWithWords = new PatternCheck(
@@ -70,10 +70,10 @@ public class RentalFeeParser {
 
         //пример: 45 000 руб, 45 000 рублей
         PatternCheck fullPriceAbove_1000WithCurrency = new PatternCheck(Pattern.compile(
-                fullPriceAbove_1000_patternTemplate + "("+RUBLES_PATTERN+")", FLAGS), 2);
+                fullPriceAbove_1000_patternTemplate + "(" + RUBLES_PATTERN + ")", FLAGS), 2);
         //пример: 450 руб, 450 рублей
         PatternCheck fullPriceBellow_1000WithCurrency = new PatternCheck(Pattern.compile(
-                fullPriceBellow_1000_patternTemplate + "("+RUBLES_PATTERN+")", FLAGS), 2);
+                fullPriceBellow_1000_patternTemplate + "(" + RUBLES_PATTERN + ")", FLAGS), 2);
 
         //пример: 45 000
         fullPriceAbove_1000 = new PatternCheck(Pattern.compile(
@@ -82,7 +82,7 @@ public class RentalFeeParser {
         //пример: 450
         fullPriceBellow_1000 = new PatternCheck(Pattern.compile(
 
-                        fullPriceBellow_1000_patternTemplate, FLAGS), 2, 1, successCallbackCheckers);
+                fullPriceBellow_1000_patternTemplate, FLAGS), 2, 1, successCallbackCheckers);
 
         patterns = ImmutableList.of(
                 patternCheckForThousandsWithWords,
@@ -116,9 +116,10 @@ public class RentalFeeParser {
         log.info(">> Finding rental fee process started");
         try {
             String text = normalizeText(inputText);
-            if(text == null) return null;
+            if (text == null) return null;
 
-            pattern_loop: for (PatternCheck patternCheck : patterns) {
+            pattern_loop:
+            for (PatternCheck patternCheck : patterns) {
                 Pattern pattern = patternCheck.pattern;
                 Matcher matcher = pattern.matcher(text);
                 int matchNumber = 0;
@@ -135,21 +136,21 @@ public class RentalFeeParser {
                         if (bigDecimal.compareTo(BigDecimal.ZERO) >= 0) {
                             List<PatternCheck.SuccessCallbackChecker> successCheckCallbacks = patternCheck.successCheckCallbacks;
                             for (PatternCheck.SuccessCallbackChecker callback : successCheckCallbacks) {
-                                if(!callback.allowed(text, value)) {
+                                if (!callback.allowed(text, value)) {
                                     log.debug("Specified result was invalidated by callback [{}]. Skipping", callback);
                                     continue pattern_loop;
                                 }
                             }
 
                             long longValBeforeMultiplying = bigDecimal.longValue();
-                            if((longValBeforeMultiplying > 10_000 && longValBeforeMultiplying%100 != 0) ||
-                                    (longValBeforeMultiplying > 100_000 && longValBeforeMultiplying%1_000 != 0)) {
+                            if ((longValBeforeMultiplying > 10_000 && longValBeforeMultiplying % 100 != 0) ||
+                                    (longValBeforeMultiplying > 100_000 && longValBeforeMultiplying % 1_000 != 0)) {
                                 log.warn("Seems that value is a little bit ugly ");
                                 continue pattern_loop;
                             }
 
                             BigDecimal tmpResultValue = bigDecimal.multiply(BigDecimal.valueOf(patternCheck.multiplier));
-                            if(tmpResultValue.longValue() > 500_000) {
+                            if (tmpResultValue.longValue() > 500_000) {
                                 log.warn("Value [{}] is too big. Skipping", tmpResultValue);
                                 continue pattern_loop;
                             }
@@ -159,7 +160,7 @@ public class RentalFeeParser {
 //                                continue pattern_loop;
 //                            }
 
-                            if(resultValue == null || tmpResultValue.compareTo(resultValue) > 0) {
+                            if (resultValue == null || tmpResultValue.compareTo(resultValue) > 0) {
                                 log.debug("Setting result value to [{}]", tmpResultValue);
                                 resultValue = tmpResultValue;
                             }
@@ -167,11 +168,11 @@ public class RentalFeeParser {
                             log.error("Parsing error. Value parsed: [{}]", bigDecimal);
                         }
                     } catch (Exception ignore) {
-    //                    log.error("Exception occurred while parsing result value [{}]: {}", value, e.getMessage());
+                        //                    log.error("Exception occurred while parsing result value [{}]: {}", value, e.getMessage());
                     }
                 }
 
-                if(resultValue != null) {
+                if (resultValue != null) {
                     return !resultValue.equals(BigDecimal.ZERO) ? resultValue : null;
                 }
             }
@@ -220,7 +221,7 @@ public class RentalFeeParser {
             boolean found = false;
             List<PhoneUtil.Phone> phoneNumbers = phoneNumberParser.findPhoneNumbers(text);
             for (PhoneUtil.Phone phoneNumber : phoneNumbers) {
-                if(normalizeMatchedValue(phoneNumber.raw).contains(context)) {
+                if (normalizeMatchedValue(phoneNumber.raw).contains(context)) {
                     found = true;
                     break;
                 }

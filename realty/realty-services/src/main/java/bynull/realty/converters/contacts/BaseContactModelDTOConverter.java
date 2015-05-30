@@ -1,6 +1,5 @@
 package bynull.realty.converters.contacts;
 
-import bynull.realty.common.Converter;
 import bynull.realty.data.business.Contact;
 import bynull.realty.dto.ContactDTO;
 
@@ -16,7 +15,7 @@ public abstract class BaseContactModelDTOConverter<S extends Contact> implements
 
     @Override
     public ContactDTO toTargetType(S in, ContactDTO instance) {
-        if(in == null) return null;
+        if (in == null) return null;
         instance.setId(in.getId());
         instance.setType(in.getType());
 

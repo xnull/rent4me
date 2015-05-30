@@ -1,14 +1,14 @@
 package bynull.realty.converters.apartments;
 
 import bynull.realty.converters.MetroModelDTOConverter;
-import bynull.realty.data.business.*;
-import bynull.realty.dto.*;
-import bynull.realty.utils.HibernateUtil;
+import bynull.realty.data.business.Apartment;
+import bynull.realty.dto.AddressComponentsDTO;
+import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.GeoPointDTO;
+import bynull.realty.dto.MetroDTO;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by dionis on 3/5/15.

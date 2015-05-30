@@ -3,7 +3,6 @@ package bynull.realty.services.api;
 import bynull.realty.dao.ApartmentRepositoryCustom;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.services.metro.MetroServiceException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

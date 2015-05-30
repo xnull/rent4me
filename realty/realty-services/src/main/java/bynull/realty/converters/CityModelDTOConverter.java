@@ -1,11 +1,9 @@
 package bynull.realty.converters;
 
 import bynull.realty.common.Converter;
-import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.dto.BoundingBoxDTO;
 import bynull.realty.dto.CityDTO;
-import bynull.realty.dto.MetroDTO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

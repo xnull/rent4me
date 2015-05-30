@@ -9,7 +9,6 @@ import bynull.realty.dto.MetroDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,8 +32,8 @@ public class AbstractSocialNetServiceImpl {
             Set<MetroEntity> matchedMetros = new HashSet<>();
             metros = city != null
                     ? metros.stream()
-                                .filter(m -> m.getCity().getId().equals(city.getId()))
-                                .collect(Collectors.toList())
+                    .filter(m -> m.getCity().getId().equals(city.getId()))
+                    .collect(Collectors.toList())
                     : metros;
             for (MetroDTO metro : metros) {
                 if (metroTextAnalyzer.matches(message, metro.getStationName())) {
@@ -54,7 +53,7 @@ public class AbstractSocialNetServiceImpl {
     }
 
     protected GeoPoint getAveragePoint(Set<MetroEntity> metroEntities) {
-        if(metroEntities == null || metroEntities.isEmpty()) return null;
+        if (metroEntities == null || metroEntities.isEmpty()) return null;
 
         int counter = metroEntities.size();
         double latSum = 0.0d;
@@ -65,14 +64,14 @@ public class AbstractSocialNetServiceImpl {
             latSum += metroEntity.getLocation().getLatitude();
         }
 
-        double averageLat = latSum/counter;
-        double averageLng = lngSum/counter;
+        double averageLat = latSum / counter;
+        double averageLng = lngSum / counter;
 
         return new GeoPoint().withLatitude(averageLat).withLongitude(averageLng);
     }
 
     protected GeoPoint getAveragePoint(CityDTO cityDTO) {
-        if(cityDTO == null) return null;
+        if (cityDTO == null) return null;
 
 
         double averageLat = (cityDTO.getArea().getHigh().getLatitude() + cityDTO.getArea().getLow().getLatitude()) / 2;

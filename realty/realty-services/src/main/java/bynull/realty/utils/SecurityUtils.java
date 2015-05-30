@@ -17,12 +17,13 @@ public class SecurityUtils {
 
     /**
      * Get authorized user or fail. User object might be detached from hibernate session. So be aware of that.
+     *
      * @return
      */
     public static UserIDHolder getAuthorizedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User authorizedUser = authentication != null ? (User) authentication.getPrincipal() :  null;
-        if(authorizedUser == null) {
+        User authorizedUser = authentication != null ? (User) authentication.getPrincipal() : null;
+        if (authorizedUser == null) {
             throw new NotAuthorizedException("User not authorized");
         }
         return new UserIDHolder(authorizedUser.getId());
@@ -38,15 +39,15 @@ public class SecurityUtils {
     }
 
 
-
     /**
      * Check that user is the same as authorized user
+     *
      * @param user
      */
     public static void verifySameUser(User user) {
         UserIDHolder authorizedUser = getAuthorizedUser();
-        if(authorizedUser.getId() != user.getId()) {
-            throw new ForbiddenException("User #"+user.getId()+" differs from authorized user #"+authorizedUser.getId());
+        if (authorizedUser.getId() != user.getId()) {
+            throw new ForbiddenException("User #" + user.getId() + " differs from authorized user #" + authorizedUser.getId());
         }
     }
 

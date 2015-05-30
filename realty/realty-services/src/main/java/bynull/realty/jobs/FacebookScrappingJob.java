@@ -2,7 +2,6 @@ package bynull.realty.jobs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
@@ -24,12 +23,12 @@ public class FacebookScrappingJob implements Runnable {
         jobHelperComponent.addJob(new JobHelperComponent.JobAcceptanceCallback() {
             @Override
             public void onJobAdded(JobHelperComponent.Job job) {
-                log.info("Automatic job "+FacebookScrappingJob.class+" accepted");
+                log.info("Automatic job " + FacebookScrappingJob.class + " accepted");
             }
 
             @Override
             public void onJobRejected(JobHelperComponent.Job job) {
-                log.info("Automatic job "+FacebookScrappingJob.class+" rejected");
+                log.info("Automatic job " + FacebookScrappingJob.class + " rejected");
             }
         }, jobHelperComponent.syncWithFB());
     }

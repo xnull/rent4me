@@ -2,11 +2,9 @@ package bynull.realty.services.api;
 
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
-import bynull.realty.util.LimitAndOffset;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by dionis on 02/01/15.

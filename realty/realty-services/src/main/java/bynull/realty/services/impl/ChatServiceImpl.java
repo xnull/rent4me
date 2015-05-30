@@ -7,7 +7,6 @@ import bynull.realty.dao.UserRepository;
 import bynull.realty.data.business.User;
 import bynull.realty.data.business.chat.ChatMessage;
 import bynull.realty.dto.ChatMessageDTO;
-import bynull.realty.services.api.AsyncExecutor;
 import bynull.realty.services.api.ChatService;
 import bynull.realty.services.api.NotificationService;
 import bynull.realty.util.LimitAndOffset;
@@ -62,9 +61,9 @@ public class ChatServiceImpl implements ChatService {
 
         final long chatMessageId = entity.getId();
 
-        afterCommitExecutor.executeAsynchronouslyInTransaction(()->{
+        afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
             ChatMessage one = chatMessageRepository.findOne(chatMessageId);
-            Assert.notNull(one, "Chat message not found by id "+chatMessageId);
+            Assert.notNull(one, "Chat message not found by id " + chatMessageId);
             ChatMessageDTO dto = ChatMessageDTO.from(one);
             chatMessageUsersOnlineNotifier.sendMessagesToParticipants(dto);
 

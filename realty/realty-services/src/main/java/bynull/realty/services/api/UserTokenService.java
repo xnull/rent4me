@@ -21,7 +21,7 @@ public interface UserTokenService {
     /**
      * Get token if credentials are valid.
      *
-     * @param email username
+     * @param email    username
      * @param password password
      * @return newly generated token will be returned
      * @throws BadCredentialsException
@@ -31,6 +31,7 @@ public interface UserTokenService {
 
     /**
      * Checks whether provided authentications is valid username token pair
+     *
      * @param usernameTokenPair
      * @return
      */

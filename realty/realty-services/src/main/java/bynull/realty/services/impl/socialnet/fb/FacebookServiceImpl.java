@@ -1,7 +1,6 @@
 package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.common.PhoneUtil;
-import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.common.Porter;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
@@ -122,9 +121,9 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
     @Override
     public void syncWithFB() {
         List<FacebookPageToScrap> fbPages = facebookPageToScrapRepository.findAll()
-                                                    .stream()
-                                                    .filter(FacebookPageToScrap::isEnabled)
-                                                    .collect(Collectors.toList());
+                .stream()
+                .filter(FacebookPageToScrap::isEnabled)
+                .collect(Collectors.toList());
         List<? extends MetroDTO> metros = transactionOperations.execute(txStatus -> metroConverter.toTargetList(metroRepository.findAll()));
 
         em.clear();//detach all instances
@@ -144,7 +143,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                         List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
                                 .stream()
                                 .filter(item -> StringUtils.trimToNull(item.getMessage()) != null)
-                                //leave only those that have no duplicates in DB
+                                        //leave only those that have no duplicates in DB
 //                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getMessage()) == 0)
                                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -168,7 +167,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                         Iterator<FacebookHelperComponent.FacebookPostItemDTO> iterator = facebookPostItemDTOs.iterator();
                         while (iterator.hasNext()) {
                             FacebookHelperComponent.FacebookPostItemDTO next = iterator.next();
-                            if(next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getMessage())){
+                            if (next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getMessage())) {
                                 log.info("Removed duplicate in same requests by id: [{}]", next.getId());
                                 iterator.remove();
                                 continue;
@@ -203,7 +202,6 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             post.setLogicalCreated(postItemDTO.getCreatedDtime());
 
 
-
                             post.setFacebookPage(fbPage);
                             String message = post.getDescription();
 
@@ -213,7 +211,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             GeoPoint averagePoint = getAveragePoint(matchedMetros);
                             if (averagePoint != null) {
                                 post.setLocation(averagePoint);
-                            } else if(cityDTO != null) {
+                            } else if (cityDTO != null) {
                                 post.setLocation(getAveragePoint(cityDTO));
                             } else {
                                 post.setLocation(null);
@@ -231,7 +229,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             post.setRentalFee(rentalFee);
                             post.setFeePeriod(FeePeriod.MONTHLY);
                             List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
-                            Set<Contact> contacts =  phones.stream().map(phone -> {
+                            Set<Contact> contacts = phones.stream().map(phone -> {
                                 PhoneContact contact = new PhoneContact();
                                 contact.setPhoneNumber(PhoneNumber.from(phone));
                                 return contact;
@@ -350,7 +348,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                 GeoPoint averagePoint = getAveragePoint(matchedMetros);
                 if (averagePoint != null) {
                     post.setLocation(averagePoint);
-                } else if(cityDTO != null) {
+                } else if (cityDTO != null) {
                     post.setLocation(getAveragePoint(cityDTO));
                 } else {
                     post.setLocation(null);
@@ -367,7 +365,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                 Apartment.Target target = targetAnalyzer.determineTarget(message);
                 post.setTarget(target);
                 List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
-                Set<Contact> contacts =  phones.stream().map(phone -> {
+                Set<Contact> contacts = phones.stream().map(phone -> {
                     PhoneContact contact = new PhoneContact();
                     contact.setPhoneNumber(PhoneNumber.from(phone));
                     return contact;

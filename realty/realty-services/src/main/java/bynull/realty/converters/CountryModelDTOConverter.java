@@ -1,10 +1,7 @@
 package bynull.realty.converters;
 
 import bynull.realty.common.Converter;
-import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.CountryEntity;
-import bynull.realty.dto.BoundingBoxDTO;
-import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.CountryDTO;
 import org.springframework.stereotype.Component;
 

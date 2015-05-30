@@ -4,8 +4,6 @@ import bynull.realty.data.business.AddressComponents;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-
 /**
  * @author dionis on 23/11/14.
  */
@@ -22,7 +20,7 @@ public class AddressComponentsDTO {
     private String zipCode;
 
     public static AddressComponentsDTO from(AddressComponents model) {
-        if(model == null) return null;
+        if (model == null) return null;
         AddressComponentsDTO dto = new AddressComponentsDTO();
         dto.setFormattedAddress(model.getFormattedAddress());
 

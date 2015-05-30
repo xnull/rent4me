@@ -1,6 +1,5 @@
 package bynull.realty.dto;
 
-import bynull.realty.data.business.Feedback;
 import lombok.Getter;
 import lombok.Setter;
 

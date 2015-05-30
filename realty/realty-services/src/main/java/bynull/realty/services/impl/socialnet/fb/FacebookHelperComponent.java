@@ -2,8 +2,6 @@ package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.components.AccessTokenPool;
 import bynull.realty.config.Config;
-import bynull.realty.data.business.external.facebook.FacebookPostType;
-import bynull.realty.data.business.external.facebook.FacebookScrapedPost;
 import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -366,7 +364,7 @@ public class FacebookHelperComponent {
         public String getExternalLink() {
             String link = getLink();
             for (Action action : this.getActions()) {
-                if("like".equalsIgnoreCase(action.getName())) {
+                if ("like".equalsIgnoreCase(action.getName())) {
                     link = action.getLink();
                     break;
                 }
@@ -377,7 +375,7 @@ public class FacebookHelperComponent {
         public String getExternalAuthorLink() {
             String link = null;
             if (author != null) {
-                link = "https://www.facebook.com/"+author.getId();
+                link = "https://www.facebook.com/" + author.getId();
             }
 
             return link;
@@ -394,7 +392,7 @@ public class FacebookHelperComponent {
 
         @Getter
         @Setter
-        public static class Author  {
+        public static class Author {
             @JsonProperty("name")
             private String name;
             @JsonProperty("id")

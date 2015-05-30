@@ -1,6 +1,5 @@
 package bynull.realty.converters.apartments;
 
-import bynull.realty.data.business.InternalApartment;
 import bynull.realty.data.business.VkontakteApartment;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.data.common.CityEntity;

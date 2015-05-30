@@ -1,6 +1,5 @@
 package bynull.realty.utils;
 
-import bynull.realty.services.metro.SvgMetro;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -8,7 +7,8 @@ import javax.xml.bind.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringReader;
@@ -19,19 +19,16 @@ import java.io.StringWriter;
  */
 public final class XmlUtils {
 
-    private XmlUtils(){
+    private XmlUtils() {
         throw new IllegalStateException("Can't instantiate an instance");
     }
 
     /**
      * Отобразить xml документ на класс
      *
-     * @param <T>
-     *            класс на который будет отображен xml документ
-     * @param xmlDoc
-     *            документ источник, который будет отображен на класс
-     * @param unmarshallClass
-     *            класс на который будет отображен xml документ
+     * @param <T>             класс на который будет отображен xml документ
+     * @param xmlDoc          документ источник, который будет отображен на класс
+     * @param unmarshallClass класс на который будет отображен xml документ
      * @return <T> новый класс на который отобразился xml документ
      * @throws XmlParseException
      */
@@ -52,8 +49,10 @@ public final class XmlUtils {
             throw new XmlParseException(e);
         }
     }
+
     /**
      * Отображает класс на xml документ.
+     *
      * @param jaxbClass объект.
      * @return документ.
      * @throws Throwable
@@ -75,6 +74,7 @@ public final class XmlUtils {
 
     /**
      * Получение из JAXB класса, строкового представления в виде xml строки
+     *
      * @param jaxbClass
      * @return xml-строка.
      */

@@ -12,7 +12,6 @@ import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
 import bynull.realty.services.impl.socialnet.fb.FacebookHelperComponent;
 import bynull.realty.utils.SecurityUtils;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
             FacebookHelperComponent.ExchangedToken exchangedToken = facebookHelperComponent.exchangeToken(person);
 
             log.info("Updated exchange token: [{}] expiration: [{}]", exchangedToken.accessToken, exchangedToken.liveTimeSeconds);
-            
+
             User user = userRepository.findByFacebookId(verify.facebookId);
             if (user == null) {
                 user = userRepository.findByEmail(verify.email);

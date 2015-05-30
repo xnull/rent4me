@@ -58,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification = notificationRepository.saveAndFlush(notification);
         long notificationId = notification.getId();
 
-        afterCommitExecutor.executeAsynchronouslyInTransaction(()->{
+        afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
             Notification nf = notificationRepository.findOne(notificationId);
             NotificationDTO dto = notificationModelDTOConverter.toTargetType(nf);
             notificationUsersOnlineNotifier.deliverNotification(dto);
@@ -80,7 +80,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void resolveMyNotifications(Set<Long> notificationIds) {
         Assert.notNull(notificationIds);
-        if(notificationIds.isEmpty()) {
+        if (notificationIds.isEmpty()) {
             return;
         }
         long id = SecurityUtils.getAuthorizedUser().getId();

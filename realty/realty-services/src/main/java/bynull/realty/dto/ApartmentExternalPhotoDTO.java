@@ -1,7 +1,6 @@
 package bynull.realty.dto;
 
 import bynull.realty.data.business.ApartmentExternalPhoto;
-import bynull.realty.data.business.ApartmentPhoto;
 import lombok.Getter;
 import lombok.Setter;
 

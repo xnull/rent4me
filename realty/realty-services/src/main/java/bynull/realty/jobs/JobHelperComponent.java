@@ -37,6 +37,9 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
 
     ExecutorService jobRunner;
 
+    final AtomicBoolean syncInProgress = new AtomicBoolean();
+    final AtomicReference<String> syncJobName = new AtomicReference<>();
+
     @Override
     public void afterPropertiesSet() throws Exception {
         jobRunner = Executors.newSingleThreadExecutor();
@@ -47,10 +50,6 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
         jobRunner.shutdown();
         jobRunner = null;
     }
-
-
-    final AtomicBoolean syncInProgress = new AtomicBoolean();
-    final AtomicReference<String> syncJobName = new AtomicReference<>();
 
     public Optional<String> getSyncJobName() {
         return Optional.ofNullable(syncJobName.get());
@@ -70,14 +69,14 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
         @Override
         public final void run() {
             try {
-                log.info("Starting job "+name);
+                log.info("Starting job " + name);
                 action();
-            } catch (Exception e){
-                log.info("Job ended with exception "+name+"; ", e.getMessage());
-            }finally {
+            } catch (Exception e) {
+                log.info("Job ended with exception " + name + "; ", e.getMessage());
+            } finally {
                 syncInProgress.set(false);
                 syncJobName.set(null);
-                log.info("Ended job "+name);
+                log.info("Ended job " + name);
             }
         }
 
@@ -86,18 +85,20 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
 
     public static interface JobAcceptanceCallback {
         void onJobAdded(Job job);
+
         void onJobRejected(Job job);
     }
 
     public void addJob(JobAcceptanceCallback callback, Job job) {
         boolean set = syncInProgress.compareAndSet(false, true);
-        if(set) {
+        if (set) {
             syncJobName.set(job.getName());
             jobRunner.submit(job);
             callback.onJobAdded(job);
         } else {
             callback.onJobRejected(job);
-        };
+        }
+        ;
     }
 
     public Job reparseExistingFBPosts() {

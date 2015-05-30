@@ -6,16 +6,20 @@ package bynull.realty.components;
 public interface ImageComponent {
     /**
      * Create image
+     *
      * @param imageId
      * @param imageContent
      * @return url of image.
      */
     String createJpeg(String imageId, byte[] imageContent);
+
     void deleteJpeg(String imageId);
+
     void deleteJpegSilently(String imageId);
 
     /**
      * Resize
+     *
      * @param imageContent
      * @return
      */

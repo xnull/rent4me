@@ -2,7 +2,6 @@ package bynull.realty.services.impl.socialnet.vk;
 
 import bynull.realty.common.PhoneUtil;
 import bynull.realty.components.VKHelperComponent;
-import bynull.realty.components.text.MetroTextAnalyzer;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.components.text.TargetAnalyzer;
@@ -24,12 +23,10 @@ import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
-import bynull.realty.dto.vk.VkontaktePostDTO;
 import bynull.realty.services.api.VkontakteService;
 import bynull.realty.services.impl.socialnet.AbstractSocialNetServiceImpl;
 import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
@@ -107,15 +104,15 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
         rentalFeeParser = RentalFeeParser.getInstance();
     }
 
-//    @Transactional
+    //    @Transactional
     @Override
     public void syncWithVK() {
         log.info("Loading pages");
 
         List<VkontaktePage> vkPages = vkontaktePageRepository.findAll()
-                                                .stream()
-                                                .filter(VkontaktePage::isEnabled)
-                                                .collect(Collectors.toList());
+                .stream()
+                .filter(VkontaktePage::isEnabled)
+                .collect(Collectors.toList());
 
         log.info("Loading metros");
 
@@ -152,13 +149,12 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
 
 
-
                     try {
                         log.info("Loading posts from page");
                         List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab)
                                 .stream()
                                 .filter(item -> StringUtils.trimToNull(item.getText()) != null)
-                                //leave only those that have no duplicates in DB
+                                        //leave only those that have no duplicates in DB
                                 .collect(Collectors.toCollection(ArrayList::new));
 
                         log.info("Loaded [{}] posts from page", postItemDTOs.size());
@@ -217,7 +213,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                             GeoPoint averagePoint = getAveragePoint(matchedMetros);
                             if (averagePoint != null) {
                                 post.setLocation(averagePoint);
-                            } else if(cityDTO != null) {
+                            } else if (cityDTO != null) {
                                 post.setLocation(getAveragePoint(cityDTO));
                             } else {
                                 post.setLocation(null);
@@ -235,7 +231,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                             post.setTarget(target);
                             post.setFeePeriod(FeePeriod.MONTHLY);
                             List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
-                            Set<Contact> contacts =  phones.stream().map(phone -> {
+                            Set<Contact> contacts = phones.stream().map(phone -> {
                                 PhoneContact contact = new PhoneContact();
                                 contact.setPhoneNumber(PhoneNumber.from(phone));
                                 return contact;
@@ -297,8 +293,8 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 
     @Transactional(readOnly = true)
     @Override
-    public VkontaktePageDTO findPageById(long fbPageId) {
-        return vkontaktePageConverter.toTargetType(vkontaktePageRepository.findOne(fbPageId));
+    public VkontaktePageDTO findPageById(long vkPageId) {
+        return vkontaktePageConverter.toTargetType(vkontaktePageRepository.findOne(vkPageId));
     }
 
     @Transactional(readOnly = true)
@@ -339,7 +335,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                 GeoPoint averagePoint = getAveragePoint(matchedMetros);
                 if (averagePoint != null) {
                     post.setLocation(averagePoint);
-                } else if(cityDTO != null) {
+                } else if (cityDTO != null) {
                     post.setLocation(getAveragePoint(cityDTO));
                 } else {
                     post.setLocation(null);
@@ -357,7 +353,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                 post.setTarget(target);
 
                 List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
-                Set<Contact> contacts =  phones.stream().map(phone -> {
+                Set<Contact> contacts = phones.stream().map(phone -> {
                     PhoneContact contact = new PhoneContact();
                     contact.setPhoneNumber(PhoneNumber.from(phone));
                     return contact;

@@ -6,7 +6,6 @@ import bynull.realty.data.business.FacebookApartment;
 import bynull.realty.data.business.InternalApartment;
 import bynull.realty.data.business.VkontakteApartment;
 import bynull.realty.dto.ApartmentDTO;
-import bynull.realty.utils.HibernateUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -55,7 +54,7 @@ public class ApartmentModelDTOConverterFactory<S extends Apartment> implements C
         } else if (in instanceof FacebookApartment) {
             return (ApartmentModelDTOConverter<S>) facebookApartmentModelDTOConverter;
         } else {
-            if(in == null)
+            if (in == null)
                 return NULL_CONVERTER;
             else
                 throw new UnsupportedOperationException();

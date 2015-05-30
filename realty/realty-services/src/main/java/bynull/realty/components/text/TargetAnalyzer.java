@@ -21,29 +21,29 @@ public class TargetAnalyzer {
 
     public Apartment.Target determineTarget(String text) {
         String lowerCasedText = StringUtils.trimToEmpty(StringUtils.lowerCase(text));
-        if(lowerCasedText.isEmpty()) return Apartment.Target.UNKNOWN;
+        if (lowerCasedText.isEmpty()) return Apartment.Target.UNKNOWN;
 
         boolean hasLessorTargetedKeywords = false;
 
         for (String lessorTargetedKeyword : LESSOR_TARGETED_KEYWORDS) {
             hasLessorTargetedKeywords = lowerCasedText.contains(lessorTargetedKeyword);
-            if(hasLessorTargetedKeywords)
+            if (hasLessorTargetedKeywords)
                 break;
         }
 
         boolean hasRenterTargetedKeywords = false;
         for (String renterTargetedKeyword : RENTER_TARGETED_KEYWORDS) {
             hasRenterTargetedKeywords = lowerCasedText.contains(renterTargetedKeyword);
-            if(hasRenterTargetedKeywords) {
+            if (hasRenterTargetedKeywords) {
                 break;
             }
         }
 
-        if(hasLessorTargetedKeywords && hasRenterTargetedKeywords) {
+        if (hasLessorTargetedKeywords && hasRenterTargetedKeywords) {
             return Apartment.Target.BOTH;
-        } else if(hasLessorTargetedKeywords) {
+        } else if (hasLessorTargetedKeywords) {
             return Apartment.Target.LESSOR;
-        } else if(hasRenterTargetedKeywords) {
+        } else if (hasRenterTargetedKeywords) {
             return Apartment.Target.RENTER;
         } else {
             return Apartment.Target.UNKNOWN;

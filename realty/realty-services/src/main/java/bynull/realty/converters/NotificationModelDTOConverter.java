@@ -1,7 +1,6 @@
 package bynull.realty.converters;
 
 import bynull.realty.common.Converter;
-import bynull.realty.data.business.User;
 import bynull.realty.data.business.chat.ChatMessage;
 import bynull.realty.data.business.notifications.NewMessageNotification;
 import bynull.realty.data.business.notifications.Notification;
@@ -39,7 +38,7 @@ public class NotificationModelDTOConverter implements Converter<Notification, No
         instance.setCreated(in.getCreated());
 
         switch (in.getType()) {
-            case NEW_MESSAGE:{
+            case NEW_MESSAGE: {
                 NewMessageNotification newMessageNotification = (NewMessageNotification) in;
                 ChatMessage chatMessage = newMessageNotification.getChatMessage();
                 instance.setValue(ChatMessageDTO.from(chatMessage));

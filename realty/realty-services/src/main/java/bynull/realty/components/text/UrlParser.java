@@ -35,10 +35,10 @@ public class UrlParser {
 
         for (Pattern pattern : patterns) {
             Matcher m = pattern.matcher(normalizedText);
-            while(m.find()) {
+            while (m.find()) {
                 String url = m.group();
                 String trimmedUrl = StringUtils.trimToEmpty(url);
-                if(!trimmedUrl.isEmpty()) {
+                if (!trimmedUrl.isEmpty()) {
                     urls.add(trimmedUrl);
                 }
             }

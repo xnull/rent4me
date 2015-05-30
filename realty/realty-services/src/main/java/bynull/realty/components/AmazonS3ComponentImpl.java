@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -24,18 +23,18 @@ import java.io.InputStream;
  */
 @Component
 public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBean, DisposableBean {
-    private static final String         accessKey   = "AKIAJ7GFF3NP7EHZHYTA";
-    private static final String         sercetKey   = "o0YklIRxXHrgwtZuJ6WCLQ2sY5L5CQLIF0s628Dq";
-    private static final String         bucketName  = "rent4.me";
-    private static final Logger LOGGER      = LoggerFactory.getLogger(AmazonS3ComponentImpl.class);
+    private static final String accessKey = "AKIAJ7GFF3NP7EHZHYTA";
+    private static final String sercetKey = "o0YklIRxXHrgwtZuJ6WCLQ2sY5L5CQLIF0s628Dq";
+    private static final String bucketName = "rent4.me";
+    private static final Logger LOGGER = LoggerFactory.getLogger(AmazonS3ComponentImpl.class);
 
     @Resource
-    private Config config ;
+    private Config config;
     private AmazonS3Client s3Client;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        s3Client = new AmazonS3Client( new BasicAWSCredentials(accessKey, sercetKey));
+        s3Client = new AmazonS3Client(new BasicAWSCredentials(accessKey, sercetKey));
     }
 
     @Override
@@ -43,8 +42,8 @@ public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBea
         s3Client.shutdown();
     }
 
-    public void storeObject( byte[] object, String objectName, String objectId){
-        storeObjectAccessibleForRead( object, objectName, objectId, "image/jpeg");
+    public void storeObject(byte[] object, String objectName, String objectId) {
+        storeObjectAccessibleForRead(object, objectName, objectId, "image/jpeg");
     }
 
     private String getPath(String objectName, String objectId) {
@@ -52,20 +51,20 @@ public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBea
     }
 
     @Override
-    public void storeObjectAccessibleForRead( byte[] object, String objectName, String objectId, String contentType){
+    public void storeObjectAccessibleForRead(byte[] object, String objectName, String objectId, String contentType) {
         ObjectMetadata metadata = new ObjectMetadata();
         Assert.notNull(object);
-        InputStream input = new ByteArrayInputStream(object) ;
+        InputStream input = new ByteArrayInputStream(object);
         metadata.setContentLength(object.length);
         metadata.setContentType(contentType);
 
 
-        try{
+        try {
 
-            PutObjectRequest por = new PutObjectRequest( bucketName, getPath(objectName, objectId), input , metadata );
+            PutObjectRequest por = new PutObjectRequest(bucketName, getPath(objectName, objectId), input, metadata);
             por.setCannedAcl(CannedAccessControlList.PublicRead);
             s3Client.putObject(por);
-        }catch(AmazonServiceException ase){
+        } catch (AmazonServiceException ase) {
             LOGGER.error("Error Message: " + ase.getMessage());
 
             throw new RuntimeException(ase);
@@ -80,7 +79,7 @@ public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBea
     }
 
     @Override
-    public byte[] getObject(String objectName, String objectId){
+    public byte[] getObject(String objectName, String objectId) {
 
         // Process the objectData stream.
         InputStream objectData = null;
@@ -98,8 +97,7 @@ public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBea
         } catch (AmazonServiceException ace) {
             LOGGER.error("Error Message: " + ace.getMessage());
             throw new RuntimeException(ace);
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(objectData);
         }
 
@@ -108,10 +106,10 @@ public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBea
     }
 
     @Override
-    public void deleteObject(String objectName, String objectId){
-        try{
+    public void deleteObject(String objectName, String objectId) {
+        try {
             s3Client.deleteObject(bucketName, getPath(objectName, objectId));
-        }catch(AmazonServiceException ace){
+        } catch (AmazonServiceException ace) {
             LOGGER.error("Error Message: " + ace.getMessage());
             throw new RuntimeException(ace);
         }
@@ -124,6 +122,6 @@ public class AmazonS3ComponentImpl implements AmazonS3Component, InitializingBea
     }
 
     private String getBaseUrl() {
-        return "http://"+bucketName+".s3.amazonaws.com";
+        return "http://" + bucketName + ".s3.amazonaws.com";
     }
 }

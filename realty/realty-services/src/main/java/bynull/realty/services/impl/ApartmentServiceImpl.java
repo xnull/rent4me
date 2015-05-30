@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -165,8 +167,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             Apartment first = Iterables.getFirst(user.getApartments(), null);
             ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(first);
             return targetConverter.toTargetType(first);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -268,8 +269,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         //TODO: change to generic implementation
         return result.stream()
-                .map(it->(InternalApartment)it)
-                .map(apartment->{
+                .map(it -> (InternalApartment) it)
+                .map(apartment -> {
                     ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(apartment);
                     return targetConverter.toTargetType(apartment);
                 })
@@ -287,7 +288,6 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         Assert.notNull(roomsCount);
         text = StringUtils.trimToEmpty(text);
-
 
 
         List<Apartment> posts = apartmentRepository.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);

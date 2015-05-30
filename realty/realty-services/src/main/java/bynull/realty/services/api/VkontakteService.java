@@ -2,7 +2,6 @@ package bynull.realty.services.api;
 
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
-import bynull.realty.dto.vk.VkontaktePostDTO;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public interface VkontakteService {
 
     void save(VkontaktePageDTO vkontaktePageDTO);
 
-    VkontaktePageDTO findPageById(long fbPageId);
+    VkontaktePageDTO findPageById(long vkPageId);
 
     long countByQuery(String text);
 

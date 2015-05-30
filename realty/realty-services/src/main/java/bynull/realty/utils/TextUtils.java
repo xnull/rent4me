@@ -49,10 +49,10 @@ public class TextUtils {
 
     public static String replaceRecursively(String text, String search, String replace) {
         String prev;
-        while(true) {
+        while (true) {
             prev = text;
             text = StringUtils.replace(text, search, replace);
-            if(text.equals(prev))
+            if (text.equals(prev))
                 return text;
         }
     }
@@ -78,7 +78,7 @@ public class TextUtils {
             return null;
         }
 
-        if(initialText.equals(text)) return text;
+        if (initialText.equals(text)) return text;
         else return normalizeTextAggressivelyForPriceParsing(text);
     }
 }

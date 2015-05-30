@@ -1,13 +1,11 @@
 package bynull.realty.converters.apartments;
 
-import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.InternalApartment;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.dto.UserDTO;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**

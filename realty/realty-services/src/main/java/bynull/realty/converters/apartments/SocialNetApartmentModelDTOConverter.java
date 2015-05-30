@@ -2,7 +2,6 @@ package bynull.realty.converters.apartments;
 
 import bynull.realty.converters.contacts.ContactModelDTOConverter;
 import bynull.realty.converters.contacts.ContactModelDTOConverterFactory;
-import bynull.realty.data.business.ApartmentExternalPhoto;
 import bynull.realty.data.business.Contact;
 import bynull.realty.data.business.SocialNetApartment;
 import bynull.realty.dto.ApartmentDTO;

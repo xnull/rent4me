@@ -3,7 +3,6 @@ package bynull.realty.services.impl;
 import bynull.realty.ServiceTest;
 import bynull.realty.services.api.FacebookService;
 import org.junit.Ignore;
-import org.junit.Test;
 
 import javax.annotation.Resource;
 

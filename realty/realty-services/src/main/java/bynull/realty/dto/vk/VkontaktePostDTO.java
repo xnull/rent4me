@@ -2,7 +2,6 @@ package bynull.realty.dto.vk;
 
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.PhoneNumberDTO;
-import bynull.realty.dto.fb.FacebookPageDTO;
 import lombok.Getter;
 import lombok.Setter;
 

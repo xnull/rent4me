@@ -47,12 +47,12 @@ public class AfterCommitExecutorImpl extends TransactionSynchronizationAdapter i
 
     @Override
     public void executeAsynchronously(Runnable command) {
-        execute(()->asyncExecutor.execute(command));
+        execute(() -> asyncExecutor.execute(command));
     }
 
     @Override
     public void executeAsynchronouslyInTransaction(Runnable command) {
-        executeAsynchronously(()->transactionOperations.execute(new TransactionCallbackWithoutResult() {
+        executeAsynchronously(() -> transactionOperations.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 command.run();
