@@ -179,7 +179,7 @@ public class ApartmentRestResource {
 
         geoParams = geoParams.withCountryCode(Optional.ofNullable(countryCode));
 
-        if (lat != null && lng != null) {
+        if (lat != null && lng != null && !geoParams.getBoundingBox().isPresent()) {
             geoParams = geoParams.withPoint(Optional.of(new GeoPoint().withLatitude(lat).withLongitude(lng)));
         } else {
             geoParams = geoParams.withPoint(Optional.empty());
