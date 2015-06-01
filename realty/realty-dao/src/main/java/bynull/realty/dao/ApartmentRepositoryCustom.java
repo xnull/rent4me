@@ -18,6 +18,8 @@ import java.util.Set;
  * Created by dionis on 3/5/15.
  */
 public interface ApartmentRepositoryCustom {
+    List<Apartment> findSimilarApartments(long apartmentId);
+
     List<Apartment> findPosts(String text,
                               boolean withSubway,
                               Set<ApartmentRepository.RoomCount> roomsCount,

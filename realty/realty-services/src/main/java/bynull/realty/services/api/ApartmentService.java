@@ -38,6 +38,8 @@ public interface ApartmentService {
 
     List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, ApartmentRepository.FindMode findMode, ApartmentRepositoryCustom.GeoParams geoParams, List<Long> metroIds, LimitAndOffset limitAndOffset);
 
+    List<? extends ApartmentDTO> findSimilarToApartment(long apartmentId);
+
     List<? extends ApartmentDTO> listAll(PageRequest pageRequest);
 
     void showApartmentInSearch(long id);

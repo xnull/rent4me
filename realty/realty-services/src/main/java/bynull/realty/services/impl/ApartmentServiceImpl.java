@@ -301,6 +301,17 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<? extends ApartmentDTO> findSimilarToApartment(long apartmentId) {
+        List<Apartment> similarApartments = apartmentRepository.findSimilarApartments(apartmentId);
+
+        return similarApartments.stream().map(e -> {
+            ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(e);
+            return targetConverter.toTargetType(e);
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<? extends ApartmentDTO> listAll(PageRequest pageRequest) {
         Page<Apartment> apartments = apartmentRepository.findAll(pageRequest);
 

@@ -194,4 +194,22 @@ public class ApartmentRestResource {
                 .ok(result)
                 .build();
     }
+
+    @Path("/similar")
+    @GET
+    public Response findSimilar(
+            @QueryParam("apartmentId") long apartmentId
+    ) {
+
+
+
+
+        List<? extends ApartmentDTO> found = apartmentService.findSimilarToApartment(apartmentId);
+
+        List<? extends ApartmentJSON> result = apartmentDtoJsonConverter.toTargetList(found);
+
+        return Response
+                .ok(result)
+                .build();
+    }
 }

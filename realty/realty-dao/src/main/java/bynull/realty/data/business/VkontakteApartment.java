@@ -1,6 +1,7 @@
 package bynull.realty.data.business;
 
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
+import bynull.realty.data.common.CityEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,5 +28,10 @@ public class VkontakteApartment extends SocialNetApartment {
     @Override
     public DataSource getDataSource() {
         return DataSource.VKONTAKTE;
+    }
+
+    @Override
+    public CityEntity getCity() {
+        return vkontaktePage.getCity();
     }
 }

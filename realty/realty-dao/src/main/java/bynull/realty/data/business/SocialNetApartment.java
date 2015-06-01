@@ -1,5 +1,6 @@
 package bynull.realty.data.business;
 
+import bynull.realty.data.common.CityEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
@@ -76,4 +77,6 @@ public abstract class SocialNetApartment extends Apartment {
     public void setContacts(Set<Contact> contacts) {
         this.contacts = contacts;
     }
+
+    public abstract CityEntity getCity();
 }

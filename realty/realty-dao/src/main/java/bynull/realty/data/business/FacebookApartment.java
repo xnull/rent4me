@@ -1,6 +1,7 @@
 package bynull.realty.data.business;
 
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
+import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.hibernate.validation.annotations.LessThanOrEqual;
 
@@ -33,5 +34,10 @@ public class FacebookApartment extends SocialNetApartment {
     @Override
     public DataSource getDataSource() {
         return DataSource.FACEBOOK;
+    }
+
+    @Override
+    public CityEntity getCity() {
+        return facebookPage.getCity();
     }
 }

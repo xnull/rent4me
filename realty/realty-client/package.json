@@ -13,7 +13,7 @@
     "rent4meEmitter": "./app/shared/common/Emitter.js",
     "rent4meBlockUI": "./app/shared/common/BlockUI.js",
     "rent4meAutocomplete": "./app/shared/common/Autocomplete.js",
-    "skel": "./node_modules/bower/skel/src/skel.js"
+    "skel": "./node_modules/bower/skel-old/src/skel.js"
   },
   "jquery": {
     "exports": "$"
