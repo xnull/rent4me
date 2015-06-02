@@ -73,7 +73,7 @@ var Header = React.createClass({
                 <div className='collapse navbar-collapse' id='navbar-collapse2'>
                     <ul className='nav navbar-nav navbar-right'>
                         <li className={NavStore.isHomeSelected() ? 'active' : ''}>
-                            <a href='#' role='button'>Главная</a>
+                            <a href='#' role='button'>Поиск</a>
                         </li>
 
                         <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? 'active dropdown' : 'dropdown'} style={style}>

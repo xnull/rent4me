@@ -3,6 +3,7 @@
  */
 var React = require('react');
 var Router = require('react-router');
+var Link = Router.Link;
 
 var Posts = require('./posts');
 
@@ -101,7 +102,7 @@ var Advert = React.createClass({
                 <Posts items={similarPosts} shown={true} hasMore={false}
                     showFull={false}
                     onHasMoreClicked={void(0)}/>
-                <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться к поиску</btn>
+                <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться назад</btn>
             </div>;
         } else {
             similarPostsDisplay = null;
@@ -114,7 +115,7 @@ var Advert = React.createClass({
                         {content}
                     </div>
                     <div className="panel-footer">
-                        <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться к поиску</btn>
+                        <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться назад</btn>
                         <br/>
                         {similarPostsDisplay}
                     </div>

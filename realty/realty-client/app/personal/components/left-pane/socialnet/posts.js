@@ -66,17 +66,29 @@ var MetroPreviews = React.createClass({
 });
 
 var GoogleMapView = React.createClass({
+
+    map: null,
+    listener: null,
+
     componentDidMount: function () {
         var location = this.props.location;
 
         if (location.latitude && location.longitude) {
+            var latLng = new google.maps.LatLng(location.latitude, location.longitude);
             var mapOptions = {
+                scrollwheel: false,
                 zoom: 14,
-                center: new google.maps.LatLng(location.latitude, location.longitude)
+                center: latLng
             };
 
             var map = new google.maps.Map(this.refs.mapInsert.getDOMNode(),
                 mapOptions);
+
+            this.listener = google.maps.event.addDomListener(window, 'resize', function() {
+                map.setCenter(latLng);
+            });
+
+            this.map = map;
 
 
             var marker = new google.maps.Marker({
@@ -86,9 +98,15 @@ var GoogleMapView = React.createClass({
         }
     },
 
+    componentWillUnmount: function() {
+        if(this.listener) {
+            google.maps.event.removeListener(this.listener);
+        }
+    },
+
     render: function () {
         return (
-            <div ref="mapInsert" style={{width: '300px', height: '300px', marginBottom: '20px'}}></div>
+            <div ref="mapInsert" style={{width: '100%', height: '300px', marginBottom: '20px'}}></div>
         );
     }
 });
@@ -238,7 +256,7 @@ var ImagePreviews = React.createClass({
         var firstImage = this.getFirstImage();
         var images = this.getImageUrls();
 
-        var carousel = images ? (
+        var carousel = images && images.length > 0 ? (
             <div className="row">
                 <div className="col-xs-12">
                 </div>
@@ -301,8 +319,8 @@ var MessageDetails = React.createClass({
             showFull ? null :
                 <div className="col-md-offset-9 col-sm-offset-8 col-xs-offset-6 col-md-3 col-sm-4 col-xs-6"
                      style={{marginTop: 5}}>
-                    <Link to="advert" params={{id: item.id}}><span
-                        className="btn btn-default center-block">Подробнее</span></Link>
+                    <Link to="advert" params={{id: item.id}}><a href={"#/advert/"+item.id}
+                        className="btn btn-default center-block">Подробнее</a></Link>
                 </div>
         )
     }
@@ -374,16 +392,19 @@ var Post = React.createClass({
 
         var mapInsert = showFull && item.location ? (<GoogleMapView location={item.location}/>) : null;
 
+        //show in a better way for list & for full screen
+        var classNamesForAddresses = showFull ? "col-md-12 col-sm-12 col-xs-12" : "col-md-9 col-sm-6 col-xs-12";
+        var extraDivReservedForImagePreview = showFull ? null : <div className="col-md-3 col-sm-6 col-xs-12"></div>;
+
+
         return (
             <div className='panel panel-info'>
                 <HeaderBlock item={item}/>
                 {gallery}
                 <div className="panel-body">
                     <div className="row">
-                        <div className="col-md-3 col-sm-6 col-xs-12">
-
-                        </div>
-                        <div className="col-md-9 col-sm-6 col-xs-12">
+                        {extraDivReservedForImagePreview}
+                        <div className={classNamesForAddresses}>
                             <div className='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
                                 <Address item={item}/>
                                 <MetroPreviews metros={item.metros}/>

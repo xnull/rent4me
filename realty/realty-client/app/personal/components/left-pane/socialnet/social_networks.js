@@ -35,6 +35,7 @@ var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
 var Button = require('react-bootstrap/Button');
 
 module.exports = React.createClass({
+
     getInitialState: function () {
         return {
             withSubway: SocialNetStore.isSearchWithSubway(),
