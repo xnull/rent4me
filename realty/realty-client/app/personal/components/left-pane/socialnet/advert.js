@@ -96,9 +96,13 @@ var Advert = React.createClass({
         if(similarPosts) {
             console.log("Similar posts that will be displayed:");
             console.log(similarPosts);
-            similarPostsDisplay = <div><h3>Похожие объявления</h3><Posts items={similarPosts} shown={true} hasMore={false}
-                showFull={false}
-                onHasMoreClicked={void(0)}/></div>;
+            similarPostsDisplay = <div>
+                <h3 className="center-block">Похожие объявления</h3>
+                <Posts items={similarPosts} shown={true} hasMore={false}
+                    showFull={false}
+                    onHasMoreClicked={void(0)}/>
+                <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться к поиску</btn>
+            </div>;
         } else {
             similarPostsDisplay = null;
         }
