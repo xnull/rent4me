@@ -1,0 +1,12 @@
+apply from: ext.pathToJavaProjectScript
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":realty-embedded-launcher")
+    compile project(":realty-client")
+    compile project(":realty-web")
+}

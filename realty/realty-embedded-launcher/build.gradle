@@ -6,9 +6,6 @@ repositories {
 }
 
 dependencies {
-    compile project(":realty-web")
-    compile project(":realty-admin:realty-admin-web")
-    compile project(":realty-client")
 
     compile libraries."org.eclipse.jetty:jetty-start"
     compile libraries."org.eclipse.jetty:jetty-webapp"

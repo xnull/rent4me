@@ -12,7 +12,7 @@
     <import resource="classpath:service.xml"/>
     <import resource="classpath:scheduler.xml"/>
     <import resource="classpath:profiles.xml"/>
-    <context:component-scan base-package="bynull.realty"/>
+    <!--<context:component-scan base-package="bynull.realty"/>-->
     <tx:annotation-driven transaction-manager="txManager"/>
 
     <mvc:annotation-driven/>
@@ -20,7 +20,7 @@
 
     <context:property-placeholder location="classpath*:config.properties"/>
     <context:annotation-config/>
-    <context:component-scan base-package="name.dargiri.web"/>
+    <context:component-scan base-package="name.dargiri.web,bynull.realty"/>
 
     <!--<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource">-->
         <!--<property name="driverClass" value="${jdbc.driverClass}"/>-->
