@@ -23,6 +23,7 @@ var _searchMaxPrice = null;
 var _searchWithSubway = true;
 var _posts = [];
 var _postsCache = {};
+var _similarForPosts = {};
 var _offset = 0;
 var _limit = 30;
 var _hasMoreResults = false;
@@ -34,11 +35,16 @@ var _formattedName = null;
 var _metros = [];
 
 var CHANGE_EVENT = 'change';
+var CHANGE_SIMILAR_EVENT = 'change-similar';
 var CHANGE_LOCATION_EVENT = 'CHANGE_LOCATION_EVENT';
 
 var Store = assign({}, EventEmitter.prototype, {
     emitChange: function () {
         this.emit(CHANGE_EVENT);
+    },
+
+    emitSimilarChanged: function () {
+        this.emit(CHANGE_SIMILAR_EVENT);
     },
 
     emitLocationChanged: function () {
@@ -79,6 +85,15 @@ var Store = assign({}, EventEmitter.prototype, {
 
     getPostById: function(id) {
         return _postsCache[id];
+    },
+
+    getSimilarForPost: function(id) {
+        var ids = _similarForPosts[id];
+        console.log("Getting similar ids:");
+        console.log(ids);
+        return ids ? ids.map(function(_id) {
+            return _postsCache[_id];
+        }) : null;
     },
 
     getBounds: function(){
@@ -153,6 +168,19 @@ var Store = assign({}, EventEmitter.prototype, {
      */
     removeChangeLocationListener: function (callback) {
         this.removeListener(CHANGE_LOCATION_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    addSimilarPostsListener: function (callback) {
+        this.on(CHANGE_SIMILAR_EVENT, callback);
+    },
+    /**
+     * @param {function} callback
+     */
+    removeSimilarPostsListener: function (callback) {
+        this.removeListener(CHANGE_SIMILAR_EVENT, callback);
     }
 });
 
@@ -175,6 +203,20 @@ AppDispatcher.register(function (payload) {
                 _postsCache[action.post.id] = action.post;
             }
             break;
+
+        case SocialNetConstants.SOCIAL_NET_POST_SIMILAR_FOUND:
+            console.log('found similar posts posts:');
+            if(action.posts) {
+                console.log("Similar found! ");
+                action.posts.forEach(post=>{
+                    _postsCache[post.id] = post;
+                });
+                _similarForPosts[action.postId] = action.posts.map(post=>post.id);
+            } else {
+                console.log("No posts found");
+            }
+            Store.emitSimilarChanged();
+            return true;
 
         case SocialNetConstants.SOCIAL_NET_POSTS_RESET_SEARCH:
 

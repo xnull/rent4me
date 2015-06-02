@@ -195,10 +195,10 @@ public class ApartmentRestResource {
                 .build();
     }
 
-    @Path("/similar")
+    @Path("/{id}/similar")
     @GET
     public Response findSimilar(
-            @QueryParam("apartmentId") long apartmentId
+            @PathParam("id") long apartmentId
     ) {
 
 

@@ -301,8 +301,8 @@ var MessageDetails = React.createClass({
             showFull ? null :
                 <div className="col-md-offset-9 col-sm-offset-8 col-xs-offset-6 col-md-3 col-sm-4 col-xs-6"
                      style={{marginTop: 5}}>
-                    <Link to="advert" params={{id: item.id}}><a
-                        className="btn btn-default center-block">Подробнее</a></Link>
+                    <Link to="advert" params={{id: item.id}}><span
+                        className="btn btn-default center-block">Подробнее</span></Link>
                 </div>
         )
     }

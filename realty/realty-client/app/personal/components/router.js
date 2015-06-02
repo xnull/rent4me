@@ -18,6 +18,8 @@ var AuthStore = require('../../shared/stores/AuthStore');
 var Utils = require('../../shared/common/Utils');
 var WebSocketUtil = require('../../shared/common/WebSocketUtil');
 
+var AdvertPage = require('./left-pane/socialnet/advert');
+
 /**
  * Расписано как надо юзать реакт компоненты через browserify:
  * https://gist.github.com/sebmarkbage/d7bce729f38730399d28
@@ -70,7 +72,7 @@ var route = (
         <Route name="chats" path="user/chats" handler={require('./left-pane/chats/main')}/>
         <Route name="chat" path="user/chat" handler={require('./left-pane/chats/chat')}/>
         <Route name="newMessageInChat" path="user/chats/newMessage" handler={require('./left-pane/chats/newMessage')}/>
-        <Route name="advert" path="advert/:id" handler={require('./left-pane/socialnet/advert')}  />
+        <Route name="advert" path="advert/:id" handler={AdvertPage} />
 
         <DefaultRoute handler={require('./left-pane/socialnet/social_networks')}/>
     </Route>

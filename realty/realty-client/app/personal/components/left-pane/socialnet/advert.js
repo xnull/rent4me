@@ -12,22 +12,44 @@ var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
 var NOT_INITIALIZED_YET = 'NOT_LOADED_YET';
 
 var Advert = React.createClass({
-    mixins: [Router.State],
+    mixins: [Router.State, Router.Navigation],
+
+    statics: {
+
+    },
 
     getInitialState: function () {
         var that = this;
         return {
-            post: NOT_INITIALIZED_YET
+            post: NOT_INITIALIZED_YET,
+            similarPosts: null
         }
+    },
+
+    componentWillReceiveProps: function() {
+        //will be triggered on reload only
+        SocialNetActions.findPost(this.getParams().id);
+        SocialNetActions.findSimilarPosts(this.getParams().id);
     },
 
     componentDidMount: function () {
         SocialNetStore.addChangeListener(this._onPostChange);
+        SocialNetStore.addSimilarPostsListener(this._onSimilarPostChange);
         SocialNetActions.findPost(this.getParams().id);
+        SocialNetActions.findSimilarPosts(this.getParams().id);
     },
 
     componentWillUnmount: function () {
         SocialNetStore.removeChangeListener(this._onPostChange);
+        SocialNetStore.removeSimilarPostsListener(this._onSimilarPostChange);
+    },
+
+    _onSimilarPostChange: function() {
+        console.log("On similar post change:");
+        var that = this;
+        var similarForPost = SocialNetStore.getSimilarForPost(that.getParams().id);
+        console.log(similarForPost);
+        this.setState({similarPosts: similarForPost});
     },
 
     _onPostChange: function () {
@@ -69,6 +91,18 @@ var Advert = React.createClass({
                              onHasMoreClicked={void(0)}/>;
         }
 
+        var similarPosts = this.state.similarPosts;
+        var similarPostsDisplay;
+        if(similarPosts) {
+            console.log("Similar posts that will be displayed:");
+            console.log(similarPosts);
+            similarPostsDisplay = <div><h3>Похожие объявления</h3><Posts items={similarPosts} shown={true} hasMore={false}
+                showFull={false}
+                onHasMoreClicked={void(0)}/></div>;
+        } else {
+            similarPostsDisplay = null;
+        }
+
         return (
             <div>
                 <div className="panel">
@@ -77,6 +111,8 @@ var Advert = React.createClass({
                     </div>
                     <div className="panel-footer">
                         <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться к поиску</btn>
+                        <br/>
+                        {similarPostsDisplay}
                     </div>
                 </div>
             </div>

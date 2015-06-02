@@ -182,23 +182,21 @@ public class PreRenderRestResource {
                 content+="<p>"+apartment.getDescription()+"</p>";
 
                 content+="<h2>Объявления которые могут быть вам интересны</h2>";
-                GeoPoint location = apartment.getLocation();
-                if (location != null) {
-                    List<Apartment> nearest = apartmentRepository.findNearest(location.getLongitude(), location.getLatitude(), 10, 0);
-                    for (Apartment suggestedApartment : nearest) {
-                        if(suggestedApartment.getId().equals(apartment.getId())) continue;
 
-                        content+=("<p>");
-                        content+=("<div>");
-                        content += "<a href=\"" + urlForApartment(suggestedApartment) + ("\">");
-                        content+=(getDesc(suggestedApartment));
-                        content+=("</a>");
-                        content+=("</div>");
-                        content+=("<br/>");
+                List<Apartment> similar = apartmentRepository.findSimilarApartments(apartment.getId());
+                for (Apartment suggestedApartment : similar) {
+                    if(suggestedApartment.getId().equals(apartment.getId())) continue;
+
+                    content+=("<p>");
+                    content+=("<div>");
+                    content += "<a href=\"" + urlForApartment(suggestedApartment) + ("\">");
+                    content+=(getDesc(suggestedApartment));
+                    content+=("</a>");
+                    content+=("</div>");
+                    content+=("<br/>");
 
 
-                        content+=("</p>");
-                    }
+                    content+=("</p>");
                 }
 
                 template = StringUtils.replace(template, ":body", content);

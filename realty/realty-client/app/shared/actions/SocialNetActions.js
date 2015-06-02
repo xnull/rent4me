@@ -216,12 +216,65 @@ var SocialNetActions = {
             .execute();
     },
 
-    findPost(id) {
-        var post = SocialNetStore.getPostById(id);
-        if(!post) {
+    findPost: function(id) {
+        var findPostPromise = new Promise(function(resolveFunc, rejectFunc){
+            var post = SocialNetStore.getPostById(id);
+            if(!post) {
+                var promise = new Promise(function(resolve, reject) {
+                    //load data from server side
+                    var url = '/rest/apartments/'+id;
+
+                    var requestBuilder = Ajax
+                        .GET(url);
+
+                    if(AuthStore.hasCredentials()) {
+                        requestBuilder = requestBuilder.authorized();
+                    }
+
+                    requestBuilder
+                        .onSuccess(function (data) {
+                            resolve(data);
+                        })
+                        .onError(function (xhr, status, err) {
+                            reject(Error("No post found"));
+                        })
+                        .execute();
+                });
+                promise
+                    .then(function (data) {
+                        AppDispatcher.handleViewAction({
+                            actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
+                            post: data
+                        });
+                        BlockUI.unblockUI();
+                        resolveFunc(SocialNetStore.getPostById(id));
+                    }, function (err) {
+                        console.log(err);
+                        AppDispatcher.handleViewAction({
+                            actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
+                            post: null
+                        });
+                        BlockUI.unblockUI();
+                        rejectFunc("Error loading post");
+                    });
+            } else {
+                AppDispatcher.handleViewAction({
+                    actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
+                    post: post
+                });
+                resolveFunc(post);
+            }
+        });
+        return findPostPromise;
+    },
+
+    findSimilarPosts: function(id) {
+        console.log("Finding similar posts for id: "+id);
+        var posts = SocialNetStore.getSimilarForPost(id);
+        if(!posts) {
             var promise = new Promise(function(resolve, reject) {
                 //load data from server side
-                var url = '/rest/apartments/'+id;
+                var url = '/rest/apartments/'+id+"/similar";
 
                 var requestBuilder = Ajax
                     .GET(url);
@@ -242,22 +295,25 @@ var SocialNetActions = {
             promise
                 .then(function (data) {
                     AppDispatcher.handleViewAction({
-                        actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
-                        post: data
+                        actionType: SocialNetConstants.SOCIAL_NET_POST_SIMILAR_FOUND,
+                        postId: id,
+                        posts: data
                     });
                     BlockUI.unblockUI();
                 }, function (err) {
                     console.log(err);
                     AppDispatcher.handleViewAction({
-                        actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
-                        post: null
+                        actionType: SocialNetConstants.SOCIAL_NET_POST_SIMILAR_FOUND,
+                        postId: id,
+                        posts: null
                     });
                     BlockUI.unblockUI();
                 });
         } else {
             AppDispatcher.handleViewAction({
-                actionType: SocialNetConstants.SOCIAL_NET_POST_FOUND,
-                post: post
+                actionType: SocialNetConstants.SOCIAL_NET_POST_SIMILAR_FOUND,
+                postId: id,
+                posts: posts
             });
         }
     }
