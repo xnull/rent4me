@@ -101,7 +101,7 @@ public class VKHelperComponent {
         try {
             //https://api.vk.com/method/'''METHOD_NAME'''?'''PARAMETERS'''&access_token='''ACCESS_TOKEN'''
             String url = "https://api.vk.com/method/wall.post?owner_id="+groupId+"&from_group=1&message="+ URLEncoder.encode(text,"UTF-8")+"&signed=0&v=5.33&access_token="+accessToken;
-
+            LOGGER.info("VK ADMIN url to send: [{}]", url);
             long requestStartTime = System.currentTimeMillis();
 
 
@@ -656,6 +656,8 @@ public class VKHelperComponent {
         long requestStartTime = System.currentTimeMillis();
         //https://api.vk.com/method/'''METHOD_NAME'''?'''PARAMETERS'''&access_token='''ACCESS_TOKEN'''
         String uri = "https://oauth.vk.com/access_token?client_id="+VK_ADMIN_APP_ID+"&client_secret="+VK_ADMIN_SECRET+"&code="+code+"&redirect_uri=https://oauth.vk.com/blank.html";
+
+        LOGGER.info("VK ADMIN url to auth: [{}]", uri);
 
         GetMethod httpGet = new GetMethod(uri);
         httpGet.setFollowRedirects(false);
