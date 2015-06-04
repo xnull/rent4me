@@ -21,13 +21,13 @@ public class FacebookApartmentCrossPostingOnVKJob implements Runnable {
     ApartmentService apartmentService;
 
     @Scheduled(
-            cron = "0 0,15,30,45 * * * *" //start on each 9-th minute of each hour
+            cron = "0 0 * * * *" //start on each 9-th minute of each hour
 //            initialDelay = 60*60*1000, fixedDelay = 60*60*1000
     )//start each hour, default delay - one minute
     @Override
     public void run() {
         log.info(">>> Starting Cross-posting FB apartments to VK");
-        apartmentService.publishFBApartmentsOnVkPage(new DateTime().minusMinutes(15).toDate(), new Date());
+        apartmentService.publishFBApartmentsOnVkPage(new DateTime().minusMinutes(60).toDate(), new Date());
         log.info("<<< Finished Cross-posting FB apartments to VK");
         /*jobHelperComponent.addJob(new JobHelperComponent.JobAcceptanceCallback() {
             @Override
