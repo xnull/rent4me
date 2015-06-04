@@ -409,7 +409,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         desc += "\n\n" +
-                "http://rent4.me/advert/\"+apartment.getId()";
+                "http://rent4.me/advert/"+apartment.getId();
         return desc;
     }
 }
