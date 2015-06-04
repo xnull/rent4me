@@ -405,8 +405,11 @@ public class ApartmentServiceImpl implements ApartmentService {
     private String toDescription(Apartment apartment) {
         String desc = StringUtils.trimToEmpty(apartment.getDescription());
         if(desc.length() > 256) {
-            desc = StringUtils.substring(desc, 0, 256)+"...\nhttp://rent4.me/advert/"+apartment.getId();
+            desc = StringUtils.substring(desc, 0, 256)+"...";
         }
+
+        desc += "\n\n" +
+                "http://rent4.me/advert/\"+apartment.getId()";
         return desc;
     }
 }
