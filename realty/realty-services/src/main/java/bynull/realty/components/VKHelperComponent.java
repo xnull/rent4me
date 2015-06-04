@@ -2,7 +2,10 @@ package bynull.realty.components;
 
 import bynull.realty.config.Config;
 import bynull.realty.data.business.VkontakteApartment;
+import bynull.realty.data.business.configs.ServerSetting;
 import bynull.realty.data.business.external.vkontakte.VkontaktePostType;
+import bynull.realty.dto.ServerSettingDTO;
+import bynull.realty.services.api.ServerSettingsService;
 import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -46,11 +49,17 @@ public class VKHelperComponent {
     private static final String VK_SECRET = "DkAHHjYk8ZvAvAgBQMJd";
     private static final String VK_APP_ID = "4463597";
 
+    private static final String VK_ADMIN_SECRET = "JG9Th6Araj09lwPRTNRq";
+    private static final String VK_ADMIN_APP_ID = "4944878";
+
     @Resource
     Config config;
 
     @Resource
     AccessTokenPool accessTokenPool;
+
+    @Resource
+    ServerSettingsService serverSettingService;
 
     private String getRedirectUri() {
         return config.getVkRedirectURL() + "/vk_auth_return_page";
@@ -84,6 +93,46 @@ public class VKHelperComponent {
 //        pageId = "22062158";
 
         return doLoadPostsFromPage0(maxAge, pageId, new ArrayList<>(), 0, 0);
+    }
+
+    public void sendMessageToGroup(String groupId, String text) {
+        ServerSettingDTO setting = serverSettingService.getById(ServerSetting.Id.VK_TOKEN).get();
+        String accessToken = setting.getValue();
+        try {
+            //https://api.vk.com/method/'''METHOD_NAME'''?'''PARAMETERS'''&access_token='''ACCESS_TOKEN'''
+            String url = "https://api.vk.com/method/wall.post?owner_id="+groupId+"&from_group=1&message="+ URLEncoder.encode(text,"UTF-8")+"&signed=0&v=5.33&access_token="+accessToken;
+
+            long requestStartTime = System.currentTimeMillis();
+
+
+            GetMethod httpGet = new GetMethod(url);
+            httpGet.setFollowRedirects(false);
+            try {
+                int responseCode = httpManager.executeMethod(httpGet);
+                if (responseCode != HttpStatus.SC_OK) {
+                    throw new BadRequestException("VK posting failed. Invalid response code: " + responseCode);
+                }
+                String body = httpGet.getResponseBodyAsString();
+                long time = System.currentTimeMillis() - requestStartTime;
+                LOGGER.info("Execution time: {} ms", time);
+
+                LOGGER.info("Response received for admin VK auth request: [{}]", body);
+
+                LOGGER.info("Status line: {}", httpGet.getStatusLine());
+
+                Map response = jacksonObjectMapper.readValue(body, Map.class);
+                Assert.notNull(response);
+
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } finally {
+                httpGet.releaseConnection();
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Getter
@@ -397,8 +446,6 @@ public class VKHelperComponent {
     public VKVerificationInfoDTO verify(final ClientShortInfo person) throws VKAuthorizationException {
         Assert.notNull(person.exchangeCode, "vk exchange code should not be empty");
 
-        // Facebook URL example
-
         VKVerificationInfoDTO result;
         try {
             result = new RetryRunner<VKVerificationInfoDTO>(2).doWithRetry(new Callable<VKVerificationInfoDTO>() {
@@ -472,7 +519,7 @@ public class VKHelperComponent {
             String body = httpGet.getResponseBodyAsString();
             LOGGER.info("Response received for VK auth request: [{}]", body);
             if (responseCode != HttpStatus.SC_OK) {
-                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
+                throw new BadRequestException("VK authentication failed. Invalid response code: " + responseCode);
             }
 
 
@@ -520,8 +567,6 @@ public class VKHelperComponent {
     public VkUserInfo retrieveMoreInfo(String vkId, String accessToken) throws VKAuthorizationException {
         Assert.notNull(vkId, "vk user id required");
         Assert.notNull(accessToken, "vk access token required");
-
-        // Facebook URL example
 
         VkUserInfo result;
         try {
@@ -581,7 +626,7 @@ public class VKHelperComponent {
         try {
             int responseCode = httpManager.executeMethod(httpGet);
             if (responseCode != HttpStatus.SC_OK) {
-                throw new BadRequestException("Facebook authentication failed. Invalid response code: " + responseCode);
+                throw new BadRequestException("VK authentication failed. Invalid response code: " + responseCode);
             }
             String body = httpGet.getResponseBodyAsString();
             long time = System.currentTimeMillis() - requestStartTime;
@@ -599,6 +644,39 @@ public class VKHelperComponent {
             LOGGER.info("Status line: {}", httpGet.getStatusLine());
 
             return userInfo;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            httpGet.releaseConnection();
+        }
+    }
+
+
+    public String exchangeAdminCodeToPermanentAccessToken(String code) {
+        long requestStartTime = System.currentTimeMillis();
+        //https://api.vk.com/method/'''METHOD_NAME'''?'''PARAMETERS'''&access_token='''ACCESS_TOKEN'''
+        String uri = "https://oauth.vk.com/access_token?client_id="+VK_ADMIN_APP_ID+"&client_secret="+VK_ADMIN_SECRET+"&code="+code+"&redirect_uri=https://oauth.vk.com/blank.html";
+
+        GetMethod httpGet = new GetMethod(uri);
+        httpGet.setFollowRedirects(false);
+        try {
+            int responseCode = httpManager.executeMethod(httpGet);
+            if (responseCode != HttpStatus.SC_OK) {
+                throw new BadRequestException("VK authentication failed. Invalid response code: " + responseCode);
+            }
+            String body = httpGet.getResponseBodyAsString();
+            long time = System.currentTimeMillis() - requestStartTime;
+            LOGGER.info("Execution time: {} ms", time);
+
+            LOGGER.info("Response received for admin VK auth request: [{}]", body);
+
+            LOGGER.info("Status line: {}", httpGet.getStatusLine());
+
+            Map response = jacksonObjectMapper.readValue(body, Map.class);
+            Assert.notNull(response);
+
+
+            return String.valueOf(response.get("access_token"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {

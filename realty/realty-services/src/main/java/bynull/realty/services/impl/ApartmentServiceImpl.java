@@ -1,5 +1,6 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.components.VKHelperComponent;
 import bynull.realty.converters.apartments.ApartmentModelDTOConverter;
 import bynull.realty.converters.apartments.ApartmentModelDTOConverterFactory;
 import bynull.realty.dao.*;
@@ -12,6 +13,8 @@ import bynull.realty.services.api.ApartmentService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
+import com.google.common.util.concurrent.Uninterruptibles;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
@@ -22,13 +25,16 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * @author dionis on 22/06/14.
  */
+@Slf4j
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
     @Resource
@@ -51,6 +57,9 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Resource
     ApartmentModelDTOConverterFactory<Apartment> apartmentModelDTOConverterFactory;
+
+    @Resource
+    VKHelperComponent vkHelperComponent;
 
     @Transactional
     @Override
@@ -344,5 +353,60 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void unPublishOldNonInternalApartments() {
         apartmentRepository.unPublishOldNonInternalApartments(new DateTime().minusDays(31).toDate());
+    }
+
+    @Transactional
+    @Override
+    public void publishFBApartmentsOnVkPage(Date startDate, Date endDate) {
+        List<FacebookApartment> apartments = apartmentRepository.findFBApartmentsSinceTime(startDate, endDate);
+        long size = apartments.size();
+        log.info("Apartments found: [{}]", size);
+
+        apartments = apartments.stream().filter(this::adShouldBePosted).collect(Collectors.toList());
+
+        log.info("Apartments published: [{}]", apartments.size());
+
+        String groupId="-82219356";//public group
+        String pageId="-95509841";//public page
+
+        for (FacebookApartment apartment : apartments) {
+            String desc = toDescription(apartment);
+            long start = System.currentTimeMillis();
+            vkHelperComponent.sendMessageToGroup(pageId, desc);
+            long end = System.currentTimeMillis();
+            long diff = end - start;
+            //wait for 30-60 seconds in order to fool vk if they will decide to ban us
+            long minWaitThreshold = 30000+(System.currentTimeMillis()%30000);
+            if(diff < minWaitThreshold) {
+                long sleepForMs = minWaitThreshold - diff;
+                log.info("Waiting [{}] ms before next publishing on FB", sleepForMs);
+                Uninterruptibles.sleepUninterruptibly(sleepForMs, TimeUnit.MILLISECONDS);
+            }
+        }
+
+    }
+
+    private boolean adShouldBePosted(Apartment apartment) {
+        if(apartment.getMetros() != null && !apartment.getMetros().isEmpty()) {
+            return true;
+        }
+
+        if(apartment.getRoomCount() != null) {
+            return true;
+        }
+
+        if(apartment.getRentalFee() != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private String toDescription(Apartment apartment) {
+        String desc = StringUtils.trimToEmpty(apartment.getDescription());
+        if(desc.length() > 256) {
+            desc = StringUtils.substring(desc, 0, 256)+"...\nhttp://rent4.me/advert/"+apartment.getId();
+        }
+        return desc;
     }
 }

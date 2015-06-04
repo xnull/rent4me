@@ -65,6 +65,8 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 <!-- Wrap all page content here -->
@@ -88,6 +90,7 @@
                         <li><a href="<c:url value="/secure/people/new"/>">Users</a></li>
                         <li><a href="<c:url value="/secure/cities/"/>">Cities</a></li>
                         <li><a href="<c:url value="/secure/apartments/list"/>">Apartments</a></li>
+                        <li><a href="<c:url value="/secure/promoting"/>">Promoting</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Apartment Deltas<b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -171,7 +174,5 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </body>
 </html>

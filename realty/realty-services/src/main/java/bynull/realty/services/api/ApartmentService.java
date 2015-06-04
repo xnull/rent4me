@@ -6,7 +6,9 @@ import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.util.LimitAndOffset;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -47,4 +49,6 @@ public interface ApartmentService {
     void hideApartmentFromSearch(long id);
 
     void unPublishOldNonInternalApartments();
+
+    void publishFBApartmentsOnVkPage(Date startDate, Date endDate);
 }
