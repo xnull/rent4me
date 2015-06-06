@@ -3,6 +3,7 @@
  */
 
 var React = require('react');
+var assign = require('object-assign');
 
 var Rooms = React.createClass({
     propTypes: {
@@ -23,30 +24,41 @@ var Rooms = React.createClass({
         };
     },
 
+    getInitialState: function () {
+        var self = this;
+        return {
+            oneRoomAptSelected: self.props.oneRoomAptSelected,
+            twoRoomAptSelected: self.props.twoRoomAptSelected,
+            threeRoomAptSelected: self.props.threeRoomAptSelected,
+            isChecked: true
+        };
+    },
+
+    onOneRoomAptValueChanged: function (e) {
+        var value = !this.state.oneRoomAptSelected;
+        console.log('1 room apt selected? ' + value);
+        this.setState(assign({}, this.state, {oneRoomAptSelected: value}));
+        this.props.onOneRoomAptValueChanged(value);
+    },
+
+    onTwoRoomAptValueChanged: function (e) {
+        var value = !this.state.twoRoomAptSelected;
+        console.log('2 room apt selected? ' + value);
+        this.setState(assign({}, this.state, {twoRoomAptSelected: value}));
+        this.props.onTwoRoomAptValueChanged(value);
+    },
+
+    onThreeRoomAptValueChanged: function (e) {
+        var value = !this.state.threeRoomAptSelected;
+        console.log('3 room apt selected? ' + value);
+        this.setState(assign({}, this.state, {threeRoomAptSelected: value}));
+        this.props.onThreeRoomAptValueChanged(value);
+    },
+
     render: function () {
-        var firstSelected = this.props.oneRoomAptSelected;
-        var secondSelected = this.props.twoRoomAptSelected;
-        var thirdSelected = this.props.threeRoomAptSelected;
-
-        var that = this;
-
-        var onOneRoomAptValueChanged = function (e) {
-            var value = !firstSelected;
-            console.log('1 room apt selected? ' + value);
-            that.props.onOneRoomAptValueChanged(value);
-        };
-
-        var onTwoRoomAptValueChanged = function (e) {
-            var value = !secondSelected;
-            console.log('2 room apt selected? ' + value);
-            that.props.onTwoRoomAptValueChanged(value);
-        };
-
-        var onThreeRoomAptValueChanged = function (e) {
-            var value = !thirdSelected;
-            console.log('3 room apt selected? ' + value);
-            that.props.onThreeRoomAptValueChanged(value);
-        };
+        var firstSelected = this.state.oneRoomAptSelected;
+        var secondSelected = this.state.twoRoomAptSelected;
+        var thirdSelected = this.state.threeRoomAptSelected;
 
         var firstClassNames = "btn btn-default" + (firstSelected ? " active" : "");
         var secondClassNames = "btn btn-default" + (secondSelected ? " active" : "");
@@ -59,16 +71,15 @@ var Rooms = React.createClass({
                     <label className="btn btn-success" style={{color: 'white', width: '2%', pointerEvents: 'none'}}>
                         Комнат
                     </label>
-                    <label className={firstClassNames}>
-                        <input type="checkbox" checked={firstSelected} onChange={onOneRoomAptValueChanged}>1</input>
-
-                    </label>
-                    <label className={secondClassNames}>
-                        <input type="checkbox" checked={secondSelected} onChange={onTwoRoomAptValueChanged}>2</input>
-                    </label>
-                    <label className={thirdClassNames}>
-                        <input type="checkbox" checked={thirdSelected} onChange={onThreeRoomAptValueChanged}>3</input>
-                    </label>
+                    <div className={firstClassNames} onClick={this.onOneRoomAptValueChanged}>
+                        1
+                    </div>
+                    <div className={secondClassNames} onClick={this.onTwoRoomAptValueChanged}>
+                        2
+                    </div>
+                    <div className={thirdClassNames} onClick={this.onThreeRoomAptValueChanged}>
+                        3
+                    </div>
                 </div>
             </div>
         )
