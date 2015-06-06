@@ -18,7 +18,7 @@ var AddressBox = React.createClass({
                 id="addressInput"
                 className="form-control"
                 type="text"
-                placeholder="Введите местоположение"
+                placeholder="Введите город/район/метро"
                 onChange={this.onAddressChange}
             />
         )

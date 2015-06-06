@@ -148,7 +148,7 @@ var AddressBox = React.createClass({
                         paddingBottom: 0,
                         borderRadius: 0
                     }}
-                    placeholder="Введите местоположение"
+                    placeholder="Введите город/район/метро"
                     onChange={this.onAddressChange}
                 />
 
