@@ -163,7 +163,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                         log.info("Loading posts from page");
                         List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab)
                                 .stream()
-                                .filter(item -> StringUtils.trimToNull(item.getText()) != null)
+                                .filter(item -> StringUtils.trimToNull(item.getText()) != null && !StringUtils.trimToEmpty(item.getText()).contains("rent4.me"))
                                         //leave only those that have no duplicates in DB
                                 .collect(Collectors.toCollection(ArrayList::new));
 

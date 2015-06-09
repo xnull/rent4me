@@ -142,7 +142,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                     try {
                         List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
                                 .stream()
-                                .filter(item -> StringUtils.trimToNull(item.getMessage()) != null)
+                                .filter(item -> StringUtils.trimToNull(item.getMessage()) != null && !StringUtils.trimToEmpty(item.getMessage()).contains("rent4.me"))
                                         //leave only those that have no duplicates in DB
 //                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getMessage()) == 0)
                                 .collect(Collectors.toCollection(ArrayList::new));
