@@ -6,6 +6,7 @@ import bynull.realty.data.business.configs.ServerSetting;
 import bynull.realty.data.business.external.vkontakte.VkontaktePostType;
 import bynull.realty.dto.ServerSettingDTO;
 import bynull.realty.services.api.ServerSettingsService;
+import bynull.realty.services.api.VkPublishingEventService;
 import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,6 +26,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -61,6 +63,9 @@ public class VKHelperComponent {
     @Resource
     ServerSettingsService serverSettingService;
 
+    @Resource
+    VkPublishingEventService vkPublishingEventService;
+
     private String getRedirectUri() {
         return config.getVkRedirectURL() + "/vk_auth_return_page";
     }
@@ -95,9 +100,40 @@ public class VKHelperComponent {
         return doLoadPostsFromPage0(maxAge, pageId, new ArrayList<>(), 0, 0);
     }
 
-    public void sendMessageToGroup(String groupId, String text) {
-        ServerSettingDTO setting = serverSettingService.getById(ServerSetting.Id.VK_TOKEN).get();
-        String accessToken = setting.getValue();
+    /**
+     * Grab any valid point which allow publishing posts
+     * @return
+     */
+    public Optional<String> grabToken() {
+        Optional<ServerSettingDTO> serverSettingDTOOptional = serverSettingService.getById(ServerSetting.Id.VK_TOKEN);
+        if(!serverSettingDTOOptional.isPresent()) {
+            return Optional.empty();
+        }
+        ServerSettingDTO setting = serverSettingDTOOptional.get();
+
+        String token = setting.getValue();
+
+        long count = vkPublishingEventService.countOfPublishedEventsWithToken(token, getTokenRestrictionPeriod());
+        if(count >= getMaxCountOfPublishingMessagesDuringPeriod()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(token);
+    }
+
+    public long getMaxCountOfPublishingMessagesDuringPeriod() {
+        return 50;
+    }
+
+    /**
+     * Get time during which restrictions on count of publiushed messages could be applied.
+     * @return
+     */
+    public Date getTokenRestrictionPeriod() {
+        return new DateTime().minusHours(24).toDate();
+    }
+
+    public void sendMessageToGroup(String accessToken, String groupId, String text) {
         try {
             //https://api.vk.com/method/'''METHOD_NAME'''?'''PARAMETERS'''&access_token='''ACCESS_TOKEN'''
             String url = "https://api.vk.com/method/wall.post?owner_id="+groupId+"&from_group=1&message="+ URLEncoder.encode(text,"UTF-8")+"&signed=0&v=5.33&access_token="+accessToken;

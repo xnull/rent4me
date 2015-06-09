@@ -50,5 +50,5 @@ public interface ApartmentService {
 
     void unPublishOldNonInternalApartments();
 
-    void publishFBApartmentsOnVkPage(Date startDate, Date endDate);
+    void publishApartmentsOnOurVkGroupPage(List<Long> apartmentIds);
 }

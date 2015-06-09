@@ -2,6 +2,7 @@ package bynull.realty.services.impl.socialnet.fb;
 
 import bynull.realty.common.PhoneUtil;
 import bynull.realty.common.Porter;
+import bynull.realty.components.AfterCommitExecutor;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.components.text.TargetAnalyzer;
@@ -22,7 +23,10 @@ import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
+import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.FacebookService;
+import bynull.realty.services.impl.CityServiceImpl;
+import bynull.realty.services.impl.MetroServiceImpl;
 import bynull.realty.services.impl.socialnet.AbstractSocialNetServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
@@ -57,17 +61,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements FacebookService, InitializingBean {
-    private final HttpClient httpManager = new HttpClient(new MultiThreadedHttpConnectionManager()) {{
+    @Resource
+    ApartmentService apartmentService;
 
-        final HttpClientParams params = new HttpClientParams();
-        params.setIntParameter(HttpClientParams.MAX_REDIRECTS, 5);
-        //wait for 3 seconds max to obtain connection
-        params.setConnectionManagerTimeout(3 * 1000);
-        params.setSoTimeout(10 * 1000);
-
-        this.setParams(params);
-    }};
-    private final ObjectMapper jacksonObjectMapper = new ObjectMapper();
     @Resource
     Config config;
     @Resource
@@ -76,6 +72,9 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
     ApartmentRepository apartmentRepository;
     @Resource
     FacebookHelperComponent facebookHelperComponent;
+
+    @Resource
+    AfterCommitExecutor afterCommitExecutor;
 
     Porter porter;
 
@@ -133,6 +132,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
                     FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
                     CityDTO cityDTO = cityModelDTOConverter.toTargetType(fbPage.getCity());
                     List<FacebookApartment> newest = apartmentRepository.finFBAparmentsByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
@@ -247,6 +247,24 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             }
 
                             post = apartmentRepository.save(post);
+                            if(post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
+                                    && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
+
+                                int scorePoints = 0;
+
+                                if (post.getRentalFee() != null) {
+                                    scorePoints++;
+                                }
+                                if (post.getMetros() != null && !post.getMetros().isEmpty()) {
+                                    scorePoints++;
+                                }
+                                if (post.getRoomCount() != null) {
+                                    scorePoints++;
+                                }
+                                if(scorePoints >= 1) {
+                                    apartmentIdsToPostOnVKPage.add(post.getId());
+                                }
+                            }
                             log.info("<<< Processing of post #[{}] done", i);
 
 //                                post.setType(getType().toInternal());
@@ -256,6 +274,9 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                     } catch (Exception e) {
                         log.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
                     }
+                    afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
+                        apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage);
+                    });
                 }
             });
 

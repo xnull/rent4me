@@ -5,12 +5,15 @@ import bynull.realty.converters.apartments.ApartmentModelDTOConverter;
 import bynull.realty.converters.apartments.ApartmentModelDTOConverterFactory;
 import bynull.realty.dao.*;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.vk.stats.VkPublishingEvent;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.api.VkPublishingEventService;
 import bynull.realty.util.LimitAndOffset;
+import bynull.realty.utils.HibernateUtil;
 import bynull.realty.utils.SecurityUtils;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.Uninterruptibles;
@@ -24,10 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -39,6 +39,9 @@ import java.util.stream.Collectors;
 public class ApartmentServiceImpl implements ApartmentService {
     @Resource
     ApartmentRepository apartmentRepository;
+
+    @Resource
+    VkPublishingEventService vkPublishingEventService;
 
     @Resource
     UserRepository userRepository;
@@ -355,37 +358,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         apartmentRepository.unPublishOldNonInternalApartments(new DateTime().minusDays(31).toDate());
     }
 
-    @Transactional
-    @Override
-    public void publishFBApartmentsOnVkPage(Date startDate, Date endDate) {
-        List<FacebookApartment> apartments = apartmentRepository.findFBApartmentsSinceTime(startDate, endDate);
-        long size = apartments.size();
-        log.info("Apartments found: [{}]", size);
-
-        apartments = apartments.stream().filter(this::adShouldBePosted).collect(Collectors.toList());
-
-        log.info("Apartments published: [{}]", apartments.size());
-
-        String groupId="-82219356";//public group
-        String pageId="-95509841";//public page
-
-        for (FacebookApartment apartment : apartments) {
-            String desc = toDescription(apartment);
-            long start = System.currentTimeMillis();
-            vkHelperComponent.sendMessageToGroup(pageId, desc);
-            long end = System.currentTimeMillis();
-            long diff = end - start;
-            //wait for 30-60 seconds in order to fool vk if they will decide to ban us
-            long minWaitThreshold = 30000+(System.currentTimeMillis()%30000);
-            if(diff < minWaitThreshold) {
-                long sleepForMs = minWaitThreshold - diff;
-                log.info("Waiting [{}] ms before next publishing on FB", sleepForMs);
-                Uninterruptibles.sleepUninterruptibly(sleepForMs, TimeUnit.MILLISECONDS);
-            }
-        }
-
-    }
-
     private boolean adShouldBePosted(Apartment apartment) {
         if(apartment.getMetros() != null && !apartment.getMetros().isEmpty()) {
             return true;
@@ -411,5 +383,74 @@ public class ApartmentServiceImpl implements ApartmentService {
         desc += "\n\n" +
                 "http://rent4.me/advert/"+apartment.getId();
         return desc;
+    }
+
+    @Transactional
+    @Override
+    public void publishApartmentsOnOurVkGroupPage(List<Long> apartmentIds) {
+        if(apartmentIds.isEmpty()) return;
+        List<Apartment> apartments = apartmentRepository.findByIdIn(apartmentIds);
+        long size = apartments.size();
+        log.info("Apartments found: [{}]", size);
+
+        apartments = apartments.stream().filter(this::adShouldBePosted).collect(Collectors.toList());
+
+        log.info("Apartments published: [{}]", apartments.size());
+
+        String groupId="-82219356";//public group - old
+        groupId="-95509841";//public group - new
+
+        long maxCountOfPublishingMessagesDuringPeriod = vkHelperComponent.getMaxCountOfPublishingMessagesDuringPeriod();
+
+        publishing_cycle:
+        for (Apartment apartment : apartments) {
+            apartment = HibernateUtil.deproxy(apartment);
+            if(apartment instanceof SocialNetApartment) {
+                final Apartment.DataSource dataSource;
+                if(apartment instanceof VkontakteApartment) {
+                    long count = vkPublishingEventService.countOfPublishedEventsWithDataSource(Apartment.DataSource.VKONTAKTE, vkHelperComponent.getTokenRestrictionPeriod());
+                    dataSource = Apartment.DataSource.VKONTAKTE;
+                    //set it to 40% for vk
+                    long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod*40/100;
+                    if(count >= maxAllowedMessagesPublishedDuringPeriod) {
+                        continue publishing_cycle;
+                    }
+                } else if(apartment instanceof FacebookApartment) {
+                    long count = vkPublishingEventService.countOfPublishedEventsWithDataSource(Apartment.DataSource.FACEBOOK, vkHelperComponent.getTokenRestrictionPeriod());
+                    dataSource = Apartment.DataSource.FACEBOOK;
+                    //set it to 60% for fb
+                    long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod*50/100;
+                    if(count >= maxAllowedMessagesPublishedDuringPeriod) {
+                        continue publishing_cycle;
+                    }
+                } else {
+                    log.warn("Unsupported class provided for publishing: [{}]. Skipping.", apartment.getClass());
+                    continue publishing_cycle;
+                }
+
+                String desc = toDescription(apartment);
+                long start = System.currentTimeMillis();
+                Optional<String> token = vkHelperComponent.grabToken();
+                if(!token.isPresent()) {
+                    log.error("No token present. Stopping publishing cycle.");
+                    break publishing_cycle;
+                }
+
+                String accessToken = token.get();
+                vkPublishingEventService.publishEvent(dataSource, groupId, desc, accessToken);
+                vkHelperComponent.sendMessageToGroup(accessToken, groupId, desc);
+                long end = System.currentTimeMillis();
+                long diff = end - start;
+                //wait for 30-60 seconds in order to fool vk if they will decide to ban us
+                long minWaitThreshold = 30000+(System.currentTimeMillis()%30000);
+                if(diff < minWaitThreshold) {
+                    long sleepForMs = minWaitThreshold - diff;
+                    log.info("Waiting [{}] ms before next publishing on FB", sleepForMs);
+                    Uninterruptibles.sleepUninterruptibly(sleepForMs, TimeUnit.MILLISECONDS);
+                }
+            } else {
+                log.info("Apartment of not supported class provided: " + apartment.getClass());
+            }
+        }
     }
 }

@@ -78,7 +78,7 @@ public class PromotingController {
 
     @RequestMapping(value = "vk_post", method = RequestMethod.POST)
     public ModelAndView vkPostToGroup(VkPostForm vkPostForm, RedirectAttributes redirectAttributes) {
-        vkHelperComponent.sendMessageToGroup(vkPostForm.getGroupId(), vkPostForm.getText());
+//        vkHelperComponent.sendMessageToGroup(vkPostForm.getGroupId(), vkPostForm.getText());
 
         redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Message published to VK");
 
@@ -94,7 +94,7 @@ public class PromotingController {
 
     @RequestMapping(value = "vk_bulk_post", method = RequestMethod.POST)
     public ModelAndView vkPostToGroupBulk(VkBulkPostForHours vkBulkPostForHours, RedirectAttributes redirectAttributes) {
-        apartmentService.publishFBApartmentsOnVkPage(new DateTime().minusHours(vkBulkPostForHours.hoursStart).toDate(), new DateTime().minusHours(vkBulkPostForHours.hoursEnd).toDate());
+//        apartmentService.publishFBApartmentsOnVkPage(new DateTime().minusHours(vkBulkPostForHours.hoursStart).toDate(), new DateTime().minusHours(vkBulkPostForHours.hoursEnd).toDate());
 
         redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Messages published to VK from FB");
 

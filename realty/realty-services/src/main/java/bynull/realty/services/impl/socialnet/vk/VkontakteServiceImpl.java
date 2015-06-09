@@ -1,6 +1,7 @@
 package bynull.realty.services.impl.socialnet.vk;
 
 import bynull.realty.common.PhoneUtil;
+import bynull.realty.components.AfterCommitExecutor;
 import bynull.realty.components.VKHelperComponent;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
@@ -23,7 +24,9 @@ import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
+import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.VkontakteService;
+import bynull.realty.services.impl.MetroServiceImpl;
 import bynull.realty.services.impl.socialnet.AbstractSocialNetServiceImpl;
 import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +63,12 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 
     @Resource
     VkontaktePageModelDTOConverter vkontaktePageConverter;
+
+    @Resource
+    AfterCommitExecutor afterCommitExecutor;
+
+    @Resource
+    ApartmentService apartmentService;
 
     @Resource
     MetroRepository metroRepository;
@@ -131,6 +140,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
                     log.info("Getting page");
                     VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
 
@@ -249,6 +259,25 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                             }
 
                             post = apartmentRepository.save(post);
+                            if(post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
+                                    && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
+
+                                int scorePoints = 0;
+
+                                if (post.getRentalFee() != null) {
+                                    scorePoints++;
+                                }
+                                if (post.getMetros() != null && !post.getMetros().isEmpty()) {
+                                    scorePoints++;
+                                }
+                                if (post.getRoomCount() != null) {
+                                    scorePoints++;
+                                }
+                                //only premium posts should be posted on our page for now
+                                if(scorePoints >= 3) {
+                                    apartmentIdsToPostOnVKPage.add(post.getId());
+                                }
+                            }
 
                             log.info("<<< Processing of post #[{}] done", i);
                         }
@@ -257,6 +286,9 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                     } catch (Exception e) {
                         log.error("Failed to parse [" + vkPage.getExternalId() + "]", e);
                     }
+                    afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
+                        apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage);
+                    });
                 }
             });
         }

@@ -122,6 +122,8 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("select a from FacebookApartment a where a.created >= :start_date and a.created < :end_date order by a.logicalCreated")
     List<FacebookApartment> findFBApartmentsSinceTime(@Param("start_date") Date date, @Param("end_date") Date endDate);
 
+    List<Apartment> findByIdIn(List<Long> apartmentIds);
+
 
     public enum FindMode {
         RENTER {

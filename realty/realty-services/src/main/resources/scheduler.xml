@@ -7,5 +7,4 @@
     <bean class="bynull.realty.jobs.FacebookScrappingJob"/>
     <bean class="bynull.realty.jobs.PhotoTempCleanupJob"/>
     <bean class="bynull.realty.jobs.VkontakteScrappingJob"/>
-    <bean class="bynull.realty.jobs.FacebookApartmentCrossPostingOnVKJob"/>
 </beans>
