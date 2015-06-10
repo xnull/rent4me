@@ -273,6 +273,8 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                                 if (post.getRoomCount() != null) {
                                     scorePoints++;
                                 }
+                                log.info("Score points for VK post #[{}]: [{}]", post.getId(), scorePoints);
+
                                 //only premium posts should be posted on our page for now
                                 if(scorePoints >= 3) {
                                     apartmentIdsToPostOnVKPage.add(post.getId());

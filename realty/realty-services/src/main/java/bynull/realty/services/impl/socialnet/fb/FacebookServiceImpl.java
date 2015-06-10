@@ -261,6 +261,9 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                                 if (post.getRoomCount() != null) {
                                     scorePoints++;
                                 }
+
+                                log.info("Score points for FB post #[{}]: [{}]", post.getId(), scorePoints);
+
                                 if(scorePoints >= 1) {
                                     apartmentIdsToPostOnVKPage.add(post.getId());
                                 }
