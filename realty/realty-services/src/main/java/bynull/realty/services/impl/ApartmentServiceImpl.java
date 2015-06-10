@@ -400,7 +400,9 @@ public class ApartmentServiceImpl implements ApartmentService {
         String groupId="-82219356";//public group - old
         groupId="-95509841";//public group - new
 
+        log.info("CrossPostPublishingToVK: Getting max count");
         long maxCountOfPublishingMessagesDuringPeriod = vkHelperComponent.getMaxCountOfPublishingMessagesDuringPeriod();
+        log.info("CrossPostPublishingToVK: Got max count: [{}]", maxCountOfPublishingMessagesDuringPeriod);
 
         publishing_cycle:
         for (Apartment apartment : apartments) {
@@ -408,23 +410,30 @@ public class ApartmentServiceImpl implements ApartmentService {
             if(apartment instanceof SocialNetApartment) {
                 final Apartment.DataSource dataSource;
                 if(apartment instanceof VkontakteApartment) {
+                    log.info("CrossPostPublishingToVK: Getting published VK events");
                     long count = vkPublishingEventService.countOfPublishedEventsWithDataSource(Apartment.DataSource.VKONTAKTE, vkHelperComponent.getTokenRestrictionPeriod());
+                    log.info("CrossPostPublishingToVK: Got published VK events: [{}]", count);
                     dataSource = Apartment.DataSource.VKONTAKTE;
                     //set it to 40% for vk
                     long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod*40/100;
                     if(count >= maxAllowedMessagesPublishedDuringPeriod) {
+                        log.info("CrossPostPublishingToVK: Skipping VK - more than needed");
                         continue publishing_cycle;
                     }
                 } else if(apartment instanceof FacebookApartment) {
+                    log.info("CrossPostPublishingToVK: Getting published FB events");
                     long count = vkPublishingEventService.countOfPublishedEventsWithDataSource(Apartment.DataSource.FACEBOOK, vkHelperComponent.getTokenRestrictionPeriod());
+                    log.info("CrossPostPublishingToVK: Got published FB events: [{}]", count);
                     dataSource = Apartment.DataSource.FACEBOOK;
                     //set it to 60% for fb
                     long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod*50/100;
                     if(count >= maxAllowedMessagesPublishedDuringPeriod) {
+                        log.info("CrossPostPublishingToVK: Skipping FB - more than needed");
                         continue publishing_cycle;
                     }
                 } else {
-                    log.warn("Unsupported class provided for publishing: [{}]. Skipping.", apartment.getClass());
+                    log.info("CrossPostPublishingToVK: Unsupported class provided for publishing: [{}]. Skipping.", apartment.getClass());
+                    log.warn("CrossPostPublishingToVK: Unsupported class provided for publishing: [{}]. Skipping.", apartment.getClass());
                     continue publishing_cycle;
                 }
 
@@ -432,13 +441,17 @@ public class ApartmentServiceImpl implements ApartmentService {
                 long start = System.currentTimeMillis();
                 Optional<String> token = vkHelperComponent.grabToken();
                 if(!token.isPresent()) {
-                    log.error("No token present. Stopping publishing cycle.");
+                    log.info("CrossPostPublishingToVK: No token present. Stopping publishing cycle.");
+                    log.error("CrossPostPublishingToVK: No token present. Stopping publishing cycle.");
                     break publishing_cycle;
                 }
 
                 String accessToken = token.get();
+                log.info("CrossPostPublishingToVK: Publishing stats");
                 vkPublishingEventService.publishEvent(dataSource, groupId, desc, accessToken);
+                log.info("CrossPostPublishingToVK: Sending message to vk");
                 vkHelperComponent.sendMessageToGroup(accessToken, groupId, desc);
+                log.info("CrossPostPublishingToVK: Sent message to vk");
                 long end = System.currentTimeMillis();
                 long diff = end - start;
                 //wait for 30-60 seconds in order to fool vk if they will decide to ban us
