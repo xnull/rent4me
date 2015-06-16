@@ -20,7 +20,28 @@ function googleAnalytics() {
     ga('create', 'UA-52484973-1', 'auto');
     ga('require', 'displayfeatures');
     ga('send', 'pageview');
+
+    return ga;
 }
+
+var GaHolder = (function () {
+    var instance;
+
+    function GaHolder() {
+        this.ga = googleAnalytics();
+    }
+
+    return {
+        getInstance: function(){
+            if (instance == null) {
+                instance = new GaHolder();
+                // Hide the constructor so the returned objected can't be new'd...
+                instance.constructor = null;
+            }
+            return instance;
+        }
+    };
+})();
 
 function yandexMetrika() {
     console.log('Init yandex metrika');
@@ -91,7 +112,7 @@ function Segment() {
 }
 
 function initAnalyticsSystem() {
-    googleAnalytics();
+    GaHolder.getInstance();
     yandexMetrika();
 }
 
@@ -99,7 +120,8 @@ var Analytics = {
     initAnalyticsSystem: initAnalyticsSystem,
     google: googleAnalytics,
     yandex: yandexMetrika,
-    segment: Segment
+    segment: Segment,
+    googleAnalyricsHolder: GaHolder.getInstance
 };
 
 module.exports = Analytics;

@@ -11,6 +11,7 @@ var Ajax = require('../common/Ajax');
 
 function navigateTo(path) {
     console.log('NavAction: Navigating to ' + path);
+
     AppDispatcher.handleViewAction({
         actionType: NavConstants.NAVIGATE_TO,
         page: path

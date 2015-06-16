@@ -17,6 +17,7 @@ var NavStore = require('../../shared/stores/NavStore');
 var AuthStore = require('../../shared/stores/AuthStore');
 var Utils = require('../../shared/common/Utils');
 var WebSocketUtil = require('../../shared/common/WebSocketUtil');
+var Analytics = require('../../shared/common/analytics.js');
 
 var AdvertPage = require('./left-pane/socialnet/advert');
 
@@ -26,6 +27,7 @@ var AdvertPage = require('./left-pane/socialnet/advert');
  * https://github.com/facebook/react/issues/2436
  */
 var App = React.createClass({
+
     componentWillMount: function () {
         //restore username & token from cookies before component mounted
         AuthActions.restoreUsernameAndTokenFromCookies();
@@ -55,7 +57,19 @@ var App = React.createClass({
         //NB! This dummy function should be here because in othercase callback for nav store won't be initialized in proper order.
     },
 
+    /**
+     * https://developers.google.com/analytics/devguides/collection/analyticsjs/ (Updating a tracker)
+     *
+     * @returns {XML}
+     */
     render: function () {
+        console.log(Analytics.googleAnalyricsHolder().ga);
+
+        Analytics.googleAnalyricsHolder().ga('set', 'page', '/personal' + this.props.path);
+        if (AuthStore.hasCredentials()) {
+            ga('set', 'userId', AuthStore.getUsernameTokenPair().token);
+        }
+
         return (
             <RouteHandler/>
         )
@@ -72,12 +86,12 @@ var route = (
         <Route name="chats" path="user/chats" handler={require('./left-pane/chats/main')}/>
         <Route name="chat" path="user/chat" handler={require('./left-pane/chats/chat')}/>
         <Route name="newMessageInChat" path="user/chats/newMessage" handler={require('./left-pane/chats/newMessage')}/>
-        <Route name="advert" path="advert/:id" handler={AdvertPage} />
+        <Route name="advert" path="advert/:id" handler={AdvertPage}/>
 
         <DefaultRoute handler={require('./left-pane/socialnet/social_networks')}/>
     </Route>
 );
 
-Router.run(route, function (Handler) {
-    React.render(<Handler/>, document.getElementById('mainView'));
+Router.run(route, function (Handler, state) {
+    React.render(<Handler {...state}/>, document.getElementById('mainView'));
 });
