@@ -67,7 +67,7 @@ var App = React.createClass({
 
         Analytics.googleAnalyricsHolder().ga('set', 'page', '/personal' + this.props.path);
         if (AuthStore.hasCredentials()) {
-            ga('set', 'userId', AuthStore.getUsernameTokenPair().token);
+            Analytics.googleAnalyricsHolder().ga('set', 'userId', AuthStore.getUsernameTokenPair().token);
         }
 
         return (
