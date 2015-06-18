@@ -394,7 +394,7 @@ var Post = React.createClass({
 
         //show in a better way for list & for full screen
         var classNamesForAddresses = showFull ? "col-md-12 col-sm-12 col-xs-12" : "col-md-9 col-sm-6 col-xs-12";
-        var extraDivReservedForImagePreview = showFull ? gallery : <div className="col-md-3 col-sm-6 col-xs-12"></div>;
+        var extraDivReservedForImagePreview = gallery;
 
 
         return (
