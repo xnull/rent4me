@@ -63,8 +63,6 @@ var App = React.createClass({
      * @returns {XML}
      */
     render: function () {
-        console.log(Analytics.googleAnalyricsHolder().ga);
-
         Analytics.googleAnalyricsHolder().ga('set', 'page', '/personal' + this.props.path);
         Analytics.googleAnalyricsHolder().ga('send', 'pageview');
         if (AuthStore.hasCredentials()) {
