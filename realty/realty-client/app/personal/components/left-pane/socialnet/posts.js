@@ -84,7 +84,7 @@ var GoogleMapView = React.createClass({
             var map = new google.maps.Map(this.refs.mapInsert.getDOMNode(),
                 mapOptions);
 
-            this.listener = google.maps.event.addDomListener(window, 'resize', function() {
+            this.listener = google.maps.event.addDomListener(window, 'resize', function () {
                 map.setCenter(latLng);
             });
 
@@ -98,8 +98,8 @@ var GoogleMapView = React.createClass({
         }
     },
 
-    componentWillUnmount: function() {
-        if(this.listener) {
+    componentWillUnmount: function () {
+        if (this.listener) {
             google.maps.event.removeListener(this.listener);
         }
     },
@@ -146,7 +146,7 @@ var ContactInfo = React.createClass({
 
             var url = "#/user/chat?id=" + chatKey + "&receiver_id=" + targetPerson.id;
             directContact = (<div>
-                <a href={url} className="btn btn-default">Отправить сообщение</a>
+                <a href={url} className="btn btn-default">Отпра ить сообщение</a>
             </div>);
         } else {
             directContact = null;
@@ -277,8 +277,10 @@ var ImagePreviews = React.createClass({
 
         return showFull ? (carousel) : (
             <div>
-                <div className="thumbnail pull-left">
-                    {firstImage ? firstImage : withoutImage}
+                <div className='col-lg-3 col-md-3 col-sm-12 col-xs-12'>
+                    <div className="thumbnail pull-left">
+                        {firstImage ? firstImage : withoutImage}
+                    </div>
                 </div>
             </div>
         )
@@ -291,7 +293,7 @@ var HeaderBlock = React.createClass({
 
         var creationDate = (
             <div>
-                Дата объявления: {moment(item.created).format("lll")}
+                Дата объя ления: {moment(item.created).format("lll")}
             </div>
         );
 
@@ -320,7 +322,7 @@ var MessageDetails = React.createClass({
                 <div className="col-md-offset-9 col-sm-offset-8 col-xs-offset-6 col-md-3 col-sm-4 col-xs-6"
                      style={{marginTop: 5}}>
                     <Link to="advert" params={{id: item.id}}><a href={"#/advert/"+item.id}
-                        className="btn btn-default center-block">Подробнее</a></Link>
+                                                                className="btn btn-default center-block">Подробнее</a></Link>
                 </div>
         )
     }
@@ -400,6 +402,7 @@ var Post = React.createClass({
         return (
             <div className='panel panel-info'>
                 <HeaderBlock item={item}/>
+
                 <div className="panel-body">
                     <div className="row">
                         {extraDivReservedForImagePreview}
