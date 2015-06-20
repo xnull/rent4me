@@ -5,9 +5,29 @@
     <title>Hey hello</title>
 
     <style>
+        /*https://scotch.io/bar-talk/bootstrap-3-tips-and-tricks-you-still-might-not-know*/
         .no-gutter > [class*='col-'] {
             padding-right: 0;
             padding-left: 0;
+        }
+
+        .row-table {
+            display: table;
+            table-layout: fixed;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        .row-table > [class*="col-"] {
+            display: table-cell;
+            float: none;
+            table-layout: fixed;
+            vertical-align: middle;
+        }
+
+        .noBorderRadius {
+            border-radius: 0 !important;
         }
     </style>
 
@@ -57,7 +77,7 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a role="button"> Поиск</a></li>
+                        <li><a role="button">Поиск</a></li>
                     </ul>
                 </div>
             </div>
@@ -68,10 +88,11 @@
     <!--  Панель управления с инфой о владельце объявления и кнопками для жалоб и связи -->
     <div class="row no-gutter">
         <div class="col-md-12">
-            <div class="panel panel-default" style="margin-bottom: 0 !important; border-radius: 0">
+            <div class="panel panel-default noBorderRadius"
+                 style="/*background-color: rgba(70, 74, 74, 0.9);*/margin-bottom: 0 !important; border-bottom: 0;">
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-1 col-md-1 text-center">
+                        <div class="col-xs-2 col-md-1">
                             <a href="#">
                                 <!-- super man: http://mediad.publicbroadcasting.net/p/kpcw/files/201404/superman_no_photo.png -->
                                 <img src="https://nslnr.su/pict/no_photo_man.gif" alt="..."
@@ -79,8 +100,15 @@
                             </a>
                         </div>
 
-                        <div class="col-xs-5 col-md-5 <!--text-center-->">
-                            <a class="btn btn-default">Связаться</a>
+                        <div class="col-xs-3 col-md-3">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12">
+                                    <a class="btn btn-default">Связаться</a>
+                                </div>
+                                <div class="col-xs-12 col-md-12" style="padding-top: 15px">
+                                    <a href="" class="text-center">Источник объявы</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,9 +127,21 @@
 
             <!-- adverts -->
             <div class="row no-gutter">
+                <!-- Accomodation images -->
                 <div class="col-xs-12 col-md-8">
-                    <img style="max-width: 100%" src="http://agbeat.com/wp-content/uploads/2011/11/mike-leyland.jpg"
-                         alt="...">
+                    <div class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                        </ol>
+
+                        <div class="item">
+                            <img style="max-width: 100%"
+                                 src="http://agbeat.com/wp-content/uploads/2011/11/mike-leyland.jpg"
+                                 alt="...">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-md-4 col-xs-12">
@@ -116,6 +156,7 @@
                         </div>
                     </div>
 
+                    <!-- Accomodation info -->
                     <table class="table table-striped">
                         <tbody>
                         <tr>
@@ -167,12 +208,33 @@
                         </tbody>
                     </table>
                 </div>
-
-
             </div>
 
-            <div class="row">
-                <!-- Similar adverts -->
+            <!-- Комментарии и лайки -->
+            <div class="row no-gutter">
+                <div class="col-xs-8 col-md-8">
+                    <h4>Комментарии</h4>
+                </div>
+                <div class="col-md-4 text-right">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h4>Поделиться </h4>
+                        </div>
+                        <div class="col-xs-4">
+                            <img src="https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/vkontakte-32.png"
+                                 width="32"/>
+                            <img src="https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/facebook-32.png"
+                                 width="32"/>
+                            <img src="https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/odnoklassniki-32.png"
+                                 width="32"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Similar adverts -->
+            <div class="row ">
                 <div class="col-md-12" style="margin-top: 50px"></div>
                 <div class="col-md-12">
                     <hr>
@@ -181,28 +243,31 @@
                 <h1 class="text-center">Похожие объявления</h1>
 
                 <div class="col-sm-4 col-md-4">
-                    <a href="#" class="">
-                        <div class="thumbnail">
-                            <img src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="...">
-
-                            <div class="caption">
-                                <div class="row row-fluid">
-                                    <div class="col-xs-11"><h4>Москва</h4></div>
-                                    <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
-                                </div>
-                                <div class="row row-fluid">
-                                    <div class="col-xs-12">
-                                        <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                    <div class="panel panel-default">
+                        <img style="max-width: 100%"
+                             src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="..."/>
+                        <div class="panel-body">
+                            <a href="#" class="">
+                                <div class="caption">
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-11"><h4>Москва</h4></div>
+                                        <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
                                     </div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
-                                        1</strong></div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена: 30
-                                        000</strong></div>
-                                    <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-12">
+                                            <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                                        </div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
+                                            1</strong></div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена:
+                                            30
+                                            000</strong></div>
+                                        <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="col-sm-4 col-md-4">
@@ -337,3 +402,19 @@
 
 </body>
 </html>
+
+
+<!--
+написать владельцу (связаться) - кнопка
+
+перейти на источник в соц. сети - кнопка или текстовая ссылка
+
+пожаловаться на объявление -  кнопка
+
+виджет комментариев
+
+конпоки репостинга в соц. сети - http://msk.choister.ru/o/2-komnatnaya-kvartira-50-0-kv-m-moskva-80000-00-rub-na-dlitelnyi-srok-5571c4ace4b08147d888b9ec.html
+
+фоточка из соц. сети, того кто разместил объяву?
+
+-->
