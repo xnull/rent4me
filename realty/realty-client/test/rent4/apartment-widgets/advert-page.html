@@ -29,6 +29,15 @@
         .noBorderRadius {
             border-radius: 0 !important;
         }
+
+        .table-borderless td,
+        .table-borderless th {
+            border: 0 !important;
+        }
+
+        .comment-group-item {
+            border: 1px solid rgba(242, 201, 201, 0.16) !important;
+        }
     </style>
 
 
@@ -94,6 +103,7 @@
                     <div class="row">
                         <div class="col-xs-2 col-md-1">
                             <a href="#">
+                                <!-- Фоточка разместившего объяву товарища (зареганного или фотка профиля из соц сети)
                                 <!-- super man: http://mediad.publicbroadcasting.net/p/kpcw/files/201404/superman_no_photo.png -->
                                 <img src="https://nslnr.su/pict/no_photo_man.gif" alt="..."
                                      class="img-rounded" width="64">
@@ -138,7 +148,7 @@
 
                         <div class="item">
                             <img style="max-width: 100%"
-                                 src="http://agbeat.com/wp-content/uploads/2011/11/mike-leyland.jpg"
+                                 src="images/mike-leyland.jpg"
                                  alt="...">
                         </div>
                     </div>
@@ -232,6 +242,131 @@
                 </div>
             </div>
 
+            <!-- Виджет комментариев -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <!-- добавление нового комментария -->
+                        <table class="table table-responsive table-striped table-borderless">
+                            <tbody>
+                            <tr>
+                                <td class="col-md-1 text-center">
+                                    <a href="#">
+                                        <!-- super man: http://mediad.publicbroadcasting.net/p/kpcw/files/201404/superman_no_photo.png -->
+                                        <img src="https://nslnr.su/pict/no_photo_man.gif" alt="..."
+                                             class="img-circle" width="32">
+                                    </a>
+                                </td>
+                                <td>
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="commentSystem">Ваш комментарий</label>
+                                            <input type="text" class="form-control" id="commentSystem"
+                                                   placeholder="текст комментария">
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+                        <!-- START list group. Списрк комментариев -->
+                        <div class="list-group">
+                            <!-- START list group item-->
+                            <a href="javascript:void(0);" class="list-group-item comment-group-item">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="http://geedmo.com/themeforest/wintermin/app/img/user/01.jpg" alt="Image"
+                                             class="media-object img-circle thumb48">
+                                    </div>
+                                    <div class="media-body clearfix">
+                                        <small class="pull-right">2h</small>
+                                        <strong class="media-heading text-primary">
+                                            <span class="point point-success point-lg text-left"></span>Sheila
+                                            Carter</strong>
+
+                                        <p class="mb-sm">
+                                            <small>Cras sit amet nibh libero, in gravida nulla. Nulla...</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- END list group item-->
+                            <!-- START list group item-->
+                            <a href="javascript:void(0);" class="list-group-item comment-group-item">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="http://geedmo.com/themeforest/wintermin/app/img/user/04.jpg" alt="Image"
+                                             class="media-object img-circle thumb48">
+                                    </div>
+                                    <div class="media-body clearfix">
+                                        <small class="pull-right">3h</small>
+                                        <strong class="media-heading text-primary">
+                                            <span class="point point-success point-lg text-left"></span>Rich
+                                            Reynolds</strong>
+
+                                        <p class="mb-sm">
+                                            <small>Cras sit amet nibh libero, in gravida nulla. Nulla...</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- END list group item-->
+                            <!-- START list group item-->
+                            <a href="javascript:void(0);" class="list-group-item comment-group-item">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="http://geedmo.com/themeforest/wintermin/app/img/user/03.jpg" alt="Image"
+                                             class="media-object img-circle thumb48">
+                                    </div>
+                                    <div class="media-body clearfix">
+                                        <small class="pull-right">4h</small>
+                                        <strong class="media-heading text-primary">
+                                            <span class="point point-danger point-lg text-left"></span>Beverley
+                                            Pierce</strong>
+
+                                        <p class="mb-sm">
+                                            <small>Cras sit amet nibh libero, in gravida nulla. Nulla...</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- END list group item-->
+                            <!-- START list group item-->
+                            <a href="javascript:void(0);" class="list-group-item comment-group-item">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="http://geedmo.com/themeforest/wintermin/app/img/user/06.jpg" alt="Image"
+                                             class="media-object img-circle thumb48">
+                                    </div>
+                                    <div class="media-body clearfix">
+                                        <small class="pull-right">4h</small>
+                                        <strong class="media-heading text-primary">
+                                            <span class="point point-danger point-lg text-left"></span>Alex
+                                            Somar</strong>
+
+                                        <p class="mb-sm">
+                                            <small>Vestibulum pretium aliquam scelerisque.</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- END list group item-->
+                        </div>
+                        <!-- END list group-->
+                        <!-- START panel footer-->
+                        <div class="panel-footer clearfix">
+                            <a href="javascript:void(0);" class="pull-left">
+                                <small>Показать все комментарии</small>
+                            </a>
+                        </div>
+                        <!-- END panel-footer-->
+                    </div>
+
+                </div>
+            </div>
+
 
             <!-- Similar adverts -->
             <div class="row ">
@@ -246,6 +381,7 @@
                     <div class="panel panel-default">
                         <img style="max-width: 100%"
                              src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="..."/>
+
                         <div class="panel-body">
                             <a href="#" class="">
                                 <div class="caption">
@@ -271,129 +407,150 @@
                 </div>
 
                 <div class="col-sm-4 col-md-4">
-                    <a href="#" class="">
-                        <div class="thumbnail">
-                            <img src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="...">
+                    <div class="panel panel-default">
+                        <img style="max-width: 100%"
+                             src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="..."/>
 
-                            <div class="caption">
-                                <div class="row row-fluid">
-                                    <div class="col-xs-11"><h4>Москва</h4></div>
-                                    <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
-                                </div>
-                                <div class="row row-fluid">
-                                    <div class="col-xs-12">
-                                        <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                        <div class="panel-body">
+                            <a href="#" class="">
+                                <div class="caption">
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-11"><h4>Москва</h4></div>
+                                        <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
                                     </div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
-                                        1</strong></div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена: 30
-                                        000</strong></div>
-                                    <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-12">
+                                            <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                                        </div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
+                                            1</strong></div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена:
+                                            30
+                                            000</strong></div>
+                                        <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="col-sm-4 col-md-4">
-                    <a href="#" class="">
-                        <div class="thumbnail">
-                            <img src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="...">
+                    <div class="panel panel-default">
+                        <img style="max-width: 100%"
+                             src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="..."/>
 
-                            <div class="caption">
-                                <div class="row row-fluid">
-                                    <div class="col-xs-11"><h4>Москва</h4></div>
-                                    <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
-                                </div>
-                                <div class="row row-fluid">
-                                    <div class="col-xs-12">
-                                        <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                        <div class="panel-body">
+                            <a href="#" class="">
+                                <div class="caption">
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-11"><h4>Москва</h4></div>
+                                        <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
                                     </div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
-                                        1</strong></div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена: 30
-                                        000</strong></div>
-                                    <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-12">
+                                            <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                                        </div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
+                                            1</strong></div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена:
+                                            30
+                                            000</strong></div>
+                                        <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="col-sm-4 col-md-4">
-                    <a href="#" class="">
-                        <div class="thumbnail">
-                            <img src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="...">
+                    <div class="panel panel-default">
+                        <img style="max-width: 100%"
+                             src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="..."/>
 
-                            <div class="caption">
-                                <div class="row row-fluid">
-                                    <div class="col-xs-11"><h4>Москва</h4></div>
-                                    <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
-                                </div>
-                                <div class="row row-fluid">
-                                    <div class="col-xs-12">
-                                        <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                        <div class="panel-body">
+                            <a href="#" class="">
+                                <div class="caption">
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-11"><h4>Москва</h4></div>
+                                        <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
                                     </div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
-                                        1</strong></div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена: 30
-                                        000</strong></div>
-                                    <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-12">
+                                            <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                                        </div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
+                                            1</strong></div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена:
+                                            30
+                                            000</strong></div>
+                                        <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="col-sm-4 col-md-4">
-                    <a href="#" class="">
-                        <div class="thumbnail">
-                            <img src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="...">
+                    <div class="panel panel-default">
+                        <img style="max-width: 100%"
+                             src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="..."/>
 
-                            <div class="caption">
-                                <div class="row row-fluid">
-                                    <div class="col-xs-11"><h4>Москва</h4></div>
-                                    <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
-                                </div>
-                                <div class="row row-fluid">
-                                    <div class="col-xs-12">
-                                        <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                        <div class="panel-body">
+                            <a href="#" class="">
+                                <div class="caption">
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-11"><h4>Москва</h4></div>
+                                        <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
                                     </div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
-                                        1</strong></div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена: 30
-                                        000</strong></div>
-                                    <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-12">
+                                            <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                                        </div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
+                                            1</strong></div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена:
+                                            30
+                                            000</strong></div>
+                                        <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="col-sm-4 col-md-4">
-                    <a href="#" class="">
-                        <div class="thumbnail">
-                            <img src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="...">
+                    <div class="panel panel-default">
+                        <img style="max-width: 100%"
+                             src="http://www.adaptiverealty.com/wp-content/uploads/2012/12/024.jpg" alt="..."/>
 
-                            <div class="caption">
-                                <div class="row row-fluid">
-                                    <div class="col-xs-11"><h4>Москва</h4></div>
-                                    <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
-                                </div>
-                                <div class="row row-fluid">
-                                    <div class="col-xs-12">
-                                        <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                        <div class="panel-body">
+                            <a href="#" class="">
+                                <div class="caption">
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-11"><h4>Москва</h4></div>
+                                        <div class="col-xs-11"><h5>Метро Петровско-разумовская</h5></div>
                                     </div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
-                                        1</strong></div>
-                                    <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена: 30
-                                        000</strong></div>
-                                    <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-12">
+                                            <div style="border-top: 1px dotted; margin-bottom: 10px"></div>
+                                        </div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Комнат:
+                                            1</strong></div>
+                                        <div class="col-xs-4 text-center" style="border-right: 1px dotted;"><strong>Цена:
+                                            30
+                                            000</strong></div>
+                                        <div class="col-xs-4 text-center"><strong>Тел.: 8 (901) 535-48-07</strong></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
+
 
             </div>
         </div>
@@ -405,16 +562,16 @@
 
 
 <!--
-написать владельцу (связаться) - кнопка
+написать владельцу (связаться) - кнопка +
 
-перейти на источник в соц. сети - кнопка или текстовая ссылка
+перейти на источник в соц. сети - кнопка или текстовая ссылка +
 
 пожаловаться на объявление -  кнопка
 
-виджет комментариев
+виджет комментариев +
 
-конпоки репостинга в соц. сети - http://msk.choister.ru/o/2-komnatnaya-kvartira-50-0-kv-m-moskva-80000-00-rub-na-dlitelnyi-srok-5571c4ace4b08147d888b9ec.html
+конпоки репостинга в соц. сети - http://msk.choister.ru/o/2-komnatnaya-kvartira-50-0-kv-m-moskva-80000-00-rub-na-dlitelnyi-srok-5571c4ace4b08147d888b9ec.html +
 
-фоточка из соц. сети, того кто разместил объяву?
+фоточка из соц. сети, того кто разместил объяву? +
 
 -->
