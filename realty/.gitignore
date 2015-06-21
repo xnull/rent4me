@@ -12,3 +12,5 @@ realty-client/app/vendor
 
 realty-web/src/main/webapp/view
 realty-client/build-js/*
+
+logs/*
