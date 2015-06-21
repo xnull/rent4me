@@ -1,12 +1,21 @@
-#/bin/bash
+#!/bin/sh
 
+#https://registry.hub.docker.com/u/mdillon/postgis/
+#https://registry.hub.docker.com/_/postgres/
 
-echo "------- Postgre init scrit ---------"
+echo "------------- Init db -----------"
 
-ps aux | grep postgres
+POSTGRES="gosu postgres postgres"
 
-gosu postgres postgres --single <<- EOSQL
-    CREATE ROLE realty_test_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;
-    CREATE ROLE realty_test_user LOGIN PASSWORD 'password' NOINHERIT;
-    GRANT realty_test_group TO realty_dev_user;
+$POSTGRES --single -E <<EOSQL
+CREATE DATABASE realty_devdb
+
+CREATE ROLE realty_dev_group SUPERUSER CREATEDB CREATEROLE;
+CREATE ROLE realty_dev_user LOGIN PASSWORD 'password' NOINHERIT;
+GRANT realty_dev_group TO realty_dev_user;
 EOSQL
+
+echo "------------ create postgis extention -------------"
+#$POSTGRES --single realty_devdb -E <<EOSQL
+#CREATE EXTENSION postgis;
+#EOSQL
