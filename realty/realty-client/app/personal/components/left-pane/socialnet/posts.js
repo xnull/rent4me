@@ -3,9 +3,9 @@
  */
 var React = require('react');
 
-var _ = require('underscore');
 var Utils = require('rent4meUtil');
-var moment = require('moment');
+var _ = Utils.modules.Underscore;
+var moment = Utils.modules.Moment;
 var accounting = require('accounting');
 var assign = require('object-assign');
 var UserStore = require('../../../../shared/stores/UserStore');
@@ -13,6 +13,7 @@ var UserActions = require('../../../../shared/actions/UserActions');
 var ReactBootstrap = require('react-bootstrap');
 var Carousel = ReactBootstrap.Carousel;
 var CarouselItem = ReactBootstrap.CarouselItem;
+var AdvertWidget = Utils.modules.AdvertWidget;
 
 var Router = require('react-router');
 var Link = Router.Link;
@@ -390,14 +391,16 @@ var Post = React.createClass({
 
         var showFull = this.props.showFull || false;
 
+        if(!showFull){
+            return <AdvertWidget item={this.props.item} />
+        }
+
         var gallery = <ImagePreviews item={item} showFull={showFull}/>;
 
         var mapInsert = showFull && item.location ? (<GoogleMapView location={item.location}/>) : null;
 
         //show in a better way for list & for full screen
         var classNamesForAddresses = showFull ? "col-md-12 col-sm-12 col-xs-12" : "col-md-9 col-sm-6 col-xs-12";
-        var extraDivReservedForImagePreview = gallery;
-
 
         return (
             <div className='panel panel-info'>
@@ -405,7 +408,7 @@ var Post = React.createClass({
 
                 <div className="panel-body">
                     <div className="row">
-                        {extraDivReservedForImagePreview}
+                        {gallery}
                         <div className={classNamesForAddresses}>
                             <div className='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
                                 <Address item={item}/>
@@ -443,31 +446,36 @@ var Post = React.createClass({
 
 var Posts = React.createClass({
 
-    render: function () {
+    getShownStyle: function () {
         var shown = this.props.shown || false;
-        var items = this.props.items || [];
-        var hasMore = this.props.hasMore || false;
-
-        console.log("Has more?" + hasMore);
-
-        var onHasMoreClicked = this.props.onHasMoreClicked;
-
-        var hasMoreElement = hasMore ?
-            (
-                <a href="javascript:void(0)" onClick={onHasMoreClicked} className="list-group-item">
-
-                    <p className="list-group-item-text">
-                        Загрузить еще
-                    </p>
-
-                </a>
-            ) : null;
-
         var style = {};
         if (!shown) {
             style['display'] = 'none';
         }
+        return style
+    },
 
+    furtherAdverts: function () {
+        var hasMore = this.props.hasMore || false;
+        console.log("Has more?: " + hasMore);
+
+        if (!hasMore) {
+            return null;
+        }
+
+        var onHasMoreClicked = this.props.onHasMoreClicked;
+        return (
+            <a href="javascript:void(0)" onClick={onHasMoreClicked} className="list-group-item">
+                <p className="list-group-item-text">
+                    <h3>Далее</h3>
+                </p>
+
+            </a>
+        )
+    },
+
+    getPosts: function(){
+        var items = this.props.items || [];
         var showFull = this.props.showFull;
 
         var posts = items.map(function (item) {
@@ -476,12 +484,16 @@ var Posts = React.createClass({
             );
         });
 
+        return posts;
+    },
+
+    render: function () {
         return (
-            <div style={style}>
+            <div style={this.getShownStyle()}>
                 <div className="list-group">
-                    {posts}
+                    {this.getPosts()}
                     <br/>
-                    {hasMoreElement}
+                    {this.furtherAdverts()}
                 </div>
             </div>
         );

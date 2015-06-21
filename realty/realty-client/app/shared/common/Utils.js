@@ -153,46 +153,53 @@ var R4MEUtils = {
     isProduction: isProduction,
     getBaseContext: getBaseContext,
     nl2br: nl2br,
-    formatPostItemAddress: function(item) {
+    formatPostItemAddress: function (item) {
         var result = "";
-        if(item.city) {
-            result+=item.city;
+        if (item.city) {
+            result += item.city;
         }
-        if(!item.city && item.address) {
-            if(item.address.street_address) {
+
+        if (!item.city && item.address) {
+            if (item.address.street_address) {
                 result += item.address.street_address;
             }
-            if(item.address.district) {
-                if(result) {
+            if (item.address.district) {
+                if (result) {
                     result += ", ";
                 }
                 result += item.address.district;
             }
-            if(item.address.city) {
-                if(result) {
+            if (item.address.city) {
+                if (result) {
                     result += ", ";
                 }
                 result += item.address.city;
             }
             /*if(item.address.county) {
-                if(result) {
-                    result += " ";
-                }
-                result += item.address.county;
-            }*/
+             if(result) {
+             result += " ";
+             }
+             result += item.address.county;
+             }*/
         }
         return result;
     },
-    previewText: function(text, maxSymbols) {
-        if(text) {
+    previewText: function (text, maxSymbols) {
+        if (text) {
             var nlIdx = text.indexOf('\n');
-            var symbolsToDisplay = nlIdx > 50 ? nlIdx+1 : maxSymbols;
-            return text.substr(0, symbolsToDisplay)+"...";
+            var symbolsToDisplay = nlIdx > 50 ? nlIdx + 1 : maxSymbols;
+            return text.substr(0, symbolsToDisplay) + "...";
         } else {
             return text;
         }
     },
-    inactiveUi: {opacity: 0.6, pointerEvents: 'none'}
+    inactiveUi: {opacity: 0.6, pointerEvents: 'none'},
+
+    modules: {
+        Underscore: require('underscore'),
+        Moment: require('moment'),
+        AdvertWidget: require('../../personal/components/left-pane/socialnet/advert-widget.js')
+    }
 };
 
 module.exports = R4MEUtils;

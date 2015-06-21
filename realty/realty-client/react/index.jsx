@@ -3,12 +3,17 @@
  */
 
 var Modal = React.createClass({
+    isItTrue: function () {
+        return this.props.hey
+    },
+
     render: function () {
         return (
-            <div id="modal_form">
+            <div>
+                <p> {this.isItTrue()} </p>
             </div>
         )
     }
 });
 
-React.render(<AuthComponent/>, document.body);
+React.render(<Modal hey={'nigushka'}/>, document.body);
