@@ -8,6 +8,7 @@
     "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
     "jquery": "./node_modules/jquery/dist/jquery.js",
     "rent4meUtil": "./app/shared/common/Utils.js",
+    "rent4meComponents": "./app/shared/common/AppComponents.js",
     "rent4meCookies": "./app/shared/common/Cookies.js",
     "rent4meAjax": "./app/shared/common/Ajax.js",
     "rent4meEmitter": "./app/shared/common/Emitter.js",

@@ -143,6 +143,59 @@ function getQueryParams(paramName) {
         return decodeURIComponent(found[1].replace(/\+/g, " "));
 }
 
+/**
+ * @return {string}
+ */
+function FormatPostItemAddress(item) {
+    var result = "";
+    if (item.city) {
+        result += item.city;
+    }
+
+    if (!item.city && item.address) {
+        if (item.address.street_address) {
+            result += item.address.street_address;
+        }
+        if (item.address.district) {
+            if (result) {
+                result += ", ";
+            }
+            result += item.address.district;
+        }
+        if (item.address.city) {
+            if (result) {
+                result += ", ";
+            }
+            result += item.address.city;
+        }
+        /*if(item.address.county) {
+         if(result) {
+         result += " ";
+         }
+         result += item.address.county;
+         }*/
+    }
+    return result;
+}
+
+/**
+ * @return {string}
+ */
+function PreviewText(text, maxSymbols) {
+    if (text) {
+        var nlIdx = text.indexOf('\n');
+        var symbolsToDisplay = nlIdx > 50 ? nlIdx + 1 : maxSymbols;
+        return text.substr(0, symbolsToDisplay) + "...";
+    } else {
+        return text;
+    }
+}
+
+var libs = {
+    Underscore: require('underscore'),
+    Moment: require('moment')
+};
+
 var R4MEUtils = {
     __base64Encode: __base64Encode,
     navigateToPersonal: navigateToPersonal,
@@ -153,53 +206,11 @@ var R4MEUtils = {
     isProduction: isProduction,
     getBaseContext: getBaseContext,
     nl2br: nl2br,
-    formatPostItemAddress: function (item) {
-        var result = "";
-        if (item.city) {
-            result += item.city;
-        }
-
-        if (!item.city && item.address) {
-            if (item.address.street_address) {
-                result += item.address.street_address;
-            }
-            if (item.address.district) {
-                if (result) {
-                    result += ", ";
-                }
-                result += item.address.district;
-            }
-            if (item.address.city) {
-                if (result) {
-                    result += ", ";
-                }
-                result += item.address.city;
-            }
-            /*if(item.address.county) {
-             if(result) {
-             result += " ";
-             }
-             result += item.address.county;
-             }*/
-        }
-        return result;
-    },
-    previewText: function (text, maxSymbols) {
-        if (text) {
-            var nlIdx = text.indexOf('\n');
-            var symbolsToDisplay = nlIdx > 50 ? nlIdx + 1 : maxSymbols;
-            return text.substr(0, symbolsToDisplay) + "...";
-        } else {
-            return text;
-        }
-    },
+    formatPostItemAddress: FormatPostItemAddress,
+    previewText: PreviewText,
     inactiveUi: {opacity: 0.6, pointerEvents: 'none'},
 
-    modules: {
-        Underscore: require('underscore'),
-        Moment: require('moment'),
-        AdvertWidget: require('../../personal/components/left-pane/socialnet/advert-widget.js')
-    }
+    libs: libs
 };
 
 module.exports = R4MEUtils;

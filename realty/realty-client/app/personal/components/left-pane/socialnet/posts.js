@@ -4,8 +4,10 @@
 var React = require('react');
 
 var Utils = require('rent4meUtil');
-var _ = Utils.modules.Underscore;
-var moment = Utils.modules.Moment;
+var App = require('rent4meComponents');
+
+var _ = Utils.libs.Underscore;
+var moment = Utils.libs.Moment;
 var accounting = require('accounting');
 var assign = require('object-assign');
 var UserStore = require('../../../../shared/stores/UserStore');
@@ -13,7 +15,7 @@ var UserActions = require('../../../../shared/actions/UserActions');
 var ReactBootstrap = require('react-bootstrap');
 var Carousel = ReactBootstrap.Carousel;
 var CarouselItem = ReactBootstrap.CarouselItem;
-var AdvertWidget = Utils.modules.AdvertWidget;
+var AdvertWidget = App.AdvertWidget;
 
 var Router = require('react-router');
 var Link = Router.Link;
