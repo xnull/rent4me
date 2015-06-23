@@ -15,12 +15,12 @@ module.exports = {
         }
 
         if (item.data_source === 'INTERNAL') {
-            if (!item.photos) return this.noImage;
+            if (!item.photos || _.isEmpty(item.photos)) return this.noImage;
 
             return _.first(item.photos).small_thumbnail_url;
         }
 
-        if (!item.external_images) {
+        if (!item.external_images || _.isEmpty(item.external_images) ) {
             return this.noImage;
         }
 
