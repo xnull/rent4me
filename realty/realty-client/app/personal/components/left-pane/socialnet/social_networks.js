@@ -1,13 +1,14 @@
 /**
  * Created by dionis on 04/01/15.
  */
-var React = require('react');
 var Util = require('rent4meUtil');
-var Ajax = require('rent4meAjax');
-var assign = require('object-assign');
+var AppCfg = require(Util.libs.AppComponentsName);
 
-var SocialNetStore = require('../../../../shared/stores/SocialNetStore');
-var SocialNetActions = require('../../../../shared/actions/SocialNetActions');
+var React = Util.libs.React;
+var assign = Util.libs.ObjectAssign;
+
+var SocialNetStore = AppCfg.SocialNetStore;
+var SocialNetActions = AppCfg.SocialNetActions;
 
 var RoomsCount = require('../../../../shared/ui/rooms-count');
 var PriceRange = require('../../../../shared/ui/price-range');
@@ -20,8 +21,8 @@ var SearchTermBubble = require('../../../../shared/ui/search-term-bubble');
 var AddressUtils = require('../../../../shared/common/AddressUtils');
 var JSON2 = require('JSON2');
 
-var _ = require('underscore');
-var moment = require('moment');
+var _ = Util.libs.Underscore;
+var moment = Util.libs.Moment;
 var Posts = require('./posts');
 var NavActions = require('../../../../shared/actions/NavActions');
 var MetrosActions = require('../../../../shared/actions/MetrosActions');

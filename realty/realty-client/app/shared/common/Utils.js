@@ -192,8 +192,16 @@ function PreviewText(text, maxSymbols) {
 }
 
 var libs = {
+    //Because of testing, there are errors if I would link to react components
+    AppComponentsName:  'rent4meComponents',
+
+    React: require('react'),
     Underscore: require('underscore'),
-    Moment: require('moment')
+    Moment: require('moment'),
+    ObjectAssign: require('object-assign'),
+    Accounting: require('accounting'),
+    ReactBootstrap: require('react-bootstrap'),
+    ReactRouter: require('react-router')
 };
 
 var R4MEUtils = {

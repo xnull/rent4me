@@ -4,20 +4,20 @@
 var React = require('react');
 
 var Utils = require('rent4meUtil');
-var App = require('rent4meComponents');
+var App = require(Utils.libs.AppComponentsName);
 
 var _ = Utils.libs.Underscore;
 var moment = Utils.libs.Moment;
-var accounting = require('accounting');
-var assign = require('object-assign');
-var UserStore = require('../../../../shared/stores/UserStore');
-var UserActions = require('../../../../shared/actions/UserActions');
-var ReactBootstrap = require('react-bootstrap');
+var accounting = Utils.libs.Accounting;
+var assign = Utils.libs.ObjectAssign;
+var UserStore = App.UserStore;
+var UserActions = App.UserActions;
+var ReactBootstrap = Utils.libs.ReactBootstrap;
 var Carousel = ReactBootstrap.Carousel;
 var CarouselItem = ReactBootstrap.CarouselItem;
 var AdvertWidget = App.AdvertWidget;
 
-var Router = require('react-router');
+var Router = Utils.libs.ReactRouter;
 var Link = Router.Link;
 
 var AdsItem = React.createClass({
