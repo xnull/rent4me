@@ -467,7 +467,7 @@ var Posts = React.createClass({
 
         var onHasMoreClicked = this.props.onHasMoreClicked;
         return (
-            <a className="btn btn-default" href="javascript:void(0)" onClick={onHasMoreClicked}>
+            <a className="btn btn-default center-block" href="javascript:void(0)" onClick={onHasMoreClicked}>
                 <h3>Далее</h3>
             </a>
         )
@@ -488,14 +488,19 @@ var Posts = React.createClass({
 
     render: function () {
         return (
-            <div className="row">
-                <div style={this.getShownStyle()}>
-                    <div className="list-group">
-                        {this.getPosts()}
+            <div>
+                <div className="row">
+                    <div style={this.getShownStyle()}>
+                        <div className="list-group">
+                            {this.getPosts()}
+                        </div>
                     </div>
                 </div>
-                <br/>
-                {this.furtherAdverts()}
+                <div className="row">
+                    <div className="col-xs-12 clo-sm-12 col-md-3 col-md-offset-9">
+                        {this.furtherAdverts()}
+                    </div>
+                </div>
             </div>
         );
     }
