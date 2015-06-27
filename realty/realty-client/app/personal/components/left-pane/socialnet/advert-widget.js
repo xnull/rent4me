@@ -36,11 +36,11 @@ var AdvertWidget = React.createClass({
     },
 
     roomCount: function () {
-        return this.props.item.roomCount ? this.props.item.roomCount : 'См. в описании'
+        return this.props.item.room_count ? this.props.item.room_count : '?'
     },
 
     price: function () {
-        return this.props.item.rental_fee ? accounting.formatNumber(this.props.item.rental_fee, 0, " ") : 'См. в описании'
+        return this.props.item.rental_fee ? accounting.formatNumber(this.props.item.rental_fee, 0, " ") : '?'
     },
 
     render: function () {
@@ -48,35 +48,39 @@ var AdvertWidget = React.createClass({
         var metros = advertData.metros;
 
         return (
-            <div className="col-sm-3 col-md-3">
+            <div className="col-sm-4 col-md-4">
                 <div className="panel panel-default">
-                    <a href={'#/advertData/' + advertData.id}>
+                    <a href={'#/advert/' + advertData.id}>
                         <img className="img-responsive center-block"
-                             style={{width: '100%', height: '200px', display: 'block', borderBottom: '1px dotted'}}
+                             style={{width: '100%', height: '250px', display: 'block', borderBottom: '1px solid'}}
                              src={helper.getFirstImageUrl(advertData)} alt="..."/>
                     </a>
 
-                    <div className="panel-body">
-                        <div className="caption">
-                            <div className="row row-fluid">
-                                <div className="col-xs-11"><h5>{helper.getAddress(advertData)}</h5></div>
-                                <div className="col-xs-11">
-                                    <h6>Метро {helper.getMetroList(metros)}</h6>
-                                </div>
+                    <div className="panel-body" style={{paddingTop: '10px', borderBottom: '1px solid #EFEFEF', paddingBottom: '5px'}}>
+                        <div className="row row-fluid">
+                            <div className="col-xs-11">
+                                <h5
+                                    style={{whiteSpace: 'nowrap', marginTop: '0px', marginBottom: '0px'}}>
+                                    {helper.getAddress(advertData)}
+                                </h5>
                             </div>
-                            <div className="row row-fluid">
-                                <div className="col-xs-12">
-                                    <div style={{borderTop: '1px dotted', marginBottom: '10px', whiteSpace: 'nowrap'}}></div>
-                                </div>
-                                /*<div className="col-xs-4 text-center" style={{borderRight: '1px dotted', whiteSpace: 'nowrap'}}>
-                                    Комнат: {this.roomCount()}
-                                </div>
-                                <div className="col-xs-4 text-center" style={{borderRight: '1px dotted', whiteSpace: 'nowrap'}}>
-                                    Цена: {this.price()}
-                                </div>
-                                <div className="col-xs-4 text-center">
-                                    Тел.: {helper.getPhone(advertData)}
-                                </div>*/
+                            <div className="col-xs-11">
+                                <h6 style={{whiteSpace: 'nowrap', marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                                    Метро {helper.getMetroList(metros)}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="panel-body" style={{paddingTop: '5px', paddingBottom: '10px'}}>
+                        <div className="row row-fluid text-center">
+                            <div className="col-xs-5">
+                                <p style={{marginBottom: '5px'}}>Цена</p>
+                                <h4 style={{color: 'rgba(236, 75, 17, 0.8)', marginBottom: '0px', marginTop: '0px'}}>{this.price()}</h4>
+                            </div>
+                            <div className="col-xs-5 col-xs-offset-2">
+                                <p style={{marginBottom: '5px'}}>Комнат</p>
+                                <h4 style={{color: '#000', marginBottom: '0px', marginTop: '0px'}}>{this.roomCount()}</h4>
                             </div>
                         </div>
                     </div>

@@ -488,7 +488,7 @@ var Posts = React.createClass({
 
     render: function () {
         return (
-            <div>
+            <div className="row">
                 <div style={this.getShownStyle()}>
                     <div className="list-group">
                         {this.getPosts()}

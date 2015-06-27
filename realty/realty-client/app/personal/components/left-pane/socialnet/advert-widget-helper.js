@@ -39,7 +39,7 @@ module.exports = {
         }
 
         return metros.map(function (metro) {
-            return metro.station_name;
+            return metro.station_name + " ";
         });
     },
 
