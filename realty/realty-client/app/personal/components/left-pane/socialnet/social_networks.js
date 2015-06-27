@@ -2,7 +2,7 @@
  * Created by dionis on 04/01/15.
  */
 var Util = require('rent4meUtil');
-var AppCfg = require(Util.libs.AppComponentsName);
+var AppCfg = require('rent4meComponents');
 
 var React = Util.libs.React;
 var assign = Util.libs.ObjectAssign;

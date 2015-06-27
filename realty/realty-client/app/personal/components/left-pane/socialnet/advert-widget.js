@@ -48,35 +48,37 @@ var AdvertWidget = React.createClass({
         var metros = advertData.metros;
 
         return (
-            <div className="col-sm-4 col-md-4">
+            <div className="col-sm-3 col-md-3">
                 <div className="panel panel-default">
-                    <img style={{maxWidth: '100%'}} src={helper.getFirstImageUrl(advertData)} alt="..."/>
+                    <a href={'#/advertData/' + advertData.id}>
+                        <img className="img-responsive center-block"
+                             style={{width: '100%', height: '200px', display: 'block', borderBottom: '1px dotted'}}
+                             src={helper.getFirstImageUrl(advertData)} alt="..."/>
+                    </a>
 
                     <div className="panel-body">
-                        <a href={'#/advertData/' + advertData.id}>
-                            <div className="caption">
-                                <div className="row row-fluid">
-                                    <div className="col-xs-11"><h4>{helper.getAddress(advertData)}</h4></div>
-                                    <div className="col-xs-11">
-                                        <h5>Метро {helper.getMetroList(metros)}</h5>
-                                    </div>
-                                </div>
-                                <div className="row row-fluid">
-                                    <div className="col-xs-12">
-                                        <div style={{borderTop: '1px dotted', marginBottom: '10px'}}></div>
-                                    </div>
-                                    <div className="col-xs-4 text-center" style={{borderRight: '1px dotted'}}>
-                                        <strong>Комнат: {this.roomCount()}</strong>
-                                    </div>
-                                    <div className="col-xs-4 text-center" style={{borderRight: '1px dotted'}}>
-                                        <strong>Цена: {this.price()}</strong>
-                                    </div>
-                                    <div className="col-xs-4 text-center">
-                                        <strong>Тел.: {helper.getPhone(advertData)}</strong>
-                                    </div>
+                        <div className="caption">
+                            <div className="row row-fluid">
+                                <div className="col-xs-11"><h5>{helper.getAddress(advertData)}</h5></div>
+                                <div className="col-xs-11">
+                                    <h6>Метро {helper.getMetroList(metros)}</h6>
                                 </div>
                             </div>
-                        </a>
+                            <div className="row row-fluid">
+                                <div className="col-xs-12">
+                                    <div style={{borderTop: '1px dotted', marginBottom: '10px', whiteSpace: 'nowrap'}}></div>
+                                </div>
+                                /*<div className="col-xs-4 text-center" style={{borderRight: '1px dotted', whiteSpace: 'nowrap'}}>
+                                    Комнат: {this.roomCount()}
+                                </div>
+                                <div className="col-xs-4 text-center" style={{borderRight: '1px dotted', whiteSpace: 'nowrap'}}>
+                                    Цена: {this.price()}
+                                </div>
+                                <div className="col-xs-4 text-center">
+                                    Тел.: {helper.getPhone(advertData)}
+                                </div>*/
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

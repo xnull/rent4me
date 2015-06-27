@@ -17,14 +17,14 @@ module.exports = {
         if (item.data_source === 'INTERNAL') {
             if (!item.photos || _.isEmpty(item.photos)) return this.noImage;
 
-            return _.first(item.photos).small_thumbnail_url;
+            return _.first(item.photos).full_picture_url;
         }
 
         if (!item.external_images || _.isEmpty(item.external_images) ) {
             return this.noImage;
         }
 
-        return _.first(item.external_images).small_thumbnail_url;
+        return _.first(item.external_images).full_picture_url;
     },
 
     getAddress: function (advertData) {

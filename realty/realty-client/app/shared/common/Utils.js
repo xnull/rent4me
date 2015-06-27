@@ -193,7 +193,7 @@ function PreviewText(text, maxSymbols) {
 
 var libs = {
     //Because of testing, there are errors if I would link to react components
-    AppComponentsName:  'rent4meComponents',
+    AppComponentsName: 'rent4meComponents',
 
     React: require('react'),
     Underscore: require('underscore'),

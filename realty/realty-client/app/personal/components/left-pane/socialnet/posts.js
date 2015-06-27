@@ -4,7 +4,7 @@
 var React = require('react');
 
 var Utils = require('rent4meUtil');
-var App = require(Utils.libs.AppComponentsName);
+var App = require('rent4meComponents');
 
 var _ = Utils.libs.Underscore;
 var moment = Utils.libs.Moment;
@@ -393,8 +393,8 @@ var Post = React.createClass({
 
         var showFull = this.props.showFull || false;
 
-        if(!showFull){
-            return <AdvertWidget item={this.props.item} />
+        if (!showFull) {
+            return <AdvertWidget item={this.props.item}/>
         }
 
         var gallery = <ImagePreviews item={item} showFull={showFull}/>;
@@ -467,16 +467,13 @@ var Posts = React.createClass({
 
         var onHasMoreClicked = this.props.onHasMoreClicked;
         return (
-            <a href="javascript:void(0)" onClick={onHasMoreClicked} className="list-group-item">
-                <p className="list-group-item-text">
-                    <h3>Далее</h3>
-                </p>
-
+            <a className="btn btn-default" href="javascript:void(0)" onClick={onHasMoreClicked}>
+                <h3>Далее</h3>
             </a>
         )
     },
 
-    getPosts: function(){
+    getPosts: function () {
         var items = this.props.items || [];
         var showFull = this.props.showFull;
 
@@ -491,12 +488,14 @@ var Posts = React.createClass({
 
     render: function () {
         return (
-            <div style={this.getShownStyle()}>
-                <div className="list-group">
-                    {this.getPosts()}
-                    <br/>
-                    {this.furtherAdverts()}
+            <div>
+                <div style={this.getShownStyle()}>
+                    <div className="list-group">
+                        {this.getPosts()}
+                    </div>
                 </div>
+                <br/>
+                {this.furtherAdverts()}
             </div>
         );
     }
