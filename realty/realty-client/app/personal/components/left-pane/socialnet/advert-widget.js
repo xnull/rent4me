@@ -48,7 +48,7 @@ var AdvertWidget = React.createClass({
         var metros = advertData.metros;
 
         return (
-            <div className="col-sm-4 col-md-4">
+            <div className="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                 <div className="panel panel-default">
                     <a href={'#/advert/' + advertData.id}>
                         <img className="img-responsive center-block"
