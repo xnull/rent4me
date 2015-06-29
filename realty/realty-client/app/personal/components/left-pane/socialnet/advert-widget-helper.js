@@ -20,7 +20,7 @@ module.exports = {
             return _.first(item.photos).full_picture_url;
         }
 
-        if (!item.external_images || _.isEmpty(item.external_images) ) {
+        if (!item.external_images || _.isEmpty(item.external_images)) {
             return this.noImage;
         }
 
@@ -32,15 +32,17 @@ module.exports = {
     },
 
     getMetroList: function (metros) {
-        var hasMetros = _.size(metros) > 0;
+        var hasMetros = _.size(metros) > 0;qqq
 
         if (!hasMetros) {
             return this.unrecognizedMetro;
         }
 
-        return metros.map(function (metro) {
-            return metro.station_name + " ";
+        var result = metros.map(function (metro) {
+            return metro.station_name;
         });
+
+        return result.join('; ');
     },
 
     getPhone: function (item) {

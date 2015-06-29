@@ -18,9 +18,9 @@ describe("An advert helper", function () {
         expect(advertHelper.getAddress(advertData)).toBe('Moscow');
     });
 
-    it("getMEtros must returns metro list", function () {
+    it("getMetros must returns metro list", function () {
         var metroList = [{station_name: 'metro1'}, {station_name: 'metro2'}];
-        expect(advertHelper.getMetroList(metroList)).toEqual(['metro1', 'metro2']);
+        expect(advertHelper.getMetroList(metroList)).toEqual('metro1; metro2');
     });
 
     it("getPhone must returns the phone number", function () {
