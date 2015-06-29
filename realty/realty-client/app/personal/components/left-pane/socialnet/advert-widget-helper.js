@@ -32,7 +32,7 @@ module.exports = {
     },
 
     getMetroList: function (metros) {
-        var hasMetros = _.size(metros) > 0;qqq
+        var hasMetros = _.size(metros) > 0;
 
         if (!hasMetros) {
             return this.unrecognizedMetro;
