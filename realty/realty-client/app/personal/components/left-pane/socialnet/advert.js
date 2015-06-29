@@ -15,9 +15,7 @@ var NOT_INITIALIZED_YET = 'NOT_LOADED_YET';
 var Advert = React.createClass({
     mixins: [Router.State, Router.Navigation],
 
-    statics: {
-
-    },
+    statics: {},
 
     getInitialState: function () {
         var that = this;
@@ -27,7 +25,7 @@ var Advert = React.createClass({
         }
     },
 
-    componentWillReceiveProps: function() {
+    componentWillReceiveProps: function () {
         //will be triggered on reload only
         SocialNetActions.findPost(this.getParams().id);
         SocialNetActions.findSimilarPosts(this.getParams().id);
@@ -45,7 +43,7 @@ var Advert = React.createClass({
         SocialNetStore.removeSimilarPostsListener(this._onSimilarPostChange);
     },
 
-    _onSimilarPostChange: function() {
+    _onSimilarPostChange: function () {
         console.log("On similar post change:");
         var that = this;
         var similarForPost = SocialNetStore.getSimilarForPost(that.getParams().id);
@@ -58,12 +56,12 @@ var Advert = React.createClass({
         this.setState({post: SocialNetStore.getPostById(that.getParams().id)});
     },
 
-    _smartReturnToSearch: function() {
+    _smartReturnToSearch: function () {
         //вернуться к поиску с запоминанием позиции в ней
         var referrer = document.referrer || '';
-        console.log('referrer: '+referrer);
+        console.log('referrer: ' + referrer);
         var historyLength = window.history.length;
-        if((referrer.indexOf('://rent4.me') != -1 || referrer.indexOf('://localhost') != -1 || !referrer) && historyLength > 1) {
+        if ((referrer.indexOf('://rent4.me') != -1 || referrer.indexOf('://localhost') != -1 || !referrer) && historyLength > 1) {
             console.log('returning back via history');
             console.log('History length: ' + historyLength);
             window.history.back();
@@ -93,33 +91,26 @@ var Advert = React.createClass({
         }
 
         var similarPosts = this.state.similarPosts;
-        var similarPostsDisplay;
-        if(similarPosts) {
+        var similarPostsDisplay = null;
+        if (similarPosts) {
             console.log("Similar posts that will be displayed:");
             console.log(similarPosts);
             similarPostsDisplay = <div>
-                <h3 className="center-block">Похожие объявления</h3>
+                <h3 className="center-block">Похожие объя ления</h3>
                 <Posts items={similarPosts} shown={true} hasMore={false}
-                    showFull={false}
-                    onHasMoreClicked={void(0)}/>
+                       showFull={false}
+                       onHasMoreClicked={void(0)}/>
                 <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться назад</btn>
             </div>;
-        } else {
-            similarPostsDisplay = null;
         }
 
         return (
             <div>
-                <div className="panel">
-                    <div className="panel-body" style={{backgroundColor: 'rgba(9, 45, 76, 0.2)'}}>
-                        {content}
-                    </div>
-                    <div className="panel-footer">
-                        <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться назад</btn>
-                        <br/>
-                        {similarPostsDisplay}
-                    </div>
-                </div>
+                {content}
+                <br/>
+                <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться назад</btn>
+                <br/>
+                {similarPostsDisplay}
             </div>
         );
     }

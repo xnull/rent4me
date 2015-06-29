@@ -396,7 +396,7 @@ var Post = React.createClass({
 
         if (!showFull) {
             return <AdvertWidget item={this.props.item}/>
-        }else {
+        } else {
             return <AdvertInfo item={this.props.item}/>
         }
 
@@ -494,9 +494,7 @@ var Posts = React.createClass({
             <div>
                 <div className="row">
                     <div style={this.getShownStyle()}>
-                        <div className="list-group">
-                            {this.getPosts()}
-                        </div>
+                        {this.getPosts()}
                     </div>
                 </div>
                 <div className="row">

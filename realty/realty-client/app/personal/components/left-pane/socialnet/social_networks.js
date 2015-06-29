@@ -477,7 +477,7 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="panel">
-                    <div className="panel-body" style={{backgroundColor: 'rgba(9, 45, 76, 0.2)'}}>
+                    <div className="panel-body">
 
                         <form className="form-horizontal" role="form">
                             <div className='row'>

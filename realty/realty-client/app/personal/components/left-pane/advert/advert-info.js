@@ -1,9 +1,23 @@
 /**
+ * Advert info page
  * Created by null on 6/29/15.
  */
 var React = require('react');
 
 var AdvertInfo = React.createClass({
+    componentDidMount: function () {
+        this.initializeMap()
+    },
+
+    initializeMap: function () {
+        var mapOptions = {
+            center: new google.maps.LatLng(44.5403, -78.5463),
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(this.refs.googleMapComponent.getDOMNode(), mapOptions)
+    },
+
     render: function () {
         return (
             <div>
@@ -24,13 +38,13 @@ var AdvertInfo = React.createClass({
                                     </div>
 
                                     <!-- Конпки связи -->
-                                    <div className="col-xs-3 col-md-1">
-                                        <a className="btn btn-default" style={{padding: '12px'}}>Связаться</a>
+                                    <div className="col-xs-3 col-md-3 ">
+                                        <a className="btn btn-danger center-block" style={{padding: '12px'}}>Связаться</a>
                                     </div>
 
                                     <!-- Редактировать -->
-                                    <div className="col-xs-3 col-md-2 col-md-offset-6 text-center">
-                                        <a className="btn btn-primary">Исправить &nbsp;<img
+                                    <div className="col-xs-3 col-md-2 col-md-offset-3 text-center">
+                                        <a className="btn btn-default">Исправить &nbsp;<img
                                             src="https://cdn0.iconfinder.com/data/icons/ikooni-outline-free-basic/128/free-18-24.png"
                                             className="glyphicon glyphicon-picture"
                                             title="Помочь в распознавании объявленияя"
@@ -40,7 +54,7 @@ var AdvertInfo = React.createClass({
 
                                     <!-- Пожаловаться -->
                                     <div className="col-xs-3 col-md-2 text-center">
-                                        <a className="btn btn-danger">Пожаловаться&nbsp;<img
+                                        <a className="btn btn-default">Пожаловаться&nbsp;<img
                                             src="https://cdn0.iconfinder.com/data/icons/ikooni-outline-free-basic/128/free-18-24.png"
                                             className="glyphicon glyphicon-picture"
                                             title="Пожаловаться на объявление от агента"
@@ -72,7 +86,7 @@ var AdvertInfo = React.createClass({
 
                                     <div className="item">
                                         <img style={{maxWidth: '100%'}}
-                                             src="images/mike-leyland.jpg"
+                                             src="http://www.capsol.co.za/blog/wp-content/uploads/2012/05/luxury-camps-bay-holiday-accomodation.jpg"
                                              alt="..."/>
                                     </div>
                                 </div>
@@ -83,7 +97,7 @@ var AdvertInfo = React.createClass({
                                 <div className="col-md-12">
                                     <div className="panel panel-default" style={{height: '305px'}}>
                                         <div className="panel-body">
-                                            <div id="map-canvas"
+                                            <div id="map-canvas" ref="googleMapComponent"
                                                  style={{position: 'absolute', left: '0px', top: '0px', overflow: 'hidden', width: '100%', height: '100%', zIndex: '0'}}>
                                             </div>
                                         </div>
@@ -94,13 +108,13 @@ var AdvertInfo = React.createClass({
                                 <table className="table table-striped">
                                     <tbody>
                                     <tr>
-                                        <td className="col-md-12">Красноярская улица, Москва, город Москва</td>
+                                        <td className="col-md-12">Красноярская улица, Моск а, город Моск а</td>
                                     </tr>
                                     <tr>
                                         <td className="col-md-12">Комнат: 2</td>
                                     </tr>
                                     <tr>
-                                        <td className="col-md-12">Метро Петровско-разумовская</td>
+                                        <td className="col-md-12">Метро Петро ско-разумо ская</td>
                                     </tr>
                                     <tr>
                                         <td className="col-md-12">Цена: 30 000 рублей</td>
@@ -119,25 +133,25 @@ var AdvertInfo = React.createClass({
                                 <table className="table table-striped">
                                     <tbody>
                                     <tr>
-                                        <td>ОБЪЯВЛЕНИЕ С КОМИССИЕЙ за заселение. Комиссия посредника - 30% первого
-                                            арендного платежа единоразово
+                                        <td>ОБЪЯВЛЕНИЕ С КОМИССИЕЙ за заселение. Комиссия посредника - 30% пер ого
+                                            арендного платежа единоразо о
 
-                                            Сдается: 3х ком квартира
+                                            Сдается: 3х ком к артира
                                             Адрес: ул. Крауля дом 6
                                             Цена : 23 000 + к.у. (льготные)
 
-                                            Дополнительно: Квартира на 2 этаже в 9 этажном доме, хорошее состояние,
-                                            есть все
-                                            необходимое, мебель, бытовая техника. До центра 15 минут.
+                                            Дополнительно: К артира на 2 этаже 9 этажном доме, хорошее состояние,
+                                            есть се
+                                            необходимое, мебель, быто ая техника. До центра 15 минут.
 
-                                            Контактное лицо: Евгения
+                                            Контактное лицо: Е гения
 
                                             Телефон: 8-908-639-55-99
                                             #agent@apartments_ekb
 
-                                            Мы публикуем только реальные и проверенные эксклюзивные варианты с
+                                            Мы публикуем только реальные и про еренные эксклюзи ные арианты с
                                             комиссиями
-                                            посредников. Не более 15-20 шт. в день. Они тоже кому-то нужны. Вот тут
+                                            посреднико . Не более 15-20 шт. день. Они тоже кому-то нужны. Вот тут
                                             об этом
                                             подробно
                                             - http://vk.com/wall-51271270_47167.
@@ -319,7 +333,7 @@ var AdvertInfo = React.createClass({
                                     <!-- START panel footer-->
                                     <div className="panel-footer clearfix">
                                         <a href="javascript:void(0);" className="pull-left">
-                                            <small>Показать все комментарии</small>
+                                            <small>Показать се комментарии</small>
                                         </a>
                                     </div>
                                     <!-- END panel-footer-->

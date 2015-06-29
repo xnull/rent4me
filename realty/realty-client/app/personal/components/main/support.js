@@ -72,11 +72,11 @@ var Renter = React.createClass({
         var show = !this.state.isAuthorized;
 
         var nameInput = (<div className="row" style={{padding: 14}}>
-            <input type="text" placeholder="Имя" className="form-control" value={this.state.name} onChange={this._onNameChange}/>
+            <input type="text" placeholder="Имя (необязательно)" className="form-control" value={this.state.name} onChange={this._onNameChange}/>
         </div>);
 
         var emailInput = (<div className="row" style={{padding: 14}}>
-            <input type="text" placeholder="E-Mail" className="form-control" value={this.state.email} onChange={this._onEmailChange}/>
+            <input type="text" placeholder="E-Mail (необязательно)" className="form-control" value={this.state.email} onChange={this._onEmailChange}/>
         </div>);
 
         if(!show) {

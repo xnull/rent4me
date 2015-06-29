@@ -61,7 +61,7 @@ function AjaxBuilder(httpMethod) {
         resultingSettings['type'] = _httpMethod;
 
         if (_url) {
-            resultingSettings['url'] = _url;
+            resultingSettings['url'] = Utils.isLocalhost() ? 'http://rent4.me:18080' + _url : _url;
         }
 
         if (_data) {
