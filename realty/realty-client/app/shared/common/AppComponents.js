@@ -9,7 +9,8 @@ module.exports = {
     AppAjax: require('rent4meAjax'),
 
     SocialNetStore: require('../../shared/stores/SocialNetStore'),
-    SocialNetActions: require('../../shared/actions/SocialNetActions')
+    SocialNetActions: require('../../shared/actions/SocialNetActions'),
 
+    AdvertInfoPage : require('../../personal/components/left-pane/advert/advert-info')
 
 };

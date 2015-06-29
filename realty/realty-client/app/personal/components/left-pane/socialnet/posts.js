@@ -16,6 +16,7 @@ var ReactBootstrap = Utils.libs.ReactBootstrap;
 var Carousel = ReactBootstrap.Carousel;
 var CarouselItem = ReactBootstrap.CarouselItem;
 var AdvertWidget = App.AdvertWidget;
+var AdvertInfo = App.AdvertInfoPage;
 
 var Router = Utils.libs.ReactRouter;
 var Link = Router.Link;
@@ -395,6 +396,8 @@ var Post = React.createClass({
 
         if (!showFull) {
             return <AdvertWidget item={this.props.item}/>
+        }else {
+            return <AdvertInfo item={this.props.item}/>
         }
 
         var gallery = <ImagePreviews item={item} showFull={showFull}/>;

@@ -83,10 +83,10 @@ function Settings() {
 
     //init module info
     var len = this.projectSubModules.length;
-    for (var i = 0; i < len; i++) {
-        var moduleName = this.projectSubModules[i];
-        console.log('Initializing module ' + moduleName);
-        this.moduleInfo[moduleName] = {};
+    for (var x = 0; x < len; x++) {
+        var mName = this.projectSubModules[x];
+        console.log('Initializing module ' + mName);
+        this.moduleInfo[mName] = {};
     }
 
     for (var i = 0; i < len; i++) {
