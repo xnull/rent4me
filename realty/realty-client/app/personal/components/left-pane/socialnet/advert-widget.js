@@ -50,7 +50,7 @@ var AdvertWidget = React.createClass({
 
         return (
             <div className="list-group">
-                <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div className="col-xs-12 col-sm-4 col-md-3 col-lg-3">
                     <div className="panel panel-default">
                         <a href={'#/advert/' + advertData.id}>
                             <img className="img-responsive center-block"

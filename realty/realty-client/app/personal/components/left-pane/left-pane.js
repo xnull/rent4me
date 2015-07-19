@@ -1,6 +1,4 @@
 var React = require('react');
-var Ads = require('./ads');
-var SocialNet = require('./socialnet/socialnet');
 
 var Utils = require('../../../shared/common/Utils');
 var UserStore = require('../../../shared/stores/UserStore');

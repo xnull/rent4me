@@ -128,6 +128,7 @@ var tasks = new Tasks();
  * Наблюдение за исходниками и если они изменились, то производится пересборка проекта
  */
 gulp.task(tasks.watch, [tasks.connectServer], function () {
+
     gulp.src(settings.watchDirs)
         .pipe(plugins.watch(settings.watchDirs, function (files) {
                 buildNumber = __guid();
@@ -227,6 +228,7 @@ function build() {
         var moduleName = settings.projectSubModules[i];
         console.log('Building: ' + moduleName);
         var moduleInfo = settings.moduleInfo[moduleName];
+
         if (moduleName != '/start') {
             buildBrowserify(moduleInfo);
             cssBuild(moduleInfo);
@@ -240,7 +242,7 @@ function build() {
 }
 
 function buildStart(moduleInfo) {
-    buildBrowserify(moduleInfo);//build js stuff
+    var b = buildBrowserify(moduleInfo);//build js stuff
     //indexHtmlBuild(moduleInfo);
     fontsBuild(moduleInfo);
 
@@ -270,17 +272,23 @@ function buildStart(moduleInfo) {
     //simply copy all content of js
     gulp.src([moduleInfo['projectDir'] + "/js/*.*"])
         .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
+
+    return b;
 }
 
 function buildBrowserify(moduleInfo) {
-    var b = plugins.browserify();
-    b
-        .transform(plugins.to5ify)
-        .transform(plugins.reactify); // use the reactify transform
+    var b = plugins.browserify({
+        insertGlobals : true,
+        cache: {},
+        packageCache: {}
+    });
+    b.transform(plugins.to5ify).transform(plugins.reactify); // use the reactify transform
     b.add(moduleInfo['mainJsFile']);
     b.bundle()
         .pipe(plugins.source('main-'+buildNumber+'.js'))
         .pipe(gulp.dest(moduleInfo['buildDir'] + "/js"));
+
+    return b;
 }
 
 function cssBuild(moduleInfo) {

@@ -95,7 +95,7 @@ var Header = React.createClass({
                         </li>
 
                         <li>
-                            <a href='#/personal/cabinet' role='button'>Я арендатор</a>
+                            <a href='#/personal/cabinet' role='button'>Личный кабинет</a>
                         </li>
 
                         <li className={NavStore.isSupportSelected() ? 'active' : ''}>
