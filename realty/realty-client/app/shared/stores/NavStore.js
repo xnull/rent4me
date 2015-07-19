@@ -39,6 +39,14 @@ var NavStore = assign({}, EventEmitter.prototype, {
         return _currentPage == 'support';
     },
 
+    isChatSelected: function () {
+        return _currentPage == 'chat';
+    },
+
+    isCabinetSelected: function () {
+        return _currentPage == 'cabinet';
+    },
+
     /**
      * @param {function} callback
      */

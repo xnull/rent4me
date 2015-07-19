@@ -9,7 +9,7 @@ var UserStore = require('../../../shared/stores/UserStore');
 var FeedbackActions = require('../../../shared/actions/feedback-actions');
 
 var Renter = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             isAuthorized: AuthStore.hasCredentials(),
             email: '',
@@ -24,41 +24,41 @@ var Renter = React.createClass({
         AuthStore.addChangeListener(this._onAuthChange);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
         AuthStore.removeChangeListener(this._onAuthChange);
     },
 
-    _onAuthChange: function() {
+    _onAuthChange: function () {
         this.setState(assign({}, this.state, {
             isAuthorized: AuthStore.hasCredentials()
         }));
     },
 
-    _onTextChange: function(e) {
-      var value = e.target.value;
+    _onTextChange: function (e) {
+        var value = e.target.value;
         this.setState(assign({}, this.state, {
             text: value
         }));
     },
 
-    _onNameChange: function(e) {
+    _onNameChange: function (e) {
         var value = e.target.value;
         this.setState(assign({}, this.state, {
             name: value
         }));
     },
 
-    _onEmailChange: function(e) {
+    _onEmailChange: function (e) {
         var value = e.target.value;
         this.setState(assign({}, this.state, {
             email: value
         }));
     },
 
-    _onClick: function(e) {
-        console.log('Name: '+this.state.name);
-        console.log('Email: '+this.state.email);
-        console.log('Text: '+this.state.text);
+    _onClick: function (e) {
+        console.log('Name: ' + this.state.name);
+        console.log('Email: ' + this.state.email);
+        console.log('Text: ' + this.state.text);
         FeedbackActions.sendFeedback(this.state.name, this.state.email, this.state.text);
         this.setState(assign({}, this.state, {
             email: '',
@@ -72,21 +72,24 @@ var Renter = React.createClass({
         var show = !this.state.isAuthorized;
 
         var nameInput = (<div className="row" style={{padding: 14}}>
-            <input type="text" placeholder="Имя (необязательно)" className="form-control" value={this.state.name} onChange={this._onNameChange}/>
+            <input type="text" placeholder="Имя (необязательно)" className="form-control" value={this.state.name}
+                   onChange={this._onNameChange}/>
         </div>);
 
         var emailInput = (<div className="row" style={{padding: 14}}>
-            <input type="text" placeholder="E-Mail (необязательно)" className="form-control" value={this.state.email} onChange={this._onEmailChange}/>
+            <input type="text" placeholder="E-Mail (необязательно)" className="form-control" value={this.state.email}
+                   onChange={this._onEmailChange}/>
         </div>);
 
-        if(!show) {
+        if (!show) {
             emailInput = null;
             nameInput = null;
         }
 
-        var infoMessageDisplay = this.state.infoMessage ? <p className="alert alert-info">{this.state.infoMessage}</p> : null;
+        var infoMessageDisplay = this.state.infoMessage ?
+            <p className="alert alert-info">{this.state.infoMessage}</p> : null;
 
-        if(infoMessageDisplay) {
+        if (infoMessageDisplay) {
             return (
                 <div className="well">
                     {infoMessageDisplay}
@@ -94,20 +97,28 @@ var Renter = React.createClass({
             );
         } else {
             return (
-                <div className="well">
-                    <form className="form-horizontal" role="form">
-                        <h4>Обратная связь</h4>
-                        <div className="form-group" style={{padding: 14}}>
-                        {nameInput}
-                        {emailInput}
-                            <div className="row" style={{padding: 14}}>
-                                <textarea className="form-control" placeholder="Ваш вопрос" rows="3" value={this.state.text} onChange={this._onTextChange}/>
+                <div>
+                    <br/>
+
+                    <div className="well">
+                        <form className="form-horizontal" role="form">
+                            <h4>Обратная связь</h4>
+
+                            <div className="form-group" style={{padding: 14}}>
+                                {nameInput}
+                                {emailInput}
+                                <div className="row" style={{padding: 14}}>
+                                    <textarea className="form-control" placeholder="Ваш вопрос" rows="3"
+                                              value={this.state.text} onChange={this._onTextChange}/>
+                                </div>
                             </div>
-                        </div>
-                        <button className="btn btn-success pull-right" type="button" onClick={this._onClick}>Отправить</button>
-                    </form>
-                    <br/>
-                    <br/>
+                            <button className="btn btn-success pull-right" type="button" onClick={this._onClick}>
+                                Отправить
+                            </button>
+                        </form>
+                        <br/>
+                        <br/>
+                    </div>
                 </div>
             );
         }

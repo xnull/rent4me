@@ -79,7 +79,6 @@ var App = React.createClass({
 
 var route = (
     <Route path="/" handler={App}>
-        <Route name="user" path="user" handler={require('./left-pane/settings/user.js')}/>
         <Route name="landlord" path="user/landlord" handler={require('./left-pane/settings/landlord.js')}/>
         <Route name="renter" path="user/renter" handler={require('./left-pane/settings/renter.js')}/>
 

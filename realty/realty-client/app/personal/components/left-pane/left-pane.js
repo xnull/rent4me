@@ -40,45 +40,39 @@ var UserPanel = React.createClass({
     render: function () {
         var authorized = AuthStore.hasCredentials();
 
-        var style = authorized ? {} : {display: 'none'};
+        var hideUnathorized = authorized ? {} : {display: 'none'};
+        if (Utils.isLocalhost()){
+            hideUnathorized = {};
+        }
 
         var me = this.state.me || {};
 
-        var newMessagesCountDisplay = this.state.countOfNewMessages > 0 ? (<b className="badge badge-notification pull-right">{this.state.countOfNewMessages}</b>) : null;
+        var newMessagesCountDisplay = this.state.countOfNewMessages > 0 ? (
+            <b className="badge badge-notification pull-right">{this.state.countOfNewMessages}</b>) : null;
 
         return (
-            <div className="panel panel-default" style={style}>
-                <div className="panel-body">
-                    <h4>Пользователь</h4>
+            <div style={hideUnathorized}>
+                <div className="well well-sm">
+                    <div className="media">
+                        <a className="thumbnail pull-left" href="#">
+                            <img className="media-object" width="80" style={{height: 60}}/>
+                        </a>
 
-                    <div className="well well-sm">
-                        <div className="media">
-                            <a className="thumbnail pull-left" href="#">
-                                <img className="media-object" width="80" style={{height: 60}}/>
-                            </a>
-
-                            <div className="media-body">
-                                <h4 className="media-heading">{me.name}</h4>
-
-                                <br/>
-
-                                <div className="col-sm-12 col-md-12 col-xs-12">
-                                    <a className="btn btn-default center-block" href="#/user">Настройки</a>
-                                </div>
-
-                            </div>
+                        <div className="media-body">
+                            <h4 className="media-heading">{me.name}</h4>
 
                             <br/>
+                        </div>
 
-                            <div className="col-sm-12 col-md-12 col-xs-12">
-                                <a className="btn btn-default center-block" href="#/user/chats">
-                                    <b className="glyphicon glyphicon-envelope pull-left"></b>
-                                    Сообщения {newMessagesCountDisplay}
-                                </a>
-                            </div>
+                        <br/>
+
+                        <div className="col-sm-12 col-md-12 col-xs-12">
+                            <a className="btn btn-default center-block" href="#/user/chats">
+                                <b className="glyphicon glyphicon-envelope pull-left"></b>
+                                Сообщения {newMessagesCountDisplay}
+                            </a>
                         </div>
                     </div>
-
                 </div>
             </div>
         );

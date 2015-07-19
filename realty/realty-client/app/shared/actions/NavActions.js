@@ -35,6 +35,14 @@ var NavActions = {
 
     navigateToSupport: function () {
         navigateTo('support');
+    },
+
+    navigateToChat: function () {
+        navigateTo('chat');
+    },
+
+    navigateToCabinet: function () {
+        navigateTo('cabinet');
     }
 };
 

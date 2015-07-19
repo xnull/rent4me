@@ -9,6 +9,9 @@ var Chats = require('./chats');
 var ChatStore = require('../../../../shared/stores/ChatStore');
 var ChatActions = require('../../../../shared/actions/ChatActions');
 
+var NavActions = require('../../../../shared/actions/NavActions');
+var AuthStore = require('../../../../shared/stores/AuthStore');
+
 module.exports = React.createClass({
     getInitialState: function () {
         return {
@@ -18,12 +21,22 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function () {
+        NavActions.navigateToChat();
+        AuthStore.addChangeListener(this._onAuthChange);
+
         ChatStore.addChangeListener(this.myChatsListener);
         ChatActions.loadMyChats();
     },
 
     componentWillUnmount: function () {
+        AuthStore.removeChangeListener(this._onAuthChange);
         ChatStore.removeChangeListener(this.myChatsListener);
+    },
+
+    _onAuthChange: function() {
+        this.setState(assign({}, this.state, {
+            isAuthorized: AuthStore.hasCredentials()
+        }));
     },
 
     myChatsListener: function () {

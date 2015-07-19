@@ -44,6 +44,13 @@ var Header = React.createClass({
         this.setState(newState);//trigger update
     },
 
+    hiddenIfNotAuthorized: function () {
+        if (Utils.isLocalhost()){
+            return {};
+        }
+        return  AuthStore.hasCredentials() ? {} : {display: 'none'};
+    },
+
     render: function () {
 
         var authorized = AuthStore.hasCredentials();
@@ -56,12 +63,12 @@ var Header = React.createClass({
             logoutOrLoginButton = <AuthComponent displayItem={authorizationDisplayItem}/>;
         }
 
-        var hiddenIfNotAuthorized = authorized ? {} : {display: 'none'};
+        var hiddenIfNotAuthorized = this.hiddenIfNotAuthorized();
 
         return (
             <div className='navbar navbar-default header' style={{borderRadius: 0}}>
                 <div className='navbar-header'>
-                    <a className='navbar-brand' href='javascript:void(0)'>Rent for me</a>
+                    <img className='navbar-brand' style={{maxWidth: '100%'}} src="images/rent4me-icon.png"/>
 
                     <button type="button" className="navbar-toggle" data-toggle="collapse"
                             data-target="#navbar-collapse2">
@@ -94,15 +101,19 @@ var Header = React.createClass({
                             </ul>
                         </li>
 
-                        <li style={hiddenIfNotAuthorized}>
+                        <li style={hiddenIfNotAuthorized} className={NavStore.isCabinetSelected() ? 'active' : ''}>
                             <a href='#/user/cabinet' role='button'>Личный кабинет</a>
+                        </li>
+
+                        <li style={hiddenIfNotAuthorized} className={NavStore.isChatSelected() ? 'active' : ''}>
+                            <a href='#/user/chats' role='button'>Сообщения</a>
                         </li>
 
                         <li className={NavStore.isSupportSelected() ? 'active' : ''}>
                             <a href='#/support' role='button'>Поддержка</a>
                         </li>
 
-                        <li className={NavStore.isSupportSelected() ? 'active' : ''}>
+                        <li>
                             <a href="https://play.google.com/store/apps/details?id=rent4.me.rent" target="_blank">
                                 Мобильная версия
                             </a>
