@@ -63,7 +63,8 @@ var Header = React.createClass({
                 <div className='navbar-header'>
                     <a className='navbar-brand' href='javascript:void(0)'>Rent for me</a>
 
-                    <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
+                    <button type="button" className="navbar-toggle" data-toggle="collapse"
+                            data-target="#navbar-collapse2">
                         <span className="sr-only">Toggle navigation</span>
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
@@ -76,8 +77,10 @@ var Header = React.createClass({
                             <a href='#' role='button'>Поиск</a>
                         </li>
 
-                        <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? 'active dropdown' : 'dropdown'} style={style}>
-                            <a href='javascript:void(0)' className='dropdown-toggle' data-toggle='dropdown'>Мои объявления
+                        <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? 'active dropdown' : 'dropdown'}
+                            style={style}>
+                            <a href='javascript:void(0)' className='dropdown-toggle' data-toggle='dropdown'>Мои
+                                объявления
                                 <b className='caret'></b>
                             </a>
                             <ul className='dropdown-menu pull-right'>
@@ -91,8 +94,18 @@ var Header = React.createClass({
                             </ul>
                         </li>
 
+                        <li>
+                            <a href='#/personal/cabinet' role='button'>Я арендатор</a>
+                        </li>
+
                         <li className={NavStore.isSupportSelected() ? 'active' : ''}>
                             <a href='#/support' role='button'>Поддержка</a>
+                        </li>
+
+                        <li className={NavStore.isSupportSelected() ? 'active' : ''}>
+                            <a href="https://play.google.com/store/apps/details?id=rent4.me.rent" target="_blank">
+                                Мобильная версия
+                            </a>
                         </li>
 
                         <li>

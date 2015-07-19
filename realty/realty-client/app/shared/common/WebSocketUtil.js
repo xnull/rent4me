@@ -1,8 +1,6 @@
 var AuthStore = require('../stores/AuthStore');
 var SockJS = require('sockjs-client');
 var WebSocketMultiplexer = require('./WebSocketMultiplexClient');
-console.log("Multiplexer");
-console.log(WebSocketMultiplexer);
 
 var _socket = null;
 var _multiplexer = null;

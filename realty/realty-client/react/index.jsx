@@ -1,6 +1,7 @@
 /**
  *
  */
+"use strict";
 
 var Modal = React.createClass({
     isItTrue: function () {
@@ -8,6 +9,8 @@ var Modal = React.createClass({
     },
 
     render: function () {
+        var fun = (x) => {x};
+
         return (
             <div>
                 <p> {this.isItTrue()} </p>

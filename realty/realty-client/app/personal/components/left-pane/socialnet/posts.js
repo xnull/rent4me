@@ -260,7 +260,7 @@ var ImagePreviews = React.createClass({
         var firstImage = this.getFirstImage();
         var images = this.getImageUrls();
 
-        var carousel = images && images.length > 0 ? (
+        var getImageUrlssel = images && images.length > 0 ? (
             <div className="row">
                 <div className="col-xs-12">
                 </div>

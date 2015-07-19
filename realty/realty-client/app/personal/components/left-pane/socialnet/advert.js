@@ -96,19 +96,16 @@ var Advert = React.createClass({
             console.log("Similar posts that will be displayed:");
             console.log(similarPosts);
             similarPostsDisplay = <div>
-                <h3 className="center-block">Похожие объя ления</h3>
+                <h3 className="center-block">Похожие объявления</h3>
                 <Posts items={similarPosts} shown={true} hasMore={false}
                        showFull={false}
                        onHasMoreClicked={void(0)}/>
-                <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться назад</btn>
             </div>;
         }
 
         return (
             <div>
                 {content}
-                <br/>
-                <btn className="btn btn-primary center-block" onClick={this._smartReturnToSearch}>Вернуться назад</btn>
                 <br/>
                 {similarPostsDisplay}
             </div>

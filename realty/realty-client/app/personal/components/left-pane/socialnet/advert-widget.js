@@ -2,6 +2,7 @@
  * A widget of some advert
  * Created by null on 6/21/15.
  */
+var App = require('rent4meComponents');
 var React = require('react');
 var UserStore = require('../../../../shared/stores/UserStore');
 var UserActions = require('../../../../shared/actions/UserActions');

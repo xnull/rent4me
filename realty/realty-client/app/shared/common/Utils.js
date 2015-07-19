@@ -1,6 +1,8 @@
 /**
  * Created by dionis on 02/12/14.
  */
+'use strict';
+
 function nl2br(str) {
     var is_xhtml = true;
     //  discuss at: http://phpjs.org/functions/nl2br/
@@ -204,6 +206,30 @@ var libs = {
     ReactRouter: require('react-router')
 };
 
+function ifDefined(value, lambda) {
+    if(value){
+        return lambda()
+    }
+
+    return null;
+}
+
+function Optional(value) {
+    this.optional = value;
+
+    this.ifPresent = function(lambda) {
+        if (this.optional) {
+            lambda()
+        }
+    }
+}
+
+var OptionalFactory = {
+    create: function (value) {
+        return new Optional(value)
+    }
+};
+
 var R4MEUtils = {
     __base64Encode: __base64Encode,
     navigateToPersonal: navigateToPersonal,
@@ -217,6 +243,8 @@ var R4MEUtils = {
     formatPostItemAddress: FormatPostItemAddress,
     previewText: PreviewText,
     inactiveUi: {opacity: 0.6, pointerEvents: 'none'},
+    Optional: OptionalFactory.create,
+    IfDefined: ifDefined,
 
     libs: libs
 };

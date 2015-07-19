@@ -1,8 +1,9 @@
 /**
  * Created by null on 6/21/15.
  */
-var _ = require('underscore');
 var Utils = require('rent4meUtil');
+var _ = Utils.libs.Underscore;
+var accounting = Utils.libs.Accounting;
 
 module.exports = {
     noImage: '/personal/images/not-available.jpeg',
@@ -27,8 +28,16 @@ module.exports = {
         return _.first(item.external_images).full_picture_url;
     },
 
-    getAddress: function (advertData) {
-        return Utils.formatPostItemAddress(advertData);
+    getAddress: function (item) {
+        return Utils.formatPostItemAddress(item);
+    },
+
+    getPrice: function(item){
+        return item.rental_fee ? accounting.formatNumber(item.rental_fee, 0, " ") : 'См. в описании'
+    },
+
+    getRoomCount: function(item){
+        return item.room_count ? item.room_count : 'См. в описании'
     },
 
     getMetroList: function (metros) {

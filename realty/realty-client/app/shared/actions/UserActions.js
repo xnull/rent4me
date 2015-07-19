@@ -141,8 +141,6 @@ var UserActions = {
         }
         var myProfile = UserStore.getMyProfile();
         if (_.isEmpty(myProfile)) {
-            console.log('My profile is empty. Loading.');
-            console.log(myProfile);
             this.loadMyProfile();
         }
     }
