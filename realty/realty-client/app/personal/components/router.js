@@ -20,6 +20,7 @@ var WebSocketUtil = require('../../shared/common/WebSocketUtil');
 var Analytics = require('../../shared/common/analytics.js');
 
 var AdvertPage = require('./left-pane/socialnet/advert');
+var Cabinet = require('./cabinet/cabinet-component');
 
 /**
  * Расписано как надо юзать реакт компоненты через browserify:
@@ -87,6 +88,8 @@ var route = (
         <Route name="chat" path="user/chat" handler={require('./left-pane/chats/chat')}/>
         <Route name="newMessageInChat" path="user/chats/newMessage" handler={require('./left-pane/chats/newMessage')}/>
         <Route name="advert" path="advert/:id" handler={AdvertPage}/>
+
+        <Route name="cabinet" path="user/cabinet" handler={Cabinet}/>
 
         <DefaultRoute handler={require('./left-pane/socialnet/social_networks')}/>
     </Route>

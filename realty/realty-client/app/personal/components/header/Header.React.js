@@ -1,4 +1,5 @@
 /**
+ * Header
  * Created by dionis on 08/12/14.
  */
 var React = require('react');
@@ -55,11 +56,10 @@ var Header = React.createClass({
             logoutOrLoginButton = <AuthComponent displayItem={authorizationDisplayItem}/>;
         }
 
-
-        var style = authorized ? {} : {display: 'none'};
+        var hiddenIfNotAuthorized = authorized ? {} : {display: 'none'};
 
         return (
-            <div className='navbar navbar-default header'>
+            <div className='navbar navbar-default header' style={{borderRadius: 0}}>
                 <div className='navbar-header'>
                     <a className='navbar-brand' href='javascript:void(0)'>Rent for me</a>
 
@@ -78,7 +78,7 @@ var Header = React.createClass({
                         </li>
 
                         <li className={(NavStore.isLandLordSelected() || NavStore.isRenterSelected()) ? 'active dropdown' : 'dropdown'}
-                            style={style}>
+                            style={hiddenIfNotAuthorized}>
                             <a href='javascript:void(0)' className='dropdown-toggle' data-toggle='dropdown'>Мои
                                 объявления
                                 <b className='caret'></b>
@@ -94,8 +94,8 @@ var Header = React.createClass({
                             </ul>
                         </li>
 
-                        <li>
-                            <a href='#/personal/cabinet' role='button'>Личный кабинет</a>
+                        <li style={hiddenIfNotAuthorized}>
+                            <a href='#/user/cabinet' role='button'>Личный кабинет</a>
                         </li>
 
                         <li className={NavStore.isSupportSelected() ? 'active' : ''}>

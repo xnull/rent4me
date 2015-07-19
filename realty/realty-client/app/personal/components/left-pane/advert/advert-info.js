@@ -74,7 +74,7 @@ var AdvertInfo = React.createClass({
                     <div className="col-md-12 col-sm-12 col-xs-12">
                         <AdvertContent item={item}/>
                         <AdvertText item={item}/>
-                        <Likes item={item}/>
+                        <!-- <Likes item={item}/> -->
                         <!-- <CommentsWidget item={item}/> -->
                     </div>
                 </div>
