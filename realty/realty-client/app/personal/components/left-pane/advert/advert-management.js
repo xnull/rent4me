@@ -1,13 +1,5 @@
 var React = require('react');
 
-var IfPresent = React.createClass({
-    render: function () {
-        return (
-            <div/>
-        )
-    }
-});
-
 var AdvertManagement = React.createClass({
 
     connect: function () {
@@ -23,10 +15,10 @@ var AdvertManagement = React.createClass({
         var item = this.props.item;
 
         return (
-            <div className="row no-gutter">
+            <div className="row">
                 <div className="col-md-12">
                     <div className="panel panel-default noBorderRadius"
-                         style={{marginBottom: '0 !important', borderBottom: 0}}>
+                         style={{marginBottom: '0 !important', border: 'none', borderBottom: '1px solid #e1e2e3'}}>
                         <div className="panel-body">
                             <div className="row">
                                 <!-- Фоточка разместившего объяву товарища (зареганного или фотка профиля из соц сети) -->

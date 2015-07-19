@@ -108,7 +108,7 @@ var AdvertContent = React.createClass({
         var item = this.props.item;
 
         return (
-            <div className="row no-gutter">
+            <div className="row">
                 <!-- Accomodation images -->
                 <div className="col-xs-12 col-md-8">
                     <ImagePreviews item={this.props.item}/>

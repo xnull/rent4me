@@ -17,7 +17,7 @@ var AdvertText = React.createClass({
 
     render: function () {
         return (
-            <div className="row no-gutter">
+            <div className="row">
                 <div className="col-xs-12 col-md-12">
                     <table className="table table-striped">
                         <tbody>
@@ -37,10 +37,10 @@ var AdvertText = React.createClass({
 var Likes = React.createClass({
     render: function () {
         return (
-            <div className="row no-gutter">
+            <div className="row">
                 <div className="col-xs-6 col-md-offset-6 text-right">
                     <div className="row">
-                        <div className="col-xs-8">
+                        <div className="col-xs-7">
                             <h4>Поделиться </h4>
                         </div>
                         <div className="col-xs-4">
