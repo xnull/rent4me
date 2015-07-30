@@ -9,6 +9,7 @@ import name.dargiri.web.form.VkontaktePageForm;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -20,7 +21,7 @@ public class CityAdminConverter implements Converter<CityDTO, CityForm> {
     CountryAdminConverter countryAdminConverter;
 
     @Override
-    public CityForm newTargetType(CityDTO in) {
+    public CityForm newTargetType(Optional<CityDTO> in) {
         return new CityForm();
     }
 
@@ -30,13 +31,14 @@ public class CityAdminConverter implements Converter<CityDTO, CityForm> {
     }
 
     @Override
-    public CityForm toTargetType(CityDTO in, CityForm form) {
-        if (in == null) return null;
-        form.setId(in.getId());
-        form.setName(in.getName());
-        form.setArea(BoundingBoxForm.from(in.getArea()));
-        form.setCountry(countryAdminConverter.toTargetType(in.getCountry()));
-        return form;
+    public Optional<CityForm> toTargetType(Optional<CityDTO> in, CityForm form) {
+        return in.flatMap(cityDTO -> {
+            form.setId(cityDTO.getId());
+            form.setName(cityDTO.getName());
+            form.setArea(BoundingBoxForm.from(cityDTO.getArea()));
+            countryAdminConverter.toTargetType(Optional.ofNullable(cityDTO.getCountry())).ifPresent(form::setCountry);
+            return Optional.of(form);
+        });
     }
 
     @Override

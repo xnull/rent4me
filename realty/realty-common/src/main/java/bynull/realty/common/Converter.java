@@ -1,41 +1,70 @@
 package bynull.realty.common;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * The converter
  * Created by dionis on 18/01/15.
  */
-public interface Converter<ST,
-        TT> {
+public interface Converter<ST, TT> {
     default List<? extends TT> toTargetList(Collection<? extends ST> in) {
-        if(in==null) return null;
-        return in.stream().filter(it -> it != null).map(this::toTargetType).collect(Collectors.toList());
+        if (in == null) return Collections.emptyList();
+        return in.stream()
+                .filter(it -> it != null)
+                .map(it -> toTargetType(Optional.of(it)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     default List<? extends ST> toSourceList(Collection<? extends TT> in) {
-        if(in==null) return null;
+        if (in == null) return Collections.emptyList();
         return in.stream().filter(it -> it != null).map(this::toSourceType).collect(Collectors.toList());
     }
 
     default Set<? extends TT> toTargetSet(Collection<? extends ST> in) {
-        if(in==null) return null;
-        return in.stream().filter(it -> it != null).map(this::toTargetType).collect(Collectors.toSet());
+        if (in == null) return Collections.emptySet();
+        return in.stream()
+                .filter(it -> it != null)
+                .map(it -> toTargetType(Optional.of(it)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
     }
 
     default Set<? extends ST> toSourceSet(Collection<? extends TT> in) {
-        if(in==null) return null;
+        if (in == null) return Collections.emptySet();
         return in.stream().filter(it -> it != null).map(this::toSourceType).collect(Collectors.toSet());
     }
 
-    TT newTargetType(ST in);
+    @Deprecated
+    default TT newTargetType(ST in) {
+        throw new UnsupportedOperationException("Deperesated method, please use 'newTargetType' with Optional ");
+    }
+
+    default TT newTargetType(Optional<ST> in){
+        return newTargetType(in.orElse(null));
+    }
+
     ST newSourceType(TT in);
 
-    TT toTargetType(ST in, TT instance);
+    default Optional<TT> toTargetType(Optional<ST> in, TT instance){
+        return Optional.ofNullable(toTargetType(in.orElse(null), instance));
+    }
 
-    default TT toTargetType(ST in) {
+    @Deprecated
+    default TT toTargetType(ST in, TT instance) {
+        throw new UnsupportedOperationException("Deperesated method, please use 'toTargetType' with Optional ");
+    }
+
+    @Deprecated
+    default Optional<TT> toTargetType(ST in) {
+        Optional<ST> optIn = Optional.ofNullable(in);
+        return toTargetType(optIn, newTargetType(optIn));
+    }
+
+    default Optional<TT> toTargetType(Optional<ST> in) {
         return toTargetType(in, newTargetType(in));
     }
 

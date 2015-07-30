@@ -44,8 +44,8 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
         form.setImageUrls(in.getImageUrls());
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
-        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()));
-        form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()));
+        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()).orElse(null));
+        form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()).orElse(null));
         form.setMetros(metroAdminConverter.toTargetSet(in.getMetros()));
         return form;
     }

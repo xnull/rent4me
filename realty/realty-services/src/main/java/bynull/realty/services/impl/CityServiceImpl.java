@@ -70,7 +70,7 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     @Override
     public Optional<CityDTO> findById(long id) {
-        return Optional.ofNullable(cityModelDTOConverter.toTargetType(cityRepository.findOne(id)));
+        return cityModelDTOConverter.toTargetType(cityRepository.findOne(id));
     }
 
     @Transactional
@@ -86,7 +86,7 @@ public class CityServiceImpl implements CityService {
         found.setCountry(cityEntity.getCountry());
         found = cityRepository.saveAndFlush(found);
 
-        return cityModelDTOConverter.toTargetType(found);
+        return cityModelDTOConverter.toTargetType(found).orElse(null);
     }
 
     @Transactional
@@ -114,7 +114,7 @@ public class CityServiceImpl implements CityService {
             return Optional.empty();
         } else {
             CityEntity cityEntity = cityRepository.findByPoint(geoPoint.get().getLongitude(), geoPoint.get().getLatitude());
-            return Optional.ofNullable(cityModelDTOConverter.toTargetType(cityEntity));
+            return cityModelDTOConverter.toTargetType(cityEntity);
         }
     }
 
@@ -124,6 +124,6 @@ public class CityServiceImpl implements CityService {
         GeoPoint cityCenterPoint = MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCityCenterPoint();
         CityEntity cityEntity = cityRepository.findByPoint(cityCenterPoint.getLongitude(), cityCenterPoint.getLatitude());
         Assert.notNull(cityEntity, "Moscow entity should be present");
-        return cityModelDTOConverter.toTargetType(cityEntity);
+        return cityModelDTOConverter.toTargetType(cityEntity).orElse(null);
     }
 }

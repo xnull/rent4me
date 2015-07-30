@@ -6,6 +6,7 @@ import name.dargiri.web.form.FacebookPageForm;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -17,8 +18,8 @@ public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, Fa
     CityAdminConverter cityConverter;
 
     @Override
-    public FacebookPageForm newTargetType(FacebookPageDTO in) {
-        return  new FacebookPageForm();
+    public FacebookPageForm newTargetType(Optional<FacebookPageDTO> in) {
+        return new FacebookPageForm();
     }
 
     @Override
@@ -27,14 +28,16 @@ public class FacebookPageAdminConverter implements Converter<FacebookPageDTO, Fa
     }
 
     @Override
-    public FacebookPageForm toTargetType(FacebookPageDTO in, FacebookPageForm form) {
-        if (in == null) return null;
-        form.setId(in.getId());
-        form.setExternalId(in.getExternalId());
-        form.setLink(in.getLink());
-        form.setEnabled(in.isEnabled());
-        form.setCity(cityConverter.toTargetType(in.getCity()));
-        return form;
+    public Optional<FacebookPageForm> toTargetType(Optional<FacebookPageDTO> in, FacebookPageForm form) {
+        return in.flatMap(fbDto -> {
+            form.setId(fbDto.getId());
+            form.setExternalId(fbDto.getExternalId());
+            form.setLink(fbDto.getLink());
+            form.setEnabled(fbDto.isEnabled());
+
+            cityConverter.toTargetType(Optional.ofNullable(fbDto.getCity())).ifPresent(form::setCity);
+            return Optional.of(form);
+        });
     }
 
     @Override

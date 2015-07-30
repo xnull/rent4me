@@ -3,6 +3,8 @@ package bynull.realty.converters.contacts;
 import bynull.realty.data.business.Contact;
 import bynull.realty.dto.ContactDTO;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 3/5/15.
  */
@@ -14,12 +16,13 @@ public abstract class BaseContactModelDTOConverter<S extends Contact> implements
     }
 
     @Override
-    public ContactDTO toTargetType(S in, ContactDTO instance) {
-        if (in == null) return null;
-        instance.setId(in.getId());
-        instance.setType(in.getType());
+    public Optional<ContactDTO> toTargetType(Optional<S> in, ContactDTO instance) {
+        return in.flatMap(s -> {
+            instance.setId(s.getId());
+            instance.setType(s.getType());
 
-        return instance;
+            return Optional.of(instance);
+        });
     }
 
     @Override
@@ -28,7 +31,7 @@ public abstract class BaseContactModelDTOConverter<S extends Contact> implements
     }
 
     @Override
-    public ContactDTO newTargetType(S in) {
+    public ContactDTO newTargetType(Optional<S> in) {
         return new ContactDTO();
     }
 }

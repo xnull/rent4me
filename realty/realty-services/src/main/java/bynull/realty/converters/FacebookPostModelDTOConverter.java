@@ -45,8 +45,8 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedP
         dto.setCreated(post.getCreated());
         dto.setUpdated(post.getUpdated());
         dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
-        dto.setPage(facebookPageConverter.toTargetType(post.getFacebookPageToScrap()));
-        dto.setPhoneNumberDTO(phoneNumberModelConverter.toTargetType(post.getPhoneNumber()));
+        dto.setPage(facebookPageConverter.toTargetType(post.getFacebookPageToScrap()).orElse(null));
+        dto.setPhoneNumberDTO(phoneNumberModelConverter.toTargetType(post.getPhoneNumber()).orElse(null));
         dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
         return dto;
     }

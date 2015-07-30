@@ -1,15 +1,12 @@
 package bynull.realty.web.websocket;
 
-import bynull.realty.components.api.ChatMessageUsersOnlineNotifier;
+import bynull.realty.common.JsonUtils;
+import bynull.realty.common.JsonUtils.JsonMapperException;
 import bynull.realty.components.api.NotificationUsersOnlineNotifier;
-import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.dto.NotificationDTO;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
-import bynull.realty.utils.JsonMapperException;
-import bynull.realty.utils.JsonUtils;
 import bynull.realty.web.converters.NotificationDtoJsonConverter;
-import bynull.realty.web.json.ChatMessageJSON;
 import bynull.realty.web.json.NotificationJSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -37,7 +34,7 @@ public class NotificationsWebSocketEndPoint implements NotificationUsersOnlineNo
 
     @Override
     public void deliverNotification(NotificationDTO notificationDTO) {
-        NotificationJSON jsonObject = notificationDtoJsonConverter.toTargetType(notificationDTO);
+        NotificationJSON jsonObject = notificationDtoJsonConverter.toTargetType(notificationDTO).get();
         try {
             String json = JsonUtils.toJson(jsonObject);
             genericWebSocketEndPoint.sendToUserOnChannel("notifications", notificationDTO.getReceiver().getId(), json);

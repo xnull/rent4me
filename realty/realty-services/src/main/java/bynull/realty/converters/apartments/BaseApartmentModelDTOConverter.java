@@ -9,6 +9,7 @@ import bynull.realty.dto.MetroDTO;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/5/15.
@@ -19,32 +20,32 @@ public abstract class BaseApartmentModelDTOConverter<T extends Apartment> implem
     MetroModelDTOConverter metroModelDTOConverter;
 
     @Override
-    public ApartmentDTO toTargetType(T apartment, ApartmentDTO result) {
-        if (apartment == null) return null;
-        result.setId(apartment.getId());
-        result.setLocation(GeoPointDTO.from(apartment.getLocation()));
-        result.setAddress(AddressComponentsDTO.from(apartment.getAddressComponents()));
-        result.setDescription(apartment.getDescription());
-        result.setRoomCount(apartment.getRoomCount());
-        result.setFloorNumber(apartment.getFloorNumber());
-        result.setFloorsTotal(apartment.getFloorsTotal());
-        result.setArea(apartment.getArea());
+    public Optional<ApartmentDTO> toTargetType(Optional<T> apartment, ApartmentDTO result) {
+        return apartment.flatMap(ap -> {
+            result.setId(ap.getId());
+            result.setLocation(GeoPointDTO.from(ap.getLocation()));
+            result.setAddress(AddressComponentsDTO.from(ap.getAddressComponents()));
+            result.setDescription(ap.getDescription());
+            result.setRoomCount(ap.getRoomCount());
+            result.setFloorNumber(ap.getFloorNumber());
+            result.setFloorsTotal(ap.getFloorsTotal());
+            result.setArea(ap.getArea());
 
-        result.setTypeOfRent(apartment.getTypeOfRent());
-        result.setRentalFee(apartment.getRentalFee());
-        result.setFeePeriod(apartment.getFeePeriod());
+            result.setTypeOfRent(ap.getTypeOfRent());
+            result.setRentalFee(ap.getRentalFee());
+            result.setFeePeriod(ap.getFeePeriod());
 
-        result.setCreated(apartment.getLogicalCreated());
-        result.setUpdated(apartment.getUpdated());
-        result.setDataSource(apartment.getDataSource());
-        result.setTarget(apartment.getTarget());
-        result.setPublished(apartment.isPublished());
+            result.setCreated(ap.getLogicalCreated());
+            result.setUpdated(ap.getUpdated());
+            result.setDataSource(ap.getDataSource());
+            result.setTarget(ap.getTarget());
+            result.setPublished(ap.isPublished());
 
-        List<? extends MetroDTO> metros = metroModelDTOConverter.toTargetList(apartment.getMetros());
-        result.setMetros(metros);
+            List<? extends MetroDTO> metros = metroModelDTOConverter.toTargetList(ap.getMetros());
+            result.setMetros(metros);
 
-
-        return result;
+            return Optional.of(result);
+        });
     }
 
     @Override
@@ -53,7 +54,7 @@ public abstract class BaseApartmentModelDTOConverter<T extends Apartment> implem
     }
 
     @Override
-    public ApartmentDTO newTargetType(T in) {
+    public ApartmentDTO newTargetType(Optional<T> in) {
         return new ApartmentDTO();
     }
 

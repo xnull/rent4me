@@ -45,7 +45,7 @@ public class SocialNetPostModelDTOConverter implements Converter<SocialNetPost, 
         dto.setUpdated(post.getUpdated());
         dto.setSocialNetwork(post.getSocialNetwork());
         dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
-        dto.setPhoneNumberDTO(phoneNumberDTOConverter.toTargetType(post.getPhoneNumber()));
+        dto.setPhoneNumberDTO(phoneNumberDTOConverter.toTargetType(post.getPhoneNumber()).orElse(null));
 //        dto.setMetros(Collections.emptySet());
 //        dto.setPage(vkPageConverter.toTargetType(post.getVkontaktePage()));
         dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());

@@ -45,12 +45,12 @@ public class ApartmentRestResource {
     @Path("/{id}")
     public Response findOne(@PathParam("id") long id, @HeaderParam("user-agent") String userAgent) {
         log.info("User agent provided: [{}]", userAgent);
-        ApartmentDTO dto = apartmentService.find(id);
-        if (dto == null) {
+        Optional<ApartmentDTO> dto = apartmentService.find(id);
+        if (!dto.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         } else {
-            ApartmentJSON json = apartmentDtoJsonConverter.toTargetType(dto);
-            return Response.ok(json).build();
+            Optional<ApartmentJSON> json = apartmentDtoJsonConverter.toTargetType(dto);
+            return Response.ok(json.orElse(null)).build();
         }
     }
 
@@ -90,7 +90,11 @@ public class ApartmentRestResource {
 
         List<ApartmentDTO> nearest = apartmentService.findNearestForCountry(geoPoint, countryCode, latLow, lngLow, latHigh, lngHigh, limitAndOffset);
 
-        List<ApartmentJSON> json = nearest.stream().map(apartmentDtoJsonConverter::toTargetType).collect(Collectors.toList());
+        List<ApartmentJSON> json = nearest.stream()
+                .map(apartmentDtoJsonConverter::toTargetType)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
         return Response
                 .ok(json)
                 .build();
@@ -180,9 +184,12 @@ public class ApartmentRestResource {
             geoParams = geoParams.withPoint(Optional.empty());
         }
 
-
         List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
-        List<ApartmentJSON> result = found.stream().map(apartmentDtoJsonConverter::toTargetType).collect(Collectors.toList());
+        List<ApartmentJSON> result = found.stream()
+                .map(apartmentDtoJsonConverter::toTargetType)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
 
         return Response
                 .ok(result)

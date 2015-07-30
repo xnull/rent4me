@@ -60,7 +60,7 @@ public class CityController {
 
     {
         CountryDTO selectedCountry = getSelectedCountry();
-        CountryForm countryForm = countryAdminConverter.toTargetType(selectedCountry);
+        CountryForm countryForm = countryAdminConverter.toTargetType(selectedCountry).orElse(null);
         CityForm cityForm = new CityForm();
         BoundingBoxForm area = new BoundingBoxForm();
         area.setHigh(new GeoPointForm());
@@ -95,7 +95,7 @@ public class CityController {
         Optional<CityDTO> dto = cityService.findById(id);
         if (dto.isPresent()) {
             ModelAndView mav = new ModelAndView("cities/edit_form");
-            CityForm cityForm = cityConverter.toTargetType(dto.get());
+            CityForm cityForm = cityConverter.toTargetType(dto.get()).orElse(null);
             mav.addObject("city", cityForm);
             return mav;
         } else {

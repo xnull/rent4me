@@ -1,15 +1,11 @@
 package bynull.realty.web.websocket;
 
-import bynull.realty.components.api.ChatMessageUsersOnlineNotifier;
+import bynull.realty.common.JsonUtils;
 import bynull.realty.components.api.UsersOnlineNotifier;
-import bynull.realty.dto.ChatMessageDTO;
 import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.UserService;
 import bynull.realty.services.api.UserTokenService;
-import bynull.realty.utils.JsonMapperException;
-import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.SecurityUtils;
-import bynull.realty.web.json.ChatMessageJSON;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

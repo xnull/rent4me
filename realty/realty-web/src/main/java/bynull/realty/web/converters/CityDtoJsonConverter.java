@@ -6,6 +6,8 @@ import bynull.realty.web.json.BoundingBoxJSON;
 import bynull.realty.web.json.CityJSON;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 20/01/15.
  */
@@ -22,15 +24,14 @@ public class CityDtoJsonConverter implements Converter<CityDTO, CityJSON> {
     }
 
     @Override
-    public CityJSON toTargetType(CityDTO in, CityJSON instance) {
-        if (in == null) {
-            return null;
-        }
-        CityJSON json = new CityJSON();
-        json.setId(in.getId());
-        json.setArea(BoundingBoxJSON.from(in.getArea()));
-        json.setName(in.getName());
-        return json;
+    public Optional<CityJSON> toTargetType(Optional<CityDTO> in, CityJSON instance) {
+        return in.flatMap(c -> {
+            CityJSON json = new CityJSON();
+            json.setId(c.getId());
+            json.setArea(BoundingBoxJSON.from(c.getArea()));
+            json.setName(c.getName());
+            return Optional.of(json);
+        });
     }
 
     @Override

@@ -47,7 +47,7 @@ public class ApartmentInfoDeltaModelDTOConverter implements Converter<ApartmentI
         instance.setArea(in.getArea());
         Apartment apartment = HibernateUtil.deproxy(in.getApartment());
         ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(apartment);
-        instance.setApartment(targetConverter.toTargetType(apartment));
+        instance.setApartment(targetConverter.toTargetType(apartment).orElse(null));
 
         return instance;
     }

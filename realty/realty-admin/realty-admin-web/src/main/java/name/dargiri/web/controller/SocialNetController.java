@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by dionis on 2/3/14.
@@ -99,8 +100,8 @@ public class SocialNetController {
     @RequestMapping(value = "fb/{id}/edit")
     public ModelAndView editFBPage(@PathVariable("id") long fbPageId) {
         ModelAndView mav = new ModelAndView("socialnet/fb/fb_page_edit");
-        FacebookPageDTO page = facebookService.findPageById(fbPageId);
-        FacebookPageForm form = fbPageConverter.toTargetType(page);
+        Optional<FacebookPageDTO> page = facebookService.findPageById(fbPageId);
+        FacebookPageForm form = fbPageConverter.toTargetType(page).orElse(null);
 
         List<? extends CityDTO> cities = cityService.findAll();
         List<? extends CityForm> cityForms = cityConverter.toTargetList(cities);
@@ -188,7 +189,7 @@ public class SocialNetController {
     public ModelAndView editVKPage(@PathVariable("id") long fbPageId) {
         ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_edit");
         VkontaktePageDTO page = vkontakteService.findPageById(fbPageId);
-        VkontaktePageForm form = vkPageConverter.toTargetType(page);
+        VkontaktePageForm form = vkPageConverter.toTargetType(page).orElse(null);
         List<? extends CityDTO> cities = cityService.findAll();
         List<? extends CityForm> cityForms = cityConverter.toTargetList(cities);
         mav.addObject("cities", cityForms);

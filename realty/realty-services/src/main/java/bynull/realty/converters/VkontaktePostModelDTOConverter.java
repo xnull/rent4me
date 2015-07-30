@@ -42,10 +42,10 @@ public class VkontaktePostModelDTOConverter implements Converter<VkontaktePost, 
         dto.setRentalFee(post.getRentalFee());
         dto.setRoomCount(post.getRoomCount());
         dto.setCreated(post.getCreated());
-        dto.setPhoneNumber(phoneNumberConverter.toTargetType(post.getPhoneNumber()));
+        dto.setPhoneNumber(phoneNumberConverter.toTargetType(post.getPhoneNumber()).orElse(null));
         dto.setUpdated(post.getUpdated());
         dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
-        dto.setPage(vkPageConverter.toTargetType(post.getVkontaktePage()));
+        dto.setPage(vkPageConverter.toTargetType(post.getVkontaktePage()).orElse(null));
         dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
         return dto;
     }

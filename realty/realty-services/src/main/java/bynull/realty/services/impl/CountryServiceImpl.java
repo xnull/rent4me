@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/21/15.
@@ -28,6 +29,6 @@ public class CountryServiceImpl implements CountryService {
     public CountryDTO findByName(String name) {
         CountryEntity country = countryRepository.findByNameIgnoreCase(name);
         Assert.notNull(country);
-        return countryConverter.toTargetType(country);
+        return countryConverter.toTargetType(country).orElse(null);
     }
 }

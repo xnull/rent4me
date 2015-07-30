@@ -44,7 +44,7 @@ public class ApartmentInfoDeltaAdminConverter implements Converter<ApartmentInfo
         instance.setFloorsTotal(in.getFloorsTotal());
         instance.setArea(in.getArea());
 
-        instance.setApartment(apartmentAdminConverter.toTargetType(in.getApartment()));
+        instance.setApartment(apartmentAdminConverter.toTargetType(in.getApartment()).orElse(null));
 
         return instance;
     }

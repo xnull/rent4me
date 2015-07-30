@@ -45,9 +45,9 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
         form.setImageUrls(in.getImageUrls());
         form.setCreated(in.getCreated());
         form.setUpdated(in.getUpdated());
-        form.setPage(vkPageAdminConverter.toTargetType(in.getPage()));
+        form.setPage(vkPageAdminConverter.toTargetType(in.getPage()).orElse(null));
         form.setMetros(metroAdminConverter.toTargetSet(in.getMetros()));
-        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumber()));
+        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumber()).orElse(null));
         return form;
     }
 

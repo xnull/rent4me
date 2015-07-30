@@ -66,7 +66,6 @@ public class MetroTextAnalyzer implements TextAnalyzer, InitializingBean {
     public boolean matches(String text, String metroName) {
         if (StringUtils.trimToEmpty(text).isEmpty() || StringUtils.trimToEmpty(metroName).isEmpty()) return false;
 
-
         //normalize text
         text = TextUtils.normalizeTextForParsing(text);
 

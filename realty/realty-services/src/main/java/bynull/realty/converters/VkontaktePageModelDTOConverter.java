@@ -33,7 +33,7 @@ public class VkontaktePageModelDTOConverter implements Converter<VkontaktePage, 
         dto.setLink(in.getLink());
         dto.setExternalId(in.getExternalId());
         dto.setEnabled(in.isEnabled());
-        dto.setCity(cityConverter.toTargetType(in.getCity()));
+        dto.setCity(cityConverter.toTargetType(in.getCity()).orElse(null));
         return dto;
     }
 

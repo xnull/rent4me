@@ -11,6 +11,7 @@ import com.google.common.collect.Iterables;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,25 +23,24 @@ public abstract class SocialNetApartmentModelDTOConverter<T extends SocialNetApa
     ContactModelDTOConverterFactory<Contact> contactModelDTOConverterFactory;
 
     @Override
-    public ApartmentDTO toTargetType(T apartment, ApartmentDTO dto) {
-        if (apartment == null) {
-            return null;
-        }
-        ApartmentDTO result = super.toTargetType(apartment, dto);
+    public Optional<ApartmentDTO> toTargetType(Optional<T> apartment, ApartmentDTO dto) {
+        return apartment.flatMap(ap -> {
+            ApartmentDTO result = super.toTargetType(apartment, dto).get();//not null guaranties
 
-        result.setExternalLink(apartment.getLink());
-        result.setExternalAuthorLink(apartment.getExtAuthorLink());
+            result.setExternalLink(ap.getLink());
+            result.setExternalAuthorLink(ap.getExtAuthorLink());
 
-        Set<Contact> contacts = apartment.getContacts();
-        ContactModelDTOConverter<Contact> targetConverter = contactModelDTOConverterFactory.getTargetConverter(Iterables.getFirst(contacts, null));
-        List<? extends ContactDTO> contactDTOs = targetConverter.toTargetList(contacts);
-        result.setContacts(contactDTOs);
+            Set<Contact> contacts = ap.getContacts();
+            ContactModelDTOConverter<Contact> targetConverter = contactModelDTOConverterFactory.getTargetConverter(Iterables.getFirst(contacts, null));
+            List<? extends ContactDTO> contactDTOs = targetConverter.toTargetList(contacts);
+            result.setContacts(contactDTOs);
 
-        result.setImageUrls(
-                apartment.getExternalPhotos().stream()
-                        .map(ApartmentExternalPhotoDTO::from)
-                        .collect(Collectors.toList()));
+            result.setImageUrls(
+                    ap.getExternalPhotos().stream()
+                            .map(ApartmentExternalPhotoDTO::from)
+                            .collect(Collectors.toList()));
 
-        return result;
+            return Optional.of(result);
+        });
     }
 }

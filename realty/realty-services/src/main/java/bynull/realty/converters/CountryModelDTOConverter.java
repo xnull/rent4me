@@ -5,6 +5,8 @@ import bynull.realty.data.common.CountryEntity;
 import bynull.realty.dto.CountryDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 18/01/15.
  */
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class CountryModelDTOConverter implements Converter<CountryEntity, CountryDTO> {
 
     @Override
-    public CountryDTO newTargetType(CountryEntity in) {
+    public CountryDTO newTargetType(Optional<CountryEntity> in) {
         return new CountryDTO();
     }
 
@@ -22,11 +24,12 @@ public class CountryModelDTOConverter implements Converter<CountryEntity, Countr
     }
 
     @Override
-    public CountryDTO toTargetType(CountryEntity in, CountryDTO dto) {
-        if (in == null) return null;
-        dto.setId(in.getId());
-        dto.setName(in.getName());
-        return dto;
+    public Optional<CountryDTO> toTargetType(Optional<CountryEntity> in, CountryDTO dto) {
+        return in.flatMap(c -> {
+            dto.setId(c.getId());
+            dto.setName(c.getName());
+            return Optional.of(dto);
+        });
     }
 
     @Override

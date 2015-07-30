@@ -47,7 +47,7 @@ public class SocialNetPostDtoJsonConverter implements Converter<SocialNetPostDTO
         json.setCreated(in.getCreated());
         json.setUpdated(in.getUpdated());
         json.setMetros(metroConverter.toTargetSet(in.getMetros()));
-        json.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()));
+        json.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()).orElse(null));
         json.setSocialNetwork(in.getSocialNetwork());
         return json;
     }

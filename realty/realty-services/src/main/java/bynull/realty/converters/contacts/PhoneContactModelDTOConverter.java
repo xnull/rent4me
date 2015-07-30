@@ -6,6 +6,7 @@ import bynull.realty.dto.ContactDTO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/5/15.
@@ -17,12 +18,11 @@ public class PhoneContactModelDTOConverter extends BaseContactModelDTOConverter<
     PhoneNumberModelDTOConverter phoneNumberModelDTOConverter;
 
     @Override
-    public ContactDTO toTargetType(PhoneContact in, ContactDTO instance) {
-        if (in == null) return null;
-        ContactDTO result = super.toTargetType(in, instance);
-
-        result.setPhoneNumber(phoneNumberModelDTOConverter.toTargetType(in.getPhoneNumber()));
-
-        return result;
+    public Optional<ContactDTO> toTargetType(Optional<PhoneContact> in, ContactDTO instance) {
+        return in.flatMap(p -> {
+            ContactDTO result = super.toTargetType(in, instance).get();
+            phoneNumberModelDTOConverter.toTargetType(p.getPhoneNumber()).ifPresent(result::setPhoneNumber);
+            return Optional.of(result);
+        });
     }
 }

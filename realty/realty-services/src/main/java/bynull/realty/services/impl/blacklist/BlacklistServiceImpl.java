@@ -47,14 +47,14 @@ public class BlacklistServiceImpl {
         Optional<Blacklist> optBlackInfo = Optional.ofNullable(blacklistRepo.findByApartmentId(apartmentId));
 
         if (!optBlackInfo.isPresent()) {
-            ApartmentDTO apartment = apartmentService.find(apartmentId);
+            Optional<ApartmentDTO> apartment = apartmentService.find(apartmentId);
 
             Blacklist bl = new Blacklist();
-            //bl.setApartment(apartment);
-            switch (apartment.getDataSource()) {
+            bl.setApartmentId(apartment.get().getId());
+            switch (apartment.get().getDataSource()) {
                 case INTERNAL:
                     //check that identification exists if not then create it
-                    idRepo.findByUserId();
+                    /*idRepo.findByUserId();
                     idRepo.findByVkId();
                     idRepo.findByFbId();
                     idRepo.findByEmail();
@@ -67,7 +67,7 @@ public class BlacklistServiceImpl {
                     }else{
                         создать новый ид и вписать туда имеющиеся знания о нарушителе
                         idRepo.save(id);
-                    }
+                    }*/
                     break;
                 case FACEBOOK:
                     //get fb user id

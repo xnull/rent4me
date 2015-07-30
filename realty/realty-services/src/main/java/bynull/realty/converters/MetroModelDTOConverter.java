@@ -7,6 +7,7 @@ import bynull.realty.dto.MetroDTO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -18,7 +19,7 @@ public class MetroModelDTOConverter implements Converter<MetroEntity, MetroDTO> 
     CityModelDTOConverter cityModelDTOConverter;
 
     @Override
-    public MetroDTO newTargetType(MetroEntity in) {
+    public MetroDTO newTargetType(Optional<MetroEntity> in) {
         return new MetroDTO();
     }
 
@@ -28,13 +29,14 @@ public class MetroModelDTOConverter implements Converter<MetroEntity, MetroDTO> 
     }
 
     @Override
-    public MetroDTO toTargetType(MetroEntity in, MetroDTO dto) {
-        if (in == null) return null;
-        dto.setId(in.getId());
-        dto.setStationName(in.getStationName());
-        dto.setLocation(GeoPointDTO.from(in.getLocation()));
-        dto.setCity(cityModelDTOConverter.toTargetType(in.getCity()));
-        return dto;
+    public Optional<MetroDTO> toTargetType(Optional<MetroEntity> in, MetroDTO dto) {
+        return in.flatMap(m -> {
+            dto.setId(m.getId());
+            dto.setStationName(m.getStationName());
+            dto.setLocation(GeoPointDTO.from(m.getLocation()));
+            cityModelDTOConverter.toTargetType(m.getCity()).ifPresent(dto::setCity);
+            return Optional.of(dto);
+        });
     }
 
     @Override

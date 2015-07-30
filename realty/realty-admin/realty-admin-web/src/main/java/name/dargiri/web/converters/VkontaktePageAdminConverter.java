@@ -33,7 +33,7 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
         form.setExternalId(in.getExternalId());
         form.setLink(in.getLink());
         form.setEnabled(in.isEnabled());
-        form.setCity(cityConverter.toTargetType(in.getCity()));
+        form.setCity(cityConverter.toTargetType(in.getCity()).orElse(null));
         return form;
     }
 

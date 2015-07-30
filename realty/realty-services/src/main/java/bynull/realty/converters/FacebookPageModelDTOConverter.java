@@ -6,8 +6,10 @@ import bynull.realty.dto.fb.FacebookPageDTO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
+ * FacebookPageModelDTOConverter
  * Created by dionis on 18/01/15.
  */
 @Component
@@ -17,7 +19,7 @@ public class FacebookPageModelDTOConverter implements Converter<FacebookPageToSc
     CityModelDTOConverter cityConverter;
 
     @Override
-    public FacebookPageDTO newTargetType(FacebookPageToScrap in) {
+    public FacebookPageDTO newTargetType(Optional<FacebookPageToScrap> in) {
         return new FacebookPageDTO();
     }
 
@@ -27,14 +29,15 @@ public class FacebookPageModelDTOConverter implements Converter<FacebookPageToSc
     }
 
     @Override
-    public FacebookPageDTO toTargetType(FacebookPageToScrap in, FacebookPageDTO dto) {
-        if (in == null) return null;
-        dto.setId(in.getId());
-        dto.setLink(in.getLink());
-        dto.setExternalId(in.getExternalId());
-        dto.setEnabled(in.isEnabled());
-        dto.setCity(cityConverter.toTargetType(in.getCity()));
-        return dto;
+    public Optional<FacebookPageDTO> toTargetType(Optional<FacebookPageToScrap> in, FacebookPageDTO dto) {
+        return in.flatMap(fbPage -> {
+            dto.setId(fbPage.getId());
+            dto.setLink(fbPage.getLink());
+            dto.setExternalId(fbPage.getExternalId());
+            dto.setEnabled(fbPage.isEnabled());
+            cityConverter.toTargetType(Optional.ofNullable(fbPage.getCity())).ifPresent(dto::setCity);
+            return Optional.of(dto);
+        });
     }
 
     @Override

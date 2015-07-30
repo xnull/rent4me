@@ -134,7 +134,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
                     FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
-                    CityDTO cityDTO = cityModelDTOConverter.toTargetType(fbPage.getCity());
+                    Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(fbPage.getCity());
                     List<FacebookApartment> newest = apartmentRepository.finFBAparmentsByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
 
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
@@ -209,12 +209,11 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             post.setMetros(matchedMetros);
 
                             GeoPoint averagePoint = getAveragePoint(matchedMetros);
+
                             if (averagePoint != null) {
                                 post.setLocation(averagePoint);
-                            } else if (cityDTO != null) {
-                                post.setLocation(getAveragePoint(cityDTO));
                             } else {
-                                post.setLocation(null);
+                                post.setLocation(getAveragePoint(cityDTO));
                             }
 
                             AddressComponents addressComponents = new AddressComponents();
@@ -247,7 +246,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                             }
 
                             post = apartmentRepository.save(post);
-                            if(post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
+                            if (post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
                                     && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
 
                                 int scorePoints = 0;
@@ -264,7 +263,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
 
                                 log.info("Score points for FB post #[{}]: [{}]", post.getId(), scorePoints);
 
-                                if(scorePoints >= 1) {
+                                if (scorePoints >= 1) {
                                     apartmentIdsToPostOnVKPage.add(post.getId());
                                 }
                             }
@@ -318,20 +317,19 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
     public List<FacebookPageDTO> listAllPages() {
         return facebookPageToScrapRepository.findAll()
                 .stream()
-                .sorted(new Comparator<FacebookPageToScrap>() {
-                    @Override
-                    public int compare(FacebookPageToScrap o1, FacebookPageToScrap o2) {
-                        return o2.getUpdated().compareTo(o1.getUpdated());
-                    }
-                })
-                .map(facebookPageConverter::toTargetType)
+                .sorted((o1, o2) -> o2.getUpdated().compareTo(o1.getUpdated()))
+                .map(f -> facebookPageConverter.toTargetType(Optional.of(f)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     @Override
-    public FacebookPageDTO findPageById(long fbPageId) {
-        return facebookPageConverter.toTargetType(facebookPageToScrapRepository.findOne(fbPageId));
+    public Optional<FacebookPageDTO> findPageById(long fbPageId) {
+        return facebookPageConverter.toTargetType(
+                Optional.ofNullable(facebookPageToScrapRepository.findOne(fbPageId))
+        );
     }
 
     @Transactional(readOnly = true)
@@ -364,7 +362,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
             for (FacebookApartment post : posts) {
                 String message = post.getDescription();
 
-                CityDTO cityDTO = cityModelDTOConverter.toTargetType(post.getFacebookPage().getCity());
+                Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(post.getFacebookPage().getCity());
 
                 Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
                 post.setMetros(matchedMetros);

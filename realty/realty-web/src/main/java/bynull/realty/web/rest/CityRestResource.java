@@ -51,21 +51,18 @@ public class CityRestResource {
 
         Optional<CityDTO> city = cityService.findByGeoPoint(geoPoint);
 
-        if(city.isPresent()) {
-            CityJSON json = cityDtoJsonConverter.toTargetType(city.get());
+        if (city.isPresent()) {
+            CityJSON json = cityDtoJsonConverter.toTargetType(city).orElse(null);
             return Response
                     .ok(json)
                     .build();
         } else {
             CityDTO moscow = cityService.getMoscow();
 
-            CityJSON json = cityDtoJsonConverter.toTargetType(moscow);
+            CityJSON json = cityDtoJsonConverter.toTargetType(moscow).orElse(null);
             return Response
                     .ok(json)
                     .build();
         }
-
-
-
     }
 }

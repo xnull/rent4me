@@ -39,7 +39,7 @@ public class FacebookPostDtoJsonConverter implements Converter<FacebookPostDTO, 
         json.setMessage(in.getMessage());
         json.setRoomCount(in.getRoomCount());
         json.setRentalFee(in.getRentalFee());
-        json.setPage(facebookPageConverter.toTargetType(in.getPage()));
+        json.setPage(facebookPageConverter.toTargetType(in.getPage()).orElse(null));
         json.setImageUrls(in.getImageUrls());
         json.setCreated(in.getCreated());
         json.setUpdated(in.getUpdated());

@@ -8,6 +8,7 @@ import bynull.realty.utils.HibernateUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/5/15.
@@ -17,7 +18,7 @@ public class ContactModelDTOConverterFactory<S extends Contact> implements Conve
 
     private final ContactModelDTOConverter<S> NULL_CONVERTER = new ContactModelDTOConverter<S>() {
         @Override
-        public ContactDTO newTargetType(S in) {
+        public ContactDTO newTargetType(Optional<S> in) {
             return null;
         }
 
@@ -27,8 +28,8 @@ public class ContactModelDTOConverterFactory<S extends Contact> implements Conve
         }
 
         @Override
-        public ContactDTO toTargetType(S in, ContactDTO instance) {
-            return null;
+        public Optional<ContactDTO> toTargetType(Optional<S> in, ContactDTO instance) {
+            return Optional.empty();
         }
 
         @Override

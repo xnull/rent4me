@@ -7,6 +7,7 @@ import bynull.realty.dto.CityDTO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -18,7 +19,7 @@ public class CityModelDTOConverter implements Converter<CityEntity, CityDTO> {
     CountryModelDTOConverter countryModelDTOConverter;
 
     @Override
-    public CityDTO newTargetType(CityEntity in) {
+    public CityDTO newTargetType(Optional<CityEntity> in) {
         return new CityDTO();
     }
 
@@ -28,13 +29,14 @@ public class CityModelDTOConverter implements Converter<CityEntity, CityDTO> {
     }
 
     @Override
-    public CityDTO toTargetType(CityEntity in, CityDTO dto) {
-        if (in == null) return null;
-        dto.setId(in.getId());
-        dto.setName(in.getName());
-        dto.setArea(BoundingBoxDTO.from(in.getArea()));
-        dto.setCountry(countryModelDTOConverter.toTargetType(in.getCountry()));
-        return dto;
+    public Optional<CityDTO> toTargetType(Optional<CityEntity> in, CityDTO dto) {
+        return in.flatMap(cityEntity -> {
+            dto.setId(cityEntity.getId());
+            dto.setName(cityEntity.getName());
+            dto.setArea(BoundingBoxDTO.from(cityEntity.getArea()));
+            countryModelDTOConverter.toTargetType(Optional.ofNullable(cityEntity.getCountry())).ifPresent(dto::setCountry);
+            return Optional.of(dto);
+        });
     }
 
     @Override

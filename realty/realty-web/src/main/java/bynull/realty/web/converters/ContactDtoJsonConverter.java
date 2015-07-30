@@ -32,7 +32,7 @@ public class ContactDtoJsonConverter implements Converter<ContactDTO, ContactJSO
         if(in == null) return null;
         instance.setId(in.getId());
         instance.setType(ContactJSON.Type.from(in.getType()));
-        instance.setPhone(phoneNumberDtoJsonConverter.toTargetType(in.getPhoneNumber()));
+        instance.setPhone(phoneNumberDtoJsonConverter.toTargetType(in.getPhoneNumber()).orElse(null));
         return instance;
     }
 

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,14 +27,15 @@ public class AbstractSocialNetServiceImpl {
     @Resource
     MetroRepository metroRepository;
 
-    protected Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message, CityDTO city) {
+    protected Set<MetroEntity> matchMetros(List<? extends MetroDTO> metros, String message, Optional<CityDTO> optCity) {
         log.info(">> Matching metros started");
+
         try {
             Set<MetroEntity> matchedMetros = new HashSet<>();
-            metros = city != null
-                    ? metros.stream()
-                    .filter(m -> m.getCity().getId().equals(city.getId()))
-                    .collect(Collectors.toList())
+            metros = optCity.isPresent() ?
+                    metros.stream()
+                            .filter(m -> m.getCity().getId().equals(optCity.get().getId()))
+                            .collect(Collectors.toList())
                     : metros;
             for (MetroDTO metro : metros) {
                 if (metroTextAnalyzer.matches(message, metro.getStationName())) {
@@ -70,12 +72,11 @@ public class AbstractSocialNetServiceImpl {
         return new GeoPoint().withLatitude(averageLat).withLongitude(averageLng);
     }
 
-    protected GeoPoint getAveragePoint(CityDTO cityDTO) {
-        if (cityDTO == null) return null;
+    protected GeoPoint getAveragePoint(Optional<CityDTO> cityDTO) {
+        if (!cityDTO.isPresent()) return null;
 
-
-        double averageLat = (cityDTO.getArea().getHigh().getLatitude() + cityDTO.getArea().getLow().getLatitude()) / 2;
-        double averageLng = (cityDTO.getArea().getHigh().getLongitude() + cityDTO.getArea().getLow().getLongitude()) / 2;
+        double averageLat = (cityDTO.get().getArea().getHigh().getLatitude() + cityDTO.get().getArea().getLow().getLatitude()) / 2;
+        double averageLng = (cityDTO.get().getArea().getHigh().getLongitude() + cityDTO.get().getArea().getLow().getLongitude()) / 2;
 
         return new GeoPoint().withLatitude(averageLat).withLongitude(averageLng);
     }

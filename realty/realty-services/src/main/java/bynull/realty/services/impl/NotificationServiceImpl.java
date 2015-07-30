@@ -20,6 +20,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -60,8 +61,8 @@ public class NotificationServiceImpl implements NotificationService {
 
         afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
             Notification nf = notificationRepository.findOne(notificationId);
-            NotificationDTO dto = notificationModelDTOConverter.toTargetType(nf);
-            notificationUsersOnlineNotifier.deliverNotification(dto);
+            notificationModelDTOConverter.toTargetType(nf)
+                    .ifPresent(notificationUsersOnlineNotifier::deliverNotification);
         });
     }
 
@@ -71,9 +72,7 @@ public class NotificationServiceImpl implements NotificationService {
         long id = SecurityUtils.getAuthorizedUser().getId();
         User user = userRepository.findOne(id);
 
-        List<? extends NotificationDTO> result = notificationModelDTOConverter.toTargetList(notificationRepository.listMyUnreadNotifications(user));
-
-        return result;
+        return notificationModelDTOConverter.toTargetList(notificationRepository.listMyUnreadNotifications(user));
     }
 
     @Transactional
