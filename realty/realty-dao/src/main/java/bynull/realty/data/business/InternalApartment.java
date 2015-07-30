@@ -68,12 +68,7 @@ public class InternalApartment extends Apartment {
             return Collections.emptyList();
         } else {
             List<ApartmentPhoto> result = new ArrayList<>(photos);
-            Collections.sort(result, new Comparator<ApartmentPhoto>() {
-                @Override
-                public int compare(ApartmentPhoto o1, ApartmentPhoto o2) {
-                    return o2.getCreationTimestamp().compareTo(o1.getCreationTimestamp());
-                }
-            });
+            Collections.sort(result, (o1, o2) -> o2.getCreationTimestamp().compareTo(o1.getCreationTimestamp()));
             return result;
         }
     }

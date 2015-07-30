@@ -8,7 +8,7 @@ import javax.persistence.*;
  * @author dionis on 23/06/14.
  */
 @Entity
-@Table(name = "realty_authorities")
+    @Table(name = "realty_authorities")
 public class Authority implements GrantedAuthority {
     @Id
     @Column(name = "id")

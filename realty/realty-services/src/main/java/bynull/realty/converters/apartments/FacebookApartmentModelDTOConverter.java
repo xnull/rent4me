@@ -6,6 +6,8 @@ import bynull.realty.data.common.CityEntity;
 import bynull.realty.dto.ApartmentDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 3/5/15.
  */
@@ -20,7 +22,20 @@ public class FacebookApartmentModelDTOConverter extends SocialNetApartmentModelD
             if (city != null) {
                 apartmentDTO.setCity(city.getName());
             }
+
+            Optional.ofNullable(apartment.getExtAuthorLink()).ifPresent(link -> {
+                apartmentDTO.setAuthorId(parseAuthorId(link));
+            });
         }
+
         return apartmentDTO;
+    }
+
+    /**
+     * @param authorLink for example: https://www.facebook.com/131345607204302
+     * @return
+     */
+    static String parseAuthorId(String authorLink) {
+        return authorLink.substring(authorLink.lastIndexOf("/") + 1);
     }
 }

@@ -30,6 +30,7 @@ public abstract class SocialNetApartmentModelDTOConverter<T extends SocialNetApa
 
         result.setExternalLink(apartment.getLink());
         result.setExternalAuthorLink(apartment.getExtAuthorLink());
+
         Set<Contact> contacts = apartment.getContacts();
         ContactModelDTOConverter<Contact> targetConverter = contactModelDTOConverterFactory.getTargetConverter(Iterables.getFirst(contacts, null));
         List<? extends ContactDTO> contactDTOs = targetConverter.toTargetList(contacts);

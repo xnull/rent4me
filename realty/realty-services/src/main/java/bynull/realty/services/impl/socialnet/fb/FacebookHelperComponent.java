@@ -1,8 +1,8 @@
 package bynull.realty.services.impl.socialnet.fb;
 
+import bynull.realty.common.JsonUtils;
 import bynull.realty.components.AccessTokenPool;
 import bynull.realty.config.Config;
-import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

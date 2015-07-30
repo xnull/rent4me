@@ -39,6 +39,24 @@ var AdvertManagement = React.createClass({
                                 <div className="col-xs-3 col-md-3 ">
                                     {Utils.IfDefined(item.external_link, this.connect)}
                                 </div>
+
+                                <!-- Редактировать -->
+                                <div class="col-xs-3 col-md-2 col-md-offset-6 text-center">
+                                    <!-- <a class="btn btn-primary">Исправить &nbsp;<img
+                                        src="https://cdn0.iconfinder.com/data/icons/ikooni-outline-free-basic/128/free-18-24.png"
+                                        class="glyphicon glyphicon-picture" title="Помочь в распознавании объявленияя"
+                                        width="32"/></a> -->
+                                </div>
+
+                                <!-- Пожаловаться -->
+                                <div class="col-xs-3 col-md-2 text-center">
+                                    <a class="btn btn-danger">Пожаловаться&nbsp;
+                                        <img
+                                            src="https://cdn0.iconfinder.com/data/icons/ikooni-outline-free-basic/128/free-18-24.png"
+                                            class="glyphicon glyphicon-picture" title="Пожаловаться на объявление от агента"
+                                            width="32"/>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

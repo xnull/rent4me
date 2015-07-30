@@ -1,5 +1,7 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.common.JsonUtils;
+import bynull.realty.common.JsonUtils.JsonMapperException;
 import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.dao.ApartmentRepositoryCustom;
 import bynull.realty.dao.MetroRepository;
@@ -12,8 +14,6 @@ import bynull.realty.dto.MetroDTO;
 import bynull.realty.services.api.MetroService;
 import bynull.realty.services.metro.*;
 import bynull.realty.services.metro.MetroSystemDto.MetroStationFullInfoDto;
-import bynull.realty.utils.JsonMapperException;
-import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.XmlUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;

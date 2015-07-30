@@ -20,7 +20,18 @@ public class VkontakteApartmentModelDTOConverter extends SocialNetApartmentModel
             if (city != null) {
                 apartmentDTO.setCity(city.getName());
             }
+
+            apartmentDTO.setAuthorId(parseAuthorId(apartment.getExtAuthorLink()));
         }
         return apartmentDTO;
+    }
+
+    /**
+     *
+     * @param authorLink https://vk.com/id248324164
+     * @return
+     */
+    static String parseAuthorId(String authorLink){
+        return authorLink.substring(authorLink.lastIndexOf("/") + 1);
     }
 }

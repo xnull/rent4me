@@ -44,7 +44,7 @@ public abstract class Apartment implements Serializable {
         public static final String VKONTAKTE_STRING_DB_VALUE = "VK";
     }
 
-    public static enum  DataSource {
+    public enum  DataSource {
         INTERNAL(DbValue.INTERNAL_STRING_DB_VALUE),
         FACEBOOK(DbValue.FACEBOOK_STRING_DB_VALUE),
         VKONTAKTE(DbValue.VKONTAKTE_STRING_DB_VALUE),

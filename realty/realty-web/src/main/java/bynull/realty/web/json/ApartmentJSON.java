@@ -95,7 +95,7 @@ public class ApartmentJSON {
     @JsonProperty("city")
     private String city;
 
-    public static enum DataSource {
+    public enum DataSource {
         INTERNAL, FACEBOOK, VKONTAKTE;
 
         public static DataSource from(Apartment.DataSource dataSource) {
@@ -113,5 +113,4 @@ public class ApartmentJSON {
             }
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package bynull.realty.components;
 
+import bynull.realty.common.JsonUtils;
 import bynull.realty.config.Config;
 import bynull.realty.data.business.VkontakteApartment;
 import bynull.realty.data.business.configs.ServerSetting;
@@ -7,7 +8,6 @@ import bynull.realty.data.business.external.vkontakte.VkontaktePostType;
 import bynull.realty.dto.ServerSettingDTO;
 import bynull.realty.services.api.ServerSettingsService;
 import bynull.realty.services.api.VkPublishingEventService;
-import bynull.realty.utils.JsonUtils;
 import bynull.realty.utils.RetryRunner;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

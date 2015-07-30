@@ -47,15 +47,10 @@ public class ApartmentRestResource {
         log.info("User agent provided: [{}]", userAgent);
         ApartmentDTO dto = apartmentService.find(id);
         if (dto == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         } else {
             ApartmentJSON json = apartmentDtoJsonConverter.toTargetType(dto);
-
-            return Response
-                    .ok(json)
-                    .build();
+            return Response.ok(json).build();
         }
     }
 
@@ -82,7 +77,7 @@ public class ApartmentRestResource {
             @QueryParam("lng_hi") Double lngHigh,
             @QueryParam("limit") int limit,
             @QueryParam("offset") int offset
-            ) {
+    ) {
 
         GeoPoint geoPoint = new GeoPoint();
         geoPoint.setLongitude(lng);
@@ -158,7 +153,7 @@ public class ApartmentRestResource {
 
         ApartmentRepositoryCustom.GeoParams geoParams = new ApartmentRepositoryCustom.GeoParams();
 
-        if(latLow != null && lngLow != null && latHigh != null && lngHigh != null) {
+        if (latLow != null && lngLow != null && latHigh != null && lngHigh != null) {
 
             geoParams = geoParams.withBoundingBox(Optional.of(
                     new BoundingBox()
@@ -186,7 +181,6 @@ public class ApartmentRestResource {
         }
 
 
-
         List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
         List<ApartmentJSON> result = found.stream().map(apartmentDtoJsonConverter::toTargetType).collect(Collectors.toList());
 
@@ -200,8 +194,6 @@ public class ApartmentRestResource {
     public Response findSimilar(
             @PathParam("id") long apartmentId
     ) {
-
-
 
 
         List<? extends ApartmentDTO> found = apartmentService.findSimilarToApartment(apartmentId);

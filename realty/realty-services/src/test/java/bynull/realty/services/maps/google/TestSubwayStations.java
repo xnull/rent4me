@@ -1,11 +1,11 @@
 package bynull.realty.services.maps.google;
 
+import bynull.realty.common.JsonUtils;
+import bynull.realty.common.JsonUtils.JsonMapperException;
 import bynull.realty.services.impl.MetroServiceImpl;
 import bynull.realty.services.metro.MetroServiceException;
 import bynull.realty.services.metro.MetroStationsDto;
 import bynull.realty.services.metro.MetroSystemDto;
-import bynull.realty.utils.JsonMapperException;
-import bynull.realty.utils.JsonUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

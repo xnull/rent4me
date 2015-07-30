@@ -125,7 +125,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     List<Apartment> findByIdIn(List<Long> apartmentIds);
 
 
-    public enum FindMode {
+    enum FindMode {
         RENTER {
             @Override
             public Apartment.Target toTarget() {
