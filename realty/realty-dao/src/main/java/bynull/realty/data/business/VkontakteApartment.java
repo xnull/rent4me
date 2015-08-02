@@ -31,6 +31,11 @@ public class VkontakteApartment extends SocialNetApartment {
     }
 
     @Override
+    public ApartmentType getType() {
+        return ApartmentType.VK;
+    }
+
+    @Override
     public CityEntity getCity() {
         return vkontaktePage.getCity();
     }

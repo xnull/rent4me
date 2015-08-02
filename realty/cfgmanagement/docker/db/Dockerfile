@@ -12,6 +12,6 @@ FROM mdillon/postgis
 #RUN apt-get install -y postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgis
 
 #RUN echo "Entry point !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-ADD init-database.sh /docker-entrypoint-initdb.d/
+ADD init-database-test.sh /docker-entrypoint-initdb.d/
 
 RUN echo "this is the end!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"

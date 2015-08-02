@@ -1,18 +1,23 @@
 package bynull.realty.services.impl.blacklist;
 
-import bynull.realty.dao.ApartmentRepository;
-import bynull.realty.dao.IdentificationRepository;
 import bynull.realty.dao.UserRepository;
 import bynull.realty.dao.blacklist.BlacklistRepository;
-import bynull.realty.data.business.Apartment;
-import bynull.realty.data.business.blacklist.Blacklist;
+import bynull.realty.data.business.blacklist.BlacklistEntity;
+import bynull.realty.data.business.ids.IdentEntity;
+import bynull.realty.data.business.ids.IdentType;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.ContactDTO;
+import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.impl.IdentificationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Сервис для работы с черным спиком. Идея такая: у нас имеется таблица blacklist со списком заблокированнных ресурсов.
@@ -27,13 +32,10 @@ public class BlacklistServiceImpl {
     private BlacklistRepository blacklistRepo;
 
     @Resource
-    private IdentificationRepository idRepo;
+    private IdentificationServiceImpl identService;
 
     @Resource
     private ApartmentService apartmentService;
-
-    @Resource
-    private UserRepository userRepo;
 
     /**
      * 1. Найти в блэк листе запись о данном ресурсе
@@ -41,10 +43,8 @@ public class BlacklistServiceImpl {
      *
      * @param apartmentId
      */
-    public void voteToAddAdvertToBlacklist(Long apartmentId) {
+    public void addApartmentToBlacklist(Long apartmentId) {
         log.debug("Vote to add advert to blacklist. Id: {}", apartmentId);
-
-        Optional<Blacklist> optBlackInfo = Optional.ofNullable(blacklistRepo.findByApartmentId(apartmentId));
 
         /**
          * Для identifications таблицы надо будет реализовать алгоритм связывания идентификаторов.
@@ -58,54 +58,94 @@ public class BlacklistServiceImpl {
          *     находить все связи всех идентификаторов.
          */
 
+        Optional<ApartmentDTO> optApartment = apartmentService.find(apartmentId);
+        if (!optApartment.isPresent()){
+            return;
+        }
+
+        IdentEntity ident = identService.find(apartmentId.toString(), IdentType.APARTMENT);
+        if (ident == null) {
+            ident = identService.save(apartmentId.toString(), IdentType.APARTMENT);
+        }
+
+        Optional<BlacklistEntity> optBlackInfo = Optional.ofNullable(blacklistRepo.findByIdentId(ident.getId()));
+
         if (!optBlackInfo.isPresent()) {
-            Optional<ApartmentDTO> optApartment = apartmentService.find(apartmentId);
+            BlacklistEntity bl = new BlacklistEntity();
+            bl.setIdentId(ident.getId());
+            blacklistRepo.save(bl);
+        }
 
-            /**
-             * 1. Находим все идентификаторы с которыми связаны данные апартаменты
-             * 2. Ищем все идентификаторы с ids_ids и ids таблице и если обнаружились новые связи идентификаторов
-             *    через объявление, то связываем все имеющиеся идентификаторы путем обновления таблиц ids_ids и ids
-             * 3. добавляем ссылку на ids в черный список
-             */
-            if (optApartment.isPresent()){
-                Blacklist bl = new Blacklist();
-                bl.setApartmentId(optApartment.get().getId());
+        mergeIdents(ident, optApartment);
+    }
 
-                switch (optApartment.get().getDataSource()) {
-                    case INTERNAL:
-                        //check that identification exists if not then create it
-                    /*idRepo.findByUserId();
-                    idRepo.findByVkId();
-                    idRepo.findByFbId();
-                    idRepo.findByEmail();
-                    idRepo.findByPhone();
+    /**
+     * Связать имеющиеся идентификаторы
+     * @param sourceIdent
+     * @param optApartment
+     */
+    private void mergeIdents(IdentEntity sourceIdent, Optional<ApartmentDTO> optApartment) {
 
-                    //если нашли ид хоть по одному из параметров, то добавляем его в черный список
-                    if(found){
-                        bl.setIdentificationId(optApartment.getOwner().getId());
-                        ...
-                    }else{
-                        создать новый ид и вписать туда имеющиеся знания о нарушителе
-                        idRepo.save(id);
-                    }*/
-                        break;
-                    case FACEBOOK:
-                        //get fb user id
-                        break;
-                    case VKONTAKTE:
-                        //get vk user
-                        break;
-                }
-
-            }else {
-                /**
-                 * вываливаем в лог ошыбку, о том что произошла неведомая херня
-                 */
+        /**
+         * 1. Находим все идентификаторы с которыми связаны данные апартаменты
+         * 2. связываем все иденты
+         * 3. добавляем ссылку на ids в черный список
+         */
+        if (optApartment.isPresent()) {
+            ApartmentDTO apartment = optApartment.get();
+            switch (apartment.getDataSource()) {
+                case INTERNAL:
+                    identService.mergeIdents(
+                            sourceIdent,
+                            getInternalApartmentIdents(apartment.getOwner())
+                    );
+                    break;
+                case FACEBOOK:
+                    identService.mergeIdents(
+                            sourceIdent,
+                            getSocialNetIdents(apartment, IdentType.FB_ID)
+                    );
+                    break;
+                case VKONTAKTE:
+                    identService.mergeIdents(
+                            sourceIdent,
+                            getSocialNetIdents(apartment, IdentType.VK_ID)
+                    );
+                    break;
             }
 
-            //blacklistRepo.save()
         } else {
-            //алгоритм тот же что и выше, только надо создать запись в блэк таблице
+            /**
+             * вываливаем в лог ошибку, о том что чел хочет странного и такого объявления не существует в базе,
+             */
         }
+    }
+
+    private Set<Long> getSocialNetIdents(ApartmentDTO apartment, IdentType type) {
+        Set<Long> adjIdents = new HashSet<>();
+        adjIdents.add(identService.find(apartment.getAuthorId(), type).getId());
+
+        for (ContactDTO contact : apartment.getContacts()) {
+            switch (contact.getType()) {
+                case PHONE:
+                    adjIdents.add(identService.find(contact.getPhoneNumber().getRawNumber(), IdentType.PHONE).getId());
+                    break;
+            }
+        }
+
+        return adjIdents;
+    }
+
+    private Set<Long> getInternalApartmentIdents(UserDTO user) {
+        if (user == null) return Collections.emptySet();
+
+        Set<Long> result = new HashSet<>();
+        result.add(identService.find(user.getId().toString(), IdentType.USER_ID).getId());
+        result.add(identService.find(user.getEmail(), IdentType.EMAIL).getId());
+        result.add(identService.find(user.getFacebookId(), IdentType.FB_ID).getId());
+        result.add(identService.find(user.getVkontakteId(), IdentType.VK_ID).getId());
+        result.add(identService.find(user.getPhoneNumber(), IdentType.PHONE).getId());
+
+        return result;
     }
 }

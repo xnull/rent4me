@@ -320,7 +320,7 @@ public abstract class Apartment implements Serializable {
     /**
      * Who is target for this apartment.
      */
-    public static enum Target {
+    public enum Target {
         RENTER,
         LESSOR,
         /**
@@ -328,5 +328,11 @@ public abstract class Apartment implements Serializable {
          */
         BOTH,
         UNKNOWN
+    }
+
+    public abstract ApartmentType getType();
+
+    public enum ApartmentType{
+        INTERNAL, FB, VK;
     }
 }

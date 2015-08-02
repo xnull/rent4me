@@ -49,14 +49,7 @@ public interface Converter<ST, TT> {
 
     ST newSourceType(TT in);
 
-    default Optional<TT> toTargetType(Optional<ST> in, TT instance){
-        return Optional.ofNullable(toTargetType(in.orElse(null), instance));
-    }
-
-    @Deprecated
-    default TT toTargetType(ST in, TT instance) {
-        throw new UnsupportedOperationException("Deperesated method, please use 'toTargetType' with Optional ");
-    }
+    Optional<TT> toTargetType(Optional<ST> in, TT instance);
 
     @Deprecated
     default Optional<TT> toTargetType(ST in) {

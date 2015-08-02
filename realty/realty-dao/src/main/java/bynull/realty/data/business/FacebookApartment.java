@@ -37,6 +37,11 @@ public class FacebookApartment extends SocialNetApartment {
     }
 
     @Override
+    public ApartmentType getType() {
+        return ApartmentType.FB;
+    }
+
+    @Override
     public CityEntity getCity() {
         return facebookPage.getCity();
     }

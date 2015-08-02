@@ -16,6 +16,7 @@ dependencies {
     compile(libraries."org.postgis:postgis-jdbc") {
         exclude group: 'org.postgis', module: 'postgis-stubs'
     }
+    compile libraries.jooq
 
     //hibernate
     compile libraries."org.hibernate:hibernate-core"

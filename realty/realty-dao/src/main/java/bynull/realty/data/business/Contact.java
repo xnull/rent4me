@@ -27,8 +27,7 @@ public abstract class Contact implements Serializable {
     }
 
     public static enum Type {
-        PHONE(DbValue.PHONE_DB_VALUE),
-        ;
+        PHONE(DbValue.PHONE_DB_VALUE);
         public final String dbValue;
 
         Type(String dbValue) {

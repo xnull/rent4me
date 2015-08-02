@@ -2,6 +2,7 @@ package bynull.realty.data.business;
 
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.hibernate.validation.annotations.LessThanOrEqual;
+import lombok.ToString;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.Assert;
 
@@ -18,6 +19,7 @@ import static bynull.realty.util.CommonUtils.copy;
 /**
  * Created by null on 21.06.14.
  */
+@ToString
 @Entity
 @DiscriminatorValue(Apartment.DbValue.INTERNAL_STRING_DB_VALUE)
 @LessThanOrEqual(targetField = "floorNumber", fieldForComparison = "floorsTotal", message = "Количество этажей всего должно быть больше или равно указанному этажу")
@@ -139,6 +141,11 @@ public class InternalApartment extends Apartment {
     @Override
     public DataSource getDataSource() {
         return DataSource.INTERNAL;
+    }
+
+    @Override
+    public ApartmentType getType() {
+        return ApartmentType.INTERNAL;
     }
 
     public void mergeWith(Apartment apartment) {

@@ -25,7 +25,7 @@ var RentType = React.createClass({
         return (
             <div className={className}>
                 <div className="btn-group btn-group-justified" data-toggle="buttons" >
-                    <label className="btn btn-success" style={{color: 'white', pointerEvents: 'none'}}>
+                    <label className="btn btn-success" style={{backgroundColor: 'rgba(53,55,59,1)', color: 'white', pointerEvents: 'none'}}>
                         Я хочу
                     </label>
                     <label className={renterClasses} onClick={this.props.changeToRenter} >

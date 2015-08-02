@@ -47,18 +47,20 @@ public class ApartmentModelDTOConverterFactory<S extends Apartment> implements C
 
     @Override
     public ApartmentModelDTOConverter<S> getTargetConverter(S in) {
-        if (in instanceof InternalApartment) {
-            return (ApartmentModelDTOConverter<S>) internalApartmentModelDTOConverter;
-        } else if (in instanceof VkontakteApartment) {
-            return (ApartmentModelDTOConverter<S>) vkontakteApartmentModelDTOConverter;
-        } else if (in instanceof FacebookApartment) {
-            return (ApartmentModelDTOConverter<S>) facebookApartmentModelDTOConverter;
-        } else {
-            if (in == null)
-                return NULL_CONVERTER;
-            else
-                throw new UnsupportedOperationException();
+        if (in == null) {
+            return NULL_CONVERTER;
         }
+
+        switch (in.getType()){
+            case INTERNAL:
+                return (ApartmentModelDTOConverter<S>) internalApartmentModelDTOConverter;
+            case FB:
+                return (ApartmentModelDTOConverter<S>) facebookApartmentModelDTOConverter;
+            case VK:
+                return (ApartmentModelDTOConverter<S>) vkontakteApartmentModelDTOConverter;
+        }
+
+        throw new UnsupportedOperationException("Unknown apartment type: " + in.getType());
     }
 
     @Override
