@@ -90,14 +90,8 @@ public class ApartmentRestResource {
 
         List<ApartmentDTO> nearest = apartmentService.findNearestForCountry(geoPoint, countryCode, latLow, lngLow, latHigh, lngHigh, limitAndOffset);
 
-        List<ApartmentJSON> json = nearest.stream()
-                .map(apartmentDtoJsonConverter::toTargetType)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-        return Response
-                .ok(json)
-                .build();
+        List<ApartmentJSON> json = apartmentDtoJsonConverter.toTargetListOf(nearest);
+        return Response.ok(json).build();
     }
 
     @PUT
@@ -185,15 +179,9 @@ public class ApartmentRestResource {
         }
 
         List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
-        List<ApartmentJSON> result = found.stream()
-                .map(apartmentDtoJsonConverter::toTargetType)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+        List<ApartmentJSON> result = apartmentDtoJsonConverter.toTargetListOf(found);
 
-        return Response
-                .ok(result)
-                .build();
+        return Response.ok(result).build();
     }
 
     @Path("/{id}/similar")

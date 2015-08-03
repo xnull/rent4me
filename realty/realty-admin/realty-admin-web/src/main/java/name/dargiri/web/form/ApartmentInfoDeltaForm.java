@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/25/15.
@@ -27,4 +28,8 @@ public class ApartmentInfoDeltaForm {
     private Integer floorsTotal;
     private BigDecimal area;
     private ApartmentForm apartment;
+
+    public void setApartmentOpt(Optional<ApartmentForm> apt){
+        apartment = apt.orElse(null);
+    }
 }

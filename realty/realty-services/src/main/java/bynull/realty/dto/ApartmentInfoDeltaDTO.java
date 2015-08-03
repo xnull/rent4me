@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/25/15.
@@ -24,4 +25,8 @@ public class ApartmentInfoDeltaDTO {
     private Integer floorsTotal;
     private BigDecimal area;
     private ApartmentDTO apartment;
+
+    public Optional<ApartmentDTO> getApartmentOpt(){
+        return Optional.ofNullable(apartment);
+    }
 }

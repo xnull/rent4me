@@ -7,13 +7,15 @@ import bynull.realty.web.json.ChatMessageJSON;
 import bynull.realty.web.json.NotificationJSON;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 5/2/15.
  */
 @Component
 public class NotificationDtoJsonConverter implements Converter<NotificationDTO, NotificationJSON> {
     @Override
-    public NotificationJSON newTargetType(NotificationDTO in) {
+    public NotificationJSON newTargetType(Optional<NotificationDTO> in) {
         return new NotificationJSON();
     }
 
@@ -23,23 +25,22 @@ public class NotificationDtoJsonConverter implements Converter<NotificationDTO, 
     }
 
     @Override
-    public NotificationJSON toTargetType(NotificationDTO in, NotificationJSON instance) {
-        if (in == null) {
-            return null;
-        }
-        instance.setId(in.getId());
-        instance.setResolved(in.isResolved());
-        instance.setType(in.getType().getDbValue());
-        instance.setCreated(in.getCreated());
-        switch (in.getType()) {
-            case NEW_MESSAGE:{
-                instance.setValue(ChatMessageJSON.from((ChatMessageDTO) in.getValue()));
+    public Optional<NotificationJSON> toTargetType(Optional<NotificationDTO> in, NotificationJSON instance) {
+        return in.map(ntf -> {
+            instance.setId(ntf.getId());
+            instance.setResolved(ntf.isResolved());
+            instance.setType(ntf.getType().getDbValue());
+            instance.setCreated(ntf.getCreated());
+            switch (ntf.getType()) {
+                case NEW_MESSAGE: {
+                    instance.setValue(ChatMessageJSON.from((ChatMessageDTO) ntf.getValue()));
+                }
+                break;
+                default:
+                    throw new UnsupportedOperationException("Unsupported conversion " + ntf.getType());
             }
-            break;
-            default:
-                throw new UnsupportedOperationException("Unsupported conversion "+in.getType());
-        }
-        return instance;
+            return instance;
+        });
     }
 
     @Override

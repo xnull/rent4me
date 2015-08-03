@@ -6,6 +6,7 @@ import bynull.realty.web.json.SocialNetPostJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 20/01/15.
@@ -23,7 +24,7 @@ public class SocialNetPostDtoJsonConverter implements Converter<SocialNetPostDTO
     PhoneNumberDtoJsonConverter phoneNumberConverter;
 
     @Override
-    public SocialNetPostJSON newTargetType(SocialNetPostDTO in) {
+    public SocialNetPostJSON newTargetType(Optional<SocialNetPostDTO> in) {
         return new SocialNetPostJSON();
     }
 
@@ -33,23 +34,22 @@ public class SocialNetPostDtoJsonConverter implements Converter<SocialNetPostDTO
     }
 
     @Override
-    public SocialNetPostJSON toTargetType(SocialNetPostDTO in, SocialNetPostJSON json) {
-        if (in == null) {
-            return null;
-        }
-        json.setId(in.getId());
-        json.setLink(in.getLink());
-        json.setMessage(in.getMessage());
-        json.setRoomCount(in.getRoomCount());
-        json.setRentalFee(in.getRentalFee());
-//        json.setPage(facebookPageConverter.toTargetType(in.getPage()));
-        json.setImageUrls(in.getImageUrls());
-        json.setCreated(in.getCreated());
-        json.setUpdated(in.getUpdated());
-        json.setMetros(metroConverter.toTargetSet(in.getMetros()));
-        json.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()).orElse(null));
-        json.setSocialNetwork(in.getSocialNetwork());
-        return json;
+    public Optional<SocialNetPostJSON> toTargetType(Optional<SocialNetPostDTO> in, SocialNetPostJSON json) {
+        return in.map(sNet -> {
+            json.setId(sNet.getId());
+            json.setLink(sNet.getLink());
+            json.setMessage(sNet.getMessage());
+            json.setRoomCount(sNet.getRoomCount());
+            json.setRentalFee(sNet.getRentalFee());
+//        json.setPage(facebookPageConverter.toTargetType(sNet.getPage()));
+            json.setImageUrls(sNet.getImageUrls());
+            json.setCreated(sNet.getCreated());
+            json.setUpdated(sNet.getUpdated());
+            json.setMetros(metroConverter.toTargetSet(sNet.getMetros()));
+            json.setPhoneNumber(phoneNumberConverter.toTargetType(sNet.getPhoneNumberOpt()).orElse(null));
+            json.setSocialNetwork(sNet.getSocialNetwork());
+            return json;
+        });
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +26,7 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
     CityDtoJsonConverter cityDtoJsonConverter;
 
     @Override
-    public ApartmentJSON newTargetType(ApartmentDTO in) {
+    public ApartmentJSON newTargetType(Optional<ApartmentDTO> in) {
         return new ApartmentJSON();
     }
 
@@ -35,58 +36,58 @@ public class ApartmentDtoJsonConverter implements Converter<ApartmentDTO, Apartm
     }
 
     @Override
-    public ApartmentJSON toTargetType(ApartmentDTO apartment, ApartmentJSON json) {
-        if (apartment == null) return null;
+    public Optional<ApartmentJSON> toTargetType(Optional<ApartmentDTO> apartment, ApartmentJSON json) {
+        return apartment.map(apt -> {
+            json.setId(apt.getId());
+            json.setLocation(GeoPointJSON.from(apt.getLocation()));
+            json.setAddress(AddressComponentsJSON.from(apt.getAddress()));
+            json.setCreated(apt.getCreated());
+            json.setUpdated(apt.getUpdated());
 
-        json.setId(apartment.getId());
-        json.setLocation(GeoPointJSON.from(apartment.getLocation()));
-        json.setAddress(AddressComponentsJSON.from(apartment.getAddress()));
-        json.setCreated(apartment.getCreated());
-        json.setUpdated(apartment.getUpdated());
+            json.setArea(apt.getArea());
+            json.setRoomCount(apt.getRoomCount());
+            json.setFloorNumber(apt.getFloorNumber());
+            json.setFloorsTotal(apt.getFloorsTotal());
+            json.setDescription(apt.getDescription());
 
-        json.setArea(apartment.getArea());
-        json.setRoomCount(apartment.getRoomCount());
-        json.setFloorNumber(apartment.getFloorNumber());
-        json.setFloorsTotal(apartment.getFloorsTotal());
-        json.setDescription(apartment.getDescription());
+            json.setTypeOfRent(apt.getTypeOfRent());
+            json.setRentalFee(apt.getRentalFee());
+            json.setFeePeriod(apt.getFeePeriod());
+            json.setPublished(apt.isPublished());
+            json.setDataSource(ApartmentJSON.DataSource.from(apt.getDataSource()));
 
-        json.setTypeOfRent(apartment.getTypeOfRent());
-        json.setRentalFee(apartment.getRentalFee());
-        json.setFeePeriod(apartment.getFeePeriod());
-        json.setPublished(apartment.isPublished());
-        json.setDataSource(ApartmentJSON.DataSource.from(apartment.getDataSource()));
+            List<? extends MetroJSON> metros = metroDtoJsonConverter.toTargetList(apt.getMetros());
+            json.setMetros(metros);
 
-        List<? extends MetroJSON> metros = metroDtoJsonConverter.toTargetList(apartment.getMetros());
-        json.setMetros(metros);
+            // internal specific
 
-        // internal specific
-
-        json.setPhotos(apartment.getPhotos() != null
-                        ?   apartment.getPhotos()
-                        .stream()
-                        .map(ApartmentPhotoJSON::from)
-                        .collect(Collectors.toList())
-                        :   null
-        );
-
-
-        json.setOwner(UserJSON.from(apartment.getOwner()));
+            json.setPhotos(apt.getPhotos() != null
+                            ?   apt.getPhotos()
+                            .stream()
+                            .map(ApartmentPhotoJSON::from)
+                            .collect(Collectors.toList())
+                            :   null
+            );
 
 
-        //social net specific
-        List<ApartmentExternalPhotoJSON> imageUrls = apartment.getImageUrls() != null
-                ? apartment.getImageUrls().stream().map(ApartmentExternalPhotoJSON::from).collect(Collectors.toList())
-                : null;
-        json.setImageUrls(imageUrls);
+            json.setOwner(UserJSON.from(apt.getOwner()));
 
-        List<? extends ContactJSON> contacts = contactDtoJsonConverter.toTargetList(apartment.getContacts());
-        json.setContacts(contacts);
 
-        json.setExternalLink(apartment.getExternalLink());
-        json.setExternalAuthorLink(apartment.getExternalAuthorLink());
-        json.setCity(apartment.getCity());
+            //social net specific
+            List<ApartmentExternalPhotoJSON> imageUrls = apt.getImageUrls() != null
+                    ? apt.getImageUrls().stream().map(ApartmentExternalPhotoJSON::from).collect(Collectors.toList())
+                    : null;
+            json.setImageUrls(imageUrls);
 
-        return json;
+            List<? extends ContactJSON> contacts = contactDtoJsonConverter.toTargetList(apt.getContacts());
+            json.setContacts(contacts);
+
+            json.setExternalLink(apt.getExternalLink());
+            json.setExternalAuthorLink(apt.getExternalAuthorLink());
+            json.setCity(apt.getCity());
+
+            return json;
+        });
     }
 
     @Override

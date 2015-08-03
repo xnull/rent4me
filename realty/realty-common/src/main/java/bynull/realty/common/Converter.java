@@ -8,6 +8,16 @@ import java.util.stream.Collectors;
  * Created by dionis on 18/01/15.
  */
 public interface Converter<ST, TT> {
+    default List<TT> toTargetListOf(Collection<ST> in) {
+        if (in == null) return Collections.emptyList();
+        return in.stream()
+                .filter(it -> it != null)
+                .map(it -> toTargetType(Optional.of(it)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
     default List<? extends TT> toTargetList(Collection<? extends ST> in) {
         if (in == null) return Collections.emptyList();
         return in.stream()

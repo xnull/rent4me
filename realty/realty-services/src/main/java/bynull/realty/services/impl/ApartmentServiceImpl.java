@@ -172,14 +172,14 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public ApartmentDTO findAuthorizedUserApartment() {
+    public Optional<ApartmentDTO> findAuthorizedUserApartment() {
         User user = getAuthorizedUser();
         if (user != null) {
             Apartment first = Iterables.getFirst(user.getApartments(), null);
             ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(first);
-            return targetConverter.toTargetType( Optional.ofNullable(first)).orElse(null);
+            return targetConverter.toTargetType(Optional.ofNullable(first));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 

@@ -8,6 +8,7 @@ import name.dargiri.web.form.GeoPointForm;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/25/15.
@@ -19,7 +20,7 @@ public class ApartmentInfoDeltaAdminConverter implements Converter<ApartmentInfo
     ApartmentAdminConverter apartmentAdminConverter;
 
     @Override
-    public ApartmentInfoDeltaForm newTargetType(ApartmentInfoDeltaDTO in) {
+    public ApartmentInfoDeltaForm newTargetType(Optional<ApartmentInfoDeltaDTO> in) {
         return new ApartmentInfoDeltaForm();
     }
 
@@ -29,24 +30,24 @@ public class ApartmentInfoDeltaAdminConverter implements Converter<ApartmentInfo
     }
 
     @Override
-    public ApartmentInfoDeltaForm toTargetType(ApartmentInfoDeltaDTO in, ApartmentInfoDeltaForm instance) {
-        if (in == null) return null;
+    public Optional<ApartmentInfoDeltaForm> toTargetType(Optional<ApartmentInfoDeltaDTO> in, ApartmentInfoDeltaForm instance) {
+        return in.map( aptDelta -> {
+            instance.setId(aptDelta.getId());
+            instance.setLocation(GeoPointForm.from(aptDelta.getLocation()));
+            instance.setAddressComponents(AddressComponentsForm.from(aptDelta.getAddressComponents()));
+            instance.setCreated(aptDelta.getCreated());
+            instance.setUpdated(aptDelta.getUpdated());
+            instance.setApplied(aptDelta.isApplied());
+            instance.setRejected(aptDelta.isRejected());
+            instance.setRoomCount(aptDelta.getRoomCount());
+            instance.setFloorNumber(aptDelta.getFloorNumber());
+            instance.setFloorsTotal(aptDelta.getFloorsTotal());
+            instance.setArea(aptDelta.getArea());
 
-        instance.setId(in.getId());
-        instance.setLocation(GeoPointForm.from(in.getLocation()));
-        instance.setAddressComponents(AddressComponentsForm.from(in.getAddressComponents()));
-        instance.setCreated(in.getCreated());
-        instance.setUpdated(in.getUpdated());
-        instance.setApplied(in.isApplied());
-        instance.setRejected(in.isRejected());
-        instance.setRoomCount(in.getRoomCount());
-        instance.setFloorNumber(in.getFloorNumber());
-        instance.setFloorsTotal(in.getFloorsTotal());
-        instance.setArea(in.getArea());
+            instance.setApartmentOpt(apartmentAdminConverter.toTargetType(aptDelta.getApartmentOpt()));
 
-        instance.setApartment(apartmentAdminConverter.toTargetType(in.getApartment()).orElse(null));
-
-        return instance;
+            return instance;
+        });
     }
 
     @Override

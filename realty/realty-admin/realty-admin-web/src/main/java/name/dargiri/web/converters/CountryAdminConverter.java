@@ -8,6 +8,8 @@ import name.dargiri.web.form.CityForm;
 import name.dargiri.web.form.CountryForm;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 18/01/15.
  */
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class CountryAdminConverter implements Converter<CountryDTO, CountryForm> {
 
     @Override
-    public CountryForm newTargetType(CountryDTO in) {
+    public CountryForm newTargetType(Optional<CountryDTO> in) {
         return new CountryForm();
     }
 
@@ -25,11 +27,12 @@ public class CountryAdminConverter implements Converter<CountryDTO, CountryForm>
     }
 
     @Override
-    public CountryForm toTargetType(CountryDTO in, CountryForm form) {
-        if (in == null) return null;
-        form.setId(in.getId());
-        form.setName(in.getName());
-        return form;
+    public Optional<CountryForm> toTargetType(Optional<CountryDTO> in, CountryForm form) {
+        return in.map(c ->  {
+            form.setId(c.getId());
+            form.setName(c.getName());
+            return form;
+        });
     }
 
     @Override

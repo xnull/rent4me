@@ -6,6 +6,7 @@ import name.dargiri.web.form.FacebookPostForm;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -23,7 +24,7 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
     private PhoneNumberAdminConverter phoneNumberConverter;
 
     @Override
-    public FacebookPostForm newTargetType(FacebookPostDTO in) {
+    public FacebookPostForm newTargetType(Optional<FacebookPostDTO> in) {
         return new FacebookPostForm();
     }
 
@@ -33,21 +34,20 @@ public class FacebookPostAdminConverter implements Converter<FacebookPostDTO, Fa
     }
 
     @Override
-    public FacebookPostForm toTargetType(FacebookPostDTO in, FacebookPostForm form) {
-        if (in == null) {
-            return null;
-        }
-        form.setLink(in.getLink());
-        form.setMessage(in.getMessage());
-        form.setRoomCount(in.getRoomCount());
-        form.setRentalFee(in.getRentalFee());
-        form.setImageUrls(in.getImageUrls());
-        form.setCreated(in.getCreated());
-        form.setUpdated(in.getUpdated());
-        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumberDTO()).orElse(null));
-        form.setPage(facebookPageAdminConverter.toTargetType(in.getPage()).orElse(null));
-        form.setMetros(metroAdminConverter.toTargetSet(in.getMetros()));
-        return form;
+    public Optional<FacebookPostForm> toTargetType(Optional<FacebookPostDTO> in, FacebookPostForm form) {
+        return in.map(fb -> {
+            form.setLink(fb.getLink());
+            form.setMessage(fb.getMessage());
+            form.setRoomCount(fb.getRoomCount());
+            form.setRentalFee(fb.getRentalFee());
+            form.setImageUrls(fb.getImageUrls());
+            form.setCreated(fb.getCreated());
+            form.setUpdated(fb.getUpdated());
+            form.setPhoneNumber(phoneNumberConverter.toTargetType(fb.getPhoneOpt()).orElse(null));
+            form.setPage(facebookPageAdminConverter.toTargetType(fb.getPageOpt()).orElse(null));
+            form.setMetros(metroAdminConverter.toTargetSet(fb.getMetros()));
+            return form;
+        });
     }
 
     @Override

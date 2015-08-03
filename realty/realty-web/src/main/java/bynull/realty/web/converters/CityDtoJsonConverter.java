@@ -14,7 +14,7 @@ import java.util.Optional;
 @Component
 public class CityDtoJsonConverter implements Converter<CityDTO, CityJSON> {
     @Override
-    public CityJSON newTargetType(CityDTO in) {
+    public CityJSON newTargetType(Optional<CityDTO> in) {
         return null;
     }
 

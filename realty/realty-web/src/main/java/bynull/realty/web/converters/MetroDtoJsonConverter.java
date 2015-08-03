@@ -6,13 +6,15 @@ import bynull.realty.web.json.GeoPointJSON;
 import bynull.realty.web.json.MetroJSON;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 20/01/15.
  */
 @Component
 public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
     @Override
-    public MetroJSON newTargetType(MetroDTO in) {
+    public MetroJSON newTargetType(Optional<MetroDTO> in) {
         return new MetroJSON();
     }
 
@@ -22,15 +24,14 @@ public class MetroDtoJsonConverter implements Converter<MetroDTO, MetroJSON> {
     }
 
     @Override
-    public MetroJSON toTargetType(MetroDTO in, MetroJSON instance) {
-        if (in == null) {
-            return null;
-        }
-        MetroJSON json = new MetroJSON();
-        json.setId(in.getId());
-        json.setStationName(in.getStationName());
-        json.setLocation(GeoPointJSON.from(in.getLocation()));
-        return json;
+    public Optional<MetroJSON> toTargetType(Optional<MetroDTO> in, MetroJSON instance) {
+        return in.map(metro -> {
+            MetroJSON json = new MetroJSON();
+            json.setId(metro.getId());
+            json.setStationName(metro.getStationName());
+            json.setLocation(GeoPointJSON.from(metro.getLocation()));
+            return json;
+        });
     }
 
     @Override

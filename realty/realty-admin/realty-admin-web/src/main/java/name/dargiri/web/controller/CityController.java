@@ -50,7 +50,7 @@ public class CityController {
     public ModelAndView all() {
         CountryDTO country = getSelectedCountry();
         ModelAndView mav = new ModelAndView("cities/list");
-        List<? extends CityDTO> cities = cityService.findByCountry(country.get());
+        List<? extends CityDTO> cities = cityService.findByCountry(country);
         List<? extends CityForm> all = cityConverter.toTargetList(cities);
         mav.addObject("cities", all);
         return mav;
@@ -59,7 +59,7 @@ public class CityController {
     @RequestMapping(value = "/new")
     public ModelAndView createForm() {
         CountryDTO selectedCountry = getSelectedCountry();
-        CountryForm countryForm = countryAdminConverter.toTargetType(selectedCountry).orElse(null);
+        CountryForm countryForm = countryAdminConverter.toTargetType(Optional.ofNullable(selectedCountry)).orElse(null);
         CityForm cityForm = new CityForm();
         BoundingBoxForm area = new BoundingBoxForm();
         area.setHigh(new GeoPointForm());

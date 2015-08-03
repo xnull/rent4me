@@ -6,6 +6,7 @@ import bynull.realty.web.json.FacebookPostJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 20/01/15.
@@ -20,7 +21,7 @@ public class FacebookPostDtoJsonConverter implements Converter<FacebookPostDTO, 
     FacebookPageDtoJsonConverter facebookPageConverter;
 
     @Override
-    public FacebookPostJSON newTargetType(FacebookPostDTO in) {
+    public FacebookPostJSON newTargetType(Optional<FacebookPostDTO> in) {
         return new FacebookPostJSON();
     }
 
@@ -30,21 +31,20 @@ public class FacebookPostDtoJsonConverter implements Converter<FacebookPostDTO, 
     }
 
     @Override
-    public FacebookPostJSON toTargetType(FacebookPostDTO in, FacebookPostJSON json) {
-        if (in == null) {
-            return null;
-        }
-        json.setId(in.getId());
-        json.setLink(in.getLink());
-        json.setMessage(in.getMessage());
-        json.setRoomCount(in.getRoomCount());
-        json.setRentalFee(in.getRentalFee());
-        json.setPage(facebookPageConverter.toTargetType(in.getPage()).orElse(null));
-        json.setImageUrls(in.getImageUrls());
-        json.setCreated(in.getCreated());
-        json.setUpdated(in.getUpdated());
-        json.setMetros(metroConverter.toTargetSet(in.getMetros()));
-        return json;
+    public Optional<FacebookPostJSON> toTargetType(Optional<FacebookPostDTO> in, FacebookPostJSON json) {
+        return in.map(fbPost -> {
+            json.setId(fbPost.getId());
+            json.setLink(fbPost.getLink());
+            json.setMessage(fbPost.getMessage());
+            json.setRoomCount(fbPost.getRoomCount());
+            json.setRentalFee(fbPost.getRentalFee());
+            json.setPage(facebookPageConverter.toTargetType(fbPost.getPageOpt()).orElse(null));
+            json.setImageUrls(fbPost.getImageUrls());
+            json.setCreated(fbPost.getCreated());
+            json.setUpdated(fbPost.getUpdated());
+            json.setMetros(metroConverter.toTargetSet(fbPost.getMetros()));
+            return json;
+        });
     }
 
     @Override

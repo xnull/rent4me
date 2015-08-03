@@ -28,7 +28,7 @@ public class ApartmentAdminConverter implements Converter<ApartmentDTO, Apartmen
 //    ContactAdminConvereter contactAdminConvereter;
 
     @Override
-    public ApartmentForm newTargetType(ApartmentDTO in) {
+    public ApartmentForm newTargetType(Optional<ApartmentDTO> in) {
         return new ApartmentForm();
     }
 

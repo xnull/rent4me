@@ -7,6 +7,7 @@ import bynull.realty.web.json.PhoneNumberJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/6/15.
@@ -18,7 +19,7 @@ public class ContactDtoJsonConverter implements Converter<ContactDTO, ContactJSO
     PhoneNumberDtoJsonConverter phoneNumberDtoJsonConverter;
 
     @Override
-    public ContactJSON newTargetType(ContactDTO in) {
+    public ContactJSON newTargetType(Optional<ContactDTO> in) {
         return new ContactJSON();
     }
 
@@ -28,12 +29,13 @@ public class ContactDtoJsonConverter implements Converter<ContactDTO, ContactJSO
     }
 
     @Override
-    public ContactJSON toTargetType(ContactDTO in, ContactJSON instance) {
-        if(in == null) return null;
-        instance.setId(in.getId());
-        instance.setType(ContactJSON.Type.from(in.getType()));
-        instance.setPhone(phoneNumberDtoJsonConverter.toTargetType(in.getPhoneNumber()).orElse(null));
-        return instance;
+    public Optional<ContactJSON> toTargetType(Optional<ContactDTO> in, ContactJSON instance) {
+        return in.map(c -> {
+            instance.setId(c.getId());
+            instance.setType(ContactJSON.Type.from(c.getType()));
+            instance.setPhone(phoneNumberDtoJsonConverter.toTargetType(c.getPhoneNumberOpt()).orElse(null));
+            return instance;
+        });
     }
 
     @Override

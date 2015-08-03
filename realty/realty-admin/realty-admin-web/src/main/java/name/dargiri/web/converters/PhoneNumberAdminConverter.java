@@ -8,6 +8,7 @@ import name.dargiri.web.form.VkontaktePostForm;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -17,7 +18,7 @@ public class PhoneNumberAdminConverter implements Converter<PhoneNumberDTO, Phon
 
 
     @Override
-    public PhoneNumberForm newTargetType(PhoneNumberDTO in) {
+    public PhoneNumberForm newTargetType(Optional<PhoneNumberDTO> in) {
         return new PhoneNumberForm();
     }
 
@@ -27,13 +28,12 @@ public class PhoneNumberAdminConverter implements Converter<PhoneNumberDTO, Phon
     }
 
     @Override
-    public PhoneNumberForm toTargetType(PhoneNumberDTO in, PhoneNumberForm form) {
-        if (in == null) {
-            return null;
-        }
-        form.setRaw(in.getRawNumber());
-        form.setNationalFormattedNumber(in.getNationalFormattedNumber());
-        return form;
+    public Optional<PhoneNumberForm> toTargetType(Optional<PhoneNumberDTO> in, PhoneNumberForm form) {
+        return in.map(p -> {
+            form.setRaw(p.getRawNumber());
+            form.setNationalFormattedNumber(p.getNationalFormattedNumber());
+            return form;
+        });
     }
 
 

@@ -87,7 +87,7 @@ public class ApartmentDeltaController {
         Optional<ApartmentInfoDeltaDTO> dto = apartmentInfoDeltaService.findById(id);
         if (dto.isPresent()) {
             ModelAndView mav = new ModelAndView("apartment_deltas/edit_form");
-            ApartmentInfoDeltaForm form = apartmentInfoDeltaConverter.toTargetType(dto.get()).orElse(null);
+            ApartmentInfoDeltaForm form = apartmentInfoDeltaConverter.toTargetType(dto).orElse(null);
             mav.addObject("form", form);
             return mav;
         } else {

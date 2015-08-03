@@ -8,6 +8,7 @@ import bynull.realty.web.json.PhoneNumberJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 20/01/15.
@@ -22,7 +23,7 @@ public class PhoneNumberDtoJsonConverter implements Converter<PhoneNumberDTO, Ph
     FacebookPageDtoJsonConverter facebookPageConverter;
 
     @Override
-    public PhoneNumberJSON newTargetType(PhoneNumberDTO in) {
+    public PhoneNumberJSON newTargetType(Optional<PhoneNumberDTO> in) {
         return new PhoneNumberJSON();
     }
 
@@ -32,13 +33,12 @@ public class PhoneNumberDtoJsonConverter implements Converter<PhoneNumberDTO, Ph
     }
 
     @Override
-    public PhoneNumberJSON toTargetType(PhoneNumberDTO in, PhoneNumberJSON json) {
-        if (in == null) {
-            return null;
-        }
-        json.setRawNumber(in.getRawNumber());
-        json.setNationalFormattedNumber(in.getNationalFormattedNumber());
-        return json;
+    public Optional<PhoneNumberJSON> toTargetType(Optional<PhoneNumberDTO> in, PhoneNumberJSON json) {
+        return in.map(p ->{
+            json.setRawNumber(p.getRawNumber());
+            json.setNationalFormattedNumber(p.getNationalFormattedNumber());
+            return json;
+        });
     }
 
 

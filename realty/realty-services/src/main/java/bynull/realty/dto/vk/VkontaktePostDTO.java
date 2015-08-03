@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -44,5 +45,13 @@ public class VkontaktePostDTO {
 
     public void setUpdated(Date updated) {
         this.updated = copy(updated);
+    }
+
+    public Optional<VkontaktePageDTO> getPageOpt(){
+        return Optional.ofNullable(page);
+    }
+
+    public Optional<PhoneNumberDTO> getPhoneNumberOpt(){
+        return Optional.ofNullable(phoneNumber);
     }
 }

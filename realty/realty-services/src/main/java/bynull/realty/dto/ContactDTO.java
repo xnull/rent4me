@@ -4,6 +4,8 @@ import bynull.realty.data.business.Contact;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 3/5/15.
  */
@@ -15,4 +17,8 @@ public class ContactDTO {
 
     //phone specific
     private PhoneNumberDTO phoneNumber;
+
+    public Optional<PhoneNumberDTO> getPhoneNumberOpt(){
+        return Optional.ofNullable(phoneNumber);
+    }
 }

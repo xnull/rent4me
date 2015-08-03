@@ -6,6 +6,7 @@ import name.dargiri.web.form.VkontaktePageForm;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -17,7 +18,7 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
     CityAdminConverter cityConverter;
 
     @Override
-    public VkontaktePageForm newTargetType(VkontaktePageDTO in) {
+    public VkontaktePageForm newTargetType(Optional<VkontaktePageDTO> in) {
         return new VkontaktePageForm();
     }
 
@@ -27,14 +28,15 @@ public class VkontaktePageAdminConverter implements Converter<VkontaktePageDTO, 
     }
 
     @Override
-    public VkontaktePageForm toTargetType(VkontaktePageDTO in, VkontaktePageForm form) {
-        if (in == null) return null;
-        form.setId(in.getId());
-        form.setExternalId(in.getExternalId());
-        form.setLink(in.getLink());
-        form.setEnabled(in.isEnabled());
-        form.setCity(cityConverter.toTargetType(in.getCity()).orElse(null));
-        return form;
+    public Optional<VkontaktePageForm> toTargetType(Optional<VkontaktePageDTO> in, VkontaktePageForm form) {
+        return in.map(vk -> {
+            form.setId(vk.getId());
+            form.setExternalId(vk.getExternalId());
+            form.setLink(vk.getLink());
+            form.setEnabled(vk.isEnabled());
+            form.setCity(cityConverter.toTargetType(vk.getCityOpt()).orElse(null));
+            return form;
+        });
     }
 
     @Override

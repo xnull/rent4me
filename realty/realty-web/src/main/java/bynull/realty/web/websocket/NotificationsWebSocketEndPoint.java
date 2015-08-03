@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 4/29/15.
@@ -34,7 +35,7 @@ public class NotificationsWebSocketEndPoint implements NotificationUsersOnlineNo
 
     @Override
     public void deliverNotification(NotificationDTO notificationDTO) {
-        NotificationJSON jsonObject = notificationDtoJsonConverter.toTargetType(notificationDTO).get();
+        NotificationJSON jsonObject = notificationDtoJsonConverter.toTargetType(Optional.ofNullable(notificationDTO)).get();
         try {
             String json = JsonUtils.toJson(jsonObject);
             genericWebSocketEndPoint.sendToUserOnChannel("notifications", notificationDTO.getReceiver().getId(), json);

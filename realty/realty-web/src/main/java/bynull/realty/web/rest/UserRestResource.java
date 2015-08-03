@@ -27,10 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -109,10 +106,10 @@ public class UserRestResource {
     @Path("/apartment")
     public Response getApartment() {
 
-        ApartmentDTO apartment = apartmentService.findAuthorizedUserApartment();
+        Optional<ApartmentDTO> apartment = apartmentService.findAuthorizedUserApartment();
         return Response
                 .status(apartment != null ? Response.Status.OK : Response.Status.NOT_FOUND)
-                .entity(apartmentDtoJsonConverter.toTargetType(apartment))
+                .entity(apartmentDtoJsonConverter.toTargetType(apartment).orElse(null))
                 .build();
     }
 
@@ -123,7 +120,7 @@ public class UserRestResource {
         boolean result = apartmentService.createForAuthorizedUser(dto);
         return Response
                 .status(result ? Response.Status.CREATED : Response.Status.CONFLICT)
-                .entity(result ? apartmentDtoJsonConverter.toTargetType(apartmentService.findAuthorizedUserApartment()) : null)
+                .entity(result ? apartmentDtoJsonConverter.toTargetType(apartmentService.findAuthorizedUserApartment()).orElse(null) : null)
                 .build();
     }
 
@@ -134,7 +131,7 @@ public class UserRestResource {
         boolean result = apartmentService.updateForAuthorizedUser(dto);
         return Response
                 .status(result ? Response.Status.OK : Response.Status.CONFLICT)
-                .entity(result ? apartmentDtoJsonConverter.toTargetType(apartmentService.findAuthorizedUserApartment()) : null)
+                .entity(result ? apartmentDtoJsonConverter.toTargetType(apartmentService.findAuthorizedUserApartment()).orElse(null) : null)
                 .build();
     }
 

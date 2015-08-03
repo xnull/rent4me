@@ -6,6 +6,8 @@ import name.dargiri.web.form.GeoPointForm;
 import name.dargiri.web.form.MetroForm;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 18/01/15.
  */
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class MetroAdminConverter implements Converter<MetroDTO, MetroForm> {
 
     @Override
-    public MetroForm newTargetType(MetroDTO in) {
+    public MetroForm newTargetType(Optional<MetroDTO> in) {
         return new MetroForm();
     }
 
@@ -23,12 +25,13 @@ public class MetroAdminConverter implements Converter<MetroDTO, MetroForm> {
     }
 
     @Override
-    public MetroForm toTargetType(MetroDTO in, MetroForm form) {
-        if (in == null) return null;
-        form.setId(in.getId());
-        form.setStationName(in.getStationName());
-        form.setLocation(GeoPointForm.from(in.getLocation()));
-        return form;
+    public Optional<MetroForm> toTargetType(Optional<MetroDTO> in, MetroForm form) {
+        return in.map(m -> {
+            form.setId(m.getId());
+            form.setStationName(m.getStationName());
+            form.setLocation(GeoPointForm.from(m.getLocation()));
+            return form;
+        });
     }
 
     @Override

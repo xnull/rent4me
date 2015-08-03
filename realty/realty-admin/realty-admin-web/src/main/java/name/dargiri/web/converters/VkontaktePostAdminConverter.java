@@ -6,6 +6,7 @@ import name.dargiri.web.form.VkontaktePostForm;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -23,7 +24,7 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
     private PhoneNumberAdminConverter phoneNumberConverter;
 
     @Override
-    public VkontaktePostForm newTargetType(VkontaktePostDTO in) {
+    public VkontaktePostForm newTargetType(Optional<VkontaktePostDTO> in) {
         return new VkontaktePostForm();
     }
 
@@ -33,22 +34,20 @@ public class VkontaktePostAdminConverter implements Converter<VkontaktePostDTO, 
     }
 
     @Override
-    public VkontaktePostForm toTargetType(VkontaktePostDTO in, VkontaktePostForm form) {
-        if (in == null) {
-            return null;
-        }
-
-        form.setLink(in.getLink());
-        form.setMessage(in.getMessage());
-        form.setRoomCount(in.getRoomCount());
-        form.setRentalFee(in.getRentalFee());
-        form.setImageUrls(in.getImageUrls());
-        form.setCreated(in.getCreated());
-        form.setUpdated(in.getUpdated());
-        form.setPage(vkPageAdminConverter.toTargetType(in.getPage()).orElse(null));
-        form.setMetros(metroAdminConverter.toTargetSet(in.getMetros()));
-        form.setPhoneNumber(phoneNumberConverter.toTargetType(in.getPhoneNumber()).orElse(null));
-        return form;
+    public Optional<VkontaktePostForm> toTargetType(Optional<VkontaktePostDTO> in, VkontaktePostForm form) {
+        return in.map(vkPost -> {
+            form.setLink(vkPost.getLink());
+            form.setMessage(vkPost.getMessage());
+            form.setRoomCount(vkPost.getRoomCount());
+            form.setRentalFee(vkPost.getRentalFee());
+            form.setImageUrls(vkPost.getImageUrls());
+            form.setCreated(vkPost.getCreated());
+            form.setUpdated(vkPost.getUpdated());
+            form.setPage(vkPageAdminConverter.toTargetType(vkPost.getPageOpt()).orElse(null));
+            form.setMetros(metroAdminConverter.toTargetSet(vkPost.getMetros()));
+            form.setPhoneNumber(phoneNumberConverter.toTargetType(vkPost.getPhoneNumberOpt()).orElse(null));
+            return form;
+        });
     }
 
     @Override
