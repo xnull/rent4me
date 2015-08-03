@@ -70,23 +70,24 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     @Override
     public Optional<CityDTO> findById(long id) {
-        return cityModelDTOConverter.toTargetType(cityRepository.findOne(id));
+        return cityModelDTOConverter.toTargetType(Optional.ofNullable(cityRepository.findOne(id)));
     }
 
     @Transactional
     @Override
-    public CityDTO update(CityDTO city) {
+    public Optional<CityDTO> update(CityDTO city) {
         CityEntity cityEntity = cityModelDTOConverter.toSourceType(city);
 
-        CityEntity found = cityRepository.findOne(city.getId());
-        Assert.notNull(found);
+        Optional<CityEntity> found = Optional.ofNullable(cityRepository.findOne(city.getId()));
 
-        found.setName(cityEntity.getName());
-        found.setArea(cityEntity.getArea());
-        found.setCountry(cityEntity.getCountry());
-        found = cityRepository.saveAndFlush(found);
+        return found.flatMap(c -> {
+            c.setName(cityEntity.getName());
+            c.setArea(cityEntity.getArea());
+            c.setCountry(cityEntity.getCountry());
+            c = cityRepository.saveAndFlush(c);
 
-        return cityModelDTOConverter.toTargetType(found).orElse(null);
+            return cityModelDTOConverter.toTargetType(Optional.of(c));
+        });
     }
 
     @Transactional
@@ -110,20 +111,18 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     @Override
     public Optional<CityDTO> findByGeoPoint(Optional<GeoPoint> geoPoint) {
-        if (!geoPoint.isPresent()) {
-            return Optional.empty();
-        } else {
+        return geoPoint.flatMap(g -> {
             CityEntity cityEntity = cityRepository.findByPoint(geoPoint.get().getLongitude(), geoPoint.get().getLatitude());
-            return cityModelDTOConverter.toTargetType(cityEntity);
-        }
+            return cityModelDTOConverter.toTargetType(Optional.ofNullable(cityEntity));
+        });
     }
 
     @Transactional(readOnly = true)
     @Override
-    public CityDTO getMoscow() {
+    public Optional<CityDTO> getMoscow() {
         GeoPoint cityCenterPoint = MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCityCenterPoint();
         CityEntity cityEntity = cityRepository.findByPoint(cityCenterPoint.getLongitude(), cityCenterPoint.getLatitude());
         Assert.notNull(cityEntity, "Moscow entity should be present");
-        return cityModelDTOConverter.toTargetType(cityEntity).orElse(null);
+        return cityModelDTOConverter.toTargetType(Optional.of(cityEntity));
     }
 }

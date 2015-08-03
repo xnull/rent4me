@@ -188,7 +188,7 @@ public class SocialNetController {
     @RequestMapping(value = "vk/{id}/edit")
     public ModelAndView editVKPage(@PathVariable("id") long fbPageId) {
         ModelAndView mav = new ModelAndView("socialnet/vk/vk_page_edit");
-        VkontaktePageDTO page = vkontakteService.findPageById(fbPageId);
+        Optional<VkontaktePageDTO> page = vkontakteService.findPageById(fbPageId);
         VkontaktePageForm form = vkPageConverter.toTargetType(page).orElse(null);
         List<? extends CityDTO> cities = cityService.findAll();
         List<? extends CityForm> cityForms = cityConverter.toTargetList(cities);

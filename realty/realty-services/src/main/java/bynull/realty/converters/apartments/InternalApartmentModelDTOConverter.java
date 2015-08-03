@@ -6,6 +6,7 @@ import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.dto.UserDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -14,17 +15,17 @@ import java.util.stream.Collectors;
 @Component
 public class InternalApartmentModelDTOConverter extends BaseApartmentModelDTOConverter<InternalApartment> {
     @Override
-    public ApartmentDTO toTargetType(InternalApartment apartment, ApartmentDTO dto) {
-        ApartmentDTO result = super.toTargetType(apartment, dto);
+    public Optional<ApartmentDTO> toTargetType(Optional<InternalApartment> apartment, ApartmentDTO dto) {
+        return super.toTargetType(apartment, dto).flatMap(apt ->{
+            apt.setOwner(UserDTO.from(apartment.get().getOwner()));
 
-        result.setOwner(UserDTO.from(apartment.getOwner()));
+            apt.setPhotos(apartment.get().listPhotosNewestFirst()
+                            .stream()
+                            .map(ApartmentPhotoDTO::from)
+                            .collect(Collectors.toList())
+            );
 
-        result.setPhotos(apartment.listPhotosNewestFirst()
-                        .stream()
-                        .map(ApartmentPhotoDTO::from)
-                        .collect(Collectors.toList())
-        );
-
-        return result;
+            return Optional.of(apt);
+        });
     }
 }

@@ -9,6 +9,7 @@ import bynull.realty.dto.ApartmentDTO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/5/15.
@@ -17,7 +18,7 @@ import javax.annotation.Resource;
 public class ApartmentModelDTOConverterFactory<S extends Apartment> implements ConverterFactory<S, ApartmentDTO, ApartmentModelDTOConverter<S>> {
     private final ApartmentModelDTOConverter<S> NULL_CONVERTER = new ApartmentModelDTOConverter<S>() {
         @Override
-        public ApartmentDTO newTargetType(S in) {
+        public ApartmentDTO newTargetType(Optional<S> in) {
             return null;
         }
 
@@ -27,8 +28,8 @@ public class ApartmentModelDTOConverterFactory<S extends Apartment> implements C
         }
 
         @Override
-        public ApartmentDTO toTargetType(S in, ApartmentDTO instance) {
-            return null;
+        public Optional<ApartmentDTO> toTargetType(Optional<S> in, ApartmentDTO instance) {
+            return Optional.empty();
         }
 
         @Override

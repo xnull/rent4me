@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author dionis on 08/12/14.
@@ -26,4 +27,8 @@ public interface ApartmentInfoDeltaRepository extends JpaRepository<ApartmentInf
 
     @Query(value = "SELECT distinct on (apartment_id) * from apartment_deltas where applied=:applied and rejected=:rejected ORDER BY apartment_id, created_dt DESC;", nativeQuery = true)
     List<ApartmentInfoDelta> listAllGroupedByApartments(@Param("applied") boolean applied, @Param("rejected") boolean rejected);
+
+    default Optional<ApartmentInfoDelta> findOneOpt(Long id) {
+        return Optional.ofNullable(findOne(id));
+    }
 }

@@ -14,21 +14,21 @@ import java.util.Optional;
 @Component
 public class FacebookApartmentModelDTOConverter extends SocialNetApartmentModelDTOConverter<FacebookApartment> {
     @Override
-    public ApartmentDTO toTargetType(FacebookApartment apartment, ApartmentDTO dto) {
-        ApartmentDTO apartmentDTO = super.toTargetType(apartment, dto);
-        if (apartmentDTO != null) {
-            FacebookPageToScrap facebookPage = apartment.getFacebookPage();
+    public Optional<ApartmentDTO> toTargetType(Optional<FacebookApartment> apartment, ApartmentDTO dto) {
+        return super.toTargetType(apartment, dto).flatMap(apartmentDTO -> {
+            FacebookApartment apt = apartment.get();
+            FacebookPageToScrap facebookPage = apt.getFacebookPage();
             CityEntity city = facebookPage.getCity();
             if (city != null) {
                 apartmentDTO.setCity(city.getName());
             }
 
-            Optional.ofNullable(apartment.getExtAuthorLink()).ifPresent(link -> {
+            Optional.ofNullable(apt.getExtAuthorLink()).ifPresent(link -> {
                 apartmentDTO.setAuthorId(parseAuthorId(link));
             });
-        }
 
-        return apartmentDTO;
+            return Optional.of(apartmentDTO);
+        });
     }
 
     /**

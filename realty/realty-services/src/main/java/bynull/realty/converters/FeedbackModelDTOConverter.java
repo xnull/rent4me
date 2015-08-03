@@ -6,13 +6,15 @@ import bynull.realty.dto.FeedbackDTO;
 import bynull.realty.dto.UserDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 4/11/15.
  */
 @Component
 public class FeedbackModelDTOConverter implements Converter<Feedback, FeedbackDTO> {
     @Override
-    public FeedbackDTO newTargetType(Feedback in) {
+    public FeedbackDTO newTargetType(Optional<Feedback> in) {
         return new FeedbackDTO();
     }
 
@@ -22,19 +24,18 @@ public class FeedbackModelDTOConverter implements Converter<Feedback, FeedbackDT
     }
 
     @Override
-    public FeedbackDTO toTargetType(Feedback in, FeedbackDTO instance) {
-        if (in == null) {
-            return null;
-        }
-        FeedbackDTO out = new FeedbackDTO();
-        out.setText(in.getText());
-        out.setEmail(in.getEmail());
-        out.setName(in.getName());
-        out.setId(in.getId());
-        out.setUpdated(in.getUpdated());
-        out.setCreated(in.getCreated());
-        out.setCreator(UserDTO.from(in.getCreator()));
-        return out;
+    public Optional<FeedbackDTO> toTargetType(Optional<Feedback> in, FeedbackDTO instance) {
+        return in.flatMap(f -> {
+            FeedbackDTO out = new FeedbackDTO();
+            out.setText(f.getText());
+            out.setEmail(f.getEmail());
+            out.setName(f.getName());
+            out.setId(f.getId());
+            out.setUpdated(f.getUpdated());
+            out.setCreated(f.getCreated());
+            out.setCreator(UserDTO.from(f.getCreator()));
+            return Optional.of(out);
+        });
     }
 
     @Override

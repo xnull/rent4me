@@ -17,7 +17,7 @@ public interface CityService {
 
     Optional<CityDTO> findById(long id);
 
-    CityDTO update(CityDTO city);
+    Optional<CityDTO> update(CityDTO city);
 
     boolean delete(long id);
 
@@ -25,5 +25,5 @@ public interface CityService {
 
     Optional<CityDTO> findByGeoPoint(Optional<GeoPoint> geoPoint);
 
-    CityDTO getMoscow();
+    Optional<CityDTO> getMoscow();
 }

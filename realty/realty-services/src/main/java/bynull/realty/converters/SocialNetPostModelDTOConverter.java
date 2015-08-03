@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -24,7 +25,7 @@ public class SocialNetPostModelDTOConverter implements Converter<SocialNetPost, 
     PhoneNumberModelDTOConverter phoneNumberDTOConverter;
 
     @Override
-    public SocialNetPostDTO newTargetType(SocialNetPost in) {
+    public SocialNetPostDTO newTargetType(Optional<SocialNetPost> in) {
         return new SocialNetPostDTO();
     }
 
@@ -34,22 +35,23 @@ public class SocialNetPostModelDTOConverter implements Converter<SocialNetPost, 
     }
 
     @Override
-    public SocialNetPostDTO toTargetType(SocialNetPost post, SocialNetPostDTO dto) {
-        if (post == null) return null;
-        dto.setId(post.getId().toStringRepresentation());
-        dto.setLink(post.getLink());
-        dto.setMessage(post.getMessage());
-        dto.setRentalFee(post.getRentalFee());
-        dto.setRoomCount(post.getRoomCount());
-        dto.setCreated(post.getCreated());
-        dto.setUpdated(post.getUpdated());
-        dto.setSocialNetwork(post.getSocialNetwork());
-        dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
-        dto.setPhoneNumberDTO(phoneNumberDTOConverter.toTargetType(post.getPhoneNumber()).orElse(null));
+    public Optional<SocialNetPostDTO> toTargetType(Optional<SocialNetPost> post, SocialNetPostDTO dto) {
+        return post.flatMap(p -> {
+            dto.setId(p.getId().toStringRepresentation());
+            dto.setLink(p.getLink());
+            dto.setMessage(p.getMessage());
+            dto.setRentalFee(p.getRentalFee());
+            dto.setRoomCount(p.getRoomCount());
+            dto.setCreated(p.getCreated());
+            dto.setUpdated(p.getUpdated());
+            dto.setSocialNetwork(p.getSocialNetwork());
+            dto.setMetros(metroConverter.toTargetSet(p.getMetros()));
+            dto.setPhoneNumberDTO(phoneNumberDTOConverter.toTargetType(p.getPhoneNumberOpt()).orElse(null));
 //        dto.setMetros(Collections.emptySet());
-//        dto.setPage(vkPageConverter.toTargetType(post.getVkontaktePage()));
-        dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
-        return dto;
+//        dto.setPage(vkPageConverter.toTargetType(p.getVkontaktePage()));
+            dto.setImageUrls(p.getPicture() != null ? Collections.singletonList(p.getPicture()) : Collections.emptyList());
+            return Optional.of(dto);
+        });
     }
 
     @Override

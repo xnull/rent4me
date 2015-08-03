@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -137,6 +138,10 @@ public class VkontaktePost {
         return vkontaktePage;
     }
 
+    public Optional<VkontaktePage> getVkontaktePageOpt() {
+        return Optional.ofNullable(vkontaktePage);
+    }
+
     public void setVkontaktePage(VkontaktePage vkontaktePage) {
         this.vkontaktePage = vkontaktePage;
     }
@@ -151,6 +156,10 @@ public class VkontaktePost {
 
     public PhoneNumber getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public Optional<PhoneNumber> getPhoneNumberOpt() {
+        return Optional.ofNullable(phoneNumber);
     }
 
     public void setMetros(Set<MetroEntity> metros) {

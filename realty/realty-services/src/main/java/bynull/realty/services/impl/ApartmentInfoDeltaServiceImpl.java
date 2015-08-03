@@ -32,8 +32,7 @@ public class ApartmentInfoDeltaServiceImpl implements ApartmentInfoDeltaService 
     @Transactional(readOnly = true)
     @Override
     public Optional<ApartmentInfoDeltaDTO> findById(Long id) {
-        ApartmentInfoDelta one = apartmentInfoDeltaRepository.findOne(id);
-        return converter.toTargetType(one);
+        return converter.toTargetType(apartmentInfoDeltaRepository.findOneOpt(id));
     }
 
     @Transactional

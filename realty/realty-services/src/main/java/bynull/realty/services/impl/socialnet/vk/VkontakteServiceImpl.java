@@ -147,7 +147,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 
                     log.info("Getting city");
 
-                    Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(vkPage.getCity());
+                    Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(vkPage.getCityOpt());
 
                     log.info("Got city [{}]", cityDTO);
                     log.info("Finding newest for page");
@@ -327,8 +327,8 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 
     @Transactional(readOnly = true)
     @Override
-    public VkontaktePageDTO findPageById(long vkPageId) {
-        return vkontaktePageConverter.toTargetType(vkontaktePageRepository.findOne(vkPageId)).orElse(null);
+    public Optional<VkontaktePageDTO> findPageById(long vkPageId) {
+        return vkontaktePageConverter.toTargetType(vkontaktePageRepository.findOneOpt(vkPageId));
     }
 
     @Transactional(readOnly = true)
@@ -361,7 +361,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
             for (VkontakteApartment post : posts) {
                 String message = post.getDescription();
 
-                Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(post.getVkontaktePage().getCity());
+                Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(post.getVkontaktePage().getCityOpt());
 
                 Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
                 post.setMetros(matchedMetros);

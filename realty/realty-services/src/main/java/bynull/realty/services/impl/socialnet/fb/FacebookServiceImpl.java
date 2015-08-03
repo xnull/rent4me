@@ -134,7 +134,8 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
                     FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
-                    Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(fbPage.getCity());
+
+                    Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(Optional.ofNullable(fbPage.getCity()));
                     List<FacebookApartment> newest = apartmentRepository.finFBAparmentsByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
 
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
@@ -362,7 +363,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
             for (FacebookApartment post : posts) {
                 String message = post.getDescription();
 
-                Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(post.getFacebookPage().getCity());
+                Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(Optional.ofNullable(post.getFacebookPage().getCity()));
 
                 Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
                 post.setMetros(matchedMetros);

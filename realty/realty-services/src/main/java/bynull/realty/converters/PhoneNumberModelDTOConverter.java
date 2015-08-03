@@ -5,13 +5,15 @@ import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.dto.PhoneNumberDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 2/11/15.
  */
 @Component
 public class PhoneNumberModelDTOConverter implements Converter<PhoneNumber, PhoneNumberDTO> {
     @Override
-    public PhoneNumberDTO newTargetType(PhoneNumber in) {
+    public PhoneNumberDTO newTargetType(Optional<PhoneNumber> in) {
         return new PhoneNumberDTO();
     }
 
@@ -21,14 +23,12 @@ public class PhoneNumberModelDTOConverter implements Converter<PhoneNumber, Phon
     }
 
     @Override
-    public PhoneNumberDTO toTargetType(PhoneNumber in, PhoneNumberDTO dto) {
-        if (in == null) {
-            return null;
-        } else {
-            dto.setRawNumber(in.getRawNumber());
-            dto.setNationalFormattedNumber(in.getNationalFormattedNumber());
-            return dto;
-        }
+    public Optional<PhoneNumberDTO> toTargetType(Optional<PhoneNumber> in, PhoneNumberDTO dto) {
+        return in.flatMap(p -> {
+            dto.setRawNumber(p.getRawNumber());
+            dto.setNationalFormattedNumber(p.getNationalFormattedNumber());
+            return Optional.of(dto);
+        });
     }
 
     @Override

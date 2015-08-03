@@ -34,7 +34,7 @@ public class MetroModelDTOConverter implements Converter<MetroEntity, MetroDTO> 
             dto.setId(m.getId());
             dto.setStationName(m.getStationName());
             dto.setLocation(GeoPointDTO.from(m.getLocation()));
-            cityModelDTOConverter.toTargetType(m.getCity()).ifPresent(dto::setCity);
+            dto.setCityOpt(cityModelDTOConverter.toTargetType(m.getCity()));
             return Optional.of(dto);
         });
     }

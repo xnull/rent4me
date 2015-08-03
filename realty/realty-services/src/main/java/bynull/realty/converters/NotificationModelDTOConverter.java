@@ -10,13 +10,15 @@ import bynull.realty.dto.UserDTO;
 import bynull.realty.utils.HibernateUtil;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Created by dionis on 5/2/15.
  */
 @Component
 public class NotificationModelDTOConverter implements Converter<Notification, NotificationDTO> {
     @Override
-    public NotificationDTO newTargetType(Notification in) {
+    public NotificationDTO newTargetType(Optional<Notification> in) {
         return new NotificationDTO();
     }
 
@@ -26,29 +28,28 @@ public class NotificationModelDTOConverter implements Converter<Notification, No
     }
 
     @Override
-    public NotificationDTO toTargetType(Notification in, NotificationDTO instance) {
-        if (in == null) {
-            return null;
-        }
-        in = HibernateUtil.deproxy(in);
-        instance.setId(in.getId());
-        instance.setType(in.getType());
-        instance.setReceiver(UserDTO.from(in.getReceiver()));
-        instance.setResolved(in.isResolved());
-        instance.setCreated(in.getCreated());
+    public Optional<NotificationDTO> toTargetType(Optional<Notification> in, NotificationDTO instance) {
+        return in.flatMap(ntf -> {
+            ntf = HibernateUtil.deproxy(in);
+            instance.setId(ntf.getId());
+            instance.setType(ntf.getType());
+            instance.setReceiver(UserDTO.from(ntf.getReceiver()));
+            instance.setResolved(ntf.isResolved());
+            instance.setCreated(ntf.getCreated());
 
-        switch (in.getType()) {
-            case NEW_MESSAGE: {
-                NewMessageNotification newMessageNotification = (NewMessageNotification) in;
-                ChatMessage chatMessage = newMessageNotification.getChatMessage();
-                instance.setValue(ChatMessageDTO.from(chatMessage));
+            switch (ntf.getType()) {
+                case NEW_MESSAGE: {
+                    NewMessageNotification newMessageNotification = (NewMessageNotification) ntf;
+                    ChatMessage chatMessage = newMessageNotification.getChatMessage();
+                    instance.setValue(ChatMessageDTO.from(chatMessage));
+                }
+                break;
+                default:
+                    throw new UnsupportedOperationException("Not supported conversion type");
             }
-            break;
-            default:
-                throw new UnsupportedOperationException("Not supported conversion type");
-        }
 
-        return instance;
+            return Optional.of(instance);
+        });
     }
 
     @Override

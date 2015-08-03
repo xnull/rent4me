@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -144,12 +145,20 @@ public class FacebookScrapedPost {
         return phoneNumber;
     }
 
+    public Optional<PhoneNumber> getPhoneNumberOpt() {
+        return Optional.ofNullable(phoneNumber);
+    }
+
     public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     public FacebookPageToScrap getFacebookPageToScrap() {
         return facebookPageToScrap;
+    }
+
+    public Optional<FacebookPageToScrap> getFacebookPageToScrapOpt() {
+        return Optional.ofNullable(facebookPageToScrap);
     }
 
     public void setFacebookPageToScrap(FacebookPageToScrap facebookPageToScrap) {

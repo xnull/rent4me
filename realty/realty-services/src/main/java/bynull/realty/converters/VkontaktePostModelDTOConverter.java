@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -24,7 +25,7 @@ public class VkontaktePostModelDTOConverter implements Converter<VkontaktePost, 
     PhoneNumberModelDTOConverter phoneNumberConverter;
 
     @Override
-    public VkontaktePostDTO newTargetType(VkontaktePost in) {
+    public VkontaktePostDTO newTargetType(Optional<VkontaktePost> in) {
         return new VkontaktePostDTO();
     }
 
@@ -34,20 +35,21 @@ public class VkontaktePostModelDTOConverter implements Converter<VkontaktePost, 
     }
 
     @Override
-    public VkontaktePostDTO toTargetType(VkontaktePost post, VkontaktePostDTO dto) {
-        if (post == null) return null;
-        dto.setId(post.getId());
-        dto.setLink(post.getLink());
-        dto.setMessage(post.getMessage());
-        dto.setRentalFee(post.getRentalFee());
-        dto.setRoomCount(post.getRoomCount());
-        dto.setCreated(post.getCreated());
-        dto.setPhoneNumber(phoneNumberConverter.toTargetType(post.getPhoneNumber()).orElse(null));
-        dto.setUpdated(post.getUpdated());
-        dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
-        dto.setPage(vkPageConverter.toTargetType(post.getVkontaktePage()).orElse(null));
-        dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
-        return dto;
+    public Optional<VkontaktePostDTO> toTargetType(Optional<VkontaktePost> post, VkontaktePostDTO dto) {
+        return post.flatMap(p -> {
+            dto.setId(p.getId());
+            dto.setLink(p.getLink());
+            dto.setMessage(p.getMessage());
+            dto.setRentalFee(p.getRentalFee());
+            dto.setRoomCount(p.getRoomCount());
+            dto.setCreated(p.getCreated());
+            dto.setPhoneNumber(phoneNumberConverter.toTargetType(p.getPhoneNumberOpt()).orElse(null));
+            dto.setUpdated(p.getUpdated());
+            dto.setMetros(metroConverter.toTargetSet(p.getMetros()));
+            dto.setPage(vkPageConverter.toTargetType(p.getVkontaktePageOpt()).orElse(null));
+            dto.setImageUrls(p.getPicture() != null ? Collections.singletonList(p.getPicture()) : Collections.emptyList());
+            return Optional.of(dto);
+        });
     }
 
     @Override

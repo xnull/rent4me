@@ -123,8 +123,8 @@ public class MetroServiceImpl implements MetroService {
                         //remove metros from cities other than provided
                 .filter(metro -> {
                     final boolean allowed;
-
-                    BoundingBox area = metro.getCity().getArea();
+                    //TODO What to do if city is null?
+                    BoundingBox area = metro.getCity().get().getArea();
                     allowed = area.contains(cityDescription.cityCenterPoint);
 
                     return allowed;

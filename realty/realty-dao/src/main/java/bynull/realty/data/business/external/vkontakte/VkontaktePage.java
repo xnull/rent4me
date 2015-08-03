@@ -4,6 +4,7 @@ import bynull.realty.data.common.CityEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Optional;
 
 import static bynull.realty.util.CommonUtils.copy;
 
@@ -96,6 +97,10 @@ public class VkontaktePage {
 
     public CityEntity getCity() {
         return city;
+    }
+
+    public Optional<CityEntity> getCityOpt() {
+        return Optional.ofNullable(city);
     }
 
     public void setCity(CityEntity city) {

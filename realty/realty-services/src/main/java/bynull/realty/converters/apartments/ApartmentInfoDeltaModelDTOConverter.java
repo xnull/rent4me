@@ -10,6 +10,7 @@ import bynull.realty.utils.HibernateUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Created by dionis on 3/25/15.
@@ -21,7 +22,7 @@ public class ApartmentInfoDeltaModelDTOConverter implements Converter<ApartmentI
     ApartmentModelDTOConverterFactory<Apartment> apartmentModelDTOConverterFactory;
 
     @Override
-    public ApartmentInfoDeltaDTO newTargetType(ApartmentInfoDelta in) {
+    public ApartmentInfoDeltaDTO newTargetType(Optional<ApartmentInfoDelta> in) {
         return new ApartmentInfoDeltaDTO();
     }
 
@@ -31,25 +32,25 @@ public class ApartmentInfoDeltaModelDTOConverter implements Converter<ApartmentI
     }
 
     @Override
-    public ApartmentInfoDeltaDTO toTargetType(ApartmentInfoDelta in, ApartmentInfoDeltaDTO instance) {
-        if (in == null) return null;
+    public Optional<ApartmentInfoDeltaDTO> toTargetType(Optional<ApartmentInfoDelta> in, ApartmentInfoDeltaDTO instance) {
+        return in.flatMap(aptDelta -> {
+            instance.setId(aptDelta.getId());
+            instance.setLocation(GeoPointDTO.from(aptDelta.getLocation()));
+            instance.setAddressComponents(AddressComponentsDTO.from(aptDelta.getAddressComponents()));
+            instance.setCreated(aptDelta.getCreated());
+            instance.setUpdated(aptDelta.getUpdated());
+            instance.setApplied(aptDelta.isApplied());
+            instance.setRejected(aptDelta.isRejected());
+            instance.setRoomCount(aptDelta.getRoomCount());
+            instance.setFloorNumber(aptDelta.getFloorNumber());
+            instance.setFloorsTotal(aptDelta.getFloorsTotal());
+            instance.setArea(aptDelta.getArea());
+            Apartment apartment = HibernateUtil.deproxy(aptDelta.getApartment());
+            ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(apartment);
+            instance.setApartment(targetConverter.toTargetType(Optional.ofNullable(apartment)).orElse(null));
 
-        instance.setId(in.getId());
-        instance.setLocation(GeoPointDTO.from(in.getLocation()));
-        instance.setAddressComponents(AddressComponentsDTO.from(in.getAddressComponents()));
-        instance.setCreated(in.getCreated());
-        instance.setUpdated(in.getUpdated());
-        instance.setApplied(in.isApplied());
-        instance.setRejected(in.isRejected());
-        instance.setRoomCount(in.getRoomCount());
-        instance.setFloorNumber(in.getFloorNumber());
-        instance.setFloorsTotal(in.getFloorsTotal());
-        instance.setArea(in.getArea());
-        Apartment apartment = HibernateUtil.deproxy(in.getApartment());
-        ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(apartment);
-        instance.setApartment(targetConverter.toTargetType(apartment).orElse(null));
-
-        return instance;
+            return Optional.of(instance);
+        });
     }
 
     @Override

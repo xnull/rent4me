@@ -60,8 +60,8 @@ public class NotificationServiceImpl implements NotificationService {
         long notificationId = notification.getId();
 
         afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
-            Notification nf = notificationRepository.findOne(notificationId);
-            notificationModelDTOConverter.toTargetType(nf)
+            notificationModelDTOConverter
+                    .toTargetType(Optional.ofNullable(notificationRepository.findOne(notificationId)))
                     .ifPresent(notificationUsersOnlineNotifier::deliverNotification);
         });
     }

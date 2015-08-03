@@ -21,7 +21,7 @@ public class PhoneContactModelDTOConverter extends BaseContactModelDTOConverter<
     public Optional<ContactDTO> toTargetType(Optional<PhoneContact> in, ContactDTO instance) {
         return in.flatMap(p -> {
             ContactDTO result = super.toTargetType(in, instance).get();
-            phoneNumberModelDTOConverter.toTargetType(p.getPhoneNumber()).ifPresent(result::setPhoneNumber);
+            phoneNumberModelDTOConverter.toTargetType(p.getPhoneNumberOpt()).ifPresent(result::setPhoneNumber);
             return Optional.of(result);
         });
     }

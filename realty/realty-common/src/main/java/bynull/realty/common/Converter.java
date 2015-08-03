@@ -38,24 +38,11 @@ public interface Converter<ST, TT> {
         return in.stream().filter(it -> it != null).map(this::toSourceType).collect(Collectors.toSet());
     }
 
-    @Deprecated
-    default TT newTargetType(ST in) {
-        throw new UnsupportedOperationException("Deperesated method, please use 'newTargetType' with Optional ");
-    }
-
-    default TT newTargetType(Optional<ST> in){
-        return newTargetType(in.orElse(null));
-    }
+    TT newTargetType(Optional<ST> in);
 
     ST newSourceType(TT in);
 
     Optional<TT> toTargetType(Optional<ST> in, TT instance);
-
-    @Deprecated
-    default Optional<TT> toTargetType(ST in) {
-        Optional<ST> optIn = Optional.ofNullable(in);
-        return toTargetType(optIn, newTargetType(optIn));
-    }
 
     default Optional<TT> toTargetType(Optional<ST> in) {
         return toTargetType(in, newTargetType(in));

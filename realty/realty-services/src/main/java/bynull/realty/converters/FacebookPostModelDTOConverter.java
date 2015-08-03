@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Created by dionis on 18/01/15.
@@ -24,7 +25,7 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedP
     PhoneNumberModelDTOConverter phoneNumberModelConverter;
 
     @Override
-    public FacebookPostDTO newTargetType(FacebookScrapedPost in) {
+    public FacebookPostDTO newTargetType(Optional<FacebookScrapedPost> in) {
         return new FacebookPostDTO();
     }
 
@@ -34,21 +35,21 @@ public class FacebookPostModelDTOConverter implements Converter<FacebookScrapedP
     }
 
     @Override
-    public FacebookPostDTO toTargetType(FacebookScrapedPost post, FacebookPostDTO dto) {
-        if (post == null) return null;
-
-        dto.setId(post.getId());
-        dto.setLink(post.getLink());
-        dto.setMessage(post.getMessage());
-        dto.setRentalFee(post.getRentalFee());
-        dto.setRoomCount(post.getRoomCount());
-        dto.setCreated(post.getCreated());
-        dto.setUpdated(post.getUpdated());
-        dto.setMetros(metroConverter.toTargetSet(post.getMetros()));
-        dto.setPage(facebookPageConverter.toTargetType(post.getFacebookPageToScrap()).orElse(null));
-        dto.setPhoneNumberDTO(phoneNumberModelConverter.toTargetType(post.getPhoneNumber()).orElse(null));
-        dto.setImageUrls(post.getPicture() != null ? Collections.singletonList(post.getPicture()) : Collections.emptyList());
-        return dto;
+    public Optional<FacebookPostDTO> toTargetType(Optional<FacebookScrapedPost> post, FacebookPostDTO dto) {
+        return post.flatMap(p -> {
+            dto.setId(p.getId());
+            dto.setLink(p.getLink());
+            dto.setMessage(p.getMessage());
+            dto.setRentalFee(p.getRentalFee());
+            dto.setRoomCount(p.getRoomCount());
+            dto.setCreated(p.getCreated());
+            dto.setUpdated(p.getUpdated());
+            dto.setMetros(metroConverter.toTargetSet(p.getMetros()));
+            dto.setPage(facebookPageConverter.toTargetType(p.getFacebookPageToScrapOpt()).orElse(null));
+            dto.setPhoneNumberDTO(phoneNumberModelConverter.toTargetType(p.getPhoneNumberOpt()).orElse(null));
+            dto.setImageUrls(p.getPicture() != null ? Collections.singletonList(p.getPicture()) : Collections.emptyList());
+            return Optional.of(dto);
+        });
     }
 
 

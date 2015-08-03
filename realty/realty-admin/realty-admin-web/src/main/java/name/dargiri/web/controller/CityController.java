@@ -2,6 +2,7 @@ package name.dargiri.web.controller;
 
 //import name.dargiri.data.dto.PersonDTO;
 //import name.dargiri.data.service.PersonService;
+
 import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.CountryDTO;
 import bynull.realty.services.api.CityService;
@@ -49,16 +50,14 @@ public class CityController {
     public ModelAndView all() {
         CountryDTO country = getSelectedCountry();
         ModelAndView mav = new ModelAndView("cities/list");
-        List<? extends CityDTO> cities = cityService.findByCountry(country);
+        List<? extends CityDTO> cities = cityService.findByCountry(country.get());
         List<? extends CityForm> all = cityConverter.toTargetList(cities);
         mav.addObject("cities", all);
         return mav;
     }
 
     @RequestMapping(value = "/new")
-    public ModelAndView createForm()
-
-    {
+    public ModelAndView createForm() {
         CountryDTO selectedCountry = getSelectedCountry();
         CountryForm countryForm = countryAdminConverter.toTargetType(selectedCountry).orElse(null);
         CityForm cityForm = new CityForm();
@@ -74,12 +73,10 @@ public class CityController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public ModelAndView create(CityForm cityForm, RedirectAttributes redirectAttributes)
-
-    {
+    public ModelAndView create(CityForm cityForm, RedirectAttributes redirectAttributes) {
         CityDTO city = cityConverter.toSourceType(cityForm);
         boolean created = cityService.create(city);
-        if(created) {
+        if (created) {
             redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "City added");
             return new ModelAndView("redirect:/secure/cities/all");
         } else {
@@ -95,7 +92,7 @@ public class CityController {
         Optional<CityDTO> dto = cityService.findById(id);
         if (dto.isPresent()) {
             ModelAndView mav = new ModelAndView("cities/edit_form");
-            CityForm cityForm = cityConverter.toTargetType(dto.get()).orElse(null);
+            CityForm cityForm = cityConverter.toTargetType(dto).orElse(null);
             mav.addObject("city", cityForm);
             return mav;
         } else {
@@ -107,8 +104,8 @@ public class CityController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
     public ModelAndView edit(@PathVariable("id") Long id, CityForm cityForm) {
         CityDTO city = cityConverter.toSourceType(cityForm);
-        CityDTO updated = cityService.update(city);
-        if (updated != null) {
+        Optional<CityDTO> updated = cityService.update(city);
+        if (updated.isPresent()) {
             return new ModelAndView("redirect:/secure/cities/all");
         } else {
             ModelAndView mav = new ModelAndView("main/person");
@@ -121,7 +118,7 @@ public class CityController {
     @RequestMapping(value = "/delete/{id}")
     public ModelAndView delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         boolean deleted = cityService.delete(id);
-        if(deleted) {
+        if (deleted) {
             redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "City deleted");
         } else {
             redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE, "City not deleted");
@@ -132,6 +129,10 @@ public class CityController {
 
     private CountryDTO getSelectedCountry() {
         //hard-code russia for now
-        return countryService.findByName(RUSSIA);
+        Optional<CountryDTO> country = countryService.findByName(RUSSIA);
+        if (!country.isPresent()){
+            throw new RuntimeException("Countru not found");
+        }
+        return country.get();
     }
 }

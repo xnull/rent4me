@@ -10,6 +10,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * @author Vyacheslav Petc (v.pets@oorraa.net)
@@ -41,4 +42,8 @@ public class MetroEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id")
     private CityEntity city;
+
+    public Optional<CityEntity> getCity(){
+        return Optional.ofNullable(city);
+    }
 }

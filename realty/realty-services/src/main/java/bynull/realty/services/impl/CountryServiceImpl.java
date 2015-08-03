@@ -26,9 +26,9 @@ public class CountryServiceImpl implements CountryService {
 
     @Transactional(readOnly = true)
     @Override
-    public CountryDTO findByName(String name) {
+    public Optional<CountryDTO> findByName(String name) {
         CountryEntity country = countryRepository.findByNameIgnoreCase(name);
         Assert.notNull(country);
-        return countryConverter.toTargetType(country).orElse(null);
+        return countryConverter.toTargetType(Optional.of(country));
     }
 }

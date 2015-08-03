@@ -5,6 +5,7 @@ import bynull.realty.dto.vk.VkontaktePageDTO;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by dionis on 28/01/15.
@@ -18,7 +19,7 @@ public interface VkontakteService {
 
     void save(VkontaktePageDTO vkontaktePageDTO);
 
-    VkontaktePageDTO findPageById(long vkPageId);
+    Optional<VkontaktePageDTO> findPageById(long vkPageId);
 
     long countByQuery(String text);
 

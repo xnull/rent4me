@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         InternalApartment created = apartmentRepository.saveAndFlush(apartment);
 
         ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(created);
-        return targetConverter.toTargetType(created).orElse(null);
+        return targetConverter.toTargetType(Optional.ofNullable(created)).orElse(null);
     }
 
     @Transactional
@@ -157,10 +158,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public Optional<ApartmentDTO> find(Long id) {
-        Apartment one = apartmentRepository.findOne(id);
-        ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(one);
-
-        return targetConverter.toTargetType(one);
+        return apartmentRepository.findOneOpt(id).flatMap(apt -> {
+            return apartmentModelDTOConverterFactory.getTargetConverter(apt).toTargetType(Optional.of(apt));
+        });
     }
 
     @Transactional
@@ -177,7 +177,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (user != null) {
             Apartment first = Iterables.getFirst(user.getApartments(), null);
             ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(first);
-            return targetConverter.toTargetType(first).orElse(null);
+            return targetConverter.toTargetType( Optional.ofNullable(first)).orElse(null);
         } else {
             return null;
         }
@@ -281,7 +281,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         //TODO: change to generic implementation
         return result.stream()
                 .map(it -> (InternalApartment) it)
-                .map(apartment -> apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(apartment))
+                .map(apartment -> apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(Optional.ofNullable(apartment)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -302,7 +302,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         List<Apartment> posts = apartmentRepository.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
 
         return posts.stream()
-                .map(e -> apartmentModelDTOConverterFactory.getTargetConverter(e).toTargetType(e))
+                .map(e -> apartmentModelDTOConverterFactory.getTargetConverter(e).toTargetType(Optional.ofNullable(e)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -315,7 +315,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         List<Apartment> similarApartments = apartmentRepository.findSimilarApartments(apartmentId);
 
         return similarApartments.stream()
-                .map(e -> apartmentModelDTOConverterFactory.getTargetConverter(e).toTargetType(e))
+                .map(e -> apartmentModelDTOConverterFactory.getTargetConverter(e).toTargetType(Optional.ofNullable(e)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -328,7 +328,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         return apartments.getContent()
                 .stream()
-                .map(apartment -> apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(apartment))
+                .map(apartment -> apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(Optional.ofNullable(apartment)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

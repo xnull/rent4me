@@ -57,9 +57,7 @@ public class CityRestResource {
                     .ok(json)
                     .build();
         } else {
-            CityDTO moscow = cityService.getMoscow();
-
-            CityJSON json = cityDtoJsonConverter.toTargetType(moscow).orElse(null);
+            CityJSON json = cityDtoJsonConverter.toTargetType(cityService.getMoscow()).orElse(null);
             return Response
                     .ok(json)
                     .build();

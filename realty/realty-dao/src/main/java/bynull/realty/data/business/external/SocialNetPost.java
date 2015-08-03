@@ -8,6 +8,7 @@ import org.hibernate.annotations.Immutable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -66,4 +67,8 @@ public class SocialNetPost {
 
     @Embedded
     private PhoneNumber phoneNumber;
+
+    public Optional<PhoneNumber> getPhoneNumberOpt(){
+        return Optional.ofNullable(phoneNumber);
+    }
 }
