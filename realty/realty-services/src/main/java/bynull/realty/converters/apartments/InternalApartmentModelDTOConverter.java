@@ -1,6 +1,7 @@
 package bynull.realty.converters.apartments;
 
 import bynull.realty.data.business.InternalApartment;
+import bynull.realty.data.business.User;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.dto.UserDTO;
@@ -16,16 +17,18 @@ import java.util.stream.Collectors;
 public class InternalApartmentModelDTOConverter extends BaseApartmentModelDTOConverter<InternalApartment> {
     @Override
     public Optional<ApartmentDTO> toTargetType(Optional<InternalApartment> apartment, ApartmentDTO dto) {
-        return super.toTargetType(apartment, dto).flatMap(apt ->{
-            apt.setOwner(UserDTO.from(apartment.get().getOwner()));
+        return apartment.flatMap(internalApartment ->
+                super.toTargetType(apartment, dto).map(apt -> {
+                    User owner = internalApartment.getOwner();
+                    apt.setOwner(UserDTO.from(owner));
 
-            apt.setPhotos(apartment.get().listPhotosNewestFirst()
-                            .stream()
-                            .map(ApartmentPhotoDTO::from)
-                            .collect(Collectors.toList())
-            );
+                    apt.setPhotos(apartment.get().listPhotosNewestFirst()
+                                    .stream()
+                                    .map(ApartmentPhotoDTO::from)
+                                    .collect(Collectors.toList())
+                    );
 
-            return Optional.of(apt);
-        });
+                    return apt;
+                }));
     }
 }

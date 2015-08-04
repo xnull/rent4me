@@ -1,5 +1,6 @@
 package bynull.realty.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class MetroDTO {
     private GeoPointDTO location;
     private CityDTO city;
 
+    @JsonIgnore
     public void setCityOpt(Optional<CityDTO> city){
         city.ifPresent(c -> this.city = c);
     }

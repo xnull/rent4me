@@ -328,7 +328,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
     @Transactional(readOnly = true)
     @Override
     public Optional<VkontaktePageDTO> findPageById(long vkPageId) {
-        return vkontaktePageConverter.toTargetType(vkontaktePageRepository.findOneOpt(vkPageId));
+        return vkontaktePageConverter.toTargetType(Optional.ofNullable(vkontaktePageRepository.findOne(vkPageId)));
     }
 
     @Transactional(readOnly = true)

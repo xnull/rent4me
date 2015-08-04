@@ -1,5 +1,6 @@
 package bynull.realty.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,7 @@ public class ApartmentInfoDeltaDTO {
     private BigDecimal area;
     private ApartmentDTO apartment;
 
+    @JsonIgnore
     public Optional<ApartmentDTO> getApartmentOpt(){
         return Optional.ofNullable(apartment);
     }

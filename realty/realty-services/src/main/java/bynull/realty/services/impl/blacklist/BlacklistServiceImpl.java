@@ -10,6 +10,7 @@ import bynull.realty.dto.ContactDTO;
 import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.impl.IdentificationServiceImpl;
+import com.sun.deploy.util.BlackList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -59,14 +60,12 @@ public class BlacklistServiceImpl {
          */
 
         Optional<ApartmentDTO> optApartment = apartmentService.find(apartmentId);
-        if (!optApartment.isPresent()){
+        if (!optApartment.isPresent()) {
             return;
         }
 
-        IdentEntity ident = identService.find(apartmentId.toString(), IdentType.APARTMENT);
-        if (ident == null) {
-            ident = identService.save(apartmentId.toString(), IdentType.APARTMENT);
-        }
+        Optional<IdentEntity> optIdent = identService.find(apartmentId.toString(), IdentType.APARTMENT);
+        IdentEntity ident = optIdent.orElseGet(() -> identService.save(apartmentId.toString(), IdentType.APARTMENT));
 
         Optional<BlacklistEntity> optBlackInfo = Optional.ofNullable(blacklistRepo.findByIdentId(ident.getId()));
 
@@ -81,6 +80,7 @@ public class BlacklistServiceImpl {
 
     /**
      * Связать имеющиеся идентификаторы
+     *
      * @param sourceIdent
      * @param optApartment
      */
@@ -123,12 +123,12 @@ public class BlacklistServiceImpl {
 
     private Set<Long> getSocialNetIdents(ApartmentDTO apartment, IdentType type) {
         Set<Long> adjIdents = new HashSet<>();
-        adjIdents.add(identService.find(apartment.getAuthorId(), type).getId());
+        adjIdents.add(identService.findAndSaveIfNotExists(apartment.getAuthorId(), type).getId());
 
         for (ContactDTO contact : apartment.getContacts()) {
             switch (contact.getType()) {
                 case PHONE:
-                    adjIdents.add(identService.find(contact.getPhoneNumber().getRawNumber(), IdentType.PHONE).getId());
+                    adjIdents.add(identService.findAndSaveIfNotExists(contact.getPhoneNumber().getRawNumber(), IdentType.PHONE).getId());
                     break;
             }
         }
@@ -140,12 +140,32 @@ public class BlacklistServiceImpl {
         if (user == null) return Collections.emptySet();
 
         Set<Long> result = new HashSet<>();
-        result.add(identService.find(user.getId().toString(), IdentType.USER_ID).getId());
-        result.add(identService.find(user.getEmail(), IdentType.EMAIL).getId());
-        result.add(identService.find(user.getFacebookId(), IdentType.FB_ID).getId());
-        result.add(identService.find(user.getVkontakteId(), IdentType.VK_ID).getId());
-        result.add(identService.find(user.getPhoneNumber(), IdentType.PHONE).getId());
+        result.add(identService.findAndSaveIfNotExists(user.getId().toString(), IdentType.USER_ID).getId());
+        result.add(identService.findAndSaveIfNotExists(user.getEmail(), IdentType.EMAIL).getId());
+        result.add(identService.findAndSaveIfNotExists(user.getFacebookId(), IdentType.FB_ID).getId());
+        result.add(identService.findAndSaveIfNotExists(user.getVkontakteId(), IdentType.VK_ID).getId());
+        result.add(identService.findAndSaveIfNotExists(user.getPhoneNumber(), IdentType.PHONE).getId());
 
         return result;
+    }
+
+    /**
+     * Найти если существует соответствующая запись в блек листе.
+     * То есть узнать находится ли данный идентификатор в блек листе
+     *
+     * @param identValue
+     * @param identType
+     * @return
+     */
+    public Optional<BlacklistEntity> find(String identValue, IdentType identType) {
+        Set<Long> linkedIdentIds = identService.findAllLinkedIdentIds(identValue, identType);
+        for (Long linkedIdentId: linkedIdentIds){
+            BlacklistEntity bl = blacklistRepo.findByIdentId(linkedIdentId);
+            if (bl != null){
+                return Optional.of(bl);
+            }
+        }
+
+        return Optional.empty();
     }
 }

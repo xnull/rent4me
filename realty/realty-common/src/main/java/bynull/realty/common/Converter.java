@@ -1,5 +1,7 @@
 package bynull.realty.common;
 
+import org.hibernate.proxy.HibernateProxy;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,11 @@ public interface Converter<ST, TT> {
 
     default Optional<TT> toTargetType(Optional<ST> in) {
         return toTargetType(in, newTargetType(in));
+    }
+
+    default Optional<TT> toTargetTypeSimple(ST in) {
+        Optional<ST> inOpt = Optional.ofNullable(in);
+        return toTargetType(inOpt, newTargetType(inOpt));
     }
 
     ST toSourceType(TT in, ST instance);

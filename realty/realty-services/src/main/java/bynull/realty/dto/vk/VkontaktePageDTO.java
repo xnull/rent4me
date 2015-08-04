@@ -1,6 +1,7 @@
 package bynull.realty.dto.vk;
 
 import bynull.realty.dto.CityDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class VkontaktePageDTO {
     private boolean enabled;
     private CityDTO city;
 
+    @JsonIgnore
     public Optional<CityDTO> getCityOpt(){
         return Optional.ofNullable(city);
     }

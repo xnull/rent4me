@@ -1,5 +1,6 @@
 package name.dargiri.web.form;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,6 +45,7 @@ public class VkontaktePostForm {
         this.updated = copy(updated);
     }
 
+    @JsonIgnore
     public Optional<VkontaktePageForm> getPageOpt(){
         return Optional.ofNullable(page);
     }

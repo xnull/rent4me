@@ -5,12 +5,14 @@ import bynull.realty.dao.api.ident.IdentRepository;
 import bynull.realty.data.business.ids.IdRelationEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by null on 7/31/15.
@@ -25,8 +27,12 @@ public class IdentificationServiceImpl {
     @Resource
     private IdRelationsRepository idRelationsRepo;
 
-    public IdentEntity find(String identId, IdentType identType) {
-        return idRepo.findByValueAndType(identId, identType.getType());
+    public Optional<IdentEntity> find(String identValue, IdentType identType) {
+        return Optional.ofNullable(idRepo.findByValueAndType(identValue, identType.getType()));
+    }
+
+    public IdentEntity findAndSaveIfNotExists(String identId, IdentType identType) {
+        return find(identId, identType).orElseGet(() -> save(identId, identType));
     }
 
     /**
@@ -40,7 +46,7 @@ public class IdentificationServiceImpl {
      * @param adjacentIdents
      */
     public void mergeIdents(IdentEntity sourceIdent, Set<Long> adjacentIdents) {
-        Set<Long> dbAdjacentIds = findAllLinkedIdents(sourceIdent);
+        Set<Long> dbAdjacentIds = findAllLinkedIdentIds(sourceIdent);
 
         Set<Long> newAdjacent = adjacentIdents.stream()
                 .filter(adjId -> !dbAdjacentIds.contains(adjId))
@@ -55,13 +61,24 @@ public class IdentificationServiceImpl {
         }
     }
 
+    public Set<Long> findAllLinkedIdentIds(String identValue, IdentType identType) {
+        Optional<IdentEntity> sourceIdent = find(identValue, identType);
+        if (sourceIdent.isPresent()){
+            Set<Long> linked = findAllLinkedIdentIds(sourceIdent.get());
+            linked.add(sourceIdent.get().getId());
+            return linked;
+        }
+
+        return Collections.emptySet();
+    }
+
     /**
      * Поиском в ширину по графу ищем все идентификаторы связанные с sourceIdent
      *
      * @param sourceIdent
      * @return
      */
-    private Set<Long> findAllLinkedIdents(IdentEntity sourceIdent) {
+    public Set<Long> findAllLinkedIdentIds(IdentEntity sourceIdent) {
         Set<Long> result = new HashSet<>();
         Queue<Long> queue = new ArrayDeque<>();
 
@@ -78,14 +95,19 @@ public class IdentificationServiceImpl {
             }
         }
 
-        return result;
+        return  result;
     }
 
     private List<Long> findAdjacent(Long identId) {
-        return idRelationsRepo.findBySourceId(identId)
+        Stream<Long> sourceAdj = idRelationsRepo.findBySourceId(identId)
                 .stream()
-                .map(IdRelationEntity::getAdjacentId)
-                .collect(Collectors.toList());
+                .map(IdRelationEntity::getAdjacentId);
+
+        Stream<Long> targetAdj = idRelationsRepo.findByAdjacentId(identId)
+                .stream()
+                .map(IdRelationEntity::getAdjacentId);
+
+        return Stream.concat(sourceAdj, targetAdj).collect(Collectors.toList());
     }
 
     public IdentEntity save(String value, IdentType type) {
@@ -94,5 +116,12 @@ public class IdentificationServiceImpl {
         ident.setType(type.getType());
 
         return idRepo.save(ident);
+    }
+
+    public Set<IdentEntity> findAllLinkedIdents(String identValue, IdentType identType) {
+        return findAllLinkedIdentIds(identValue, identType)
+                .stream()
+                .map(idRepo::findOne)
+                .collect(Collectors.toSet());
     }
 }

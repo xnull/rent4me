@@ -2,6 +2,7 @@ package bynull.realty.data.business.external.facebook;
 
 import bynull.realty.data.business.PhoneNumber;
 import bynull.realty.data.business.metro.MetroEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -145,6 +146,7 @@ public class FacebookScrapedPost {
         return phoneNumber;
     }
 
+    @JsonIgnore
     public Optional<PhoneNumber> getPhoneNumberOpt() {
         return Optional.ofNullable(phoneNumber);
     }
@@ -157,6 +159,7 @@ public class FacebookScrapedPost {
         return facebookPageToScrap;
     }
 
+    @JsonIgnore
     public Optional<FacebookPageToScrap> getFacebookPageToScrapOpt() {
         return Optional.ofNullable(facebookPageToScrap);
     }

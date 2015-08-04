@@ -1,6 +1,6 @@
 project.ext {
     springVersion = '4.1.4.RELEASE'
-    hibernateVersion = '4.3.8.Final'
+    hibernateVersion = '4.3.10.Final'
     springSecurityVersion = '3.2.5.RELEASE'
     logbackVersion = '1.1.2'
     jerseyVersion = '2.9'
@@ -36,6 +36,7 @@ project.ext.libraries = [
         'org.hibernate:hibernate-entitymanager'                   : ["org.hibernate:hibernate-entitymanager:${hibernateVersion}"],
         'org.hibernate:hibernate-validator'                       : ["org.hibernate:hibernate-validator:4.3.2.Final"],
         'org.hibernate:hibernate-ehcache'                         : ["org.hibernate:hibernate-ehcache:${hibernateVersion}"],
+        javassist                                                 : ["org.javassist:javassist:3.20.0-GA"],
 //        'org.hibernate.javax.persistence:hibernate-jpa-2.0-api'   : ["org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final"],
 
         //jersey(rest)

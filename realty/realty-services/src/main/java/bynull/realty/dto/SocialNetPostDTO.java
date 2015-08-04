@@ -1,6 +1,7 @@
 package bynull.realty.dto;
 
 import bynull.realty.data.business.external.SocialNetwork;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +48,7 @@ public class SocialNetPostDTO {
         this.updated = copy(updated);
     }
 
+    @JsonIgnore
     public Optional<PhoneNumberDTO> getPhoneNumberOpt(){
         return Optional.ofNullable(phoneNumberDTO);
     }

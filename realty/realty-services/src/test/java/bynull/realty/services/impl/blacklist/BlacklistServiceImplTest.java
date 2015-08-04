@@ -3,6 +3,8 @@ package bynull.realty.services.impl.blacklist;
 import bynull.realty.ServiceTest;
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.blacklist.BlacklistEntity;
+import bynull.realty.data.business.ids.IdentType;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.services.api.ApartmentService;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import javax.transaction.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -54,6 +57,7 @@ public class BlacklistServiceImplTest extends ServiceTest {
 
         blService.addApartmentToBlacklist(found.getId());
 
-
+        Optional<BlacklistEntity> bl = blService.find(apartment.getId().toString(), IdentType.APARTMENT);
+        assertNotEquals(Optional.empty(), bl);
     }
 }

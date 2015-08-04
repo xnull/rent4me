@@ -1,6 +1,7 @@
 package bynull.realty.dto;
 
 import bynull.realty.data.business.Contact;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class ContactDTO {
     //phone specific
     private PhoneNumberDTO phoneNumber;
 
+    @JsonIgnore
     public Optional<PhoneNumberDTO> getPhoneNumberOpt(){
         return Optional.ofNullable(phoneNumber);
     }

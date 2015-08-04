@@ -19,6 +19,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.Uninterruptibles;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -158,9 +160,11 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public Optional<ApartmentDTO> find(Long id) {
-        return apartmentRepository.findOneOpt(id).flatMap(apt -> {
-            return apartmentModelDTOConverterFactory.getTargetConverter(apt).toTargetType(Optional.of(apt));
-        });
+        Apartment apartment = HibernateUtil.deproxy(apartmentRepository.findOne(id));
+        if (apartment != null) {
+            return apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(Optional.of(apartment));
+        }
+        return Optional.empty();
     }
 
     @Transactional
@@ -357,15 +361,15 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     private boolean adShouldBePosted(Apartment apartment) {
-        if(apartment.getMetros() != null && !apartment.getMetros().isEmpty()) {
+        if (apartment.getMetros() != null && !apartment.getMetros().isEmpty()) {
             return true;
         }
 
-        if(apartment.getRoomCount() != null) {
+        if (apartment.getRoomCount() != null) {
             return true;
         }
 
-        if(apartment.getRentalFee() != null) {
+        if (apartment.getRentalFee() != null) {
             return true;
         }
 
@@ -374,19 +378,19 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     private String toDescription(Apartment apartment) {
         String desc = StringUtils.trimToEmpty(apartment.getDescription());
-        if(desc.length() > 256) {
-            desc = StringUtils.substring(desc, 0, 256)+"...";
+        if (desc.length() > 256) {
+            desc = StringUtils.substring(desc, 0, 256) + "...";
         }
 
         desc += "\n\n" +
-                "http://rent4.me/advert/"+apartment.getId();
+                "http://rent4.me/advert/" + apartment.getId();
         return desc;
     }
 
     @Transactional
     @Override
     public void publishApartmentsOnOurVkGroupPage(List<Long> apartmentIds) {
-        if(apartmentIds.isEmpty()) return;
+        if (apartmentIds.isEmpty()) return;
         List<Apartment> apartments = apartmentRepository.findByIdIn(apartmentIds);
         long size = apartments.size();
         log.info("Apartments found: [{}]", size);
@@ -395,8 +399,8 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         log.info("Apartments published: [{}]", apartments.size());
 
-        String groupId="-82219356";//public group - old
-        groupId="-95509841";//public group - new
+        String groupId = "-82219356";//public group - old
+        groupId = "-95509841";//public group - new
 
         log.info("CrossPostPublishingToVK: Getting max count");
         long maxCountOfPublishingMessagesDuringPeriod = vkHelperComponent.getMaxCountOfPublishingMessagesDuringPeriod();
@@ -405,27 +409,27 @@ public class ApartmentServiceImpl implements ApartmentService {
         publishing_cycle:
         for (Apartment apartment : apartments) {
             apartment = HibernateUtil.deproxy(apartment);
-            if(apartment instanceof SocialNetApartment) {
+            if (apartment instanceof SocialNetApartment) {
                 final Apartment.DataSource dataSource;
-                if(apartment instanceof VkontakteApartment) {
+                if (apartment instanceof VkontakteApartment) {
                     log.info("CrossPostPublishingToVK: Getting published VK events");
                     long count = vkPublishingEventService.countOfPublishedEventsWithDataSource(Apartment.DataSource.VKONTAKTE, vkHelperComponent.getTokenRestrictionPeriod());
                     log.info("CrossPostPublishingToVK: Got published VK events: [{}]", count);
                     dataSource = Apartment.DataSource.VKONTAKTE;
                     //set it to 40% for vk
-                    long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod*40/100;
-                    if(count >= maxAllowedMessagesPublishedDuringPeriod) {
+                    long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod * 40 / 100;
+                    if (count >= maxAllowedMessagesPublishedDuringPeriod) {
                         log.info("CrossPostPublishingToVK: Skipping VK - more than needed");
                         continue publishing_cycle;
                     }
-                } else if(apartment instanceof FacebookApartment) {
+                } else if (apartment instanceof FacebookApartment) {
                     log.info("CrossPostPublishingToVK: Getting published FB events");
                     long count = vkPublishingEventService.countOfPublishedEventsWithDataSource(Apartment.DataSource.FACEBOOK, vkHelperComponent.getTokenRestrictionPeriod());
                     log.info("CrossPostPublishingToVK: Got published FB events: [{}]", count);
                     dataSource = Apartment.DataSource.FACEBOOK;
                     //set it to 60% for fb
-                    long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod*50/100;
-                    if(count >= maxAllowedMessagesPublishedDuringPeriod) {
+                    long maxAllowedMessagesPublishedDuringPeriod = maxCountOfPublishingMessagesDuringPeriod * 50 / 100;
+                    if (count >= maxAllowedMessagesPublishedDuringPeriod) {
                         log.info("CrossPostPublishingToVK: Skipping FB - more than needed");
                         continue publishing_cycle;
                     }
@@ -438,7 +442,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                 String desc = toDescription(apartment);
                 long start = System.currentTimeMillis();
                 Optional<String> token = vkHelperComponent.grabToken();
-                if(!token.isPresent()) {
+                if (!token.isPresent()) {
                     log.info("CrossPostPublishingToVK: No token present. Stopping publishing cycle.");
                     log.error("CrossPostPublishingToVK: No token present. Stopping publishing cycle.");
                     break publishing_cycle;
@@ -453,8 +457,8 @@ public class ApartmentServiceImpl implements ApartmentService {
                 long end = System.currentTimeMillis();
                 long diff = end - start;
                 //wait for 30-60 seconds in order to fool vk if they will decide to ban us
-                long minWaitThreshold = 30000+(System.currentTimeMillis()%30000);
-                if(diff < minWaitThreshold) {
+                long minWaitThreshold = 30000 + (System.currentTimeMillis() % 30000);
+                if (diff < minWaitThreshold) {
                     long sleepForMs = minWaitThreshold - diff;
                     log.info("Waiting [{}] ms before next publishing on FB", sleepForMs);
                     Uninterruptibles.sleepUninterruptibly(sleepForMs, TimeUnit.MILLISECONDS);

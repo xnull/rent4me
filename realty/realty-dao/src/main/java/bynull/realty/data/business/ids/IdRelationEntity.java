@@ -19,9 +19,15 @@ public class IdRelationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * IdentEntity id
+     */
     @Column(name = "source_id")
     private Long sourceId;
 
+    /**
+     * IdentEntity id
+     */
     @Column(name = "adjacent_id")
     private Long adjacentId;
 }

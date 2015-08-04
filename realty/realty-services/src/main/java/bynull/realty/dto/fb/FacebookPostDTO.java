@@ -2,6 +2,7 @@ package bynull.realty.dto.fb;
 
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.PhoneNumberDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,9 +48,12 @@ public class FacebookPostDTO {
         this.updated = copy(updated);
     }
 
+    @JsonIgnore
     public Optional<FacebookPageDTO> getPageOpt(){
         return Optional.ofNullable(page);
     }
+
+    @JsonIgnore
     public Optional<PhoneNumberDTO> getPhoneOpt(){
         return Optional.ofNullable(phoneNumberDTO);
     }

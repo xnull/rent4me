@@ -2,6 +2,7 @@ package bynull.realty.dto.vk;
 
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.PhoneNumberDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,10 +48,12 @@ public class VkontaktePostDTO {
         this.updated = copy(updated);
     }
 
+    @JsonIgnore
     public Optional<VkontaktePageDTO> getPageOpt(){
         return Optional.ofNullable(page);
     }
 
+    @JsonIgnore
     public Optional<PhoneNumberDTO> getPhoneNumberOpt(){
         return Optional.ofNullable(phoneNumber);
     }

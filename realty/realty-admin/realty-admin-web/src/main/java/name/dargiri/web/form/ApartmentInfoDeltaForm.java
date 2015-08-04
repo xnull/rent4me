@@ -3,6 +3,7 @@ package name.dargiri.web.form;
 import bynull.realty.dto.AddressComponentsDTO;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.GeoPointDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,7 @@ public class ApartmentInfoDeltaForm {
     private BigDecimal area;
     private ApartmentForm apartment;
 
+    @JsonIgnore
     public void setApartmentOpt(Optional<ApartmentForm> apt){
         apartment = apt.orElse(null);
     }
