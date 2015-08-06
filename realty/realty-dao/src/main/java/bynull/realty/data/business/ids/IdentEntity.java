@@ -1,7 +1,9 @@
 package bynull.realty.data.business.ids;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -13,6 +15,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class IdentEntity {
 
     @Id
@@ -25,5 +29,4 @@ public class IdentEntity {
 
     @Column(name = "id_type")
     private String type;
-
 }

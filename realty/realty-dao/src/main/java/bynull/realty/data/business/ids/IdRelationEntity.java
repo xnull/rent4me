@@ -2,12 +2,14 @@ package bynull.realty.data.business.ids;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 /**
  * Created by null on 8/2/15.
  */
+@ToString
 @Getter
 @Setter
 @Table(name = "id_relations")

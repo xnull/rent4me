@@ -1,7 +1,5 @@
 package bynull.realty.common;
 
-import org.hibernate.proxy.HibernateProxy;
-
 import java.util.*;
 import java.util.stream.Collectors;
 

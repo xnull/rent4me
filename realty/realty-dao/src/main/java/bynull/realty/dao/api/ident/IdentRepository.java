@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface IdentRepository extends JpaRepository<IdentEntity, Long> {
 
-    IdentEntity findByValueAndType(String ident, String type);
+    IdentEntity findByValueLikeAndType(String ident, String type);
 }

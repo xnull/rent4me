@@ -5,7 +5,6 @@ import bynull.realty.dao.api.ident.IdentRepository;
 import bynull.realty.data.business.ids.IdRelationEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +26,12 @@ public class IdentificationServiceImpl {
     @Resource
     private IdRelationsRepository idRelationsRepo;
 
+    public Optional<IdentEntity> find(Long id) {
+        return Optional.ofNullable(idRepo.findOne(id));
+    }
+
     public Optional<IdentEntity> find(String identValue, IdentType identType) {
-        return Optional.ofNullable(idRepo.findByValueAndType(identValue, identType.getType()));
+        return Optional.ofNullable(idRepo.findByValueLikeAndType(identValue, identType.getType()));
     }
 
     public IdentEntity findAndSaveIfNotExists(String identId, IdentType identType) {
@@ -98,16 +101,20 @@ public class IdentificationServiceImpl {
         return  result;
     }
 
-    private List<Long> findAdjacent(Long identId) {
-        Stream<Long> sourceAdj = idRelationsRepo.findBySourceId(identId)
+    private Set<Long> findAdjacent(Long identId) {
+        Set<Long> sourceAdj = idRelationsRepo.findBySourceId(identId)
                 .stream()
-                .map(IdRelationEntity::getAdjacentId);
+                .map(IdRelationEntity::getAdjacentId)
+                .collect(Collectors.toSet());
 
-        Stream<Long> targetAdj = idRelationsRepo.findByAdjacentId(identId)
+        Set<Long> targetAdj = idRelationsRepo.findByAdjacentId(identId)
                 .stream()
-                .map(IdRelationEntity::getAdjacentId);
+                .map(IdRelationEntity::getSourceId)
+                .collect(Collectors.toSet());
 
-        return Stream.concat(sourceAdj, targetAdj).collect(Collectors.toList());
+        sourceAdj.addAll(targetAdj);
+
+        return sourceAdj;
     }
 
     public IdentEntity save(String value, IdentType type) {
