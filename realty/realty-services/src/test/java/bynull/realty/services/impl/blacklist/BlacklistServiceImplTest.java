@@ -50,7 +50,7 @@ public class BlacklistServiceImplTest extends ServiceTest {
     @Transactional
     @Rollback(false)
     public void testAddApartmentToBlacklist() throws Exception {
-        User user = createUser();
+        User user = getUser();
         InternalApartment apartment = createInternalApartment(user);
         VkontakteApartment vkApt = createVkapartment();
         VkontakteApartment vkAptAnother = createVkapartmentAnother();
@@ -61,15 +61,15 @@ public class BlacklistServiceImplTest extends ServiceTest {
         Apartment foundVk = apartmentRepository.getOne(vkApt.getId());
         Apartment foundVkAnother = apartmentRepository.getOne(vkAptAnother.getId());
 
-        blService.addApartmentToBlacklist(foundInternal.getId());
-        blService.addApartmentToBlacklist(foundVk.getId());
-        blService.addApartmentToBlacklist(foundVkAnother.getId());
+        addToBlackList(foundInternal);
+        addToBlackList(foundVk);
+        addToBlackList(foundVkAnother);
 
         Set<IdentEntity> aptIdents = identService.findAllLinkedIdents(apartment.getId().toString(), IdentType.APARTMENT);
         assertEquals(8, aptIdents.size());
-        assertTrue(aptIdents.stream().map(IdentEntity::getValue).collect(Collectors.toSet()).contains("8-915-471-28-71"));
+        assertTrue(aptIdents.stream().map(IdentEntity::getIdentValue).collect(Collectors.toSet()).contains("8-915-471-28-71"));
 
-        IdentEntity phone = aptIdents.stream().filter(id -> id.getType().equals(IdentType.PHONE.getType())).findFirst().get();
+        IdentEntity phone = aptIdents.stream().filter(id -> id.getIdentType().equals(IdentType.PHONE.getType())).findFirst().get();
         assertEquals(0, relationsRepo.findBySourceId(phone.getId()).size());
         assertEquals(2, relationsRepo.findByAdjacentId(phone.getId()).size());
 
@@ -78,7 +78,7 @@ public class BlacklistServiceImplTest extends ServiceTest {
 
         Set<IdentEntity> vkIdents = identService.findAllLinkedIdents("8-915-471-28-71", IdentType.PHONE);
         assertEquals(8, vkIdents.size());
-        assertTrue(vkIdents.stream().map(IdentEntity::getValue).collect(Collectors.toSet()).contains("8-915-471-28-71"));
+        assertTrue(vkIdents.stream().map(IdentEntity::getIdentValue).collect(Collectors.toSet()).contains("8-915-471-28-71"));
 
         Optional<BlacklistEntity> phoneBl = blService.find("8-915-471-28-71", IdentType.PHONE);
         assertNotEquals(Optional.empty(), phoneBl);
@@ -87,13 +87,21 @@ public class BlacklistServiceImplTest extends ServiceTest {
         assertNotEquals(Optional.empty(), vkBl);
 
         Set<IdentEntity> anotherAptIdents = identService.findAllLinkedIdents(foundVkAnother.getId().toString(), IdentType.APARTMENT);
-        IdentEntity aloneVk = anotherAptIdents.stream().filter(id -> id.getType().equals(IdentType.APARTMENT.getType())).findFirst().get();
+        IdentEntity aloneVk = anotherAptIdents.stream().filter(id -> id.getIdentType().equals(IdentType.APARTMENT.getType())).findFirst().get();
         assertEquals(3, anotherAptIdents.size());
         assertEquals(2, relationsRepo.findBySourceId(aloneVk.getId()).size());
         assertEquals(0, relationsRepo.findByAdjacentId(aloneVk.getId()).size());
     }
 
-    private VkontakteApartment createVkapartment() {
+    public void addToBlackList(Apartment foundInternal) {
+        blService.addApartmentToBlacklist(foundInternal.getId());
+    }
+
+    public User getUser() {
+        return createUser();
+    }
+
+    public VkontakteApartment createVkapartment() {
         VkontakteApartment apartment = new VkontakteApartment();
         apartment.setTypeOfRent(RentType.LONG_TERM);
         apartment.setRentalFee(new BigDecimal("1000"));
@@ -126,7 +134,7 @@ public class BlacklistServiceImplTest extends ServiceTest {
         return apartment;
     }
 
-    private VkontakteApartment createVkapartmentAnother() {
+    public VkontakteApartment createVkapartmentAnother() {
         VkontakteApartment apartment = new VkontakteApartment();
         apartment.setTypeOfRent(RentType.LONG_TERM);
         apartment.setRentalFee(new BigDecimal("1000"));
@@ -159,7 +167,7 @@ public class BlacklistServiceImplTest extends ServiceTest {
         return apartment;
     }
 
-    private InternalApartment createInternalApartment(User user) {
+    public InternalApartment createInternalApartment(User user) {
         InternalApartment apartment = new InternalApartment();
         apartment.setOwner(user);
         apartment.setTypeOfRent(RentType.LONG_TERM);

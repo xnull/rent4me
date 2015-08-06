@@ -14,9 +14,11 @@
         </layout>
     </appender>
 
-    <logger name="bynull" level="TRACE"/>
+    <logger name="bynull" level="WARN"/>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.springframework.beans" level="WARN"/>
 
-    <root level="debug">
+    <root level="warn">
         <appender-ref ref="console"/>
         <!--<appender-ref ref="file"/>-->
     </root>

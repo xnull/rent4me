@@ -2,6 +2,7 @@ package bynull.realty.services.impl;
 
 import bynull.realty.dao.api.ident.IdRelationsRepository;
 import bynull.realty.dao.api.ident.IdentRepository;
+import bynull.realty.dao.api.ident.IdentRepository.IdentRepositorySimple;
 import bynull.realty.data.business.ids.IdRelationEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by null on 7/31/15.
@@ -24,6 +24,9 @@ public class IdentificationServiceImpl {
     private IdentRepository idRepo;
 
     @Resource
+    private IdentRepositorySimple idRepoImpl;
+
+    @Resource
     private IdRelationsRepository idRelationsRepo;
 
     public Optional<IdentEntity> find(Long id) {
@@ -31,7 +34,7 @@ public class IdentificationServiceImpl {
     }
 
     public Optional<IdentEntity> find(String identValue, IdentType identType) {
-        return Optional.ofNullable(idRepo.findByValueLikeAndType(identValue, identType.getType()));
+        return Optional.ofNullable(idRepoImpl.find(identValue, identType.getType()));
     }
 
     public IdentEntity findAndSaveIfNotExists(String identId, IdentType identType) {
@@ -102,27 +105,25 @@ public class IdentificationServiceImpl {
     }
 
     private Set<Long> findAdjacent(Long identId) {
-        Set<Long> sourceAdj = idRelationsRepo.findBySourceId(identId)
-                .stream()
-                .map(IdRelationEntity::getAdjacentId)
-                .collect(Collectors.toSet());
-
-        Set<Long> targetAdj = idRelationsRepo.findByAdjacentId(identId)
-                .stream()
-                .map(IdRelationEntity::getSourceId)
-                .collect(Collectors.toSet());
-
-        sourceAdj.addAll(targetAdj);
+        Set<Long> sourceAdj = new HashSet<>();
+        for (IdRelationEntity relationEntity : idRelationsRepo.findBySourceIdOrAdjacentId(identId, identId)) {
+            sourceAdj.add(relationEntity.getAdjacentId());
+            sourceAdj.add(relationEntity.getSourceId());
+        }
 
         return sourceAdj;
     }
 
     public IdentEntity save(String value, IdentType type) {
         IdentEntity ident = new IdentEntity();
-        ident.setValue(value);
-        ident.setType(type.getType());
+        ident.setIdentValue(value);
+        ident.setIdentType(type.getType());
 
-        return idRepo.save(ident);
+        IdentEntity dbIdent = idRepoImpl.find(value, type.getType());
+        if (dbIdent == null) {
+            return idRepo.save(ident);
+        }
+        return dbIdent;
     }
 
     public Set<IdentEntity> findAllLinkedIdents(String identValue, IdentType identType) {

@@ -6,11 +6,11 @@ package bynull.realty.data.business.ids;
  */
 public enum IdentType {
 
-    USER_ID("USER_ID"), FB_ID("FB_ID"), VK_ID("VK_ID"), PHONE("PHONE"), EMAIL("EMAIL"),
+    USER_ID("USER"), FB_ID("FB"), VK_ID("VK"), PHONE("PHONE"), EMAIL("EMAIL"),
     /**
      * Объявление о сдаче или съёме недвижимости. Оно соотнесено с id таблицы apartments
      */
-    APARTMENT("APARTMENT");
+    APARTMENT("APT");
 
     private final String type;
 

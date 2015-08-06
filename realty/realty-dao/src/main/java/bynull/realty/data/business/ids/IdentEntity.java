@@ -24,9 +24,9 @@ public class IdentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "ident_value")
+    private String identValue;
 
     @Column(name = "id_type")
-    private String type;
+    private String identType;
 }

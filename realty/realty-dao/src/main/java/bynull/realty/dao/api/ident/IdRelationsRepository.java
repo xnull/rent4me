@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface IdRelationsRepository extends JpaRepository<IdRelationEntity, Long> {
 
+    List<IdRelationEntity> findBySourceIdOrAdjacentId(Long sourceIdentId, Long adjacentIdentId);
     List<IdRelationEntity> findBySourceId(Long sourceIdentId);
     List<IdRelationEntity> findByAdjacentId(Long adjacentIdentId);
 }
