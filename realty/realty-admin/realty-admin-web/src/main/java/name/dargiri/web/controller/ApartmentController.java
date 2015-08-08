@@ -7,6 +7,7 @@ import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentInfoDeltaDTO;
 import bynull.realty.services.api.ApartmentInfoDeltaService;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.impl.blacklist.BlacklistServiceImpl;
 import name.dargiri.web.Constants;
 import name.dargiri.web.converters.ApartmentAdminConverter;
 import name.dargiri.web.converters.ApartmentInfoDeltaAdminConverter;
@@ -40,6 +41,9 @@ public class ApartmentController {
     ApartmentService apartmentService;
 
     @Resource
+    private BlacklistServiceImpl blacklistService;
+
+    @Resource
     ApartmentAdminConverter apartmentAdminConverter;
 
     @RequestMapping(value = {"list"})
@@ -70,4 +74,10 @@ public class ApartmentController {
         return new ModelAndView("redirect:/secure/apartments/list");
     }
 
+    @RequestMapping(value = "block/{id}")
+    public ModelAndView blockApartmentFromSearch(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+        blacklistService.addApartmentToBlacklist(id);
+        redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Apartment: " + id +", have been added to blacklist");
+        return new ModelAndView("redirect:/secure/apartments/list");
+    }
 }

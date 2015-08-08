@@ -48,14 +48,16 @@ public class IdentificationServiceImpl {
      * 2. пройти по списку adjacentIdents и сравнить со смиском имеющихся идентов из п.1
      * 3. добавить adjacentIdents в adjacentIdents которых ещё нет имеющемся графе полученном в п.1.
      *
-     * @param sourceIdent
-     * @param adjacentIdents
+     *  @param sourceIdent идент с которым связываем другие иденты
+     * @param adjacentIdents связанные иденты
+     * @return список новых связанных ид с которыми в результате операции был связан sourceIdent
      */
-    public void mergeIdents(IdentEntity sourceIdent, Set<Long> adjacentIdents) {
-        Set<Long> dbAdjacentIds = findAllLinkedIdentIds(sourceIdent);
+    public Set<Long> mergeIdents(IdentEntity sourceIdent, Set<Long> adjacentIdents) {
+        log.debug("Merge idents. Source: {}, adjacent ids: {}", sourceIdent, adjacentIdents);
+        Set<Long> existsAdjacentIds = findAllLinkedIdentIds(sourceIdent);
 
         Set<Long> newAdjacent = adjacentIdents.stream()
-                .filter(adjId -> !dbAdjacentIds.contains(adjId))
+                .filter(adjId -> !existsAdjacentIds.contains(adjId))
                 .collect(Collectors.toSet());
 
         for (Long adjId : newAdjacent) {
@@ -65,6 +67,8 @@ public class IdentificationServiceImpl {
 
             idRelationsRepo.save(rel);
         }
+
+        return newAdjacent;
     }
 
     public Set<Long> findAllLinkedIdentIds(String identValue, IdentType identType) {

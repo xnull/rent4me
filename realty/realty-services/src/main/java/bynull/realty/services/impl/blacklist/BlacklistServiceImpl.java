@@ -1,6 +1,5 @@
 package bynull.realty.services.impl.blacklist;
 
-import bynull.realty.dao.UserRepository;
 import bynull.realty.dao.blacklist.BlacklistRepository;
 import bynull.realty.data.business.blacklist.BlacklistEntity;
 import bynull.realty.data.business.ids.IdentEntity;
@@ -10,7 +9,6 @@ import bynull.realty.dto.ContactDTO;
 import bynull.realty.dto.UserDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.impl.IdentificationServiceImpl;
-import com.sun.deploy.util.BlackList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +17,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с черным спиком. Идея такая: у нас имеется таблица blacklist со списком заблокированнных ресурсов.
@@ -44,7 +43,7 @@ public class BlacklistServiceImpl {
      *
      * @param apartmentId
      */
-    public void addApartmentToBlacklist(Long apartmentId) {
+    public Set<BlacklistEntity> addApartmentToBlacklist(Long apartmentId) {
         log.debug("Vote to add advert to blacklist. Id: {}", apartmentId);
 
         /**
@@ -55,70 +54,58 @@ public class BlacklistServiceImpl {
          * Варианты:
          *  1. Объединить записи, удалив одну из них или создав 3-ю запись, удалив 2 предыдущие. Путь опасен
          *  2. Создаем таблицу ids_ids отношение многие ко многим, в таблице 2 столбца каждый указывает на ids. Когда
-         *     связь между идентификаторами будет обнаружена мы добавим запись в ids_ids. И по этой таблице сможем
+         *     связь между идентификаторами будет обнаружена мы добавим запись в id_relation. И по этой таблице сможем
          *     находить все связи всех идентификаторов.
          */
 
-        Optional<ApartmentDTO> optApartment = apartmentService.find(apartmentId);
-        if (!optApartment.isPresent()) {
-            return;
+        Optional<ApartmentDTO> optApt = apartmentService.find(apartmentId);
+        if (!optApt.isPresent()) {
+            return Collections.emptySet();
         }
 
-        Optional<IdentEntity> optIdent = identService.find(apartmentId.toString(), IdentType.APARTMENT);
-        IdentEntity ident = optIdent.orElseGet(() -> identService.save(apartmentId.toString(), IdentType.APARTMENT));
+        return mergeIdents(getIdent(apartmentId), optApt.get())
+                .stream()
+                .map(this::saveBl)
+                .collect(Collectors.toSet());
+    }
 
-        Optional<BlacklistEntity> optBlackInfo = Optional.ofNullable(blacklistRepo.findByIdentId(ident.getId()));
+    private BlacklistEntity saveBl(Long adjacentIdent) {
+        BlacklistEntity bl = blacklistRepo.findByIdentId(adjacentIdent);
 
-        if (!optBlackInfo.isPresent()) {
-            BlacklistEntity bl = new BlacklistEntity();
-            bl.setIdentId(ident.getId());
-            blacklistRepo.save(bl);
+        if (bl == null) {
+            bl = new BlacklistEntity();
+            bl.setIdentId(adjacentIdent);
+            return blacklistRepo.save(bl);
         }
+        return bl;
+    }
 
-        mergeIdents(ident, optApartment);
+    private IdentEntity getIdent(Long apartmentId) {
+        return identService.find(apartmentId.toString(), IdentType.APARTMENT)
+                .orElseGet(() -> identService.save(apartmentId.toString(), IdentType.APARTMENT));
     }
 
     /**
      * Связать имеющиеся идентификаторы
      *
      * @param sourceIdent
-     * @param optApartment
+     * @param apartment
      */
-    private void mergeIdents(IdentEntity sourceIdent, Optional<ApartmentDTO> optApartment) {
-
+    private Set<Long> mergeIdents(IdentEntity sourceIdent, ApartmentDTO apartment) {
         /**
          * 1. Находим все идентификаторы с которыми связаны данные апартаменты
          * 2. связываем все иденты
          * 3. добавляем ссылку на ids в черный список
          */
-        if (optApartment.isPresent()) {
-            ApartmentDTO apartment = optApartment.get();
-            switch (apartment.getDataSource()) {
-                case INTERNAL:
-                    identService.mergeIdents(
-                            sourceIdent,
-                            getInternalApartmentIdents(apartment.getOwner())
-                    );
-                    break;
-                case FACEBOOK:
-                    identService.mergeIdents(
-                            sourceIdent,
-                            getSocialNetIdents(apartment, IdentType.FB_ID)
-                    );
-                    break;
-                case VKONTAKTE:
-                    identService.mergeIdents(
-                            sourceIdent,
-                            getSocialNetIdents(apartment, IdentType.VK_ID)
-                    );
-                    break;
-            }
-
-        } else {
-            /**
-             * вываливаем в лог ошибку, о том что чел хочет странного и такого объявления не существует в базе,
-             */
+        switch (apartment.getDataSource()) {
+            case INTERNAL:
+                return identService.mergeIdents(sourceIdent, getInternalApartmentIdents(apartment.getOwner()));
+            case FACEBOOK:
+                return identService.mergeIdents(sourceIdent, getSocialNetIdents(apartment, IdentType.FB_ID));
+            case VKONTAKTE:
+                return identService.mergeIdents(sourceIdent, getSocialNetIdents(apartment, IdentType.VK_ID));
         }
+        return Collections.emptySet();
     }
 
     private Set<Long> getSocialNetIdents(ApartmentDTO apartment, IdentType type) {
@@ -159,13 +146,21 @@ public class BlacklistServiceImpl {
      */
     public Optional<BlacklistEntity> find(String identValue, IdentType identType) {
         Set<Long> linkedIdentIds = identService.findAllLinkedIdentIds(identValue, identType);
-        for (Long linkedIdentId: linkedIdentIds){
+        for (Long linkedIdentId : linkedIdentIds) {
             BlacklistEntity bl = blacklistRepo.findByIdentId(linkedIdentId);
-            if (bl != null){
+            if (bl != null) {
                 return Optional.of(bl);
             }
         }
 
         return Optional.empty();
+    }
+
+    public Set<BlacklistEntity> findAllBl(String identValue, IdentType identType) {
+        Set<Long> linkedIdentIds = identService.findAllLinkedIdentIds(identValue, identType);
+        return linkedIdentIds
+                .stream()
+                .map(blacklistRepo::findByIdentId)
+                .collect(Collectors.toSet());
     }
 }

@@ -82,6 +82,7 @@ public class BlacklistServiceImplTest extends ServiceTest {
 
         Optional<BlacklistEntity> phoneBl = blService.find("8-915-471-28-71", IdentType.PHONE);
         assertNotEquals(Optional.empty(), phoneBl);
+        assertEquals(7, blService.findAllBl("8-915-471-28-71", IdentType.PHONE).size());
 
         Optional<BlacklistEntity> vkBl = blService.find("id248324164", IdentType.VK_ID);
         assertNotEquals(Optional.empty(), vkBl);

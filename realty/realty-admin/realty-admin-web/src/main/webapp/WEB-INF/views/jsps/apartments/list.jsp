@@ -55,10 +55,28 @@
                     </ul>
             </td>
             <td>
-                    ${apartment.rentalFee}/${apartment.feePeriod}
+                    ${apartment.created}
             </td>
             <td>
                     ${apartment.roomCount}
+            </td>
+            <td>
+                    ${apartment.description}
+            </td>
+            <td>
+                    ${apartment.published}
+            </td>
+            <td>
+                <a class="btn btn-danger" href="<c:url value="/secure/apartments/block/${apartment.id}"/>" onclick="return confirm('Добавить объявление в блэклист?');">В блэклист</a>
+                <br/>
+
+                <a class="btn btn-warning" href="<c:url value="/secure/apartments/hide/${apartment.id}"/>" onclick="return confirm('Are you sure you want to hide it from search?');">Hide in search</a>
+                <br/>
+                <a class="btn btn-success" href="<c:url value="/secure/apartments/show/${apartment.id}"/>" onclick="return confirm('Are you sure you want to show it in search?');">Show in search</a>
+            </td>
+
+            <td>
+                    ${apartment.rentalFee}/${apartment.feePeriod}
             </td>
             <td>
                     ${apartment.floorNumber}
@@ -69,19 +87,7 @@
             <td>
                     ${apartment.area} м<sup>2</sup>
             </td>
-            <td>
-                    ${apartment.published}
-            </td>
-            <td>
-                    ${apartment.description}
-            </td>
-            <td>
-                    ${apartment.created}
-            </td>
-            <td>
-                <a class="btn btn-danger" href="<c:url value="/secure/apartments/hide/${apartment.id}"/>" onclick="return confirm('Are you sure you want to hide it from search?');">Hide in search</a>
-                <a class="btn btn-success" href="<c:url value="/secure/apartments/show/${apartment.id}"/>" onclick="return confirm('Are you sure you want to show it in search?');">Show in search</a>
-            </td>
+
         </tr>
     </c:forEach>
     </tbody>
