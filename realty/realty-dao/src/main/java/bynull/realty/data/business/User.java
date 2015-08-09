@@ -1,5 +1,6 @@
 package bynull.realty.data.business;
 
+import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
@@ -11,6 +12,7 @@ import java.util.*;
 /**
  * Created by null on 21.06.14.
  */
+@ToString
 @Entity
 @Table(name = "realty_users")
 public class User implements UserDetails {

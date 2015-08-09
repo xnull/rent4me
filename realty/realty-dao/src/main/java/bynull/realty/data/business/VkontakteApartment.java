@@ -2,6 +2,7 @@ package bynull.realty.data.business;
 
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import bynull.realty.data.common.CityEntity;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 /**
  * @author dionis on 3/2/15.
  */
+@ToString
 @Entity
 @DiscriminatorValue(Apartment.DbValue.VKONTAKTE_STRING_DB_VALUE)
 public class VkontakteApartment extends SocialNetApartment {

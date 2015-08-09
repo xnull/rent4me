@@ -3,6 +3,7 @@ package bynull.realty.dto;
 import bynull.realty.data.business.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import static bynull.realty.util.CommonUtils.copy;
 /**
  * @author dionis on 22/06/14.
  */
+@ToString
 @Getter
 @Setter
 public class ApartmentDTO {

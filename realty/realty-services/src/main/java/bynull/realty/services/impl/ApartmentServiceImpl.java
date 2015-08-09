@@ -70,6 +70,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDTO create(ApartmentDTO dto) {
+        log.trace("Create apartment");
 
         InternalApartment apartment = new InternalApartment();
         apartment.mergeWith(dto.toInternal());
@@ -160,10 +161,13 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public Optional<ApartmentDTO> find(Long id) {
+        log.debug("Find apartment: {}", id);
         Apartment apartment = HibernateUtil.deproxy(apartmentRepository.findOne(id));
         if (apartment != null) {
             return apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(Optional.of(apartment));
         }
+
+        log.debug("Apartment not found: {}", id);
         return Optional.empty();
     }
 
@@ -328,11 +332,16 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public List<? extends ApartmentDTO> listAll(PageRequest pageRequest) {
+        log.trace("List all apartments");
+
         Page<Apartment> apartments = apartmentRepository.findAll(pageRequest);
 
         return apartments.getContent()
                 .stream()
-                .map(apartment -> apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(Optional.ofNullable(apartment)))
+                .map(apartment ->
+                                apartmentModelDTOConverterFactory.getTargetConverter(apartment)
+                                        .toTargetType(Optional.ofNullable(apartment))
+                )
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

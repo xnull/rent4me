@@ -1,6 +1,7 @@
 /**
  * Created by null on 03.01.15.
  */
+var Utils = require('rent4meUtil');
 
 function googleAnalytics() {
     console.log('Init google analytics');
@@ -124,4 +125,16 @@ var Analytics = {
     googleAnalyricsHolder: GaHolder.getInstance
 };
 
-module.exports = Analytics;
+var AnalyticsStub = {
+    initAnalyticsSystem: function(){},
+    google:  function(){},
+    yandex:  function(){},
+    segment:  function(){},
+    googleAnalyricsHolder:  function(){
+        return {
+            ga : function(p1, p2, p3){}
+        }
+    }
+};
+
+module.exports = Utils.isLocalhost() ? AnalyticsStub : Analytics;

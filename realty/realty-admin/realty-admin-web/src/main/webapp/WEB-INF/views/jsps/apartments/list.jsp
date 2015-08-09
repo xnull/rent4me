@@ -15,19 +15,19 @@
     <thead>
     <tr>
         <th>#</th>
-        <th>Data Source</th>
+        <th>Источник</th>
         <th>Will be shown for</th>
         <th>Address</th>
         <th>Metros</th>
-        <th>Rental fee</th>
+        <th>Created</th>
         <th>Rooms</th>
+        <th>Text</th>
+        <th>Published</th>
+        <th>Actions</th>
+        <th>Rental fee</th>
         <th>Floor Number</th>
         <th>Floors Total</th>
         <th>Area</th>
-        <th>Published</th>
-        <th>Text</th>
-        <th>Created</th>
-        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -68,11 +68,10 @@
             </td>
             <td>
                 <a class="btn btn-danger" href="<c:url value="/secure/apartments/block/${apartment.id}"/>" onclick="return confirm('Добавить объявление в блэклист?');">В блэклист</a>
-                <br/>
-
-                <a class="btn btn-warning" href="<c:url value="/secure/apartments/hide/${apartment.id}"/>" onclick="return confirm('Are you sure you want to hide it from search?');">Hide in search</a>
-                <br/>
-                <a class="btn btn-success" href="<c:url value="/secure/apartments/show/${apartment.id}"/>" onclick="return confirm('Are you sure you want to show it in search?');">Show in search</a>
+                <br/><br/>
+                <a class="btn btn-warning" href="<c:url value="/secure/apartments/hide/${apartment.id}"/>" onclick="return confirm('Are you sure you want to hide it from search?');">Скрыть в поиске</a>
+                <br/><br/>
+                <a class="btn btn-success" href="<c:url value="/secure/apartments/show/${apartment.id}"/>" onclick="return confirm('Are you sure you want to show it in search?');">Показывать в поиске</a>
             </td>
 
             <td>

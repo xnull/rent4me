@@ -34,6 +34,7 @@ public class VkontakteApartmentModelDTOConverter extends SocialNetApartmentModel
 
     @Override
     public Optional<ApartmentDTO> toTargetType(Optional<VkontakteApartment> apartment, ApartmentDTO dto) {
+        log.trace("Convert vk apartment to dto: {}", apartment);
         return apartment.flatMap(ap -> {
             return super.toTargetType(apartment, dto).flatMap(a -> {
                 VkontaktePage vkontaktePage = ap.getVkontaktePage();
