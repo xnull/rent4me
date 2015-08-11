@@ -63,18 +63,22 @@ public class BlacklistServiceImpl {
             return Collections.emptySet();
         }
 
-        return mergeIdents(getIdent(apartmentId), optApt.get())
+        IdentEntity aptIdent = getIdent(apartmentId);
+        saveBl(aptIdent.getId());
+
+        return mergeIdents(aptIdent, optApt.get())
                 .stream()
                 .map(this::saveBl)
                 .collect(Collectors.toSet());
     }
 
-    private BlacklistEntity saveBl(Long adjacentIdent) {
-        BlacklistEntity bl = blacklistRepo.findByIdentId(adjacentIdent);
+    private BlacklistEntity saveBl(Long ident) {
+        BlacklistEntity bl = blacklistRepo.findByIdentId(ident);
 
         if (bl == null) {
+            log.debug("Add new record to bl. Ident id: {}", ident);
             bl = new BlacklistEntity();
-            bl.setIdentId(adjacentIdent);
+            bl.setIdentId(ident);
             return blacklistRepo.save(bl);
         }
         return bl;

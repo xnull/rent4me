@@ -1,6 +1,7 @@
 package bynull.realty.data.business.external.vkontakte;
 
 import bynull.realty.data.common.CityEntity;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +12,7 @@ import static bynull.realty.util.CommonUtils.copy;
 /**
  * Created by dionis on 28/01/15.
  */
+@ToString
 @Entity
 @Table(name = "vk_page")
 public class VkontaktePage {

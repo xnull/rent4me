@@ -1,9 +1,6 @@
 package bynull.realty.data.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Wither;
 
 import java.io.Serializable;
@@ -11,6 +8,7 @@ import java.io.Serializable;
 /**
  * Created by dionis on 3/21/15.
  */
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Wither

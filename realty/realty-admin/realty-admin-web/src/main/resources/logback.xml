@@ -41,7 +41,8 @@
         </layout>
     </appender>
 
-    <logger name="bynull" level="INFO">
+    <logger name="bynull" level="trace" additivity="false">
+        <appender-ref ref="console"/>
         <appender-ref ref="generalFileLog"/>
     </logger>
     <logger level="ERROR">

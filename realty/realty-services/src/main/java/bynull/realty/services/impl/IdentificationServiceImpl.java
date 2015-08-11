@@ -90,8 +90,9 @@ public class IdentificationServiceImpl {
      */
     public Set<Long> findAllLinkedIdentIds(IdentEntity sourceIdent) {
         Set<Long> result = new HashSet<>();
-        Queue<Long> queue = new ArrayDeque<>();
+        result.add(sourceIdent.getId());
 
+        Queue<Long> queue = new ArrayDeque<>();
         queue.add(sourceIdent.getId());
 
         while (!queue.isEmpty()) {

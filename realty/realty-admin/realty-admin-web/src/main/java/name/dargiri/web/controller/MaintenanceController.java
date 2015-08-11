@@ -7,6 +7,7 @@ import bynull.realty.jobs.JobHelperComponent;
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.services.api.MetroService;
 import bynull.realty.services.api.VkontakteService;
+import lombok.extern.slf4j.Slf4j;
 import name.dargiri.web.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import javax.annotation.Resource;
 /**
  * Created by dionis on 2/3/14.
  */
-
+@Slf4j
 @Controller
 @RequestMapping("/secure/maintenance")
 public class MaintenanceController {
@@ -65,6 +66,7 @@ public class MaintenanceController {
 
     @RequestMapping(value = "manual_sync_vk")
     public ModelAndView manualSyncWithVK(RedirectAttributes redirectAttributes) {
+        log.info("Manual sync vk start");
         jobHelperComponent.addJob(new MaintenanceControllerJobAcceptanceCallback(redirectAttributes), jobHelperComponent.manualSyncWithVK());
         return new ModelAndView("redirect:/secure/maintenance");
     }

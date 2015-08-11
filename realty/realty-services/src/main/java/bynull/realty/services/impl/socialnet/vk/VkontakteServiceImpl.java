@@ -116,7 +116,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
     //    @Transactional
     @Override
     public void syncWithVK() {
-        log.info("Loading pages");
+        log.info("Loading vk pages");
 
         List<VkontaktePage> vkPages = vkontaktePageRepository.findAll()
                 .stream()
