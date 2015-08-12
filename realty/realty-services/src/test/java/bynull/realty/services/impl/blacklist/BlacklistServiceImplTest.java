@@ -4,6 +4,7 @@ import bynull.realty.ServiceTest;
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dao.api.ident.IdRelationsRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
+import bynull.realty.dao.util.IdentRefiner;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.blacklist.BlacklistEntity;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
@@ -67,9 +68,15 @@ public class BlacklistServiceImplTest extends ServiceTest {
 
         Set<IdentEntity> aptIdents = identService.findAllLinkedIdents(apartment.getId().toString(), IdentType.APARTMENT);
         assertEquals(8, aptIdents.size());
-        assertTrue(aptIdents.stream().map(IdentEntity::getIdentValue).collect(Collectors.toSet()).contains("8-915-471-28-71"));
+        assertTrue(aptIdents.stream()
+                .map(IdentEntity::getIdentValue)
+                .collect(Collectors.toSet()).contains(getMyRefinedPhone())
+        );
 
-        IdentEntity phone = aptIdents.stream().filter(id -> id.getIdentType().equals(IdentType.PHONE.getType())).findFirst().get();
+        IdentEntity phone = aptIdents.stream()
+                .filter(id -> id.getIdentType().equals(IdentType.PHONE.getType()))
+                .findFirst()
+                .get();
         assertEquals(0, relationsRepo.findBySourceId(phone.getId()).size());
         assertEquals(2, relationsRepo.findByAdjacentId(phone.getId()).size());
 
@@ -78,11 +85,15 @@ public class BlacklistServiceImplTest extends ServiceTest {
 
         Set<IdentEntity> vkIdents = identService.findAllLinkedIdents("8-915-471-28-71", IdentType.PHONE);
         assertEquals(8, vkIdents.size());
-        assertTrue(vkIdents.stream().map(IdentEntity::getIdentValue).collect(Collectors.toSet()).contains("8-915-471-28-71"));
+        assertTrue(vkIdents.stream()
+                .map(IdentEntity::getIdentValue)
+                .collect(Collectors.toSet())
+                .contains(getMyRefinedPhone())
+        );
 
         Optional<BlacklistEntity> phoneBl = blService.find("8-915-471-28-71", IdentType.PHONE);
         assertNotEquals(Optional.empty(), phoneBl);
-        assertEquals(7, blService.findAllBl("8-915-471-28-71", IdentType.PHONE).size());
+        assertEquals(8, blService.findAllBl("8-915-471-28-71", IdentType.PHONE).size());
 
         Optional<BlacklistEntity> vkBl = blService.find("id248324164", IdentType.VK_ID);
         assertNotEquals(Optional.empty(), vkBl);
@@ -92,6 +103,10 @@ public class BlacklistServiceImplTest extends ServiceTest {
         assertEquals(3, anotherAptIdents.size());
         assertEquals(2, relationsRepo.findBySourceId(aloneVk.getId()).size());
         assertEquals(0, relationsRepo.findByAdjacentId(aloneVk.getId()).size());
+    }
+
+    private String getMyRefinedPhone() {
+        return IdentRefiner.refine("8-915-471-28-71", IdentType.PHONE);
     }
 
     public void addToBlackList(Apartment foundInternal) {

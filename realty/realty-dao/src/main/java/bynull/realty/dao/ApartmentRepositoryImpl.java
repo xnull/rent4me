@@ -11,6 +11,11 @@ import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.HibernateUtil;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDSLContext;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -160,6 +165,18 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
 
         String searchText = text.isEmpty() ? "" : text.length() > 5 ? porter.stem(text) : text;
 
+        Apartment.Target value = findMode.toTarget();
+        List<String> targets = ImmutableList.of(value, Apartment.Target.BOTH)
+                .stream()
+                .map(Enum::name)
+                .collect(Collectors.toList());
+
+        /*DSLContext queryBuilder = new DefaultDSLContext(SQLDialect.POSTGRES_9_3);
+        queryBuilder.select(DSL.field("a.*")).from("apartments a")
+                .where("a.published=true")
+                .and("a.target IN (?)", targets)
+                .and();*/
+
         String qlString = "select a.* from apartments a where a.published=true AND a.target IN (:targets) " +
                 (!searchText.isEmpty() ? " AND lower(a.description) like :msg " : "") +
 //                (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
@@ -192,7 +209,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                 boundingBox = paramsBoundingBox;
             } else {
                 CityEntity city = cityRepository.findByPoint(point.get().getLongitude(), point.get().getLatitude());
-                boundingBox = Optional.<BoundingBox>ofNullable(city != null ? city.getArea() : null);
+                boundingBox = Optional.ofNullable(city != null ? city.getArea() : null);
             }
 
             qlString += " AND st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
@@ -241,8 +258,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             query.setParameter(entry.getKey(), entry.getValue());
         }
 
-        Apartment.Target value = findMode.toTarget();
-        query.setParameter("targets", ImmutableList.of(value, Apartment.Target.BOTH).stream().map(Enum::name).collect(Collectors.toList()));
+        query.setParameter("targets", targets);
 
         if (!searchText.isEmpty()) {
             query.setParameter("msg", ilike(searchText));

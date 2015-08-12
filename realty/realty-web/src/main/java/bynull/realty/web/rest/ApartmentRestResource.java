@@ -1,7 +1,9 @@
 package bynull.realty.web.rest;
 
 import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.ApartmentRepository.FindMode;
 import bynull.realty.dao.ApartmentRepositoryCustom;
+import bynull.realty.dao.ApartmentRepositoryCustom.GeoParams;
 import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
@@ -135,21 +137,19 @@ public class ApartmentRestResource {
             @QueryParam("lng_hi") Double lngHigh,
             @QueryParam("metro_ids") List<Long> metroIds,
             @QueryParam("limit") int limit,
-            @QueryParam("offset") int offset
-    ) {
+            @QueryParam("offset") int offset) {
 
-        LimitAndOffset limitAndOffset = LimitAndOffset.builder()
-                .withLimit(limit)
-                .withOffset(offset)
-                .create();
+        log.trace("Search apartments");
 
-        ApartmentRepository.FindMode findMode = ApartmentRepository.FindMode.valueOf(type);
+        LimitAndOffset limitAndOffset = LimitAndOffset.builder().withLimit(limit).withOffset(offset).create();
+
+        FindMode findMode = FindMode.valueOf(type);
 
         Set<ApartmentRepository.RoomCount> roomsCount = rooms != null
                 ? rooms.stream().map(ApartmentRepository.RoomCount::findByValueOrFail).collect(Collectors.toSet())
                 : Collections.emptySet();
 
-        ApartmentRepositoryCustom.GeoParams geoParams = new ApartmentRepositoryCustom.GeoParams();
+        GeoParams geoParams = new GeoParams();
 
         if (latLow != null && lngLow != null && latHigh != null && lngHigh != null) {
 
