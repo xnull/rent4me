@@ -38,7 +38,7 @@ public class FacebookApartmentModelDTOConverter extends SocialNetApartmentModelD
      * @param authorLink for example: https://www.facebook.com/131345607204302
      * @return
      */
-    static String parseAuthorId(String authorLink) {
+    public static String parseAuthorId(String authorLink) {
         return authorLink.substring(authorLink.lastIndexOf("/") + 1);
     }
 }

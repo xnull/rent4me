@@ -11,29 +11,30 @@ import bynull.realty.converters.CityModelDTOConverter;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
 import bynull.realty.converters.FacebookPostModelDTOConverter;
 import bynull.realty.converters.MetroModelDTOConverter;
+import bynull.realty.converters.apartments.FacebookApartmentModelDTOConverter;
 import bynull.realty.dao.ApartmentRepository;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.ApartmentExternalPhotoRepository;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
+import bynull.realty.data.business.ids.IdentEntity;
+import bynull.realty.data.business.ids.IdentType;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
+import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.CityDTO;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.fb.FacebookPageDTO;
 import bynull.realty.dto.fb.FacebookPostDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.FacebookService;
-import bynull.realty.services.impl.CityServiceImpl;
+import bynull.realty.services.impl.IdentificationServiceImpl;
 import bynull.realty.services.impl.MetroServiceImpl;
 import bynull.realty.services.impl.socialnet.AbstractSocialNetServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import bynull.realty.services.impl.socialnet.fb.FacebookHelperComponent.FacebookPostItemDTO;
 import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
@@ -56,6 +57,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
+ * Facebook service
  * Created by dionis on 02/01/15.
  */
 @Service
@@ -110,6 +112,9 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
     @Resource
     TargetAnalyzer targetAnalyzer;
 
+    @Resource
+    private IdentificationServiceImpl identService;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         porter = Porter.getInstance();
@@ -141,7 +146,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                     Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
 
                     try {
-                        List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
+                        List<FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
                                 .stream()
                                 .filter(item -> StringUtils.trimToNull(item.getMessage()) != null && !StringUtils.trimToEmpty(item.getMessage()).contains("rent4.me"))
                                         //leave only those that have no duplicates in DB
@@ -149,7 +154,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                                 .collect(Collectors.toCollection(ArrayList::new));
 
                         List<FacebookApartment> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? apartmentRepository.findFBApartmentsByExternalIdIn(facebookPostItemDTOs.stream()
-                                        .map(FacebookHelperComponent.FacebookPostItemDTO::getId)
+                                        .map(FacebookPostItemDTO::getId)
                                         .collect(Collectors.toList())
                         ) : Collections.emptyList();
 
@@ -165,13 +170,12 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                         log.info("Removing duplicates in same requests by id");
                         Set<String> postItemDtoIds = new HashSet<>();
                         Set<String> postItemDtoContents = new HashSet<>();
-                        Iterator<FacebookHelperComponent.FacebookPostItemDTO> iterator = facebookPostItemDTOs.iterator();
+                        Iterator<FacebookPostItemDTO> iterator = facebookPostItemDTOs.iterator();
                         while (iterator.hasNext()) {
-                            FacebookHelperComponent.FacebookPostItemDTO next = iterator.next();
+                            FacebookPostItemDTO next = iterator.next();
                             if (next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getMessage())) {
                                 log.info("Removed duplicate in same requests by id: [{}]", next.getId());
                                 iterator.remove();
-                                continue;
                             } else {
                                 postItemDtoIds.add(next.getId());
                                 postItemDtoContents.add(next.getMessage());
@@ -180,7 +184,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                         log.info("Removed duplicates in same requests by id");
 
                         log.info("Removing duplicates in DB by id");
-                        List<FacebookHelperComponent.FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
+                        List<FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
                                 .stream()
                                 .filter(i -> !ids.contains(i.getId()) && !similarTextsInDB.contains(i.getMessage()))
                                 .collect(Collectors.toList());
@@ -188,7 +192,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                         log.info("Removed duplicates in DB by id");
 
 
-                        for (FacebookHelperComponent.FacebookPostItemDTO postItemDTO : facebookPostItemDTOsToPersist) {
+                        for (FacebookPostItemDTO postItemDTO : facebookPostItemDTOsToPersist) {
                             FacebookApartment post = new FacebookApartment();
 
                             int i = counter.incrementAndGet();
@@ -268,6 +272,9 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                                     apartmentIdsToPostOnVKPage.add(post.getId());
                                 }
                             }
+
+                            saveIdents(post);
+
                             log.info("<<< Processing of post #[{}] done", i);
 
 //                                post.setType(getType().toInternal());
@@ -277,9 +284,17 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
                     } catch (Exception e) {
                         log.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
                     }
-                    afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
-                        apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage);
-                    });
+                    afterCommitExecutor.executeAsynchronouslyInTransaction(() ->
+                            apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage)
+                    );
+                }
+
+                private void saveIdents(FacebookApartment post) {
+                    IdentEntity aptIdent = identService.findAndSaveIfNotExists(post.getId().toString(), IdentType.APARTMENT);
+                    Optional<ApartmentDTO> optApt = apartmentService.find(post.getId());
+                    Set<Long> idents = identService.mergeIdents(aptIdent, optApt.get());
+
+                    apartmentRepository.saveIdents(idents);
                 }
             });
 

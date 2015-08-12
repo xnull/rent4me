@@ -11,9 +11,7 @@ import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.HibernateUtil;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDSLContext;
 import org.springframework.beans.factory.InitializingBean;
@@ -146,6 +144,15 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         return resultList;
     }
 
+    private static class AptQueryBuilder{
+        DSLContext query = new DefaultDSLContext(SQLDialect.POSTGRES_9_3);
+        List<Condition> conditions = new ArrayList<>();
+
+        void and(String condition, Object... binding) {
+            conditions.add(DSL.condition(condition, binding));
+        }
+    }
+
     @Override
     public List<Apartment> findPosts(String text,
                                      boolean withSubway,
@@ -171,11 +178,21 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                 .map(Enum::name)
                 .collect(Collectors.toList());
 
-        /*DSLContext queryBuilder = new DefaultDSLContext(SQLDialect.POSTGRES_9_3);
-        queryBuilder.select(DSL.field("a.*")).from("apartments a")
-                .where("a.published=true")
-                .and("a.target IN (?)", targets)
-                .and();*/
+
+        /*AptQueryBuilder aptQuery = new AptQueryBuilder();
+        aptQuery.and("a.target IN (?)", targets);
+        aptQuery.and("a.published = true");
+        if(!searchText.isEmpty()) aptQuery.and("lower(a.description) like :'?'", ilike(searchText));
+        if(!roomsCount.isEmpty()) aptQuery.and("a.room_count IN (?)",
+                roomsCount.stream().map(rc -> Integer.valueOf(rc.value)).collect(Collectors.toSet())
+        );
+        if(minPrice != null) aptQuery.and("a.rental_fee >= ?", BigDecimal.valueOf(minPrice));
+        if(maxPrice != null) aptQuery.and("a.rental_fee <= ?", BigDecimal.valueOf(maxPrice));
+
+        aptQuery.query.select(DSL.field("a.*")).from("apartments a").where(aptQuery.conditions);
+
+        String qqq = aptQuery.query.toString();*/
+
 
         String qlString = "select a.* from apartments a where a.published=true AND a.target IN (:targets) " +
                 (!searchText.isEmpty() ? " AND lower(a.description) like :msg " : "") +
@@ -284,6 +301,16 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                 .getResultList();
 
         return resultList;
+    }
+
+    /**
+     * Храним все идентификаторы объявления в отдельной таблице, чтобы была возможность поиска и фильтрации
+     * по всем идентификаторам объявления
+     * @param idents
+     */
+    @Override
+    public void saveIdents(Set<Long> idents) {
+         надо создать таблицу
     }
 
     private String ilike(String text) {

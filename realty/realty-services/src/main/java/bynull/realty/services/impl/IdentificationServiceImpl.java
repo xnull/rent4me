@@ -1,6 +1,5 @@
 package bynull.realty.services.impl;
 
-import bynull.realty.common.PhoneUtil;
 import bynull.realty.dao.api.ident.IdRelationsRepository;
 import bynull.realty.dao.api.ident.IdentRepository;
 import bynull.realty.dao.api.ident.IdentRepository.IdentRepositorySimple;
@@ -8,6 +7,9 @@ import bynull.realty.dao.util.IdentRefiner;
 import bynull.realty.data.business.ids.IdRelationEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
+import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.ContactDTO;
+import bynull.realty.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +61,7 @@ public class IdentificationServiceImpl {
      * @param adjacentIdents связанные иденты
      * @return список новых связанных ид с которыми в результате операции был связан sourceIdent
      */
-    public Set<Long> mergeIdents(IdentEntity sourceIdent, Set<Long> adjacentIdents) {
+    private Set<Long> linkIdents(IdentEntity sourceIdent, Set<Long> adjacentIdents) {
         log.debug("Merge idents. Source: {}, adjacent ids: {}", sourceIdent, adjacentIdents);
         Set<Long> existsAdjacentIds = findAllLinkedIdentIds(sourceIdent);
 
@@ -143,5 +145,65 @@ public class IdentificationServiceImpl {
                 .stream()
                 .map(idRepo::findOne)
                 .collect(Collectors.toSet());
+    }
+
+
+    /**
+     * Связать имеющиеся идентификаторы
+     *
+     * @param sourceIdent
+     * @param apartment
+     */
+    public Set<Long> mergeIdents(IdentEntity sourceIdent, ApartmentDTO apartment) {
+        /**
+         * 1. Находим все идентификаторы с которыми связаны данные апартаменты
+         * 2. связываем все иденты
+         * 3. добавляем ссылку на ids в черный список
+         */
+        switch (apartment.getDataSource()) {
+            case INTERNAL:
+                return linkIdents(sourceIdent, getInternalApartmentIdents(apartment.getOwner()));
+            case FACEBOOK:
+                return linkIdents(sourceIdent, getSocialNetIdents(apartment, IdentType.FB_ID));
+            case VKONTAKTE:
+                return linkIdents(sourceIdent, getSocialNetIdents(apartment, IdentType.VK_ID));
+        }
+        return Collections.emptySet();
+    }
+
+    private Set<Long> getSocialNetIdents(ApartmentDTO apartment, IdentType type) {
+        Set<Long> adjIdents = new HashSet<>();
+        adjIdents.add(findAndSaveIfNotExists(apartment.getAuthorId(), type).getId());
+
+        for (ContactDTO contact : apartment.getContacts()) {
+            switch (contact.getType()) {
+                case PHONE:
+                    try {
+                        adjIdents.add(findAndSaveIfNotExists(
+                                        IdentRefiner.refine(contact.getPhoneNumber().getRawNumber(), IdentType.PHONE),
+                                        IdentType.PHONE).getId()
+                        );
+                    }
+                    catch (Exception e){
+                        //ignore
+                    }
+                    break;
+            }
+        }
+
+        return adjIdents;
+    }
+
+    private Set<Long> getInternalApartmentIdents(UserDTO user) {
+        if (user == null) return Collections.emptySet();
+
+        Set<Long> result = new HashSet<>();
+        result.add(findAndSaveIfNotExists(user.getId().toString(), IdentType.USER_ID).getId());
+        result.add(findAndSaveIfNotExists(user.getEmail(), IdentType.EMAIL).getId());
+        result.add(findAndSaveIfNotExists(user.getFacebookId(), IdentType.FB_ID).getId());
+        result.add(findAndSaveIfNotExists(user.getVkontakteId(), IdentType.VK_ID).getId());
+        result.add(findAndSaveIfNotExists(user.getPhoneNumber(), IdentType.PHONE).getId());
+
+        return result;
     }
 }

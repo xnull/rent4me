@@ -28,6 +28,8 @@ public interface ApartmentRepositoryCustom {
                               ApartmentRepository.FindMode findMode, GeoParams geoParams, List<Long> metroIds,
                               LimitAndOffset limitAndOffset);
 
+    void saveIdents(Set<Long> idents);
+
 
     @Wither
     @AllArgsConstructor

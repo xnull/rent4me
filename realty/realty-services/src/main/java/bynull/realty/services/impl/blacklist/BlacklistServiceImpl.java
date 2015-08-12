@@ -68,7 +68,7 @@ public class BlacklistServiceImpl {
         IdentEntity aptIdent = getIdent(apartmentId);
         saveBl(aptIdent.getId());
 
-        return mergeIdents(aptIdent, optApt.get())
+        return identService.mergeIdents(aptIdent, optApt.get())
                 .stream()
                 .map(this::saveBl)
                 .collect(Collectors.toSet());
@@ -87,67 +87,7 @@ public class BlacklistServiceImpl {
     }
 
     private IdentEntity getIdent(Long apartmentId) {
-        return identService.find(apartmentId.toString(), IdentType.APARTMENT)
-                .orElseGet(() -> identService.save(apartmentId.toString(), IdentType.APARTMENT));
-    }
-
-    /**
-     * Связать имеющиеся идентификаторы
-     *
-     * @param sourceIdent
-     * @param apartment
-     */
-    private Set<Long> mergeIdents(IdentEntity sourceIdent, ApartmentDTO apartment) {
-        /**
-         * 1. Находим все идентификаторы с которыми связаны данные апартаменты
-         * 2. связываем все иденты
-         * 3. добавляем ссылку на ids в черный список
-         */
-        switch (apartment.getDataSource()) {
-            case INTERNAL:
-                return identService.mergeIdents(sourceIdent, getInternalApartmentIdents(apartment.getOwner()));
-            case FACEBOOK:
-                return identService.mergeIdents(sourceIdent, getSocialNetIdents(apartment, IdentType.FB_ID));
-            case VKONTAKTE:
-                return identService.mergeIdents(sourceIdent, getSocialNetIdents(apartment, IdentType.VK_ID));
-        }
-        return Collections.emptySet();
-    }
-
-    private Set<Long> getSocialNetIdents(ApartmentDTO apartment, IdentType type) {
-        Set<Long> adjIdents = new HashSet<>();
-        adjIdents.add(identService.findAndSaveIfNotExists(apartment.getAuthorId(), type).getId());
-
-        for (ContactDTO contact : apartment.getContacts()) {
-            switch (contact.getType()) {
-                case PHONE:
-                    try {
-                        adjIdents.add(identService.findAndSaveIfNotExists(
-                                IdentRefiner.refine(contact.getPhoneNumber().getRawNumber(), IdentType.PHONE),
-                                IdentType.PHONE).getId()
-                        );
-                    }
-                    catch (Exception e){
-                        //ignore
-                    }
-                    break;
-            }
-        }
-
-        return adjIdents;
-    }
-
-    private Set<Long> getInternalApartmentIdents(UserDTO user) {
-        if (user == null) return Collections.emptySet();
-
-        Set<Long> result = new HashSet<>();
-        result.add(identService.findAndSaveIfNotExists(user.getId().toString(), IdentType.USER_ID).getId());
-        result.add(identService.findAndSaveIfNotExists(user.getEmail(), IdentType.EMAIL).getId());
-        result.add(identService.findAndSaveIfNotExists(user.getFacebookId(), IdentType.FB_ID).getId());
-        result.add(identService.findAndSaveIfNotExists(user.getVkontakteId(), IdentType.VK_ID).getId());
-        result.add(identService.findAndSaveIfNotExists(user.getPhoneNumber(), IdentType.PHONE).getId());
-
-        return result;
+        return identService.findAndSaveIfNotExists(apartmentId.toString(), IdentType.APARTMENT);
     }
 
     /**
