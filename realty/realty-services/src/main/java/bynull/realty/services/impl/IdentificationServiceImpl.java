@@ -1,8 +1,10 @@
 package bynull.realty.services.impl;
 
+import bynull.realty.common.PhoneUtil;
 import bynull.realty.dao.api.ident.IdRelationsRepository;
 import bynull.realty.dao.api.ident.IdentRepository;
 import bynull.realty.dao.api.ident.IdentRepository.IdentRepositorySimple;
+import bynull.realty.dao.util.IdentRefiner;
 import bynull.realty.data.business.ids.IdRelationEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
@@ -34,11 +36,16 @@ public class IdentificationServiceImpl {
     }
 
     public Optional<IdentEntity> find(String identValue, IdentType identType) {
-        return Optional.ofNullable(idRepoImpl.find(identValue, identType.getType()));
+        return Optional.ofNullable(idRepoImpl.find(IdentRefiner.refine(identValue, identType), identType.getType()));
     }
 
-    public IdentEntity findAndSaveIfNotExists(String identId, IdentType identType) {
-        return find(identId, identType).orElseGet(() -> save(identId, identType));
+    public IdentEntity findAndSaveIfNotExists(String identValue, IdentType identType) {
+        Optional<IdentEntity> ident = find(IdentRefiner.refine(identValue, identType), identType);
+        if(ident.isPresent()){
+            return ident.get();
+        }
+
+        return save(IdentRefiner.refine(identValue, identType), identType);
     }
 
     /**
@@ -121,7 +128,7 @@ public class IdentificationServiceImpl {
 
     public IdentEntity save(String value, IdentType type) {
         IdentEntity ident = new IdentEntity();
-        ident.setIdentValue(value);
+        ident.setIdentValue(IdentRefiner.refine(value, type));
         ident.setIdentType(type.getType());
 
         IdentEntity dbIdent = idRepoImpl.find(value, type.getType());

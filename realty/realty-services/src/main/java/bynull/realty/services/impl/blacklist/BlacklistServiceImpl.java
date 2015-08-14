@@ -1,6 +1,8 @@
 package bynull.realty.services.impl.blacklist;
 
+import bynull.realty.common.PhoneUtil;
 import bynull.realty.dao.blacklist.BlacklistRepository;
+import bynull.realty.dao.util.IdentRefiner;
 import bynull.realty.data.business.blacklist.BlacklistEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
@@ -119,7 +121,15 @@ public class BlacklistServiceImpl {
         for (ContactDTO contact : apartment.getContacts()) {
             switch (contact.getType()) {
                 case PHONE:
-                    adjIdents.add(identService.findAndSaveIfNotExists(contact.getPhoneNumber().getRawNumber(), IdentType.PHONE).getId());
+                    try {
+                        adjIdents.add(identService.findAndSaveIfNotExists(
+                                IdentRefiner.refine(contact.getPhoneNumber().getRawNumber(), IdentType.PHONE),
+                                IdentType.PHONE).getId()
+                        );
+                    }
+                    catch (Exception e){
+                        //ignore
+                    }
                     break;
             }
         }

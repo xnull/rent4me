@@ -2,6 +2,7 @@ package bynull.realty.data.business;
 
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.GeoPoint;
+import lombok.ToString;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.annotations.*;
 import org.springframework.util.Assert;
@@ -19,6 +20,7 @@ import static bynull.realty.util.CommonUtils.copy;
 /**
  * Created by null on 21.06.14.
  */
+@ToString
 @Entity
 @Table(name = "apartments")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

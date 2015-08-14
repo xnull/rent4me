@@ -6,9 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class PhoneNumberParserTest {
@@ -36,6 +38,16 @@ public class PhoneNumberParserTest {
         assertThat(first, is(notNullValue()));
         assertThat(first, is(notNullValue()));
         assertThat(first.national, is("8 (916) 995-54-54"));
+    }
+
+    @Test
+    public void testFindFirstPhoneNumber() throws Exception {
+        assertEquals("8 (926) 145-10-07", PhoneUtil.findFirstPhoneNumberSafe("89261451007", "RU").getPhoneNumber().get());
+        assertEquals("8 (926) 084-57-09", PhoneUtil.findFirstPhoneNumberSafe("+79260845709", "RU").getPhoneNumber().get());
+        assertEquals("8 (911) 839-49-44", PhoneUtil.findFirstPhoneNumberSafe("+7 911 839 49 44", "RU").getPhoneNumber().get());
+        assertEquals("8 (408) 800-88-21", PhoneUtil.findFirstPhoneNumberSafe("4088008821", "RU").getPhoneNumber().get());
+        assertEquals("8 (915) 471-28-71", PhoneUtil.findFirstPhoneNumberSafe("8-915-471-28-71", "RU").getPhoneNumber().get());
+        assertEquals(Optional.of("123"), PhoneUtil.findFirstPhoneNumberSafe("123", "RU").getPhoneNumber());
     }
 
 }

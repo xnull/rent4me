@@ -9,6 +9,7 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by dionis on 2/11/15.
@@ -31,6 +32,10 @@ public class PhoneUtil {
                     ", national='" + national + '\'' +
                     '}';
         }
+
+        public Optional<String> getPhoneNumber(){
+            return national != null ? Optional.of(national) : Optional.ofNullable(raw);
+        }
     }
 
     private static final PhoneNumberUtil PHONE_NUMBER_UTIL = PhoneNumberUtil.getInstance();
@@ -51,6 +56,14 @@ public class PhoneUtil {
         }
 
         return result;
+    }
+
+    public static Phone findPhoneSafeRu(String text) {
+        return findFirstPhoneNumberSafe(text, "RU");
+    }
+
+    public static Phone findFirstPhoneNumberSafe(String text, String countryCode) {
+        return Iterables.getFirst(findPhoneNumbers(text, countryCode), new Phone(text, null));
     }
 
     public static Phone findFirstPhoneNumber(String text, String countryCode) {

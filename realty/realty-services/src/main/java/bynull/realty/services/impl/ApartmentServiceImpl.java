@@ -297,7 +297,10 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount, Integer minPrice, Integer maxPrice, ApartmentRepository.FindMode findMode, ApartmentRepositoryCustom.GeoParams geoParams, List<Long> metroIds, LimitAndOffset limitAndOffset) {
+    public List<ApartmentDTO> findPosts(String text, boolean withSubway, Set<ApartmentRepository.RoomCount> roomsCount,
+                                        Integer minPrice, Integer maxPrice, ApartmentRepository.FindMode findMode,
+                                        ApartmentRepositoryCustom.GeoParams geoParams, List<Long> metroIds,
+                                        LimitAndOffset limitAndOffset) {
         Assert.notNull(text);
         Assert.notNull(roomsCount);
         Assert.notNull(geoParams);
