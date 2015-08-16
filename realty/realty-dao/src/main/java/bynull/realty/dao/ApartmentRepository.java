@@ -106,7 +106,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     long countOfSimilarApartments(@Param("text") String text);
 
     @Modifying
-    @Query("update Apartment a set a.published=false where a.logicalCreated < :date")
+    @Query("update Apartment a set a.published=false where (a.logicalCreated < :date and a.published=true)")
     void unPublishOldNonInternalApartments(@Param("date") Date date);
 
     @Query(value = "select count(tmp.*) from ("+LIST_APARTMENTS_QUERY_BASE+") tmp ", nativeQuery = true)
