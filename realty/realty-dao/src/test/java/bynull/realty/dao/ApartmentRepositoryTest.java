@@ -1,12 +1,12 @@
 package bynull.realty.dao;
 
 import bynull.realty.DbTest;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.facebook.FacebookPageToScrap;
 import bynull.realty.data.common.GeoPoint;
 import com.google.common.collect.Iterables;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import javax.annotation.Resource;

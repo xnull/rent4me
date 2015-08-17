@@ -2,7 +2,7 @@ package bynull.realty.services.impl;
 
 import bynull.realty.converters.apartments.ApartmentInfoDeltaModelDTOConverter;
 import bynull.realty.dao.ApartmentInfoDeltaRepository;
-import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.ApartmentInfoDelta;
 import bynull.realty.dto.ApartmentInfoDeltaDTO;

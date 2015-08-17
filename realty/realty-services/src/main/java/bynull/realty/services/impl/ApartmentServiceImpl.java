@@ -4,7 +4,11 @@ import bynull.realty.components.VKHelperComponent;
 import bynull.realty.converters.apartments.ApartmentModelDTOConverter;
 import bynull.realty.converters.apartments.ApartmentModelDTOConverterFactory;
 import bynull.realty.dao.*;
+import bynull.realty.dao.apartment.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.ids.IdentEntity;
+import bynull.realty.data.business.ids.IdentType;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.ApartmentPhotoDTO;
@@ -66,6 +70,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Resource
     VKHelperComponent vkHelperComponent;
 
+    @Resource
+    private IdentificationServiceImpl identService;
+
     @Transactional
     @Override
     public ApartmentDTO create(ApartmentDTO dto) {
@@ -75,6 +82,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         apartment.mergeWith(dto.toInternal());
 
         InternalApartment created = apartmentRepository.saveAndFlush(apartment);
+        saveIdents(created.getId());
 
         ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(created);
         return targetConverter.toTargetType(Optional.ofNullable(created)).orElse(null);
@@ -91,6 +99,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setPublished(true);//publish by default
             apartment.setTarget(Apartment.Target.RENTER);
             apartment = apartmentRepository.saveAndFlush(apartment);
+            saveIdents(apartment.getId());
 
             handlePhotoDiff(dto, apartment);
 
@@ -141,7 +150,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         handlePhotoDiff(dto, apartment);
 
-        apartment = apartmentRepository.saveAndFlush(apartment);
+        apartmentRepository.saveAndFlush(apartment);
 
         return true;
     }
@@ -478,5 +487,14 @@ public class ApartmentServiceImpl implements ApartmentService {
                 log.info("Apartment of not supported class provided: " + apartment.getClass());
             }
         }
+    }
+
+    @Override
+    public void saveIdents(Long apartmentId) {
+        IdentEntity aptIdent = identService.findAndSaveIfNotExists(apartmentId.toString(), IdentType.APARTMENT);
+        Optional<ApartmentDTO> optApt = find(apartmentId);
+        Set<Long> idents = identService.mergeIdents(aptIdent, optApt.get());
+
+        apartmentRepository.saveApartmentIdents(idents, apartmentId);
     }
 }

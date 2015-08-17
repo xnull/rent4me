@@ -11,8 +11,7 @@ import bynull.realty.converters.CityModelDTOConverter;
 import bynull.realty.converters.FacebookPageModelDTOConverter;
 import bynull.realty.converters.FacebookPostModelDTOConverter;
 import bynull.realty.converters.MetroModelDTOConverter;
-import bynull.realty.converters.apartments.FacebookApartmentModelDTOConverter;
-import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.ApartmentExternalPhotoRepository;
 import bynull.realty.dao.external.FacebookPageToScrapRepository;
@@ -134,170 +133,7 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
         AtomicInteger counter = new AtomicInteger();
         Date defaultMaxPostsAgeToGrab = new DateTime().minusDays(30).toDate();
         for (FacebookPageToScrap _fbPage : fbPages) {
-            transactionOperations.execute(new TransactionCallbackWithoutResult() {
-                @Override
-                protected void doInTransactionWithoutResult(TransactionStatus status) {
-                    final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
-                    FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
-
-                    Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(Optional.ofNullable(fbPage.getCity()));
-                    List<FacebookApartment> newest = apartmentRepository.finFBAparmentsByExternalIdNewest(fbPage.getExternalId(), getLimit1Offset0());
-
-                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
-
-                    try {
-                        List<FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
-                                .stream()
-                                .filter(item -> StringUtils.trimToNull(item.getMessage()) != null && !StringUtils.trimToEmpty(item.getMessage()).contains("rent4.me"))
-                                        //leave only those that have no duplicates in DB
-//                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getMessage()) == 0)
-                                .collect(Collectors.toCollection(ArrayList::new));
-
-                        List<FacebookApartment> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? apartmentRepository.findFBApartmentsByExternalIdIn(facebookPostItemDTOs.stream()
-                                        .map(FacebookPostItemDTO::getId)
-                                        .collect(Collectors.toList())
-                        ) : Collections.emptyList();
-
-                        Set<String> collect = facebookPostItemDTOs.stream().map(item -> Apartment.calcHash(item.getMessage())).collect(Collectors.toSet());
-
-                        final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
-
-                        Set<String> ids = byExternalIdIn.stream()
-                                .map(FacebookApartment::getExternalId)
-                                .collect(Collectors.toSet());
-
-                        //although it may seems strange but in same result set could be returned duplicates - so filter them
-                        log.info("Removing duplicates in same requests by id");
-                        Set<String> postItemDtoIds = new HashSet<>();
-                        Set<String> postItemDtoContents = new HashSet<>();
-                        Iterator<FacebookPostItemDTO> iterator = facebookPostItemDTOs.iterator();
-                        while (iterator.hasNext()) {
-                            FacebookPostItemDTO next = iterator.next();
-                            if (next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getMessage())) {
-                                log.info("Removed duplicate in same requests by id: [{}]", next.getId());
-                                iterator.remove();
-                            } else {
-                                postItemDtoIds.add(next.getId());
-                                postItemDtoContents.add(next.getMessage());
-                            }
-                        }
-                        log.info("Removed duplicates in same requests by id");
-
-                        log.info("Removing duplicates in DB by id");
-                        List<FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
-                                .stream()
-                                .filter(i -> !ids.contains(i.getId()) && !similarTextsInDB.contains(i.getMessage()))
-                                .collect(Collectors.toList());
-
-                        log.info("Removed duplicates in DB by id");
-
-
-                        for (FacebookPostItemDTO postItemDTO : facebookPostItemDTOsToPersist) {
-                            FacebookApartment post = new FacebookApartment();
-
-                            int i = counter.incrementAndGet();
-                            log.info(">>> Processing post #[{}]", i);
-                            //fill
-                            post.setExternalId(postItemDTO.getId());
-                            post.setLink(postItemDTO.getExternalLink());
-                            post.setExtAuthorLink(postItemDTO.getExternalAuthorLink());
-                            post.setDescription(postItemDTO.getMessage());
-                            post.setPublished(true);
-
-                            post.setLogicalCreated(postItemDTO.getCreatedDtime());
-
-
-                            post.setFacebookPage(fbPage);
-                            String message = post.getDescription();
-
-                            Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
-                            post.setMetros(matchedMetros);
-
-                            GeoPoint averagePoint = getAveragePoint(matchedMetros);
-
-                            if (averagePoint != null) {
-                                post.setLocation(averagePoint);
-                            } else {
-                                post.setLocation(getAveragePoint(cityDTO));
-                            }
-
-                            AddressComponents addressComponents = new AddressComponents();
-                            addressComponents.setCountryCode("RU");
-                            post.setAddressComponents(addressComponents);
-
-                            Integer roomCount = roomCountParser.findRoomCount(message);
-                            post.setRoomCount(roomCount);
-                            Apartment.Target target = targetAnalyzer.determineTarget(message);
-                            post.setTarget(target);
-                            BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
-                            post.setRentalFee(rentalFee);
-                            post.setFeePeriod(FeePeriod.MONTHLY);
-                            List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
-                            Set<Contact> contacts = phones.stream().map(phone -> {
-                                PhoneContact contact = new PhoneContact();
-                                contact.setPhoneNumber(PhoneNumber.from(phone));
-                                return contact;
-                            }).collect(Collectors.toCollection(HashSet::new));
-                            post.setContacts(contacts);
-                            post = apartmentRepository.save(post);
-
-                            String picture = StringUtils.trimToNull(postItemDTO.getPicture());
-                            if (picture != null) {
-                                ApartmentExternalPhoto photo = new ApartmentExternalPhoto();
-                                photo.setImageUrl(picture);
-                                photo.setPreviewUrl(picture);
-                                photo.setApartment(post);
-                                apartmentExternalPhotoRepository.save(photo);
-                            }
-
-                            post = apartmentRepository.save(post);
-                            if (post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
-                                    && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
-
-                                int scorePoints = 0;
-
-                                if (post.getRentalFee() != null) {
-                                    scorePoints++;
-                                }
-                                if (post.getMetros() != null && !post.getMetros().isEmpty()) {
-                                    scorePoints++;
-                                }
-                                if (post.getRoomCount() != null) {
-                                    scorePoints++;
-                                }
-
-                                log.info("Score points for FB post #[{}]: [{}]", post.getId(), scorePoints);
-
-                                if (scorePoints >= 1) {
-                                    apartmentIdsToPostOnVKPage.add(post.getId());
-                                }
-                            }
-
-                            saveIdents(post);
-
-                            log.info("<<< Processing of post #[{}] done", i);
-
-//                                post.setType(getType().toInternal());
-                        }
-                        em.flush();
-                        log.info("Saved [{}] posts for vk page: [{}]", facebookPostItemDTOsToPersist.size(), fbPage.getLink());
-                    } catch (Exception e) {
-                        log.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
-                    }
-                    afterCommitExecutor.executeAsynchronouslyInTransaction(() ->
-                            apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage)
-                    );
-                }
-
-                private void saveIdents(FacebookApartment post) {
-                    IdentEntity aptIdent = identService.findAndSaveIfNotExists(post.getId().toString(), IdentType.APARTMENT);
-                    Optional<ApartmentDTO> optApt = apartmentService.find(post.getId());
-                    Set<Long> idents = identService.mergeIdents(aptIdent, optApt.get());
-
-                    apartmentRepository.saveIdents(idents);
-                }
-            });
-
+            transactionOperations.execute(new FbSynchronisationHelper(_fbPage, defaultMaxPostsAgeToGrab, counter, metros));
         }
     }
 
@@ -433,6 +269,194 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
         return 0;
         //TODO: fix it later
         //return text != null ? facebookScrapedPostRepository.countByQuery(query) : facebookScrapedPostRepository.count();
+    }
+
+
+    public class FbSynchronisationHelper extends TransactionCallbackWithoutResult {
+        private final FacebookPageToScrap _fbPage;
+        private final Date defaultMaxPostsAgeToGrab;
+        private final AtomicInteger counter;
+        private final List<? extends MetroDTO> metros;
+
+        public FbSynchronisationHelper(FacebookPageToScrap _fbPage, Date defaultMaxPostsAgeToGrab,
+                                       AtomicInteger counter, List<? extends MetroDTO> metros) {
+            this._fbPage = _fbPage;
+            this.defaultMaxPostsAgeToGrab = defaultMaxPostsAgeToGrab;
+            this.counter = counter;
+            this.metros = metros;
+        }
+
+        private PageRequest getLimit1Offset0() {
+            return new PageRequest(0, 1);
+        }
+
+        @Override
+        public void doInTransactionWithoutResult(TransactionStatus status) {
+            final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
+            FacebookPageToScrap fbPage = facebookPageToScrapRepository.findOne(_fbPage.getId());
+
+            Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(Optional.ofNullable(fbPage.getCity()));
+            List<FacebookApartment> newest = apartmentRepository.finFBAparmentsByExternalIdNewest(
+                    fbPage.getExternalId(), getLimit1Offset0()
+            );
+
+            Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
+
+            try {
+                List<FacebookPostItemDTO> facebookPostItemDTOs = facebookHelperComponent.loadPostsFromPage(fbPage.getExternalId(), maxPostsAgeToGrab)
+                        .stream()
+                        .filter(item -> StringUtils.trimToNull(item.getMessage()) != null && !StringUtils.trimToEmpty(item.getMessage()).contains("rent4.me"))
+                                //leave only those that have no duplicates in DB
+//                                .filter(item -> apartmentRepository.countOfSimilarApartments(item.getMessage()) == 0)
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                Set<String> collect = facebookPostItemDTOs
+                        .stream()
+                        .map(item -> Apartment.calcHash(item.getMessage()))
+                        .collect(Collectors.toSet());
+
+                final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
+
+                List<FacebookApartment> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? apartmentRepository.findFBApartmentsByExternalIdIn(facebookPostItemDTOs.stream()
+                                .map(FacebookPostItemDTO::getId)
+                                .collect(Collectors.toList())
+                ) : Collections.emptyList();
+
+                Set<String> ids = byExternalIdIn.stream()
+                        .map(FacebookApartment::getExternalId)
+                        .collect(Collectors.toSet());
+
+                //although it may seems strange but in same result set could be returned duplicates - so filter them
+                removeDuplicatesById(facebookPostItemDTOs);
+
+                List<FacebookPostItemDTO> facebookPostItemDTOsToPersist =
+                        removeDuplicatesInDbById(facebookPostItemDTOs, similarTextsInDB, ids);
+
+                for (FacebookPostItemDTO postItemDTO : facebookPostItemDTOsToPersist) {
+                    FacebookApartment post = new FacebookApartment();
+
+                    int i = counter.incrementAndGet();
+                    log.info(">>> Processing post #[{}]", i);
+                    //fill
+                    post.setExternalId(postItemDTO.getId());
+                    post.setLink(postItemDTO.getExternalLink());
+                    post.setExtAuthorLink(postItemDTO.getExternalAuthorLink());
+                    post.setDescription(postItemDTO.getMessage());
+                    post.setPublished(true);
+
+                    post.setLogicalCreated(postItemDTO.getCreatedDtime());
+
+
+                    post.setFacebookPage(fbPage);
+                    String message = post.getDescription();
+
+                    Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
+                    post.setMetros(matchedMetros);
+
+                    GeoPoint averagePoint = getAveragePoint(matchedMetros);
+
+                    if (averagePoint != null) {
+                        post.setLocation(averagePoint);
+                    } else {
+                        post.setLocation(getAveragePoint(cityDTO));
+                    }
+
+                    AddressComponents addressComponents = new AddressComponents();
+                    addressComponents.setCountryCode("RU");
+                    post.setAddressComponents(addressComponents);
+
+                    Integer roomCount = roomCountParser.findRoomCount(message);
+                    post.setRoomCount(roomCount);
+                    Apartment.Target target = targetAnalyzer.determineTarget(message);
+                    post.setTarget(target);
+                    BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
+                    post.setRentalFee(rentalFee);
+                    post.setFeePeriod(FeePeriod.MONTHLY);
+                    List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
+                    Set<Contact> contacts = phones.stream().map(phone -> {
+                        PhoneContact contact = new PhoneContact();
+                        contact.setPhoneNumber(PhoneNumber.from(phone));
+                        return contact;
+                    }).collect(Collectors.toCollection(HashSet::new));
+                    post.setContacts(contacts);
+                    post = apartmentRepository.save(post);
+
+                    String picture = StringUtils.trimToNull(postItemDTO.getPicture());
+                    if (picture != null) {
+                        ApartmentExternalPhoto photo = new ApartmentExternalPhoto();
+                        photo.setImageUrl(picture);
+                        photo.setPreviewUrl(picture);
+                        photo.setApartment(post);
+                        apartmentExternalPhotoRepository.save(photo);
+                    }
+
+                    post = apartmentRepository.save(post);
+                    apartmentService.saveIdents(post.getId());
+
+                    if (post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
+                            && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
+
+                        int scorePoints = 0;
+
+                        if (post.getRentalFee() != null) {
+                            scorePoints++;
+                        }
+                        if (post.getMetros() != null && !post.getMetros().isEmpty()) {
+                            scorePoints++;
+                        }
+                        if (post.getRoomCount() != null) {
+                            scorePoints++;
+                        }
+
+                        log.info("Score points for FB post #[{}]: [{}]", post.getId(), scorePoints);
+
+                        if (scorePoints >= 1) {
+                            apartmentIdsToPostOnVKPage.add(post.getId());
+                        }
+                    }
+                    log.info("<<< Processing of post #[{}] done", i);
+
+//                                post.setType(getType().toInternal());
+                }
+                em.flush();
+                log.info("Saved [{}] posts for vk page: [{}]", facebookPostItemDTOsToPersist.size(), fbPage.getLink());
+            } catch (Exception e) {
+                log.error("Failed to parse [" + fbPage.getExternalId() + "]", e);
+            }
+            afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
+                apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage);
+            });
+        }
+
+        private List<FacebookPostItemDTO> removeDuplicatesInDbById(List<FacebookPostItemDTO> facebookPostItemDTOs, Set<String> similarTextsInDB, Set<String> ids) {
+            log.info("Removing duplicates in DB by id");
+            List<FacebookPostItemDTO> facebookPostItemDTOsToPersist = facebookPostItemDTOs
+                    .stream()
+                    .filter(i -> !ids.contains(i.getId()) && !similarTextsInDB.contains(i.getMessage()))
+                    .collect(Collectors.toList());
+
+            log.info("Removed duplicates in DB by id");
+            return facebookPostItemDTOsToPersist;
+        }
+
+        private void removeDuplicatesById(List<FacebookPostItemDTO> facebookPostItemDTOs) {
+            log.info("Removing duplicates in same requests by id");
+            Set<String> postItemDtoIds = new HashSet<>();
+            Set<String> postItemDtoContents = new HashSet<>();
+            Iterator<FacebookPostItemDTO> iterator = facebookPostItemDTOs.iterator();
+            while (iterator.hasNext()) {
+                FacebookPostItemDTO next = iterator.next();
+                if (next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getMessage())) {
+                    log.info("Removed duplicate in same requests by id: [{}]", next.getId());
+                    iterator.remove();
+                    continue;
+                } else {
+                    postItemDtoIds.add(next.getId());
+                    postItemDtoContents.add(next.getMessage());
+                }
+            }
+            log.info("Removed duplicates in same requests by id");
+        }
     }
 
 }

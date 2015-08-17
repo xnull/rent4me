@@ -1,6 +1,6 @@
 package bynull.realty.services.api;
 
-import bynull.realty.dao.ApartmentRepositoryCustom;
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.dto.MetroDTO;
 import bynull.realty.services.metro.MetroServiceException;
 

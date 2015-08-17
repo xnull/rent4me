@@ -1,9 +1,8 @@
 package bynull.realty.web.rest;
 
-import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.common.CityEntity;
-import bynull.realty.data.common.GeoPoint;
 import bynull.realty.utils.HibernateUtil;
 import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import lombok.extern.slf4j.Slf4j;

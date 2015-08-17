@@ -1,17 +1,11 @@
 package bynull.realty.web.rest;
 
-import bynull.realty.dao.ApartmentRepository;
-import bynull.realty.dao.ApartmentRepositoryCustom;
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
-import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.dto.MetroDTO;
-import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.MetroService;
-import bynull.realty.util.LimitAndOffset;
-import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import bynull.realty.web.converters.MetroDtoJsonConverter;
-import bynull.realty.web.json.ApartmentJSON;
 import bynull.realty.web.json.MetroJSON;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +16,6 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author dionis on 22/06/14.

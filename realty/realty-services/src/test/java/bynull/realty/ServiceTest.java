@@ -17,7 +17,7 @@ import java.util.UUID;
 @Transactional
 @TransactionConfiguration(transactionManager = "txManager")
 @ContextConfiguration(locations = {"classpath:service-test-context.xml"})
-public abstract class ServiceTest extends SpringTest {
+public abstract class ServiceTest extends SpringServiceTest {
 
     @PersistenceContext
     EntityManager entityManager;

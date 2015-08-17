@@ -1,14 +1,12 @@
 package bynull.realty.services.api;
 
-import bynull.realty.dao.ApartmentRepository;
-import bynull.realty.dao.ApartmentRepositoryCustom;
+import bynull.realty.dao.apartment.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.util.LimitAndOffset;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -52,4 +50,6 @@ public interface ApartmentService {
     void unPublishOldNonInternalApartments();
 
     void publishApartmentsOnOurVkGroupPage(List<Long> apartmentIds);
+
+    void saveIdents(Long apartmentId);
 }

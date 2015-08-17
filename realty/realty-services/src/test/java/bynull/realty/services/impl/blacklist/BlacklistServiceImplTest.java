@@ -1,14 +1,13 @@
 package bynull.realty.services.impl.blacklist;
 
 import bynull.realty.ServiceTest;
-import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dao.api.ident.IdRelationsRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
 import bynull.realty.dao.util.IdentRefiner;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.blacklist.BlacklistEntity;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
-import bynull.realty.data.business.ids.IdRelationEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
 import bynull.realty.data.common.GeoPoint;

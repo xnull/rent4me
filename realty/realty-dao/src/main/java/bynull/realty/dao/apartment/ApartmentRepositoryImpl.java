@@ -1,8 +1,9 @@
-package bynull.realty.dao;
+package bynull.realty.dao.apartment;
 
 import bynull.realty.common.Porter;
 import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.apartment.ApartmentIdent;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.CityEntity;
@@ -10,6 +11,7 @@ import bynull.realty.data.common.GeoPoint;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.HibernateUtil;
 import com.google.common.collect.ImmutableList;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -18,9 +20,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.util.*;
@@ -29,12 +29,16 @@ import java.util.stream.Collectors;
 /**
  * Created by dionis on 3/5/15.
  */
+@Slf4j
 public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, InitializingBean {
     @PersistenceContext
     EntityManager entityManager;
 
     @Resource
     CityRepository cityRepository;
+
+    @Resource
+    private ApartmentIdentRepository apartmentIdentRepo;
 
     Porter porter;
 
@@ -303,14 +307,29 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         return resultList;
     }
 
-    /**
-     * Храним все идентификаторы объявления в отдельной таблице, чтобы была возможность поиска и фильтрации
-     * по всем идентификаторам объявления
-     * @param idents
-     */
     @Override
-    public void saveIdents(Set<Long> idents) {
-         надо создать таблицу
+    public List<ApartmentIdent> getApartmentIdents(Long apartmentId) {
+        log.trace("Get apartment idents: {}", apartmentId);
+        TypedQuery<ApartmentIdent> query = entityManager
+                .createQuery("select from ApartmentIdent aId where aId.apartmentId = :aptId", ApartmentIdent.class);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public void saveApartmentIdents(Set<Long> idents, Long apartmentId) {
+        log.debug("Save apartment idents: {}", apartmentId);
+
+        for (Long identId : idents) {
+            ApartmentIdent aptIdent = apartmentIdentRepo.findByApartmentIdAndIdentId(apartmentId, identId);
+
+            if (aptIdent == null){
+                ApartmentIdent ident = new ApartmentIdent();
+                ident.setApartmentId(apartmentId);
+                ident.setIdentId(identId);
+                apartmentIdentRepo.saveAndFlush(ident);
+            }
+        }
     }
 
     private String ilike(String text) {

@@ -1,9 +1,8 @@
 package bynull.realty.web.rest;
 
-import bynull.realty.dao.ApartmentRepository;
-import bynull.realty.dao.ApartmentRepository.FindMode;
-import bynull.realty.dao.ApartmentRepositoryCustom;
-import bynull.realty.dao.ApartmentRepositoryCustom.GeoParams;
+import bynull.realty.dao.apartment.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository.FindMode;
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom.GeoParams;
 import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
@@ -12,18 +11,13 @@ import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import bynull.realty.web.json.ApartmentJSON;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**

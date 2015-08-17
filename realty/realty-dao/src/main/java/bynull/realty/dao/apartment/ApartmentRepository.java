@@ -1,9 +1,9 @@
-package bynull.realty.dao;
+package bynull.realty.dao.apartment;
 
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.data.business.Apartment;
 import bynull.realty.data.business.FacebookApartment;
 import bynull.realty.data.business.VkontakteApartment;
-import bynull.realty.data.business.external.vkontakte.VkontaktePage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +13,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author dionis on 22/06/14.

@@ -10,13 +10,15 @@ import bynull.realty.converters.CityModelDTOConverter;
 import bynull.realty.converters.MetroModelDTOConverter;
 import bynull.realty.converters.VkontaktePageModelDTOConverter;
 import bynull.realty.converters.VkontaktePostModelDTOConverter;
-import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.external.ApartmentExternalPhotoRepository;
 import bynull.realty.dao.external.VkontaktePageRepository;
 import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.external.vkontakte.VkontaktePage;
+import bynull.realty.data.business.ids.IdentEntity;
+import bynull.realty.data.business.ids.IdentType;
 import bynull.realty.data.business.metro.MetroEntity;
 import bynull.realty.data.common.CityEntity;
 import bynull.realty.data.common.GeoPoint;
@@ -26,6 +28,7 @@ import bynull.realty.dto.MetroDTO;
 import bynull.realty.dto.vk.VkontaktePageDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.VkontakteService;
+import bynull.realty.services.impl.IdentificationServiceImpl;
 import bynull.realty.services.impl.MetroServiceImpl;
 import bynull.realty.services.impl.socialnet.AbstractSocialNetServiceImpl;
 import com.google.common.collect.Iterables;
@@ -106,6 +109,9 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 
     @Resource
     CityModelDTOConverter cityModelDTOConverter;
+
+    @Resource
+    private IdentificationServiceImpl identService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -259,6 +265,7 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
                             }
 
                             post = apartmentRepository.save(post);
+                            apartmentService.saveIdents(post.getId());
                             if(post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
                                     && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
 

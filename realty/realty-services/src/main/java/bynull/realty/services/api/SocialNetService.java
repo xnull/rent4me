@@ -1,6 +1,6 @@
 package bynull.realty.services.api;
 
-import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dto.SocialNetPostDTO;
 import bynull.realty.util.LimitAndOffset;
 

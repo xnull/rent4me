@@ -2,7 +2,7 @@ package bynull.realty.services.impl.socialnet;
 
 import bynull.realty.common.Porter;
 import bynull.realty.converters.SocialNetPostModelDTOConverter;
-import bynull.realty.dao.ApartmentRepository;
+import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.data.business.external.SocialNetPost;
 import bynull.realty.dto.SocialNetPostDTO;
 import bynull.realty.services.api.SocialNetService;

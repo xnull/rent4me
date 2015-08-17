@@ -1,24 +1,16 @@
 package bynull.realty.web.rest;
 
-import bynull.realty.dao.ApartmentRepositoryCustom;
-import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.CityDTO;
-import bynull.realty.dto.MetroDTO;
 import bynull.realty.services.api.CityService;
-import bynull.realty.services.api.MetroService;
 import bynull.realty.web.converters.CityDtoJsonConverter;
-import bynull.realty.web.converters.MetroDtoJsonConverter;
 import bynull.realty.web.json.CityJSON;
-import bynull.realty.web.json.MetroJSON;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 /**

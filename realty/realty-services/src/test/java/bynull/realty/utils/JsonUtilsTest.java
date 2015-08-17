@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -18,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class JsonUtilsTest {
 
+    @Ignore
     @Test
     public void testToJsonOptionalFields() throws Exception {
         JsonUtils.setPrettyPrint(false);

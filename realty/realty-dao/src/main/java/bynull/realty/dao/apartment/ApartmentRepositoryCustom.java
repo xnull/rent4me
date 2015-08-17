@@ -1,11 +1,11 @@
-package bynull.realty.dao;
+package bynull.realty.dao.apartment;
 
 import bynull.realty.data.business.Apartment;
+import bynull.realty.data.business.apartment.ApartmentIdent;
 import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.util.LimitAndOffset;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Wither;
@@ -28,7 +28,8 @@ public interface ApartmentRepositoryCustom {
                               ApartmentRepository.FindMode findMode, GeoParams geoParams, List<Long> metroIds,
                               LimitAndOffset limitAndOffset);
 
-    void saveIdents(Set<Long> idents);
+    List<ApartmentIdent> getApartmentIdents(Long apartmentId);
+    void saveApartmentIdents(Set<Long> idents, Long apartmentId);
 
 
     @Wither

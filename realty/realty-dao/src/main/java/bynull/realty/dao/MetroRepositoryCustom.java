@@ -1,5 +1,6 @@
 package bynull.realty.dao;
 
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.data.business.metro.MetroEntity;
 
 import java.util.List;

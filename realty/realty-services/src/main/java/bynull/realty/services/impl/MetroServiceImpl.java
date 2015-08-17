@@ -3,7 +3,7 @@ package bynull.realty.services.impl;
 import bynull.realty.common.JsonUtils;
 import bynull.realty.common.JsonUtils.JsonMapperException;
 import bynull.realty.converters.MetroModelDTOConverter;
-import bynull.realty.dao.ApartmentRepositoryCustom;
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.dao.MetroRepository;
 import bynull.realty.dao.geo.CityRepository;
 import bynull.realty.data.business.metro.MetroEntity;
