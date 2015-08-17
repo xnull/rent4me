@@ -65,7 +65,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             params.put("country_code", countryCode);
         }
 
-        if(apartment.getRoomCount() != null) {
+        if (apartment.getRoomCount() != null) {
             sql += " AND a.room_count=:room_count ";
             params.put("room_count", apartment.getRoomCount());
         }
@@ -86,7 +86,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         }
 
         Set<MetroEntity> metros = apartment.getMetros();
-        if(metros != null && !metros.isEmpty()) {
+        if (metros != null && !metros.isEmpty()) {
             sql += " AND a.id IN (select apartment_id from apartments_metros where metro_station_id IN (:target_metro_ids))";
             Set<Long> targetMetroIds = metros.stream().map(MetroEntity::getId).collect(Collectors.toSet());
             params.put("target_metro_ids", targetMetroIds);
@@ -95,7 +95,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         String defaultSorting = "a.logical_created_dt desc";
         final String targetSorting;
         //filtering
-        if(apartment instanceof SocialNetApartment) {
+        if (apartment instanceof SocialNetApartment) {
 
             SocialNetApartment socialNetApartment = (SocialNetApartment) apartment;
 
@@ -126,14 +126,14 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             targetSorting = defaultSorting;
         } else if (apartment instanceof InternalApartment) {
 
-            targetSorting = "a.location <-> ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') ),"+defaultSorting;
+            targetSorting = "a.location <-> ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') )," + defaultSorting;
             params.put("lng", apartment.getLocation().getLongitude());
             params.put("lat", apartment.getLocation().getLatitude());
         } else {
-            throw new UnsupportedOperationException("Unsupported sorting type for class"+apartment.getClass());
+            throw new UnsupportedOperationException("Unsupported sorting type for class" + apartment.getClass());
         }
 
-        sql += " ORDER BY "+targetSorting;
+        sql += " ORDER BY " + targetSorting;
 
         Query query = entityManager.createNativeQuery(sql, Apartment.class)
                 .setMaxResults(10);
@@ -148,7 +148,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         return resultList;
     }
 
-    private static class AptQueryBuilder{
+    private static class AptQueryBuilder {
         DSLContext query = new DefaultDSLContext(SQLDialect.POSTGRES_9_3);
         List<Condition> conditions = new ArrayList<>();
 
@@ -203,12 +203,11 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
 //                (withSubway ? " AND p.metros IS NOT EMPTY " : "") +
                 (!roomsCount.isEmpty() ? " AND a.room_count IN (:roomCounts) " : "") +
                 (minPrice != null ? " AND a.rental_fee >= :minPrice " : "") +
-                (maxPrice != null ? " AND a.rental_fee <= :maxPrice " : "")
-                ;
+                (maxPrice != null ? " AND a.rental_fee <= :maxPrice " : "");
 
         Map<String, Object> params = new HashMap<>();
 
-        if(!metroIds.isEmpty()) {
+        if (!metroIds.isEmpty()) {
             qlString += " AND a.id IN (select am.apartment_id from apartments_metros am where am.metro_station_id IN (:metroIds)) ";
 
             params.put("metroIds", metroIds);
@@ -216,7 +215,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
 
         final String ordering;
 
-        if(geoParams.getCountryCode().isPresent() && StringUtils.trimToNull(geoParams.getCountryCode().get()) != null) {
+        if (geoParams.getCountryCode().isPresent() && StringUtils.trimToNull(geoParams.getCountryCode().get()) != null) {
             qlString += " AND upper(a.country_code)=upper(:country_code) ";
             params.put("country_code", geoParams.getCountryCode().get());
         }
@@ -224,7 +223,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
 
         Optional<GeoPoint> point = geoParams.getPoint();
         Optional<BoundingBox> paramsBoundingBox = geoParams.getBoundingBox();
-        if(point.isPresent() || paramsBoundingBox.isPresent()) {
+        if (point.isPresent() || paramsBoundingBox.isPresent()) {
             final Optional<BoundingBox> boundingBox;
             if (paramsBoundingBox.isPresent()) {
                 boundingBox = paramsBoundingBox;
@@ -245,13 +244,13 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
                     " ~ a.location" +
                     " ";
 
-            if(boundingBox.isPresent()) {
+            if (boundingBox.isPresent()) {
                 BoundingBox box = boundingBox.get();
                 params.put("lng_low", box.getLow().getLongitude());
                 params.put("lat_low", box.getLow().getLatitude());
                 params.put("lng_high", box.getHigh().getLongitude());
                 params.put("lat_high", box.getHigh().getLatitude());
-            } else if(point.isPresent()) {
+            } else if (point.isPresent()) {
                 GeoPoint geoPoint = point.get();
                 params.put("lng_low", geoPoint.getLongitude());
                 params.put("lat_low", geoPoint.getLatitude());
@@ -262,7 +261,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             }
         }
 
-        if(point.isPresent()) {
+        if (point.isPresent()) {
             ordering = " order by a.location <-> ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') ), a.logical_created_dt DESC";
             params.put("lat", (point).get().getLatitude());
             params.put("lng", (point).get().getLongitude());
@@ -323,7 +322,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
         for (Long identId : idents) {
             ApartmentIdent aptIdent = apartmentIdentRepo.findByApartmentIdAndIdentId(apartmentId, identId);
 
-            if (aptIdent == null){
+            if (aptIdent == null) {
                 ApartmentIdent ident = new ApartmentIdent();
                 ident.setApartmentId(apartmentId);
                 ident.setIdentId(identId);
@@ -339,7 +338,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
     @Override
     public Set<String> similarApartments(Set<String> hashes) {
         Assert.notNull(hashes);
-        if(hashes.isEmpty()) return Collections.emptySet();
+        if (hashes.isEmpty()) return Collections.emptySet();
 
         Query query = entityManager.createNativeQuery("select a.description from apartments a where a.description_hash IN (:hashez)");
         query.setParameter("hashez", hashes);
