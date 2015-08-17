@@ -127,6 +127,7 @@
                         </li>
 
                         <li><a href="<c:url value="/secure/maintenance/"/>">Maintenance</a></li>
+                        <li><a href="<c:url value="/secure/logger/"/>">Logger</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
