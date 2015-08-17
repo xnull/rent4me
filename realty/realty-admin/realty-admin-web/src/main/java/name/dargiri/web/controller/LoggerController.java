@@ -59,9 +59,9 @@ public class LoggerController {
             @RequestParam(value = "direction", required = false, defaultValue = LogReader.BACK_DIRECTION) String direction)
             throws IOException {
 
-        String fileContent = "hey hello"; //logReader.getLog(direction);
-        model.addAttribute("logs/logger", fileContent);
-        return "logger";
+        String fileContent = logReader.getLog(direction);
+        model.addAttribute("logger", fileContent);
+        return "logs/logger";
     }
 
     @RequestMapping(value = "log-analyser", method = RequestMethod.GET)
@@ -74,8 +74,8 @@ public class LoggerController {
             result.addLine(matcher.group());
         }
 
-        model.addAttribute("logs/logger", result.toString());
-        return "logger";
+        model.addAttribute("logger", result.toString());
+        return "logs/logger";
     }
 
     @Component
