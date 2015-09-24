@@ -46,9 +46,11 @@ var ApartmentPhoto = React.createClass({
         return (
             <li>
                 <div>
-                    <img src={this.props.photo.small_thumbnail_url} height="100" style={style} className="clickable" onClick={this.props.onSelect && this.props.onSelect.bind(this, this.props.photo)} />
+                    <img src={this.props.photo.small_thumbnail_url} height="100" style={style} className="clickable"
+                         onClick={this.props.onSelect && this.props.onSelect.bind(this, this.props.photo)}/>
                     <br/>
-                    <a href="javascript:void(0)" onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
+                    <a href="javascript:void(0)"
+                       onClick={this.props.onDelete && this.props.onDelete.bind(this, this.props.photo.guid)}>Remove</a>
                 </div>
             </li>
         );
@@ -201,12 +203,12 @@ var ApartmentInfoChangeRequestForm = React.createClass({
                 <br/>
                 <form className="form-horizontal" role="form">
                     <div className="row">
-                        <div className="col-sm-12 col-md-12 col-xs-12" >
-                            <UserProperty data={roomCount} onChange={this._onChange} />
-                            <UserProperty data={floorNumber} onChange={this._onChange} />
-                            <UserProperty data={floorsTotal} onChange={this._onChange} />
-                            <UserProperty data={area} onChange={this._onChange} />
-                            <UserProperty data={addressProp} />
+                        <div className="col-sm-12 col-md-12 col-xs-12">
+                            <UserProperty data={roomCount} onChange={this._onChange}/>
+                            <UserProperty data={floorNumber} onChange={this._onChange}/>
+                            <UserProperty data={floorsTotal} onChange={this._onChange}/>
+                            <UserProperty data={area} onChange={this._onChange}/>
+                            <UserProperty data={addressProp}/>
                             <UserPreview data={addressPreviewProp}/>
 
                             <UserButton data={submitButton} onClick={this._onSave}/>
@@ -243,7 +245,8 @@ var ApartmentInfoChangeRequestModal = React.createClass({
     render: function () {
         return (
             <div>
-                <Modal {...this.props} title="Запрос на изменение данных о квартире" animation={false} style={{borderBottom: 'none'}}>
+                <Modal {...this.props} title="Запрос на изменение данных о квартире" animation={false}
+                                       style={{borderBottom: 'none'}}>
                     <div className="modal-body">
                         <ApartmentInfoChangeRequestForm/>
                     </div>
@@ -269,7 +272,7 @@ var ApartmentInfoChangeRequestButton = React.createClass({
 
         return (
             <div>
-            {elementOrEmpty}
+                {elementOrEmpty}
             </div>
         );
     }
@@ -317,8 +320,8 @@ var ApartmentPhotosBlock = React.createClass({
 
         return (
             <div>
-                <ApartmentPhotoList photos={photos} onDelete={this.props.onDelete} onSelect={this.props.onSelect} />
-                    {photoPreviewOrZero}
+                <ApartmentPhotoList photos={photos} onDelete={this.props.onDelete} onSelect={this.props.onSelect}/>
+                {photoPreviewOrZero}
             </div>
         );
     }
@@ -423,7 +426,7 @@ var UserSelect = React.createClass({
                             className="form-control"
                             value={selectedValue}
                             name={this.props.data.elementName}
-                            onChange={this.props.onChange} >
+                            onChange={this.props.onChange}>
                             {optionNodes}
                         </select>
                     </div>
@@ -465,7 +468,8 @@ var UserButton = React.createClass({
 
         return (
             <div className={customClassName}>
-                <a id={this.props.data.id} className={type} href={this.props.data.url} onClick={this.props.onClick}>{this.props.data.value}</a>
+                <a id={this.props.data.id} className={type} href={this.props.data.url}
+                   onClick={this.props.onClick}>{this.props.data.value}</a>
             </div>
         )
     }
@@ -480,31 +484,28 @@ var ApartmentWelcomeScreen = React.createClass({
         var onNextStepSelected = this.props.onNextStepSelected;
 
         return (
-            <div className="panel">
-
-                <div className="panel-body">
-                    <h4>Собственность</h4>
-                    <br/>
-                    <div className="row">
-                        <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-                            <p>
-                                У вас пока что нет ни одного объявления о сдаче жилья в аренду.
-                                <br/>
-                                Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренду.
-                                <br/>
-                            </p>
+            <div>
+                <h4>Собственность</h4>
+                <br/>
+                <div className="row">
+                    <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                        <p>
+                            У вас пока что нет ни одного объявления о сдаче жилья в аренду.
                             <br/>
-                        </div>
+                            Являясь собственником жилья вы можете зарабатывать деньги сдавая его в аренду.
+                            <br/>
+                        </p>
+                        <br/>
                     </div>
-                    <div className="row">
-                        <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-                            <p>
-                                <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}>
-                                    <i className="glyphicon glyphicon-plus" style={{color: 'white'}}></i>
-                                    <b>Добавить объявление</b>
-                                </a>
-                            </p>
-                        </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                        <p>
+                            <a href="javascript:void(0)" className="btn btn-primary" onClick={onNextStepSelected}>
+                                <i className="glyphicon glyphicon-plus" style={{color: 'white'}}></i>
+                                <b>Добавить объявление</b>
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -1110,27 +1111,29 @@ module.exports = React.createClass({
 
             if (success) {
                 successOrDangerBlock = (
-                    <div className="alert alert-success" role="alert" >
+                    <div className="alert alert-success" role="alert">
                         Ваша квартира отображается в поиске
                         <br/>
                         <br/>
-                        <a href="javascript:void(0)" className="btn btn-danger" onClick={this._onPublishedChangedCb(false)}>Убрать из поиска</a>
+                        <a href="javascript:void(0)" className="btn btn-danger"
+                           onClick={this._onPublishedChangedCb(false)}>Убрать из поиска</a>
                     </div>
                 );
             } else {
                 successOrDangerBlock = (
-                    <div className="alert alert-danger" role="alert" >
+                    <div className="alert alert-danger" role="alert">
                         Ваша квартира не участвует в поиске
                         <br/>
                         <br/>
-                        <a href="javascript:void(0)" className="btn btn-success" onClick={this._onPublishedChangedCb(true)}>Добавить в поиск</a>
+                        <a href="javascript:void(0)" className="btn btn-success"
+                           onClick={this._onPublishedChangedCb(true)}>Добавить в поиск</a>
                     </div>
                 );
             }
         }
         return (
-            <div className="panel">
-                <div className="panel-body">
+            <div>
+                <div>
                     <h4>Собственность</h4>
 
                     <br/>
@@ -1138,16 +1141,16 @@ module.exports = React.createClass({
                     <div id="errorMessages" className="alert alert-danger" role="alert" style={errorMessageStyles}>
                     </div>
 
-                        {successOrDangerBlock}
+                    {successOrDangerBlock}
 
                     <form className="form-horizontal" role="form">
                         <div className="row">
-                            <div className="col-md-6 col-sm-6 col-xs-6" >
-                                <UserSelect data={rentTypeProp} onChange={this._onChange} />
-                                <UserProperty data={rentalFeeProp} onChange={this._onChange} />
-                                <UserSelect data={feePeriodProp} onChange={this._onChange} />
+                            <div className="col-md-6 col-sm-6 col-xs-6">
+                                <UserSelect data={rentTypeProp} onChange={this._onChange}/>
+                                <UserProperty data={rentalFeeProp} onChange={this._onChange}/>
+                                <UserSelect data={feePeriodProp} onChange={this._onChange}/>
 
-                                <UserText data={descriptionProp} onChange={this._onChange} />
+                                <UserText data={descriptionProp} onChange={this._onChange}/>
 
                             </div>
                             <div className="col-md-6 col-sm-6 col-xs-6">
@@ -1162,7 +1165,7 @@ module.exports = React.createClass({
                         </div>
 
                         <div className="row">
-                            <div className="col-md-4 col-sm-4 col-xs-4" >
+                            <div className="col-md-4 col-sm-4 col-xs-4">
                                 <UserProperty data={area} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
                                 <UserProperty data={roomCount} onChange={onChangeIfNotSaved} readOnly={readOnly}/>
                             </div>
@@ -1185,7 +1188,8 @@ module.exports = React.createClass({
                         <div className="row">
                             <div className="col-sm-12 col-md-12 col-xs-12">
                                 <h4>Фотографии</h4>
-                                <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete} onSelect={this._onPhotoSelected} />
+                                <ApartmentPhotoList photos={data.photos} onDelete={this._onPhotoDelete}
+                                                    onSelect={this._onPhotoSelected}/>
                                 <p>
                                     <div className="dropzone" id="my-awesome-dropzone"></div>
                                 </p>
