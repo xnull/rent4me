@@ -1,5 +1,6 @@
 package bynull.realty.data.business.vk;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class WallPost {
     private Long count;
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     public WallPost() {
     }

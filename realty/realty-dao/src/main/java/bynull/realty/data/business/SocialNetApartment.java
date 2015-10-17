@@ -37,7 +37,7 @@ public abstract class SocialNetApartment extends Apartment {
             inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<Contact> contacts;
+    private Set<Contact> contacts = new HashSet<>();
 
     public String getExternalId() {
         return externalId;

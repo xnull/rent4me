@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import static bynull.realty.util.CommonUtils.copy;
@@ -121,7 +122,7 @@ public abstract class Apartment implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "metro_station_id")
     )
     @OneToMany
-    private Set<MetroEntity> metros;
+    private Set<MetroEntity> metros = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "target")

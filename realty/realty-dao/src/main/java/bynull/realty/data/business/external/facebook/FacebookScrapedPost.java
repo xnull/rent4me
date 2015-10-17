@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -62,7 +63,7 @@ public class FacebookScrapedPost {
             inverseJoinColumns = @JoinColumn(name = "metro_station_id")
     )
     @OneToMany
-    private Set<MetroEntity> metros;
+    private Set<MetroEntity> metros = new HashSet<>();
 
     @Column(name = "rental_fee")
     private BigDecimal rentalFee;

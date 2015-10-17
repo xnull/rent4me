@@ -37,7 +37,7 @@ public class InternalApartment extends Apartment {
             inverseJoinColumns = @JoinColumn(name = "apartment_photo_id")
     )
     @OneToMany
-    private Set<ApartmentPhoto> photos;
+    private Set<ApartmentPhoto> photos = new HashSet<>();
 
     public User getOwner() {
         return owner;

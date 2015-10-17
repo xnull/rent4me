@@ -61,13 +61,13 @@ public class User implements UserDetails {
             @JoinColumn(name = "authority_id")
     })
     @OneToMany(fetch = FetchType.EAGER, cascade = javax.persistence.CascadeType.ALL)
-    private Set<Authority> authorities;
+    private Set<Authority> authorities = new HashSet<>();
     /**
      * Set of my apartments
      */
     @JoinColumn(name = "owner_id")
     @OneToMany
-    private Set<InternalApartment> apartments;
+    private Set<InternalApartment> apartments = new HashSet<>();
 
     /**
      * Set of rental histories - for users who rented history(not owners).
@@ -81,7 +81,7 @@ public class User implements UserDetails {
             }
     )
     @OneToMany
-    private Set<RentalHistory> rentalHistories;
+    private Set<RentalHistory> rentalHistories = new HashSet<>();
 
     @Override
     public Collection<Authority> getAuthorities() {
