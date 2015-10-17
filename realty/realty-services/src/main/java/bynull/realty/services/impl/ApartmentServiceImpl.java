@@ -350,8 +350,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartments.getContent()
                 .stream()
                 .map(apartment ->
-                                apartmentModelDTOConverterFactory.getTargetConverter(apartment)
-                                        .toTargetType(Optional.ofNullable(apartment))
+                        apartmentModelDTOConverterFactory.getTargetConverter(apartment)
+                                .toTargetType(Optional.ofNullable(apartment))
                 )
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -491,10 +491,16 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void saveIdents(Long apartmentId) {
+        log.trace("Save idents, apartment: {}", apartmentId);
+        if (apartmentId == null){
+            throw new IllegalArgumentException("Apartment id is null");
+        }
+
         IdentEntity aptIdent = identService.findAndSaveIfNotExists(apartmentId.toString(), IdentType.APARTMENT);
         Optional<ApartmentDTO> optApt = find(apartmentId);
-        Set<Long> idents = identService.mergeIdents(aptIdent, optApt.get());
-
-        apartmentRepository.saveApartmentIdents(idents, apartmentId);
+        optApt.ifPresent(apt -> {
+            Set<Long> idents = identService.mergeIdents(aptIdent, apt);
+            apartmentRepository.saveApartmentIdents(idents, apartmentId);
+        });
     }
 }

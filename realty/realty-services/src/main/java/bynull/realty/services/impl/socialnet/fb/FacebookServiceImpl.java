@@ -111,9 +111,6 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
     @Resource
     TargetAnalyzer targetAnalyzer;
 
-    @Resource
-    private IdentificationServiceImpl identService;
-
     @Override
     public void afterPropertiesSet() throws Exception {
         porter = Porter.getInstance();
@@ -123,11 +120,8 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
 
     @Override
     public void syncWithFB() {
-        List<FacebookPageToScrap> fbPages = facebookPageToScrapRepository.findAll()
-                .stream()
-                .filter(FacebookPageToScrap::isEnabled)
-                .collect(Collectors.toList());
-        List<? extends MetroDTO> metros = transactionOperations.execute(txStatus -> metroConverter.toTargetList(metroRepository.findAll()));
+        List<FacebookPageToScrap> fbPages = findAllFbPages();
+        List<? extends MetroDTO> metros = getAllMetros();
 
         em.clear();//detach all instances
         AtomicInteger counter = new AtomicInteger();
@@ -135,6 +129,17 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
         for (FacebookPageToScrap _fbPage : fbPages) {
             transactionOperations.execute(new FbSynchronisationHelper(_fbPage, defaultMaxPostsAgeToGrab, counter, metros));
         }
+    }
+
+    protected List<? extends MetroDTO> getAllMetros() {
+        return transactionOperations.execute(txStatus -> metroConverter.toTargetList(metroRepository.findAll()));
+    }
+
+    protected List<FacebookPageToScrap> findAllFbPages() {
+        return facebookPageToScrapRepository.findAll()
+                .stream()
+                .filter(FacebookPageToScrap::isEnabled)
+                .collect(Collectors.toList());
     }
 
     private PageRequest getLimit1Offset0() {
@@ -317,10 +322,13 @@ public class FacebookServiceImpl extends AbstractSocialNetServiceImpl implements
 
                 final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
 
-                List<FacebookApartment> byExternalIdIn = !facebookPostItemDTOs.isEmpty() ? apartmentRepository.findFBApartmentsByExternalIdIn(facebookPostItemDTOs.stream()
-                                .map(FacebookPostItemDTO::getId)
-                                .collect(Collectors.toList())
-                ) : Collections.emptyList();
+                List<FacebookApartment> byExternalIdIn = Collections.emptyList();
+                if (!facebookPostItemDTOs.isEmpty()) {
+                    List<String> fbItems = facebookPostItemDTOs.stream()
+                            .map(FacebookPostItemDTO::getId)
+                            .collect(Collectors.toList());
+                    byExternalIdIn = apartmentRepository.findFBApartmentsByExternalIdIn(fbItems);
+                }
 
                 Set<String> ids = byExternalIdIn.stream()
                         .map(FacebookApartment::getExternalId)

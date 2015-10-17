@@ -27,7 +27,7 @@ public class AccessTokenPool {
     }
 
     public String getValidVkAccessToken() {
-        User user = userRepository.findByEmailIn(validVKEmails).iterator().next();
+        User user = userRepository.findByEmailIn(validVKEmails).get(0);
         String vkAccessToken = user.getVkAccessToken();
         Assert.notNull(vkAccessToken);
         return vkAccessToken;

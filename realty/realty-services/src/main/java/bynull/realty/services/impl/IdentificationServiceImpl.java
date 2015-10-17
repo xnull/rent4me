@@ -38,10 +38,12 @@ public class IdentificationServiceImpl {
     }
 
     public Optional<IdentEntity> find(String identValue, IdentType identType) {
-        return Optional.ofNullable(idRepoImpl.find(IdentRefiner.refine(identValue, identType), identType.getType()));
+        log.trace("Find an ident: {}, {}", identValue, identType);
+        return idRepoImpl.find(IdentRefiner.refine(identValue, identType), identType.getType());
     }
 
     public IdentEntity findAndSaveIfNotExists(String identValue, IdentType identType) {
+        log.debug("Find and save an ident if not exists: {}, {}", identValue, identType);
         Optional<IdentEntity> ident = find(IdentRefiner.refine(identValue, identType), identType);
         if(ident.isPresent()){
             return ident.get();
@@ -133,11 +135,11 @@ public class IdentificationServiceImpl {
         ident.setIdentValue(IdentRefiner.refine(value, type));
         ident.setIdentType(type.getType());
 
-        IdentEntity dbIdent = idRepoImpl.find(value, type.getType());
-        if (dbIdent == null) {
+        Optional<IdentEntity> dbIdent = idRepoImpl.find(value, type.getType());
+        if (!dbIdent.isPresent()) {
             return idRepo.save(ident);
         }
-        return dbIdent;
+        return dbIdent.get();
     }
 
     public Set<IdentEntity> findAllLinkedIdents(String identValue, IdentType identType) {

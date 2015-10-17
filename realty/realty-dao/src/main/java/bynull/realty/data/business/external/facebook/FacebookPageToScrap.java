@@ -1,6 +1,7 @@
 package bynull.realty.data.business.external.facebook;
 
 import bynull.realty.data.common.CityEntity;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +11,7 @@ import static bynull.realty.util.CommonUtils.copy;
 /**
  * Created by dionis on 02/01/15.
  */
+@ToString
 @Entity
 @Table(name = "facebook_page_to_scrap")
 public class FacebookPageToScrap {

@@ -214,7 +214,6 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
 
                         log.info("Removed duplicates in DB by id");
 
-
                         for (VKHelperComponent.VkWallPostDTO postItemDTO : dtosToPersist) {
                             int i = counter.incrementAndGet();
                             log.info(">>> Processing post #[{}]", i);
