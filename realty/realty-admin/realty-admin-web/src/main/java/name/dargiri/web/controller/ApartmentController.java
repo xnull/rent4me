@@ -75,6 +75,7 @@ public class ApartmentController {
     @RequestMapping(value = "block/{id}")
     public ModelAndView blockApartmentFromSearch(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
         blacklistService.addApartmentToBlacklist(id);
+        apartmentService.saveIdents(id);
         redirectAttributes.addFlashAttribute(Constants.INFO_MESSAGE, "Apartment: " + id +", have been added to blacklist");
         return new ModelAndView("redirect:/secure/apartments/list");
     }

@@ -93,11 +93,10 @@ public class ApartmentRestResource {
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") long id, ApartmentJSON apartmentJSON) {
+        log.debug("Update an apartment: {}", id, apartmentJSON);
         ApartmentDTO dto = apartmentDtoJsonConverter.toSourceType(apartmentJSON);
         apartmentService.update(dto);
-        return Response
-                .ok()
-                .build();
+        return Response.ok().build();
     }
 
     @DELETE
@@ -105,9 +104,7 @@ public class ApartmentRestResource {
     public Response deleteOne(@PathParam("id") long id) {
         apartmentService.delete(id);
 
-        return Response
-                .ok()
-                .build();
+        return Response.ok().build();
 
     }
 
