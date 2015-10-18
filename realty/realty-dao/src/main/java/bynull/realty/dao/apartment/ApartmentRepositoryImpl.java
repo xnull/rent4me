@@ -56,6 +56,7 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
 
     @Override
     public List<Apartment> findSimilarApartments(long apartmentId) {
+        log.trace("findSimilarApartments to: {}", apartmentId);
         Apartment apartment = entityManager.find(Apartment.class, apartmentId);
         if (apartment == null) {
             throw new EntityNotFoundException("Apartment with id " + apartmentId + " not found");
@@ -138,14 +139,19 @@ public class ApartmentRepositoryImpl implements ApartmentRepositoryCustom, Initi
             return Collections.emptySet();
         }
 
-        DefaultDSLContext ctx = JooqUtil.getContext();
-        SelectJoinStep<?> sql = ctx.select(DSL.field("a.description")).from(DSL.table("apartments").as("a"));
-        sql.where("a.description_hash IN (:hashez)");
-
-        Query query = entityManager.createNativeQuery(sql.toString());
+        Query query = entityManager.createNativeQuery(similarApartmentsQuery());
         query.setParameter("hashez", hashes);
 
-        return (Set<String>) query.getResultList().stream().collect(Collectors.toSet());
+        Set<String> result = (Set<String>) query.getResultList().stream().collect(Collectors.toSet());
+        return result;
+    }
+
+    static String similarApartmentsQuery() {
+        DSLContext ctx = JooqUtil.getContext();
+        return ctx.select(DSL.field("a.description", String.class))
+                .from(DSL.table("apartments").as("a"))
+                .where("a.description_hash IN (:hashez)")
+                .toString();
     }
 
     public static String blackApartmentsQuery(){

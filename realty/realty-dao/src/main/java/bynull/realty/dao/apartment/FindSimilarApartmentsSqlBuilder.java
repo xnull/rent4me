@@ -133,7 +133,7 @@ class FindSimilarApartmentsSqlBuilder {
         if (isInternalApartment) {
             params.put("lng", apartment.getLocation().getLongitude());
             params.put("lat", apartment.getLocation().getLatitude());
-        } else {
+        } else if (!isSocialNetApartment) {
             throw new UnsupportedOperationException("Unsupported sorting type for class" + apartment.getClass());
         }
 

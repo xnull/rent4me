@@ -180,17 +180,11 @@ public class ApartmentRestResource {
 
     @Path("/{id}/similar")
     @GET
-    public Response findSimilar(
-            @PathParam("id") long apartmentId
-    ) {
-
-
+    public Response findSimilar(@PathParam("id") long apartmentId) {
+        log.debug("Find similar apartments to apartment: {}", apartmentId);
         List<? extends ApartmentDTO> found = apartmentService.findSimilarToApartment(apartmentId);
-
         List<? extends ApartmentJSON> result = apartmentDtoJsonConverter.toTargetList(found);
 
-        return Response
-                .ok(result)
-                .build();
+        return Response.ok(result).build();
     }
 }

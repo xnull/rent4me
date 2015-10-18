@@ -1,5 +1,6 @@
 package bynull.realty.dao;
 
+import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultDSLContext;
 
@@ -8,7 +9,7 @@ import org.jooq.impl.DefaultDSLContext;
  */
 public class JooqUtil {
 
-    public static DefaultDSLContext getContext(){
+    public static DSLContext getContext(){
         return new DefaultDSLContext(SQLDialect.POSTGRES_9_3);
     }
 }

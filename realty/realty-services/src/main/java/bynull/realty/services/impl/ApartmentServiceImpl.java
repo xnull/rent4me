@@ -335,6 +335,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public List<? extends ApartmentDTO> findSimilarToApartment(long apartmentId) {
+        log.trace("Find similar apartments to: {}", apartmentId);
         List<Apartment> similarApartments = apartmentRepository.findSimilarApartments(apartmentId);
 
         return similarApartments.stream()
