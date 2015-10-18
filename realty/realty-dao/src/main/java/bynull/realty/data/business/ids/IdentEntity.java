@@ -11,13 +11,14 @@ import javax.persistence.*;
  * Идентификатор чего либо
  * Created by null on 8/2/15.
  */
-@Table(name = "ident")
+@Table(name = IdentEntity.T_IDENT)
 @Entity
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 public class IdentEntity {
+    public static final String T_IDENT = "ident";
 
     @Id
     @Column(name = "id")

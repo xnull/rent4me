@@ -6,6 +6,7 @@ import bynull.realty.converters.apartments.ApartmentModelDTOConverterFactory;
 import bynull.realty.dao.*;
 import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
+import bynull.realty.dao.apartment.ApartmentRepositoryCustom.FindPostsParameters;
 import bynull.realty.data.business.*;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
@@ -318,7 +319,10 @@ public class ApartmentServiceImpl implements ApartmentService {
         text = StringUtils.trimToEmpty(text);
 
 
-        List<Apartment> posts = apartmentRepository.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
+        FindPostsParameters queryParams = new FindPostsParameters(
+                text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset
+        );
+        List<Apartment> posts = apartmentRepository.findPosts(queryParams);
 
         return posts.stream()
                 .map(e -> apartmentModelDTOConverterFactory.getTargetConverter(e).toTargetType(Optional.ofNullable(e)))
@@ -492,7 +496,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void saveIdents(Long apartmentId) {
         log.trace("Save idents, apartment: {}", apartmentId);
-        if (apartmentId == null){
+        if (apartmentId == null) {
             throw new IllegalArgumentException("Apartment id is null");
         }
 

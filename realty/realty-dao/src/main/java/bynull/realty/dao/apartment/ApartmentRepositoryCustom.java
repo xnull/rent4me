@@ -5,9 +5,7 @@ import bynull.realty.data.business.apartment.ApartmentIdent;
 import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.util.LimitAndOffset;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Wither;
 
 import java.util.List;
@@ -20,17 +18,10 @@ import java.util.Set;
 public interface ApartmentRepositoryCustom {
     List<Apartment> findSimilarApartments(long apartmentId);
 
-    List<Apartment> findPosts(String text,
-                              boolean withSubway,
-                              Set<ApartmentRepository.RoomCount> roomsCount,
-                              Integer minPrice,
-                              Integer maxPrice,
-                              ApartmentRepository.FindMode findMode, GeoParams geoParams, List<Long> metroIds,
-                              LimitAndOffset limitAndOffset);
+    List<Apartment> findPosts(FindPostsParameters queryParams);
 
     List<ApartmentIdent> getApartmentIdents(Long apartmentId);
     void saveApartmentIdents(Set<Long> idents, Long apartmentId);
-
 
     @Wither
     @AllArgsConstructor
@@ -44,4 +35,18 @@ public interface ApartmentRepositoryCustom {
     }
 
     Set<String> similarApartments(Set<String> hashes);
+
+    @ToString
+    @Value
+    class FindPostsParameters {
+        public final String text;
+        public final boolean withSubway;
+        public final Set<ApartmentRepository.RoomCount> roomsCount;
+        public final Integer minPrice;
+        public final Integer maxPrice;
+        public final ApartmentRepository.FindMode findMode;
+        public final GeoParams geoParams;
+        public final List<Long> metroIds;
+        public final LimitAndOffset limitAndOffset;
+    }
 }
