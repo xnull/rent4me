@@ -49,7 +49,7 @@ task deployAdminRelease(dependsOn: war, type: SshTask) {
 
     remotes {
         webServer {
-            host = "rent4.me"
+            host = "new.rent4.me"
             user = "tomcat"
             password = passphrase
         }
