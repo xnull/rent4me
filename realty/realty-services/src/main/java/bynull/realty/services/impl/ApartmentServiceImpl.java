@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -193,6 +194,16 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         log.debug("Apartment not found: {}", id);
         return Optional.empty();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Long> findAllVkIdsApartmentsWithPaging(int page, int size) {
+        log.debug("Find list of vk apartments id");
+        PageRequest paging = new PageRequest(page, size, new Sort(Sort.Direction.ASC));
+        Page<Long> vkApts = apartmentRepository.findVKAllIds(paging);
+
+        return vkApts.getContent();
     }
 
     @Transactional

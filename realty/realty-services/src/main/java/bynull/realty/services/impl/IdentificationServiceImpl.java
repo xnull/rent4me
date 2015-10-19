@@ -131,12 +131,12 @@ public class IdentificationServiceImpl {
     }
 
     public IdentEntity save(String value, IdentType type) {
-        IdentEntity ident = new IdentEntity();
-        ident.setIdentValue(IdentRefiner.refine(value, type));
-        ident.setIdentType(type.getType());
-
         Optional<IdentEntity> dbIdent = idRepoImpl.find(value, type.getType());
         if (!dbIdent.isPresent()) {
+            IdentEntity ident = new IdentEntity();
+            ident.setIdentValue(IdentRefiner.refine(value, type));
+            ident.setIdentType(type.getType());
+
             return idRepo.save(ident);
         }
         return dbIdent.get();
@@ -148,7 +148,6 @@ public class IdentificationServiceImpl {
                 .map(idRepo::findOne)
                 .collect(Collectors.toSet());
     }
-
 
     /**
      * Связать имеющиеся идентификаторы

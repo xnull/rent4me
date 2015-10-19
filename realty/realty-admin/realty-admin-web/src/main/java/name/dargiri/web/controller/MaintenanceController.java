@@ -89,6 +89,15 @@ public class MaintenanceController {
         return new ModelAndView("redirect:/secure/maintenance");
     }
 
+    @RequestMapping(value = "reparse_apartment_idents")
+    public ModelAndView reparseApartmentIdents(RedirectAttributes redirectAttributes) {
+        jobHelperComponent.addJob(
+                new MaintenanceControllerJobAcceptanceCallback(redirectAttributes),
+                jobHelperComponent.reparseApartmentIdents()
+        );
+        return new ModelAndView("redirect:/secure/maintenance");
+    }
+
     private class MaintenanceControllerJobAcceptanceCallback implements JobHelperComponent.JobAcceptanceCallback{
 
         private final RedirectAttributes redirectAttributes;
