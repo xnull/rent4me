@@ -64,15 +64,20 @@ class FindSimilarApartmentsSqlBuilder {
 
         //filtering
         if (city != null) {
-            String boundingBoxSQL = "st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
-                    ":lng_low," +
-                    "' '," +
-                    ":lat_low," +
-                    "')')), ST_GeomFromText( concat('SRID=4326;POINT('," +
-                    ":lng_high," +
-                    "' '," +
-                    ":lat_high," +
-                    "')'))), 4326)" +
+            String boundingBoxSQL = "st_setsrid(" +
+                    "st_makebox2d(" +
+                    "   ST_Point( "+
+                    ":lng_low " +
+                    " , " +
+                    ":lat_low " +
+                    "), " +
+                    "ST_Point( " +
+                    ":lng_high" +
+                    " , " +
+                    ":lat_high" +
+                    ")" + // st point
+                    ")" + //st makebox2d
+                    ", 4326)" + //set srid
                     " ~ a.location";
 
             query.where(boundingBoxSQL);
