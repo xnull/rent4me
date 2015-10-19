@@ -7,7 +7,10 @@ import bynull.realty.dao.apartment.ApartmentRepositoryCustom.GeoParams;
 import bynull.realty.data.common.BoundingBox;
 import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
+import bynull.realty.dto.BoundingBoxDTO;
+import bynull.realty.dto.CityDTO;
 import bynull.realty.services.api.ApartmentService;
+import bynull.realty.services.api.CityService;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.web.converters.ApartmentDtoJsonConverter;
 import bynull.realty.web.json.ApartmentJSON;
@@ -38,6 +41,9 @@ public class ApartmentRestResource {
 
     @Resource
     ApartmentDtoJsonConverter apartmentDtoJsonConverter;
+
+    @Resource
+    CityService cityService;
 
     @GET
     @Path("/{id}")
@@ -176,6 +182,14 @@ public class ApartmentRestResource {
             log.info("No point/bounds specified");
             log.info("Got real ip: "+ip);
             Optional<GeoPoint> geoLocationByIp = IpGeolocationHelper.getInstance().findGeoLocationByIp(ip);
+
+            Optional<CityDTO> city = cityService.findByGeoPoint(geoLocationByIp);
+
+            if (!city.isPresent()) {
+                city = cityService.getMoscow();
+            }
+            geoParams = geoParams.withBoundingBox(Optional.ofNullable(BoundingBoxDTO.toInternal(city.get().getArea())));
+
             log.info("Geolocation by ip "+geoLocationByIp);
             geoParams = geoParams.withPoint(geoLocationByIp);
         }
