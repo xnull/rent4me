@@ -22,10 +22,9 @@ public interface CityRepository extends JpaRepository<CityEntity, Long> {
     @Query("select c from CityEntity c where c.country=:country and lower(c.name)=lower(:name)")
     CityEntity findByCountryAndNameIgnoreCase(@Param("country")CountryEntity country, @Param("name")String name);
 
-    @Query(value = "select c.* from cities c where c.area ~ ST_GeomFromText( concat('SRID=4326;POINT('," +
+    @Query(value = "select c.* from cities c where st_setsrid(c.area, 4326) ~ St_Point(" +
             ":lng," +
-                    "' '," +
-                    ":lat," +
-                    "')'))", nativeQuery = true)
+                    ":lat" +
+                    ")", nativeQuery = true)
     CityEntity findByPoint(@Param("lng")double lng, @Param("lat")double lat);
 }
