@@ -64,15 +64,13 @@ public class ApartmentFindPostsSql {
         Optional<GeoPoint> point = params.geoParams.getPoint();
         Optional<BoundingBox> paramsBoundingBox = params.geoParams.getBoundingBox();
         if (point.isPresent() || paramsBoundingBox.isPresent()) {
-            query.where("st_setsrid(st_makebox2d(ST_GeomFromText( concat('SRID=4326;POINT('," +
+            query.where("st_setsrid(st_makebox2d(St_Point("+
                     ":lng_low," +
-                    "' '," +
-                    ":lat_low," +
-                    "')')), ST_GeomFromText( concat('SRID=4326;POINT('," +
+                    ":lat_low" +
+                    "), St_Point(" +
                     ":lng_high," +
-                    "' '," +
-                    ":lat_high," +
-                    "')'))), 4326)" +
+                    ":lat_high" +
+                    ")), 4326)" +
                     " ~ a.location" +
                     " "
             );
