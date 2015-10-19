@@ -131,7 +131,7 @@ public class ApartmentRestResource {
             @QueryParam("metro_ids") List<Long> metroIds,
             @QueryParam("limit") int limit,
             @QueryParam("offset") int offset,
-            HttpServletRequest request) {
+            @HeaderParam("x-real-ip") String ip) {
 
         log.trace("Search apartments");
 
@@ -174,12 +174,7 @@ public class ApartmentRestResource {
 
         if(!geoParams.getPoint().isPresent() && !geoParams.getBoundingBox().isPresent()) {
             log.info("No point/bounds specified");
-            String ip = request.getHeader("x-real-ip");
             log.info("Got real ip: "+ip);
-            if (ip == null) {
-                ip = request.getRemoteAddr();
-                log.info("Got real ip(override): "+ip);
-            }
             Optional<GeoPoint> geoLocationByIp = IpGeolocationHelper.getInstance().findGeoLocationByIp(ip);
             log.info("Geolocation by ip "+geoLocationByIp);
             geoParams = geoParams.withPoint(geoLocationByIp);
