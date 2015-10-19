@@ -59,7 +59,7 @@ task deployAdminRelease(dependsOn: war, type: SshTask) {
         execute 'cd /home/tomcat/tc7-prod-admin ; bin/catalina.sh stop ; rm -rf webapps/admin* ; rm -rf work/*'
         println('Deploying war:' + war.archivePath);
         put war.archivePath, '/home/tomcat/tc7-prod-admin/webapps/'
-        execute 'cd /home/tomcat/tc7-prod-admin ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; export CATALINA_OPTS=\'-Dspring.profiles.active=prod -Xmx768m -Xms768m\' ; bin/catalina.sh start'
+        execute 'cd /home/tomcat/tc7-prod-admin ; mv webapps/realty-admin-web-1.0.war webapps/admin.war ; cd .. ; ./start_prod_admin.sh'
     }
 }
 

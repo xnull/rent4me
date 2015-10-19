@@ -90,7 +90,7 @@ task deployBackendRelease(dependsOn: war, type: SshTask) {
 
     remotes {
         webServer {
-            host = "rent4.me"
+            host = "new.rent4.me"
             user = "tomcat"
             password = passphrase
         }
@@ -100,6 +100,6 @@ task deployBackendRelease(dependsOn: war, type: SshTask) {
         execute 'cd /home/tomcat/tc7-prod-rest ; bin/catalina.sh stop ; rm -rf webapps/ROOT* ; rm -rf work/*'
         println('Deploying war:' + war.archivePath);
         put war.archivePath, '/home/tomcat/tc7-prod-rest/webapps/'
-        execute 'cd /home/tomcat/tc7-prod-rest ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; export CATALINA_OPTS=\\"-Dspring.profiles.active=prod\\" ; bin/catalina.sh start'
+        execute 'cd /home/tomcat/tc7-prod-rest ; mv webapps/rent4me-1.0.0.war webapps/ROOT.war ; cd .. ; ./start_prod_rest.sh'
     }
 }

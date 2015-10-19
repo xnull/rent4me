@@ -25,7 +25,7 @@ public class BaseExceptionMapper implements ExceptionMapper<Throwable> {
     @Produces(MediaType.APPLICATION_JSON)
     @Override
     public Response toResponse(Throwable exception) {
-        logger.trace("Convert an exception to the response: {}", exception);
+        logger.error("Exception occurred: {}", exception);
 
         if(exception instanceof WebApplicationException) {
             WebApplicationException e = (WebApplicationException) exception;

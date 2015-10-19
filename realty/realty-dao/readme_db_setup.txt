@@ -51,7 +51,7 @@ createdb -O realty_dev_user realty_devdb
 
 --- create production database
 psql -c "CREATE ROLE realty_prod_group NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE;"
-psql -c "CREATE ROLE realty_prod_user LOGIN PASSWORD 'password' NOINHERIT;"
+psql -c "CREATE ROLE realty_prod_user LOGIN PASSWORD '<password>' NOINHERIT;"
 psql -c "GRANT realty_prod_group TO realty_prod_user"
 
 createdb -O realty_prod_user realty_proddb
