@@ -173,11 +173,16 @@ public class ApartmentRestResource {
         }
 
         if(!geoParams.getPoint().isPresent() && !geoParams.getBoundingBox().isPresent()) {
+            log.info("No point/bounds specified");
             String ip = request.getHeader("x-real-ip");
+            log.info("Got real ip: "+ip);
             if (ip == null) {
                 ip = request.getRemoteAddr();
+                log.info("Got real ip(override): "+ip);
             }
-            geoParams = geoParams.withPoint(IpGeolocationHelper.getInstance().findGeoLocationByIp(ip));
+            Optional<GeoPoint> geoLocationByIp = IpGeolocationHelper.getInstance().findGeoLocationByIp(ip);
+            log.info("Geolocation by ip "+geoLocationByIp);
+            geoParams = geoParams.withPoint(geoLocationByIp);
         }
 
         List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
