@@ -1,5 +1,6 @@
 package bynull.realty.web.rest;
 
+import bynull.realty.components.IpGeolocationHelper;
 import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dao.apartment.ApartmentRepository.FindMode;
 import bynull.realty.dao.apartment.ApartmentRepositoryCustom.GeoParams;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -128,7 +130,8 @@ public class ApartmentRestResource {
             @QueryParam("lng_hi") Double lngHigh,
             @QueryParam("metro_ids") List<Long> metroIds,
             @QueryParam("limit") int limit,
-            @QueryParam("offset") int offset) {
+            @QueryParam("offset") int offset,
+            HttpServletRequest request) {
 
         log.trace("Search apartments");
 
@@ -167,6 +170,14 @@ public class ApartmentRestResource {
             geoParams = geoParams.withPoint(Optional.of(new GeoPoint().withLatitude(lat).withLongitude(lng)));
         } else {
             geoParams = geoParams.withPoint(Optional.empty());
+        }
+
+        if(!geoParams.getPoint().isPresent() && !geoParams.getBoundingBox().isPresent()) {
+            String ip = request.getHeader("x-real-ip");
+            if (ip == null) {
+                ip = request.getRemoteAddr();
+            }
+            geoParams = geoParams.withPoint(IpGeolocationHelper.getInstance().findGeoLocationByIp(ip));
         }
 
         List<ApartmentDTO> found = apartmentService.findPosts(text, withSubway, roomsCount, minPrice, maxPrice, findMode, geoParams, metroIds, limitAndOffset);
