@@ -100,7 +100,6 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
         } else {
             callback.onJobRejected(job);
         }
-        ;
     }
 
     public Job reparseExistingFBPosts() {
@@ -188,7 +187,7 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
             protected void action() {
                 int page = 0;
                 while (true) {
-                    List<Long> vkApts = apartmentService.findAllVkIdsApartmentsWithPaging(page, 10);
+                    List<Long> vkApts = apartmentService.findAllVkIdsApartmentsWithPaging(page, 100);
                     if (vkApts.isEmpty()){
                         break;
                     }

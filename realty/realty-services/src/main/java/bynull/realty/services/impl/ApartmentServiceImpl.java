@@ -200,7 +200,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public List<Long> findAllVkIdsApartmentsWithPaging(int page, int size) {
         log.debug("Find list of vk apartments id");
-        PageRequest paging = new PageRequest(page, size, new Sort(Sort.Direction.ASC));
+        PageRequest paging = new PageRequest(page, size);
         Page<Long> vkApts = apartmentRepository.findVKAllIds(paging);
 
         return vkApts.getContent();
@@ -523,6 +523,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
     }
 
+    @Transactional
     @Override
     public void saveIdents(Long apartmentId) {
         log.trace("Save idents, apartment: {}", apartmentId);
