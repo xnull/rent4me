@@ -8,6 +8,7 @@ import bynull.realty.dao.apartment.ApartmentRepository;
 import bynull.realty.dao.apartment.ApartmentRepositoryCustom;
 import bynull.realty.dao.apartment.ApartmentRepositoryCustom.FindPostsParameters;
 import bynull.realty.data.business.*;
+import bynull.realty.data.business.blacklist.BlacklistEntity;
 import bynull.realty.data.business.ids.IdentEntity;
 import bynull.realty.data.business.ids.IdentType;
 import bynull.realty.data.common.GeoPoint;
@@ -16,6 +17,7 @@ import bynull.realty.dto.ApartmentPhotoDTO;
 import bynull.realty.services.api.ApartmentPhotoService;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.VkPublishingEventService;
+import bynull.realty.services.impl.blacklist.BlacklistServiceImpl;
 import bynull.realty.util.LimitAndOffset;
 import bynull.realty.utils.HibernateUtil;
 import bynull.realty.utils.SecurityUtils;
@@ -26,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -74,6 +77,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Resource
     private IdentificationServiceImpl identService;
 
+    @Resource
+    private BlacklistServiceImpl blacklistService;
+
     @Transactional
     @Override
     public ApartmentDTO create(ApartmentDTO dto) {
@@ -92,7 +98,12 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public boolean createForAuthorizedUser(ApartmentDTO dto) {
-        User user = getAuthorizedUser();
+        Optional<User> optUser = getAuthorizedUser();
+
+        if(!optUser.isPresent()){
+            return false;
+        }
+        User user = optUser.get();
 
         if (user.getApartments().isEmpty()) {
             InternalApartment apartment = dto.toInternal();
@@ -173,11 +184,26 @@ public class ApartmentServiceImpl implements ApartmentService {
         log.debug("Find apartment: {}", id);
         Apartment apartment = HibernateUtil.deproxy(apartmentRepository.findOne(id));
         if (apartment != null) {
+            Optional<BlacklistEntity> inBl = blacklistService.find(apartment.getId().toString(), IdentType.APARTMENT);
+            if (inBl.isPresent()) {
+                log.debug("Blacklist has an apartment: {}", id);
+                return Optional.empty();
+            }
             return apartmentModelDTOConverterFactory.getTargetConverter(apartment).toTargetType(Optional.of(apartment));
         }
 
         log.debug("Apartment not found: {}", id);
         return Optional.empty();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Long> findAllVkIdsApartmentsWithPaging(int page, int size) {
+        log.debug("Find list of vk apartments id");
+        PageRequest paging = new PageRequest(page, size);
+        Page<Long> vkApts = apartmentRepository.findVKAllIds(paging);
+
+        return vkApts.getContent();
     }
 
     @Transactional
@@ -190,9 +216,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional(readOnly = true)
     @Override
     public Optional<ApartmentDTO> findAuthorizedUserApartment() {
-        User user = getAuthorizedUser();
-        if (user != null) {
-            Apartment first = Iterables.getFirst(user.getApartments(), null);
+        Optional<User> optUser = getAuthorizedUser();
+        if (optUser.isPresent()) {
+            Apartment first = Iterables.getFirst(optUser.get().getApartments(), null);
             ApartmentModelDTOConverter<Apartment> targetConverter = apartmentModelDTOConverterFactory.getTargetConverter(first);
             return targetConverter.toTargetType(Optional.ofNullable(first));
         } else {
@@ -200,15 +226,18 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
     }
 
-    private User getAuthorizedUser() {
-        return userRepository.getOne(SecurityUtils.getAuthorizedUser().getId());
+    private Optional<User> getAuthorizedUser() {
+        return Optional.ofNullable(userRepository.getOne(SecurityUtils.getAuthorizedUser().getId()));
     }
 
     @Transactional
     @Override
     public void deleteApartmentForAuthorizedUser() {
-        User user = getAuthorizedUser();
-        Set<InternalApartment> apartments = user.getApartments();
+        Optional<User> user = getAuthorizedUser();
+        if (!user.isPresent()) {
+            return;
+        }
+        Set<InternalApartment> apartments = user.get().getApartments();
         if (!apartments.isEmpty()) {
             for (InternalApartment apartment : apartments) {
                 SecurityUtils.verifySameUser(apartment.getOwner());
@@ -494,6 +523,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
     }
 
+    @Transactional
     @Override
     public void saveIdents(Long apartmentId) {
         log.trace("Save idents, apartment: {}", apartmentId);

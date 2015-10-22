@@ -6,6 +6,7 @@ import bynull.realty.data.common.GeoPoint;
 import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.util.LimitAndOffset;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,9 @@ public interface ApartmentService {
     void update(ApartmentDTO dto);
 
     Optional<ApartmentDTO> find(Long id);
+
+    @Transactional(readOnly = true)
+    List<Long> findAllVkIdsApartmentsWithPaging(int page, int size);
 
     void delete(long id);
 

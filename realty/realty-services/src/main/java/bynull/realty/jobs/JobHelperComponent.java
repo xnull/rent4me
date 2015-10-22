@@ -1,5 +1,6 @@
 package bynull.realty.jobs;
 
+import bynull.realty.dto.ApartmentDTO;
 import bynull.realty.services.api.ApartmentService;
 import bynull.realty.services.api.FacebookService;
 import bynull.realty.services.api.MetroService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -98,7 +100,6 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
         } else {
             callback.onJobRejected(job);
         }
-        ;
     }
 
     public Job reparseExistingFBPosts() {
@@ -175,6 +176,26 @@ public class JobHelperComponent implements InitializingBean, DisposableBean {
             @Override
             protected void action() {
                 apartmentService.unPublishOldNonInternalApartments();
+            }
+        };
+    }
+
+    public Job reparseApartmentIdents() {
+        String jobName = "Reparse apartment idents";
+        return new Job(jobName) {
+            @Override
+            protected void action() {
+                int page = 0;
+                while (true) {
+                    List<Long> vkApts = apartmentService.findAllVkIdsApartmentsWithPaging(page, 100);
+                    if (vkApts.isEmpty()){
+                        break;
+                    }
+                    for (Long vkApt : vkApts) {
+                        apartmentService.saveIdents(vkApt);
+                    }
+                    page++;
+                }
             }
         };
     }

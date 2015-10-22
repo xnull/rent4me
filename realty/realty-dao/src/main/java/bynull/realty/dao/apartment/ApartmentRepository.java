@@ -77,6 +77,9 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long>, Apa
     @Query("select a from VkontakteApartment a")
     Page<VkontakteApartment> findVKAll(Pageable pageable);
 
+    @Query("select a.id from VkontakteApartment a")
+    Page<Long> findVKAllIds(Pageable pageable);
+
     @Query("select count(a) from VkontakteApartment a")
     long countVK();
 
