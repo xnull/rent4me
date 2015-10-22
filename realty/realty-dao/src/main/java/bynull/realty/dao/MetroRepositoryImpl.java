@@ -23,9 +23,9 @@ public class MetroRepositoryImpl implements MetroRepositoryCustom {
     @Override
     public List<MetroEntity> findMetros(ApartmentRepositoryCustom.GeoParams geoParams) {
 
-        String createGeoPoint = "ST_GeomFromText( concat('SRID=4326;POINT(',:lng,' ',:lat,')') )";
+        String createPoint = "ST_Point( :lng, :lat )";
 
-        String qlString = "select m.* from metro_stations m where m.city_id IN (select c.id from cities c where c.area ~ "+createGeoPoint+") ";
+        String qlString = "select m.* from metro_stations m where m.city_id IN (select c.id from cities c where c.area ~ "+createPoint+") ";
 
         Map<String, Object> params = new HashMap<>();
 
