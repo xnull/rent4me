@@ -3,6 +3,8 @@ package bynull.realty.services.impl.socialnet.vk;
 import bynull.realty.common.PhoneUtil;
 import bynull.realty.components.AfterCommitExecutor;
 import bynull.realty.components.VKHelperComponent;
+import bynull.realty.components.VKHelperComponent.VkWallPostDTO;
+import bynull.realty.components.VKHelperComponent.VkWallPostDTO.PreviewFullImageUrlPair;
 import bynull.realty.components.text.RentalFeeParser;
 import bynull.realty.components.text.RoomCountParser;
 import bynull.realty.components.text.TargetAnalyzer;
@@ -146,160 +148,164 @@ public class VkontakteServiceImpl extends AbstractSocialNetServiceImpl implement
             transactionOperations.execute(new TransactionCallbackWithoutResult() {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
-                    final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
-                    log.info("Getting page");
-                    VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
-
-
-                    log.info("Getting city");
-
-                    Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(vkPage.getCityOpt());
-
-                    log.info("Got city [{}]", cityDTO);
-                    log.info("Finding newest for page");
-
-                    List<VkontakteApartment> newest = apartmentRepository.findVkAparmentsByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
-
-                    log.info("Found newest for page: [{}]", newest.size());
-
-                    Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
-
-
-                    try {
-                        log.info("Loading posts from page");
-                        List<VKHelperComponent.VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab)
-                                .stream()
-                                .filter(item -> StringUtils.trimToNull(item.getText()) != null && !StringUtils.trimToEmpty(item.getText()).contains("rent4.me"))
-                                        //leave only those that have no duplicates in DB
-                                .collect(Collectors.toCollection(ArrayList::new));
-
-                        log.info("Loaded [{}] posts from page", postItemDTOs.size());
-
-                        List<VkontakteApartment> byExternalIdIn = !postItemDTOs.isEmpty() ? apartmentRepository.findVkApartmentsByExternalIdIn(postItemDTOs.stream()
-                                        .map(VKHelperComponent.VkWallPostDTO::getId)
-                                        .collect(Collectors.toList())
-                        ) : Collections.emptyList();
-
-                        Set<String> collect = postItemDTOs.stream().map(item -> Apartment.calcHash(item.getText())).collect(Collectors.toSet());
-
-                        final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
-
-                        Set<String> ids = byExternalIdIn.stream()
-                                .map(VkontakteApartment::getExternalId)
-                                .collect(Collectors.toSet());
-
-                        //although it may seems strange but in same result set could be returned duplicates - so filter them
-                        log.info("Removing duplicates in same requests by id");
-                        Set<String> postItemDtoIds = new HashSet<>();
-                        Set<String> postItemDtoContents = new HashSet<>();
-                        Iterator<VKHelperComponent.VkWallPostDTO> iterator = postItemDTOs.iterator();
-                        while (iterator.hasNext()) {
-                            VKHelperComponent.VkWallPostDTO next = iterator.next();
-                            if (next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getText())) {
-                                log.info("Removed duplicate in same requests by id or text: [{}], [{}]", next.getId(), next.getText());
-                                iterator.remove();
-                                continue;
-                            } else {
-                                postItemDtoIds.add(next.getId());
-                                postItemDtoContents.add(next.getText());
-                            }
-                        }
-                        log.info("Removed duplicates in same requests by id/texts");
-
-                        log.info("Removing duplicates in DB by id");
-                        List<VKHelperComponent.VkWallPostDTO> dtosToPersist = postItemDTOs
-                                .stream()
-                                .filter(i -> !ids.contains(i.getId()) && !similarTextsInDB.contains(i.getText()))
-                                .collect(Collectors.toList());
-
-                        log.info("Removed duplicates in DB by id");
-
-                        for (VKHelperComponent.VkWallPostDTO postItemDTO : dtosToPersist) {
-                            int i = counter.incrementAndGet();
-                            log.info(">>> Processing post #[{}]", i);
-                            VkontakteApartment post = postItemDTO.toInternal();
-                            post.setVkontaktePage(vkPage);
-                            post.setPublished(true);
-                            String message = post.getDescription();
-
-                            Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
-                            post.setMetros(matchedMetros);
-
-                            GeoPoint averagePoint = getAveragePoint(matchedMetros);
-                            if (averagePoint != null) {
-                                post.setLocation(averagePoint);
-                            } else if (cityDTO != null) {
-                                post.setLocation(getAveragePoint(cityDTO));
-                            } else {
-                                post.setLocation(null);
-                            }
-
-                            AddressComponents addressComponents = new AddressComponents();
-                            addressComponents.setCountryCode("RU");
-                            post.setAddressComponents(addressComponents);
-
-                            Integer roomCount = roomCountParser.findRoomCount(message);
-                            post.setRoomCount(roomCount);
-                            BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
-                            post.setRentalFee(rentalFee);
-                            Apartment.Target target = targetAnalyzer.determineTarget(message);
-                            post.setTarget(target);
-                            post.setFeePeriod(FeePeriod.MONTHLY);
-                            List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
-                            Set<Contact> contacts = phones.stream().map(phone -> {
-                                PhoneContact contact = new PhoneContact();
-                                contact.setPhoneNumber(PhoneNumber.from(phone));
-                                return contact;
-                            }).collect(Collectors.toCollection(HashSet::new));
-                            post.setContacts(contacts);
-
-                            post = apartmentRepository.save(post);
-
-                            for (VKHelperComponent.VkWallPostDTO.PreviewFullImageUrlPair previewFullImageUrlPair : postItemDTO.getImageUrlPairs()) {
-                                ApartmentExternalPhoto photo = new ApartmentExternalPhoto();
-                                photo.setImageUrl(previewFullImageUrlPair.getFullUrl());
-                                photo.setPreviewUrl(previewFullImageUrlPair.getPreviewUrl());
-                                photo.setApartment(post);
-                                apartmentExternalPhotoRepository.save(photo);
-                            }
-
-                            post = apartmentRepository.save(post);
-                            apartmentService.saveIdents(post.getId());
-                            if(post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
-                                    && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
-
-                                int scorePoints = 0;
-
-                                if (post.getRentalFee() != null) {
-                                    scorePoints++;
-                                }
-                                if (post.getMetros() != null && !post.getMetros().isEmpty()) {
-                                    scorePoints++;
-                                }
-                                if (post.getRoomCount() != null) {
-                                    scorePoints++;
-                                }
-                                log.info("Score points for VK post #[{}]: [{}]", post.getId(), scorePoints);
-
-                                //only premium posts should be posted on our page for now
-                                if(scorePoints >= 3) {
-                                    apartmentIdsToPostOnVKPage.add(post.getId());
-                                }
-                            }
-
-                            log.info("<<< Processing of post #[{}] done", i);
-                        }
-                        em.flush();
-                        log.info("Saved [{}] posts for vk page: [{}]", dtosToPersist.size(), vkPage.getLink());
-                    } catch (Exception e) {
-                        log.error("Failed to parse [" + vkPage.getExternalId() + "]", e);
-                    }
-                    afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
-                        apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage);
-                    });
+                    saveVkPage(_vkPage, defaultMaxPostsAgeToGrab, counter, metros);
                 }
             });
         }
+    }
+
+    private void saveVkPage(VkontaktePage _vkPage, Date defaultMaxPostsAgeToGrab, AtomicInteger counter,
+                            List<? extends MetroDTO> metros) {
+        final List<Long> apartmentIdsToPostOnVKPage = new ArrayList<>();
+        log.info("Getting page");
+        VkontaktePage vkPage = vkontaktePageRepository.findOne(_vkPage.getId());
+
+        log.info("Getting city");
+
+        Optional<CityDTO> cityDTO = cityModelDTOConverter.toTargetType(vkPage.getCityOpt());
+
+        log.info("Got city [{}]", cityDTO);
+        log.info("Finding newest for page");
+
+        List<VkontakteApartment> newest = apartmentRepository.findVkAparmentsByExternalIdNewest(vkPage.getExternalId(), getLimit1Offset0());
+
+        log.info("Found newest for page: [{}]", newest.size());
+
+        Date maxPostsAgeToGrab = newest.isEmpty() ? defaultMaxPostsAgeToGrab : Iterables.getFirst(newest, null).getLogicalCreated();
+
+
+        try {
+            log.info("Loading posts from page");
+            List<VkWallPostDTO> postItemDTOs = vkHelperComponent.loadPostsFromPage(vkPage.getExternalId(), maxPostsAgeToGrab)
+                    .stream()
+                    .filter(item -> StringUtils.trimToNull(item.getText()) != null && !StringUtils.trimToEmpty(item.getText()).contains("rent4.me"))
+                            //leave only those that have no duplicates in DB
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            log.info("Loaded [{}] posts from page", postItemDTOs.size());
+
+            List<VkontakteApartment> byExternalIdIn = !postItemDTOs.isEmpty() ? apartmentRepository.findVkApartmentsByExternalIdIn(postItemDTOs.stream()
+                            .map(VkWallPostDTO::getId)
+                            .collect(Collectors.toList())
+            ) : Collections.emptyList();
+
+            Set<String> collect = postItemDTOs.stream().map(item -> Apartment.calcHash(item.getText())).collect(Collectors.toSet());
+
+            final Set<String> similarTextsInDB = apartmentRepository.similarApartments(collect);
+
+            Set<String> ids = byExternalIdIn.stream()
+                    .map(VkontakteApartment::getExternalId)
+                    .collect(Collectors.toSet());
+
+            //although it may seems strange but in same result set could be returned duplicates - so filter them
+            log.info("Removing duplicates in same requests by id");
+            Set<String> postItemDtoIds = new HashSet<>();
+            Set<String> postItemDtoContents = new HashSet<>();
+            Iterator<VkWallPostDTO> iterator = postItemDTOs.iterator();
+            while (iterator.hasNext()) {
+                VkWallPostDTO next = iterator.next();
+                if (next.getId() == null || postItemDtoIds.contains(next.getId()) || postItemDtoContents.contains(next.getText())) {
+                    log.info("Removed duplicate in same requests by id or text: [{}], [{}]", next.getId(), next.getText());
+                    iterator.remove();
+                    continue;
+                } else {
+                    postItemDtoIds.add(next.getId());
+                    postItemDtoContents.add(next.getText());
+                }
+            }
+            log.info("Removed duplicates in same requests by id/texts");
+
+            log.info("Removing duplicates in DB by id");
+            List<VkWallPostDTO> dtosToPersist = postItemDTOs
+                    .stream()
+                    .filter(i -> !ids.contains(i.getId()) && !similarTextsInDB.contains(i.getText()))
+                    .collect(Collectors.toList());
+
+            log.info("Removed duplicates in DB by id");
+
+            for (VkWallPostDTO postItemDTO : dtosToPersist) {
+                int i = counter.incrementAndGet();
+                log.info(">>> Processing post #[{}]", i);
+                VkontakteApartment post = postItemDTO.toInternal();
+                post.setVkontaktePage(vkPage);
+                post.setPublished(true);
+                String message = post.getDescription();
+
+                Set<MetroEntity> matchedMetros = matchMetros(metros, message, cityDTO);
+                post.setMetros(matchedMetros);
+
+                GeoPoint averagePoint = getAveragePoint(matchedMetros);
+                if (averagePoint != null) {
+                    post.setLocation(averagePoint);
+                } else if (cityDTO != null) {
+                    post.setLocation(getAveragePoint(cityDTO));
+                } else {
+                    post.setLocation(null);
+                }
+
+                AddressComponents addressComponents = new AddressComponents();
+                addressComponents.setCountryCode("RU");
+                post.setAddressComponents(addressComponents);
+
+                Integer roomCount = roomCountParser.findRoomCount(message);
+                post.setRoomCount(roomCount);
+                BigDecimal rentalFee = rentalFeeParser.findRentalFee(message);
+                post.setRentalFee(rentalFee);
+                Apartment.Target target = targetAnalyzer.determineTarget(message);
+                post.setTarget(target);
+                post.setFeePeriod(FeePeriod.MONTHLY);
+                List<PhoneUtil.Phone> phones = PhoneUtil.findPhoneNumbers(message, "RU");
+                Set<Contact> contacts = phones.stream().map(phone -> {
+                    PhoneContact contact = new PhoneContact();
+                    contact.setPhoneNumber(PhoneNumber.from(phone));
+                    return contact;
+                }).collect(Collectors.toCollection(HashSet::new));
+                post.setContacts(contacts);
+
+                post = apartmentRepository.save(post);
+
+                for (PreviewFullImageUrlPair previewFullImageUrlPair : postItemDTO.getImageUrlPairs()) {
+                    ApartmentExternalPhoto photo = new ApartmentExternalPhoto();
+                    photo.setImageUrl(previewFullImageUrlPair.getFullUrl());
+                    photo.setPreviewUrl(previewFullImageUrlPair.getPreviewUrl());
+                    photo.setApartment(post);
+                    apartmentExternalPhotoRepository.save(photo);
+                }
+
+                post = apartmentRepository.save(post);
+                apartmentService.saveIdents(post.getId());
+                if(post.getCity() != null && MetroServiceImpl.MOSCOW_CITY_DESCRIPTION.getCity().equalsIgnoreCase(post.getCity().getName())
+                        && !StringUtils.trimToEmpty(post.getDescription()).contains("rent4.me")) {
+
+                    int scorePoints = 0;
+
+                    if (post.getRentalFee() != null) {
+                        scorePoints++;
+                    }
+                    if (post.getMetros() != null && !post.getMetros().isEmpty()) {
+                        scorePoints++;
+                    }
+                    if (post.getRoomCount() != null) {
+                        scorePoints++;
+                    }
+                    log.info("Score points for VK post #[{}]: [{}]", post.getId(), scorePoints);
+
+                    //only premium posts should be posted on our page for now
+                    if(scorePoints >= 3) {
+                        apartmentIdsToPostOnVKPage.add(post.getId());
+                    }
+                }
+
+                log.info("<<< Processing of post #[{}] done", i);
+            }
+            em.flush();
+            log.info("Saved [{}] posts for vk page: [{}]", dtosToPersist.size(), vkPage.getLink());
+        } catch (Exception e) {
+            log.error("Failed to parse [" + vkPage.getExternalId() + "]", e);
+        }
+        afterCommitExecutor.executeAsynchronouslyInTransaction(() -> {
+            apartmentService.publishApartmentsOnOurVkGroupPage(apartmentIdsToPostOnVKPage);
+        });
     }
 
     private PageRequest getLimit1Offset0() {
