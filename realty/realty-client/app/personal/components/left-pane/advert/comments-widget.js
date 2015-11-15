@@ -5,19 +5,16 @@
 var React = require('react');
 
 var CommentsWidget = React.createClass({
-    render: function(){
+    render: function () {
         return (
-            <!-- Виджет комментариев -->
             <div className="row">
                 <div className="col-md-12">
                     <div className="panel panel-default noBorderRadius">
-                        <!-- добавление нового комментария -->
                         <table className="table table-responsive table-striped table-borderless">
                             <tbody>
                             <tr>
                                 <td className="col-md-1 text-center">
                                     <a href="#">
-                                        <!-- super man: http://mediad.publicbroadcasting.net/p/kpcw/files/201404/superman_no_photo.png -->
                                         <img src="https://nslnr.su/pict/no_photo_man.gif" alt="..."
                                              className="img-circle" width="32"/>
                                     </a>
@@ -36,10 +33,7 @@ var CommentsWidget = React.createClass({
                             </tbody>
                         </table>
 
-
-                        <!-- START list group. Списрк комментариев -->
                         <div className="list-group">
-                            <!-- START list group item-->
                             <a href="javascript:void(0);" className="list-group-item comment-group-item">
 
                                 <div className="media">
@@ -65,8 +59,6 @@ var CommentsWidget = React.createClass({
                                     </div>
                                 </div>
                             </a>
-                            <!-- END list group item-->
-                            <!-- START list group item-->
                             <a href="javascript:void(0);"
                                className="list-group-item comment-group-item">
 
@@ -94,8 +86,6 @@ var CommentsWidget = React.createClass({
                                     </div>
                                 </div>
                             </a>
-                            <!-- END list group item-->
-                            <!-- START list group item-->
                             <a href="javascript:void(0);"
                                className="list-group-item comment-group-item">
                                 <div className="media">
@@ -122,8 +112,6 @@ var CommentsWidget = React.createClass({
                                     </div>
                                 </div>
                             </a>
-                            <!-- END list group item-->
-                            <!-- START list group item-->
                             <a href="javascript:void(0);"
                                className="list-group-item comment-group-item">
                                 <div className="media">
@@ -150,16 +138,12 @@ var CommentsWidget = React.createClass({
                                     </div>
                                 </div>
                             </a>
-                            <!-- END list group item-->
                         </div>
-                        <!-- END list group-->
-                        <!-- START panel footer-->
                         <div className="panel-footer clearfix">
                             <a href="javascript:void(0);" className="pull-left">
                                 <small>Показать се комментарии</small>
                             </a>
                         </div>
-                        <!-- END panel-footer-->
                     </div>
 
                 </div>

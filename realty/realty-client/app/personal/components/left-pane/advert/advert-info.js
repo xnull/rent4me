@@ -67,15 +67,14 @@ var AdvertInfo = React.createClass({
 
         return (
             <div>
-                <!--  Панель управления с инфой о владельце объявления и кнопками для жалоб и связи -->
                 <AdvertManagement item={item}/>
 
                 <div className="row">
                     <div className="col-md-12 col-sm-12 col-xs-12">
                         <AdvertContent item={item}/>
-                        <AdvertText item={item}/>
-                        <!-- <Likes item={item}/> -->
-                        <!-- <CommentsWidget item={item}/> -->
+                        {/**<AdvertText item={item}/>
+                        <Likes item={item}/>
+                        <CommentsWidget item={item}/>*/}
                     </div>
                 </div>
             </div>

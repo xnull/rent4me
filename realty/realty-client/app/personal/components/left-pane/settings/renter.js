@@ -75,7 +75,6 @@ var Adverts = React.createClass({
                 <div className="panel-body">
                     <h4>Активное бъявление</h4>
                     <div className='row'>
-                    {/* example item */}
                         <div className='col-md-8 col-sm-8 col-xs-8'>
                             <p className='text'> однокомнатная квартира </p>
                             <p className='text'> долгосрочная аренда </p>

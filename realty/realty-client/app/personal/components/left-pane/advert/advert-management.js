@@ -28,7 +28,7 @@ var AdvertManagement = React.createClass({
                             <div className="row">
                                 <div className="col-xs-2 col-md-1">
                                     <a href={this.getAuthorLink()} target="_blank">
-                                        <!-- super man: http://mediad.publicbroadcasting.net/p/kpcw/files/201404/superman_no_photo.png -->
+                                        {/**super man: http://mediad.publicbroadcasting.net/p/kpcw/files/201404/superman_no_photo.png*/}
                                         <img src="https://nslnr.su/pict/no_photo_man.gif" alt="..."
                                              className="img-rounded" width="38"/>
                                     </a>

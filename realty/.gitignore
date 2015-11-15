@@ -3,6 +3,7 @@ build/**
 
 realty-client/node_modules
 realty-client/app/vendor
+realty-client/tmp
 
 *.iml
 *.iws
@@ -11,6 +12,7 @@ realty-client/app/vendor
 .idea
 
 realty-web/src/main/webapp/view
+realty-client/test/rent4/webpack/src/bundle.js
 realty-client/build-js/*
 
 logs/*

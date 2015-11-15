@@ -109,13 +109,13 @@ var AdvertContent = React.createClass({
 
         return (
             <div className="row">
-                <!-- Accomodation images -->
+                {/** Accomodation images*/}
                 <div className="col-xs-12 col-md-8">
                     <ImagePreviews item={this.props.item}/>
                 </div>
 
                 <div className="col-md-4 col-xs-12">
-                    <!-- the map -->
+                    {/** the map*/}
                     <div className="col-md-12">
                         <div className="panel panel-default" style={{height: '305px'}}>
                             <div className="panel-body">
@@ -124,7 +124,7 @@ var AdvertContent = React.createClass({
                         </div>
                     </div>
 
-                    <!-- Accomodation info -->
+                    {/**Accomodation info*/}
                     <table className="table table-striped">
                         <tbody>
                         <tr>

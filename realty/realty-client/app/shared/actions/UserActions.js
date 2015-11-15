@@ -53,10 +53,13 @@ var UserActions = {
 
                 var errors = [];
 
-                if(xhr.status == 409) {
+                if (xhr.status == 409) {
                     errors.push({key: 'E-mail', value: 'E-mail уже занят'});
                 } else {
-                    errors.push({key: 'Ошибка сервера', value: 'У нас произошла ошибка и мы уже работаем, что бы исправить ее'});
+                    errors.push({
+                        key: 'Ошибка сервера',
+                        value: 'У нас произошла ошибка и мы уже работаем, что бы исправить ее'
+                    });
                 }
 
                 AppDispatcher.handleViewAction({
@@ -100,12 +103,14 @@ var UserActions = {
 
 
     loadMyProfilePromise: function () {
-        if(!AuthStore.hasCredentials()) return new Promise(function(resolve, reject){
-            reject("Not authorized. Can not load my profile");
-        });
+        if (!AuthStore.hasCredentials()) {
+            return new Promise(function (resolve, reject) {
+                reject("Not authorized. Can not load my profile");
+            });
+        }
         BlockUI.blockUI();
         _myProfileIsLoading = true;
-        var promise = new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             Ajax
                 .GET('/rest/users/me')
                 .authorized()
@@ -121,12 +126,11 @@ var UserActions = {
                 })
                 .execute();
         });
-        return promise;
     },
 
     loadMyProfile: function () {
         var loadMyProfilePromise = this.loadMyProfilePromise();
-        loadMyProfilePromise.then(function(data){
+        loadMyProfilePromise.then(function (data) {
             AppDispatcher.handleViewAction({
                 actionType: UserConstants.USER_PROFILE_LOADED,
                 user: data

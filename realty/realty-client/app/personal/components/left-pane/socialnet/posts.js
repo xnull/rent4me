@@ -256,7 +256,7 @@ var ImagePreviews = React.createClass({
 
     render: function () {
         var showFull = this.props.showFull;
-        var withoutImage = (<img className="media-object" src="/personal/images/not-available.jpeg" width="160"/>);
+        var withoutImage = (<img className="media-object" src="images/not-available.jpeg" width="160"/>);
         var firstImage = this.getFirstImage();
         var images = this.getImageUrls();
 
