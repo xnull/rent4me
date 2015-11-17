@@ -62,7 +62,7 @@ project.ext.libraries = [
 
         //pooling
         'com.jolbox:bonecp'                                       : ["com.jolbox:bonecp:0.8.0.RELEASE"],
-        'c3p0:c3p0'                                               : ["c3p0:c3p0:0.9.1.2"],
+        'c3p0:c3p0'                                               : ['com.mchange:c3p0:0.9.5.1'],
 
         //jetty(for embedded use)
         "org.eclipse.jetty:jetty-start"                           : ["org.eclipse.jetty:jetty-start:${jettyVersion}"],
