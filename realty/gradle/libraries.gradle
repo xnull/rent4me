@@ -79,6 +79,7 @@ project.ext.libraries = [
         //common stuff
         'commons-io:commons-io'                                   : ["commons-io:commons-io:2.4"],
         'commons-codec:commons-codec'                             : ["commons-codec:commons-codec:1.6"],
+        'me.moocar:logback-gelf'                                  : ["me.moocar:logback-gelf:0.2"],
 
         'joda-time:joda-time'                                     : ['joda-time:joda-time:2.5'],
         'org.joda:joda-money'                                     : ['org.joda:joda-money:0.10.0'],
