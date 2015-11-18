@@ -58,7 +58,7 @@
         <appender-ref ref="generalFileLog"/>
         <appender-ref ref="GELF UDP APPENDER"/>
     </logger>
-    <logger name="bynull" level="ERROR">
+    <logger level="ERROR">
         <appender-ref ref="errorFileLog"/>
     </logger>
 
