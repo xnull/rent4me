@@ -5,10 +5,10 @@
         <encoder class="me.moocar.logbackgelf.GZIPEncoder">
             <layout class="me.moocar.logbackgelf.GelfLayout">
                 <shortMessageLayout class="ch.qos.logback.classic.PatternLayout">
-                    <pattern>%ex{short}[%x{requestContext}]%.100m</pattern>
+                    <pattern>%ex{short}[%x{requestId}]%.100m</pattern>
                 </shortMessageLayout>
                 <fullMessageLayout class="ch.qos.logback.classic.PatternLayout">
-                    <pattern>%rEx%[x{requestContext}]%m</pattern>
+                    <pattern>%rEx%[x{requestId}]%m</pattern>
                 </fullMessageLayout>
             </layout>
         </encoder>
