@@ -54,7 +54,7 @@
         </layout>
     </appender>
 
-    <logger name="bynull" level="INFO">
+    <logger name="bynull" level="DEBUG">
         <appender-ref ref="generalFileLog"/>
         <appender-ref ref="GELF UDP APPENDER"/>
     </logger>
