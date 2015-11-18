@@ -3,7 +3,14 @@
 
     <appender name="GELF UDP APPENDER" class="me.moocar.logbackgelf.GelfUDPAppender">
         <encoder class="me.moocar.logbackgelf.GZIPEncoder">
-            <layout class="me.moocar.logbackgelf.GelfLayout"/>
+            <layout class="me.moocar.logbackgelf.GelfLayout">
+                <shortMessageLayout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%ex{short}[%x{requestContext}]%.100m</pattern>
+                </shortMessageLayout>
+                <fullMessageLayout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%rEx%[x{requestContext}]%m</pattern>
+                </fullMessageLayout>
+            </layout>
         </encoder>
     </appender>
 
