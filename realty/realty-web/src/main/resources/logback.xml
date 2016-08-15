@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
 
+    <appender name="GELF UDP APPENDER" class="me.moocar.logbackgelf.GelfUDPAppender">
+        <encoder class="me.moocar.logbackgelf.GZIPEncoder">
+            <layout class="me.moocar.logbackgelf.GelfLayout">
+                <shortMessageLayout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%ex{short}[%X{requestId}]%.100m</pattern>
+                </shortMessageLayout>
+                <fullMessageLayout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%rEx[%X{requestId}]%m</pattern>
+                </fullMessageLayout>
+            </layout>
+        </encoder>
+    </appender>
+
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
@@ -20,7 +33,7 @@
 
 
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%X{requestId}] - %msg%n</Pattern>
         </layout>
     </appender>
 
@@ -41,8 +54,9 @@
         </layout>
     </appender>
 
-    <logger name="bynull" level="INFO">
+    <logger name="bynull" level="DEBUG">
         <appender-ref ref="generalFileLog"/>
+        <appender-ref ref="GELF UDP APPENDER"/>
     </logger>
     <logger level="ERROR">
         <appender-ref ref="errorFileLog"/>

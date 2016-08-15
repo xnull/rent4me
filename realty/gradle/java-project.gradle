@@ -59,6 +59,7 @@ project.dependencies {
     compile libraries.'org.slf4j:slf4j-api'
     compile libraries."ch.qos.logback:logback-classic"
     compile libraries."ch.qos.logback:logback-core"
+    compile libraries."me.moocar:logback-gelf"
 
     compile 'com.google.guava:guava:17.0'
     compile 'org.projectlombok:lombok:1.14.8'

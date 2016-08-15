@@ -115,11 +115,10 @@ public class ParameterLoggingAndContextInitializingFilter implements Filter {
                 log.info("<<< Response: [{}]", cachingServletResponseWrapper.responseString());
 
                 log.info("=== Request took {} ms", RequestContext.getRequestContext().calculateRequestTimeMillis());
-                LogUtil.clearRequestContext();
-
             } finally {
                 RequestContext.destroyRequestContext();
                 ContextHelper.clearAllContexts();
+                LogUtil.clearRequestContext();
             }
         }
     }
