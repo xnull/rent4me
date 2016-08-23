@@ -1,0 +1,26 @@
+{ "dependencies" :
+	{
+		"react": "latest"
+		, "react-dom": "latest"
+		, "redux": "latest"
+		, "react-redux": "latest"
+		, "redux-logger": "latest"
+		, "redux-thunk": "latest"
+		, "react-router": "latest"
+		, "remarkable": "latest"
+		, "whatwg-fetch": "latest"
+	}
+	, "devDependencies" :
+		{
+			"webpack": "latest"
+			, "webpack-dev-server": "latest"
+			, "css-loader": "latest"
+			, "style-loader": "latest"
+			, "babel-loader": "latest"
+			, "babel-core": "latest"
+			, "babel-preset-es2015": "latest"
+			, "babel-preset-react": "latest"
+			, "babel-polyfill": "latest"
+			, "babel-plugin-transform-object-rest-spread": "latest"
+		}
+}
