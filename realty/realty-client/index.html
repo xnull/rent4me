@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Realty &#8211; Premium Real Estate Theme</title>
     <script>
-                            /* You can add more configuration options to webfontloader by previously defining the WebFontConfig with your options */
-                            if ( typeof WebFontConfig === "undefined" ) {
-                                WebFontConfig = new Object();
-                            }
-                            WebFontConfig['google'] = {families: ['Source+Sans+Pro:400', 'Fira+Sans:400']};
+        /* You can add more configuration options to webfontloader by previously defining the WebFontConfig with your options */
+        if (typeof WebFontConfig === "undefined") {
+            WebFontConfig = new Object();
+        }
+        WebFontConfig['google'] = {families: ['Source+Sans+Pro:400', 'Fira+Sans:400']};
 
-                            (function() {
-                                var wf = document.createElement( 'script' );
-                                wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.3/webfont.js';
-                                wf.type = 'text/javascript';
-                                wf.async = 'true';
-                                var s = document.getElementsByTagName( 'script' )[0];
-                                s.parentNode.insertBefore( wf, s );
-                            })();
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.3/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
 
     </script>
     <!-- <link rel='dns-prefetch' href='//maps.googleapis.com'> -->
@@ -42,11 +42,90 @@
           href="http://demo.themetrail.com/realty/wp-content/plugins/js_composer/assets/css/vc-ie8.min.css"
           media="screen"><![endif]-->
     <style type="text/css" title="dynamic-css" class="options-output">
-        body, .section-title span{background-color:#ffffff;}#header{background-color:#fff;}.top-header, .top-header a, .site-branding, .site-title a, .site-description a, .primary-menu a{color:#787878;}#header{font-family:"Source Sans Pro";opacity: 1;visibility: visible;-webkit-transition: opacity 0.24s ease-in-out;-moz-transition: opacity 0.24s ease-in-out;transition: opacity 0.24s ease-in-out;}.wf-loading #header,{opacity: 0;}.ie.wf-loading #header,{visibility: hidden;}h1, h2, h3, h4, h5, h6{font-family:"Source Sans Pro";font-weight:400;color:#42484b;opacity: 1;visibility: visible;-webkit-transition: opacity 0.24s ease-in-out;-moz-transition: opacity 0.24s ease-in-out;transition: opacity 0.24s ease-in-out;}.wf-loading h1, h2, h3, h4, h5, h6,{opacity: 0;}.ie.wf-loading h1, h2, h3, h4, h5, h6,{visibility: hidden;}body{font-family:"Fira Sans";font-weight:400;color:#787878;opacity: 1;visibility: visible;-webkit-transition: opacity 0.24s ease-in-out;-moz-transition: opacity 0.24s ease-in-out;transition: opacity 0.24s ease-in-out;}.wf-loading body,{opacity: 0;}.ie.wf-loading body,{visibility: hidden;}#footer{background-color:#333;}#footer-bottom{background-color:#2e2e2e;}#footer .widget-title, #footer p{color:#ffffff;}
+        body, .section-title span {
+            background-color: #ffffff;
+        }
+
+        #header {
+            background-color: #fff;
+        }
+
+        .top-header, .top-header a, .site-branding, .site-title a, .site-description a, .primary-menu a {
+            color: #787878;
+        }
+
+        #header {
+            font-family: "Source Sans Pro";
+            opacity: 1;
+            visibility: visible;
+            -webkit-transition: opacity 0.24s ease-in-out;
+            -moz-transition: opacity 0.24s ease-in-out;
+            transition: opacity 0.24s ease-in-out;
+        }
+
+        .wf-loading #header, {
+            opacity: 0;
+        }
+
+        .ie.wf-loading #header, {
+            visibility: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Source Sans Pro";
+            font-weight: 400;
+            color: #42484b;
+            opacity: 1;
+            visibility: visible;
+            -webkit-transition: opacity 0.24s ease-in-out;
+            -moz-transition: opacity 0.24s ease-in-out;
+            transition: opacity 0.24s ease-in-out;
+        }
+
+        .wf-loading h1, h2, h3, h4, h5, h6, {
+            opacity: 0;
+        }
+
+        .ie.wf-loading h1, h2, h3, h4, h5, h6, {
+            visibility: hidden;
+        }
+
+        body {
+            font-family: "Fira Sans";
+            font-weight: 400;
+            color: #787878;
+            opacity: 1;
+            visibility: visible;
+            -webkit-transition: opacity 0.24s ease-in-out;
+            -moz-transition: opacity 0.24s ease-in-out;
+            transition: opacity 0.24s ease-in-out;
+        }
+
+        .wf-loading body, {
+            opacity: 0;
+        }
+
+        .ie.wf-loading body, {
+            visibility: hidden;
+        }
+
+        #footer {
+            background-color: #333;
+        }
+
+        #footer-bottom {
+            background-color: #2e2e2e;
+        }
+
+        #footer .widget-title, #footer p {
+            color: #ffffff;
+        }
     </style>
 
     <noscript>
-        <style type="text/css"> .wpb_animate_when_almost_visible { opacity: 1; }</style>
+        <style type="text/css"> .wpb_animate_when_almost_visible {
+            opacity: 1;
+        }</style>
     </noscript>
     <!--[if lt IE 9]>
     <script src="http://demo.themetrail.com/realty/wp-content/themes/realty/lib/js/html5.js"></script>
@@ -228,339 +307,414 @@
                             <div class="wpb_wrapper">
 
                                 <script>
-				var map = null, markers = [], newMarkers = [], markerCluster = null, infobox = [], address = null;
+                                    var map = null, markers = [], newMarkers = [], markerCluster = null, infobox = [], address = null;
 
 
-		var customIcon = new google.maps.MarkerImage(
-			'http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/map-marker/map-marker-green-fat.png',
-			null, // size is determined at runtime
-		  null, // origin is 0,0
-		  null, // anchor is bottom center of the scaled image
-		  new google.maps.Size(50, 69)
-		);
+                                    var customIcon = new google.maps.MarkerImage(
+                                            'http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/map-marker/map-marker-green-fat.png',
+                                            null, // size is determined at runtime
+                                            null, // origin is 0,0
+                                            null, // anchor is bottom center of the scaled image
+                                            new google.maps.Size(50, 69)
+                                    );
 
 
-
-		var markerClusterOptions = {
-			gridSize: 60, // Default: 60
-			maxZoom: 14,
-			styles: [{
-				width: 50,
-				height: 50,
-				url: "http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/map-marker/map-marker-gold-round.png"
-			}]
-		};
-
+                                    var markerClusterOptions = {
+                                        gridSize: 60, // Default: 60
+                                        maxZoom: 14,
+                                        styles: [{
+                                            width: 50,
+                                            height: 50,
+                                            url: "http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/map-marker/map-marker-gold-round.png"
+                                        }]
+                                    };
 
 
-					var customAltIcon = new google.maps.MarkerImage(
-				'http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/map-marker/map-marker-red-fat.png',
-			  null, // size is determined at runtime
-			  null, // origin is 0,0
-			  null, // anchor is bottom center of the scaled image
-			  new google.maps.Size(50, 69)
-			);
+                                    var customAltIcon = new google.maps.MarkerImage(
+                                            'http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/map-marker/map-marker-red-fat.png',
+                                            null, // size is determined at runtime
+                                            null, // origin is 0,0
+                                            null, // anchor is bottom center of the scaled image
+                                            new google.maps.Size(50, 69)
+                                    );
 
-		jQuery('.property-item').on('mouseenter', function(){
-			var data_sync_id = jQuery(this).attr('data-sync-id');
-			newMarkers[data_sync_id].setIcon(customAltIcon);
-		}).on('mouseleave', function(){
-			var data_sync_id = jQuery(this).attr('data-sync-id');
-			newMarkers[data_sync_id].setIcon(customIcon);
-		});
+                                    jQuery('.property-item').on('mouseenter', function () {
+                                        var data_sync_id = jQuery(this).attr('data-sync-id');
+                                        newMarkers[data_sync_id].setIcon(customAltIcon);
+                                    }).on('mouseleave', function () {
+                                        var data_sync_id = jQuery(this).attr('data-sync-id');
+                                        newMarkers[data_sync_id].setIcon(customIcon);
+                                    });
 
 
+                                    /**
+                                     * initMap
+                                     *
+                                     */
+                                    function initMap() {
+                                        if (1 == 1) return;
 
-				/**
-				 * initMap
-				 *
-				 */
-				function initMap() {
-          if(1==1) return;
+                                        var mapOptions = {
+                                            center: new google.maps.LatLng(0, 0),
+                                            zoom: 13,
+                                            scrollwheel: false,
+                                            streetViewControl: false,
+                                            draggable: true,
+                                            disableDefaultUI: true,
+                                        };
 
-					var	mapOptions = {
-						center: new google.maps.LatLng(0, 0),
-						zoom: 13,
-				    scrollwheel: false,
-				    streetViewControl: false,
-				    draggable: true,
-				    disableDefaultUI: true,
-					};
+                                        map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-					map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                                        if (map_options.map_style !== '') {
+                                            var styles = JSON.parse(map_options.map_style);
+                                            map.setOptions({styles: styles});
+                                        }
 
-											if ( map_options.map_style !== '' ) {
-							var styles = JSON.parse(map_options.map_style);
-							map.setOptions( { styles: styles } );
-						}
+                                        address = null;
+                                        //console.log('No address');
 
-										  address = null;
-					  //console.log('No address');
+                                        markers = initMarkers(map, [{
+                                            permalink: 'http://demo.themetrail.com/realty/property/westminster-beauty/',
+                                            title: 'Westminster Beauty',
+                                            price: '$500,000',
+                                            latLng: new google.maps.LatLng(51.5007153, -0.13608049999993455),
+                                            thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-bedroom-cozy-600x300.jpg'
+                                        },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/spacious-mansion/',
+                                                title: 'Spacious Mansion',
+                                                price: '$950,000',
+                                                latLng: new google.maps.LatLng(51.4998999, -0.15615779999995993),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-villa-pool-4-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/futuristic-nest/',
+                                                title: 'Futuristic Nest',
+                                                price: '$5,000 per month',
+                                                latLng: new google.maps.LatLng(51.486545, -0.16975860000002285),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-one-story-house-2-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/loft-above-the-city/',
+                                                title: 'Loft Above The City',
+                                                price: '$2,500&nbsp;per month',
+                                                latLng: new google.maps.LatLng(51.4655913, -0.17991240000003472),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-bedroom-modern-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/apartment-on-stamford/',
+                                                title: 'Apartment On Stamford',
+                                                price: '$3,000 per month',
+                                                latLng: new google.maps.LatLng(51.5071489, -0.10518149999995785),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-living-room-light-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/state-of-the-art/',
+                                                title: 'State of The Art',
+                                                price: '$3,000 per month',
+                                                latLng: new google.maps.LatLng(51.5101741, -0.13528059999998732),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-living-room-modern-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/modern-office/',
+                                                title: 'Modern Office',
+                                                price: '$600,000',
+                                                latLng: new google.maps.LatLng(51.5012413, -0.10586069999999381),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-office-building3-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/living-the-dream/',
+                                                title: 'Living The Dream',
+                                                price: '$7,500&nbsp;per month',
+                                                latLng: new google.maps.LatLng(51.5069927, -0.13605989999996382),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-mansion-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/for-the-minimalist/',
+                                                title: 'For The Minimalist',
+                                                price: '$275,000',
+                                                latLng: new google.maps.LatLng(51.51533939999999, -0.14131750000001375),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-minimalistic-living-room-ocean-view-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/country-house/',
+                                                title: 'Country House',
+                                                price: '$350,000',
+                                                latLng: new google.maps.LatLng(51.4978868, -0.0901566999999659),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-red-bricks-entrance-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/central-office/',
+                                                title: 'Central Office',
+                                                price: '$6,000&nbsp;per month',
+                                                latLng: new google.maps.LatLng(51.5122249, -0.09045309999999063),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-office-huge-2-600x300.jpg'
+                                            },
+                                            {
+                                                permalink: 'http://demo.themetrail.com/realty/property/green-oasis/',
+                                                title: 'Green Oasis',
+                                                price: '$825,000',
+                                                latLng: new google.maps.LatLng(51.49607270000001, -0.12657279999996263),
+                                                thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-mansion-lavender-600x300.jpg'
+                                            },
+                                        ]);
 
-					markers = initMarkers(map, [ { permalink:'http://demo.themetrail.com/realty/property/westminster-beauty/', title:'Westminster Beauty', price:'$500,000', latLng: new google.maps.LatLng(51.5007153, -0.13608049999993455), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-bedroom-cozy-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/spacious-mansion/', title:'Spacious Mansion', price:'$950,000', latLng: new google.maps.LatLng(51.4998999, -0.15615779999995993), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-villa-pool-4-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/futuristic-nest/', title:'Futuristic Nest', price:'$5,000 per month', latLng: new google.maps.LatLng(51.486545, -0.16975860000002285), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-one-story-house-2-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/loft-above-the-city/', title:'Loft Above The City', price:'$2,500&nbsp;per month', latLng: new google.maps.LatLng(51.4655913, -0.17991240000003472), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-bedroom-modern-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/apartment-on-stamford/', title:'Apartment On Stamford', price:'$3,000 per month', latLng: new google.maps.LatLng(51.5071489, -0.10518149999995785), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-living-room-light-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/state-of-the-art/', title:'State of The Art', price:'$3,000 per month', latLng: new google.maps.LatLng(51.5101741, -0.13528059999998732), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-living-room-modern-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/modern-office/', title:'Modern Office', price:'$600,000', latLng: new google.maps.LatLng(51.5012413, -0.10586069999999381), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-office-building3-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/living-the-dream/', title:'Living The Dream', price:'$7,500&nbsp;per month', latLng: new google.maps.LatLng(51.5069927, -0.13605989999996382), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-mansion-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/for-the-minimalist/', title:'For The Minimalist', price:'$275,000', latLng: new google.maps.LatLng(51.51533939999999, -0.14131750000001375), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-minimalistic-living-room-ocean-view-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/country-house/', title:'Country House', price:'$350,000', latLng: new google.maps.LatLng(51.4978868, -0.0901566999999659), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-red-bricks-entrance-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/central-office/', title:'Central Office', price:'$6,000&nbsp;per month', latLng: new google.maps.LatLng(51.5122249, -0.09045309999999063), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-office-huge-2-600x300.jpg' },
-{ permalink:'http://demo.themetrail.com/realty/property/green-oasis/', title:'Green Oasis', price:'$825,000', latLng: new google.maps.LatLng(51.49607270000001, -0.12657279999996263), thumbnail: 'http://demo.themetrail.com/realty/wp-content/uploads/2015/10/realty-property-mansion-lavender-600x300.jpg' },
- ]);
+                                        // Spiderfier
+                                        var oms = new OverlappingMarkerSpiderfier(map, {
+                                            markersWontMove: true,
+                                            markersWontHide: true,
+                                            keepSpiderfied: true,
+                                            legWeight: 5
+                                        });
 
-					// Spiderfier
-					var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true, keepSpiderfied: true, legWeight: 5 });
+                                        function omsMarkers(markers) {
+                                            for (var i = 0; i < markers.length; i++) {
+                                                oms.addMarker(markers[i]);
+                                            }
+                                        }
 
-					function omsMarkers( markers ) {
-					  for ( var i = 0; i < markers.length; i++ ) {
-							oms.addMarker( markers[i] );
-					  }
-					}
+                                        omsMarkers(markers);
 
-					omsMarkers(markers);
+                                    }
+                                    google.maps.event.addDomListener(window, 'load', initMap);
 
-				}
-				google.maps.event.addDomListener(window, 'load', initMap);
+                                    /**
+                                     * Get latLng from property address and grab it with callback, as geocode calls asynchonous
+                                     *
+                                     */
+                                    function getLatLng(callback) {
+                                        var geocoder = new google.maps.Geocoder();
+                                        if (geocoder && address) {
+                                            geocoder.geocode({'address': address}, function (results, status) {
+                                                if (status == google.maps.GeocoderStatus.OK) {
+                                                    latLng = results[0].geometry.location;
+                                                    callback(latLng);
+                                                } else {
+                                                    console.log("Geocoder failed due to: " + status);
+                                                }
+                                            });
+                                        }
+                                    }
 
-				/**
-				 * Get latLng from property address and grab it with callback, as geocode calls asynchonous
-				 *
-				 */
-			  function getLatLng(callback) {
-				  var geocoder = new google.maps.Geocoder();
-				  if ( geocoder && address ) {
-					  geocoder.geocode( { 'address': address}, function(results, status ) {
-							if (status == google.maps.GeocoderStatus.OK) {
-								latLng = results[0].geometry.location;
-								callback(latLng);
-							} else {
-								console.log("Geocoder failed due to: " + status);
-							}
-					  });
-				  }
-			  }
+                                    /**
+                                     * initMarkers
+                                     *
+                                     */
+                                    function initMarkers(map, markerData) {
 
-				/**
-				 * initMarkers
-				 *
-				 */
-				function initMarkers(map, markerData) {
+                                        getLatLng(function (latLng) {
+                                            map.setCenter(latLng);
+                                        });
 
-											getLatLng(function(latLng) {
-							map.setCenter(latLng);
-						});
+                                        var bounds = new google.maps.LatLngBounds();
 
-					var bounds = new google.maps.LatLngBounds();
+                                        for (var i = 0; i < markerData.length; i++) {
 
-					for ( var i = 0; i < markerData.length; i++ ) {
+                                            marker = new google.maps.Marker({
+                                                map: map,
+                                                position: markerData[i].latLng,
+                                                icon: customIcon,
+                                                animation: google.maps.Animation.DROP
+                                            }),
 
-						marker = new google.maps.Marker({
-						map: map,
-						position: markerData[i].latLng,
-						icon: customIcon,
-						animation: google.maps.Animation.DROP
-						}),
+                                                    infoboxOptions = {
+                                                        content: '<div class="map-marker-wrapper">' +
+                                                        '<div class="map-marker-container">' +
+                                                        '<div class="arrow-down"></div>' +
+                                                        '<img src="' + markerData[i].thumbnail + '" />' +
+                                                        '<div class="content">' +
+                                                        '<a href="' + markerData[i].permalink + '">' +
+                                                        '<h5 class="title">' + markerData[i].title + '</h5>' +
+                                                        '</a>' +
+                                                        markerData[i].price +
+                                                        '</div>' +
+                                                        '</div>' +
+                                                        '</div>',
+                                                        disableAutoPan: false,
+                                                        pixelOffset: new google.maps.Size(-33, -90),
+                                                        zIndex: null,
+                                                        isHidden: true,
+                                                        alignBottom: true,
+                                                        closeBoxURL: "http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/close.png",
+                                                        infoBoxClearance: new google.maps.Size(25, 25)
+                                                    };
 
-						infoboxOptions = {
-							content: 	'<div class="map-marker-wrapper">'+
-													'<div class="map-marker-container">'+
-														'<div class="arrow-down"></div>'+
-														'<img src="'+markerData[i].thumbnail+'" />'+
-														'<div class="content">'+
-															'<a href="'+markerData[i].permalink+'">'+
-																'<h5 class="title">'+markerData[i].title+'</h5>'+
-															'</a>'+
-															markerData[i].price+
-														'</div>'+
-													'</div>'+
-												'</div>',
-							disableAutoPan: false,
-						  pixelOffset: new google.maps.Size(-33, -90),
-						  zIndex: null,
-						  isHidden: true,
-						  alignBottom: true,
-						  closeBoxURL: "http://demo.themetrail.com/realty/wp-content/themes/realty/lib/images/close.png",
-						  infoBoxClearance: new google.maps.Size(25, 25)
-						};
+                                            newMarkers.push(marker);
 
-						newMarkers.push(marker);
+                                            newMarkers[i].infobox = new InfoBox(infoboxOptions);
 
-						newMarkers[i].infobox = new InfoBox(infoboxOptions);
+                                            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                                                return function () {
+                                                    if (newMarkers[i].infobox.getVisible()) {
+                                                        newMarkers[i].infobox.hide();
+                                                    } else {
+                                                        jQuery('.infoBox').hide();
+                                                        newMarkers[i].infobox.show();
+                                                    }
 
-						google.maps.event.addListener(marker, 'click', (function(marker, i) {
-							return function() {
-								if ( newMarkers[i].infobox.getVisible() ) {
-									newMarkers[i].infobox.hide();
-								} else {
-									jQuery('.infoBox').hide();
-									newMarkers[i].infobox.show();
-								}
+                                                    newMarkers[i].infobox.open(map, this);
+                                                    map.setCenter(marker.getPosition());
+                                                    map.panBy(0, -175);
+                                                }
+                                            })(marker, i));
 
-								newMarkers[i].infobox.open(map, this);
-								map.setCenter(marker.getPosition());
-								map.panBy(0,-175);
-							}
-						})( marker, i ) );
+                                            google.maps.event.addListener(map, 'click', function () {
+                                                jQuery('.infoBox').hide();
+                                            });
 
-						google.maps.event.addListener(map, 'click', function() {
-							jQuery('.infoBox').hide();
-					  });
+                                            // Extend map bounds for this marker
+                                            bounds.extend(markerData[i].latLng);
 
-						// Extend map bounds for this marker
-					  bounds.extend(markerData[i].latLng);
+                                        } // for (each marker)
 
-					} // for (each marker)
+                                        // Create new map bounds to have all marker on the map
+                                        // If not on single-property.php, as only required for multiple markers
+                                        map.fitBounds(bounds);
+                                        markerCluster = new MarkerClusterer(map, newMarkers, markerClusterOptions);
 
-					// Create new map bounds to have all marker on the map
-					// If not on single-property.php, as only required for multiple markers
-										map.fitBounds(bounds);
-										markerCluster = new MarkerClusterer(map, newMarkers, markerClusterOptions);
+                                        return newMarkers;
 
-					return newMarkers;
-
-				} // initMarkers()
+                                    } // initMarkers()
 
                                 </script>
 
                                 <script>
-			function map_controls() {
+                                    function map_controls() {
 
-				// Zoom In
-				google.maps.event.addDomListener(document.getElementById('zoom-in-1399313232'), 'click', function () {
-					var currentZoom = map.getZoom();
-					currentZoom++;
-					if ( currentZoom > 19 ) {
-						currentZoom = 19;
-					}
-					map.setZoom(currentZoom);
-				});
+                                        // Zoom In
+                                        google.maps.event.addDomListener(document.getElementById('zoom-in-1399313232'), 'click', function () {
+                                            var currentZoom = map.getZoom();
+                                            currentZoom++;
+                                            if (currentZoom > 19) {
+                                                currentZoom = 19;
+                                            }
+                                            map.setZoom(currentZoom);
+                                        });
 
-				// Zoom Out
-				google.maps.event.addDomListener(document.getElementById('zoom-out-1399313232'), 'click', function () {
-					var currentZoom = map.getZoom();
-					currentZoom--;
-					if ( currentZoom > 19 ) {
-						currentZoom = 19;
-					}
-					map.setZoom(currentZoom);
-				});
+                                        // Zoom Out
+                                        google.maps.event.addDomListener(document.getElementById('zoom-out-1399313232'), 'click', function () {
+                                            var currentZoom = map.getZoom();
+                                            currentZoom--;
+                                            if (currentZoom > 19) {
+                                                currentZoom = 19;
+                                            }
+                                            map.setZoom(currentZoom);
+                                        });
 
-				// Map Type: Roadmap
-				google.maps.event.addDomListener(document.getElementById('map-type-roadmap-1399313232'), 'click', function () {
-					map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-				});
+                                        // Map Type: Roadmap
+                                        google.maps.event.addDomListener(document.getElementById('map-type-roadmap-1399313232'), 'click', function () {
+                                            map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+                                        });
 
-				// Map Type: Satellite
-				google.maps.event.addDomListener(document.getElementById('map-type-satellite-1399313232'), 'click', function () {
-					map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
-				});
+                                        // Map Type: Satellite
+                                        google.maps.event.addDomListener(document.getElementById('map-type-satellite-1399313232'), 'click', function () {
+                                            map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+                                        });
 
-				// Map Type: Hybrid
-				google.maps.event.addDomListener(document.getElementById('map-type-hybrid-1399313232'), 'click', function () {
-					map.setMapTypeId(google.maps.MapTypeId.HYBRID);
-				});
+                                        // Map Type: Hybrid
+                                        google.maps.event.addDomListener(document.getElementById('map-type-hybrid-1399313232'), 'click', function () {
+                                            map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+                                        });
 
-				// Map Type: Terrain
-				google.maps.event.addDomListener(document.getElementById('map-type-terrain-1399313232'), 'click', function () {
-					map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
-				});
+                                        // Map Type: Terrain
+                                        google.maps.event.addDomListener(document.getElementById('map-type-terrain-1399313232'), 'click', function () {
+                                            map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+                                        });
 
-				jQuery('.map-type li').click(function() {
-					jQuery('.map-type li').removeClass('active');
-					jQuery(this).addClass('active');
-				});
+                                        jQuery('.map-type li').click(function () {
+                                            jQuery('.map-type li').removeClass('active');
+                                            jQuery(this).addClass('active');
+                                        });
 
-				// Geolocation - Current Location
-				jQuery('#current-location-1399313232').click(function() {
+                                        // Geolocation - Current Location
+                                        jQuery('#current-location-1399313232').click(function () {
 
-					// Current Location Marker
-					var markerCurrent = new google.maps.Marker({
-					  //clickable: false,
-					  icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-						  new google.maps.Size(22,22),
-						  new google.maps.Point(0,18),
-						  new google.maps.Point(11,11)),
-					  shadow: null,
-					  zIndex: null,
-					  map: map					});
+                                            // Current Location Marker
+                                            var markerCurrent = new google.maps.Marker({
+                                                //clickable: false,
+                                                icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+                                                        new google.maps.Size(22, 22),
+                                                        new google.maps.Point(0, 18),
+                                                        new google.maps.Point(11, 11)),
+                                                shadow: null,
+                                                zIndex: null,
+                                                map: map
+                                            });
 
-					jQuery(this).toggleClass('active');
+                                            jQuery(this).toggleClass('active');
 
-					if ( !jQuery('#current-location-1399313232').hasClass('draw') ) {
-						// Create Loading Element
-					  var loading = document.createElement('div');
-				    loading.setAttribute( 'class', 'loader-container' );
-				    loading.innerHTML = '<div class="svg-loader"></div>';
-				    document.getElementById('map').appendChild(loading);
-					}
+                                            if (!jQuery('#current-location-1399313232').hasClass('draw')) {
+                                                // Create Loading Element
+                                                var loading = document.createElement('div');
+                                                loading.setAttribute('class', 'loader-container');
+                                                loading.innerHTML = '<div class="svg-loader"></div>';
+                                                document.getElementById('map').appendChild(loading);
+                                            }
 
-					// Current Position
-					if (navigator.geolocation) {
+                                            // Current Position
+                                            if (navigator.geolocation) {
 
-						navigator.geolocation.getCurrentPosition(function(current) {
+                                                navigator.geolocation.getCurrentPosition(function (current) {
 
-					    var me = new google.maps.LatLng(current.coords.latitude, current.coords.longitude);
-					    markerCurrent.setPosition(me);
-							map.panTo(me);
+                                                    var me = new google.maps.LatLng(current.coords.latitude, current.coords.longitude);
+                                                    markerCurrent.setPosition(me);
+                                                    map.panTo(me);
 
-							// Remove Loader
-				    	loading.remove();
+                                                    // Remove Loader
+                                                    loading.remove();
 
-							// https://developers.google.com/maps/documentation/javascript/examples/circle-simple
-							var currentRadiusCircleOptions = {
-					      strokeColor: '#00CFF0',
-					      strokeOpacity: 0.6,
-					      strokeWeight: 2,
-					      fillColor: '#00CFF0',
-					      fillOpacity: 0.2,
-					      map: map,
-					      center: me,
-					      visible: true,
-					      radius: 1000 // Unit: meter
-					    };
+                                                    // https://developers.google.com/maps/documentation/javascript/examples/circle-simple
+                                                    var currentRadiusCircleOptions = {
+                                                        strokeColor: '#00CFF0',
+                                                        strokeOpacity: 0.6,
+                                                        strokeWeight: 2,
+                                                        fillColor: '#00CFF0',
+                                                        fillOpacity: 0.2,
+                                                        map: map,
+                                                        center: me,
+                                                        visible: true,
+                                                        radius: 1000 // Unit: meter
+                                                    };
 
-					    // When Initializing
-							if ( !jQuery('#current-location-1399313232').hasClass('draw') ) {
+                                                    // When Initializing
+                                                    if (!jQuery('#current-location-1399313232').hasClass('draw')) {
 
-						    // Create Circle
-						    currentRadiusCircle = new google.maps.Circle(currentRadiusCircleOptions);
+                                                        // Create Circle
+                                                        currentRadiusCircle = new google.maps.Circle(currentRadiusCircleOptions);
 
-							}
+                                                    }
 
-							jQuery('#current-location-1399313232').addClass('draw');
+                                                    jQuery('#current-location-1399313232').addClass('draw');
 
-							// Toggle Crrent Location Icon & Circle
-							if ( jQuery('#current-location-1399313232').hasClass('active') ) {
-								markerCurrent.setMap(map);
-								currentRadiusCircle.setMap(map);
-							}
-							else {
-								markerCurrent.setMap(null);
-								currentRadiusCircle.setMap(null);
-							}
+                                                    // Toggle Crrent Location Icon & Circle
+                                                    if (jQuery('#current-location-1399313232').hasClass('active')) {
+                                                        markerCurrent.setMap(map);
+                                                        currentRadiusCircle.setMap(map);
+                                                    }
+                                                    else {
+                                                        markerCurrent.setMap(null);
+                                                        currentRadiusCircle.setMap(null);
+                                                    }
 
-						});
+                                                });
 
-					} else {
-					  console.log("Current Position Not Found");
-					}
+                                            } else {
+                                                console.log("Current Position Not Found");
+                                            }
 
-					// Toggle Current Location Circle Visibility
-					google.maps.event.addListener(markerCurrent, 'click', (function() {
-						if ( currentRadiusCircle.getVisible() ) {
-					  	currentRadiusCircle.set( 'visible', false );
-						} else {
-					  	currentRadiusCircle.set( 'visible', true );
-						}
-					}));
+                                            // Toggle Current Location Circle Visibility
+                                            google.maps.event.addListener(markerCurrent, 'click', (function () {
+                                                if (currentRadiusCircle.getVisible()) {
+                                                    currentRadiusCircle.set('visible', false);
+                                                } else {
+                                                    currentRadiusCircle.set('visible', true);
+                                                }
+                                            }));
 
-				});
+                                        });
 
-			}
-			google.maps.event.addDomListener(window, 'load', map_controls);
+                                    }
+                                    google.maps.event.addDomListener(window, 'load', map_controls);
 
                                 </script>
 
@@ -1395,8 +1549,6 @@
                                 </div><!-- .property-items -->
 
 
-
-
                             </div>
                         </div>
                     </div>
@@ -1627,13 +1779,13 @@
                                 Password?</a>
                         </form>
                         <script>
-				(function($) {
-				  "use strict";
-					$(document).ready(function() {
-						$('#user_login').attr( 'placeholder', 'Username or email' );
-						$('#user_pass').attr( 'placeholder', 'Password' );
-					});
-				})(jQuery);
+                            (function ($) {
+                                "use strict";
+                                $(document).ready(function () {
+                                    $('#user_login').attr('placeholder', 'Username or email');
+                                    $('#user_pass').attr('placeholder', 'Password');
+                                });
+                            })(jQuery);
 
                         </script>
 
@@ -1649,276 +1801,275 @@
     </div>
 </div>
 <script>
-		jQuery(document).ready(function($) {
+    jQuery(document).ready(function ($) {
 
-			// Social Sharing and video pop up
-			video_and_social_share();
+        // Social Sharing and video pop up
+        video_and_social_share();
 
-			jQuery('.search-results-view i').on('click',function() {
-			  jQuery('.search-results-view i').removeClass('active');
-			  jQuery(this).toggleClass('active');
-			  jQuery('.property-items').fadeTo( 300 , 0, function() {
-			  jQuery(this).fadeTo( 300, 1 );
-			});
+        jQuery('.search-results-view i').on('click', function () {
+            jQuery('.search-results-view i').removeClass('active');
+            jQuery(this).toggleClass('active');
+            jQuery('.property-items').fadeTo(300, 0, function () {
+                jQuery(this).fadeTo(300, 1);
+            });
 
-			setTimeout(function() {
-				jQuery('.property-items').attr( 'data-view', jQuery('.search-results-view i.active').attr('data-view') );
-			}, 300);
+            setTimeout(function () {
+                jQuery('.property-items').attr('data-view', jQuery('.search-results-view i.active').attr('data-view'));
+            }, 300);
 
-			});
-
-
-
-		}); // END document.ready
-
-		jQuery(window).load(function() {
-
-			var heightWindow = jQuery(window).height();
-			var heightHeader = jQuery('#header').height();
-			var heightFullscreen = heightWindow - heightHeader;
+        });
 
 
+    }); // END document.ready
 
-										if ( jQuery('.property-image-container').hasClass('cut') ) {
-					jQuery('.property-image-container .property-image, .property-image-container iframe').css( 'height', 600 );
-				}
+    jQuery(window).load(function () {
 
-										jQuery('body.single-property .property-image').magnificPopup({
-					type: 		'image',
-					gallery: 	{
-						enabled: 	true,
-						tPrev: 		'',
-						tNext: 		'',
-						tCounter: '%curr% | %total%'
-					}
-				});
+        var heightWindow = jQuery(window).height();
+        var heightHeader = jQuery('#header').height();
+        var heightFullscreen = heightWindow - heightHeader;
 
 
-							jQuery('.datepicker').datepicker({
-				language: 'en',
-				autoclose: true,
-				isRTL: false,
-				format: 'yyyymmdd',
-				});
+        if (jQuery('.property-image-container').hasClass('cut')) {
+            jQuery('.property-image-container .property-image, .property-image-container iframe').css('height', 600);
+        }
+
+        jQuery('body.single-property .property-image').magnificPopup({
+            type: 'image',
+            gallery: {
+                enabled: true,
+                tPrev: '',
+                tNext: '',
+                tCounter: '%curr% | %total%'
+            }
+        });
 
 
-			// Price Range
-			if ( jQuery('.price-range-slider').length ) {
-
-				var priceFormat;
-				var priceSlider = document.getElementById('price-range-slider');
-				noUiSlider.create(priceSlider, {
-
-					start: [ 0, 1000000 ],
-					step: 50000,
-					range: {
-						'min': [  0 ],
-						'max': [  1000000 ]
-					},
-					format: wNumb({
-						decimals: 0,
-						thousand: ',',						prefix: '$',					}),
-
-					connect: true,
-					animate: true,
+        jQuery('.datepicker').datepicker({
+            language: 'en',
+            autoclose: true,
+            isRTL: false,
+            format: 'yyyymmdd',
+        });
 
 
-				});
+        // Price Range
+        if (jQuery('.price-range-slider').length) {
 
-				priceFormat = wNumb({
-					decimals: 0,
+            var priceFormat;
+            var priceSlider = document.getElementById('price-range-slider');
+            noUiSlider.create(priceSlider, {
 
-					thousand: ',',					prefix: '$',				});
+                start: [0, 1000000],
+                step: 50000,
+                range: {
+                    'min': [0],
+                    'max': [1000000]
+                },
+                format: wNumb({
+                    decimals: 0,
+                    thousand: ',', prefix: '$',
+                }),
 
-				var priceValues = [
-					document.getElementById('price-range-min'),
-					document.getElementById('price-range-max')
-				];
-
-				var inputValues = [
-					document.getElementById('price-range-min'),
-					document.getElementById('price-range-max')
-				];
-
-				priceSlider.noUiSlider.on('update', function( values, handle ) {
-
-					priceValues[handle].innerHTML = values[handle];
-					var min_price = priceFormat.from( values[0] );
-					var max_price = priceFormat.from( values[1] );
-					jQuery('.property-search-price-range-min').val(min_price);
-					jQuery('.property-search-price-range-max').val(max_price);
-
-				});
-
-				priceSlider.noUiSlider.on('change', function( values, handle ) {
-
-					loader();
-
-					priceValues[handle].innerHTML = values[handle];
-					var min_price = priceFormat.from( values[0] );
-					var max_price = priceFormat.from( values[1] );
-					jQuery('.property-search-price-range-min').val(min_price);
-					jQuery('.property-search-price-range-max').val(max_price);
-
-					removeMarkers();
-					tt_ajax_search_results();
-
-				});
-
-			} // END .price-range-slider
-
-			// AJAX
-			function tt_ajax_search_results() {
-				"use strict";
-				if ( jQuery('.property-search-feature') ) {
-					var feature = [];
-					jQuery('.property-search-feature:checked').each(function() {
-					  feature.push( jQuery(this).val() );
-					});
-				}
-				var ajaxData = jQuery('.property-search-form').first().serialize() + "&action=tt_ajax_search&base=" + window.location.pathname;
-				jQuery.ajax({
-
-				  type: 'GET',
-				  url: ajax_object.ajax_url,
-				  data: ajaxData,
-				  success: function (response) {
-					  jQuery('.loader-container').fadeOut();
-				    jQuery('.property-items').html(response);
-						video_and_social_share();
-				  },
-				  error: function () {
-				  	console.log( 'failed' );
-				  }
-
-				});
-
-			}
-
-			// Remove Map Markers & Marker Cluster
-			function removeMarkers() {
-				// http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/examples/speed_test.js
-			  if(typeof newMarkers != 'undefined'){
-			    for( i = 0; i < newMarkers.length; i++ ) {
-				  newMarkers[i].setMap(null);
-					// Close Infoboxes
-				  if ( newMarkers[i].infobox.getVisible() ) {
-					newMarkers[i].infobox.hide();
-				  }
-			    }
-			    if ( markerCluster ) {
-				  markerCluster.clearMarkers();
-			    }
-			    markers = [];
-			    newMarkers = [];
-			    bounds = [];
-			  }
-
-			}
-
-			// Fire Search Results Ajax On Search Field Change (Exclude Datepicker)
-			jQuery('.property-search-form select, .property-search-form input').not('.datepicker').on('change',function() {
-				loader();
-				if ( jQuery('.google-map').length > 0 ) {
-					removeMarkers();
-				}
-				tt_ajax_search_results();
-			});
-
-			// Fire Search Results Ajax On Search Field "Datepicker" Change
-			jQuery('.property-search-form input.datepicker').on('changeDate', function() {
-				loader();
-				if ( jQuery('.google-map').length > 0 ) {
-					removeMarkers();
-				}
-				tt_ajax_search_results();
-			});
-
-			function loader() {
-				jQuery('.property-items').addClass('loading');
-				jQuery('.property-items').html('<div class="loader-container"><div class="svg-loader"></div></div>');
-			}
-
-			// AJAX script for pagination
-			jQuery(function($) {
-				$('.pagination-ajax a').live('click',function(e){
-					e.preventDefault();
-
-					var link_page = $(this).attr('href');
-					var page_number =  $(this).text();
-
-					if($(this).hasClass( "next" )){
-						var next_from = parseInt($('.pagination-ajax li span').text());
-						page_number = next_from + 1;
-					}
-
-					if($(this).hasClass( "prev" )){
-						var prev_from = parseInt($('.pagination-ajax li span').text());
-						page_number = prev_from - 1;
-					}
-
-					$('.property-items').fadeOut(500);
-					removeMarkers();
-
-					var ajaxData = jQuery('.property-search-form').first().serialize() + "&action=tt_ajax_search&base=" + window.location.pathname + "&pagenumber=" + page_number;
-					//console.log(ajaxData);
-					$.ajax({
-						type: 'GET',
-						url: ajax_object.ajax_url,
-						data: ajaxData,
-						success: function (response) {
-							$(".property-items").html(response);
-							$(".property-items").fadeIn(500);
-							window.history.pushState(".property-items", "Properties",link_page );
-						},
-						error: function () {
-						console.log( 'failed' );
-						}
-					});
-
-				});
-			});
-
-			// END AJAX script for pagination
-
-		}); // END window.load
+                connect: true,
+                animate: true,
 
 
-					jQuery('.menu-item-has-children, .menu-item-language').click(function() {
-			  if ( jQuery('body').hasClass('show-nav') ) {
-			    jQuery(this).find('.sub-menu').toggleClass('open');
-			  }
-			});
+            });
 
+            priceFormat = wNumb({
+                decimals: 0,
+
+                thousand: ',', prefix: '$',
+            });
+
+            var priceValues = [
+                document.getElementById('price-range-min'),
+                document.getElementById('price-range-max')
+            ];
+
+            var inputValues = [
+                document.getElementById('price-range-min'),
+                document.getElementById('price-range-max')
+            ];
+
+            priceSlider.noUiSlider.on('update', function (values, handle) {
+
+                priceValues[handle].innerHTML = values[handle];
+                var min_price = priceFormat.from(values[0]);
+                var max_price = priceFormat.from(values[1]);
+                jQuery('.property-search-price-range-min').val(min_price);
+                jQuery('.property-search-price-range-max').val(max_price);
+
+            });
+
+            priceSlider.noUiSlider.on('change', function (values, handle) {
+
+                loader();
+
+                priceValues[handle].innerHTML = values[handle];
+                var min_price = priceFormat.from(values[0]);
+                var max_price = priceFormat.from(values[1]);
+                jQuery('.property-search-price-range-min').val(min_price);
+                jQuery('.property-search-price-range-max').val(max_price);
+
+                removeMarkers();
+                tt_ajax_search_results();
+
+            });
+
+        } // END .price-range-slider
+
+        // AJAX
+        function tt_ajax_search_results() {
+            "use strict";
+            if (jQuery('.property-search-feature')) {
+                var feature = [];
+                jQuery('.property-search-feature:checked').each(function () {
+                    feature.push(jQuery(this).val());
+                });
+            }
+            var ajaxData = jQuery('.property-search-form').first().serialize() + "&action=tt_ajax_search&base=" + window.location.pathname;
+            jQuery.ajax({
+
+                type: 'GET',
+                url: ajax_object.ajax_url,
+                data: ajaxData,
+                success: function (response) {
+                    jQuery('.loader-container').fadeOut();
+                    jQuery('.property-items').html(response);
+                    video_and_social_share();
+                },
+                error: function () {
+                    console.log('failed');
+                }
+
+            });
+
+        }
+
+        // Remove Map Markers & Marker Cluster
+        function removeMarkers() {
+            // http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/examples/speed_test.js
+            if (typeof newMarkers != 'undefined') {
+                for (i = 0; i < newMarkers.length; i++) {
+                    newMarkers[i].setMap(null);
+                    // Close Infoboxes
+                    if (newMarkers[i].infobox.getVisible()) {
+                        newMarkers[i].infobox.hide();
+                    }
+                }
+                if (markerCluster) {
+                    markerCluster.clearMarkers();
+                }
+                markers = [];
+                newMarkers = [];
+                bounds = [];
+            }
+
+        }
+
+        // Fire Search Results Ajax On Search Field Change (Exclude Datepicker)
+        jQuery('.property-search-form select, .property-search-form input').not('.datepicker').on('change', function () {
+            loader();
+            if (jQuery('.google-map').length > 0) {
+                removeMarkers();
+            }
+            tt_ajax_search_results();
+        });
+
+        // Fire Search Results Ajax On Search Field "Datepicker" Change
+        jQuery('.property-search-form input.datepicker').on('changeDate', function () {
+            loader();
+            if (jQuery('.google-map').length > 0) {
+                removeMarkers();
+            }
+            tt_ajax_search_results();
+        });
+
+        function loader() {
+            jQuery('.property-items').addClass('loading');
+            jQuery('.property-items').html('<div class="loader-container"><div class="svg-loader"></div></div>');
+        }
+
+        // AJAX script for pagination
+        jQuery(function ($) {
+            $('.pagination-ajax a').live('click', function (e) {
+                e.preventDefault();
+
+                var link_page = $(this).attr('href');
+                var page_number = $(this).text();
+
+                if ($(this).hasClass("next")) {
+                    var next_from = parseInt($('.pagination-ajax li span').text());
+                    page_number = next_from + 1;
+                }
+
+                if ($(this).hasClass("prev")) {
+                    var prev_from = parseInt($('.pagination-ajax li span').text());
+                    page_number = prev_from - 1;
+                }
+
+                $('.property-items').fadeOut(500);
+                removeMarkers();
+
+                var ajaxData = jQuery('.property-search-form').first().serialize() + "&action=tt_ajax_search&base=" + window.location.pathname + "&pagenumber=" + page_number;
+                //console.log(ajaxData);
+                $.ajax({
+                    type: 'GET',
+                    url: ajax_object.ajax_url,
+                    data: ajaxData,
+                    success: function (response) {
+                        $(".property-items").html(response);
+                        $(".property-items").fadeIn(500);
+                        window.history.pushState(".property-items", "Properties", link_page);
+                    },
+                    error: function () {
+                        console.log('failed');
+                    }
+                });
+
+            });
+        });
+
+        // END AJAX script for pagination
+
+    }); // END window.load
+
+
+    jQuery('.menu-item-has-children, .menu-item-language').click(function () {
+        if (jQuery('body').hasClass('show-nav')) {
+            jQuery(this).find('.sub-menu').toggleClass('open');
+        }
+    });
 
 
 </script>
 
 <script>
 
-		jQuery('.container').on("click",'.add-to-favorites',function() {
+    jQuery('.container').on("click", '.add-to-favorites', function () {
 
-							jQuery('#msg-login-to-add-favorites').removeClass('hide');
-				jQuery('a[href="#tab-login"]').tab('show');
-				jQuery('#login-modal').modal();
-				jQuery('#login-modal').on('hidden.bs.modal', function () {
-					jQuery('#msg-login-to-add-favorites').addClass('hide');
-				});
+        jQuery('#msg-login-to-add-favorites').removeClass('hide');
+        jQuery('a[href="#tab-login"]').tab('show');
+        jQuery('#login-modal').modal();
+        jQuery('#login-modal').on('hidden.bs.modal', function () {
+            jQuery('#msg-login-to-add-favorites').addClass('hide');
+        });
 
-		});
+    });
 
 </script>
 
 
 <script>
-		jQuery('.container').on("click",'.add-to-follow',function() {
+    jQuery('.container').on("click", '.add-to-follow', function () {
 
-								jQuery('a[href="#tab-login"]').tab('show');
-					jQuery('#login-modal').modal();
-					jQuery('#msg-login-to-add-follow').removeClass('hide');
-					jQuery('#msg-login-to-add-follow').addClass('hide');
+        jQuery('a[href="#tab-login"]').tab('show');
+        jQuery('#login-modal').modal();
+        jQuery('#msg-login-to-add-follow').removeClass('hide');
+        jQuery('#msg-login-to-add-follow').addClass('hide');
 
-			});
+    });
 
 </script>
 <script type="text/javascript" src="/build/bundle.js" charset="utf-8"></script>
