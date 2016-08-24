@@ -1,7 +1,9 @@
+require('./style.css')
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//import { routes } from './routes'
+import { routes } from './routes'
 
 import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router'
 
@@ -17,6 +19,6 @@ import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-ro
 // );
 
 ReactDOM.render(
-  <h1>Welcome to rent4.me - social network for those who want to rent apartments without agents</h1>,
-  document.getElementById('asdasdasdsasd')
+  <Router history={browserHistory} routes={routes} />,
+  document.getElementById('example')
 );
