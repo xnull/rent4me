@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom';
 //import { routes } from './routes'
 
 import PropertyPreviewMainList from './components/PropertyPreviewMainList.React'
+import PropertySearchBox from './components/PropertySearchBox.React'
+import Header from './components/Header.React'
+import Menu from './components/Menu.React'
 
 import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router'
 
@@ -68,7 +71,16 @@ const fakeData = [
     }
 ]
 
+
 ReactDOM.render(
-  <PropertyPreviewMainList apartments={fakeData}/>,
+  <Header />,
+  document.getElementById('topblabla')
+);
+
+ReactDOM.render(
+  <div>
+    <PropertySearchBox />
+    <PropertyPreviewMainList apartments={fakeData}/>
+  </div>,
   document.getElementById('asdasdasdsasd')
 );
