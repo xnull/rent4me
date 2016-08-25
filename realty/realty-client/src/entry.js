@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//import { routes } from './routes'
-
-import Content from './components/Content.React'
-import Header from './components/Header.React'
-import Footer from './components/Footer.React'
+import { routes } from './routes'
 
 import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router'
 
@@ -20,18 +16,7 @@ import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-ro
 //   document.getElementById('example')
 // );
 
-
 ReactDOM.render(
-  <Header />,
-  document.getElementById('topblabla')
-);
-
-ReactDOM.render(
-  <Content />,
-  document.getElementById('contentblabla')
-);
-
-ReactDOM.render(
-  <Footer />,
-  document.getElementById('bottomblabla')
+  <Router history={browserHistory} routes={routes} />,
+  document.getElementById('app_container')
 );

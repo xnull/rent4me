@@ -5,7 +5,7 @@ import React, {Component, PropTypes} from 'react'
 import PropertySearchBox from './PropertySearchBox.React'
 import PropertyPreviewMainList from './PropertyPreviewMainList.React'
 
-export default class Content extends Component {
+export default class Main extends Component {
     render() {
       const fakeData = [
             {
