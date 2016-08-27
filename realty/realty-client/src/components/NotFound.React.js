@@ -8,7 +8,7 @@ export default class NotFound extends Component {
 
         return (
           <article>
-            <h3>Not found</h3>
+            <h3>Страница не найдена</h3>
           </article>
         )
     }
