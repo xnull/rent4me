@@ -2,15 +2,18 @@
  * Created by dionis on 24.08.16.
  */
 import React, {Component, PropTypes} from 'react'
+import { Link } from 'react-router'
 
 export default class PropertyPreview extends Component {
     render() {
         const apartment = this.props.apartment
 
+        const linkLocation = "/apartments/"+apartment.id
+
         return (
             <div className="property-item border-box  featured">
 
-                <a href="http://demo.themetrail.com/realty/property/futuristic-nest/">
+                <Link to={linkLocation}>
                     <figure className="property-thumbnail">
                         <img width="600" height="300"
                              src={apartment.previewImage}
@@ -30,36 +33,24 @@ export default class PropertyPreview extends Component {
                             }
                         </figcaption>
                     </figure>
-                </a>
+                </Link>
 
                 <div className="property-content content">
                     <div className="property-title">
-                        <a href="http://demo.themetrail.com/realty/property/futuristic-nest/">
-                            <h3 className="title">Futuristic Nest</h3></a>
+                        <Link to={linkLocation}>
+                            <h3 className="title">{apartment.address}</h3></Link>
                     </div>
                     <div className="property-meta clearfix">
                         <div>
                             <div className="meta-title"><i className="icon-size"></i></div>
-                            <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Size">
-                                1500 sq ft
+                            <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Площадь">
+                                1500 м<sup>2</sup>
                             </div>
                         </div>
                         <div>
                             <div className="meta-title"><i className="icon-rooms"></i></div>
-                            <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Rooms">8
-                                Rooms
-                            </div>
-                        </div>
-                        <div>
-                            <div className="meta-title"><i className="icon-bedrooms"></i></div>
-                            <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Bedrooms">3
-                                Bedrooms
-                            </div>
-                        </div>
-                        <div>
-                            <div className="meta-title"><i className="icon-bathrooms"></i></div>
-                            <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Bathrooms">2
-                                Bathrooms
+                            <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Комнат">8
+                                Комнат
                             </div>
                         </div>
                     </div>
@@ -68,7 +59,7 @@ export default class PropertyPreview extends Component {
                     <div className="property-price">
 
                         <div className="price-tag">
-                            $5,000&nbsp;per month
+                            6000 рублей в месяц
                         </div>
 
                         <div className="property-icons">
@@ -87,17 +78,15 @@ export default class PropertyPreview extends Component {
                                href="http://pinterest.com/pin/create/button/?url=http://demo.themetrail.com/realty/property/futuristic-nest/&amp;description=http%3A%2F%2Fdemo.themetrail.com%2Frealty%2Fproperty%2Ffuturistic-nest%2F"><i
                                 className="icon-pinterest"></i></a>
 						</div>
-						<i className="icon-share share-property" data-toggle="tooltip" data-original-title="Share"
+						<i className="icon-share share-property" data-toggle="tooltip" data-original-title="Поделиться"
                            title=""></i>
 					</span>
 
                             <i className="add-to-favorites icon-heart-1" data-fav-id="142" data-toggle="tooltip"
-                               title="" data-original-title="Add To Favorites"></i><a href="//vimeo.com/63241912"
+                               title="" data-original-title="В избранное"></i><a href="//vimeo.com/63241912"
                                                                                       className="property-video-popup"><i
                             className="icon-video-camera" data-toggle="tooltip" title=""
-                            data-original-title="Watch Trailer"></i></a><i className="icon-add compare-property"
-                                                                           data-compare-id="142" data-toggle="tooltip"
-                                                                           title="" data-original-title="Compare"></i>
+                            data-original-title="Видео превью"></i></a>
 
                         </div>
                         <div className="clearfix"></div>

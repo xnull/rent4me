@@ -87,13 +87,11 @@ export default class Main extends Component {
 
                                           <div id="pagination">
                                               <ul className='page-numbers'>
-                                                  <li><span className='page-numbers current'>1</span></li>
-                                                  <li><a className='page-numbers'
-                                                         href='http://demo.themetrail.com/realty/page/2/#property-items'>2</a>
+                                                  <li>
+                                                    <a className="page-numbers">
+                                                      Далее
+                                                    </a>
                                                   </li>
-                                                  <li><a className="next page-numbers"
-                                                         href="http://demo.themetrail.com/realty/page/2/#property-items"><i
-                                                          className="icon-arrow-right"></i></a></li>
                                               </ul>
                                           </div>
 

@@ -2,6 +2,8 @@
  * Created by dionis on 24.08.16.
  */
 import React, {Component, PropTypes} from 'react'
+import { Link } from 'react-router'
+
 import TopHeader from './TopHeader.React'
 import SiteBranding from './SiteBranding.React'
 import LoginModal from './LoginModal.React'
@@ -47,9 +49,10 @@ export default class Footer extends Component {
                                 <div className="widget-content">
                                     <div className="menu-custom-footer-menu-container">
                                         <ul id="menu-custom-footer-menu" className="menu">
-                                            <li id="menu-item-1078"
-                                                className="menu-item menu-item-type-custom menu-item-object-custom menu-item-1078"><a
-                                                    href="http://themeforest.net/item/realty-unique-real-estate-wordpress-theme/8583309/support">Support</a></li>
+                                            <li
+                                                className="menu-item menu-item-type-custom menu-item-object-custom">
+                                                <Link to="/support">Support</Link>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
