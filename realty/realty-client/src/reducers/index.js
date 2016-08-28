@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 
-import Apartment from './Apartment'
+import Apartments from './Apartments'
 
-export default combineReducers({
-  Apartment, routing: routerReducer
-})
+const reducers = { Apartments, routing: routerReducer }
+
+console.log('reducers', reducers)
+
+export default combineReducers(reducers)
