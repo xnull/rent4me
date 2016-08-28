@@ -8,10 +8,10 @@ export default class PropertyPreviewMainList extends Component {
     render() {
         const apartments = this.props.apartments
 
-        const apartmentsDOM = apartments.map( apartment =>
-          (
-            <PropertyPreviewListItemWrapper key={apartment.id} apartment={apartment}/>
-          )
+        const apartmentsDOM = apartments.map(apartment =>
+            (
+                <PropertyPreviewListItemWrapper key={apartment.id} apartment={apartment}/>
+            )
         )
 
         return (<ul className="row list-unstyled">{apartmentsDOM}</ul>)

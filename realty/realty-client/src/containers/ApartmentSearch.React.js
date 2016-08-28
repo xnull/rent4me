@@ -20,7 +20,7 @@ class ApartmentSearch extends Component {
     initialLoadApartments() {
         console.log('Loading apartments')
         const Apartments = this.props.Apartments;
-        if(Apartments.apartments.length == 0) {
+        if (Apartments.apartments.length == 0) {
             const {clearApartmentSearch} = this.props.apartmentActions;
             clearApartmentSearch()
         }

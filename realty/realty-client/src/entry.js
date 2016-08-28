@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
+import {Provider} from 'react-redux'
 
-import { routes } from './routes'
+import {routes} from './routes'
 
 import configureStore from './stores/configureStore'
 
-import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
+import {Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-router'
+import {syncHistoryWithStore} from 'react-router-redux'
 
 // import configureStore from './store/configureStore.js'
 
@@ -26,7 +26,7 @@ const history = syncHistoryWithStore(browserHistory, store)
 
 ReactDOM.render(
     <Provider store={store}>
-      <Router history={history} routes={routes} />
+        <Router history={history} routes={routes}/>
     </Provider>,
-  document.getElementById('app_container')
+    document.getElementById('app_container')
 );

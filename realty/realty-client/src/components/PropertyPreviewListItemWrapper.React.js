@@ -9,9 +9,9 @@ export default class PropertyPreviewListItemWrapper extends Component {
         const apartment = this.props.apartment
 
         return (
-          <li className="col-lg-4 col-md-6">
-            <PropertyPreview apartment={apartment} />
-          </li>
+            <li className="col-lg-4 col-md-6">
+                <PropertyPreview apartment={apartment}/>
+            </li>
         )
     }
 }

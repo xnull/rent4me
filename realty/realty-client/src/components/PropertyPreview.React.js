@@ -2,13 +2,13 @@
  * Created by dionis on 24.08.16.
  */
 import React, {Component, PropTypes} from 'react'
-import { Link } from 'react-router'
+import {Link} from 'react-router'
 
 export default class PropertyPreview extends Component {
     render() {
         const apartment = this.props.apartment
 
-        const linkLocation = "/apartments/"+apartment.id
+        const linkLocation = "/apartments/" + apartment.id
 
         return (
             <div className="property-item border-box  featured">
@@ -84,7 +84,7 @@ export default class PropertyPreview extends Component {
 
                             <i className="add-to-favorites icon-heart-1" data-fav-id="142" data-toggle="tooltip"
                                title="" data-original-title="В избранное"></i><a href="//vimeo.com/63241912"
-                                                                                      className="property-video-popup"><i
+                                                                                 className="property-video-popup"><i
                             className="icon-video-camera" data-toggle="tooltip" title=""
                             data-original-title="Видео превью"></i></a>
 

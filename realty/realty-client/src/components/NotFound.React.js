@@ -7,9 +7,9 @@ export default class NotFound extends Component {
     render() {
 
         return (
-          <article>
-            <h3>Страница не найдена</h3>
-          </article>
+            <article>
+                <h3>Страница не найдена</h3>
+            </article>
         )
     }
 }
