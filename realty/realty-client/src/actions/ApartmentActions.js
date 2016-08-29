@@ -19,7 +19,7 @@ export function clearApartmentSearch() {
             type: APARTMENT_LIST_CLEAR_LOADING
         })
 
-        const newId = () => new Date().getTime()+""
+        const newId = () => new Date().getTime() + ""
 
         fetch('http://rent4.me/rest/cities/search?lng=24.6817121&lat=59.397131900000005')
             .then(function (response) {

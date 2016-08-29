@@ -6,9 +6,9 @@ import {routes} from './routes'
 
 import configureStore from './stores/configureStore'
 
-import { applyRouterMiddleware, Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-router'
+import {applyRouterMiddleware, Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-router'
 import {syncHistoryWithStore} from 'react-router-redux'
-import { useScroll } from 'react-router-scroll'
+import {useScroll} from 'react-router-scroll'
 
 
 // import configureStore from './store/configureStore.js'
