@@ -2,6 +2,8 @@
  * Created by dionis on 24.08.16.
  */
 import React, {Component, PropTypes} from 'react'
+// http://react-google-maps.tomchentw.com/#/places/search-box?_k=9s5hin
+// import { GoogleMap, Marker, SearchBox } from "react-google-maps";
 
 export default class PropertySearchBox extends Component {
     render() {
@@ -15,7 +17,7 @@ export default class PropertySearchBox extends Component {
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group select">
                         <input type="text" name="location" id="location"
-                               placeholder="Start typing address..." className="form-control"/>
+                               placeholder="Введите Адрес/метро/улицу" className="form-control"/>
                     </div>
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group select">
                         <select name="status" id="status" className="form-control chosen-select">

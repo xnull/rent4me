@@ -10,7 +10,8 @@
     "react-router-redux": "4.0.5",
     "react-router-scroll": "0.3.2",
     "remarkable": "1.6.2",
-    "whatwg-fetch": "1.0.0"
+    "whatwg-fetch": "1.0.0",
+    "react-google-maps": "4.11.0"
   },
   "devDependencies": {
     "webpack": "1.13.2",
