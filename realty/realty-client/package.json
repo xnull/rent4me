@@ -1,28 +1,28 @@
 {
   "dependencies": {
-    "react": "latest",
-    "react-dom": "latest",
-    "redux": "latest",
-    "react-redux": "latest",
-    "redux-logger": "latest",
-    "redux-thunk": "latest",
-    "react-router": "latest",
-    "react-router-redux": "latest",
-    "react-router-scroll": "latest",
-    "remarkable": "latest",
-    "whatwg-fetch": "latest"
+    "react": "15.3.1",
+    "react-dom": "15.3.1",
+    "redux": "3.5.2",
+    "react-redux": "4.4.5",
+    "redux-logger": "2.6.1",
+    "redux-thunk": "2.1.0",
+    "react-router": "2.7.0",
+    "react-router-redux": "4.0.5",
+    "react-router-scroll": "0.3.2",
+    "remarkable": "1.6.2",
+    "whatwg-fetch": "1.0.0"
   },
   "devDependencies": {
-    "webpack": "latest",
-    "webpack-dev-server": "latest",
-    "webpack-dashboard": "latest",
-    "css-loader": "latest",
-    "style-loader": "latest",
-    "babel-loader": "latest",
-    "babel-core": "latest",
-    "babel-preset-es2015": "latest",
-    "babel-preset-react": "latest",
-    "babel-polyfill": "latest",
-    "babel-plugin-transform-object-rest-spread": "latest"
+    "webpack": "1.13.2",
+    "webpack-dev-server": "1.15.0",
+    "webpack-dashboard": "0.1.8",
+    "css-loader": "0.23.1",
+    "style-loader": "0.13.1",
+    "babel-loader": "6.2.5",
+    "babel-core": "6.13.2",
+    "babel-preset-es2015": "6.13.2",
+    "babel-preset-react": "6.11.1",
+    "babel-polyfill": "6.13.0",
+    "babel-plugin-transform-object-rest-spread": "6.8.0"
   }
 }
