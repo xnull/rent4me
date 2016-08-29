@@ -6,8 +6,10 @@ import {routes} from './routes'
 
 import configureStore from './stores/configureStore'
 
-import {Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-router'
+import { applyRouterMiddleware, Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-router'
 import {syncHistoryWithStore} from 'react-router-redux'
+import { useScroll } from 'react-router-scroll'
+
 
 // import configureStore from './store/configureStore.js'
 
@@ -26,7 +28,7 @@ const history = syncHistoryWithStore(browserHistory, store)
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router history={history} routes={routes}/>
+        <Router history={history} routes={routes} render={applyRouterMiddleware(useScroll())}/>
     </Provider>,
     document.getElementById('app_container')
 );

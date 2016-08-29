@@ -8,6 +8,7 @@
 		, "redux-thunk": "latest"
 		, "react-router": "latest"
 		, "react-router-redux": "latest"
+		, "react-router-scroll": "latest"
 		, "remarkable": "latest"
 		, "whatwg-fetch": "latest"
 	}
