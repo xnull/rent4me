@@ -10,26 +10,32 @@ export default class PropertyPreview extends Component {
 
         const linkLocation = "/apartments/" + apartment.id
 
+        const imgUrl = (apartment.external_images.length > 0
+            ? apartment.external_images[0].full_picture_url
+            : 'http://www.madrascityproperties.com/public/images/no-propertyfound.png')
+
         return (
             <div className="property-item border-box  featured">
 
                 <Link to={linkLocation}>
                     <figure className="property-thumbnail">
                         <img width="600" height="300"
-                             src={apartment.previewImage}
-                             className=" wp-post-image" alt="One Story House"/>
+                             src={imgUrl}
+                             className=" wp-post-image" alt=""/>
                         <figcaption>
                             <div className="property-excerpt">
-                                <h4 className="address">{apartment.address}</h4>
+                                {apartment.address.formatted_address? <h4 className="address">{apartment.address.formatted_address}</h4> : ''}
                                 <p>{apartment.description}</p>
                             </div>
                             {
-                                apartment.rented
+                                apartment.published
                                     ?
                                     (<div className="property-tag tag-left">
-                                        Rented Out
+                                        Added @ {apartment.created}
                                     </div>)
-                                    : ''
+                                    : <div className="property-tag tag-left">
+                                    Rented out
+                                </div>
                             }
                         </figcaption>
                     </figure>
@@ -38,7 +44,7 @@ export default class PropertyPreview extends Component {
                 <div className="property-content content">
                     <div className="property-title">
                         <Link to={linkLocation}>
-                            <h3 className="title">{apartment.address}</h3></Link>
+                            <h3 className="title">{apartment.address.formatted_address ? apartment.address.formatted_address: ''}</h3></Link>
                     </div>
                     <div className="property-meta clearfix">
                         <div>
@@ -59,7 +65,18 @@ export default class PropertyPreview extends Component {
                     <div className="property-price">
 
                         <div className="price-tag">
-                            6000 рублей в месяц
+                            { (apartment.rental_fee || '???') } рублей {([apartment.fee_period].map(period=>{
+                            switch((period||'')) {
+                                case 'HOURLY':
+                                    return "в час";
+                                case 'DAILY':
+                                    return "в день";
+                                case 'WEEKLY':
+                                    return "в неделю";
+                                case 'MONTHLY':
+                                    return "в месяц";
+                            }
+                        }))}
                         </div>
 
                         <div className="property-icons">

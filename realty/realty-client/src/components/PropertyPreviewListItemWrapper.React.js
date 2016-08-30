@@ -7,6 +7,7 @@ import PropertyPreview from './PropertyPreview.React'
 export default class PropertyPreviewListItemWrapper extends Component {
     render() {
         const apartment = this.props.apartment
+        console.log("Apartment wrapper for", apartment)
 
         return (
             <li className="col-lg-4 col-md-6">
