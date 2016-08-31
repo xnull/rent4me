@@ -168,10 +168,9 @@ class PropertySearchBox extends Component {
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
-                        <input type="number" name="minprice" id="minprice" className="form-control chosen-select"
+                        <input type="text" name="minprice" id="minprice" className="form-control chosen-select"
                                onChange={this.changeMinPrice}
-                               placeholder="Цена мин" value={
-                                    (propertySearch.minPrice ? NumberUtils.formatNumber(propertySearch.minPrice) : "")}/>
+                               placeholder="Цена мин" value={(propertySearch.minPrice ? NumberUtils.formatNumber(propertySearch.minPrice) : null)}/>
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
