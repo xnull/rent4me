@@ -21,9 +21,7 @@ class PropertySearchBox extends Component {
         this.changeMaxPrice = this.changeMaxPrice.bind(this)
         this.changeMinRooms = this.changeMinRooms.bind(this)
         this.changeMaxRooms = this.changeMaxRooms.bind(this)
-        this.changeTypez = this.changeTypez.bind(this)
-        this.state = {blabla: ''}
-
+        this.changeType = this.changeType.bind(this)
     }
 
     changeMinPrice(e) {
@@ -50,9 +48,10 @@ class PropertySearchBox extends Component {
         changeMaxRooms(value)
     }
 
-    changeTypez(e) {
-        console.log('change type', e)
-
+    changeType(e) {
+        const value = e.target.value
+        const {changeType } = this.props.propertySearchActions
+        changeType(value)
     }
 
     componentDidMount() {
@@ -66,6 +65,14 @@ class PropertySearchBox extends Component {
             console.log('Changed to place', place);
             _self.onPlaceChange(place)
         })
+
+        this._typeSelect.onchange = function() {
+            console.log(_self._typeSelect.options[_self._typeSelect.selectedIndex].value)
+            console.log(_self._typeSelect.selectedIndex)
+            _self.changeType({target: {
+                value: 1
+            }})
+        };
         // this._autocompleteInput.value = "Москва"
     }
 
@@ -179,10 +186,11 @@ class PropertySearchBox extends Component {
 
 
 
+                    {/*TODO: bind to on change native dom event because this element is transformed to something blabla*/}
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group select">
-                        {/*TODO: bind to on change native dom event because this element is transformed to something blabla*/}
-                        <select id="aaasdadasds" className="form-control chosen-select" onChange={this.changeTypez} value={this.state.blabla}>
-                            <option key={''} value={''}>{''}</option>
+                        <select className="form-control chosen-select"
+                            ref={(c) => this._typeSelect = c}
+                        >
                             <option key={'RENTER'} value={'RENTER'}>{'RENTER'}</option>
                             <option key={'LESSOR'} value={'LESSOR'}>{'LESSOR'}</option>
                         </select>
