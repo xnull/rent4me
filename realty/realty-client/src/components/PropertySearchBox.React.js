@@ -18,6 +18,11 @@ class PropertySearchBox extends Component {
         this.onPlaceChange = this.onPlaceChange.bind(this)
         this.onSearchClicked = this.onSearchClicked.bind(this)
         this.changeMinPrice = this.changeMinPrice.bind(this)
+        this.changeMaxPrice = this.changeMaxPrice.bind(this)
+        this.changeMinRooms = this.changeMinRooms.bind(this)
+        this.changeMaxRooms = this.changeMaxRooms.bind(this)
+        this.changeTypez = this.changeTypez.bind(this)
+        this.state = {blabla: ''}
 
     }
 
@@ -25,6 +30,29 @@ class PropertySearchBox extends Component {
         const value = e.target.value
         const {changeMinPrice } = this.props.propertySearchActions
         changeMinPrice(value)
+    }
+
+    changeMaxPrice(e) {
+        const value = e.target.value
+        const {changeMaxPrice } = this.props.propertySearchActions
+        changeMaxPrice(value)
+    }
+
+    changeMinRooms(e) {
+        const value = e.target.value
+        const {changeMinRooms } = this.props.propertySearchActions
+        changeMinRooms(value)
+    }
+
+    changeMaxRooms(e) {
+        const value = e.target.value
+        const {changeMaxRooms } = this.props.propertySearchActions
+        changeMaxRooms(value)
+    }
+
+    changeTypez(e) {
+        console.log('change type', e)
+
     }
 
     componentDidMount() {
@@ -84,6 +112,49 @@ class PropertySearchBox extends Component {
         this.onSearchClicked()
     }
 
+    metroDom() {
+        return (<div className="col-xs-12 col-sm-4 col-md-3 form-group">
+
+
+            <select name="metro" id="metro"
+                    className="form-control chosen-select">
+                <option value="">Метро</option>
+
+
+                <option value="42">Авиамоторная</option>
+
+
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+                <option value="99">Октябрьская</option>
+
+            </select>
+        </div>)
+    }
+
     render() {
         const propertySearch = this.props.PropertySearch
 
@@ -98,7 +169,7 @@ class PropertySearchBox extends Component {
                 <div className="row">
 
 
-                    <div className="col-xs-12 col-sm-8 col-md-6 form-group select">
+                    <div className="col-xs-12 col-sm-4 col-md-3 form-group select">
                         <input type="text" name="location" id="location"
                                ref={(c) => this._autocompleteInput = c}
                                placeholder="Введите Адрес/метро/улицу" className="form-control"/>
@@ -106,75 +177,40 @@ class PropertySearchBox extends Component {
 
 
 
-                    <div className="col-xs-12 col-sm-4 col-md-3 form-group">
 
-
-                        <select name="metro" id="metro"
-                                className="form-control chosen-select">
-                            <option value="">Метро</option>
-
-
-                            <option value="42">Авиамоторная</option>
-
-
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-                            <option value="99">Октябрьская</option>
-
-                        </select>
-
-
-                    </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group select">
-                        <select name="status" id="status" className="form-control chosen-select" defaultValue="renter">
-                            <option value="renter">
-                                Я хочу Снять
-                            </option>
-                            <option value="lessor">
-                                Я хочу Сдать
-                            </option>
+                        {/*TODO: bind to on change native dom event because this element is transformed to something blabla*/}
+                        <select id="aaasdadasds" className="form-control chosen-select" onChange={this.changeTypez} value={this.state.blabla}>
+                            <option key={''} value={''}>{''}</option>
+                            <option key={'RENTER'} value={'RENTER'}>{'RENTER'}</option>
+                            <option key={'LESSOR'} value={'LESSOR'}>{'LESSOR'}</option>
                         </select>
                     </div>
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
-                        <input type="number" name="minrooms" id="minrooms" className="form-control chosen-select" min="1" max="3" placeholder="Комнат мин"/>
+                        <input type="number" className="form-control chosen-select" min="1" max="3" placeholder="Комнат мин"
+                               onChange={this.changeMinRooms}
+                               value={(propertySearch.minRooms ? propertySearch.minRooms : '')}/>
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
-                        <input type="number" name="maxrooms" id="maxrooms" className="form-control chosen-select" min="1" max="3" placeholder="Комнат макс"/>
+                        <input type="number" className="form-control chosen-select" min="1" max="3" placeholder="Комнат макс"
+                               onChange={this.changeMaxRooms}
+                               value={(propertySearch.maxRooms ? propertySearch.maxRooms : '')}/>
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
-                        <input type="text" name="minprice" id="minprice" className="form-control chosen-select"
+                        <input type="text" className="form-control chosen-select"
                                onChange={this.changeMinPrice}
-                               placeholder="Цена мин" value={(propertySearch.minPrice ? NumberUtils.formatNumber(propertySearch.minPrice) : null)}/>
+                               placeholder="Цена мин"
+                               value={(propertySearch.minPrice ? NumberUtils.formatNumber(propertySearch.minPrice) : '')}/>
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
-                        <input type="number" name="maxprice" id="maxprice" className="form-control chosen-select" min="1" max="3" placeholder="Цена макс"/>
+                        <input type="text" className="form-control chosen-select"
+                               onChange={this.changeMaxPrice}
+                               placeholder="Цена макс"
+                               value={(propertySearch.maxPrice ? NumberUtils.formatNumber(propertySearch.maxPrice) : '')}/>
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">

@@ -20,16 +20,32 @@ const initialState = {
     },
     minPrice: null,
     maxPrice: null,
+    type: 'RENTER',
     error: ''
 };
 
 export default function PropertySearch(state = initialState, action) {
     console.log('page reducer, state:', action.type, state, action.payload)
     switch (action.type) {
-        case PROPERTY_SEARCH_GEOMETRY_CHANGED:
-            return {...state, geometry: action.payload }
-        case PROPERTY_SEARCH_MIN_PRICE_CHANGED:
-            return {...state, minPrice: action.payload }
+        case PROPERTY_SEARCH_GEOMETRY_CHANGED: {
+            const newGeometry = action.payload
+            return {...state, geometry: newGeometry }
+        }
+        case PROPERTY_SEARCH_MIN_PRICE_CHANGED: {
+            return {...state, minPrice:  action.payload}
+        }
+        case PROPERTY_SEARCH_MAX_PRICE_CHANGED: {
+            return {...state, maxPrice: action.payload}
+        }
+        case PROPERTY_SEARCH_MIN_ROOMS_CHANGED: {
+            return {...state, minRooms:  action.payload}
+        }
+        case PROPERTY_SEARCH_MAX_ROOMS_CHANGED: {
+            return {...state, maxRooms: action.payload}
+        }
+        case PROPERTY_SEARCH_TYPE_CHANGED: {
+            return {...state, type: action.payload}
+        }
         default:
             return state
     }

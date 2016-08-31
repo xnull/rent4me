@@ -2,22 +2,27 @@
  * Created by dionis on 24.08.16.
  */
 import React, {Component, PropTypes} from 'react'
-import {Link} from 'react-router'
+import SmartLink from './SmartLink.React'
+import moment from 'moment'
 
 export default class PropertyPreview extends Component {
     render() {
         const apartment = this.props.apartment
 
-        const linkLocation = "/apartments/" + apartment.id
+        // const linkLocation = "/apartments/" + apartment.id
+        //temporary workaround until property page will be done
+        const linkLocation = apartment.external_link ?
+            apartment.external_link
+            : "/apartments/" + apartment.id
 
         const imgUrl = (apartment.external_images.length > 0
             ? apartment.external_images[0].full_picture_url
-            : 'http://www.madrascityproperties.com/public/images/no-propertyfound.png')
+            : '/images/no-propertyfound.png')
 
         return (
             <div className="property-item border-box  featured">
 
-                <Link to={linkLocation}>
+                <SmartLink to={linkLocation}>
                     <figure className="property-thumbnail">
                         <img width="600" height="300"
                              src={imgUrl}
@@ -31,20 +36,20 @@ export default class PropertyPreview extends Component {
                                 apartment.published
                                     ?
                                     (<div className="property-tag tag-left">
-                                        Added @ {apartment.created}
+                                        Добавлено {moment(apartment.created).format('lll')}
                                     </div>)
                                     : <div className="property-tag tag-left">
-                                    Rented out
+                                    Объявление неактивно
                                 </div>
                             }
                         </figcaption>
                     </figure>
-                </Link>
+                </SmartLink>
 
                 <div className="property-content content">
                     <div className="property-title">
-                        <Link to={linkLocation}>
-                            <h3 className="title">{apartment.address.formatted_address ? apartment.address.formatted_address: ''}</h3></Link>
+                        <SmartLink to={linkLocation}>
+                            <h3 className="title">{apartment.address.formatted_address ? apartment.address.formatted_address: ''}</h3></SmartLink>
                     </div>
                     <div className="property-meta clearfix">
                         <div>

@@ -14,6 +14,8 @@ import {
     PROPERTY_SEARCH_TEXT_REMOVED,
 } from '../constants/PropertySearchConstants'
 
+import NumberUtils from '../utils/NumberUtils'
+
 export function changeGeometry(geometry) {
     return (dispatch) => {
         dispatch({
@@ -27,16 +29,17 @@ export function changeMinPrice(price) {
     return (dispatch) => {
         dispatch({
             type: PROPERTY_SEARCH_MIN_PRICE_CHANGED,
-            payload: price
+            payload: NumberUtils.parseNumber(price)
         })
     }
 }
 
 export function changeMaxPrice(price) {
     return (dispatch) => {
+        price = NumberUtils.parseNumber(price)
         dispatch({
             type: PROPERTY_SEARCH_MAX_PRICE_CHANGED,
-            payload: price
+            payload: NumberUtils.parseNumber(price)
         })
     }
 }
@@ -45,7 +48,7 @@ export function changeMinRooms(rooms) {
     return (dispatch) => {
         dispatch({
             type: PROPERTY_SEARCH_MIN_ROOMS_CHANGED,
-            payload: rooms
+            payload: NumberUtils.numBetween(NumberUtils.parseNumber(rooms), 1, 3)
         })
     }
 }
@@ -54,7 +57,7 @@ export function changeMaxRooms(rooms) {
     return (dispatch) => {
         dispatch({
             type: PROPERTY_SEARCH_MAX_ROOMS_CHANGED,
-            payload: rooms
+            payload: NumberUtils.numBetween(NumberUtils.parseNumber(rooms), 1, 3)
         })
     }
 }
@@ -77,7 +80,7 @@ export function changeMetroRemoved(metroInfo) {
     }
 }
 
-export function changeTextChanged(text) {
+export function changeText(text) {
     return (dispatch) => {
         dispatch({
             type: PROPERTY_SEARCH_TEXT_CHANGED,
@@ -86,20 +89,19 @@ export function changeTextChanged(text) {
     }
 }
 
-export function changeTextRemoved(text) {
+export function removeText() {
     return (dispatch) => {
         dispatch({
-            type: PROPERTY_SEARCH_TEXT_REMOVED,
-            payload: text
+            type: PROPERTY_SEARCH_TEXT_REMOVED
         })
     }
 }
 
-export function changeTypeChanged(type) {
+export function changeType(type) {
     return (dispatch) => {
         dispatch({
             type: PROPERTY_SEARCH_TYPE_CHANGED,
-            payload: type
+            payload: type == 'LESSOR' ? 'LESSOR' : 'RENTER'
         })
     }
 }

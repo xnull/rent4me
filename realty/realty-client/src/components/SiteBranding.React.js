@@ -14,11 +14,11 @@ export default class SiteBranding extends Component {
 
                     <p className="site-title">
                         <Link to="/">
-                            <img width="124" height="23"
-                                 src="http://demo.themetrail.com/realty/wp-content/uploads/2015/10/logo.png"
+                            <img
+                                 src="/images/rent4me-icon.png"
                                  className="site-logo"
                                  alt="logo"
-                                 srcSet="http://demo.themetrail.com/realty/wp-content/uploads/2015/10/logo@2x.png 2x"/>
+                                 srcSet="/images/rent4me-icon.png 2x"/>
                         </Link>
                     </p>
 
