@@ -5,6 +5,7 @@ import React, {Component, PropTypes} from 'react'
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import NumberUtils from '../utils/NumberUtils'
 
 import * as propertySearchActions from '../actions/PropertySearchActions'
 import * as apartmentActions from '../actions/ApartmentActions'
@@ -16,6 +17,14 @@ class PropertySearchBox extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.onPlaceChange = this.onPlaceChange.bind(this)
         this.onSearchClicked = this.onSearchClicked.bind(this)
+        this.changeMinPrice = this.changeMinPrice.bind(this)
+
+    }
+
+    changeMinPrice(e) {
+        const value = e.target.value
+        const {changeMinPrice } = this.props.propertySearchActions
+        changeMinPrice(value)
     }
 
     componentDidMount() {
@@ -77,9 +86,8 @@ class PropertySearchBox extends Component {
 
     render() {
         const propertySearch = this.props.PropertySearch
-        const { changeGeometry } = this.props.propertySearchActions
+
         console.log('property search', propertySearch)
-        console.log('property search change geometry', changeGeometry)
 
         return (
             <form className="property-search-form border-box"
@@ -160,7 +168,10 @@ class PropertySearchBox extends Component {
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
-                        <input type="number" name="minprice" id="minprice" className="form-control chosen-select" min="1" max="3" placeholder="Цена мин"/>
+                        <input type="number" name="minprice" id="minprice" className="form-control chosen-select"
+                               onChange={this.changeMinPrice}
+                               placeholder="Цена мин" value={
+                                    (propertySearch.minPrice ? NumberUtils.formatNumber(propertySearch.minPrice) : "")}/>
                     </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
