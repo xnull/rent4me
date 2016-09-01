@@ -13,8 +13,7 @@
     "whatwg-fetch": "1.0.0",
     "react-google-maps": "4.11.0",
     "accounting": "0.4.1",
-    "moment": "2.14.1",
-    "build-url": "1.0.9"
+    "moment": "2.14.1"
   },
   "devDependencies": {
     "webpack": "1.13.2",

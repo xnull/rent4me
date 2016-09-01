@@ -63,7 +63,7 @@ class PropertySearchBox extends Component {
         this.autocomplete = new google.maps.places.Autocomplete(this._autocompleteInput, autocompleteConfigs);
         this.autocomplete.addListener('place_changed', () => {
             const place = _self.autocomplete.getPlace();
-            console.log('Changed to place', place);
+            //console.log('Changed to place', place);
             _self.onPlaceChange(place)
         })
 
@@ -210,7 +210,7 @@ class PropertySearchBox extends Component {
                     </div>
 
 
-                    {/*<div className="col-xs-12 col-sm-4 col-md-3 form-group">
+                    <div className="col-xs-12 col-sm-4 col-md-3 form-group">
                         <input type="number" className="form-control chosen-select" min="1" max="3" placeholder="Комнат мин"
                                onChange={this.changeMinRooms}
                                value={(propertySearch.minRooms ? propertySearch.minRooms : '')}/>
@@ -220,7 +220,7 @@ class PropertySearchBox extends Component {
                         <input type="number" className="form-control chosen-select" min="1" max="3" placeholder="Комнат макс"
                                onChange={this.changeMaxRooms}
                                value={(propertySearch.maxRooms ? propertySearch.maxRooms : '')}/>
-                    </div>*/}
+                    </div>
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
                         <input type="text" className="form-control chosen-select"

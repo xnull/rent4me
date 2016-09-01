@@ -12,7 +12,7 @@ import {
 } from '../constants/ApartmentConstants'
 
 import 'whatwg-fetch';
-import buildUrl from 'build-url'
+import URLUtils from '../utils/URLUtils'
 
 function appendToQueryParamsIfNotEmpty(queryParams, params, targetKey, paramKey) {
     if(params[paramKey]) {
@@ -88,13 +88,9 @@ function doLoading(dispatch, params, limit, offset) {
         }
 
         var url =
-            buildUrl('//rent4.me/rest/apartments', {
-                path: 'search',
-                // hash: 'contact',
-                queryParams: queryParams
-            });
+            URLUtils.buildUrl('//rent4.me', '/rest/apartments/search', queryParams);
 
-        //console.log('url: ', url)
+        // console.log('url: ', url)
 
         fetch(url)
             .then(function (response) {
