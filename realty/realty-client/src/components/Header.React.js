@@ -10,8 +10,8 @@ export default class Header extends Component {
 
         return (
             <header id="header">
-                <SiteBranding />
                 <TopHeader />
+                <SiteBranding />
             </header>
         )
     }

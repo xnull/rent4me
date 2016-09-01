@@ -59,10 +59,11 @@ class PropertySearchBox extends Component {
 
         const autocompleteConfigs = {};
         const _self = this;
+
         this.autocomplete = new google.maps.places.Autocomplete(this._autocompleteInput, autocompleteConfigs);
         this.autocomplete.addListener('place_changed', () => {
             const place = _self.autocomplete.getPlace();
-            //console.log('Changed to place', place);
+            console.log('Changed to place', place);
             _self.onPlaceChange(place)
         })
 
@@ -82,6 +83,7 @@ class PropertySearchBox extends Component {
         const { changeGeometry } = this.props.propertySearchActions
 
         const geometry = place.geometry
+        this._autocompleteInput.value = place.formatted_address
         if(geometry.viewport) {
             //search within some area
             const bounds = geometry.viewport
@@ -100,7 +102,8 @@ class PropertySearchBox extends Component {
                             lat: sw.lat(),
                             lng: sw.lng()
                         }
-                    }
+                    },
+                    locationDescription: place.formatted_address
                 })
         } else {
             //search nearest to coordinates
@@ -110,7 +113,8 @@ class PropertySearchBox extends Component {
                     location: {
                         lat: location.lat(),
                         lng: location.lng(),
-                    }
+                    },
+                    locationDescription: place.formatted_address
                 }
             )
         }
@@ -178,7 +182,6 @@ class PropertySearchBox extends Component {
 
         return (
             <form className="property-search-form border-box"
-                  action="http://demo.themetrail.com/realty/property-map-vertical/"
                   onSubmit={this.handleSubmit}
             >
 
@@ -187,6 +190,7 @@ class PropertySearchBox extends Component {
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group select">
                         <input type="text" name="location" id="location"
+                               defaultValue={propertySearch.geometry.locationDescription}
                                ref={(c) => this._autocompleteInput = c}
                                placeholder="Введите Адрес/метро/улицу" className="form-control"/>
                     </div>
@@ -239,9 +243,6 @@ class PropertySearchBox extends Component {
 
 
                 </div>
-
-
-                <input type="hidden" name="pageid" value="1149"/>
 
 
             </form>

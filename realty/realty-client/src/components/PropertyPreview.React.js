@@ -26,7 +26,7 @@ export default class PropertyPreview extends Component {
                     <figure className="property-thumbnail">
                         <img width="600" height="300"
                              src={imgUrl}
-                             className=" wp-post-image" alt=""/>
+                             className="propertyPreviewImage wp-post-image" alt=""/>
                         <figcaption>
                             <div className="property-excerpt">
                                 {apartment.address.formatted_address? <h4 className="address">{apartment.address.formatted_address}</h4> : ''}

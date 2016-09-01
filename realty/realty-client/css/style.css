@@ -8938,3 +8938,9 @@ https://wordpress.org/plugins/wordpress-social-login/
 .site-logo {
   height: 44px;
 }
+
+.propertyPreviewImage {
+  height: 300px;
+  width: 600px;
+  object-fit: cover;
+}

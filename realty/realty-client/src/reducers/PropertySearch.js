@@ -15,6 +15,7 @@ const initialState = {
     roomMin: null,
     roomMax: null,
     geometry: {
+        locationDescription: null,
         bounds: null,
         location: null
     },
@@ -42,9 +43,6 @@ export default function PropertySearch(state = initialState, action) {
         }
         case PROPERTY_SEARCH_MAX_ROOMS_CHANGED: {
             return {...state, maxRooms: action.payload}
-        }
-        case PROPERTY_SEARCH_TYPE_CHANGED: {
-            return {...state, type: action.payload}
         }
         case PROPERTY_SEARCH_TYPE_CHANGED: {
             return {...state, type: action.payload}

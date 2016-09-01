@@ -17,7 +17,7 @@ export default class TopHeader extends Component {
 
                         <Link to="/apartments/new">Добавить квартиру/комнату</Link>
 
-                        <a href="#login-modal" data-toggle="modal">Войти</a>
+                        {/*{<a href="#login-modal" data-toggle="modal">Войти</a>}*/}
 
                     </div>
                 </div>
