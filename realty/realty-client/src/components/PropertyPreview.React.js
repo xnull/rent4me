@@ -58,12 +58,15 @@ export default class PropertyPreview extends Component {
                                 1500 м<sup>2</sup>
                             </div>
                         </div>
-                        <div>
-                            <div className="meta-title"><i className="icon-rooms"></i></div>
-                            <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Комнат">8
-                                Комнат
-                            </div>
-                        </div>
+                        {
+                            apartment.room_count
+                                ? (
+                                <div>
+                                    <div className="meta-title"><i className="icon-rooms"></i></div>
+                                    <div className="meta-data" data-toggle="tooltip" title="" data-original-title="Комнат">Комнат: {apartment.room_count}</div>
+                                </div>
+                                ) : ''
+                        }
                     </div>
 
 

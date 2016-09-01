@@ -7,7 +7,7 @@ import PropertyPreviewListItemWrapper from './PropertyPreviewListItemWrapper.Rea
 export default class PropertyPreviewMainList extends Component {
     render() {
         const apartments = this.props.apartments
-        console.log("Apartments: ", apartments)
+        //console.log("Apartments: ", apartments)
 
         const apartmentsDOM = apartments.map(apartment =>
             (

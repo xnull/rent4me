@@ -16,7 +16,7 @@ const initialState = {
     roomMax: null,
     geometry: {
         bounds: null,
-        latLng: null
+        location: null
     },
     minPrice: null,
     maxPrice: null,
@@ -25,7 +25,7 @@ const initialState = {
 };
 
 export default function PropertySearch(state = initialState, action) {
-    console.log('page reducer, state:', action.type, state, action.payload)
+    //console.log('page reducer, state:', action.type, state, action.payload)
     switch (action.type) {
         case PROPERTY_SEARCH_GEOMETRY_CHANGED: {
             const newGeometry = action.payload
@@ -42,6 +42,9 @@ export default function PropertySearch(state = initialState, action) {
         }
         case PROPERTY_SEARCH_MAX_ROOMS_CHANGED: {
             return {...state, maxRooms: action.payload}
+        }
+        case PROPERTY_SEARCH_TYPE_CHANGED: {
+            return {...state, type: action.payload}
         }
         case PROPERTY_SEARCH_TYPE_CHANGED: {
             return {...state, type: action.payload}

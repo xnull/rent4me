@@ -6,6 +6,6 @@ import PropertySearch from './PropertySearch'
 
 const reducers = {Apartments, PropertySearch ,routing: routerReducer}
 
-console.log('reducers', reducers)
+//console.log('reducers', reducers)
 
 export default combineReducers(reducers)

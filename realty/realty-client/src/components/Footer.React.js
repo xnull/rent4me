@@ -56,7 +56,7 @@ export default class Footer extends Component {
                                             <ul id="menu-custom-footer-menu" className="menu">
                                                 <li
                                                     className="menu-item menu-item-type-custom menu-item-object-custom">
-                                                    <Link to="/support">Support</Link>
+                                                    <Link to="/support">Связаться с нами</Link>
                                                 </li>
                                             </ul>
                                         </div>

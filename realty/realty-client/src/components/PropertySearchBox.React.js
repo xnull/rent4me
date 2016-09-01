@@ -55,22 +55,23 @@ class PropertySearchBox extends Component {
     }
 
     componentDidMount() {
-        console.log('Autocomplete component',this._autocompleteInput);
+        //console.log('Autocomplete component',this._autocompleteInput);
 
         const autocompleteConfigs = {};
         const _self = this;
         this.autocomplete = new google.maps.places.Autocomplete(this._autocompleteInput, autocompleteConfigs);
         this.autocomplete.addListener('place_changed', () => {
             const place = _self.autocomplete.getPlace();
-            console.log('Changed to place', place);
+            //console.log('Changed to place', place);
             _self.onPlaceChange(place)
         })
 
         this._typeSelect.onchange = function() {
-            console.log(_self._typeSelect.options[_self._typeSelect.selectedIndex].value)
-            console.log(_self._typeSelect.selectedIndex)
+            const selectedValue = _self._typeSelect.options[_self._typeSelect.selectedIndex].value;
+            //console.log(selectedValue)
+            //console.log(_self._typeSelect.selectedIndex)
             _self.changeType({target: {
-                value: 1
+                value: selectedValue
             }})
         };
         // this._autocompleteInput.value = "Москва"
@@ -86,8 +87,8 @@ class PropertySearchBox extends Component {
             const bounds = geometry.viewport
             const ne = bounds.getNorthEast();
             const sw = bounds.getSouthWest();
-            console.log('ne lat, lng:', ne.lat(), ',', ne.lng())
-            console.log('sw lat, lng:', sw.lat(), ',', sw.lng())
+            //console.log('ne lat, lng:', ne.lat(), ',', ne.lng())
+            //console.log('sw lat, lng:', sw.lat(), ',', sw.lng())
             changeGeometry(
                 {
                     bounds: {
@@ -104,6 +105,14 @@ class PropertySearchBox extends Component {
         } else {
             //search nearest to coordinates
             const location = geometry.location
+            changeGeometry(
+                {
+                    location: {
+                        lat: location.lat(),
+                        lng: location.lng(),
+                    }
+                }
+            )
         }
     }
 
@@ -115,7 +124,7 @@ class PropertySearchBox extends Component {
 
     handleSubmit(e) {
         e.preventDefault() //avoid form submission to server
-        console.log('Search')
+        //console.log('Search')
         this.onSearchClicked()
     }
 
@@ -165,7 +174,7 @@ class PropertySearchBox extends Component {
     render() {
         const propertySearch = this.props.PropertySearch
 
-        console.log('property search', propertySearch)
+        //console.log('property search', propertySearch)
 
         return (
             <form className="property-search-form border-box"
@@ -191,11 +200,13 @@ class PropertySearchBox extends Component {
                         <select className="form-control chosen-select"
                             ref={(c) => this._typeSelect = c}
                         >
-                            <option key={'RENTER'} value={'RENTER'}>{'RENTER'}</option>
-                            <option key={'LESSOR'} value={'LESSOR'}>{'LESSOR'}</option>
+                            <option key={'RENTER'} value={'RENTER'}>{'Я хочу Снять'}</option>
+                            <option key={'LESSOR'} value={'LESSOR'}>{'Я хочу Сдать'}</option>
                         </select>
                     </div>
-                    <div className="col-xs-12 col-sm-4 col-md-3 form-group">
+
+
+                    {/*<div className="col-xs-12 col-sm-4 col-md-3 form-group">
                         <input type="number" className="form-control chosen-select" min="1" max="3" placeholder="Комнат мин"
                                onChange={this.changeMinRooms}
                                value={(propertySearch.minRooms ? propertySearch.minRooms : '')}/>
@@ -205,7 +216,7 @@ class PropertySearchBox extends Component {
                         <input type="number" className="form-control chosen-select" min="1" max="3" placeholder="Комнат макс"
                                onChange={this.changeMaxRooms}
                                value={(propertySearch.maxRooms ? propertySearch.maxRooms : '')}/>
-                    </div>
+                    </div>*/}
 
                     <div className="col-xs-12 col-sm-4 col-md-3 form-group">
                         <input type="text" className="form-control chosen-select"
@@ -245,7 +256,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    console.log('mapping dispatch to props')
+    //console.log('mapping dispatch to props')
     return {
         propertySearchActions: bindActionCreators(propertySearchActions, dispatch),
         apartmentActions: bindActionCreators(apartmentActions, dispatch)

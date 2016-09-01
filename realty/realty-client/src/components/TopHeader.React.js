@@ -15,9 +15,9 @@ export default class TopHeader extends Component {
                     <div className="top-header-links primary-tooltips">
 
 
-                        <Link to="/apartments/new">Submit Property</Link>
+                        <Link to="/apartments/new">Добавить квартиру/комнату</Link>
 
-                        <a href="#login-modal" data-toggle="modal">Login</a>
+                        <a href="#login-modal" data-toggle="modal">Войти</a>
 
                     </div>
                 </div>
