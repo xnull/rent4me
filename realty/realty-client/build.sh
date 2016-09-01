@@ -1,3 +1,4 @@
+npm install
 rm -r dist* > /dev/null 2>&1
 mkdir dist
 ./webpack.minimize.sh \
