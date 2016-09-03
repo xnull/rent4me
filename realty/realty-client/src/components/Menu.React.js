@@ -12,9 +12,12 @@ export default class Menu extends Component {
                     <li className="menu-item">
                         <Link to="/">На главную</Link>
                     </li>
+                    {/* Temporarily disable until we have contact functionality developed
                     <li className="menu-item">
                         <Link to="/contact">Контакт</Link>
                     </li>
+                    */
+                    }
                 </ul>
             </nav>
         )

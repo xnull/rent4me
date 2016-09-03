@@ -10,7 +10,8 @@ export const routes = (
     <div>
         <Route path='/' component={App}>
             <IndexRoute component={ApartmentSearch}/>
-            <Redirect from='/old_admin' to='/'/>
+            {/*redirect from old urls that were on google to main site page*/}
+            <Redirect from='/personal' to='/'/>
             <Route path='*' component={NotFound}/>
         </Route>
 

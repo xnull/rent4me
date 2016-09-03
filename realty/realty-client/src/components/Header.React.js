@@ -10,7 +10,10 @@ export default class Header extends Component {
 
         return (
             <header id="header">
-                <TopHeader />
+                {
+                  /*temporarily remove header until we have login functionality*/
+                  /*<TopHeader />*/
+                }
                 <SiteBranding />
             </header>
         )

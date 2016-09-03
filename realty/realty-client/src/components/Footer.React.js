@@ -49,7 +49,7 @@ export default class Footer extends Component {
                                     </div>
                                 </div>
 
-
+                                {/*Temporarily disable until we have pages where to go
                                 <div className="col-sm-6 footer-bottom-right">
                                     <div className="widget-content">
                                         <div className="menu-custom-footer-menu-container">
@@ -62,6 +62,7 @@ export default class Footer extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                */}
                             </div>
                         </div>
                     </div>
