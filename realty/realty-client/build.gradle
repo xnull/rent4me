@@ -88,12 +88,12 @@ task buildProduction(dependsOn: [npmInstall, cleanUpBuild], type: BaseJsTaskRunn
 
 task copyBuiltStuff(type: Copy) {
   from('.') {
-    include 'build'
+    include 'build/**'
     include 'index.html'
-    include 'css'
-    include 'external_js'
-    include 'fonts'
-    include 'images'
+    include 'css/**'
+    include 'external_js/**'
+    include 'fonts/**'
+    include 'images/**'
   }
 
   into distExplodedDir
