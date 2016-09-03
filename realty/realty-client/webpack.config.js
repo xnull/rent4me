@@ -1,65 +1,55 @@
-'use strict';
+const webpack = require('webpack');
+const path = require('path');
+const DashboardPlugin = require('webpack-dashboard/plugin');
 
-var webpack = require('webpack'),
-    HtmlWebpackPlugin = require('html-webpack-plugin'),
-    path = require('path'),
-    srcPath = path.join(__dirname, 'app');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+function isProduction() {
+    let production = false;
+    for (var arg of process.argv) {
+        if (arg == '-p') {
+            production = true;
+            break;
+        }
+    }
+    return production;
+}
+
+let plugins;
+
+if (isProduction()) {
+    plugins = [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(isProduction() ? 'production' : 'development')
+            }
+        })
+    ]
+} else {
+    plugins = [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(isProduction() ? 'production' : 'development')
+            }
+        }),//todo: check somehow and include this plugin only if it's run with webpack-dashboard
+        new DashboardPlugin()
+    ]
+}
 
 module.exports = {
-    target: 'web',
-    cache: true,
-    context: srcPath,
-    entry: {
-        module: path.join(srcPath, 'personal/app.js'),
-        common: [
-            'jquery', 'react', 'react-router', 'bootstrap', 'react-bootstrap',
-            'underscore', 'validator.js', 'JSON2', 'dropzone', 'react-tools', 'through', 'flux', 'events',
-            'object-assign', 'moment', 'accounting', 'sockjs-client', 'websocket-multiplex'
-        ]
-    },
-    resolve: {
-        root: srcPath,
-        extensions: ['', '.js'],
-        modulesDirectories: ['node_modules']
-    },
+    entry: path.join(__dirname, "src/entry.js"),
     output: {
-        path: path.join(__dirname, 'tmp'),
-        publicPath: '',
-        filename: '[name].js',
-        library: ['Example', '[name]'],
-        pathInfo: true
+        path: path.join(__dirname, 'build'),
+        filename: 'bundle.js'
     },
-
     module: {
         loaders: [
-            {test: /\.js?$/, exclude: /node_modules/, loader: 'babel?cacheDirectory'},
-            {test: /\.css$/, loader: 'style-loader!css-loader'},
-            {test: /\.(png|jpg|jpeg|gif)$/, loader: "url-loader?prefix=image"}
+            {test: /\.css$/, loader: "style!css"},
+            {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"}
         ]
     },
-    plugins: [
-        new CopyWebpackPlugin([
-            {from: 'personal/index.css', to: 'css/index.css'},
-            {from: 'start/images', to: 'images'},
-            {from: 'personal/images', to: 'images'}
-        ]),
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
-        }),
-        new webpack.optimize.CommonsChunkPlugin('common', 'common.js'),
-        new HtmlWebpackPlugin({
-            inject: true,
-            template: 'app/personal/index.html'
-        }),
-        new webpack.NoErrorsPlugin()
-    ],
+    plugins: plugins,
 
-    debug: true,
-    devtool: 'eval-cheap-module-source-map',
+    //enable for development when 404 fallback to /index.html so that react-router browserHistory will work
     devServer: {
-        contentBase: './tmp',
         historyApiFallback: true
     }
 };

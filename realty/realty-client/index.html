@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rent4.Me &#8211; Аренда квартир без посредников</title>
+    <script>
+        /* You can add more configuration options to webfontloader by previously defining the WebFontConfig with your options */
+        if (typeof WebFontConfig === "undefined") {
+            WebFontConfig = new Object();
+        }
+        WebFontConfig['google'] = {families: ['Source+Sans+Pro:400', 'Fira+Sans:400']};
+
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.3/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+
+    </script>
+    <!-- <link rel='dns-prefetch' href='//maps.googleapis.com'> -->
+    <link rel='stylesheet' id='theme-main-min-css' href='/css/theme-main.min.css' type='text/css' media='all'/>
+    <link rel='stylesheet' id='theme-css' href='/css/style.css' type='text/css' media='all'/>
+    <link rel='stylesheet' id='print-css' href='/css/print.css' type='text/css' media='print'/>
+    <link rel='stylesheet' id='js_composer_front-css' href='/css/js_composer.min.4.12.css' type='text/css' media='all'/>
+
+    <script type='text/javascript' src='/external_js/jquery.1.12.4.js'></script>
+    <script type='text/javascript' src='/external_js/jquery-migrate.min.1.4.1.js'></script>
+    <script type='text/javascript' src='//maps.googleapis.com/maps/api/js?libraries=places&language=ru'></script>
+    <script type='text/javascript' src='/external_js/google-maps.min.js'></script>
+
+    <style type="text/css" title="dynamic-css" class="options-output">
+        body, .section-title span {
+            background-color: #ffffff;
+        }
+
+        #header {
+            background-color: #fff;
+        }
+
+        .top-header, .top-header a, .site-branding, .site-title a, .site-description a, .primary-menu a {
+            color: #787878;
+        }
+
+        #header {
+            font-family: "Source Sans Pro";
+            opacity: 1;
+            visibility: visible;
+            -webkit-transition: opacity 0.24s ease-in-out;
+            -moz-transition: opacity 0.24s ease-in-out;
+            transition: opacity 0.24s ease-in-out;
+        }
+
+        .wf-loading #header, {
+            opacity: 0;
+        }
+
+        .ie.wf-loading #header, {
+            visibility: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Source Sans Pro";
+            font-weight: 400;
+            color: #42484b;
+            opacity: 1;
+            visibility: visible;
+            -webkit-transition: opacity 0.24s ease-in-out;
+            -moz-transition: opacity 0.24s ease-in-out;
+            transition: opacity 0.24s ease-in-out;
+        }
+
+        .wf-loading h1, h2, h3, h4, h5, h6, {
+            opacity: 0;
+        }
+
+        .ie.wf-loading h1, h2, h3, h4, h5, h6, {
+            visibility: hidden;
+        }
+
+        body {
+            font-family: "Fira Sans";
+            font-weight: 400;
+            color: #787878;
+            opacity: 1;
+            visibility: visible;
+            -webkit-transition: opacity 0.24s ease-in-out;
+            -moz-transition: opacity 0.24s ease-in-out;
+            transition: opacity 0.24s ease-in-out;
+        }
+
+        .wf-loading body, {
+            opacity: 0;
+        }
+
+        .ie.wf-loading body, {
+            visibility: hidden;
+        }
+
+        #footer {
+            background-color: #333;
+        }
+
+        #footer-bottom {
+            background-color: #2e2e2e;
+        }
+
+        #footer .widget-title, #footer p {
+            color: #ffffff;
+        }
+    </style>
+
+    <noscript>
+        <style type="text/css"> .wpb_animate_when_almost_visible {
+            opacity: 1;
+        }</style>
+    </noscript>
+
+</head>
+
+<body class="home page page-id-1149 page-template-default wpb-js-composer js-comp-ver-4.12 vc_responsive">
+
+
+<div id="app_container"></div>
+
+
+<script type='text/javascript' src='/external_js/theme-main.min.js'></script>
+<script type='text/javascript' src='/external_js/wp-embed.min.4.6.js'></script>
+<script type='text/javascript' src='/external_js/js_composer_front.min.4.12.js'></script>
+
+<script type="text/javascript" src="/build/bundle.js" charset="utf-8"></script>
+<script>
+    jQuery(document).ready(function ($) {
+
+        // Social Sharing and video pop up
+        video_and_social_share();
+
+        jQuery('.search-results-view i').on('click', function () {
+            jQuery('.search-results-view i').removeClass('active');
+            jQuery(this).toggleClass('active');
+            jQuery('.property-items').fadeTo(300, 0, function () {
+                jQuery(this).fadeTo(300, 1);
+            });
+
+            setTimeout(function () {
+                jQuery('.property-items').attr('data-view', jQuery('.search-results-view i.active').attr('data-view'));
+            }, 300);
+
+        });
+
+
+    }); // END document.ready
+
+    jQuery(window).load(function () {
+
+        var heightWindow = jQuery(window).height();
+        var heightHeader = jQuery('#header').height();
+        var heightFullscreen = heightWindow - heightHeader;
+
+
+        if (jQuery('.property-image-container').hasClass('cut')) {
+            jQuery('.property-image-container .property-image, .property-image-container iframe').css('height', 600);
+        }
+
+        jQuery('body.single-property .property-image').magnificPopup({
+            type: 'image',
+            gallery: {
+                enabled: true,
+                tPrev: '',
+                tNext: '',
+                tCounter: '%curr% | %total%'
+            }
+        });
+
+
+        jQuery('.datepicker').datepicker({
+            language: 'en',
+            autoclose: true,
+            isRTL: false,
+            format: 'yyyymmdd',
+        });
+
+        function loader() {
+            jQuery('.property-items').addClass('loading');
+            jQuery('.property-items').html('<div class="loader-container"><div class="svg-loader"></div></div>');
+        }
+
+    });
+
+    jQuery('.container').on("click", '.add-to-favorites', function () {
+
+        jQuery('#msg-login-to-add-favorites').removeClass('hide');
+        jQuery('a[href="#tab-login"]').tab('show');
+        jQuery('#login-modal').modal();
+        jQuery('#login-modal').on('hidden.bs.modal', function () {
+            jQuery('#msg-login-to-add-favorites').addClass('hide');
+        });
+    });
+
+    jQuery('.container').on("click", '.add-to-follow', function () {
+        jQuery('a[href="#tab-login"]').tab('show');
+        jQuery('#login-modal').modal();
+        jQuery('#msg-login-to-add-follow').removeClass('hide');
+        jQuery('#msg-login-to-add-follow').addClass('hide');
+    });
+</script>
+
+</body>
+</html>

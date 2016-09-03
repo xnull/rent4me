@@ -4,7 +4,7 @@
  */
 apply from: "${rootProject.projectDir}/gradle/client-deployment.gradle"
 
-defaultTasks 'bowerInstall'
+defaultTasks 'npmInstall'
 
 /**
  * https://github.com/srs/gradle-node-plugin
@@ -27,11 +27,23 @@ apply plugin: 'ssh'
 
 final buildNumber = java.util.UUID.randomUUID();
 
+final internalGroup = 'Rent4.Me Client custom tasks'
+final relevantGroups = [internalGroup]
+
+final distDir = 'dist'
+final distExplodedDir = "$distDir/tmp"
+
 def nodeJsDir = file("${rootProject.projectDir}/.gradle/nodejs")
+
+
+def nodeModuleFile(nodeModule) {
+  final path = "/node_modules/$nodeModule/bin/$nodeModule"
+  return new File(project.projectDir, path)
+}
 
 node {
     // Version of node to use.
-    version = '0.10.33'
+    version = '6.4.0'
 
     // Base URL for fetching node distributions (change if you have a mirror).
     distBaseUrl = 'http://nodejs.org/dist'
@@ -44,111 +56,64 @@ node {
     workDir = nodeJsDir
 }
 
-/**
- * Download js dependencies
- */
-task bowerInstallSystem(dependsOn: npmInstall, type: BaseJsTaskRunner) {
-    script = new File(project.projectDir, '/node_modules/bower/bin/bower')
-    args = ['install']
+task cleanUpBuild(type: Delete) {
+    group internalGroup
+    description "Removes directory where JS file is built using WebPack"
+    delete 'build'
 }
 
-task bowerInstall(type: JsTaskRunner) {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['bowerInstall', '--buildNumber', buildNumber]
+task cleanNodeModules(type: Delete) {
+    group internalGroup
+    description "Removes node_modules folder - thus cleares cache for current project"
+    delete 'node_modules'
 }
 
-/**
- * Run unit tests
- */
-task jsTest(type: JsTaskRunner, dependsOn: 'bowerInstall') {
-    script = new File(project.projectDir, '/node_modules/karma/bin/karma')
-    args = ['start', 'test/karma.conf.js']
-}
-//test.dependsOn jsTest
-
-task jsPreBuild(type: JsTaskRunner, dependsOn: 'bowerInstall') {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['build', '--buildNumber', buildNumber]
+task cleanUpDistribution(type: Delete) {
+    group internalGroup
+    description "Cleans up directory where already built stuff goes, ready for distribution"
+    delete distDir
 }
 
-task jsBuild(type: JsTaskRunner, dependsOn: 'jsPreBuild') {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['compressDev', '--buildNumber', buildNumber]
+task cleanSetup(dependsOn: [cleanNodeModules, npmInstall]) {
+  group internalGroup
+  description "removes any outdated stuff"
 }
 
-task jsBuildRelease(type: JsTaskRunner, dependsOn: 'jsPreBuild') {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['compressProd', '--buildNumber', buildNumber]
+task buildProduction(dependsOn: [npmInstall, cleanUpBuild], type: BaseJsTaskRunner) {
+  group internalGroup
+  description = "Makes build for production"
+  script = nodeModuleFile('webpack')
+  args = ['-p']
 }
 
-task jsWatch(type: JsTaskRunner, dependsOn: 'bowerInstall') {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['watch', '--buildNumber', buildNumber]
+task copyBuiltStuff(type: Copy) {
+  from('.') {
+    include 'build/**'
+    include 'index.html'
+    include 'css/**'
+    include 'external_js/**'
+    include 'fonts/**'
+    include 'images/**'
+  }
+
+  into distExplodedDir
 }
 
-task jsHint(type: JsTaskRunner, dependsOn: 'bowerInstall') {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['jsHint', '--buildNumber', buildNumber]
-}
-check.dependsOn jsHint
-
-task jsFiles(type: JsTaskRunner, dependsOn: 'bowerInstall') {
-    script = new File(project.projectDir, '/node_modules/gulp/bin/gulp')
-    args = ['files', '--buildNumber', buildNumber]
+task packApp(type: Tar) {
+    from distExplodedDir
+    baseName = 'app'
+    destinationDir = file(distDir)
 }
 
-task cleanUpBuildTmp(type: Delete) {
-    delete fileTree(dir: 'build/tmp')
+task prepareForDistribution(dependsOn: [buildProduction, cleanUpDistribution, copyBuiltStuff, packApp]) {
+  group internalGroup
+  description = "Prepares app for distribution"
 }
 
-task prepareReactRouterNodeModule(type: Copy) {
-    from 'node_modules/react-router'
-    into 'build/tmp/node_modules/react-router'
-}
-
-task packApp(dependsOn: ['cleanUpBuildTmp', 'jsBuild', 'prepareReactRouterNodeModule'], type: Tar) {
-    //copy node modules from one file to another
-//    reactRouter = new File(project.projectDir, 'node_modules/react-router')
-//    new File(project.projectDir, 'tmp_node_modules')
-    from 'build-js'
-    baseName = 'app-1.0'
-}
-
-task packAppRelease(dependsOn: ['cleanUpBuildTmp', 'jsBuildRelease', 'prepareReactRouterNodeModule'], type: Tar) {
-    //copy node modules from one file to another
-//    reactRouter = new File(project.projectDir, 'node_modules/react-router')
-//    new File(project.projectDir, 'tmp_node_modules')
-    from 'build-js'
-    baseName = 'app-1.0'
-}
-
-task deployFrontendDev(dependsOn: packAppRelease, type: SshTask) {
-    group = 'Deployment'
-
-    def passphrase = "k124hfeoifs9";
-
-    ssh {
-        knownHosts = allowAnyHosts
-    }
-
-
-    remotes {
-        webServer {
-            host = "dev.rent4.me"
-            user = "tomcat"
-            password = passphrase
-        }
-    }
-
-    session(remotes.webServer) {
-        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/home/tomcat/nginx/dev'
-        execute 'cd /home/tomcat/nginx/dev;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar; chmod -R 755 ./*'
-    }
-}
-
-task deployFrontendRelease(dependsOn: packAppRelease, type: SshTask) {
-    group = 'Deployment'
-
+task deployToProd(dependsOn: prepareForDistribution, type: SshTask) {
+    group = internalGroup
+    description = "Build and deploy to production environment"
+    //TODO: promprt it from CLI?
     def passphrase = "k124hfeoifs9";
 
     ssh {
@@ -165,32 +130,27 @@ task deployFrontendRelease(dependsOn: packAppRelease, type: SshTask) {
     }
 
     session(remotes.webServer) {
-        put new File(project.projectDir, 'build/distributions/app-1.0.tar'), '/home/tomcat/nginx/prod'
-        execute 'cd /home/tomcat/nginx/prod;find ! -name \'app-1.0.tar\' -type f -exec rm -f {} +;tar -xf app-1.0.tar; chmod -R 755 ./*'
+        put new File(project.projectDir, 'dist/app.tar'), '/home/tomcat/nginx/prod'
+        execute 'cd /home/tomcat/nginx/prod;find ! -name \'app.tar\' -type f -exec rm -f {} +;tar -xf app.tar; chmod -R 755 ./*'
     }
 }
 
-clean << {
-    //project.delete './node_modules'
-    project.delete './build-js'
+task buildDevWatch(dependsOn: npmInstall, type: BaseJsTaskRunner) {
+  group internalGroup
+  description = "Makes dev build and watches for changes"
+  script = nodeModuleFile('webpack')
+  args = ['-d']
 }
 
-task updateWebDriverManager(type: JsTaskRunner, dependsOn: 'bowerInstall') {
-    script = new File(project.projectDir, '/node_modules/protractor/bin/webdriver-manager')
-    args = ['update']
-}
-
-/**
- * Запуск интеграционны файлов
- */
-task jsE2E(type: JsTaskRunner, dependsOn: updateWebDriverManager) {
-    script = new File(project.projectDir, '/node_modules/protractor/bin/protractor')
-    args = ['test/protractor-conf.js']
+task devWebServer(dependsOn: npmInstall, type: BaseJsTaskRunner) {
+  group internalGroup
+  description "Starts web-server that's acccessible using url http://127.0.0.1:8080/"
+  script = nodeModuleFile('webpack-dev-server')
+  args = ['--output-public-path', '/build/']
 }
 
 public class BaseJsTaskRunner extends com.moowork.gradle.node.task.NodeTask {
     BaseJsTaskRunner() {
-        group = 'javascript'
         setExecOverrides {
             it.ignoreExitValue = false
             it.workingDir = project.projectDir
@@ -201,6 +161,6 @@ public class BaseJsTaskRunner extends com.moowork.gradle.node.task.NodeTask {
 public class JsTaskRunner extends BaseJsTaskRunner {
     JsTaskRunner() {
         super()
-        dependsOn 'bowerInstallSystem'
+        dependsOn 'npmInstall'
     }
 }
