@@ -34,7 +34,6 @@ export default class LoginModal extends Component {
 
 
                                     <form name="loginform" id="loginform"
-                                          action="http://demo.themetrail.com/realty/wp-login.php"
                                           method="post">
 
                                         <p className="login-username">
@@ -57,9 +56,9 @@ export default class LoginModal extends Component {
                                                    className="button-primary"
                                                    value="Log In"/>
                                             <input type="hidden" name="redirect_to"
-                                                   value="http://demo.themetrail.com/realty/"/>
+                                                   value=""/>
                                         </p>
-                                        <a href="http://demo.themetrail.com/realty/wp-login.php?action=lostpassword&redirect_to=http://demo.themetrail.com/realty/">Lost
+                                        <a href="#">Lost
                                             Password?</a>
                                     </form>
 
