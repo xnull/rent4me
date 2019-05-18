@@ -58,38 +58,3 @@
    будет смысл посылать инфо своей кватртиры арендатору. Чтобы получить доп. деньги.
    
  Может тогда и можно будет оставить в живых агенства, но комиссия их будет 3№ а не адовые 100.
- 
- ----------
- Connect to dev environment using following info:
-
- IP Address: 188.226.219.248 (alias: dev-realty.fspare.com, rent4.me)
-
- ROOT login
-
- Username: root
- Password: hnzjnjwbfjao
-
- Tomcat login:
- Username: tomcat
- Password: k124hfeoifs9
-
-------
-
-------
-jenkins account for bitbucket:
-username: jenkinsrealty
-email: jenkins-realty@fspare.com
-password: s82ks93l09d0a
-
--------
- Postgresql for JIRA:
- Database: jiradb
- Hostname: jira.rent4.me
- username: jira_user
- password: j28s3ja0su3a98
-
- ------
- mailchimp.com
- email: admin@rent4.me
- username: admin@rent4.me
- password: T210sadml324@asdlk
