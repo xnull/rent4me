@@ -16,7 +16,7 @@
     "moment": "2.14.1"
   },
   "devDependencies": {
-    "webpack": "1.13.2",
+    "webpack": "5.94.0",
     "webpack-dev-server": "1.15.0",
     "webpack-dashboard": "0.1.8",
     "css-loader": "0.23.1",
